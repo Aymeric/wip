@@ -1,0 +1,1708 @@
+{
+  "data": {
+    "instruments": [
+      {
+        "id": "8954bc11-72a0-433a-a75c-373a4c51fe37",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2026-12-18",
+        "sellout_datetime": "2026-12-18T20:30:00+00:00",
+        "strike_price": "0.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "95fdf818-caaf-4b06-81b7-b5da1ea96428",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "0.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "a9c9c246-0e9c-40fc-851f-23507eaebb58",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "0.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "dd4985b4-63bb-418f-a292-f5a35d416bb7",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2026-12-18",
+        "sellout_datetime": "2026-12-18T20:30:00+00:00",
+        "strike_price": "0.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "0af3e77a-3850-4d30-aa61-17b6bb3190b8",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2027-06-17",
+        "sellout_datetime": "2027-06-17T19:30:00+00:00",
+        "strike_price": "1.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "1b071c0b-1e5d-475b-a024-d5d0b452d199",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "1.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "2b7c41a0-517a-4776-a48a-dc06768f6b7c",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "1.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "325ddeb8-a666-4755-a29e-2d35bbc1bc2e",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2027-06-17",
+        "sellout_datetime": "2027-06-17T19:30:00+00:00",
+        "strike_price": "1.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "4b979351-0c44-4291-9c54-fb1bbacb4435",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2028-01-21",
+        "sellout_datetime": "2028-01-21T20:30:00+00:00",
+        "strike_price": "1.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "6db3db55-e818-4f13-b0fb-2ef0c9b5745e",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2028-06-16",
+        "sellout_datetime": "2028-06-16T19:30:00+00:00",
+        "strike_price": "1.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "700a8f6c-0fde-4913-84f0-d7d3fa97f7a4",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2027-09-17",
+        "sellout_datetime": "2027-09-17T19:30:00+00:00",
+        "strike_price": "1.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "756db79c-2954-4565-8370-7a1f1e688ad8",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2027-09-17",
+        "sellout_datetime": "2027-09-17T19:30:00+00:00",
+        "strike_price": "1.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "a51e3da2-de9f-4a5b-871c-c6949eae45e9",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2028-01-21",
+        "sellout_datetime": "2028-01-21T20:30:00+00:00",
+        "strike_price": "1.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "b2712f6c-491e-4ac6-8e01-2b021e64cb99",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2027-12-17",
+        "sellout_datetime": "2027-12-17T20:30:00+00:00",
+        "strike_price": "1.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "b88467b3-2ccb-4440-80dd-6538bd14b0dd",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2026-12-18",
+        "sellout_datetime": "2026-12-18T20:30:00+00:00",
+        "strike_price": "1.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "bc231dae-deaa-4e60-ab95-15144ad040e1",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2027-12-17",
+        "sellout_datetime": "2027-12-17T20:30:00+00:00",
+        "strike_price": "1.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "d2779a92-a6e1-450f-96a9-fcac086f1a1a",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2028-06-16",
+        "sellout_datetime": "2028-06-16T19:30:00+00:00",
+        "strike_price": "1.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "ded3465d-516d-4a02-951c-12c38189d37d",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2026-12-18",
+        "sellout_datetime": "2026-12-18T20:30:00+00:00",
+        "strike_price": "1.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "f25fae34-8e2f-4b6c-b7fd-58df68a97bc2",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "1.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "fedf4b16-ee9d-473f-ab8e-23a4103f2759",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "1.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "417397e2-82c3-4142-b9ca-13afc899736f",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2026-12-18",
+        "sellout_datetime": "2026-12-18T20:30:00+00:00",
+        "strike_price": "1.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "424ae3f3-486e-4b7c-9903-bee83af22606",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "1.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "56acf58e-010a-46ff-afa0-1dea867938bd",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "1.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "65706b4a-c4fc-4fb5-b6bf-37bc0688846c",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2026-12-18",
+        "sellout_datetime": "2026-12-18T20:30:00+00:00",
+        "strike_price": "1.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "00642ff1-4254-4584-bb64-ea8e13a9f17d",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "2.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "188ed4cf-4714-47b3-858a-e5f6afa56171",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2028-06-16",
+        "sellout_datetime": "2028-06-16T19:30:00+00:00",
+        "strike_price": "2.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "1ecd58b2-d27a-4335-8c5a-1b987e23f2c7",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2028-01-21",
+        "sellout_datetime": "2028-01-21T20:30:00+00:00",
+        "strike_price": "2.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "2ba8a732-c63c-4410-ac41-a6957de8803a",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2027-12-17",
+        "sellout_datetime": "2027-12-17T20:30:00+00:00",
+        "strike_price": "2.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "35058202-20e2-45a4-bfef-12aae6c74f12",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2027-06-17",
+        "sellout_datetime": "2027-06-17T19:30:00+00:00",
+        "strike_price": "2.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "36259ec1-a061-4601-b1ff-91d1df09568b",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2027-12-17",
+        "sellout_datetime": "2027-12-17T20:30:00+00:00",
+        "strike_price": "2.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "4d59596e-17ed-49ba-8ca6-82a551320fe1",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "2.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "837e050e-b067-48a6-8501-d939be876d53",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2026-12-18",
+        "sellout_datetime": "2026-12-18T20:30:00+00:00",
+        "strike_price": "2.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "9f3aaeec-bfd2-4953-9f4e-8f07afb3848b",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "2.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "a06d17fb-8ef4-4627-9fd5-ac5c46f47342",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2027-06-17",
+        "sellout_datetime": "2027-06-17T19:30:00+00:00",
+        "strike_price": "2.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "a5c072e0-515e-4906-89e3-481964fb20ed",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2028-06-16",
+        "sellout_datetime": "2028-06-16T19:30:00+00:00",
+        "strike_price": "2.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "aca9927d-f922-4600-b930-5dd12fe584e0",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2027-09-17",
+        "sellout_datetime": "2027-09-17T19:30:00+00:00",
+        "strike_price": "2.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "b750761f-548a-4e1e-a76e-51ac0d739a7d",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "2.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "bc3ac892-491e-44ea-b63e-dccede9ee34e",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2027-09-17",
+        "sellout_datetime": "2027-09-17T19:30:00+00:00",
+        "strike_price": "2.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "e3ee0142-0b3d-47a5-bdd1-0a5c167352cb",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2028-01-21",
+        "sellout_datetime": "2028-01-21T20:30:00+00:00",
+        "strike_price": "2.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "f93977b3-efdb-4781-a20e-123b950b7a6b",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2026-12-18",
+        "sellout_datetime": "2026-12-18T20:30:00+00:00",
+        "strike_price": "2.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "434d0bf8-daa4-4e41-ab92-73a641b47093",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "2.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "7b537225-2359-4a4d-aa32-f56f9818ee49",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "2.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "979fbdf4-26cb-4ce0-930a-c2b500ecac4e",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2026-12-18",
+        "sellout_datetime": "2026-12-18T20:30:00+00:00",
+        "strike_price": "2.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "f028756f-a5a1-4706-83cb-afe224f13ba4",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2026-12-18",
+        "sellout_datetime": "2026-12-18T20:30:00+00:00",
+        "strike_price": "2.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "11b7e716-3f47-4b40-b6b6-124c9a756d7a",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2027-06-17",
+        "sellout_datetime": "2027-06-17T19:30:00+00:00",
+        "strike_price": "3.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "18aac9ae-0bf9-45b9-bced-b9bf24becfcb",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "3.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "22dca6a7-da9b-41dc-b23a-3b814ed62193",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2026-12-18",
+        "sellout_datetime": "2026-12-18T20:30:00+00:00",
+        "strike_price": "3.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "2a08ef06-e4a1-46da-84d5-6c7b6edd52da",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2028-06-16",
+        "sellout_datetime": "2028-06-16T19:30:00+00:00",
+        "strike_price": "3.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "3b888596-051f-44d5-98e5-721450f19dc6",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2028-01-21",
+        "sellout_datetime": "2028-01-21T20:30:00+00:00",
+        "strike_price": "3.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "59276266-ca23-447c-bb6d-7f10f414f441",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-17",
+        "sellout_datetime": "2026-07-17T19:30:00+00:00",
+        "strike_price": "3.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "74de74a8-8c40-41e1-9d2c-57220bf00976",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "3.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "907e6457-d895-4ab3-aaf6-7d8321b3db6b",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-17",
+        "sellout_datetime": "2026-07-17T19:30:00+00:00",
+        "strike_price": "3.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "91c0ae95-f85b-4f2f-a82e-70b47fa86497",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "3.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "9f5c890e-e9a8-4503-9d77-ab8987389a03",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2027-12-17",
+        "sellout_datetime": "2027-12-17T20:30:00+00:00",
+        "strike_price": "3.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "af843aaa-40e6-448c-9416-837b90fbe32d",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2026-12-18",
+        "sellout_datetime": "2026-12-18T20:30:00+00:00",
+        "strike_price": "3.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "bd1ffefe-c8d5-4072-a73d-29b0f2d6e1a5",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2026-11-20",
+        "sellout_datetime": "2026-11-20T20:30:00+00:00",
+        "strike_price": "3.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "cf583948-4a16-4a40-bd88-dcf9797d8e29",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "3.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "d7339aaa-af32-4da1-90b5-58700238b766",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2027-09-17",
+        "sellout_datetime": "2027-09-17T19:30:00+00:00",
+        "strike_price": "3.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "d8eb3b6f-bba9-4cba-b545-5907e024bb21",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2028-01-21",
+        "sellout_datetime": "2028-01-21T20:30:00+00:00",
+        "strike_price": "3.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "dfde5f03-d258-4b9e-9294-6093d0de5c52",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2028-06-16",
+        "sellout_datetime": "2028-06-16T19:30:00+00:00",
+        "strike_price": "3.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "e03bd0f2-2816-45da-ba06-def218cf2156",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2027-06-17",
+        "sellout_datetime": "2027-06-17T19:30:00+00:00",
+        "strike_price": "3.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "f465cb6e-6f84-4d2c-9644-01f3b3c6caa5",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2027-12-17",
+        "sellout_datetime": "2027-12-17T20:30:00+00:00",
+        "strike_price": "3.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "fc798c3d-7944-4052-a56a-baca64eed45e",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2026-11-20",
+        "sellout_datetime": "2026-11-20T20:30:00+00:00",
+        "strike_price": "3.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "feb6f68d-4ea6-47c5-bbb6-a5fb4b75e35e",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2027-09-17",
+        "sellout_datetime": "2027-09-17T19:30:00+00:00",
+        "strike_price": "3.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "3c24df96-3b43-4b7b-a8b8-1998ebe42b38",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2026-12-18",
+        "sellout_datetime": "2026-12-18T20:30:00+00:00",
+        "strike_price": "3.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "bfe5a9cb-008a-4210-809a-74f7644228b8",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "3.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "e46dbde0-7d8c-4bf7-9b1f-5d6727c530ce",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "3.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "f116d240-3f10-47d7-93de-b450a1c1a1a0",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2026-12-18",
+        "sellout_datetime": "2026-12-18T20:30:00+00:00",
+        "strike_price": "3.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "07a869c5-ce63-483d-af88-34bb4f476d4c",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2026-12-18",
+        "sellout_datetime": "2026-12-18T20:30:00+00:00",
+        "strike_price": "4.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "1362d4f5-1e04-4299-8f01-8392c5b53a1a",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2026-12-18",
+        "sellout_datetime": "2026-12-18T20:30:00+00:00",
+        "strike_price": "4.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "26399c96-b55d-42a2-971e-cb504cd8706e",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2027-12-17",
+        "sellout_datetime": "2027-12-17T20:30:00+00:00",
+        "strike_price": "4.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "28a57f43-8eaa-4161-a383-9f20d38f0e2a",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2027-09-17",
+        "sellout_datetime": "2027-09-17T19:30:00+00:00",
+        "strike_price": "4.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "29be41b6-0e78-49b3-a8e3-874d899c42a7",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2028-01-21",
+        "sellout_datetime": "2028-01-21T20:30:00+00:00",
+        "strike_price": "4.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "33c734ba-0953-44db-b3b9-e423d7c2631d",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2028-01-21",
+        "sellout_datetime": "2028-01-21T20:30:00+00:00",
+        "strike_price": "4.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "37060d43-1a8f-4424-9706-fa4cb6a6fc31",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2027-06-17",
+        "sellout_datetime": "2027-06-17T19:30:00+00:00",
+        "strike_price": "4.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "52027324-7801-4ea2-99ed-c15f369bd34b",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "4.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "77e46a6a-72c8-46c8-b1d8-790ec94f2ad3",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "4.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "7ef2313a-7aa4-430a-956c-6106d176fcdc",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2028-06-16",
+        "sellout_datetime": "2028-06-16T19:30:00+00:00",
+        "strike_price": "4.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "80738b17-2828-4c3c-bd70-f0cc94f3294b",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "4.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "8e6bd8ea-2ffb-48cf-8ec6-440a570951d5",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-17",
+        "sellout_datetime": "2026-07-17T19:30:00+00:00",
+        "strike_price": "4.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "a891eeb3-351d-486c-a3d4-6fb5634f1b91",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-17",
+        "sellout_datetime": "2026-07-17T19:30:00+00:00",
+        "strike_price": "4.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "b398f582-51df-40c0-b8f3-8773f631a572",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2028-06-16",
+        "sellout_datetime": "2028-06-16T19:30:00+00:00",
+        "strike_price": "4.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "d0393354-ee6f-4b4f-84d0-737d8132161d",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2027-09-17",
+        "sellout_datetime": "2027-09-17T19:30:00+00:00",
+        "strike_price": "4.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "d17c4084-ad07-4cc2-b416-5ff739620d97",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "4.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "e7b47ce8-814f-448d-8b24-16dbf38a133d",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2027-12-17",
+        "sellout_datetime": "2027-12-17T20:30:00+00:00",
+        "strike_price": "4.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "ebff7733-05f9-483a-8301-4f9352fcd445",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2027-06-17",
+        "sellout_datetime": "2027-06-17T19:30:00+00:00",
+        "strike_price": "4.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "2f33f340-b991-436c-9bb3-7d7a6db62de6",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "4.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "3897a6ff-fdc3-45e3-9de0-d4337d437ab8",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "4.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "54fc8390-c538-45ba-8ac9-698d5692c6c0",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2026-12-18",
+        "sellout_datetime": "2026-12-18T20:30:00+00:00",
+        "strike_price": "4.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "dd28dd38-2a9d-48a7-b56a-9be419c02907",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2026-12-18",
+        "sellout_datetime": "2026-12-18T20:30:00+00:00",
+        "strike_price": "4.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "0b3a3da2-980e-4f35-bc27-b65d4f0a4a1c",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2028-06-16",
+        "sellout_datetime": "2028-06-16T19:30:00+00:00",
+        "strike_price": "5.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "12dac5d1-4b0b-4195-9551-d2a5ac97851e",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2026-11-20",
+        "sellout_datetime": "2026-11-20T20:30:00+00:00",
+        "strike_price": "5.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "18b3f9c5-60ad-4a7f-8537-3506e4afa1cf",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2026-11-20",
+        "sellout_datetime": "2026-11-20T20:30:00+00:00",
+        "strike_price": "5.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "1a872470-bbad-475a-a396-3fbcbb8d9cf7",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "5.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "39b32de3-6df4-4bc2-9f39-c32f540c1da9",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2027-06-17",
+        "sellout_datetime": "2027-06-17T19:30:00+00:00",
+        "strike_price": "5.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "3e851f52-3739-4d7a-8e46-3baeb2ee8ab9",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2026-12-18",
+        "sellout_datetime": "2026-12-18T20:30:00+00:00",
+        "strike_price": "5.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "3ee2dab9-3ee6-47ec-a984-771481d6b508",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-17",
+        "sellout_datetime": "2026-07-17T19:30:00+00:00",
+        "strike_price": "5.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "49c940df-68e8-4d37-bb54-84cd94107e80",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2027-09-17",
+        "sellout_datetime": "2027-09-17T19:30:00+00:00",
+        "strike_price": "5.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "4eef811a-15bc-4259-9d28-c91ec471c9e6",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2026-12-18",
+        "sellout_datetime": "2026-12-18T20:30:00+00:00",
+        "strike_price": "5.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "5012ef14-dc0f-418e-8fd4-8ceee644bcaf",
+        "chain_id": "31068fea-4e56-4948-b8e7-fe8e13e95558",
+        "chain_symbol": "WULF",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "5.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      }
+    ],
+    "next": "http://edge-internal.brokeback-shard-router.region.rh/options/instruments/?chain_symbol=WULF&cursor=bz0xMCZwPTQuNTAwMA%3D%3D&state=active"
+  },
+  "guide": "Present chain_symbol, expiration_date, type, strike_price; flag state when not 'active' or tradability when not 'tradable'. Pass id to an order's leg.option_id. Quote sellout_datetime when the user asks \"when will Robinhood force-close this position?\" — it is the authoritative per-contract timestamp covering equity/index, AM/PM settle, and T-1 logic. underlying_type ('equity' or 'index') is informational; mention only when it affects strategy. When next is non-null, extract the cursor query param and call this tool again."
+}

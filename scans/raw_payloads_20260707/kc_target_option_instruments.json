@@ -1,0 +1,415 @@
+{
+  "data": {
+    "instruments": [
+      {
+        "id": "4d82cf8e-4615-4487-a556-b6d5fd7bdebf",
+        "chain_id": "b29555fc-ea3a-4b28-bb07-70dc0a4a6f3c",
+        "chain_symbol": "KC",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "2.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "8330e083-6bf0-48d9-9647-6d5bbad0d51f",
+        "chain_id": "b29555fc-ea3a-4b28-bb07-70dc0a4a6f3c",
+        "chain_symbol": "KC",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "2.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "524ca511-f64a-408a-9964-bb0dc5559ae3",
+        "chain_id": "b29555fc-ea3a-4b28-bb07-70dc0a4a6f3c",
+        "chain_symbol": "KC",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "5.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "6a5407d1-0695-4773-b0aa-7e4decd07a01",
+        "chain_id": "b29555fc-ea3a-4b28-bb07-70dc0a4a6f3c",
+        "chain_symbol": "KC",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "5.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "6e4af777-803b-4084-95d9-9c77ab67c073",
+        "chain_id": "b29555fc-ea3a-4b28-bb07-70dc0a4a6f3c",
+        "chain_symbol": "KC",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "7.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "713a2ce4-37ed-4636-8c7f-69f924c27b54",
+        "chain_id": "b29555fc-ea3a-4b28-bb07-70dc0a4a6f3c",
+        "chain_symbol": "KC",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "7.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "79cb2944-2633-46b8-9648-f6521db86b03",
+        "chain_id": "b29555fc-ea3a-4b28-bb07-70dc0a4a6f3c",
+        "chain_symbol": "KC",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "10.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "a5e4ae5d-0862-4c1b-bc51-a8dcaa75d246",
+        "chain_id": "b29555fc-ea3a-4b28-bb07-70dc0a4a6f3c",
+        "chain_symbol": "KC",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "10.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "b6044a8c-0915-4170-ab57-4941230b0aac",
+        "chain_id": "b29555fc-ea3a-4b28-bb07-70dc0a4a6f3c",
+        "chain_symbol": "KC",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "12.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "bea3d4d6-cb84-4f30-8623-e88cecf5e7f9",
+        "chain_id": "b29555fc-ea3a-4b28-bb07-70dc0a4a6f3c",
+        "chain_symbol": "KC",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "12.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "0b70cf6b-76fb-45b6-8c43-02583ee06901",
+        "chain_id": "b29555fc-ea3a-4b28-bb07-70dc0a4a6f3c",
+        "chain_symbol": "KC",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "15.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "f955a3df-5611-4161-a347-204322909f73",
+        "chain_id": "b29555fc-ea3a-4b28-bb07-70dc0a4a6f3c",
+        "chain_symbol": "KC",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "15.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "be0f0391-7e5f-454e-bf09-be2a9a05e21d",
+        "chain_id": "b29555fc-ea3a-4b28-bb07-70dc0a4a6f3c",
+        "chain_symbol": "KC",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "17.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "ed493817-d253-4792-b6c2-fe3560289fbd",
+        "chain_id": "b29555fc-ea3a-4b28-bb07-70dc0a4a6f3c",
+        "chain_symbol": "KC",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "17.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "7498d9c0-241f-4ef6-a30d-540a20891bac",
+        "chain_id": "b29555fc-ea3a-4b28-bb07-70dc0a4a6f3c",
+        "chain_symbol": "KC",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "20.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "cc05f33e-e266-4da9-8b5e-a64f6f07aa46",
+        "chain_id": "b29555fc-ea3a-4b28-bb07-70dc0a4a6f3c",
+        "chain_symbol": "KC",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "20.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "7b906bd0-6bdd-434a-ba5f-107c9f2c0fb1",
+        "chain_id": "b29555fc-ea3a-4b28-bb07-70dc0a4a6f3c",
+        "chain_symbol": "KC",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "22.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "f088efe6-ae87-4aa0-965f-67af140356ce",
+        "chain_id": "b29555fc-ea3a-4b28-bb07-70dc0a4a6f3c",
+        "chain_symbol": "KC",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "22.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "614d9734-72b7-4c08-9f93-4e243adcf531",
+        "chain_id": "b29555fc-ea3a-4b28-bb07-70dc0a4a6f3c",
+        "chain_symbol": "KC",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "25.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "be7937db-3879-44c4-86a2-5981bde5679d",
+        "chain_id": "b29555fc-ea3a-4b28-bb07-70dc0a4a6f3c",
+        "chain_symbol": "KC",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "25.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "b0b84f05-d956-4b54-b197-0177456bfd1d",
+        "chain_id": "b29555fc-ea3a-4b28-bb07-70dc0a4a6f3c",
+        "chain_symbol": "KC",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "30.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "fe4f3d18-409a-4062-9304-56f7ce7909b2",
+        "chain_id": "b29555fc-ea3a-4b28-bb07-70dc0a4a6f3c",
+        "chain_symbol": "KC",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "30.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "8338e89b-8ed6-4b9b-b256-68814ef46351",
+        "chain_id": "b29555fc-ea3a-4b28-bb07-70dc0a4a6f3c",
+        "chain_symbol": "KC",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "35.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "f12cd3d2-5823-4889-a16e-3afa0264d778",
+        "chain_id": "b29555fc-ea3a-4b28-bb07-70dc0a4a6f3c",
+        "chain_symbol": "KC",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "35.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      }
+    ]
+  },
+  "guide": "Present chain_symbol, expiration_date, type, strike_price; flag state when not 'active' or tradability when not 'tradable'. Pass id to an order's leg.option_id. Quote sellout_datetime when the user asks \"when will Robinhood force-close this position?\" — it is the authoritative per-contract timestamp covering equity/index, AM/PM settle, and T-1 logic. underlying_type ('equity' or 'index') is informational; mention only when it affects strategy. When next is non-null, extract the cursor query param and call this tool again."
+}

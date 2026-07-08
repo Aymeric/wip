@@ -1,0 +1,959 @@
+{
+  "data": {
+    "instruments": [
+      {
+        "id": "0a9af536-ec70-4903-89c8-71a9bc6da7c3",
+        "chain_id": "3ef88bc0-b626-4975-a49b-4d2a7d561084",
+        "chain_symbol": "UMC",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "14.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "717a8e1e-fd82-4f9c-9db1-7dac3d464b11",
+        "chain_id": "3ef88bc0-b626-4975-a49b-4d2a7d561084",
+        "chain_symbol": "UMC",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "14.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "b4f86d0c-1d64-42b2-9002-5c1aac96728e",
+        "chain_id": "3ef88bc0-b626-4975-a49b-4d2a7d561084",
+        "chain_symbol": "UMC",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "15.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "ba99d83b-feac-451d-86a2-a361890a9708",
+        "chain_id": "3ef88bc0-b626-4975-a49b-4d2a7d561084",
+        "chain_symbol": "UMC",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "15.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "449246c3-fc4d-4c9e-a561-8cea4b45586f",
+        "chain_id": "3ef88bc0-b626-4975-a49b-4d2a7d561084",
+        "chain_symbol": "UMC",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "16.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "68f63e5d-4c1e-4ba1-a1fd-a644ba439041",
+        "chain_id": "3ef88bc0-b626-4975-a49b-4d2a7d561084",
+        "chain_symbol": "UMC",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "16.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "cf8c20dc-7a46-40a6-9f2b-6157809db276",
+        "chain_id": "3ef88bc0-b626-4975-a49b-4d2a7d561084",
+        "chain_symbol": "UMC",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "17.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "de4492e1-f239-410f-b292-4d011836b03d",
+        "chain_id": "3ef88bc0-b626-4975-a49b-4d2a7d561084",
+        "chain_symbol": "UMC",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "17.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "020f58f2-f141-4c4c-9cd2-a9a15856ed97",
+        "chain_id": "3ef88bc0-b626-4975-a49b-4d2a7d561084",
+        "chain_symbol": "UMC",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "18.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "6e7450ee-695a-4145-a65b-d805a07ba2be",
+        "chain_id": "3ef88bc0-b626-4975-a49b-4d2a7d561084",
+        "chain_symbol": "UMC",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "18.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "03ecfbff-bd5d-4c41-b926-06527ff7a686",
+        "chain_id": "3ef88bc0-b626-4975-a49b-4d2a7d561084",
+        "chain_symbol": "UMC",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "19.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "d5855621-4a3a-4972-b2a5-ebf58d556778",
+        "chain_id": "3ef88bc0-b626-4975-a49b-4d2a7d561084",
+        "chain_symbol": "UMC",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "19.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "30f70856-45b8-4611-9649-16c7132d344f",
+        "chain_id": "3ef88bc0-b626-4975-a49b-4d2a7d561084",
+        "chain_symbol": "UMC",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "20.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "dd75fcce-d702-496a-9618-834df0ed434d",
+        "chain_id": "3ef88bc0-b626-4975-a49b-4d2a7d561084",
+        "chain_symbol": "UMC",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "20.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "45eec827-5daf-4c19-aa77-65548a1cec95",
+        "chain_id": "3ef88bc0-b626-4975-a49b-4d2a7d561084",
+        "chain_symbol": "UMC",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "21.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "e17cb53d-a749-4736-affa-53e991e1ccb0",
+        "chain_id": "3ef88bc0-b626-4975-a49b-4d2a7d561084",
+        "chain_symbol": "UMC",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "21.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "26834fb3-6ef0-4540-8f8f-2df1449e2874",
+        "chain_id": "3ef88bc0-b626-4975-a49b-4d2a7d561084",
+        "chain_symbol": "UMC",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "22.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "8bafb246-25b4-4840-b92e-6400f140ffc6",
+        "chain_id": "3ef88bc0-b626-4975-a49b-4d2a7d561084",
+        "chain_symbol": "UMC",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "22.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "2bc90804-c6a7-4a48-878d-1cef6189779b",
+        "chain_id": "3ef88bc0-b626-4975-a49b-4d2a7d561084",
+        "chain_symbol": "UMC",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "23.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "88aa3346-4ad2-4814-80a5-21c82d240871",
+        "chain_id": "3ef88bc0-b626-4975-a49b-4d2a7d561084",
+        "chain_symbol": "UMC",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "23.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "1f160c39-9d68-4558-acfc-e74a1bddc7dd",
+        "chain_id": "3ef88bc0-b626-4975-a49b-4d2a7d561084",
+        "chain_symbol": "UMC",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "24.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "b494a8ed-2831-4f9c-a379-a8153afa2d64",
+        "chain_id": "3ef88bc0-b626-4975-a49b-4d2a7d561084",
+        "chain_symbol": "UMC",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "24.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "d1470796-9702-4e68-be05-12a08ccdd73e",
+        "chain_id": "3ef88bc0-b626-4975-a49b-4d2a7d561084",
+        "chain_symbol": "UMC",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "25.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "d65871eb-43c0-4806-b81b-b29afe91fc1a",
+        "chain_id": "3ef88bc0-b626-4975-a49b-4d2a7d561084",
+        "chain_symbol": "UMC",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "25.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "c7a50f29-c3b6-4542-b25e-f8db738fe7ca",
+        "chain_id": "3ef88bc0-b626-4975-a49b-4d2a7d561084",
+        "chain_symbol": "UMC",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "26.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "e88e6e12-8bea-44ad-b726-6f6febba3d91",
+        "chain_id": "3ef88bc0-b626-4975-a49b-4d2a7d561084",
+        "chain_symbol": "UMC",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "26.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "1ad076e7-2a18-4c8e-aed7-44b828c1bf05",
+        "chain_id": "3ef88bc0-b626-4975-a49b-4d2a7d561084",
+        "chain_symbol": "UMC",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "27.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "292c5afb-da2c-455f-8227-5345ce6ff093",
+        "chain_id": "3ef88bc0-b626-4975-a49b-4d2a7d561084",
+        "chain_symbol": "UMC",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "27.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "3c8fbac7-4aa1-4860-93c7-98556d1d094a",
+        "chain_id": "3ef88bc0-b626-4975-a49b-4d2a7d561084",
+        "chain_symbol": "UMC",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "28.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "b01f5c62-56f0-4343-8c86-846f8b89db91",
+        "chain_id": "3ef88bc0-b626-4975-a49b-4d2a7d561084",
+        "chain_symbol": "UMC",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "28.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "0a42dd0d-aff0-4b81-96ef-789b070ca1d2",
+        "chain_id": "3ef88bc0-b626-4975-a49b-4d2a7d561084",
+        "chain_symbol": "UMC",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "29.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "19f84ff7-8abc-41e9-85fa-2f36a54a4215",
+        "chain_id": "3ef88bc0-b626-4975-a49b-4d2a7d561084",
+        "chain_symbol": "UMC",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "29.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "1f1d36df-2223-42ed-97b7-0e4caac92882",
+        "chain_id": "3ef88bc0-b626-4975-a49b-4d2a7d561084",
+        "chain_symbol": "UMC",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "30.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "292dbf0b-53d1-4d74-8de6-9fff8d38a2b2",
+        "chain_id": "3ef88bc0-b626-4975-a49b-4d2a7d561084",
+        "chain_symbol": "UMC",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "30.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "7c16c435-5ef3-47e2-bf6a-9a17cff8f9dd",
+        "chain_id": "3ef88bc0-b626-4975-a49b-4d2a7d561084",
+        "chain_symbol": "UMC",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "31.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "a8cece8d-5879-48bb-af80-08670b144dbc",
+        "chain_id": "3ef88bc0-b626-4975-a49b-4d2a7d561084",
+        "chain_symbol": "UMC",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "31.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "9dcaa2bc-2ec6-422d-943b-cd565b5a99c5",
+        "chain_id": "3ef88bc0-b626-4975-a49b-4d2a7d561084",
+        "chain_symbol": "UMC",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "32.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "bd3dc42f-3a74-474c-8cae-bbb1546af3fb",
+        "chain_id": "3ef88bc0-b626-4975-a49b-4d2a7d561084",
+        "chain_symbol": "UMC",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "32.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "804124ad-e159-49b8-b851-1ff1f74a648c",
+        "chain_id": "3ef88bc0-b626-4975-a49b-4d2a7d561084",
+        "chain_symbol": "UMC",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "33.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "df3d08ab-a339-4585-bd45-95192ce60e4d",
+        "chain_id": "3ef88bc0-b626-4975-a49b-4d2a7d561084",
+        "chain_symbol": "UMC",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "33.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "bde1225c-19ef-464c-a989-2b80fa70a286",
+        "chain_id": "3ef88bc0-b626-4975-a49b-4d2a7d561084",
+        "chain_symbol": "UMC",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "34.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "db0dd8ba-b0cd-412a-aa2d-6b2aac2789d5",
+        "chain_id": "3ef88bc0-b626-4975-a49b-4d2a7d561084",
+        "chain_symbol": "UMC",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "34.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "357f5529-3d29-47fb-8a90-7be475de0267",
+        "chain_id": "3ef88bc0-b626-4975-a49b-4d2a7d561084",
+        "chain_symbol": "UMC",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "35.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "a324e889-500e-4d6a-a5a5-480d28c2c1b8",
+        "chain_id": "3ef88bc0-b626-4975-a49b-4d2a7d561084",
+        "chain_symbol": "UMC",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "35.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "192dae80-a26b-4e72-8210-f52d87ac9a7c",
+        "chain_id": "3ef88bc0-b626-4975-a49b-4d2a7d561084",
+        "chain_symbol": "UMC",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "36.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "a982eaac-1fb8-44a5-a288-063a40805d35",
+        "chain_id": "3ef88bc0-b626-4975-a49b-4d2a7d561084",
+        "chain_symbol": "UMC",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "36.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "8a716fd7-9b8e-4c52-86e5-e24097ece73c",
+        "chain_id": "3ef88bc0-b626-4975-a49b-4d2a7d561084",
+        "chain_symbol": "UMC",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "37.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "db363b59-66c9-4070-a385-1fbe6937d426",
+        "chain_id": "3ef88bc0-b626-4975-a49b-4d2a7d561084",
+        "chain_symbol": "UMC",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "37.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "68cf1cc2-85b8-4c5b-b835-02c73d2fc272",
+        "chain_id": "3ef88bc0-b626-4975-a49b-4d2a7d561084",
+        "chain_symbol": "UMC",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "38.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "da2af120-6bdf-4ee2-b3af-eddf3e13959b",
+        "chain_id": "3ef88bc0-b626-4975-a49b-4d2a7d561084",
+        "chain_symbol": "UMC",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "38.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "64a518c0-b671-458c-a99c-8fba2a10e351",
+        "chain_id": "3ef88bc0-b626-4975-a49b-4d2a7d561084",
+        "chain_symbol": "UMC",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "39.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "6e07bb50-4806-493f-8aa3-2e217afa60e5",
+        "chain_id": "3ef88bc0-b626-4975-a49b-4d2a7d561084",
+        "chain_symbol": "UMC",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "39.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "40cad6aa-05fc-42a4-8f8d-c40dacc9133e",
+        "chain_id": "3ef88bc0-b626-4975-a49b-4d2a7d561084",
+        "chain_symbol": "UMC",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "40.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "b4e20be3-0b43-4706-a8b2-c3040f992746",
+        "chain_id": "3ef88bc0-b626-4975-a49b-4d2a7d561084",
+        "chain_symbol": "UMC",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "40.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "1d7dddc3-05e2-4e0c-a2d0-4de9683eb010",
+        "chain_id": "3ef88bc0-b626-4975-a49b-4d2a7d561084",
+        "chain_symbol": "UMC",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "41.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "d83aa55c-34c8-482b-a9e6-3ca4cf3e05a4",
+        "chain_id": "3ef88bc0-b626-4975-a49b-4d2a7d561084",
+        "chain_symbol": "UMC",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "41.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      }
+    ]
+  },
+  "guide": "Present chain_symbol, expiration_date, type, strike_price; flag state when not 'active' or tradability when not 'tradable'. Pass id to an order's leg.option_id. Quote sellout_datetime when the user asks \"when will Robinhood force-close this position?\" \u2014 it is the authoritative per-contract timestamp covering equity/index, AM/PM settle, and T-1 logic. underlying_type ('equity' or 'index') is informational; mention only when it affects strategy. When next is non-null, extract the cursor query param and call this tool again."
+}

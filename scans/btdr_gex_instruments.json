@@ -1,0 +1,347 @@
+{
+  "symbol": "BTDR",
+  "chain_id": "578d4d6c-cf42-4dea-a6ed-f009df9e7914",
+  "expiration": "2026-08-07",
+  "instruments": [
+    {
+      "id": "01d64b9e-e42f-4e1a-89b8-168ca2ac96f5",
+      "strike": 5.0,
+      "type": "call"
+    },
+    {
+      "id": "3036156b-1afb-47a1-8f32-47fefc2d3539",
+      "strike": 5.0,
+      "type": "put"
+    },
+    {
+      "id": "464c69a2-7595-471e-a892-c3e3cf7e6796",
+      "strike": 7.0,
+      "type": "put"
+    },
+    {
+      "id": "8446a590-48ee-47ca-8dfe-e0078f14ddde",
+      "strike": 7.0,
+      "type": "call"
+    },
+    {
+      "id": "356c94ec-a4dc-4806-b9b5-d12d2c36b5e1",
+      "strike": 8.0,
+      "type": "call"
+    },
+    {
+      "id": "c03477b4-c886-4ff6-ba8a-b7a3dc7ba889",
+      "strike": 8.0,
+      "type": "put"
+    },
+    {
+      "id": "07e537af-d931-4e4a-b66f-36ce186ba437",
+      "strike": 9.0,
+      "type": "call"
+    },
+    {
+      "id": "f147fd00-f429-48bb-bcd8-a0e68cd53194",
+      "strike": 9.0,
+      "type": "put"
+    },
+    {
+      "id": "3b9f7fff-ec7c-4cc0-80fd-90aedca0f5a4",
+      "strike": 10.0,
+      "type": "put"
+    },
+    {
+      "id": "888c58c2-d8d5-474f-9545-1d5441363bd3",
+      "strike": 10.0,
+      "type": "call"
+    },
+    {
+      "id": "0631e8e0-541a-4001-a988-6b2567be4300",
+      "strike": 11.0,
+      "type": "put"
+    },
+    {
+      "id": "e5a11c1a-9cc5-4a9b-b44c-f3348887af32",
+      "strike": 11.0,
+      "type": "call"
+    },
+    {
+      "id": "a6e0da02-4c2c-425f-9b2a-6033f46c1f7b",
+      "strike": 11.5,
+      "type": "put"
+    },
+    {
+      "id": "f8e96f40-b6b0-4db1-87d0-faf5813cab9b",
+      "strike": 11.5,
+      "type": "call"
+    },
+    {
+      "id": "4ad2bc95-8180-44e9-b085-b948c137b736",
+      "strike": 12.0,
+      "type": "call"
+    },
+    {
+      "id": "aba99ea6-b358-4370-a4e3-be6797fd1520",
+      "strike": 12.0,
+      "type": "put"
+    },
+    {
+      "id": "0d60c997-2598-47ce-9c87-7080dde96b75",
+      "strike": 12.5,
+      "type": "put"
+    },
+    {
+      "id": "c5f9a88a-49cf-4755-adcc-f2925cef52f6",
+      "strike": 12.5,
+      "type": "call"
+    },
+    {
+      "id": "3c912e0e-8118-4325-a977-4ee015e47fcc",
+      "strike": 13.0,
+      "type": "put"
+    },
+    {
+      "id": "a3de5b4f-de0f-4237-88c6-ecaf16802143",
+      "strike": 13.0,
+      "type": "call"
+    },
+    {
+      "id": "5f50db13-5ff4-449a-b261-19427716269d",
+      "strike": 13.5,
+      "type": "call"
+    },
+    {
+      "id": "c3f81edf-4d98-42c1-8fb0-750f65c0314d",
+      "strike": 13.5,
+      "type": "put"
+    },
+    {
+      "id": "50ac82f1-c8d3-4e5a-b7dd-5b210930ded3",
+      "strike": 14.0,
+      "type": "call"
+    },
+    {
+      "id": "64feee73-43f9-45d7-8128-723dfbeef508",
+      "strike": 14.0,
+      "type": "put"
+    },
+    {
+      "id": "70206eb4-b115-4b6c-81da-51998157d009",
+      "strike": 14.5,
+      "type": "call"
+    },
+    {
+      "id": "9a451f8f-2853-4c91-a327-60f753570f84",
+      "strike": 14.5,
+      "type": "put"
+    },
+    {
+      "id": "1d4083fd-5a2e-4f47-ba8e-8b4242700bc9",
+      "strike": 15.0,
+      "type": "put"
+    },
+    {
+      "id": "d0540fda-215d-4f93-8e8d-732a051c6757",
+      "strike": 15.0,
+      "type": "call"
+    },
+    {
+      "id": "c234a964-6782-439e-bc9f-e6a8b5630517",
+      "strike": 15.5,
+      "type": "put"
+    },
+    {
+      "id": "d9adbfe4-c3a9-433e-b89b-4e7b0e7c9d0e",
+      "strike": 15.5,
+      "type": "call"
+    },
+    {
+      "id": "06e37afe-b509-485c-a2a2-fa5e9a534da1",
+      "strike": 16.0,
+      "type": "call"
+    },
+    {
+      "id": "46d03a00-e74f-47fa-892d-467eb27d7c80",
+      "strike": 16.0,
+      "type": "put"
+    },
+    {
+      "id": "2c65b26f-5423-4ba6-8beb-14e4e0908f91",
+      "strike": 16.5,
+      "type": "call"
+    },
+    {
+      "id": "6c0b993f-f061-4e51-9b25-7839dbd97437",
+      "strike": 16.5,
+      "type": "put"
+    },
+    {
+      "id": "00f648cc-8b80-4dd5-a3cf-918de8afdcc5",
+      "strike": 17.0,
+      "type": "call"
+    },
+    {
+      "id": "47a413b3-3ae4-4d59-90dd-d4962e367701",
+      "strike": 17.0,
+      "type": "put"
+    },
+    {
+      "id": "5494ebfd-2233-4433-9de5-77f1d0583946",
+      "strike": 17.5,
+      "type": "call"
+    },
+    {
+      "id": "e7274992-7f29-4b77-8947-189ab4ce8c41",
+      "strike": 17.5,
+      "type": "put"
+    },
+    {
+      "id": "700dd1cf-1a58-4d59-8019-143b75952eaa",
+      "strike": 18.0,
+      "type": "call"
+    },
+    {
+      "id": "7b156ea3-1487-4112-a1e0-d1285a5ab1bb",
+      "strike": 18.0,
+      "type": "put"
+    },
+    {
+      "id": "4b027399-8144-4313-858c-5334c0b6ea89",
+      "strike": 18.5,
+      "type": "call"
+    },
+    {
+      "id": "f3c07a6f-f9fd-40c3-8d86-7c4a56bd8952",
+      "strike": 18.5,
+      "type": "put"
+    },
+    {
+      "id": "24639174-ce46-4d47-aac8-844853dc499c",
+      "strike": 19.0,
+      "type": "call"
+    },
+    {
+      "id": "2ba6561b-0ee3-4c97-bd70-24e8c5281d1f",
+      "strike": 19.0,
+      "type": "put"
+    },
+    {
+      "id": "487e48ce-43c5-4435-9530-4ee977b5edd9",
+      "strike": 19.5,
+      "type": "put"
+    },
+    {
+      "id": "92f39491-56e2-4221-9a35-762dfb178bc3",
+      "strike": 19.5,
+      "type": "call"
+    },
+    {
+      "id": "28ef1e94-a06b-4bf3-9630-3ef3c6f033e4",
+      "strike": 20.0,
+      "type": "put"
+    },
+    {
+      "id": "c7445c05-9b55-4f10-a703-a1aef9266a3a",
+      "strike": 20.0,
+      "type": "call"
+    },
+    {
+      "id": "72874829-7de1-4254-b411-8acbb2694fc7",
+      "strike": 20.5,
+      "type": "call"
+    },
+    {
+      "id": "b7a73f85-a75c-4c2b-94c9-de29c5b7fd3c",
+      "strike": 20.5,
+      "type": "put"
+    },
+    {
+      "id": "6c6b0efd-aacb-437a-a7cc-93e72ff4c321",
+      "strike": 21.0,
+      "type": "put"
+    },
+    {
+      "id": "c4ddd20e-0e63-471a-8762-113f9f96f779",
+      "strike": 21.0,
+      "type": "call"
+    },
+    {
+      "id": "12174c6b-bfd6-4b4d-921c-3729950fb13c",
+      "strike": 21.5,
+      "type": "put"
+    },
+    {
+      "id": "ef5e1180-e369-4a83-abc5-ff45e2f80158",
+      "strike": 21.5,
+      "type": "call"
+    },
+    {
+      "id": "3f8d096d-25be-4b4e-9c4d-2c8175cdc9b2",
+      "strike": 22.0,
+      "type": "put"
+    },
+    {
+      "id": "a0ee1a0b-57fd-44a6-b82a-eb45771cde3f",
+      "strike": 22.0,
+      "type": "call"
+    },
+    {
+      "id": "465ada3a-4322-417a-8ed5-29b467bf5681",
+      "strike": 23.0,
+      "type": "call"
+    },
+    {
+      "id": "d18470e2-2ff5-408b-ae75-3d3a354bd855",
+      "strike": 23.0,
+      "type": "put"
+    },
+    {
+      "id": "b0e9e901-af4b-44c8-aed9-cbd0e1d2c19f",
+      "strike": 24.0,
+      "type": "put"
+    },
+    {
+      "id": "d7a85a2f-e8df-4df3-a178-9ca67f25937f",
+      "strike": 24.0,
+      "type": "call"
+    },
+    {
+      "id": "0d78d738-85e8-4a2c-b454-cf42086d3ed9",
+      "strike": 25.0,
+      "type": "put"
+    },
+    {
+      "id": "a1cd6aba-a2b6-49fd-ada1-72454dcac6a8",
+      "strike": 25.0,
+      "type": "call"
+    },
+    {
+      "id": "056a27da-dff2-4582-9a36-e22306d94854",
+      "strike": 26.0,
+      "type": "put"
+    },
+    {
+      "id": "1d2ed22c-c9bd-41fa-bea6-3460ddefc3d8",
+      "strike": 26.0,
+      "type": "call"
+    },
+    {
+      "id": "47a29fa8-94d0-49d5-b6af-a114ab4c1561",
+      "strike": 30.0,
+      "type": "call"
+    },
+    {
+      "id": "c26f1612-ef0b-49a9-bfb0-943c3cacfa7e",
+      "strike": 30.0,
+      "type": "put"
+    },
+    {
+      "id": "7f1b77ba-2139-488f-8455-68902aae9b1e",
+      "strike": 35.0,
+      "type": "put"
+    },
+    {
+      "id": "89fea321-7634-4228-97e6-025c5c4fe915",
+      "strike": 35.0,
+      "type": "call"
+    }
+  ]
+}

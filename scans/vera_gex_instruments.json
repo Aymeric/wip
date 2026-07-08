@@ -1,0 +1,117 @@
+{
+  "symbol": "VERA",
+  "chain_id": "d9bf7685-d277-48ef-b111-2951c747ef95",
+  "expiration": "2026-08-21",
+  "instruments": [
+    {
+      "id": "8a264628-5cc8-401d-a75b-7f3583bcbabd",
+      "strike": 17.5,
+      "type": "put"
+    },
+    {
+      "id": "d10cc250-9c68-494c-a074-e6324b58d2fc",
+      "strike": 17.5,
+      "type": "call"
+    },
+    {
+      "id": "5d552bbf-6d30-4ce4-adac-c5031506face",
+      "strike": 20.0,
+      "type": "call"
+    },
+    {
+      "id": "c4ef8cc0-2245-4f85-baab-f720ad1d9cfd",
+      "strike": 20.0,
+      "type": "put"
+    },
+    {
+      "id": "42cf31a1-8e16-44c1-b6ad-049c82b0425d",
+      "strike": 22.5,
+      "type": "put"
+    },
+    {
+      "id": "c19a2fd6-eb4b-4c2b-87c4-d75c3594450f",
+      "strike": 22.5,
+      "type": "call"
+    },
+    {
+      "id": "e775b60b-ba0a-4ab2-8ad9-6e41580370ae",
+      "strike": 25.0,
+      "type": "call"
+    },
+    {
+      "id": "ff2c16a2-fb2f-420d-8da1-cbbbd9e7f2d7",
+      "strike": 25.0,
+      "type": "put"
+    },
+    {
+      "id": "10755ca3-669b-4f85-ac11-00550fcdc48a",
+      "strike": 30.0,
+      "type": "call"
+    },
+    {
+      "id": "8cb9a0bd-e7de-4d4d-9bf7-95be17488126",
+      "strike": 30.0,
+      "type": "put"
+    },
+    {
+      "id": "37572d8f-a88a-46f8-908f-1a2679ef909d",
+      "strike": 35.0,
+      "type": "call"
+    },
+    {
+      "id": "9a56365e-d813-433f-a9b5-d07022942940",
+      "strike": 35.0,
+      "type": "put"
+    },
+    {
+      "id": "29df87c9-3d9d-4581-80e5-5a90605b81b7",
+      "strike": 40.0,
+      "type": "put"
+    },
+    {
+      "id": "8403784c-029b-419d-b532-e78701a4cd92",
+      "strike": 40.0,
+      "type": "call"
+    },
+    {
+      "id": "1503f4e7-74e0-4227-a89e-af2e1ae137f9",
+      "strike": 45.0,
+      "type": "put"
+    },
+    {
+      "id": "9c3b5a24-e6ec-4856-b126-547df445711f",
+      "strike": 45.0,
+      "type": "call"
+    },
+    {
+      "id": "77cb4521-2815-4201-aacf-3452a92c387f",
+      "strike": 50.0,
+      "type": "put"
+    },
+    {
+      "id": "aa24fbd1-191d-4178-b72f-1533743265a7",
+      "strike": 50.0,
+      "type": "call"
+    },
+    {
+      "id": "8092c788-030c-4871-b043-86f01681b913",
+      "strike": 55.0,
+      "type": "call"
+    },
+    {
+      "id": "a291e0c7-462d-436a-b37a-a6fe5fdffb01",
+      "strike": 55.0,
+      "type": "put"
+    },
+    {
+      "id": "47c8bd9d-0d97-4116-a24f-a4ec74ec1327",
+      "strike": 60.0,
+      "type": "call"
+    },
+    {
+      "id": "6ffcac55-23ab-42cd-9be7-448873dd4026",
+      "strike": 60.0,
+      "type": "put"
+    }
+  ]
+}

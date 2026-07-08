@@ -1,0 +1,13 @@
+{
+  "spy_change_pct": -0.5798,
+  "qqq_change_pct": -1.8649,
+  "basket_gate": "FAIL",
+  "bull_count": 6,
+  "bear_count": 9,
+  "bull_bear_ratio": 0.667,
+  "bull_bear_gate": "FAIL",
+  "vix_spot": 15.2,
+  "vix_delta_gate": "FAIL",
+  "system_authorization": "BLOCKED",
+  "last_updated": "2026-07-07"
+}

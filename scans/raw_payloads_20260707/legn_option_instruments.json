@@ -1,0 +1,619 @@
+{
+  "data": {
+    "instruments": [
+      {
+        "id": "cc9fca07-fc28-41dd-beb3-4b8741be8822",
+        "chain_id": "35d2c1d2-ce53-452d-b364-1308dd7e11ce",
+        "chain_symbol": "LEGN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "7.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "d8bc3214-39fd-496a-b1fa-68a50a59567e",
+        "chain_id": "35d2c1d2-ce53-452d-b364-1308dd7e11ce",
+        "chain_symbol": "LEGN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "7.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "59c22c53-7854-4433-9bd8-28c0833b068a",
+        "chain_id": "35d2c1d2-ce53-452d-b364-1308dd7e11ce",
+        "chain_symbol": "LEGN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "10.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "f0d627cb-d0ca-410d-9c21-6d55f4e85b96",
+        "chain_id": "35d2c1d2-ce53-452d-b364-1308dd7e11ce",
+        "chain_symbol": "LEGN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "10.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "afa04d22-c09e-4ee8-8eb1-4676aa9fff94",
+        "chain_id": "35d2c1d2-ce53-452d-b364-1308dd7e11ce",
+        "chain_symbol": "LEGN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "12.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "d32b575d-bace-4101-b004-900e82390c7c",
+        "chain_id": "35d2c1d2-ce53-452d-b364-1308dd7e11ce",
+        "chain_symbol": "LEGN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "12.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "0efa0b3b-02c3-46cf-a278-b922cae9fd5c",
+        "chain_id": "35d2c1d2-ce53-452d-b364-1308dd7e11ce",
+        "chain_symbol": "LEGN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "15.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "a64f318c-d5f7-4653-a4f4-5621af2c71c2",
+        "chain_id": "35d2c1d2-ce53-452d-b364-1308dd7e11ce",
+        "chain_symbol": "LEGN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "15.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "177226b4-0398-4162-bd76-3860265212ca",
+        "chain_id": "35d2c1d2-ce53-452d-b364-1308dd7e11ce",
+        "chain_symbol": "LEGN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "17.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "6d3db2b7-c521-4cea-85f5-0d6b0c5ca64d",
+        "chain_id": "35d2c1d2-ce53-452d-b364-1308dd7e11ce",
+        "chain_symbol": "LEGN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "17.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "10975998-8ad2-467b-a312-28804de59039",
+        "chain_id": "35d2c1d2-ce53-452d-b364-1308dd7e11ce",
+        "chain_symbol": "LEGN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "20.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "35c828b7-97a1-442c-abd9-65b2bec1491f",
+        "chain_id": "35d2c1d2-ce53-452d-b364-1308dd7e11ce",
+        "chain_symbol": "LEGN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "20.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "bba143d9-561e-45cf-bcc0-fab49526a267",
+        "chain_id": "35d2c1d2-ce53-452d-b364-1308dd7e11ce",
+        "chain_symbol": "LEGN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "22.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "cb93ada2-ac9e-4ca9-9b9a-94a3ded28e8d",
+        "chain_id": "35d2c1d2-ce53-452d-b364-1308dd7e11ce",
+        "chain_symbol": "LEGN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "22.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "14c759bb-2fb4-43bd-83ae-a8df76508faf",
+        "chain_id": "35d2c1d2-ce53-452d-b364-1308dd7e11ce",
+        "chain_symbol": "LEGN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "25.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "db2f20d2-b1d3-4e2d-ac73-951ead0c6a74",
+        "chain_id": "35d2c1d2-ce53-452d-b364-1308dd7e11ce",
+        "chain_symbol": "LEGN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "25.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "6769e139-ed91-4302-bd0c-b545ff5a32ae",
+        "chain_id": "35d2c1d2-ce53-452d-b364-1308dd7e11ce",
+        "chain_symbol": "LEGN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "27.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "ed20e5be-dc5a-4166-9bdd-fb9366d0c126",
+        "chain_id": "35d2c1d2-ce53-452d-b364-1308dd7e11ce",
+        "chain_symbol": "LEGN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "27.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "3f47ab50-97dc-47f1-ad9e-fd5a42758ea1",
+        "chain_id": "35d2c1d2-ce53-452d-b364-1308dd7e11ce",
+        "chain_symbol": "LEGN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "30.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "df3812f8-a2bf-4a69-827b-62943f7c5961",
+        "chain_id": "35d2c1d2-ce53-452d-b364-1308dd7e11ce",
+        "chain_symbol": "LEGN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "30.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "5b99e26e-c2c3-4591-be3b-6bfc67d3bbe5",
+        "chain_id": "35d2c1d2-ce53-452d-b364-1308dd7e11ce",
+        "chain_symbol": "LEGN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "32.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "ed535b45-32b9-4671-862b-0d3156bea17b",
+        "chain_id": "35d2c1d2-ce53-452d-b364-1308dd7e11ce",
+        "chain_symbol": "LEGN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "32.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "5e41fa8e-d0c2-4be7-adcb-6976fbee2314",
+        "chain_id": "35d2c1d2-ce53-452d-b364-1308dd7e11ce",
+        "chain_symbol": "LEGN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "35.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "c94fef8a-3b49-4a1a-bfc3-7e807a03d63a",
+        "chain_id": "35d2c1d2-ce53-452d-b364-1308dd7e11ce",
+        "chain_symbol": "LEGN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "35.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "e52de6fd-25e3-4a56-be82-9b8c2b101feb",
+        "chain_id": "35d2c1d2-ce53-452d-b364-1308dd7e11ce",
+        "chain_symbol": "LEGN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "37.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "f0516adf-2bd0-4caf-ab23-3372a6c629de",
+        "chain_id": "35d2c1d2-ce53-452d-b364-1308dd7e11ce",
+        "chain_symbol": "LEGN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "37.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "d1dbca0d-1d85-4905-8a65-6b4e90712f14",
+        "chain_id": "35d2c1d2-ce53-452d-b364-1308dd7e11ce",
+        "chain_symbol": "LEGN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "40.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "ffbf3cdc-482c-4547-bd42-37d8338dbd1b",
+        "chain_id": "35d2c1d2-ce53-452d-b364-1308dd7e11ce",
+        "chain_symbol": "LEGN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "40.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "73a273dd-f26a-4845-a5a4-07f502fa4a7c",
+        "chain_id": "35d2c1d2-ce53-452d-b364-1308dd7e11ce",
+        "chain_symbol": "LEGN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "42.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "97ceafaf-a757-458e-a310-58a2e8d366b6",
+        "chain_id": "35d2c1d2-ce53-452d-b364-1308dd7e11ce",
+        "chain_symbol": "LEGN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "42.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "5149c3e0-a3e1-4c48-80c2-9dd84e24a161",
+        "chain_id": "35d2c1d2-ce53-452d-b364-1308dd7e11ce",
+        "chain_symbol": "LEGN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "45.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "c0a373be-4692-4f71-ba04-ddeacfa19f33",
+        "chain_id": "35d2c1d2-ce53-452d-b364-1308dd7e11ce",
+        "chain_symbol": "LEGN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "45.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "3a070fc4-d15a-401d-a9d5-a6a9d99e2c3f",
+        "chain_id": "35d2c1d2-ce53-452d-b364-1308dd7e11ce",
+        "chain_symbol": "LEGN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "47.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "c4a02ff5-e012-41e3-803f-339ca7ede375",
+        "chain_id": "35d2c1d2-ce53-452d-b364-1308dd7e11ce",
+        "chain_symbol": "LEGN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "47.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "8a75023d-49e1-4a27-bdbe-e4824d0c4ff2",
+        "chain_id": "35d2c1d2-ce53-452d-b364-1308dd7e11ce",
+        "chain_symbol": "LEGN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "50.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "e7ee6102-ea79-43d4-b699-e417a933e92e",
+        "chain_id": "35d2c1d2-ce53-452d-b364-1308dd7e11ce",
+        "chain_symbol": "LEGN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "50.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      }
+    ]
+  },
+  "guide": "Present chain_symbol, expiration_date, type, strike_price; flag state when not 'active' or tradability when not 'tradable'. Pass id to an order's leg.option_id. Quote sellout_datetime when the user asks \"when will Robinhood force-close this position?\" \u2014 it is the authoritative per-contract timestamp covering equity/index, AM/PM settle, and T-1 logic. underlying_type ('equity' or 'index') is informational; mention only when it affects strategy. When next is non-null, extract the cursor query param and call this tool again."
+}

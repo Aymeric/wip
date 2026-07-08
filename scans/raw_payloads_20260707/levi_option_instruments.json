@@ -1,0 +1,1708 @@
+{
+  "data": {
+    "instruments": [
+      {
+        "id": "353557af-ffa8-4577-9774-8ad3f2ccfc9a",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "3.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "970b19b9-c539-4168-8e80-0a604c01af45",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "3.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "a01f5def-1d25-488d-9c05-11c9fa4d34b5",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "5.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "cf9924ff-c225-4d06-888e-eb97573f786b",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "5.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "e1b50fdd-3323-4064-a949-701e28d57ba1",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "8.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "f7cf9ddc-4a94-48b0-afd7-6d495b899e6d",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "8.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "253329be-2b1f-4ab1-bcf7-f653a3e0f231",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "10.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "9dcc4ccc-b503-470d-9f56-d698bad51129",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2028-01-21",
+        "sellout_datetime": "2028-01-21T20:30:00+00:00",
+        "strike_price": "10.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "a6df7c88-4390-405d-8284-eacc174ebe62",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-17",
+        "sellout_datetime": "2026-07-17T19:30:00+00:00",
+        "strike_price": "10.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "b0cf94b7-05a1-4a63-9c3d-0cfee53ab845",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2028-01-21",
+        "sellout_datetime": "2028-01-21T20:30:00+00:00",
+        "strike_price": "10.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "ba0f2792-8f5b-40e9-93d1-255458f77dd3",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-16",
+        "sellout_datetime": "2026-10-16T19:30:00+00:00",
+        "strike_price": "10.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "bcd87ef7-d380-44b1-b344-875615581c4e",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-16",
+        "sellout_datetime": "2026-10-16T19:30:00+00:00",
+        "strike_price": "10.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "d67b453b-3843-4df4-873a-6657938d42ae",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "10.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "e43273f8-87b4-4f45-b3bd-7f52bbd2fe4f",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-17",
+        "sellout_datetime": "2026-07-17T19:30:00+00:00",
+        "strike_price": "10.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "8b47da53-95f1-487a-b876-526d54315b75",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "12.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "da80f049-9f7c-4660-bb39-077f39dc7b54",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "12.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "e1b00ad5-3321-4da1-a560-36cd49ac6e90",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-17",
+        "sellout_datetime": "2026-07-17T19:30:00+00:00",
+        "strike_price": "12.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "f4e1be5c-c7d1-4900-997b-d8f315efafae",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-17",
+        "sellout_datetime": "2026-07-17T19:30:00+00:00",
+        "strike_price": "12.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "23764511-e985-4309-9703-7975c7c36369",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-17",
+        "sellout_datetime": "2026-07-17T19:30:00+00:00",
+        "strike_price": "13.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "2a7ae9a4-3f07-4377-86ff-697506ad8cd1",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2028-01-21",
+        "sellout_datetime": "2028-01-21T20:30:00+00:00",
+        "strike_price": "13.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "3d0468bd-683b-4df6-a2b4-e6129126816e",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-17",
+        "sellout_datetime": "2026-07-17T19:30:00+00:00",
+        "strike_price": "13.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "66c8e8d9-042c-4d09-82cf-3d121fa6ad4f",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "13.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "92d21df0-b7f0-43e1-a1d5-6a5419623ab7",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "13.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "b0515658-65e6-41b8-ae16-3c8f4791adf5",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2028-01-21",
+        "sellout_datetime": "2028-01-21T20:30:00+00:00",
+        "strike_price": "13.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "b0642782-bc88-4c10-8ec9-56c775cbf134",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-16",
+        "sellout_datetime": "2026-10-16T19:30:00+00:00",
+        "strike_price": "13.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "cc0a6e5e-c8fe-45db-ae9a-64d40d7b1ee8",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-16",
+        "sellout_datetime": "2026-10-16T19:30:00+00:00",
+        "strike_price": "13.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "0cfbc433-e594-4465-afdf-a3bb1b1c691a",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-17",
+        "sellout_datetime": "2026-07-17T19:30:00+00:00",
+        "strike_price": "14.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "2c54b35d-82fb-47e7-a796-48136b29b24f",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-16",
+        "sellout_datetime": "2026-10-16T19:30:00+00:00",
+        "strike_price": "14.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "5a62bd72-bf86-4a27-9552-9ce51cbfda93",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-17",
+        "sellout_datetime": "2026-07-17T19:30:00+00:00",
+        "strike_price": "14.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "9965292f-147e-4775-9853-f44e490fba6a",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "14.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "ebe72695-f2e2-450f-ac87-6fbdafe4dcc0",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "14.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "fec4034c-d9d5-48fa-b73f-2699722a8419",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-16",
+        "sellout_datetime": "2026-10-16T19:30:00+00:00",
+        "strike_price": "14.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "14a79b16-f864-4184-b827-eefc21d8b7b9",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2028-01-21",
+        "sellout_datetime": "2028-01-21T20:30:00+00:00",
+        "strike_price": "15.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "20eb43a6-9524-43ba-acf0-f638094d0f00",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "15.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "348876b3-a113-43e1-827f-a126f9125bb6",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-16",
+        "sellout_datetime": "2026-10-16T19:30:00+00:00",
+        "strike_price": "15.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "905320f7-8d22-46f0-8d8a-794bff6525c3",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "15.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "9db0bdb9-720d-4aa1-93ec-10dc37bbc898",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-16",
+        "sellout_datetime": "2026-10-16T19:30:00+00:00",
+        "strike_price": "15.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "c3463439-24e8-49d7-a846-33bbc221a95e",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-17",
+        "sellout_datetime": "2026-07-17T19:30:00+00:00",
+        "strike_price": "15.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "d7f470e0-1f81-44c4-bc99-4d256f9340c0",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-17",
+        "sellout_datetime": "2026-07-17T19:30:00+00:00",
+        "strike_price": "15.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "e974dec8-8fc6-4a7a-8dd8-c0769ca98e84",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2028-01-21",
+        "sellout_datetime": "2028-01-21T20:30:00+00:00",
+        "strike_price": "15.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "7e0aca82-f1be-4269-8f9b-1e65e079d359",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "16.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "8ec37e95-49ba-4f74-a19c-ea91eea5a944",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "16.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "9d861768-a799-46f5-8782-f584da791e42",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-16",
+        "sellout_datetime": "2026-10-16T19:30:00+00:00",
+        "strike_price": "16.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "aff0606f-afe0-4a3f-b4a9-5d471bbc24cd",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "16.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "ca46adc0-0347-42cf-85ae-0577d50a3da4",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-17",
+        "sellout_datetime": "2026-07-17T19:30:00+00:00",
+        "strike_price": "16.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "de5c6509-a90f-47b3-be47-34ee5c6c6c1a",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-16",
+        "sellout_datetime": "2026-10-16T19:30:00+00:00",
+        "strike_price": "16.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "e210ee1e-7390-4426-bf59-a3e295858768",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "16.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "eb3ce5da-683f-4b3e-a975-d29a82cccbcf",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-17",
+        "sellout_datetime": "2026-07-17T19:30:00+00:00",
+        "strike_price": "16.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "2eb9b439-14af-4d32-b152-8e2e861157d5",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-17",
+        "sellout_datetime": "2026-07-17T19:30:00+00:00",
+        "strike_price": "17.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "321bbe5a-db29-4e4b-a60b-2616f08b39b9",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-16",
+        "sellout_datetime": "2026-10-16T19:30:00+00:00",
+        "strike_price": "17.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "51fa1b57-de37-4264-a83b-c598815f34d9",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "17.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "5fae6a27-895b-46ac-bfe9-3efc9c4ce00c",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-17",
+        "sellout_datetime": "2026-07-17T19:30:00+00:00",
+        "strike_price": "17.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "67dd512d-2e07-40c2-be3f-a9c9b795f87d",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "17.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "96b44b06-9d87-41b4-942a-00a3dcdf5345",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "17.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "b4a6cd4c-1934-4268-a70c-f1ed6a4b1a0b",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "17.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "f390db40-66d9-4907-9b4d-1081ef536503",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-16",
+        "sellout_datetime": "2026-10-16T19:30:00+00:00",
+        "strike_price": "17.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "0a95b149-cef0-4866-821f-31b2dcb2e883",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-17",
+        "sellout_datetime": "2026-07-17T19:30:00+00:00",
+        "strike_price": "18.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "1f42a7b7-b6ce-4bd8-a5b5-4b2eec33ad8a",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2028-01-21",
+        "sellout_datetime": "2028-01-21T20:30:00+00:00",
+        "strike_price": "18.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "24dd99ee-a4fb-4620-b24e-2ec42450469f",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-17",
+        "sellout_datetime": "2026-07-17T19:30:00+00:00",
+        "strike_price": "18.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "2ade8e13-161f-424c-adcb-415d06098ba9",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-16",
+        "sellout_datetime": "2026-10-16T19:30:00+00:00",
+        "strike_price": "18.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "332a59f3-c7c0-44e2-b9db-af5855ef6016",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-16",
+        "sellout_datetime": "2026-10-16T19:30:00+00:00",
+        "strike_price": "18.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "77aaad33-ee50-418d-8e76-eab437eef554",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "18.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "a05572be-b67e-4b8d-852e-32eb3830aa2d",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "18.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "a959e3c5-6a21-4068-b9f3-03aebb93bd51",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "18.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "c859edbe-9cfa-4f81-824f-88804da516af",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2028-01-21",
+        "sellout_datetime": "2028-01-21T20:30:00+00:00",
+        "strike_price": "18.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "cc18aa94-7090-4b6e-aba4-4fdc8ca36e88",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "18.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "0c363b66-376f-4c1f-9950-f85410254643",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "19.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "356513aa-849c-43f9-bb86-56468db90e91",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-17",
+        "sellout_datetime": "2026-07-17T19:30:00+00:00",
+        "strike_price": "19.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "41b4ffa9-22aa-46aa-8baa-c8e6b7ee2b71",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "19.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "50a1569e-2f49-4932-8367-9c16af748451",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-16",
+        "sellout_datetime": "2026-10-16T19:30:00+00:00",
+        "strike_price": "19.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "67d9a020-5797-49c9-976b-44cf6dc49c69",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-17",
+        "sellout_datetime": "2026-07-17T19:30:00+00:00",
+        "strike_price": "19.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "6a74f76f-c6ef-46ea-bbf2-5e1b31696b5d",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "19.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "83cb1fed-7464-4966-97f0-96ee8576fb8d",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-16",
+        "sellout_datetime": "2026-10-16T19:30:00+00:00",
+        "strike_price": "19.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "ca1c1a26-c2f9-43e6-ae69-2904e77a1bb7",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "19.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "05fe5f5a-0900-4823-90ad-fc1facc38165",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-17",
+        "sellout_datetime": "2026-07-17T19:30:00+00:00",
+        "strike_price": "20.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "375d4f3c-f8d6-4ee5-b68c-6f3ccab89bad",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "20.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "8c26dfd1-ece6-4e1d-8ec1-8ff8d71f686f",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2028-01-21",
+        "sellout_datetime": "2028-01-21T20:30:00+00:00",
+        "strike_price": "20.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "8c2c5404-decb-491b-aafa-eacfa94130db",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-16",
+        "sellout_datetime": "2026-10-16T19:30:00+00:00",
+        "strike_price": "20.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "afa97f70-9e37-4697-884b-514f9b438874",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-16",
+        "sellout_datetime": "2026-10-16T19:30:00+00:00",
+        "strike_price": "20.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "b866d54f-f338-4cc2-a313-1c4836b729bd",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "20.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "ce771f4a-0009-4eb7-b3c5-11a4ca12eeef",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2028-01-21",
+        "sellout_datetime": "2028-01-21T20:30:00+00:00",
+        "strike_price": "20.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "d2242ae1-6685-4eba-908c-34a4f6889f8f",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "20.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "d7f263e0-b1cd-4b9c-90db-d2cfe7df4707",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "20.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "f05147a6-76c6-4c59-be3a-651ce67ff65e",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-17",
+        "sellout_datetime": "2026-07-17T19:30:00+00:00",
+        "strike_price": "20.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "1e4457e3-8762-4474-a928-a1e741c445c7",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-16",
+        "sellout_datetime": "2026-10-16T19:30:00+00:00",
+        "strike_price": "21.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "1f2c8a30-c2b1-45e1-b8b7-13e69bc309bb",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "21.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "21468b15-84ce-4b6f-9d98-6544616f8327",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "21.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "24287d49-48ec-4571-8cd3-4b90594b4713",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "21.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "2487fd54-501b-4df9-953a-7635093bdb09",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "21.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "722ddad7-fcd6-40ed-a07e-cc81f1ba296b",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-16",
+        "sellout_datetime": "2026-10-16T19:30:00+00:00",
+        "strike_price": "21.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "87872d8f-aaec-46c7-a743-4ac824ca5661",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-17",
+        "sellout_datetime": "2026-07-17T19:30:00+00:00",
+        "strike_price": "21.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "bf95edaf-81d2-4177-86ec-8191347a895d",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-17",
+        "sellout_datetime": "2026-07-17T19:30:00+00:00",
+        "strike_price": "21.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "0a7219bd-cfc1-4c61-9bea-119b9f3f49fa",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2028-01-21",
+        "sellout_datetime": "2028-01-21T20:30:00+00:00",
+        "strike_price": "22.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "1d1d7342-cde6-4102-8046-6afe54e9758e",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-17",
+        "sellout_datetime": "2026-07-17T19:30:00+00:00",
+        "strike_price": "22.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "6714b5b2-2f6f-4a3f-882b-ed0ba3087ae8",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-16",
+        "sellout_datetime": "2026-10-16T19:30:00+00:00",
+        "strike_price": "22.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "6815eedc-83b9-4717-8d32-d353a6fd7670",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "22.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "846da506-43da-4487-a5d0-340f6d89bdf1",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2028-01-21",
+        "sellout_datetime": "2028-01-21T20:30:00+00:00",
+        "strike_price": "22.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "a36c0a7a-85e0-495c-ab49-8af08664f030",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-17",
+        "sellout_datetime": "2026-07-17T19:30:00+00:00",
+        "strike_price": "22.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "a6ebffc1-d808-4fa3-ade6-2be1361cf1ef",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "22.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "bc55af7b-64e4-4cae-b597-e462074e48e8",
+        "chain_id": "ce6b409d-7bc6-47e2-beb6-f7f5df639c64",
+        "chain_symbol": "LEVI",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "22.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      }
+    ],
+    "next": "http://edge-internal.brokeback-shard-router.region.rh/options/instruments/?chain_symbol=LEVI&cursor=bz04JnA9MjEuMDAwMA%3D%3D&state=active"
+  },
+  "guide": "Present chain_symbol, expiration_date, type, strike_price; flag state when not 'active' or tradability when not 'tradable'. Pass id to an order's leg.option_id. Quote sellout_datetime when the user asks \"when will Robinhood force-close this position?\" — it is the authoritative per-contract timestamp covering equity/index, AM/PM settle, and T-1 logic. underlying_type ('equity' or 'index') is informational; mention only when it affects strategy. When next is non-null, extract the cursor query param and call this tool again."
+}

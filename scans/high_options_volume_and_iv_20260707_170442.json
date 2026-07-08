@@ -1,0 +1,1112 @@
+{
+  "data": {
+    "result": {
+      "scan_id": "4135aa4d-1d52-4b34-86e4-f4f954461850",
+      "scan_title": "High options volume and IV",
+      "total_items": 60,
+      "results": [
+        {
+          "ticker": "TLSA",
+          "instrument_id": "ca9a7479-3970-431b-9901-bad1ea27ae0c",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.030534351145038195",
+            "Asset type": "STOCK",
+            "Implied volatility": "9.120097",
+            "Last": "1.35",
+            "Market cap": "1.66709461e+08",
+            "Name": "Tiziana Life Sciences",
+            "Net change": "0.040000000000000036",
+            "Relative options volume": "2.418324849606664",
+            "Relative volume": "1",
+            "Symbol": "TLSA",
+            "Volume": "161192.394345"
+          }
+        },
+        {
+          "ticker": "FLD",
+          "instrument_id": "6eae5de1-5f4e-4cb4-85ba-b567c67ec6be",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.025337487019730102",
+            "Asset type": "STOCK",
+            "Implied volatility": "6.772671",
+            "Last": "0.4937",
+            "Market cap": "2.4452183e+07",
+            "Name": "Fold Holdings",
+            "Net change": "0.012200000000000044",
+            "Relative options volume": "2.6039130032559474",
+            "Relative volume": "1",
+            "Symbol": "FLD",
+            "Volume": "174536.667279"
+          }
+        },
+        {
+          "ticker": "YRD",
+          "instrument_id": "78bde958-d99c-40a8-90c5-904fd466977a",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "-0.041666666666666706",
+            "Asset type": "STOCK",
+            "Implied volatility": "2.967962",
+            "Last": "1.38",
+            "Market cap": "1.25983383e+08",
+            "Name": "Yiren Digital",
+            "Net change": "-0.06000000000000005",
+            "Relative options volume": "2.1351061050309172",
+            "Relative volume": "1",
+            "Symbol": "YRD",
+            "Volume": "5.6621620462171e+07"
+          }
+        },
+        {
+          "ticker": "AARD",
+          "instrument_id": "025ecbb8-4c66-40b6-b8cb-18f7df3ac3e2",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.0017543859649122432",
+            "Asset type": "STOCK",
+            "Implied volatility": "2.87301",
+            "Last": "5.71",
+            "Market cap": "1.24353394e+08",
+            "Name": "Aardvark Therapeutics",
+            "Net change": "0.009999999999999787",
+            "Relative options volume": "2.8618968386023296",
+            "Relative volume": "1.0000047410586812",
+            "Symbol": "AARD",
+            "Volume": "210924.354301"
+          }
+        },
+        {
+          "ticker": "CDXS",
+          "instrument_id": "1b72826a-310d-4f97-9b9b-998320c78bad",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "-0.023846153846154006",
+            "Asset type": "STOCK",
+            "Implied volatility": "2.177308",
+            "Last": "2.4111",
+            "Market cap": "2.2451452e+08",
+            "Name": "Codexis",
+            "Net change": "-0.058900000000000396",
+            "Relative options volume": "2.2133252340061293",
+            "Relative volume": "1.0000036868071749",
+            "Symbol": "CDXS",
+            "Volume": "1.356192010288e+06"
+          }
+        },
+        {
+          "ticker": "HLLY",
+          "instrument_id": "2fd616e8-dcef-438d-9204-e0a252b09029",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0",
+            "Asset type": "STOCK",
+            "Implied volatility": "1.6432528",
+            "Last": "2.4",
+            "Market cap": "2.88887635e+08",
+            "Name": "Holley",
+            "Net change": "0",
+            "Relative options volume": "5.066652332831649",
+            "Relative volume": "1.0000062699082173",
+            "Symbol": "HLLY",
+            "Volume": "637971.871518"
+          }
+        },
+        {
+          "ticker": "MMLP",
+          "instrument_id": "f6b35900-cd9c-4ce0-9f85-7c1828e39c8f",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0",
+            "Asset type": "STOCK",
+            "Implied volatility": "1.5430124",
+            "Last": "2.41",
+            "Market cap": "9.4290493e+07",
+            "Name": "Martin Midstream",
+            "Net change": "0",
+            "Relative options volume": "2.1587108543630285",
+            "Relative volume": "1",
+            "Symbol": "MMLP",
+            "Volume": "59855.7043"
+          }
+        },
+        {
+          "ticker": "VERA",
+          "instrument_id": "8dbd29ed-30e6-4131-aacf-06129242a642",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.016747572815533924",
+            "Asset type": "STOCK",
+            "Implied volatility": "1.4943742",
+            "Last": "41.89",
+            "Market cap": "2.957455644e+09",
+            "Name": "Vera Therapeutics",
+            "Net change": "0.6899999999999977",
+            "Relative options volume": "2.818615095465678",
+            "Relative volume": "1.0000038880074242",
+            "Symbol": "VERA",
+            "Volume": "5.144043099289e+06"
+          }
+        },
+        {
+          "ticker": "AXTI",
+          "instrument_id": "0c0bf051-7468-4a31-a727-a1565892c011",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.035853055457435556",
+            "Asset type": "STOCK",
+            "Implied volatility": "1.4652526",
+            "Last": "58.65",
+            "Market cap": "3.704260678e+09",
+            "Name": "AXT",
+            "Net change": "2.030000000000001",
+            "Relative options volume": "2.007808317289272",
+            "Relative volume": "1",
+            "Symbol": "AXTI",
+            "Volume": "1.0420813120441e+07"
+          }
+        },
+        {
+          "ticker": "BE",
+          "instrument_id": "82d742b6-84e0-4f22-a3f7-5bfa4afcb8c1",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.033999040200819654",
+            "Asset type": "STOCK",
+            "Implied volatility": "1.4150324",
+            "Last": "280.1",
+            "Market cap": "7.7052999402e+10",
+            "Name": "Bloom Energy",
+            "Net change": "9.210000000000036",
+            "Relative options volume": "2.215092026508854",
+            "Relative volume": "1",
+            "Symbol": "BE",
+            "Volume": "1.5929257234564e+07"
+          }
+        },
+        {
+          "ticker": "IMTX",
+          "instrument_id": "c98a3316-c636-48e3-96b9-71775f10ca24",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0",
+            "Asset type": "STOCK",
+            "Implied volatility": "1.4094694",
+            "Last": "9.95",
+            "Market cap": "1.359897951e+09",
+            "Name": "Immatics",
+            "Net change": "0",
+            "Relative options volume": "2.3867770886032087",
+            "Relative volume": "1",
+            "Symbol": "IMTX",
+            "Volume": "440350.872843"
+          }
+        },
+        {
+          "ticker": "ATLX",
+          "instrument_id": "cba72ed1-88aa-45bc-9836-1455e29f2ffa",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0",
+            "Asset type": "STOCK",
+            "Implied volatility": "1.290355",
+            "Last": "3.64",
+            "Market cap": "1.07346828e+08",
+            "Name": "Atlas Lithium",
+            "Net change": "0",
+            "Relative options volume": "5.354709955100504",
+            "Relative volume": "1",
+            "Symbol": "ATLX",
+            "Volume": "413652.540833"
+          }
+        },
+        {
+          "ticker": "RMAX",
+          "instrument_id": "287743d9-a3da-48f0-ae06-809d000b6fef",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0",
+            "Asset type": "STOCK",
+            "Implied volatility": "1.2406215",
+            "Last": "11.12",
+            "Market cap": "2.36108902e+08",
+            "Name": "RE/MAX",
+            "Net change": "0",
+            "Relative options volume": "3.746751350443024",
+            "Relative volume": "1.0000107505265878",
+            "Symbol": "RMAX",
+            "Volume": "837177.293712"
+          }
+        },
+        {
+          "ticker": "AAOI",
+          "instrument_id": "aee03284-144f-4f82-a97b-f063e338288d",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.014882182720132262",
+            "Asset type": "STOCK",
+            "Implied volatility": "1.2182776",
+            "Last": "122.75",
+            "Market cap": "9.705362668e+09",
+            "Name": "Applied Optoelectronics",
+            "Net change": "1.7999999999999972",
+            "Relative options volume": "2.2592809440038213",
+            "Relative volume": "1",
+            "Symbol": "AAOI",
+            "Volume": "1.6162799864543e+07"
+          }
+        },
+        {
+          "ticker": "NBIS",
+          "instrument_id": "c81e8b9e-2484-4f76-8f54-a0497468b547",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.032186253594286236",
+            "Asset type": "STOCK",
+            "Implied volatility": "1.2097147",
+            "Last": "222.56",
+            "Market cap": "5.4745528589e+10",
+            "Name": "Nebius Group",
+            "Net change": "6.939999999999998",
+            "Relative options volume": "2.3209740899214357",
+            "Relative volume": "1",
+            "Symbol": "NBIS",
+            "Volume": "2.5189568439716e+07"
+          }
+        },
+        {
+          "ticker": "IREN",
+          "instrument_id": "03fddd0d-39b0-48e6-a001-d65ae2d23436",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.00025759917568258655",
+            "Asset type": "STOCK",
+            "Implied volatility": "1.1988448",
+            "Last": "38.83",
+            "Market cap": "1.3873440124e+10",
+            "Name": "IREN Limited",
+            "Net change": "0.00999999999999801",
+            "Relative options volume": "2.475002307187568",
+            "Relative volume": "1",
+            "Symbol": "IREN",
+            "Volume": "6.0689995473239e+07"
+          }
+        },
+        {
+          "ticker": "BTDR",
+          "instrument_id": "a331e34f-ff0f-4349-85ec-317890b7531b",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.04332129963898915",
+            "Asset type": "STOCK",
+            "Implied volatility": "1.1840388",
+            "Last": "14.45",
+            "Market cap": "3.369894093e+09",
+            "Name": "Bitdeer Technologies",
+            "Net change": "0.5999999999999996",
+            "Relative options volume": "2.9137916859423547",
+            "Relative volume": "1",
+            "Symbol": "BTDR",
+            "Volume": "1.4497579509305e+07"
+          }
+        },
+        {
+          "ticker": "CIFR",
+          "instrument_id": "4bf35186-af0d-4b7a-8bd6-5a9aec827f1c",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.022455089820359247",
+            "Asset type": "STOCK",
+            "Implied volatility": "1.1323681",
+            "Last": "20.49",
+            "Market cap": "8.197345907e+09",
+            "Name": "Cipher Mining",
+            "Net change": "0.4499999999999993",
+            "Relative options volume": "2.0043047082535894",
+            "Relative volume": "1",
+            "Symbol": "CIFR",
+            "Volume": "3.1148320604477e+07"
+          }
+        },
+        {
+          "ticker": "LAES",
+          "instrument_id": "687fa545-fd62-40d5-9ccb-4b65ac0a8f75",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.0033003300330033767",
+            "Asset type": "STOCK",
+            "Implied volatility": "1.1184104",
+            "Last": "3.04",
+            "Market cap": "6.7954961e+08",
+            "Name": "SEALSQ",
+            "Net change": "0.010000000000000231",
+            "Relative options volume": "5.545419502347643",
+            "Relative volume": "1",
+            "Symbol": "LAES",
+            "Volume": "2.4327442778392e+07"
+          }
+        },
+        {
+          "ticker": "ARCT",
+          "instrument_id": "66618dd5-0589-4235-9dd3-0b32ec16fbbf",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.0027472527472526885",
+            "Asset type": "STOCK",
+            "Implied volatility": "1.074219",
+            "Last": "7.3",
+            "Market cap": "2.06919942e+08",
+            "Name": "Arcturus Therapeutics Holdings",
+            "Net change": "0.019999999999999574",
+            "Relative options volume": "3.1693254953633767",
+            "Relative volume": "1.0000131198958067",
+            "Symbol": "ARCT",
+            "Volume": "1.905527937562e+06"
+          }
+        },
+        {
+          "ticker": "TTMI",
+          "instrument_id": "eaa6c16d-3db8-4d99-a50b-9c80b833ef4c",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.01839979484549304",
+            "Asset type": "STOCK",
+            "Implied volatility": "0.9990369",
+            "Last": "158.85",
+            "Market cap": "1.6198532202e+10",
+            "Name": "TTM Technologies",
+            "Net change": "2.8700000000000045",
+            "Relative options volume": "2.2771273301803423",
+            "Relative volume": "1",
+            "Symbol": "TTMI",
+            "Volume": "3.099626731018e+06"
+          }
+        },
+        {
+          "ticker": "INTC",
+          "instrument_id": "ad059c69-0c1c-4c6b-8322-f53f1bbd69d4",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.020440382218529358",
+            "Asset type": "STOCK",
+            "Implied volatility": "0.9771609",
+            "Last": "122.81",
+            "Market cap": "6.048791e+11",
+            "Name": "Intel",
+            "Net change": "2.460000000000008",
+            "Relative options volume": "2.004994250376131",
+            "Relative volume": "1.0000000714353696",
+            "Symbol": "INTC",
+            "Volume": "1.25988017992527e+08"
+          }
+        },
+        {
+          "ticker": "RIOT",
+          "instrument_id": "f71123c6-d1de-4e1f-8045-55c474bd54e1",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.021709633649932177",
+            "Asset type": "STOCK",
+            "Implied volatility": "0.9520137",
+            "Last": "22.59",
+            "Market cap": "8.360923695e+09",
+            "Name": "Riot Platforms",
+            "Net change": "0.4800000000000004",
+            "Relative options volume": "3.7843168716873574",
+            "Relative volume": "1.0000056209203136",
+            "Symbol": "RIOT",
+            "Volume": "1.8858227817061e+07"
+          }
+        },
+        {
+          "ticker": "MARA",
+          "instrument_id": "8eec3912-304b-4ad9-b71a-39200fc34062",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.02258064516129027",
+            "Asset type": "STOCK",
+            "Implied volatility": "0.9051008",
+            "Last": "12.68",
+            "Market cap": "4.727754237e+09",
+            "Name": "MARA Holdings",
+            "Net change": "0.27999999999999936",
+            "Relative options volume": "2.7471096344548003",
+            "Relative volume": "1",
+            "Symbol": "MARA",
+            "Volume": "5.0688283219619e+07"
+          }
+        },
+        {
+          "ticker": "FIG",
+          "instrument_id": "5d6b1a8d-1d5a-48f3-a4b6-68cdf641199a",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "-0.0028116213683223395",
+            "Asset type": "STOCK",
+            "Implied volatility": "0.8954329",
+            "Last": "21.28",
+            "Market cap": "1.1275556067e+10",
+            "Name": "Figma",
+            "Net change": "-0.05999999999999872",
+            "Relative options volume": "2.033919613365526",
+            "Relative volume": "1.000012858533186",
+            "Symbol": "FIG",
+            "Volume": "2.5664221458472e+07"
+          }
+        },
+        {
+          "ticker": "BEAM",
+          "instrument_id": "267a182c-f42b-493a-8e3d-4019685fe400",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.012647312446105138",
+            "Asset type": "STOCK",
+            "Implied volatility": "0.8922672",
+            "Last": "35.23",
+            "Market cap": "3.579167855e+09",
+            "Name": "Beam Therapeutics",
+            "Net change": "0.4399999999999977",
+            "Relative options volume": "2.080173055379847",
+            "Relative volume": "1.0000017268435029",
+            "Symbol": "BEAM",
+            "Volume": "2.316369086608e+06"
+          }
+        },
+        {
+          "ticker": "PSIX",
+          "instrument_id": "125e3cdd-d4a7-44e2-882f-9f37d754570f",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "-0.00026968716289099275",
+            "Asset type": "STOCK",
+            "Implied volatility": "0.8811333",
+            "Last": "37.07",
+            "Market cap": "8.54710686e+08",
+            "Name": "Power Solutions International",
+            "Net change": "-0.00999999999999801",
+            "Relative options volume": "8.143158960645705",
+            "Relative volume": "1",
+            "Symbol": "PSIX",
+            "Volume": "491713.245944"
+          }
+        },
+        {
+          "ticker": "NEXA",
+          "instrument_id": "7dc453ca-79cb-44ce-af7e-94b154f0c7ce",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.03527607361963197",
+            "Asset type": "STOCK",
+            "Implied volatility": "0.8513083",
+            "Last": "13.5",
+            "Market cap": "1.726999487e+09",
+            "Name": "Nexa Resources",
+            "Net change": "0.46000000000000085",
+            "Relative options volume": "3.1853589015428567",
+            "Relative volume": "1",
+            "Symbol": "NEXA",
+            "Volume": "1.632934012618e+06"
+          }
+        },
+        {
+          "ticker": "FPS",
+          "instrument_id": "92b67855-c05e-455b-acac-e7ac61fe1c58",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.013017498932991879",
+            "Asset type": "STOCK",
+            "Implied volatility": "0.8283032",
+            "Last": "47.47",
+            "Market cap": "1.2182248979e+10",
+            "Name": "Forgent Power Solutions",
+            "Net change": "0.6099999999999994",
+            "Relative options volume": "2.1198798222311397",
+            "Relative volume": "1.0000156365158328",
+            "Symbol": "FPS",
+            "Volume": "3.2168794541259e+07"
+          }
+        },
+        {
+          "ticker": "LAKE",
+          "instrument_id": "44db434a-05c5-4793-8448-06eefd95e671",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "-0.03155339805825233",
+            "Asset type": "STOCK",
+            "Implied volatility": "0.8163562",
+            "Last": "11.97",
+            "Market cap": "1.21982867e+08",
+            "Name": "Lakeland Industries",
+            "Net change": "-0.3899999999999988",
+            "Relative options volume": "4.768117206438627",
+            "Relative volume": "1",
+            "Symbol": "LAKE",
+            "Volume": "156115.42576"
+          }
+        },
+        {
+          "ticker": "RIVN",
+          "instrument_id": "acc0099d-bae4-4589-936c-e36c5c5321ed",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.004830917874396128",
+            "Asset type": "STOCK",
+            "Implied volatility": "0.7850078",
+            "Last": "18.72",
+            "Market cap": "2.5017601162e+10",
+            "Name": "Rivian Automotive",
+            "Net change": "0.08999999999999986",
+            "Relative options volume": "2.857581137075942",
+            "Relative volume": "1",
+            "Symbol": "RIVN",
+            "Volume": "7.8279346637258e+07"
+          }
+        },
+        {
+          "ticker": "FMS",
+          "instrument_id": "d4528be4-734b-4c0c-b15b-269883a07d5d",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0",
+            "Asset type": "STOCK",
+            "Implied volatility": "0.7449181",
+            "Last": "23.53",
+            "Market cap": "1.2638651487e+10",
+            "Name": "Fresenius Medical Care",
+            "Net change": "0",
+            "Relative options volume": "3.2946513849092645",
+            "Relative volume": "1",
+            "Symbol": "FMS",
+            "Volume": "1.242807730266e+06"
+          }
+        },
+        {
+          "ticker": "VCEL",
+          "instrument_id": "42c656b7-b0c2-4d1a-90da-b104d4843459",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0",
+            "Asset type": "STOCK",
+            "Implied volatility": "0.7370587",
+            "Last": "46.98",
+            "Market cap": "2.399185351e+09",
+            "Name": "Vericel",
+            "Net change": "0",
+            "Relative options volume": "2.28542407313357",
+            "Relative volume": "1.0000171682146863",
+            "Symbol": "VCEL",
+            "Volume": "640729.921625"
+          }
+        },
+        {
+          "ticker": "HOOD",
+          "instrument_id": "ef29fd22-6e22-44ef-9911-a8f5bd68abd3",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.015523817972145835",
+            "Asset type": "STOCK",
+            "Implied volatility": "0.7261362",
+            "Last": "114.48",
+            "Market cap": "1.01513935075e+11",
+            "Name": "Robinhood Markets",
+            "Net change": "1.75",
+            "Relative options volume": "2.101443122542261",
+            "Relative volume": "1.000000024205499",
+            "Symbol": "HOOD",
+            "Volume": "4.131292769061e+07"
+          }
+        },
+        {
+          "ticker": "AI",
+          "instrument_id": "bd0a173e-b04e-48eb-a2a0-ce99536e7850",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0",
+            "Asset type": "STOCK",
+            "Implied volatility": "0.7071117",
+            "Last": "9.06",
+            "Market cap": "1.408370449e+09",
+            "Name": "C3.AI",
+            "Net change": "0",
+            "Relative options volume": "3.5658294318152177",
+            "Relative volume": "1",
+            "Symbol": "AI",
+            "Volume": "5.220567612219e+06"
+          }
+        },
+        {
+          "ticker": "NG",
+          "instrument_id": "bfb215a8-4c3e-466e-bacb-8b417af6efd3",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.04037267080745338",
+            "Asset type": "STOCK",
+            "Implied volatility": "0.7029661",
+            "Last": "6.7",
+            "Market cap": "2.821770095e+09",
+            "Name": "NovaGold Resources",
+            "Net change": "0.2599999999999998",
+            "Relative options volume": "2.318427719954559",
+            "Relative volume": "1",
+            "Symbol": "NG",
+            "Volume": "4.389834415125e+06"
+          }
+        },
+        {
+          "ticker": "Q",
+          "instrument_id": "1f664938-74c2-4983-9000-1fefbe09f5a6",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.026172839506172895",
+            "Asset type": "STOCK",
+            "Implied volatility": "0.6859219",
+            "Last": "145.46",
+            "Market cap": "2.9673832592e+10",
+            "Name": "Qnity Electronics",
+            "Net change": "3.710000000000008",
+            "Relative options volume": "2.6864437674412502",
+            "Relative volume": "1.0000017739909535",
+            "Symbol": "Q",
+            "Volume": "2.818508662721e+06"
+          }
+        },
+        {
+          "ticker": "WSBF",
+          "instrument_id": "9284a011-0409-437c-8040-b55724e5c056",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0",
+            "Asset type": "STOCK",
+            "Implied volatility": "0.5963752",
+            "Last": "20.6",
+            "Market cap": "3.71893489e+08",
+            "Name": "Waterstone Financial",
+            "Net change": "0",
+            "Relative options volume": "2.3570557137047583",
+            "Relative volume": "1",
+            "Symbol": "WSBF",
+            "Volume": "85152.864178"
+          }
+        },
+        {
+          "ticker": "FIGS",
+          "instrument_id": "ce60273a-7da9-41a7-a571-2c533061fef2",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.006006006006006055",
+            "Asset type": "STOCK",
+            "Implied volatility": "0.5888568",
+            "Last": "10.05",
+            "Market cap": "1.668802056e+09",
+            "Name": "FIGS",
+            "Net change": "0.0600000000000005",
+            "Relative options volume": "5.79145371552932",
+            "Relative volume": "1.0000028985544487",
+            "Symbol": "FIGS",
+            "Volume": "3.450005567445e+06"
+          }
+        },
+        {
+          "ticker": "OLPX",
+          "instrument_id": "97fd5cf8-8e69-4361-9f59-b6df289b0308",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.00966183574879228",
+            "Asset type": "STOCK",
+            "Implied volatility": "0.5846503",
+            "Last": "2.09",
+            "Market cap": "1.391282165e+09",
+            "Name": "Olaplex Holdings",
+            "Net change": "0.020000000000000018",
+            "Relative options volume": "2.2735810534912213",
+            "Relative volume": "1",
+            "Symbol": "OLPX",
+            "Volume": "7.7443510145734e+07"
+          }
+        },
+        {
+          "ticker": "SGRY",
+          "instrument_id": "f822bc18-fc2f-4a76-a499-9d19d2dc7cb4",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "-0.019733023795705157",
+            "Asset type": "STOCK",
+            "Implied volatility": "0.5208469",
+            "Last": "16.89",
+            "Market cap": "2.253480031e+09",
+            "Name": "Surgery Partners",
+            "Net change": "-0.33999999999999986",
+            "Relative options volume": "3.782954980841991",
+            "Relative volume": "1",
+            "Symbol": "SGRY",
+            "Volume": "1.476760411516e+06"
+          }
+        },
+        {
+          "ticker": "GFL",
+          "instrument_id": "b8bc806c-5d33-4666-b078-698a7e50d988",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.0400213447171825",
+            "Asset type": "STOCK",
+            "Implied volatility": "0.4943671",
+            "Last": "38.98",
+            "Market cap": "1.3529203911e+10",
+            "Name": "GFL Environmental",
+            "Net change": "1.5",
+            "Relative options volume": "4.3760300377587855",
+            "Relative volume": "1",
+            "Symbol": "GFL",
+            "Volume": "3.432284065404e+06"
+          }
+        },
+        {
+          "ticker": "TSLA",
+          "instrument_id": "e39ed23a-7bd1-4587-b060-71988d9ef483",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "-0.0016012199771254173",
+            "Asset type": "STOCK",
+            "Implied volatility": "0.4769983",
+            "Last": "392.82",
+            "Market cap": "1.477689557044e+12",
+            "Name": "Tesla",
+            "Net change": "-0.6299999999999955",
+            "Relative options volume": "3.1644391818680195",
+            "Relative volume": "1",
+            "Symbol": "TSLA",
+            "Volume": "7.4118322822674e+07"
+          }
+        },
+        {
+          "ticker": "TBRG",
+          "instrument_id": "7c0afffc-6775-4760-88ff-d90840e2aca9",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "-0.000381097560975534",
+            "Asset type": "STOCK",
+            "Implied volatility": "0.4761265",
+            "Last": "26.23",
+            "Market cap": "3.93577328e+08",
+            "Name": "TruBridge, Inc",
+            "Net change": "-0.00999999999999801",
+            "Relative options volume": "2.511388613801599",
+            "Relative volume": "1",
+            "Symbol": "TBRG",
+            "Volume": "570950.560831"
+          }
+        },
+        {
+          "ticker": "PSN",
+          "instrument_id": "d6a16a97-9ba2-4298-987d-bbdc023fa6ab",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0",
+            "Asset type": "STOCK",
+            "Implied volatility": "0.4408331",
+            "Last": "56.29",
+            "Market cap": "6.021820947e+09",
+            "Name": "Parsons",
+            "Net change": "0",
+            "Relative options volume": "3.0395138255997147",
+            "Relative volume": "1",
+            "Symbol": "PSN",
+            "Volume": "1.150902086148e+06"
+          }
+        },
+        {
+          "ticker": "THC",
+          "instrument_id": "dd0c55f2-44b0-475e-8ae4-c504916dfd37",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "-4.908698213229386e-05",
+            "Asset type": "STOCK",
+            "Implied volatility": "0.4066053",
+            "Last": "203.71",
+            "Market cap": "1.754782964e+10",
+            "Name": "Tenet Healthcare",
+            "Net change": "-0.009999999999990905",
+            "Relative options volume": "2.0284335610893085",
+            "Relative volume": "1",
+            "Symbol": "THC",
+            "Volume": "2.107072009219e+06"
+          }
+        },
+        {
+          "ticker": "NVDA",
+          "instrument_id": "a4ecd608-e7b4-4ff3-afa5-f77ae7632dfb",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "-0.002258379099728102",
+            "Asset type": "STOCK",
+            "Implied volatility": "0.3864003",
+            "Last": "194.39",
+            "Market cap": "4.71897743e+12",
+            "Name": "NVIDIA",
+            "Net change": "-0.44000000000002615",
+            "Relative options volume": "2.0212291279985877",
+            "Relative volume": "1.000000034991722",
+            "Symbol": "NVDA",
+            "Volume": "1.42890944018339e+08"
+          }
+        },
+        {
+          "ticker": "VIK",
+          "instrument_id": "a919afe5-7d0a-46bf-9a41-8f4455b2047e",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "-0.0029794418512265088",
+            "Asset type": "STOCK",
+            "Implied volatility": "0.3772211",
+            "Last": "100.39",
+            "Market cap": "4.4923560815e+10",
+            "Name": "Viking Holdings Ltd",
+            "Net change": "-0.29999999999999716",
+            "Relative options volume": "2.86845284254707",
+            "Relative volume": "1.0000119153320584",
+            "Symbol": "VIK",
+            "Volume": "4.280250641113e+06"
+          }
+        },
+        {
+          "ticker": "CSCO",
+          "instrument_id": "8a9fe49d-5d0a-4040-a19b-f3f4df44408f",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "-0.003283343686218871",
+            "Asset type": "STOCK",
+            "Implied volatility": "0.3768555",
+            "Last": "112.32",
+            "Market cap": "4.44160272398e+11",
+            "Name": "Cisco Systems",
+            "Net change": "-0.37000000000000455",
+            "Relative options volume": "2.0824557729458504",
+            "Relative volume": "1",
+            "Symbol": "CSCO",
+            "Volume": "2.4261219180799e+07"
+          }
+        },
+        {
+          "ticker": "NU",
+          "instrument_id": "cce0c8e5-f070-451b-bac9-e926d76cace2",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.006612784717119755",
+            "Asset type": "STOCK",
+            "Implied volatility": "0.3761216",
+            "Last": "13.7",
+            "Market cap": "6.6168298425e+10",
+            "Name": "Nu",
+            "Net change": "0.08999999999999986",
+            "Relative options volume": "3.053445521908968",
+            "Relative volume": "1",
+            "Symbol": "NU",
+            "Volume": "5.585448706542e+07"
+          }
+        },
+        {
+          "ticker": "T",
+          "instrument_id": "2b456f6a-3287-4757-abf9-327383d2c708",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.0009718172983480625",
+            "Asset type": "STOCK",
+            "Implied volatility": "0.3492865",
+            "Last": "20.6",
+            "Market cap": "1.42996813224e+11",
+            "Name": "AT&T",
+            "Net change": "0.020000000000003126",
+            "Relative options volume": "2.116096019258388",
+            "Relative volume": "1.000003717820085",
+            "Symbol": "T",
+            "Volume": "1.2937737095889e+08"
+          }
+        },
+        {
+          "ticker": "RPRX",
+          "instrument_id": "b8d075a9-dd75-4dd9-a838-2c32ef21690a",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.007270209451272193",
+            "Asset type": "STOCK",
+            "Implied volatility": "0.3439508",
+            "Last": "58.19",
+            "Market cap": "2.5607944988e+10",
+            "Name": "Royalty Pharma",
+            "Net change": "0.4199999999999946",
+            "Relative options volume": "2.740672123400382",
+            "Relative volume": "1",
+            "Symbol": "RPRX",
+            "Volume": "3.245307841642e+06"
+          }
+        },
+        {
+          "ticker": "UTL",
+          "instrument_id": "45284154-99db-46b7-bdbc-219975a2dbaa",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0",
+            "Asset type": "STOCK",
+            "Implied volatility": "0.3430332",
+            "Last": "53.48",
+            "Market cap": "9.62148572e+08",
+            "Name": "Unitil",
+            "Net change": "0",
+            "Relative options volume": "3.842164599774521",
+            "Relative volume": "1",
+            "Symbol": "UTL",
+            "Volume": "145425.716999"
+          }
+        },
+        {
+          "ticker": "INCY",
+          "instrument_id": "cd40c333-a0f2-4863-a706-348f26afb84e",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.009498545267841857",
+            "Asset type": "STOCK",
+            "Implied volatility": "0.3284095",
+            "Last": "117.97",
+            "Market cap": "2.3346542633e+10",
+            "Name": "Incyte",
+            "Net change": "1.1099999999999994",
+            "Relative options volume": "2.554905871586744",
+            "Relative volume": "1.0000524217809406",
+            "Symbol": "INCY",
+            "Volume": "2.632631546083e+06"
+          }
+        },
+        {
+          "ticker": "PCAR",
+          "instrument_id": "225b8ff3-97c1-4665-beee-184ce2d1f293",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "-0.00125523012552306",
+            "Asset type": "STOCK",
+            "Implied volatility": "0.3070407",
+            "Last": "119.35",
+            "Market cap": "6.2891204365e+10",
+            "Name": "Paccar",
+            "Net change": "-0.15000000000000568",
+            "Relative options volume": "2.645063362885942",
+            "Relative volume": "1",
+            "Symbol": "PCAR",
+            "Volume": "2.905756136714e+06"
+          }
+        },
+        {
+          "ticker": "AAPL",
+          "instrument_id": "450dfc6d-5510-4d40-abfb-f633b7d9be3e",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "-0.007517091663156508",
+            "Asset type": "STOCK",
+            "Implied volatility": "0.2855723",
+            "Last": "306.31",
+            "Market cap": "4.53295868228e+12",
+            "Name": "Apple",
+            "Net change": "-2.319999999999993",
+            "Relative options volume": "2.6550226929857526",
+            "Relative volume": "1",
+            "Symbol": "AAPL",
+            "Volume": "7.5506570397298e+07"
+          }
+        },
+        {
+          "ticker": "PEP",
+          "instrument_id": "376ca781-1333-40ca-bd61-a48f46ebd950",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "-0.0021494938288725714",
+            "Asset type": "STOCK",
+            "Implied volatility": "0.2826517",
+            "Last": "143.91",
+            "Market cap": "1.97115326389e+11",
+            "Name": "PepsiCo",
+            "Net change": "-0.3100000000000023",
+            "Relative options volume": "3.402883791762331",
+            "Relative volume": "1",
+            "Symbol": "PEP",
+            "Volume": "1.3046123763855e+07"
+          }
+        },
+        {
+          "ticker": "PG",
+          "instrument_id": "1520c0c0-7b1f-4464-9b5e-800a2a3ce29f",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "-0.002707879268212117",
+            "Asset type": "STOCK",
+            "Implied volatility": "0.2570479",
+            "Last": "151",
+            "Market cap": "3.52573171258e+11",
+            "Name": "Procter & Gamble",
+            "Net change": "-0.4099999999999966",
+            "Relative options volume": "2.439349196734532",
+            "Relative volume": "1.0000021603354419",
+            "Symbol": "PG",
+            "Volume": "9.257841545704e+06"
+          }
+        },
+        {
+          "ticker": "WMT",
+          "instrument_id": "ad1edbfb-19c8-4939-be66-1f09bd65b902",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "-0.0020565092989986047",
+            "Asset type": "STOCK",
+            "Implied volatility": "0.2452617",
+            "Last": "111.61",
+            "Market cap": "8.90031572695e+11",
+            "Name": "Walmart",
+            "Net change": "-0.23000000000000398",
+            "Relative options volume": "2.705192409401146",
+            "Relative volume": "1",
+            "Symbol": "WMT",
+            "Volume": "2.9549375989829e+07"
+          }
+        },
+        {
+          "ticker": "KO",
+          "instrument_id": "bb9a01df-5982-42d4-88db-8662f23cdab5",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "-0.007012122652721695",
+            "Asset type": "STOCK",
+            "Implied volatility": "0.2059751",
+            "Last": "83.55",
+            "Market cap": "3.6201087065e+11",
+            "Name": "Coca-Cola",
+            "Net change": "-0.5900000000000034",
+            "Relative options volume": "2.206871837518359",
+            "Relative volume": "1",
+            "Symbol": "KO",
+            "Volume": "1.8332322766327e+07"
+          }
+        }
+      ],
+      "sorted_by": "Implied volatility desc",
+      "filters_applied": [
+        {
+          "filter_type": "Relative options volume",
+          "predicate": ">",
+          "values": [
+            "2"
+          ],
+          "interval": "1d",
+          "length": 30
+        },
+        {
+          "filter_type": "Asset type",
+          "predicate": "ANY_OF",
+          "values": [
+            "STOCK"
+          ]
+        }
+      ],
+      "cortex_managed": false
+    }
+  },
+  "guide": "How to interpret the response:\n- result.total_items is the total number of instruments matching the scan's filters. result.results may contain fewer entries if the scan's frontend_limit caps the rows — mention this to the user when total_items > len(results).\n- result.results is an array of matching instruments. Each entry has:\n  - ticker: trading symbol (e.g. \"AAPL\"). Empty when the scan does not have a Symbol/Ticker column visible — use instrument_id then.\n  - instrument_id: Robinhood instrument UUID. Pass this to other trading tools that take an instrument_id.\n  - instrument_type: STOCK, ETF, etc.\n  - columns: map of column display name -> cell value. Values are pre-formatted strings from upstream — re-format only if needed for the user.\n- result.sorted_by tells you the row order (e.g. \"Volume desc\"). Mention it when describing the table.\n- result.filters_applied lists the filters in effect — useful for confirming \"this scan currently filters by RSI > 70\".\n- result.cortex_managed: true means the scan was created by Cortex inside Legend. Reads are fine, but update_scan_filters / update_scan_config will reject Cortex-managed scans — tell the user that if they ask to modify it.\n\nWhen presenting results:\n- Render as a table with ticker as the leftmost column followed by the most user-relevant columns (% Change, Volume, etc.).\n- State total_items so the user knows how big the match set is.\n- Note that results are live as of execution time — they will differ if run again later.\n- If results is empty: tell the user the scan returned 0 matches right now. Suggest relaxing filters with update_scan_filters if they want broader results.\n\nError handling:\n- \"scan does not exist or you do not have access to it\" → the scan_id is wrong or the scan belongs to a different user. Suggest get_scans to see available scans.\n- Rate-limited or upstream failure → surface the error verbatim, no automatic retry."
+}
