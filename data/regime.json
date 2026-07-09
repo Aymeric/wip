@@ -1,13 +1,14 @@
 {
-  "spy_change_pct": -0.309,
-  "qqq_change_pct": 0.283,
+  "spy_change_pct": 0.1315,
+  "qqq_change_pct": 0.1265,
   "basket_gate": "FAIL",
-  "bull_count": 3,
-  "bear_count": 12,
-  "bull_bear_ratio": 0.25,
-  "bull_bear_gate": "FAIL",
-  "vix_spot": 16.9,
+  "bull_count": 10,
+  "bear_count": 0,
+  "bull_bear_ratio": 999.0,
+  "bull_bear_gate": "PASS",
+  "vix_spot": 15.0,
   "vix_delta_gate": "FAIL",
+  "hyg_change_pct": 0.0,
   "system_authorization": "BLOCKED",
-  "last_updated": "2026-07-08"
+  "last_updated": "2026-07-09"
 }

@@ -10,7 +10,13 @@ import os
 # Ensure the src directory is in the path to import gex_engine correctly
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
 
-from gex_engine import calculate_grade, compute_regime_gates, compute_exit_rule_state
+from gex_engine import (
+    calculate_grade, 
+    compute_regime_gates, 
+    compute_exit_rule_state,
+    derive_gex_profile,
+    derive_volatility_profile
+)
 
 class TestGEXEngine(unittest.TestCase):
 
@@ -162,6 +168,148 @@ class TestGEXEngine(unittest.TestCase):
             days_held=2, stalling_counter=0, dte=10
         )
         self.assertEqual(exit_rule, "PROFIT TAKE (T1 TARGET MET)")
+
+    def test_etf_file_regime_integration(self):
+        # Verify etf-file regime data processing via dummy args Namespace
+        class DummyArgs:
+            def __init__(self):
+                self.spy = None
+                self.qqq = None
+                self.bulls = None
+                self.bears = None
+                self.vix_bearish = None
+                self.vix_spot = 15.0
+                self.etf_file = "data/downloads/20260708/etf_quotes.json"
+                
+        # We can dynamically test the parsing engine on cached data file
+        args = DummyArgs()
+        from gex_engine import cmd_update_regime
+        # Should not raise exception and execute status check reporting success
+        cmd_update_regime(args)
+
+    def test_hyg_credit_divergence_integration(self):
+        class DummyArgs:
+            def __init__(self):
+                self.spy = None
+                self.qqq = None
+                self.bulls = None
+                self.bears = None
+                self.vix_bearish = None
+                self.vix_spot = 15.0
+                self.hyg = -0.45
+                self.etf_file = "data/downloads/20260708/etf_quotes.json"
+                
+        args = DummyArgs()
+        from gex_engine import cmd_update_regime
+        cmd_update_regime(args)
+
+    def test_derive_gex_profile_standard(self):
+        # Setup realistic raw options instruments and quotes payloads
+        inst_data = {
+            "instruments": [
+                {"id": "put1", "strike_price": "90.0000", "type": "put"},
+                {"id": "put2", "strike_price": "95.0000", "type": "put"},
+                {"id": "call1", "strike_price": "105.0000", "type": "call"},
+                {"id": "call2", "strike_price": "110.0000", "type": "call"}
+            ]
+        }
+        quotes_data = {
+            "results": [
+                {"quote": {"instrument_id": "put1", "open_interest": 1000, "gamma": "0.01", "implied_volatility": "0.30"}},
+                {"quote": {"instrument_id": "put2", "open_interest": 2000, "gamma": "0.02", "implied_volatility": "0.28"}},
+                {"quote": {"instrument_id": "call1", "open_interest": 3000, "gamma": "0.015", "implied_volatility": "0.25"}},
+                {"quote": {"instrument_id": "call2", "open_interest": 1500, "gamma": "0.01", "implied_volatility": "0.27"}}
+            ]
+        }
+        
+        # Test GEX derivation at spot = 100.0
+        gex_profile = derive_gex_profile(inst_data, quotes_data, spot=100.0)
+        self.assertEqual(gex_profile["derived_ptrans"], 95.0)
+        self.assertEqual(gex_profile["derived_ntrans"], 90.0)
+        self.assertEqual(gex_profile["derived_gex"], 105.0)
+        self.assertEqual(gex_profile["total_oi"], 1000 + 2000 + 3000 + 1500)
+        self.assertFalse(gex_profile["rule7_derived"]) # Total OI > 10,000 is False (7500 <= 10000)
+        
+        # Test Rule 1 and Rule 2
+        # Call GEX: sum(oi * gamma * 100 * spot)
+        # put1: 1000 * 0.01 * 100 * 100 = 100000, put2: 2000 * 0.02 * 100 * 100 = 400000 -> Put GEX = 500k
+        # call1: 3000 * 0.015 * 100 * 100 = 450000, call2: 1500 * 0.01 * 100 * 100 = 150000 -> Call GEX = 600k
+        self.assertTrue(gex_profile["rule1_derived"]) # total_call_gex > 0
+        self.assertTrue(gex_profile["rule2_derived"]) # Call GEX > Put GEX (600k > 500k)
+
+    def test_derive_gex_profile_tie_breaking(self):
+        # Case where open interest is 0 for matching strikes, but total_oi > 0 (by having 1 OI on one strike)
+        inst_data = {
+            "instruments": [
+                {"id": "put1", "strike_price": "90.0000", "type": "put"},
+                {"id": "put2", "strike_price": "95.0000", "type": "put"},
+                {"id": "call1", "strike_price": "105.0000", "type": "call"},
+                {"id": "call2", "strike_price": "110.0000", "type": "call"}
+            ]
+        }
+        quotes_data = {
+            "results": [
+                {"quote": {"instrument_id": "put1", "open_interest": 0, "gamma": "0.01", "implied_volatility": "0.30"}},
+                {"quote": {"instrument_id": "put2", "open_interest": 0, "gamma": "0.02", "implied_volatility": "0.28"}},
+                {"quote": {"instrument_id": "call1", "open_interest": 1, "gamma": "0.015", "implied_volatility": "0.25"}},
+                {"quote": {"instrument_id": "call2", "open_interest": 0, "gamma": "0.01", "implied_volatility": "0.27"}}
+            ]
+        }
+        
+        gex_profile = derive_gex_profile(inst_data, quotes_data, spot=100.0)
+        # Should break ties by choosing highest strike closest to spot for pTrans (95.0, not 90.0)
+        self.assertEqual(gex_profile["derived_ptrans"], 95.0)
+        # Should break ties for nTrans by choosing highest strike strictly below pTrans (90.0)
+        self.assertEqual(gex_profile["derived_ntrans"], 90.0)
+        # Should choose the strike with largest call open interest (105.0 has 1 OI, 110.0 has 0 OI)
+        self.assertEqual(gex_profile["derived_gex"], 105.0)
+
+    def test_derive_gex_profile_spot_above_all_strikes(self):
+        inst_data = {
+            "instruments": [
+                {"id": "call1", "strike_price": "105.0000", "type": "call"},
+                {"id": "call2", "strike_price": "110.0000", "type": "call"}
+            ]
+        }
+        quotes_data = {
+            "results": [
+                {"quote": {"instrument_id": "call1", "open_interest": 500, "gamma": "0.015", "implied_volatility": "0.25"}},
+                {"quote": {"instrument_id": "call2", "open_interest": 500, "gamma": "0.01", "implied_volatility": "0.27"}}
+            ]
+        }
+        
+        # Spot is 120.0, which is strictly higher than 105 and 110 (all calls)
+        # our at_above_spot_calls is empty!
+        # Fallback should occur and assign gex to spot * 1.05 = 126.0
+        gex_profile = derive_gex_profile(inst_data, quotes_data, spot=120.0)
+        self.assertEqual(gex_profile["derived_gex"], 126.0)
+
+    def test_derive_volatility_profile(self):
+        # Create a series of 12 closes => 11 log returns with minimal variance
+        hist_data = {
+            "bars": [
+                {"begins_at": "2026-06-01T00:00:00Z", "close_price": "100.000"},
+                {"begins_at": "2026-06-02T00:00:00Z", "close_price": "100.100"},
+                {"begins_at": "2026-06-03T00:00:00Z", "close_price": "99.9000"},
+                {"begins_at": "2026-06-04T00:00:00Z", "close_price": "100.050"},
+                {"begins_at": "2026-06-05T00:00:00Z", "close_price": "99.9500"},
+                {"begins_at": "2026-06-08T00:00:00Z", "close_price": "100.020"},
+                {"begins_at": "2026-06-09T00:00:00Z", "close_price": "100.080"},
+                {"begins_at": "2026-06-10T00:00:00Z", "close_price": "99.9200"},
+                {"begins_at": "2026-06-11T00:00:00Z", "close_price": "100.040"},
+                {"begins_at": "2026-06-12T00:00:00Z", "close_price": "99.9600"},
+                {"begins_at": "2026-06-15T00:00:00Z", "close_price": "100.010"},
+                {"begins_at": "2026-06-16T00:00:00Z", "close_price": "100.070"},
+            ]
+        }
+        
+        # Pass iv_sum = 0.5, iv_count = 2 => avg iv = 0.25 => iv30 = 25.0%
+        vol_profile = derive_volatility_profile(hist_data, "AAPL", iv_sum=0.5, iv_count=2)
+        self.assertEqual(vol_profile["iv30_val"], 25.0)
+        self.assertGreater(vol_profile["hv90_val"], 0.0)
+        self.assertGreater(vol_profile["rv10_val"], 0.0)
+        # Check rule derivations
+        self.assertTrue(vol_profile["rule11_derived"]) # Realized 10-day is under 35.0%
 
 if __name__ == '__main__':
     unittest.main()

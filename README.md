@@ -82,6 +82,10 @@ python3 src/gex_engine.py status
 ```bash
 python3 src/gex_engine.py update-regime --spy 0.62 --qqq 1.10 --bulls 120 --bears 35 --vix-bearish True --vix-spot 15.20
 ```
+Or automatically derive all SPY, QQQ and Sector breadths from a downloaded Robinhood ETF Quotes file:
+```bash
+python3 src/gex_engine.py update-regime --etf-file data/downloads/20260708/etf_quotes.json --vix-bearish True --vix-spot 15.20
+```
 Gates are computed mechanically: **Basket** (SPY or QQQ > $+0.5\%$), **Bull:Bear** (ratio $> 3.0{:}1$), **VIX Delta** (dealer positioning bearish on VIX). Authorization resolves to `ALL TRACKS OK` (3/3), `TRACK 1 OK` (2/3), or `BLOCKED`.
 
 #### Dynamically grade a quantitative GEX setup:

@@ -98,6 +98,7 @@ def get_regime_status():
     vix_spot = regime.get("vix_spot", 0.0)
     vix_delta_gate = regime.get("vix_delta_gate", "FAIL")
     system_auth = regime.get("system_authorization", "BLOCKED")
+    hyg_pct = regime.get("hyg_change_pct", None)
     
     return {
         "spy_pct": spy_pct,
@@ -107,7 +108,8 @@ def get_regime_status():
         "bull_bear_gate": bull_bear_gate,
         "vix_spot": vix_spot,
         "vix_delta_gate": vix_delta_gate,
-        "system_authorization": system_auth
+        "system_authorization": system_auth,
+        "hyg_pct": hyg_pct
     }
 
 
@@ -141,20 +143,152 @@ def cmd_update_regime(args):
     """Recomputes the Daily Regime Gates from raw market inputs and persists them."""
     cached_regime = load_json(REGIME_FILE, {})
     
+    spy_val = args.spy
+    qqq_val = args.qqq
+    bulls_val = args.bulls
+    bears_val = args.bears
+    vix_bearish_val = args.vix_bearish
+    vix_spot_val = args.vix_spot
+    hyg_val = getattr(args, "hyg", None)
+    
+    if hasattr(args, "etf_file") and args.etf_file:
+        try:
+            with open(args.etf_file, "r") as f:
+                etf_data = json.load(f)
+                
+            results = []
+            if isinstance(etf_data, dict):
+                results = etf_data.get("data", {}).get("results", [])
+                if not results:
+                    results = etf_data.get("results", [])
+                if not results:
+                    results = etf_data.get("data", [])
+            elif isinstance(etf_data, list):
+                results = etf_data
+                
+            reference_etfs = {
+                "SPY", "QQQ", "IWM", "DIA", 
+                "XLK", "XLF", "XLV", "XLY", "XLP", "XLI", "XLU", "XLB", "XLRE", "XLE", "XLC", "HYG"
+            }
+            
+            spy_pct = 0.0
+            qqq_pct = 0.0
+            bull_count = 0
+            bear_count = 0
+            found_symbols = {}
+            
+            for item in results:
+                if not isinstance(item, dict):
+                    continue
+                q = item.get("quote", item)
+                if not isinstance(q, dict):
+                    continue
+                symbol = q.get("symbol")
+                if not symbol:
+                    continue
+                sym_upper = symbol.upper()
+                if sym_upper in reference_etfs:
+                    # Resolve price choosing non-reg or reg based on timestamps
+                    nonreg_t = q.get("venue_last_non_reg_trade_time") or ""
+                    reg_t = q.get("venue_last_trade_time") or ""
+                    
+                    price = 0.0
+                    if nonreg_t > reg_t and q.get("last_non_reg_trade_price") is not None:
+                        try:
+                            price = float(q["last_non_reg_trade_price"])
+                        except ValueError:
+                            pass
+                    if price <= 0.0 and q.get("last_trade_price") is not None:
+                        try:
+                            price = float(q["last_trade_price"])
+                        except ValueError:
+                            pass
+                            
+                    prev_close = 0.0
+                    if q.get("adjusted_previous_close") is not None:
+                        try:
+                            prev_close = float(q["adjusted_previous_close"])
+                        except ValueError:
+                            pass
+                            
+                    if price > 0.0 and prev_close > 0.0:
+                        chg_pct = ((price - prev_close) / prev_close) * 100.0
+                        found_symbols[sym_upper] = chg_pct
+                        
+            # Calculate SPY, QQQ changes
+            spy_pct = found_symbols.get("SPY", 0.0)
+            qqq_pct = found_symbols.get("QQQ", 0.0)
+            
+            # Count bulls and bears
+            for sym, chg in found_symbols.items():
+                if sym == "HYG":
+                    continue
+                if chg > 0.1:
+                    bull_count += 1
+                elif chg < -0.1:
+                    bear_count += 1
+                    
+            spy_val = spy_pct
+            qqq_val = qqq_pct
+            bulls_val = bull_count
+            bears_val = bear_count
+            
+            if "HYG" in found_symbols:
+                hyg_val = found_symbols["HYG"]
+            
+            print(format_color(f"📊 Auto-derived regime metrics from {args.etf_file}:", "32", bold=True))
+            print(f"  -> SPY Change: {spy_pct:+.2f}%, QQQ Change: {qqq_pct:+.2f}%")
+            if "HYG" in found_symbols:
+                print(f"  -> HYG Credit Change: {found_symbols['HYG']:+.2f}%")
+            print(f"  -> Bulls: {bull_count}, Bears: {bear_count} (out of {len(found_symbols) - (1 if 'HYG' in found_symbols else 0)} tracked reference ETFs)")
+            
+            # If VXX or UVXY are in findings, we can use their signs as a fallback VIX Delta gate proxy
+            if vix_bearish_val is None:
+                for item in results:
+                    q = item.get("quote", item) if isinstance(item, dict) else {}
+                    if not isinstance(q, dict): continue
+                    s = q.get("symbol", "").upper()
+                    if s in ("VXX", "UVXY"):
+                        nonreg_t = q.get("venue_last_non_reg_trade_time") or ""
+                        reg_t = q.get("venue_last_trade_time") or ""
+                        p = 0.0
+                        if nonreg_t > reg_t and q.get("last_non_reg_trade_price") is not None:
+                            p = float(q["last_non_reg_trade_price"]) or 0.0
+                        if p <= 0.0 and q.get("last_trade_price") is not None:
+                            p = float(q["last_trade_price"]) or 0.0
+                        pc = float(q.get("adjusted_previous_close") or 0.0)
+                        if p > 0.0 and pc > 0.0:
+                            proxy_chg = ((p - pc) / pc) * 100.0
+                            vix_bearish_val = proxy_chg < 0.0
+                            print(f"  -> Derived VIX bearish from proxy {s} (% change: {proxy_chg:+.2f}%): {vix_bearish_val}")
+                            break
+                if vix_bearish_val is None:
+                    # Fallback default if not derivable from file
+                    vix_bearish_val = False
+                    print("  -> VIX Bearish could not be resolved from proxy underliers in ETF file. Defaulting to False (Conservative).")
+                            
+        except Exception as e:
+            print(f"Error parsing ETF quotes file: {e}", file=sys.stderr)
+            
+    if spy_val is None or qqq_val is None or bulls_val is None or bears_val is None or vix_bearish_val is None:
+        print("Error: Missing required metrics for Daily Regime check. Pass them via --spy, --qqq, --bulls, --bears, --vix-bearish, or use --etf-file.", file=sys.stderr)
+        sys.exit(1)
+        
     basket_gate, bull_bear_ratio, bull_bear_gate, vix_delta_gate, system_auth, gates_passed = compute_regime_gates(
-        args.spy, args.qqq, args.bulls, args.bears, args.vix_bearish
+        spy_val, qqq_val, bulls_val, bears_val, vix_bearish_val
     )
     
     regime_data = {
-        "spy_change_pct": round(args.spy, 4),
-        "qqq_change_pct": round(args.qqq, 4),
+        "spy_change_pct": round(spy_val, 4),
+        "qqq_change_pct": round(qqq_val, 4),
         "basket_gate": basket_gate,
-        "bull_count": args.bulls,
-        "bear_count": args.bears,
+        "bull_count": bulls_val,
+        "bear_count": bears_val,
         "bull_bear_ratio": bull_bear_ratio,
         "bull_bear_gate": bull_bear_gate,
-        "vix_spot": round(args.vix_spot, 2) if args.vix_spot is not None else cached_regime.get("vix_spot", 0.0),
+        "vix_spot": round(vix_spot_val, 2) if vix_spot_val is not None else cached_regime.get("vix_spot", 0.0),
         "vix_delta_gate": vix_delta_gate,
+        "hyg_change_pct": round(hyg_val, 4) if hyg_val is not None else cached_regime.get("hyg_change_pct", 0.0),
         "system_authorization": system_auth,
         "last_updated": datetime.today().strftime('%Y-%m-%d')
     }
@@ -198,6 +332,17 @@ def cmd_status(args):
     print(f"- **VIX Delta Gate**: {vixgate_status} (VIX Spot: {regime['vix_spot']:.2f})")
     print(f"- **System Authorization**: {system_auth_str}")
     
+    hyg_pct = regime.get("hyg_pct")
+    if hyg_pct is not None:
+        hyg_color = "31" if hyg_pct <= -0.3 else ("32" if hyg_pct > 0 else "33")
+        hyg_pct_str = format_color(f"{hyg_pct:+.2f}%", hyg_color)
+        print(f"- **HYG Credit Overlay**: {hyg_pct_str}")
+        
+        equities_bullish = regime["spy_pct"] > 0.0 or regime["qqq_pct"] > 0.0
+        if hyg_pct < -0.3 and equities_bullish:
+            print_color("\n⚠️ CREDIT DIVERGENCE DETECTED: HYG daily change of < -0.30% while equities are positive.", "33", bold=True)
+            print_color("⚠️ RISK MITIGATION TRIGGERED: Reduce position sizing on new options entries by 50%.", "33", bold=True)
+            
     # Simple alert or summary
     if regime['system_authorization'] == "BLOCKED":
         print_color("\n🛑 SYSTEM STATUS: BLOCKED. No new entries authorized today.", "31", bold=True)
@@ -278,6 +423,278 @@ def calculate_grade(ticker, spot, ptrans, ntrans, gex, cotmp, extra_rules=None):
     return grade, rules
 
 
+def derive_gex_profile(inst_data, quotes_data, spot):
+    """
+    Derives GEX levels and key option metrics (COTMP, pTrans, nTrans, +GEX)
+    from Robinhood options instruments and quotes payloads.
+    
+    Args:
+        inst_data (dict or list): Options instruments JSON payload
+        quotes_data (dict or list): Options quotes JSON payload
+        spot (float): Current underlier spot price
+        
+    Returns:
+        dict: Derived levels, rules, and intermediate calculations.
+    """
+    instruments_list = []
+    if isinstance(inst_data, dict):
+        if "data" in inst_data and isinstance(inst_data["data"], dict):
+            instruments_list = inst_data["data"].get("instruments", [])
+        else:
+            instruments_list = inst_data.get("instruments", [])
+    elif isinstance(inst_data, list):
+        instruments_list = inst_data
+        
+    inst_map = {}
+    for inst in instruments_list:
+        if not isinstance(inst, dict) or "id" not in inst:
+            continue
+        try:
+            inst_map[inst["id"]] = {
+                "strike": float(inst["strike_price"]) if "strike_price" in inst else float(inst.get("strike", 0.0)),
+                "type": inst["type"]
+            }
+        except (ValueError, KeyError):
+            continue
+        
+    quotes_list = []
+    if isinstance(quotes_data, dict):
+        quotes_list = quotes_data.get("data", {}).get("results", [])
+        if not quotes_list:
+            quotes_list = quotes_data.get("data", [])
+        if not quotes_list:
+            quotes_list = quotes_data.get("results", [])
+    elif isinstance(quotes_data, list):
+        quotes_list = quotes_data
+        
+    strike_put_oi = {}
+    strike_call_oi = {}
+    strike_put_gex = {}
+    strike_call_gex = {}
+    total_oi = 0
+    total_call_gex = 0.0
+    total_put_gex = 0.0
+    
+    iv_sum = 0.0
+    iv_count = 0
+    
+    calc_spot = spot if spot is not None else 100.0
+    
+    for q_item in quotes_list:
+        if not isinstance(q_item, dict):
+            continue
+        q = q_item.get("quote", q_item)
+        if not isinstance(q, dict):
+            continue
+        opt_id = q.get("instrument_id") or q.get("id") or q.get("instrument")
+        if not opt_id or opt_id not in inst_map:
+            continue
+            
+        try:
+            oi = int(q.get("open_interest") or 0)
+            gamma = float(q.get("gamma") or 0.0)
+            iv = float(q.get("implied_volatility") or q.get("implied_vol", 0.0))
+        except (ValueError, TypeError):
+            continue
+            
+        strike = inst_map[opt_id]["strike"]
+        opt_type = inst_map[opt_id]["type"]
+        
+        total_oi += oi
+        gex_val = oi * gamma * 100.0 * calc_spot
+        
+        # IV proxy (within 15% of spot)
+        if abs(strike - calc_spot) / calc_spot <= 0.15:
+            if iv > 0.0:
+                iv_sum += iv
+                iv_count += 1
+                
+        if opt_type == "put":
+            strike_put_oi[strike] = strike_put_oi.get(strike, 0) + oi
+            strike_put_gex[strike] = strike_put_gex.get(strike, 0.0) + gex_val
+            total_put_gex += gex_val
+        elif opt_type == "call":
+            strike_call_oi[strike] = strike_call_oi.get(strike, 0) + oi
+            strike_call_gex[strike] = strike_call_gex.get(strike, 0.0) + gex_val
+            total_call_gex += gex_val
+            
+    if total_oi <= 0:
+        return {
+            "total_oi": 0,
+            "iv_sum": 0.0,
+            "iv_count": 0,
+            "derived_cotmp": calc_spot * 0.95,
+            "derived_ptrans": calc_spot * 0.98,
+            "derived_ntrans": calc_spot * 0.95,
+            "derived_gex": calc_spot * 1.05,
+            "total_call_gex": 0.0,
+            "total_put_gex": 0.0,
+            "rule1_derived": False,
+            "rule2_derived": False,
+            "rule7_derived": False,
+            "rule9_derived": False,
+            "rule10_derived": False,
+        }
+        
+    # COTMP = weighted put strike
+    sum_strike_put_oi = sum(s * oi for s, oi in strike_put_oi.items())
+    sum_put_oi = sum(strike_put_oi.values())
+    derived_cotmp = sum_strike_put_oi / sum_put_oi if sum_put_oi > 0 else calc_spot * 0.95
+    
+    # pTrans = strike at/below spot with largest put OI
+    at_below_spot_puts = {s: oi for s, oi in strike_put_oi.items() if s <= calc_spot}
+    if at_below_spot_puts:
+        # Sort by strike descending so in case of tie we get highest strike closest to spot
+        sorted_puts = sorted(at_below_spot_puts.items(), key=lambda item: (item[1], item[0]), reverse=True)
+        derived_ptrans = sorted_puts[0][0]
+    else:
+        derived_ptrans = calc_spot * 0.98
+        
+    # nTrans = strike below pTrans with next largest put OI
+    below_ptrans_puts = {s: oi for s, oi in strike_put_oi.items() if s < derived_ptrans}
+    if below_ptrans_puts:
+        # Sort by strike descending so in case of tie we get highest strike closest to pTrans
+        sorted_below_puts = sorted(below_ptrans_puts.items(), key=lambda item: (item[1], item[0]), reverse=True)
+        derived_ntrans = sorted_below_puts[0][0]
+    else:
+        derived_ntrans = derived_ptrans * 0.95
+        
+    # +GEX = strike at/above spot with largest call OI
+    at_above_spot_calls = {s: oi for s, oi in strike_call_oi.items() if s >= calc_spot}
+    if at_above_spot_calls:
+        # Sort by strike ascending so that in case of a tie (e.g. all 0), we get lowest strike closest to spot
+        sorted_calls = sorted(at_above_spot_calls.items(), key=lambda item: (item[1], -item[0]), reverse=True)
+        derived_gex = sorted_calls[0][0]
+    else:
+        derived_gex = calc_spot * 1.05
+        
+    rule1_derived = total_call_gex > 0
+    rule2_derived = total_call_gex > abs(total_put_gex)
+    rule7_derived = total_oi > 10000
+    
+    call_oi_at_target = strike_call_oi.get(derived_gex, 0)
+    max_call_oi = max(strike_call_oi.values()) if strike_call_oi else 0
+    rule9_derived = call_oi_at_target >= max_call_oi if max_call_oi > 0 else True
+    
+    all_strikes = sorted(list(set(strike_put_gex.keys()) | set(strike_call_gex.keys())))
+    nearest_strike = min(all_strikes, key=lambda s: abs(s - calc_spot)) if all_strikes else calc_spot
+    net_gex_nearest = strike_call_gex.get(nearest_strike, 0.0) - strike_put_gex.get(nearest_strike, 0.0)
+    rule10_derived = net_gex_nearest >= 0.0
+    
+    return {
+        "total_oi": total_oi,
+        "iv_sum": iv_sum,
+        "iv_count": iv_count,
+        "derived_cotmp": derived_cotmp,
+        "derived_ptrans": derived_ptrans,
+        "derived_ntrans": derived_ntrans,
+        "derived_gex": derived_gex,
+        "total_call_gex": total_call_gex,
+        "total_put_gex": total_put_gex,
+        "rule1_derived": rule1_derived,
+        "rule2_derived": rule2_derived,
+        "rule7_derived": rule7_derived,
+        "rule9_derived": rule9_derived,
+        "rule10_derived": rule10_derived,
+    }
+
+
+def calculate_annualized_vol(returns_list):
+    """Calculates annualized volatility from daily log returns."""
+    import math
+    n = len(returns_list)
+    if n < 2:
+        return 0.0
+    mean_ret = sum(returns_list) / n
+    variance = sum((x - mean_ret) ** 2 for x in returns_list) / (n - 1)
+    stdev_ret = math.sqrt(variance)
+    return stdev_ret * math.sqrt(252) * 100.0
+
+
+def derive_volatility_profile(hist_data, symbol, iv_sum, iv_count):
+    """
+    Calculates proxy volatility indicators (RV10, HV90, IV30) and applies rules.
+    
+    Args:
+        hist_data (dict or list): Historical closes JSON payload
+        symbol (str): Stock ticker symbol
+        iv_sum (float): sum of weighted IVs
+        iv_count (int): count of IV occurrences
+        
+    Returns:
+        dict: Derived volatilities and rules.
+    """
+    import math
+    bars = []
+    if isinstance(hist_data, dict):
+        results = hist_data.get("data", {}).get("results", [])
+        if not results:
+            results = hist_data.get("results", [])
+        if results:
+            for res in results:
+                if res.get("symbol", "").upper() == symbol:
+                    bars = res.get("bars", [])
+                    break
+        if not bars:
+            bars = hist_data.get("bars", [])
+    elif isinstance(hist_data, list):
+        bars = hist_data
+        
+    if not bars:
+        return {
+            "iv30_val": 0.0,
+            "hv90_val": 0.0,
+            "rv10_val": 0.0,
+            "rule8_derived": True,
+            "rule11_derived": True
+        }
+        
+    # Sort chronologically by begins_at
+    if isinstance(bars[0], dict) and "begins_at" in bars[0]:
+        bars = sorted(bars, key=lambda x: x.get("begins_at", ""))
+        
+    closes = []
+    for bar in bars:
+        if not isinstance(bar, dict):
+            continue
+        try:
+            val = float(bar.get("close_price") or bar.get("close", 0.0))
+            if val > 0.0:
+                closes.append(val)
+        except (ValueError, TypeError):
+            continue
+            
+    if len(closes) <= 1:
+        return {
+            "iv30_val": 0.0,
+            "hv90_val": 0.0,
+            "rv10_val": 0.0,
+            "rule8_derived": True,
+            "rule11_derived": True
+        }
+        
+    log_returns = [math.log(closes[i] / closes[i-1]) for i in range(1, len(closes))]
+    
+    # HV90 proxy (using exactly the last 90 log returns for 90-day realized volatility window)
+    hv90_val = calculate_annualized_vol(log_returns[-90:])
+    
+    # RV10 proxy (using exactly the last 10 log returns for 10-day volatility compression)
+    rv10_val = calculate_annualized_vol(log_returns[-10:])
+    
+    iv30_val = (iv_sum / iv_count) * 100.0 if iv_count > 0 else 0.0
+    
+    rule8_derived = iv30_val < hv90_val if iv30_val > 0.0 and hv90_val > 0.0 else True
+    rule11_derived = rv10_val <= 35.0 if rv10_val > 0.0 else True
+    
+    return {
+        "iv30_val": iv30_val,
+        "hv90_val": hv90_val,
+        "rv10_val": rv10_val,
+        "rule8_derived": rule8_derived,
+        "rule11_derived": rule11_derived
+    }
+
+
 def cmd_analyze(args):
     """Grades and analyzes options setups for a given ticker."""
     symbol = args.symbol.upper()
@@ -302,195 +719,51 @@ def cmd_analyze(args):
             with open(args.quote_file, "r") as f:
                 quotes_data = json.load(f)
                 
-            instruments_list = []
-            if isinstance(inst_data, dict):
-                if "data" in inst_data and isinstance(inst_data["data"], dict):
-                    instruments_list = inst_data["data"].get("instruments", [])
-                else:
-                    instruments_list = inst_data.get("instruments", [])
-            else:
-                instruments_list = inst_data
-                
-            inst_map = {}
-            for inst in instruments_list:
-                inst_map[inst["id"]] = {
-                    "strike": float(inst["strike_price"]) if "strike_price" in inst else float(inst.get("strike", 0.0)),
-                    "type": inst["type"]
-                }
-                
-            quotes_list = quotes_data.get("data", {}).get("results", []) if isinstance(quotes_data, dict) else []
-            if not quotes_list and isinstance(quotes_data, dict):
-                quotes_list = quotes_data.get("data", [])
-            if not quotes_list and isinstance(quotes_data, list):
-                quotes_list = quotes_data
-            if not quotes_list and isinstance(quotes_data, dict):
-                quotes_list = quotes_data.get("results", [])
-                
-            strike_put_oi = {}
-            strike_call_oi = {}
-            strike_put_gex = {}
-            strike_call_gex = {}
-            total_oi = 0
-            total_call_gex = 0.0
-            total_put_gex = 0.0
-            
-            iv_sum = 0.0
-            iv_count = 0
-            
             calc_spot = spot if spot is not None else 100.0
+            gex_profile = derive_gex_profile(inst_data, quotes_data, calc_spot)
             
-            for q_item in quotes_list:
-                q = q_item.get("quote", q_item) if isinstance(q_item, dict) else q_item
-                if not q or not isinstance(q, dict):
-                    continue
-                opt_id = q.get("instrument_id") or q.get("id") or q.get("instrument")
-                if not opt_id or opt_id not in inst_map:
-                    continue
-                    
-                oi = int(q.get("open_interest") or 0)
-                gamma = float(q.get("gamma") or 0.0)
-                iv = float(q.get("implied_volatility") or q.get("implied_vol", 0.0))
-                
-                strike = inst_map[opt_id]["strike"]
-                opt_type = inst_map[opt_id]["type"]
-                
-                total_oi += oi
-                gex_val = oi * gamma * 100.0 * calc_spot
-                
-                # IV proxy (within 15% of spot)
-                if abs(strike - calc_spot) / calc_spot <= 0.15:
-                    if iv > 0.0:
-                        iv_sum += iv
-                        iv_count += 1
-                        
-                if opt_type == "put":
-                    strike_put_oi[strike] = strike_put_oi.get(strike, 0) + oi
-                    strike_put_gex[strike] = strike_put_gex.get(strike, 0.0) + gex_val
-                    total_put_gex += gex_val
-                elif opt_type == "call":
-                    strike_call_oi[strike] = strike_call_oi.get(strike, 0) + oi
-                    strike_call_gex[strike] = strike_call_gex.get(strike, 0.0) + gex_val
-                    total_call_gex += gex_val
-                    
+            # Map parameters from gex_profile dict
+            total_oi = gex_profile["total_oi"]
+            total_call_gex = gex_profile["total_call_gex"]
+            total_put_gex = gex_profile["total_put_gex"]
+            derived_ptrans = gex_profile["derived_ptrans"]
+            derived_ntrans = gex_profile["derived_ntrans"]
+            derived_gex = gex_profile["derived_gex"]
+            derived_cotmp = gex_profile["derived_cotmp"]
+            
+            # Set rule arguments if they are None
+            if args.ptrans is None: args.ptrans = round(derived_ptrans, 2)
+            if args.ntrans is None: args.ntrans = round(derived_ntrans, 2)
+            if args.gex is None: args.gex = round(derived_gex, 2)
+            if args.cotmp is None: args.cotmp = round(derived_cotmp, 2)
+            
+            if args.rule1 is None: args.rule1 = gex_profile["rule1_derived"]
+            if args.rule2 is None: args.rule2 = gex_profile["rule2_derived"]
+            if args.rule7 is None: args.rule7 = gex_profile["rule7_derived"]
+            if args.rule9 is None: args.rule9 = gex_profile["rule9_derived"]
+            if args.rule10 is None: args.rule10 = gex_profile["rule10_derived"]
+            
             if total_oi > 0:
-                # COTMP = weighted put strike
-                sum_strike_put_oi = sum(s * oi for s, oi in strike_put_oi.items())
-                sum_put_oi = sum(strike_put_oi.values())
-                derived_cotmp = sum_strike_put_oi / sum_put_oi if sum_put_oi > 0 else calc_spot * 0.95
-                
-                # pTrans = strike at/below spot with largest put OI
-                at_below_spot_puts = {s: oi for s, oi in strike_put_oi.items() if s <= calc_spot}
-                derived_ptrans = max(at_below_spot_puts, key=at_below_spot_puts.get) if at_below_spot_puts else calc_spot * 0.98
-                
-                # nTrans = strike below pTrans with next largest put OI
-                below_ptrans_puts = {s: oi for s, oi in strike_put_oi.items() if s < derived_ptrans}
-                derived_ntrans = max(below_ptrans_puts, key=below_ptrans_puts.get) if below_ptrans_puts else derived_ptrans * 0.95
-                
-                # +GEX = strike at/above spot with largest call OI
-                at_above_spot_calls = {s: oi for s, oi in strike_call_oi.items() if s >= calc_spot}
-                derived_gex = max(at_above_spot_calls, key=at_above_spot_calls.get) if at_above_spot_calls else (max(strike_call_oi, key=strike_call_oi.get) if strike_call_oi else calc_spot * 1.05)
-                
-                # Rules
-                rule1_derived = total_call_gex > 0
-                rule2_derived = total_call_gex > abs(total_put_gex)
-                rule7_derived = total_oi > 10000
-                
-                call_oi_at_target = strike_call_oi.get(derived_gex, 0)
-                max_call_oi = max(strike_call_oi.values()) if strike_call_oi else 0
-                rule9_derived = call_oi_at_target >= max_call_oi
-                
-                all_strikes = sorted(list(set(strike_put_gex.keys()) | set(strike_call_gex.keys())))
-                nearest_strike = min(all_strikes, key=lambda s: abs(s - calc_spot)) if all_strikes else calc_spot
-                net_gex_nearest = strike_call_gex.get(nearest_strike, 0.0) - strike_put_gex.get(nearest_strike, 0.0)
-                rule10_derived = net_gex_nearest >= 0.0
-                
-                # Assign to main levels
-                if args.ptrans is None: args.ptrans = round(derived_ptrans, 2)
-                if args.ntrans is None: args.ntrans = round(derived_ntrans, 2)
-                if args.gex is None: args.gex = round(derived_gex, 2)
-                if args.cotmp is None: args.cotmp = round(derived_cotmp, 2)
-                
-                # Set rule arguments if they are None
-                if args.rule1 is None: args.rule1 = rule1_derived
-                if args.rule2 is None: args.rule2 = rule2_derived
-                if args.rule7 is None: args.rule7 = rule7_derived
-                if args.rule9 is None: args.rule9 = rule9_derived
-                if args.rule10 is None: args.rule10 = rule10_derived
-                
                 # If hist-file is passed, derive Rule 8 and Rule 11 volatility proxies
                 if hasattr(args, "hist_file") and args.hist_file:
                     try:
-                        import math
                         with open(args.hist_file, "r") as f:
                             hist_data = json.load(f)
                         
-                        # Extract bars list
-                        bars = []
-                        if isinstance(hist_data, dict):
-                            results = hist_data.get("data", {}).get("results", [])
-                            if not results:
-                                results = hist_data.get("results", [])
-                            if results:
-                                for res in results:
-                                    if res.get("symbol", "").upper() == symbol:
-                                        bars = res.get("bars", [])
-                                        break
-                            if not bars:
-                                bars = hist_data.get("bars", [])
-                        elif isinstance(hist_data, list):
-                            bars = hist_data
-                            
-                        if bars:
-                            # Sort chronologically by begins_at
-                            if isinstance(bars[0], dict) and "begins_at" in bars[0]:
-                                bars.sort(key=lambda x: x.get("begins_at", ""))
-                                
-                            closes = []
-                            for bar in bars:
-                                try:
-                                    val = float(bar.get("close_price") or bar.get("close", 0.0))
-                                    if val > 0.0:
-                                        closes.append(val)
-                                except ValueError:
-                                    continue
-                                    
-                            if len(closes) > 1:
-                                # Calculate daily log returns
-                                log_returns = [math.log(closes[i] / closes[i-1]) for i in range(1, len(closes))]
-                                
-                                def calc_annualized_vol(returns_list):
-                                    n = len(returns_list)
-                                    if n < 2:
-                                        return 0.0
-                                    mean_ret = sum(returns_list) / n
-                                    variance = sum((x - mean_ret) ** 2 for x in returns_list) / (n - 1)
-                                    stdev_ret = math.sqrt(variance)
-                                    return stdev_ret * math.sqrt(252) * 100.0
-                                    
-                                # HV90 proxy (using all available log returns)
-                                hv90_val = calc_annualized_vol(log_returns)
-                                
-                                # RV10 proxy (using last 10 log returns)
-                                rv10_val = calc_annualized_vol(log_returns[-10:])
-                                
-                                # IV30 proxy: calculate if iv_sum and iv_count are set
-                                iv30_val = (iv_sum / iv_count) * 100.0 if iv_count > 0 else 0.0
-                                
-                                rule8_derived = iv30_val < hv90_val if iv30_val > 0.0 and hv90_val > 0.0 else True
-                                rule11_derived = rv10_val <= 35.0 if rv10_val > 0.0 else True
-                                
-                                if args.rule8 is None: args.rule8 = rule8_derived
-                                if args.rule11 is None: args.rule11 = rule11_derived
-                                
-                                print(format_color(f"📈 Volatility Profile Derivation complete for {symbol}:", "32", bold=True))
-                                print(f"  -> IV30 Proxy: {iv30_val:.2f}% vs HV90 Proxy: {hv90_val:.2f}% (Rule8: {rule8_derived})")
-                                print(f"  -> RV10: {rv10_val:.2f}% (Rule11 Setup Vol Compression: {'PASS' if rule11_derived else 'FAIL'})")
+                        vol_profile = derive_volatility_profile(hist_data, symbol, gex_profile["iv_sum"], gex_profile["iv_count"])
+                        
+                        if args.rule8 is None: args.rule8 = vol_profile["rule8_derived"]
+                        if args.rule11 is None: args.rule11 = vol_profile["rule11_derived"]
+                        
+                        print(format_color(f"📈 Volatility Profile Derivation complete for {symbol}:", "32", bold=True))
+                        print(f"  -> IV30 Proxy: {vol_profile['iv30_val']:.2f}% vs HV90 Proxy: {vol_profile['hv90_val']:.2f}% (Rule8: {vol_profile['rule8_derived']})")
+                        print(f"  -> RV10: {vol_profile['rv10_val']:.2f}% (Rule11 Setup Vol Compression: {'PASS' if vol_profile['rule11_derived'] else 'FAIL'})")
                     except Exception as ve:
                         print(f"Error deriving volatility indices from historical price files: {ve}", file=sys.stderr)
                 
                 print(format_color(f"🤖 Upgraded GEX Derivation complete for {symbol}:", "32", bold=True))
                 print(f"  -> COTMP: ${derived_cotmp:.2f}, pTrans: ${derived_ptrans:.2f}, nTrans: ${derived_ntrans:.2f}, +GEX: ${derived_gex:.2f}")
-                print(f"  -> Call GEX: ${total_call_gex:,.2f}, Put GEX: ${total_put_gex:,.2f} (Rule2: {rule2_derived})")
+                print(f"  -> Call GEX: ${total_call_gex:,.2f}, Put GEX: ${total_put_gex:,.2f} (Rule2: {gex_profile['rule2_derived']})")
         except Exception as e:
             print(f"Error deriving GEX profile from option data files: {e}", file=sys.stderr)
 
@@ -746,6 +1019,8 @@ def cmd_portfolio(args):
         spot = args.spot_overrides.get(ticker) if args.spot_overrides else None
         if spot is None:
             spot = levels.get("Spot")
+        if spot is None:
+            spot = details.get("Underlier Spot") or details.get("Spot")
             
         if spot is None:
             # Fallback mock spot to keep calculations running
@@ -828,6 +1103,22 @@ def cmd_portfolio(args):
     sector_cap_fmt = format_color("PASS", "32", bold=True) if sector_cap_ok else format_color("FAIL", "31", bold=True)
     print(f"- **Sector Sizing Cap (Tech/Beta <= 15.0% of Net Liq)**: "
           f"{sector_cap_fmt} (Tech Sizing exposure: {format_color(f'{tech_exposure:.2f}%', '32' if sector_cap_ok else '31')})")
+    
+    # Sizing warnings for high concentration (exceeding 15% of net liq)
+    high_concentration = []
+    for opt_id, details in positions.items():
+        curr_val = details.get("Mark Price", 1.0) * 100
+        curr_weight = (curr_val / net_liq) * 100
+        if curr_weight >= 15.0:
+            high_concentration.append(f"{details.get('Underlier')} ({curr_weight:.2f}%)")
+    
+    if high_concentration:
+        print_color(f"\n⚠️ HIGH CONCENTRATION ALERT: {', '.join(high_concentration)} exceed 15-20% portfolio Net Liquidation threshold.", "31", bold=True)
+        print_color("⚠️ RECOMMENDED ACTION: Trim or reduce position exposure to maintain aggregate capital health.", "31", bold=False)
+        
+    if not sector_cap_ok:
+        print_color(f"\n⚠️ SECTOR EXPOSURE ALERT: High-beta tech/beta exposure exceeds 15.0% ({tech_exposure:.2f}%).", "33", bold=True)
+        print_color("⚠️ RECOMMENDED ACTION: Consider implementing broad-market sector hedges using S&P 500 or ETF benchmarks to defend capital variance.", "33", bold=False)
     
     # Save the updated indicators
     options["active_positions"] = positions
@@ -1164,12 +1455,14 @@ def main():
     
     # update-regime subcommand
     p_regime = subparsers.add_parser("update-regime", help="Recompute Daily Regime Gates from raw market inputs.")
-    p_regime.add_argument("--spy", type=float, required=True, help="SPY session change percent (e.g. 0.62)")
-    p_regime.add_argument("--qqq", type=float, required=True, help="QQQ session change percent (e.g. 1.10)")
-    p_regime.add_argument("--bulls", type=int, required=True, help="Count of bullish (green) symbols in the sector ETF list")
-    p_regime.add_argument("--bears", type=int, required=True, help="Count of bearish (red) symbols in the sector ETF list")
-    p_regime.add_argument("--vix-bearish", type=str2bool, dest="vix_bearish", required=True, help="Dealer VIX positioning is bearish/short vol (True/False)")
+    p_regime.add_argument("--spy", type=float, help="SPY session change percent (e.g. 0.62)")
+    p_regime.add_argument("--qqq", type=float, help="QQQ session change percent (e.g. 1.10)")
+    p_regime.add_argument("--bulls", type=int, help="Count of bullish (green) symbols in the sector ETF list")
+    p_regime.add_argument("--bears", type=int, help="Count of bearish (red) symbols in the sector ETF list")
+    p_regime.add_argument("--vix-bearish", type=str2bool, dest="vix_bearish", help="Dealer VIX positioning is bearish/short vol (True/False)")
     p_regime.add_argument("--vix-spot", type=float, dest="vix_spot", help="Current VIX spot level")
+    p_regime.add_argument("--hyg", type=float, help="HYG credit high-yield bond daily change percent (e.g. -0.35)")
+    p_regime.add_argument("--etf-file", type=str, help="ETF Quotes JSON file to calculate regime gates automatically")
 
     # analyze subcommand
     p_analyze = subparsers.add_parser("analyze", help="Grades dynamic options candidate setups.")
