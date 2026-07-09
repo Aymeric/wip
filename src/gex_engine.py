@@ -1,0 +1,1170 @@
+#!/usr/bin/env python3
+"""
+📊 GEX Options & Agentic Portfolio Trading Suite CLI Engine
+
+This module serves as the primary technical execution layer for a rules-based options swing trading
+and risk management system. Based on GEX (Gamma Exposure) and underlier dealer positioning mechanics,
+the CLI automates:
+  1. Broad-market Daily Regime Gates validation and authorization evaluation.
+  2. Scanning, filtering, and caching prospective candidate equity symbols.
+  3. Dynamic single-options setup grading with offline profile derivation logic.
+  4. Real-time active portfolio tracking with profit-target, structural, time-limit, and momentum stop-losses.
+
+File Paths and Cache Databases managed:
+  - REGIME_FILE (data/regime.json): Daily market index, sector ETF breadth, and market gates cache.
+  - ANALYSES_FILE (data/ticker_analyses.json): Incremental quantitative setup-grading persistent store.
+  - OPTIONS_FILE (data/active_options.json): Sized option transactions and Greeks tracker.
+  - CANDIDATES_FILE (data/candidate_stocks.json): Screened and prioritized underlier candidates.
+"""
+
+import os
+import sys
+import json
+import argparse
+import re
+import shutil
+from datetime import datetime, timezone
+
+# Define file paths relative to active workspace (current directory)
+REGIME_FILE = "data/regime.json"
+ANALYSES_FILE = "data/ticker_analyses.json"
+OPTIONS_FILE = "data/active_options.json"
+CANDIDATES_FILE = "data/candidate_stocks.json"
+SCANS_DIR = "data/scans"
+
+
+
+def print_color(text, color_code, bold=False):
+    """Prints text in ANSI color if the output is a tty."""
+    if sys.stdout.isatty():
+        prefix = f"\033[{1 if bold else 0};{color_code}m"
+        suffix = "\033[0m"
+        print(f"{prefix}{text}{suffix}")
+    else:
+        print(text)
+
+
+def format_color(text, color_code, bold=False):
+    """Formats text with ANSI color codes if the output is a tty."""
+    if sys.stdout.isatty():
+        return f"\033[{1 if bold else 0};{color_code}m{text}\033[0m"
+    return text
+
+
+def str2bool(value):
+    """Parses CLI boolean flags reliably (argparse type=bool treats 'False' as True)."""
+    if isinstance(value, bool):
+        return value
+    if value.lower() in ("true", "t", "yes", "y", "1"):
+        return True
+    if value.lower() in ("false", "f", "no", "n", "0"):
+        return False
+    raise argparse.ArgumentTypeError(f"Boolean value expected, got '{value}'")
+
+
+def load_json(filepath, default):
+    """Loads a JSON file from disk, returning default if absent or corrupted."""
+    if not os.path.exists(filepath):
+        return default
+    try:
+        with open(filepath, "r") as f:
+            return json.load(f)
+    except Exception as e:
+        print(f"Warning: Failed to load {filepath}: {e}", file=sys.stderr)
+        return default
+
+
+def save_json(filepath, data):
+    """Saves a Python dictionary/list structure to filepath as formatted JSON."""
+    try:
+        with open(filepath, "w") as f:
+            json.dump(data, f, indent=2)
+    except Exception as e:
+        print(f"Error: Failed to save to {filepath}: {e}", file=sys.stderr)
+
+
+def get_regime_status():
+    """Retrieves and packages current broad market Daily Regime Gates metrics."""
+    regime = load_json(REGIME_FILE, {})
+    
+    spy_pct = regime.get("spy_change_pct", 0.0)
+    qqq_pct = regime.get("qqq_change_pct", 0.0)
+    basket_gate = regime.get("basket_gate", "FAIL")
+    bull_bear_ratio = regime.get("bull_bear_ratio", 0.0)
+    bull_bear_gate = regime.get("bull_bear_gate", "FAIL")
+    vix_spot = regime.get("vix_spot", 0.0)
+    vix_delta_gate = regime.get("vix_delta_gate", "FAIL")
+    system_auth = regime.get("system_authorization", "BLOCKED")
+    
+    return {
+        "spy_pct": spy_pct,
+        "qqq_pct": qqq_pct,
+        "basket_gate": basket_gate,
+        "bull_bear_ratio": bull_bear_ratio,
+        "bull_bear_gate": bull_bear_gate,
+        "vix_spot": vix_spot,
+        "vix_delta_gate": vix_delta_gate,
+        "system_authorization": system_auth
+    }
+
+
+def compute_regime_gates(spy_pct, qqq_pct, bull_count, bear_count, vix_dealer_delta_bearish):
+    """Mechanically computes the three Daily Regime Gates and system authorization.
+
+    - Basket Gate: SPY or QQQ up more than +0.5% in the session.
+    - Bull:Bear Gate: bullish-to-bearish ratio > 3.0:1.
+    - VIX Delta Gate: dealer positioning on VIX is bearish (bullish for equities).
+    Track 1 (Mechanical P2P) requires >= 2/3 gates; Track 2 (B Continuation) requires 3/3.
+    """
+    basket_gate = "PASS" if (spy_pct > 0.5 or qqq_pct > 0.5) else "FAIL"
+    
+    bull_bear_ratio = round(bull_count / bear_count, 3) if bear_count > 0 else 999.0
+    bull_bear_gate = "PASS" if bull_bear_ratio > 3.0 else "FAIL"
+    
+    vix_delta_gate = "PASS" if vix_dealer_delta_bearish else "FAIL"
+    
+    gates_passed = sum(1 for g in (basket_gate, bull_bear_gate, vix_delta_gate) if g == "PASS")
+    if gates_passed == 3:
+        system_auth = "ALL TRACKS OK"
+    elif gates_passed == 2:
+        system_auth = "TRACK 1 OK"
+    else:
+        system_auth = "BLOCKED"
+        
+    return basket_gate, bull_bear_ratio, bull_bear_gate, vix_delta_gate, system_auth, gates_passed
+
+
+def cmd_update_regime(args):
+    """Recomputes the Daily Regime Gates from raw market inputs and persists them."""
+    cached_regime = load_json(REGIME_FILE, {})
+    
+    basket_gate, bull_bear_ratio, bull_bear_gate, vix_delta_gate, system_auth, gates_passed = compute_regime_gates(
+        args.spy, args.qqq, args.bulls, args.bears, args.vix_bearish
+    )
+    
+    regime_data = {
+        "spy_change_pct": round(args.spy, 4),
+        "qqq_change_pct": round(args.qqq, 4),
+        "basket_gate": basket_gate,
+        "bull_count": args.bulls,
+        "bear_count": args.bears,
+        "bull_bear_ratio": bull_bear_ratio,
+        "bull_bear_gate": bull_bear_gate,
+        "vix_spot": round(args.vix_spot, 2) if args.vix_spot is not None else cached_regime.get("vix_spot", 0.0),
+        "vix_delta_gate": vix_delta_gate,
+        "system_authorization": system_auth,
+        "last_updated": datetime.today().strftime('%Y-%m-%d')
+    }
+    
+    save_json(REGIME_FILE, regime_data)
+    
+    print(f"Regime gates recomputed and saved to {REGIME_FILE} ({gates_passed}/3 gates passed).\n")
+    cmd_status(args)
+
+
+def cmd_status(args):
+    """View the current Daily Regime Gates."""
+    regime = get_regime_status()
+    
+    print("### 📊 GEX Regime Check")
+    
+    # Let's apply neat styling / colors for CLI output readability
+    bgate_status = format_color(regime['basket_gate'], "32" if regime['basket_gate'] == "PASS" else "31", bold=True)
+    bbgate_status = format_color(regime['bull_bear_gate'], "32" if regime['bull_bear_gate'] == "PASS" else "31", bold=True)
+    vixgate_status = format_color(regime['vix_delta_gate'], "32" if regime['vix_delta_gate'] == "PASS" else "31", bold=True)
+    
+    spy_pct_str = f"{regime['spy_pct']:+.2f}%"
+    qqq_pct_str = f"{regime['qqq_pct']:+.2f}%"
+    spy_color = "32" if regime['spy_pct'] >= 0.5 else ("31" if regime['spy_pct'] < 0 else "33")
+    qqq_color = "32" if regime['qqq_pct'] >= 0.5 else ("31" if regime['qqq_pct'] < 0 else "33")
+    spy_color_str = format_color(spy_pct_str, spy_color)
+    qqq_color_str = format_color(qqq_pct_str, qqq_color)
+    
+    ratio_str = f"{regime['bull_bear_ratio']:.2f}:1"
+    ratio_color = "32" if regime['bull_bear_ratio'] >= 3.0 else "31"
+    ratio_color_str = format_color(ratio_str, ratio_color)
+    
+    system_auth_str = regime['system_authorization']
+    if "BLOCK" in system_auth_str:
+        system_auth_str = format_color(system_auth_str, "31", bold=True)
+    else:
+        system_auth_str = format_color(system_auth_str, "32", bold=True)
+        
+    print(f"- **Basket Gate**: {bgate_status} (SPY: {spy_color_str}, QQQ: {qqq_color_str})")
+    print(f"- **Bull:Bear Gate**: {bbgate_status} (Ratio: {ratio_color_str} from {REGIME_FILE} Cache)")
+    print(f"- **VIX Delta Gate**: {vixgate_status} (VIX Spot: {regime['vix_spot']:.2f})")
+    print(f"- **System Authorization**: {system_auth_str}")
+    
+    # Simple alert or summary
+    if regime['system_authorization'] == "BLOCKED":
+        print_color("\n🛑 SYSTEM STATUS: BLOCKED. No new entries authorized today.", "31", bold=True)
+    else:
+        print_color(f"\n✅ SYSTEM STATUS: AUTHORIZED ({regime['system_authorization']}). New trade entries are permitted.", "32", bold=True)
+
+
+def calculate_grade(ticker, spot, ptrans, ntrans, gex, cotmp, extra_rules=None):
+    """
+    Grades a single stock setup based on the GEX system's 11 structural rules.
+    
+    The 11 Rules are:
+      1. Total Call GEX is positive (bullish posture).
+      2. Total Call GEX exceeds absolute value of Total Put GEX (net positive positioning).
+      3. Underlier Spot price is above the largest negative GEX strike / Center of Put Mass (COTMP).
+      4. Largest positive GEX target strike (+GEX / T1 Target) is above current stock Spot price.
+      5. Positive transition (pTrans) sits above negative transition (nTrans).
+      6. Stock Spot price sits above pTrans (entry trigger rule).
+      7. Total Open Interest (OI) exceeds 10,000 contracts for structural depth.
+      8. 30-day option implied volatility (IV30) is below historical 90-day realized volatility (HV90).
+      9. Open Interest depth at the +GEX target strike exceeds all other strikes.
+      10. Dealer net gamma positioning at the current Spot is net positive.
+      11. Underlier's 10-day realized volatility (RV10) is compressed (<= 35%).
+      
+    Args:
+        ticker (str): The ticker symbol.
+        spot (float): Underlier spot price.
+        ptrans (float): Positive transition level (pTrans).
+        ntrans (float): Negative transition level (nTrans).
+        gex (float): Target positive GEX strike level (+GEX).
+        cotmp (float): Center of Put Mass strike (COTMP).
+        extra_rules (dict, optional): Boolean flags for rules requiring raw options/volatility data (1, 2, 7, 8, 9, 10, 11).
+        
+    Returns:
+        tuple[int, list[bool]]: (grade, rules_checklist) where grade is the integer score (0-11)
+                                 and rules_checklist is a list of Boolean indicators for each of the 11 rules.
+    """
+    if extra_rules is None:
+        extra_rules = {}
+
+    rules = [False] * 11
+    
+    # Rule 1: Total call GEX is positive
+    rules[0] = extra_rules.get("total_call_gex_positive", True)
+    
+    # Rule 2: Call GEX exceeds absolute Put GEX
+    rules[1] = extra_rules.get("call_gex_gt_put_gex", True)
+    
+    # Rule 3: Spot price is above largest negative GEX strike (usually COTMP or similar)
+    rules[2] = spot > cotmp
+    
+    # Rule 4: Largest single $+GEX$ target strike is above current Spot price
+    rules[3] = gex > spot
+    
+    # Rule 5: pTrans sits above nTrans
+    rules[4] = ptrans > ntrans
+    
+    # Rule 6: Spot sits above positive transition (pTrans) -> Wait, watchdog buffer allows pending.
+    # The rule checklist itself matches: Spot price sits above pTrans.
+    rules[5] = spot > ptrans
+    
+    # Rule 7: Total OI exceeds 10,000 contracts
+    rules[6] = extra_rules.get("total_oi_gt_10000", True)
+    
+    # Rule 8: 30-day option implied volatility is below historical 90-day volatility
+    rules[7] = extra_rules.get("iv_30_lt_hv_90", True)
+    
+    # Rule 9: Open Interest depth at +GEX target strike exceeds all other strikes
+    rules[8] = extra_rules.get("oi_depth_target_positive", True)
+    
+    # Rule 10: Dealer net gamma positioning at current Spot is net positive
+    rules[9] = extra_rules.get("dealer_gamma_net_positive", True)
+    
+    # Rule 11: Underlier current 10-day realized volatility is stable/compressed (<= 35%)
+    rules[10] = extra_rules.get("rv_10_stable", True)
+    
+    grade = sum(1 for r in rules if r)
+    return grade, rules
+
+
+def cmd_analyze(args):
+    """Grades and analyzes options setups for a given ticker."""
+    symbol = args.symbol.upper()
+    analyses = load_json(ANALYSES_FILE, {})
+    
+    cached = analyses.get(symbol, {})
+    
+    # Fallback spot from candidates if not passed and not cached
+    spot = args.spot if args.spot is not None else cached.get("Spot")
+    if spot is None:
+        cand_data = load_json(CANDIDATES_FILE, {})
+        for c in cand_data.get("candidates", []):
+            if c["symbol"].upper() == symbol:
+                spot = c["price"]
+                break
+
+    # If inst-file and quote-file are passed, perform mechanical local GEX profile derivation
+    if hasattr(args, "inst_file") and args.inst_file and hasattr(args, "quote_file") and args.quote_file:
+        try:
+            with open(args.inst_file, "r") as f:
+                inst_data = json.load(f)
+            with open(args.quote_file, "r") as f:
+                quotes_data = json.load(f)
+                
+            instruments_list = []
+            if isinstance(inst_data, dict):
+                if "data" in inst_data and isinstance(inst_data["data"], dict):
+                    instruments_list = inst_data["data"].get("instruments", [])
+                else:
+                    instruments_list = inst_data.get("instruments", [])
+            else:
+                instruments_list = inst_data
+                
+            inst_map = {}
+            for inst in instruments_list:
+                inst_map[inst["id"]] = {
+                    "strike": float(inst["strike_price"]) if "strike_price" in inst else float(inst.get("strike", 0.0)),
+                    "type": inst["type"]
+                }
+                
+            quotes_list = quotes_data.get("data", {}).get("results", []) if isinstance(quotes_data, dict) else []
+            if not quotes_list and isinstance(quotes_data, dict):
+                quotes_list = quotes_data.get("data", [])
+            if not quotes_list and isinstance(quotes_data, list):
+                quotes_list = quotes_data
+            if not quotes_list and isinstance(quotes_data, dict):
+                quotes_list = quotes_data.get("results", [])
+                
+            strike_put_oi = {}
+            strike_call_oi = {}
+            strike_put_gex = {}
+            strike_call_gex = {}
+            total_oi = 0
+            total_call_gex = 0.0
+            total_put_gex = 0.0
+            
+            iv_sum = 0.0
+            iv_count = 0
+            
+            calc_spot = spot if spot is not None else 100.0
+            
+            for q_item in quotes_list:
+                q = q_item.get("quote", q_item) if isinstance(q_item, dict) else q_item
+                if not q or not isinstance(q, dict):
+                    continue
+                opt_id = q.get("instrument_id") or q.get("id") or q.get("instrument")
+                if not opt_id or opt_id not in inst_map:
+                    continue
+                    
+                oi = int(q.get("open_interest") or 0)
+                gamma = float(q.get("gamma") or 0.0)
+                iv = float(q.get("implied_volatility") or q.get("implied_vol", 0.0))
+                
+                strike = inst_map[opt_id]["strike"]
+                opt_type = inst_map[opt_id]["type"]
+                
+                total_oi += oi
+                gex_val = oi * gamma * 100.0 * calc_spot
+                
+                # IV proxy (within 15% of spot)
+                if abs(strike - calc_spot) / calc_spot <= 0.15:
+                    if iv > 0.0:
+                        iv_sum += iv
+                        iv_count += 1
+                        
+                if opt_type == "put":
+                    strike_put_oi[strike] = strike_put_oi.get(strike, 0) + oi
+                    strike_put_gex[strike] = strike_put_gex.get(strike, 0.0) + gex_val
+                    total_put_gex += gex_val
+                elif opt_type == "call":
+                    strike_call_oi[strike] = strike_call_oi.get(strike, 0) + oi
+                    strike_call_gex[strike] = strike_call_gex.get(strike, 0.0) + gex_val
+                    total_call_gex += gex_val
+                    
+            if total_oi > 0:
+                # COTMP = weighted put strike
+                sum_strike_put_oi = sum(s * oi for s, oi in strike_put_oi.items())
+                sum_put_oi = sum(strike_put_oi.values())
+                derived_cotmp = sum_strike_put_oi / sum_put_oi if sum_put_oi > 0 else calc_spot * 0.95
+                
+                # pTrans = strike at/below spot with largest put OI
+                at_below_spot_puts = {s: oi for s, oi in strike_put_oi.items() if s <= calc_spot}
+                derived_ptrans = max(at_below_spot_puts, key=at_below_spot_puts.get) if at_below_spot_puts else calc_spot * 0.98
+                
+                # nTrans = strike below pTrans with next largest put OI
+                below_ptrans_puts = {s: oi for s, oi in strike_put_oi.items() if s < derived_ptrans}
+                derived_ntrans = max(below_ptrans_puts, key=below_ptrans_puts.get) if below_ptrans_puts else derived_ptrans * 0.95
+                
+                # +GEX = strike at/above spot with largest call OI
+                at_above_spot_calls = {s: oi for s, oi in strike_call_oi.items() if s >= calc_spot}
+                derived_gex = max(at_above_spot_calls, key=at_above_spot_calls.get) if at_above_spot_calls else (max(strike_call_oi, key=strike_call_oi.get) if strike_call_oi else calc_spot * 1.05)
+                
+                # Rules
+                rule1_derived = total_call_gex > 0
+                rule2_derived = total_call_gex > abs(total_put_gex)
+                rule7_derived = total_oi > 10000
+                
+                call_oi_at_target = strike_call_oi.get(derived_gex, 0)
+                max_call_oi = max(strike_call_oi.values()) if strike_call_oi else 0
+                rule9_derived = call_oi_at_target >= max_call_oi
+                
+                all_strikes = sorted(list(set(strike_put_gex.keys()) | set(strike_call_gex.keys())))
+                nearest_strike = min(all_strikes, key=lambda s: abs(s - calc_spot)) if all_strikes else calc_spot
+                net_gex_nearest = strike_call_gex.get(nearest_strike, 0.0) - strike_put_gex.get(nearest_strike, 0.0)
+                rule10_derived = net_gex_nearest >= 0.0
+                
+                # Assign to main levels
+                if args.ptrans is None: args.ptrans = round(derived_ptrans, 2)
+                if args.ntrans is None: args.ntrans = round(derived_ntrans, 2)
+                if args.gex is None: args.gex = round(derived_gex, 2)
+                if args.cotmp is None: args.cotmp = round(derived_cotmp, 2)
+                
+                # Set rule arguments if they are None
+                if args.rule1 is None: args.rule1 = rule1_derived
+                if args.rule2 is None: args.rule2 = rule2_derived
+                if args.rule7 is None: args.rule7 = rule7_derived
+                if args.rule9 is None: args.rule9 = rule9_derived
+                if args.rule10 is None: args.rule10 = rule10_derived
+                
+                print(format_color(f"🤖 Upgraded GEX Derivation complete for {symbol}:", "32", bold=True))
+                print(f"  -> COTMP: ${derived_cotmp:.2f}, pTrans: ${derived_ptrans:.2f}, nTrans: ${derived_ntrans:.2f}, +GEX: ${derived_gex:.2f}")
+                print(f"  -> Call GEX: ${total_call_gex:,.2f}, Put GEX: ${total_put_gex:,.2f} (Rule2: {rule2_derived})")
+        except Exception as e:
+            print(f"Error deriving GEX profile from option data files: {e}", file=sys.stderr)
+
+    ptrans = args.ptrans if args.ptrans is not None else cached.get("pTrans")
+    ntrans = args.ntrans if args.ntrans is not None else cached.get("nTrans")
+    gex = args.gex if args.gex is not None else cached.get("+GEX")
+    cotmp = args.cotmp if args.cotmp is not None else cached.get("COTMP")
+    db_change = args.db_change if args.db_change is not None else cached.get("db_change")
+    spike_crash = args.spike_crash if args.spike_crash is not None else cached.get("spike_crash", False)
+    
+    if None in (spot, ptrans, ntrans, gex, cotmp, db_change):
+        print(f"Error: Missing required metrics for {symbol}. Pass them via command line arguments or ensure they exist in {ANALYSES_FILE}.", file=sys.stderr)
+        print("Required fields: --spot, --ptrans, --ntrans, --gex, --cotmp, --db-change", file=sys.stderr)
+        sys.exit(1)
+        
+    # Calculate Grade (rule overrides fall back to cached values, then True)
+    rule_overrides = {
+        "rule1": args.rule1 if args.rule1 is not None else cached.get("rule1", True),
+        "rule2": args.rule2 if args.rule2 is not None else cached.get("rule2", True),
+        "rule7": args.rule7 if args.rule7 is not None else cached.get("rule7", True),
+        "rule8": args.rule8 if args.rule8 is not None else cached.get("rule8", True),
+        "rule9": args.rule9 if args.rule9 is not None else cached.get("rule9", True),
+        "rule10": args.rule10 if args.rule10 is not None else cached.get("rule10", True),
+        "rule11": args.rule11 if args.rule11 is not None else cached.get("rule11", True),
+    }
+    extra_rules = {
+        "total_call_gex_positive": rule_overrides["rule1"],
+        "call_gex_gt_put_gex": rule_overrides["rule2"],
+        "total_oi_gt_10000": rule_overrides["rule7"],
+        "iv_30_lt_hv_90": rule_overrides["rule8"],
+        "oi_depth_target_positive": rule_overrides["rule9"],
+        "dealer_gamma_net_positive": rule_overrides["rule10"],
+        "rv_10_stable": rule_overrides["rule11"],
+    }
+    
+    grade, rule_checklist = calculate_grade(symbol, spot, ptrans, ntrans, gex, cotmp, extra_rules)
+    
+    # Calculate COTMP Cushion
+    # Formula: ((Spot - COTMP) / COTMP) * 100
+    cotmp_cushion = round(((spot - cotmp) / cotmp) * 100, 2)
+    
+    # Calculate Risk/Reward
+    # Formula: Reward = (+GEX - Spot), Risk = Spot - pTrans
+    reward = gex - spot
+    risk = spot - ptrans
+    rr_ratio = round(reward / risk, 2) if risk > 0 else 999.0
+    
+    # Define Signal Status & Classification
+    # Watchdog buffer is 0.5% below pTrans. If Spot reaches watchdog buffer or above setup rules
+    watchdog_threshold = ptrans * 0.995
+    
+    status = "BLOCKED"
+    reasons = []
+    
+    if grade < 9:
+        reasons.append(f"Grade <= 8 ({grade}/11)")
+    
+    # db_change filter: must satisfy db_change >= 0.50 (Grade 11 DEEP = 0.30)
+    db_threshold = 0.50
+    if grade == 11 and cotmp_cushion >= 1.0 and cotmp_cushion < 2.0:
+        db_threshold = 0.30
+    if cached.get("pegged_1_00_sessions", 0) >= 2:
+        db_threshold = 0.0  # Exempt
+        
+    if db_change < db_threshold:
+        reasons.append(f"db_change {db_change:.2f} < threshold {db_threshold:.2f}")
+        
+    # COTMP Cushion target: Spot >= 2.0% above COTMP (Grade 11 or high db_change >= 0.50 can use 1.0%)
+    cushion_threshold = 2.0
+    if grade == 11 or db_change >= 0.50:
+        cushion_threshold = 1.0
+        
+    if cotmp_cushion < cushion_threshold:
+        reasons.append(f"COTMP Cushion {cotmp_cushion:.2f}% < threshold {cushion_threshold:.2f}%")
+        
+    if spike_crash:
+        reasons.append("Spike-Crash Pattern profile detected")
+        
+    if rr_ratio < 2.0:
+        reasons.append(f"Risk/Reward ratio {rr_ratio:.2f} < 2.00")
+        
+    if not reasons:
+        if spot >= ptrans:
+            status = "CONFIRMED"
+        elif spot >= watchdog_threshold:
+            status = f"PENDING (watchdog)"
+        else:
+            status = "PENDING (below watchdog)"
+    else:
+        status = f"BLOCKED ({', '.join(reasons)})"
+        
+    # Update analyses file
+    analyses[symbol] = {
+        "Ticker": symbol,
+        "Spot": round(spot, 2),
+        "Grade": grade,
+        "pTrans": round(ptrans, 2),
+        "nTrans": round(ntrans, 2),
+        "+GEX": round(gex, 2),
+        "COTMP": round(cotmp, 2),
+        "db_change": round(db_change, 2),
+        "COTMP Cushion": cotmp_cushion,
+        "Risk/Reward": rr_ratio,
+        "Signal Status": status,
+        "analyzed_date": datetime.today().strftime('%Y-%m-%d'),
+        "spike_crash": bool(spike_crash),
+        **rule_overrides
+    }
+    # Keep count of pegged sessions if db_change is exactly 1.00
+    if db_change == 1.00:
+        analyses[symbol]["pegged_1_00_sessions"] = cached.get("pegged_1_00_sessions", 0) + 1
+    else:
+        analyses[symbol]["pegged_1_00_sessions"] = 0
+        
+    save_json(ANALYSES_FILE, analyses)
+    
+    # Print results formatted perfectly
+    grade_color = "32" if grade >= 9 else "31"
+    db_color = "32" if db_change >= db_threshold else "31"
+    cushion_color = "32" if cotmp_cushion >= cushion_threshold else "31"
+    sc_color = "31" if spike_crash else "32"
+    rr_color = "32" if rr_ratio >= 2.0 else "31"
+    
+    status_fmt = format_color(status, "32" if status.startswith("CONFIRMED") else ("33" if status.startswith("PENDING") else "31"), bold=True)
+    
+    print(f"### 🔍 Setup Breakdown: {symbol}")
+    print(f"- **Current Spot**: ${spot:.2f}")
+    print(f"- **Key Gamma Levels**:")
+    print(f"  - pTrans (Positive Transition): ${ptrans:.2f}")
+    print(f"  - nTrans (Negative Transition): ${ntrans:.2f}")
+    print(f"  - +GEX (T1 Target): ${gex:.2f}")
+    print(f"  - COTMP (Center of Put Mass): ${cotmp:.2f}")
+    print(f"- **Core Filters**:")
+    print(f"  1. **Structural Grade**: {format_color(f'{grade}/11', grade_color)} (Status: {format_color('PASS' if grade >= 9 else 'FAIL', grade_color, bold=True)})")
+    print(f"  2. **db_change (Delta Balance Change)**: {format_color(f'{db_change:.2f}', db_color)} (Status: {format_color('PASS' if db_change >= db_threshold else 'FAIL', db_color, bold=True)})")
+    print(f"  3. **COTMP Cushion**: {format_color(f'{cotmp_cushion:.2f}%', cushion_color)} (Status: {format_color('PASS' if cotmp_cushion >= cushion_threshold else 'FAIL', cushion_color, bold=True)})")
+    print(f"  4. **Spike-Crash Check**: {format_color('FAIL - Blocked' if spike_crash else 'PASS - No Pattern', sc_color, bold=True)}")
+    print(f"  5. **Risk/Reward Ratio**: {format_color(f'{rr_ratio:.2f}:1', rr_color)} (Status: {format_color('PASS' if rr_ratio >= 2.0 else 'FAIL', rr_color, bold=True)})")
+    print(f"\n### 🚀 Status & Action")
+    print(f"- **Signal Status**: {status_fmt}")
+    if status.startswith("CONFIRMED"):
+        print_color(f"- **Recommended Play**: Underlier Spot is above pTrans. Look for bullish Option contract entry targeting ${gex:.2f}.", "32", bold=True)
+    elif status.startswith("PENDING"):
+        print_color(f"- **Recommended Play**: Setup valid. Standard watch list entry activated. Look for 5-minute close above pTrans (${ptrans:.2f}) to trigger execution.", "33", bold=True)
+    else:
+        print_color(f"- **Recommended Play**: NO ENTRY. Setup blocked by system safeguards.", "31", bold=True)
+
+
+def cmd_portfolio(args):
+    """Tracks position exits, risk sizing weights, and portfolio metrics."""
+    options = load_json(OPTIONS_FILE, {"active_positions": {}})
+    analyses = load_json(ANALYSES_FILE, {})
+    
+    positions = options.get("active_positions", {})
+    
+    if not positions:
+        print("### 🛡️ Active Portfolio Tracker & Exits (Current Positions)")
+        print("No open positions found in cache.")
+        return
+        
+    print("### 🛡️ Active Portfolio Tracker & Exits (Current Positions)")
+    
+    tech_exposure = 0.0
+    net_liq = args.net_liq if args.net_liq is not None else 50000.0 # Default total workspace valuation estimate
+    
+    for opt_id, details in positions.items():
+        ticker = details.get("Underlier")
+        purchase_premium = float(details.get("Purchase Premium", 1.0))
+        mark_price = float(details.get("Mark Price", 1.0))
+        strike = details.get("Strike")
+        expiration = details.get("Expiration")
+        opt_type = details.get("Type")
+        
+        # Calculate P&L
+        pl_dollar = (mark_price - purchase_premium) * 100
+        pl_pct = ((mark_price - purchase_premium) / purchase_premium) * 100
+        
+        # Fetch levels from analyses if available
+        levels = analyses.get(ticker, {})
+        ptrans = levels.get("pTrans")
+        ntrans = levels.get("nTrans")
+        gex_t1 = levels.get("+GEX")
+        spot = args.spot_overrides.get(ticker) if args.spot_overrides else None
+        if spot is None:
+            spot = levels.get("Spot")
+            
+        if spot is None:
+            # Fallback mock spot to keep calculations running
+            spot = float(strike) if strike else 100.0
+            
+        # Determine tracking days (derived from Entry Date when available)
+        days_held = details.get("Days Held", 1)
+        entry_date = details.get("Entry Date")
+        if entry_date:
+            try:
+                days_held = max((datetime.today() - datetime.strptime(entry_date, "%Y-%m-%d")).days + 1, 1)
+                details["Days Held"] = days_held
+            except ValueError:
+                pass
+
+        # Days to expiration
+        dte = None
+        if expiration:
+            try:
+                dte = (datetime.strptime(expiration, "%Y-%m-%d") - datetime.today()).days
+            except ValueError:
+                pass
+        
+        # Calculate stops
+        exit_rule_state = "HOLD"
+        proposed_action = "No Action"
+        
+        distance_ntrans = "N/A"
+        if ntrans:
+            dist = ((spot - ntrans) / ntrans) * 100
+            distance_ntrans = f"{dist:+.2f}%"
+            if spot < ntrans:
+                exit_rule_state = "STOP TRIGGERED (Structural Stop: Spot < nTrans)"
+                proposed_action = "Immediate Exit (Structural Stop)"
+                
+        distance_max_stop = "N/A"
+        # Option stop: 10% below entry while price is below pTrans
+        if ptrans:
+            if spot < ptrans:
+                if pl_pct <= -10.0:
+                    exit_rule_state = "STOP TRIGGERED (Max Asset Stop: -10% option loss below pTrans)"
+                    proposed_action = "Immediate Exit (Max Asset Stop)"
+                distance_max_stop = f"{pl_pct:+.2f}% vs -10.00% max"
+            else:
+                distance_max_stop = "Protection dormant (Spot > pTrans)"
+                
+        # Time stop verification
+        time_status = "ON TRACK"
+        if days_held >= 7:
+            # Progress tracking
+            if gex_t1 and ptrans:
+                full_run = gex_t1 - ptrans
+                made_progress = spot - ptrans
+                progress_pct = (made_progress / full_run) * 100 if full_run > 0 else 0.0
+                if progress_pct < 50.0:
+                    exit_rule_state = "STOP TRIGGERED (Time Stop: <50% progress by Day 7)"
+                    proposed_action = "Immediate Exit (Time Stop)"
+                    time_status = "STALE (Time Limit Exceeded)"
+                    
+        # Stalling stop verification
+        stalling_counter = details.get("Stalling Days", 0)
+        if stalling_counter >= 3:
+            exit_rule_state = "STOP TRIGGERED (Stalling Stop: <10% daily progress for 3 consecutive days)"
+            proposed_action = "Immediate Exit (Stalling Stop)"
+            time_status = "STALLED"
+            
+        # Profit Target T1 Check
+        if gex_t1 and spot >= gex_t1:
+            exit_rule_state = "PROFIT TAKE (T1 TARGET MET)"
+            proposed_action = "Exit for 100% gains OR Trail stop to entry price and target structural T2"
+
+        # Expiration check overrides all other states
+        if dte is not None and dte < 0:
+            exit_rule_state = "EXPIRED (Contract past expiration)"
+            proposed_action = "Remove from tracker via close-position"
+            time_status = "EXPIRED"
+            
+        # Watch classification
+        if exit_rule_state == "HOLD" and ptrans and spot < ptrans:
+            exit_rule_state = "WATCH"
+            proposed_action = "Hold existing, but add NOTHING"
+            
+        # Update metrics in position state
+        details["Current Value"] = mark_price * 100
+        details["P&L ($)"] = round(pl_dollar, 2)
+        details["P&L (%)"] = round(pl_pct, 2)
+        sizing_risk_weight = ((details["Asset Cost Basis"] if "Asset Cost Basis" in details else (purchase_premium * 100)) / net_liq) * 100
+        details["Sizing Risk Weight (%)"] = round(sizing_risk_weight, 2)
+        
+        details_sector_tag = details.get("Beta Sector Tag", "Equity")
+        if "Technology" in details_sector_tag or "Beta" in details_sector_tag:
+            tech_exposure += sizing_risk_weight
+            
+        # Format strings with CLI colors
+        pl_color = "32" if pl_pct >= 0 else "31"
+        status_colors = {
+            "HOLD": ("32", False),
+            "WATCH": ("33", False),
+            "PROFIT TAKE (T1 TARGET MET)": ("32", True),
+        }
+        color_code, bold = status_colors.get(exit_rule_state, ("31", True))
+        exit_rule_fmt = format_color(exit_rule_state, color_code, bold=bold)
+        
+        # Print position
+        print(f"- **{format_color(ticker, '35', bold=True)}**: Current Spot {format_color(f'${spot:.2f}', '36')} vs Avg Buy Premium {format_color(f'${purchase_premium:.2f}', '33')} / Mark {format_color(f'${mark_price:.2f}', '33')} (Gain/Loss: {format_color(f'{pl_pct:+.2f}%', pl_color, bold=True)})")
+        print(f"  - **Exits Rule State**: [{exit_rule_fmt}]")
+        print(f"  - **Distance to Structural Stop (nTrans at ${ntrans if ntrans else 0.0:.2f})**: {distance_ntrans}")
+        print(f"  - **Distance to Max Asset Stop**: {distance_max_stop}")
+        dte_str = f", DTE: {dte}" if dte is not None else ""
+        print(f"  - **Time / Momentum Tracking**: Day [{days_held}] of 7 (Status: [{time_status}]{dte_str})")
+        print(f"  - **Proposed Action**: [{format_color(proposed_action, color_code, bold=bold)}]")
+        
+    print("\n### 📏 Sizing Constraints Checklist")
+    # Sizing constraints check
+    over_allocated = []
+    for opt_id, details in positions.items():
+        risk_weight = details.get("Sizing Risk Weight (%)", 0.0)
+        tk = details.get("Underlier")
+        if risk_weight > 3.0:
+            over_allocated.append(f"{tk} ({risk_weight:.2f}% > 3.0%)")
+            
+    single_leg_ok = len(over_allocated) == 0
+    single_leg_fmt = format_color("PASS", "32", bold=True) if single_leg_ok else format_color(f"FAIL ({', '.join(over_allocated)})", "31", bold=True)
+    print(f"- **Single-Leg Sizing Limit (<= 3.0% of Net Liq)**: {single_leg_fmt}")
+    
+    sector_cap_ok = tech_exposure <= 15.0
+    sector_cap_fmt = format_color("PASS", "32", bold=True) if sector_cap_ok else format_color("FAIL", "31", bold=True)
+    print(f"- **Sector Sizing Cap (Tech/Beta <= 15.0% of Net Liq)**: "
+          f"{sector_cap_fmt} (Tech Sizing exposure: {format_color(f'{tech_exposure:.2f}%', '32' if sector_cap_ok else '31')})")
+    
+    # Save the updated indicators
+    options["active_positions"] = positions
+    save_json(OPTIONS_FILE, options)
+
+
+def cmd_add_pos(args):
+    """Add new options position manually."""
+    options = load_json(OPTIONS_FILE, {"active_positions": {}})
+    positions = options.get("active_positions", {})
+    
+    if args.option_id in positions:
+        print(f"Error: Option ID {args.option_id} already exists in portfolio. Use update-option to modify it.", file=sys.stderr)
+        sys.exit(1)
+        
+    try:
+        datetime.strptime(args.expiration, "%Y-%m-%d")
+    except ValueError:
+        print(f"Error: Expiration '{args.expiration}' must be a valid date in YYYY-MM-DD format.", file=sys.stderr)
+        sys.exit(1)
+    
+    positions[args.option_id] = {
+        "Option ID": args.option_id,
+        "Underlier": args.underlier.upper(),
+        "Strike": f"{args.strike:.2f}",
+        "Expiration": args.expiration,
+        "Type": args.type.lower(),
+        "Purchase Premium": args.purchase_premium,
+        "Delta": str(args.delta),
+        "Gamma": str(args.gamma),
+        "Mark Price": args.purchase_premium,
+        "Open Interest": args.open_interest,
+        "ImpVol": str(args.imp_vol),
+        "Asset Cost Basis": args.purchase_premium * 100,
+        "Current Value": args.purchase_premium * 100,
+        "P&L (%)": 0.0,
+        "P&L ($)": 0.0,
+        "Sizing Risk Weight (%)": 0.0,
+        "Beta Sector Tag": args.sector,
+        "Entry Date": datetime.today().strftime('%Y-%m-%d'),
+        "Days Held": 1,
+        "Stalling Days": 0
+    }
+    
+    options["active_positions"] = positions
+    save_json(OPTIONS_FILE, options)
+    print(f"Successfully added options position for {args.underlier.upper()} in {OPTIONS_FILE}.")
+
+
+def cmd_update_opt(args):
+    """Update options evaluation price/mark and momentum tracking."""
+    options = load_json(OPTIONS_FILE, {"active_positions": {}})
+    positions = options.get("active_positions", {})
+    
+    target_pos = None
+    for opt_id, details in positions.items():
+        if opt_id == args.option_id or details.get("Underlier") == args.option_id.upper():
+            target_pos = details
+            break
+            
+    if not target_pos:
+        print(f"Error: Option position with ID or Ticker {args.option_id} not found in portfolio.", file=sys.stderr)
+        sys.exit(1)
+        
+    if args.mark is not None:
+        target_pos["Mark Price"] = args.mark
+    if args.delta is not None:
+        target_pos["Delta"] = str(args.delta)
+    if args.gamma is not None:
+        target_pos["Gamma"] = str(args.gamma)
+    if args.oi is not None:
+        target_pos["Open Interest"] = args.oi
+    if args.iv is not None:
+        target_pos["ImpVol"] = str(args.iv)
+    if args.days is not None:
+        target_pos["Days Held"] = args.days
+    if args.stalling_days is not None:
+        target_pos["Stalling Days"] = args.stalling_days
+        
+    save_json(OPTIONS_FILE, options)
+    print(f"Successfully updated metrics for option {args.option_id} in {OPTIONS_FILE}.")
+
+
+def cmd_close_pos(args):
+    """Close a tracked options position and archive its realized P&L."""
+    options = load_json(OPTIONS_FILE, {"active_positions": {}})
+    positions = options.get("active_positions", {})
+    
+    matches = [
+        opt_id for opt_id, details in positions.items()
+        if opt_id == args.option_id or details.get("Underlier") == args.option_id.upper()
+    ]
+    if not matches:
+        print(f"Error: Option position with ID or Ticker {args.option_id} not found in portfolio.", file=sys.stderr)
+        sys.exit(1)
+        
+    closed = options.setdefault("closed_positions", [])
+    for opt_id in matches:
+        details = positions.pop(opt_id)
+        purchase_premium = float(details.get("Purchase Premium", 0.0))
+        close_premium = args.close_premium if args.close_premium is not None else float(details.get("Mark Price", purchase_premium))
+        realized_dollar = round((close_premium - purchase_premium) * 100, 2)
+        realized_pct = round(((close_premium - purchase_premium) / purchase_premium) * 100, 2) if purchase_premium else 0.0
+        
+        details["Close Premium"] = close_premium
+        details["Close Date"] = datetime.today().strftime('%Y-%m-%d')
+        details["Realized P&L ($)"] = realized_dollar
+        details["Realized P&L (%)"] = realized_pct
+        closed.append(details)
+        
+        pl_color = "32" if realized_dollar >= 0 else "31"
+        print(f"Closed {details.get('Underlier')} {details.get('Strike')} {details.get('Type')} ({opt_id}): "
+              + format_color(f"Realized P&L {realized_pct:+.2f}% (${realized_dollar:+.2f})", pl_color, bold=True))
+        
+    options["active_positions"] = positions
+    save_json(OPTIONS_FILE, options)
+    print(f"Archived {len(matches)} position(s) to closed_positions in {OPTIONS_FILE}.")
+
+
+def slugify(text):
+    text = text.lower()
+    text = re.sub(r'[^a-z0-9]+', '_', text)
+    return text.strip('_')
+
+
+def persist_new_scans():
+    """
+    Scans the current directory and all subdirectories in data/downloads/
+    for raw Robinhood scan downloads.
+    When a valid scan is found, it copies/persists it to the local scans/ directory
+    for offline analysis, using both a 'latest' filename and a timestamped file.
+    If the source file was in the current workspace root (cwd), it is deleted to
+    keep the root clean; otherwise (e.g. historical downloads under data/downloads),
+    the original raw file is preserved.
+    """
+    cwd = "."
+    os.makedirs(SCANS_DIR, exist_ok=True)
+    os.makedirs(os.path.join(SCANS_DIR, "history"), exist_ok=True)
+    persisted_files = []
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+
+    # Gather search locations: list of (filepath, should_delete_after_copy)
+    search_paths = []
+    
+    # 1) Search current directory
+    for item in os.listdir(cwd):
+        if item.endswith(".json") and item not in (REGIME_FILE, ANALYSES_FILE, OPTIONS_FILE, CANDIDATES_FILE):
+            search_paths.append((os.path.join(cwd, item), True))
+            
+    # 2) Search data/downloads directory recursively
+    downloads_dir = "data/downloads"
+    if os.path.exists(downloads_dir):
+        for root, dirs, files in os.walk(downloads_dir):
+            for file in files:
+                if file.endswith(".json"):
+                    search_paths.append((os.path.join(root, file), False))
+
+    # Deduplicate search paths by resolving real absolute paths
+    unique_paths = {}
+    for filepath, should_delete in search_paths:
+        if os.path.isfile(filepath):
+            abs_path = os.path.abspath(filepath)
+            if abs_path not in unique_paths:
+                unique_paths[abs_path] = (filepath, should_delete)
+
+    for abs_path, (filepath, should_delete) in unique_paths.items():
+        try:
+            with open(filepath, "r") as f:
+                data = json.load(f)
+            
+            # Verify if this is a Robinhood scan result structure
+            scan_result = None
+            if isinstance(data, dict):
+                scan_result = data.get("data", {}).get("result", {})
+                if not scan_result or not isinstance(scan_result, dict):
+                    scan_result = data.get("result", {})
+                if not scan_result or not isinstance(scan_result, dict):
+                    scan_result = data
+            
+            if isinstance(scan_result, dict):
+                scan_title = scan_result.get("scan_title")
+                scan_id = scan_result.get("scan_id")
+                
+                if scan_title and scan_id:
+                    slug_title = slugify(scan_title)
+                    latest_filename = f"{slug_title}.json"
+                    timestamped_filename = f"{slug_title}_{timestamp}.json"
+                    
+                    latest_path = os.path.join(SCANS_DIR, latest_filename)
+                    timestamped_path = os.path.join(SCANS_DIR, "history", timestamped_filename)
+                    
+                    # Copy file to persist it locally
+                    shutil.copy2(filepath, latest_path)
+                    shutil.copy2(filepath, timestamped_path)
+                    
+                    print(f"Persisted scan '{scan_title}' locally:")
+                    print(f"  -> {latest_path} (Latest)")
+                    print(f"  -> {timestamped_path} (Timestamped)")
+                    
+                    if should_delete:
+                        os.remove(filepath)
+                        print(f"  Removed raw temporary file: {filepath}")
+                    
+                    persisted_files.append((scan_title, latest_path))
+        except Exception:
+            # Ignore non-matching or corrupted JSON files
+            continue
+            
+    return persisted_files
+
+
+def cmd_update_candidates(args):
+    """Sources, persists, filters, and saves candidates from raw scan files."""
+    # First persist any new scan downloads
+    persist_new_scans()
+    
+    # Load active positions to exclude
+    options = load_json(OPTIONS_FILE, {"active_positions": {}})
+    positions = options.get("active_positions", {})
+    active_positions = ["SLS", "NKE", "BABA"]  # Fallback defaults
+    if positions:
+        active_positions = list(set(details.get("Underlier", "").upper() for details in positions.values() if details.get("Underlier")))
+        print(f"Loaded active positions to exclude: {active_positions}")
+        
+    candidates = {}
+    
+    def process_scan_file(filepath, source_name):
+        if not os.path.exists(filepath):
+            print(f"Offline file not found for {source_name}: {filepath}")
+            return
+        try:
+            with open(filepath, 'r') as f:
+                data = json.load(f)
+        except Exception as e:
+            print(f"Error reading offline file {filepath}: {e}", file=sys.stderr)
+            return
+
+        results = data.get("data", {}).get("result", {}).get("results", [])
+        print(f"Read {len(results)} items from offline scan '{source_name}' ({filepath})")
+        
+        for item in results:
+            ticker = item.get("ticker", "").upper()
+            if not ticker or ticker in active_positions:
+                continue
+            columns = item.get("columns", {})
+            
+            try:
+                price = float(columns.get("Last", 0))
+                volume = float(columns.get("Volume", 0))
+                chg_pct = float(columns.get("% Change", 0)) * 100.0
+                market_cap = float(columns.get("Market cap", 0)) if columns.get("Market cap") else 0.0
+            except Exception:
+                continue
+                
+            # Apply filters
+            if not (5.0 <= price <= 500.0):
+                continue
+            if volume < 500000:
+                continue
+            if chg_pct < 0.5:
+                continue
+            if market_cap < 2000000000:
+                continue
+                
+            iv = None
+            if "Implied volatility" in columns and columns["Implied volatility"] is not None:
+                try:
+                    iv = float(columns["Implied volatility"])
+                except ValueError:
+                    pass
+                    
+            rel_opt_vol = None
+            if "Relative options volume" in columns and columns["Relative options volume"] is not None:
+                try:
+                    rel_opt_vol = float(columns["Relative options volume"])
+                except ValueError:
+                    pass
+
+            # Deduplicate or merge
+            if ticker in candidates:
+                if iv is not None:
+                    candidates[ticker]["iv"] = iv
+                if rel_opt_vol is not None:
+                    candidates[ticker]["relative_options_volume"] = rel_opt_vol
+            else:
+                candidates[ticker] = {
+                    "symbol": ticker,
+                    "source": "scanner",
+                    "price": round(price, 2),
+                    "chg_pct": round(chg_pct, 4),
+                    "iv": iv,
+                    "relative_options_volume": rel_opt_vol,
+                    "market_cap": market_cap
+                }
+
+    # Process offline scans
+    process_scan_file(os.path.join(SCANS_DIR, "gex_momentum_candidates.json"), "GEX Momentum Candidates")
+    process_scan_file(os.path.join(SCANS_DIR, "high_options_volume_and_iv.json"), "High options volume and IV")
+    
+    candidate_list = list(candidates.values())
+    # Sort candidates by relative options volume if available, or day change % descending
+    candidate_list.sort(key=lambda x: (x["relative_options_volume"] if x["relative_options_volume"] is not None else -1, x["chg_pct"]), reverse=True)
+    
+    utc_time = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
+    
+    output_data = {
+        "last_updated": utc_time,
+        "source_scans": [
+            "GEX Momentum Candidates",
+            "High options volume and IV"
+        ],
+        "user_additions": [],
+        "excluded_active_positions": active_positions,
+        "total": len(candidate_list),
+        "candidates": candidate_list
+    }
+    
+    save_json(CANDIDATES_FILE, output_data)
+    
+    print(f"Wrote {len(candidate_list)} candidates to {CANDIDATES_FILE}")
+    for c in candidate_list[:10]:
+        print(f"  - {c['symbol']}: price=${c['price']}, change={c['chg_pct']:.2f}%, iv={c['iv']}, rel_opt_vol={c['relative_options_volume']}")
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="GEX Options Mechanical Engine - Rule validation CLI and storage keeper"
+    )
+    
+    subparsers = parser.add_subparsers(dest="command", required=True)
+    
+    # status subcommand
+    subparsers.add_parser("status", help="Analyze broader Daily Regime Gates and authorization.")
+    
+    # update-regime subcommand
+    p_regime = subparsers.add_parser("update-regime", help="Recompute Daily Regime Gates from raw market inputs.")
+    p_regime.add_argument("--spy", type=float, required=True, help="SPY session change percent (e.g. 0.62)")
+    p_regime.add_argument("--qqq", type=float, required=True, help="QQQ session change percent (e.g. 1.10)")
+    p_regime.add_argument("--bulls", type=int, required=True, help="Count of bullish (green) symbols in the sector ETF list")
+    p_regime.add_argument("--bears", type=int, required=True, help="Count of bearish (red) symbols in the sector ETF list")
+    p_regime.add_argument("--vix-bearish", type=str2bool, dest="vix_bearish", required=True, help="Dealer VIX positioning is bearish/short vol (True/False)")
+    p_regime.add_argument("--vix-spot", type=float, dest="vix_spot", help="Current VIX spot level")
+
+    # analyze subcommand
+    p_analyze = subparsers.add_parser("analyze", help="Grades dynamic options candidate setups.")
+    p_analyze.add_argument("symbol", type=str, help="Ticker symbol (e.g. AAPL, AMD)")
+    p_analyze.add_argument("--spot", type=float, help="Current spot price")
+    p_analyze.add_argument("--ptrans", type=float, help="Positive transition level")
+    p_analyze.add_argument("--ntrans", type=float, help="Negative transition level")
+    p_analyze.add_argument("--gex", type=float, help="Target positive GEX target level (+GEX / T1)")
+    p_analyze.add_argument("--cotmp", type=float, help="Center of Put Mass strike price")
+    p_analyze.add_argument("--db-change", type=float, dest="db_change", help="Delta Balance Session change")
+    p_analyze.add_argument("--spike-crash", action="store_true", dest="spike_crash", help="Trigger Spike-Crash check warning.")
+    p_analyze.add_argument("--inst-file", type=str, help="Option instruments JSON file for derivation")
+    p_analyze.add_argument("--quote-file", type=str, help="Option quotes JSON file for derivation")
+    
+    # Grade Checklist overrides if needed
+    p_analyze.add_argument("--rule1", type=str2bool, help="Overriding total call GEX is positive (True/False)")
+    p_analyze.add_argument("--rule2", type=str2bool, help="Overriding call GEX exceeds PUT GEX (True/False)")
+    p_analyze.add_argument("--rule7", type=str2bool, help="Overriding Total OI > 10,000 contracts (True/False)")
+    p_analyze.add_argument("--rule8", type=str2bool, help="Overriding IV < HV (True/False)")
+    p_analyze.add_argument("--rule9", type=str2bool, help="Overriding OI Target strike is largest (True/False)")
+    p_analyze.add_argument("--rule10", type=str2bool, help="Overriding Dealer Spot net gamma positive (True/False)")
+    p_analyze.add_argument("--rule11", type=str2bool, help="Overriding Underlier RV_10 <= 35%% (True/False)")
+    
+    # portfolio subcommand
+    p_port = subparsers.add_parser("portfolio", help="Analyzes position exits, trailing stops, and sizing limits.")
+    p_port.add_argument("--net-liq", type=float, dest="net_liq", help="Estimated Portfolio Net Liq value for sizing checks")
+    p_port.add_argument("--spot-overrides", type=str, dest="spot_overrides", help="Comma-separated ticker=price overrides, e.g. AAPL=290,BABA=81")
+    
+    # add-position subcommand
+    p_add_pos = subparsers.add_parser("add-position", help="Register a option contract in tracking sheet.")
+    p_add_pos.add_argument("option_id", type=str, help="Option contract ID")
+    p_add_pos.add_argument("underlier", type=str, help="Stock ticker symbol")
+    p_add_pos.add_argument("strike", type=float, help="Strike price of option")
+    p_add_pos.add_argument("expiration", type=str, help="Expiration date (YYYY-MM-DD)")
+    p_add_pos.add_argument("type", type=str, choices=["call", "put"], help="Option contract call/put type")
+    p_add_pos.add_argument("purchase_premium", type=float, help="Initial premium paid for contract")
+    p_add_pos.add_argument("--delta", type=float, default=0.5, help="Delta (e.g. 0.52)")
+    p_add_pos.add_argument("--gamma", type=float, default=0.01, help="Gamma (e.g. 0.02)")
+    p_add_pos.add_argument("--open-interest", type=int, default=1000, help="Total open interest")
+    p_add_pos.add_argument("--imp-vol", type=float, default=0.35, help="Implied volatility (e.g. 0.42)")
+    p_add_pos.add_argument("--sector", type=str, default="Technology/Beta", help="Target sector classification (e.g. Technology/Beta, Consumer Cyclical)")
+    
+    # update-option subcommand
+    p_up_opt = subparsers.add_parser("update-option", help="Updates pricing metrics or momentum trackers for options tracking")
+    p_up_opt.add_argument("option_id", type=str, help="Option ID or Ticker underlier name")
+    p_up_opt.add_argument("--mark", type=float, help="New current Mark Price")
+    p_up_opt.add_argument("--delta", type=float, help="New option Delta")
+    p_up_opt.add_argument("--gamma", type=float, help="New option Gamma")
+    p_up_opt.add_argument("--oi", type=int, help="New option Open Interest")
+    p_up_opt.add_argument("--iv", type=float, help="New option Implied Vol")
+    p_up_opt.add_argument("--days", type=int, help="Override Days Held")
+    p_up_opt.add_argument("--stalling-days", type=int, help="Set stalling counter")
+    
+    # close-position subcommand
+    p_close_pos = subparsers.add_parser("close-position", help="Close a tracked option position and archive realized P&L.")
+    p_close_pos.add_argument("option_id", type=str, help="Option ID or Ticker underlier name")
+    p_close_pos.add_argument("--close-premium", type=float, dest="close_premium", help="Exit premium received (defaults to last Mark Price)")
+    
+    # update-candidates subcommand
+    subparsers.add_parser("update-candidates", help="Persist downloaded scans and update candidate_stocks.json.")
+    
+    args = parser.parse_args()
+    
+    # Process spot overrides if they are provided
+    spot_overrides_dict = {}
+    if hasattr(args, "spot_overrides") and args.spot_overrides is not None:
+        try:
+            pairs = args.spot_overrides.split(",")
+            for pair in pairs:
+                k, v = pair.split("=")
+                spot_overrides_dict[k.strip().upper()] = float(v)
+        except Exception as e:
+            print(f"Warning: Failed to parse spot overrides: {e}", file=sys.stderr)
+    args.spot_overrides = spot_overrides_dict
+    
+    if args.command == "status":
+        cmd_status(args)
+    elif args.command == "update-regime":
+        cmd_update_regime(args)
+    elif args.command == "analyze":
+        cmd_analyze(args)
+    elif args.command == "portfolio":
+        cmd_portfolio(args)
+    elif args.command == "add-position":
+        cmd_add_pos(args)
+    elif args.command == "update-option":
+        cmd_update_opt(args)
+    elif args.command == "close-position":
+        cmd_close_pos(args)
+    elif args.command == "update-candidates":
+        cmd_update_candidates(args)
+
+
+if __name__ == "__main__":
+    main()

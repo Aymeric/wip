@@ -1,0 +1,124 @@
+{
+  "last_updated": "2026-07-09T03:50:39.933864Z",
+  "source_scans": [
+    "GEX Momentum Candidates",
+    "High options volume and IV"
+  ],
+  "user_additions": [],
+  "excluded_active_positions": [
+    "BABA",
+    "NKE",
+    "SLS"
+  ],
+  "total": 12,
+  "candidates": [
+    {
+      "symbol": "TEL",
+      "source": "scanner",
+      "price": 205.0,
+      "chg_pct": 4.4639,
+      "iv": null,
+      "relative_options_volume": null,
+      "market_cap": 57748664874.0
+    },
+    {
+      "symbol": "ASX",
+      "source": "scanner",
+      "price": 41.64,
+      "chg_pct": 4.2825,
+      "iv": null,
+      "relative_options_volume": null,
+      "market_cap": 89313617128.0
+    },
+    {
+      "symbol": "PACS",
+      "source": "scanner",
+      "price": 45.78,
+      "chg_pct": 3.9982,
+      "iv": null,
+      "relative_options_volume": null,
+      "market_cap": 6903841041.0
+    },
+    {
+      "symbol": "PENG",
+      "source": "scanner",
+      "price": 81.49,
+      "chg_pct": 3.8486,
+      "iv": 1.600234,
+      "relative_options_volume": 3.1676982345410125,
+      "market_cap": 3182122489.0
+    },
+    {
+      "symbol": "AMTM",
+      "source": "scanner",
+      "price": 21.62,
+      "chg_pct": 3.5441,
+      "iv": null,
+      "relative_options_volume": null,
+      "market_cap": 5174619636.0
+    },
+    {
+      "symbol": "YSS",
+      "source": "scanner",
+      "price": 21.7,
+      "chg_pct": 3.3333,
+      "iv": null,
+      "relative_options_volume": null,
+      "market_cap": 2972596977.0
+    },
+    {
+      "symbol": "MTH",
+      "source": "scanner",
+      "price": 77.01,
+      "chg_pct": 3.2582,
+      "iv": null,
+      "relative_options_volume": null,
+      "market_cap": 5223467528.0
+    },
+    {
+      "symbol": "WU",
+      "source": "scanner",
+      "price": 7.97,
+      "chg_pct": 3.2383,
+      "iv": null,
+      "relative_options_volume": null,
+      "market_cap": 2483859076.0
+    },
+    {
+      "symbol": "JBLU",
+      "source": "scanner",
+      "price": 5.76,
+      "chg_pct": 3.2258,
+      "iv": null,
+      "relative_options_volume": null,
+      "market_cap": 2131668262.0
+    },
+    {
+      "symbol": "ALHC",
+      "source": "scanner",
+      "price": 20.33,
+      "chg_pct": 1.4978,
+      "iv": 0.6322041,
+      "relative_options_volume": 2.58521975695793,
+      "market_cap": 4976083119.0
+    },
+    {
+      "symbol": "VG",
+      "source": "scanner",
+      "price": 12.5,
+      "chg_pct": 0.9693,
+      "iv": 0.6163063,
+      "relative_options_volume": 2.297038774450796,
+      "market_cap": 28793709567.0
+    },
+    {
+      "symbol": "OLLI",
+      "source": "scanner",
+      "price": 62.26,
+      "chg_pct": 0.6141,
+      "iv": 0.4463409,
+      "relative_options_volume": 2.6783141160537216,
+      "market_cap": 4112637454.0
+    }
+  ]
+}

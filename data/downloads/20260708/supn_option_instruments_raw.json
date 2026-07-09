@@ -1,0 +1,1708 @@
+{
+  "data": {
+    "instruments": [
+      {
+        "id": "11fb8a67-ae80-4666-bf1b-3357696b6d5f",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "25.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "2235686b-bdbb-45da-8d5d-1c1e0402d346",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "25.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "2714fb2f-f169-4aa3-a703-2d3b47d90b53",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2027-03-19",
+        "sellout_datetime": "2027-03-19T19:30:00+00:00",
+        "strike_price": "25.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "3c0d282e-fedf-42c1-8a5b-ac10b004affb",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2027-12-17",
+        "sellout_datetime": "2027-12-17T20:30:00+00:00",
+        "strike_price": "25.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "4989a457-efc3-4d6e-893a-eb56da348da2",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "25.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "62f8ecca-8cec-4cba-8a20-8f8ef1febf3c",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-12-18",
+        "sellout_datetime": "2026-12-18T20:30:00+00:00",
+        "strike_price": "25.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "9f7f6ef7-db99-49ce-bd9a-a464a525ec13",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2027-12-17",
+        "sellout_datetime": "2027-12-17T20:30:00+00:00",
+        "strike_price": "25.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "b9e8fdfd-7bb6-47ad-b247-f577c2a325cc",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-12-18",
+        "sellout_datetime": "2026-12-18T20:30:00+00:00",
+        "strike_price": "25.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "c518e932-bb1c-4e94-8e5b-a6a3d8aca41b",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "25.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "d418dd99-76ab-42d7-ab48-78d94da23038",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2027-03-19",
+        "sellout_datetime": "2027-03-19T19:30:00+00:00",
+        "strike_price": "25.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "0debea3a-bfd0-4309-af1e-5c2ba74b5ca4",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-12-18",
+        "sellout_datetime": "2026-12-18T20:30:00+00:00",
+        "strike_price": "28.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "1031078a-0f5e-4c0f-a651-a83e51ba5e06",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-12-18",
+        "sellout_datetime": "2026-12-18T20:30:00+00:00",
+        "strike_price": "28.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "52a98f3a-d151-4a61-9187-db7ed9c8863c",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "28.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "8a178eb2-c2da-43f2-a770-1267d2e174f7",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "28.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "0c09fe85-2662-40e7-89b8-de8343ca7347",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2027-12-17",
+        "sellout_datetime": "2027-12-17T20:30:00+00:00",
+        "strike_price": "30.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "15798852-0a8d-48d7-a804-e40d3199cb7a",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-12-18",
+        "sellout_datetime": "2026-12-18T20:30:00+00:00",
+        "strike_price": "30.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "1eb67d30-c444-408e-9d66-ad709c463ccd",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2027-03-19",
+        "sellout_datetime": "2027-03-19T19:30:00+00:00",
+        "strike_price": "30.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "4a495a50-5ab6-40c2-a470-5cbd65ee56cb",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-12-18",
+        "sellout_datetime": "2026-12-18T20:30:00+00:00",
+        "strike_price": "30.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "580d7eb7-5a02-441a-9189-906768c22161",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2027-12-17",
+        "sellout_datetime": "2027-12-17T20:30:00+00:00",
+        "strike_price": "30.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "65e54a65-b851-4f88-8af0-8124b4865806",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "30.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "79e3c8e1-eaf4-4024-ac08-41d952914212",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2027-03-19",
+        "sellout_datetime": "2027-03-19T19:30:00+00:00",
+        "strike_price": "30.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "968d7bfd-773d-409c-806b-7cf07da2118d",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "30.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "ec67c881-ab43-4202-b3f3-3f1b8f416ce0",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "30.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "f1b1ca28-8fba-4714-9d37-00ebb6b55f2d",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "30.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "421e073e-3f0e-4211-ad65-4be845c48ed7",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-12-18",
+        "sellout_datetime": "2026-12-18T20:30:00+00:00",
+        "strike_price": "33.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "84dfeecb-082c-4f96-b210-78fb1f78d698",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-12-18",
+        "sellout_datetime": "2026-12-18T20:30:00+00:00",
+        "strike_price": "33.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "da46aed2-aca7-4471-873c-172773663b7e",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "33.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "fefabcec-a1f6-4694-ad19-e783050ca90b",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "33.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "0092591a-8366-411e-b9df-9812d15d1562",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "35.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "1d6ae3a3-a17a-4a1d-b757-b3ff2d58733f",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "35.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "3461a9df-6efd-4ff2-b385-59c15ad77d92",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2027-03-19",
+        "sellout_datetime": "2027-03-19T19:30:00+00:00",
+        "strike_price": "35.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "525196a5-e09c-4a55-be2d-8f24e97d1686",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-12-18",
+        "sellout_datetime": "2026-12-18T20:30:00+00:00",
+        "strike_price": "35.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "5d11a6ed-5d24-47f1-af7a-350e12ce5393",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2027-12-17",
+        "sellout_datetime": "2027-12-17T20:30:00+00:00",
+        "strike_price": "35.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "6e54369a-27c3-4a9f-882b-1fc87ef72377",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "35.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "7b1e2315-cd84-4e47-a5f0-16a286741a79",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "35.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "89ab85fb-817b-458a-8e6e-c71b8008b272",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-17",
+        "sellout_datetime": "2026-07-17T19:30:00+00:00",
+        "strike_price": "35.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "8fce9721-5d16-478a-a249-3897d0801be7",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "35.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "9f79fc83-aafb-4321-8006-aca2c1818b5b",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2027-03-19",
+        "sellout_datetime": "2027-03-19T19:30:00+00:00",
+        "strike_price": "35.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "a190f462-6c31-4680-8307-516068dbb51f",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "35.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "c57b8753-a6b6-418e-b003-81b8149b5052",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2027-12-17",
+        "sellout_datetime": "2027-12-17T20:30:00+00:00",
+        "strike_price": "35.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "cbd80234-e42a-45c0-bb4f-43abf7c59c38",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-12-18",
+        "sellout_datetime": "2026-12-18T20:30:00+00:00",
+        "strike_price": "35.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "d4f8f894-030e-4b2d-8d66-a216e08c3281",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-17",
+        "sellout_datetime": "2026-07-17T19:30:00+00:00",
+        "strike_price": "35.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "39cac4e5-a58c-4d30-92be-038aeba1a8ce",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "36.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "66b2f9bd-e2ca-4eeb-972e-eb29e5e41e08",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-17",
+        "sellout_datetime": "2026-07-17T19:30:00+00:00",
+        "strike_price": "36.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "8d10ee3b-de6f-453f-ad1f-4d958c92d24d",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-17",
+        "sellout_datetime": "2026-07-17T19:30:00+00:00",
+        "strike_price": "36.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "c9f85569-2d71-43b1-9250-79ab4450d090",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "36.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "0a2e48a6-8cec-4cce-ac9d-e385e1eb72a3",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-17",
+        "sellout_datetime": "2026-07-17T19:30:00+00:00",
+        "strike_price": "37.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "0ff22409-dfda-48eb-8615-988624698fcd",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-17",
+        "sellout_datetime": "2026-07-17T19:30:00+00:00",
+        "strike_price": "37.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "31cbc79f-d143-408b-b32a-04161603aec6",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "37.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "b754bd56-f4bc-4db4-8faf-ae6451957da3",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "37.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "133b394e-515c-4e3e-b93d-e8a11c363ada",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-17",
+        "sellout_datetime": "2026-07-17T19:30:00+00:00",
+        "strike_price": "38.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "17cb082e-502c-4ce0-a815-dcdee73ba149",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-12-18",
+        "sellout_datetime": "2026-12-18T20:30:00+00:00",
+        "strike_price": "38.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "7b547347-596a-403a-b3a7-e44e417e97e3",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "38.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "9841267a-87d6-48a8-b364-c7b15c55440d",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "38.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "9b9f0bd6-d8f2-485e-8caf-c092d014fe14",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "38.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "cd0a7714-c1a3-4ab7-ac78-ae17761589e4",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-17",
+        "sellout_datetime": "2026-07-17T19:30:00+00:00",
+        "strike_price": "38.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "defc4c68-0310-4cbf-9aa6-a59069b96308",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-12-18",
+        "sellout_datetime": "2026-12-18T20:30:00+00:00",
+        "strike_price": "38.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "ff07a867-03f6-460f-b163-76273ef0278d",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "38.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "3775816a-8f0b-48dc-bdf8-980ca708ab5b",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-17",
+        "sellout_datetime": "2026-07-17T19:30:00+00:00",
+        "strike_price": "39.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "a39d8202-96f2-48c5-a7c6-badf7ec24035",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "39.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "abe8d575-2878-4e57-b9e6-603a4643e789",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-17",
+        "sellout_datetime": "2026-07-17T19:30:00+00:00",
+        "strike_price": "39.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "b37b3a0e-5056-418a-9b12-43a46cbf43ed",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "39.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "04353f11-5a87-4ff1-b057-2871bc5b8c9a",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "40.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "0d15f6d0-1819-4915-a4b0-eb22e62a60c7",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-17",
+        "sellout_datetime": "2026-07-17T19:30:00+00:00",
+        "strike_price": "40.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "0e3acf01-bd5e-4bca-8bf1-53098f9ee278",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "40.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "28b17b45-4189-4401-ac34-6e202fc44684",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2027-03-19",
+        "sellout_datetime": "2027-03-19T19:30:00+00:00",
+        "strike_price": "40.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "58f9f45b-a035-4602-846a-c354c57c59de",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2027-03-19",
+        "sellout_datetime": "2027-03-19T19:30:00+00:00",
+        "strike_price": "40.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "6c5ccd16-8122-4e95-89d6-66b8c63ae102",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-17",
+        "sellout_datetime": "2026-07-17T19:30:00+00:00",
+        "strike_price": "40.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "6ee57fbb-bcb9-449e-a71e-849a61e481bb",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-12-18",
+        "sellout_datetime": "2026-12-18T20:30:00+00:00",
+        "strike_price": "40.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "7b691d6d-5f07-477e-a879-eb0e4ef7da10",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "40.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "7efac799-79bd-47a8-ac27-a277fe733ad7",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "40.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "81591bb9-61fc-4374-bb41-fb4908d4441c",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2027-12-17",
+        "sellout_datetime": "2027-12-17T20:30:00+00:00",
+        "strike_price": "40.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "971ad083-984e-4113-a7bc-61b00b40d152",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "40.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "aa42d365-97c5-48ca-84ec-7da3189b4cc6",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-12-18",
+        "sellout_datetime": "2026-12-18T20:30:00+00:00",
+        "strike_price": "40.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "e0a9d14f-5aad-41d4-8141-5f527fa25f7a",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2027-12-17",
+        "sellout_datetime": "2027-12-17T20:30:00+00:00",
+        "strike_price": "40.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "e3679e53-4eb9-4ffe-8b98-719c8f8d47ab",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "40.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "8f825cbd-2fc9-41a1-bb67-77e7753d165e",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-17",
+        "sellout_datetime": "2026-07-17T19:30:00+00:00",
+        "strike_price": "41.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "a99047f4-133b-40a8-ac79-75e8292d1728",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-17",
+        "sellout_datetime": "2026-07-17T19:30:00+00:00",
+        "strike_price": "41.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "ae39c90e-2f4e-4d76-9a64-1e04f0b7bed7",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "41.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "e97311ea-fc7f-4ba4-b8d6-5fdb63af24cc",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "41.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "3bb3875c-fe9f-44da-9fdc-29a888bf049b",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-17",
+        "sellout_datetime": "2026-07-17T19:30:00+00:00",
+        "strike_price": "42.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "794545bd-36a7-43f2-84f9-b9c2f1afc044",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "42.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "c102164f-56e5-4a77-b8df-aae50dac058b",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-12-18",
+        "sellout_datetime": "2026-12-18T20:30:00+00:00",
+        "strike_price": "42.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "cb2c5e07-fba5-431a-9668-1c24c2f62493",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-17",
+        "sellout_datetime": "2026-07-17T19:30:00+00:00",
+        "strike_price": "42.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "e7b29a88-f736-470e-99a4-068e3fea28a5",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "42.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "f547591f-b136-443b-b096-9eafab2ace3d",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-12-18",
+        "sellout_datetime": "2026-12-18T20:30:00+00:00",
+        "strike_price": "42.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "026d1abc-7c12-40a3-9a8b-6011ae36d46a",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "43.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "0bfdc143-093a-4c56-94d3-ffb3e0cbd66c",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-12-18",
+        "sellout_datetime": "2026-12-18T20:30:00+00:00",
+        "strike_price": "43.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "3f64a930-9619-4c51-8698-64b3cf3b5554",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-17",
+        "sellout_datetime": "2026-07-17T19:30:00+00:00",
+        "strike_price": "43.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "44613a49-fbf1-49d9-8690-85a174a4ec6d",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-17",
+        "sellout_datetime": "2026-07-17T19:30:00+00:00",
+        "strike_price": "43.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "44717e06-c94f-434a-9113-5c024d563c1c",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "43.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "8123c8cc-527a-4d19-8cbd-f0b1039190f7",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "43.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "85e138e1-2e19-48f0-bab0-7449da8567f0",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-12-18",
+        "sellout_datetime": "2026-12-18T20:30:00+00:00",
+        "strike_price": "43.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "91461267-e3a3-4a2e-aeef-9fe58301b21c",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "43.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "9335dd42-e271-4cb4-8e82-32244aca51ef",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "43.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "fae575c4-0b64-478a-97b9-92cd51d342ec",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "43.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "06f61a2f-ce23-42bd-a731-1616c7742c60",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "44.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "384c8d43-ac87-4d45-86a5-febf8fa52f1c",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "44.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "5395ead8-fe94-49ea-a086-4fd30ff2c29b",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-17",
+        "sellout_datetime": "2026-07-17T19:30:00+00:00",
+        "strike_price": "44.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "58fc0f95-33e8-40c0-8bae-9fe3fd6411de",
+        "chain_id": "269951e7-2847-459d-b962-4a24af7f43a6",
+        "chain_symbol": "SUPN",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "44.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      }
+    ],
+    "next": "http://edge-internal.brokeback-shard-router.region.rh/options/instruments/?chain_symbol=SUPN&cursor=bz00JnA9NDMuMDAwMA%3D%3D&state=active"
+  },
+  "guide": "Present chain_symbol, expiration_date, type, strike_price; flag state when not 'active' or tradability when not 'tradable'. Pass id to an order's leg.option_id. Quote sellout_datetime when the user asks \"when will Robinhood force-close this position?\" — it is the authoritative per-contract timestamp covering equity/index, AM/PM settle, and T-1 logic. underlying_type ('equity' or 'index') is informational; mention only when it affects strategy. When next is non-null, extract the cursor query param and call this tool again."
+}

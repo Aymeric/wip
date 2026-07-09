@@ -1,0 +1,508 @@
+{
+  "data": {
+    "items": [
+      {
+        "object_id": "450dfc6d-5510-4d40-abfb-f633b7d9be3e",
+        "object_type": "instrument",
+        "symbol": "AAPL"
+      },
+      {
+        "object_id": "c0bb3aec-bd1e-471e-a4f0-ca011cbec711",
+        "object_type": "instrument",
+        "symbol": "AMZN"
+      },
+      {
+        "object_id": "ebab2398-028d-4939-9f1d-13bf38f81c50",
+        "object_type": "instrument",
+        "symbol": "META"
+      },
+      {
+        "object_id": "81733743-965a-4d93-b87a-6973cb9efd34",
+        "object_type": "instrument",
+        "symbol": "NFLX"
+      },
+      {
+        "object_id": "ef29fd22-6e22-44ef-9911-a8f5bd68abd3",
+        "object_type": "instrument",
+        "symbol": "HOOD"
+      },
+      {
+        "object_id": "943c5009-a0bb-4665-8cf4-a95dab5874e4",
+        "object_type": "instrument",
+        "symbol": "GOOG"
+      },
+      {
+        "object_id": "b2e06903-5c44-46a4-bd42-2a696f9d68e1",
+        "object_type": "instrument",
+        "symbol": "BABA"
+      },
+      {
+        "object_id": "aec9d597-9fdb-4393-af8b-da2019e2c179",
+        "object_type": "instrument",
+        "symbol": "NKE"
+      },
+      {
+        "object_id": "f82f2908-cae3-4b06-86e2-28332a9bdfe3",
+        "object_type": "instrument",
+        "symbol": "NOW"
+      },
+      {
+        "object_id": "a4ecd608-e7b4-4ff3-afa5-f77ae7632dfb",
+        "object_type": "instrument",
+        "symbol": "NVDA"
+      },
+      {
+        "object_id": "e39ed23a-7bd1-4587-b060-71988d9ef483",
+        "object_type": "instrument",
+        "symbol": "TSLA"
+      },
+      {
+        "object_id": "306245dd-b82d-4d8d-bcc5-7c58e87cdd15",
+        "object_type": "instrument",
+        "symbol": "VOO"
+      },
+      {
+        "object_id": "50810c35-d215-4866-9758-0ada4ac79ffa",
+        "object_type": "instrument",
+        "symbol": "MSFT"
+      },
+      {
+        "object_id": "ef5d2600-32d1-41f5-bfbe-abacac264d2a",
+        "object_type": "instrument",
+        "symbol": "SPCX"
+      },
+      {
+        "object_id": "8f92e76f-1e0e-4478-8580-16a6ffcfaef5",
+        "object_type": "instrument",
+        "symbol": "SPY"
+      },
+      {
+        "object_id": "2690d965-cbac-4865-ad7c-34881b10f81e",
+        "object_type": "instrument",
+        "symbol": "AMC"
+      },
+      {
+        "object_id": "6df56bd0-0bf2-44ab-8875-f94fd8526942",
+        "object_type": "instrument",
+        "symbol": "F"
+      },
+      {
+        "object_id": "54db869e-f7d5-45fb-88f1-8d7072d4c8b2",
+        "object_type": "instrument",
+        "symbol": "GOOGL"
+      },
+      {
+        "object_id": "18226051-6bfa-4c56-bd9a-d7575f0245c1",
+        "object_type": "instrument",
+        "symbol": "VTI"
+      },
+      {
+        "object_id": "ee17a597-5d34-42be-b264-f5c50b12dffc",
+        "object_type": "instrument",
+        "symbol": "BND"
+      },
+      {
+        "object_id": "8cbd9cce-48dc-4b57-97d4-665bc78fdf99",
+        "object_type": "instrument",
+        "symbol": "VEA"
+      },
+      {
+        "object_id": "49335ec7-8b86-4021-b656-6e45c37da4ed",
+        "object_type": "instrument",
+        "symbol": "VWO"
+      },
+      {
+        "object_id": "b94e24f8-a8be-459f-95a2-42578ab4171f",
+        "object_type": "instrument",
+        "symbol": "IVV"
+      },
+      {
+        "object_id": "1790dd4f-a7ff-409e-90de-cad5efafde10",
+        "object_type": "instrument",
+        "symbol": "QQQ"
+      },
+      {
+        "object_id": "940fc3f5-1db5-4fed-b452-f3a2e4562b5f",
+        "object_type": "instrument",
+        "symbol": "AMD"
+      },
+      {
+        "object_id": "2ed64ef4-2c1a-44d6-832d-1be84741dc41",
+        "object_type": "instrument",
+        "symbol": "DIS"
+      },
+      {
+        "object_id": "f90de184-4f73-4aad-9a5f-407858013eb1",
+        "object_type": "instrument",
+        "symbol": "PLTR"
+      },
+      {
+        "object_id": "2eb31ec7-2d62-40ed-aeea-9686d959dd31",
+        "object_type": "instrument",
+        "symbol": "SNDL"
+      },
+      {
+        "object_id": "2a2a190b-64c0-46e7-a667-2e557ae1649e",
+        "object_type": "instrument",
+        "symbol": "SCHD"
+      },
+      {
+        "object_id": "71922dc8-1582-4ae6-ad1f-c2dcd3d1b223",
+        "object_type": "instrument",
+        "symbol": "SPMO"
+      },
+      {
+        "object_id": "1a988898-9444-4c11-b1cc-bbc8592f8123",
+        "object_type": "instrument",
+        "symbol": "LCID"
+      },
+      {
+        "object_id": "698f04e6-1710-4f34-b7af-4a88fe5e47b3",
+        "object_type": "instrument",
+        "symbol": "AVGO"
+      },
+      {
+        "object_id": "9f1399e5-5023-425a-9eb5-cd3f91560189",
+        "object_type": "instrument",
+        "symbol": "NIO"
+      },
+      {
+        "object_id": "bb9a01df-5982-42d4-88db-8662f23cdab5",
+        "object_type": "instrument",
+        "symbol": "KO"
+      },
+      {
+        "object_id": "acc0099d-bae4-4589-936c-e36c5c5321ed",
+        "object_type": "instrument",
+        "symbol": "RIVN"
+      },
+      {
+        "object_id": "ec89803c-c5e5-4df1-889c-da4f8cb6f8cd",
+        "object_type": "instrument",
+        "symbol": "COST"
+      },
+      {
+        "object_id": "0a8a072c-e52c-4e41-a2ee-8adbd72217d3",
+        "object_type": "instrument",
+        "symbol": "MU"
+      },
+      {
+        "object_id": "ad1edbfb-19c8-4939-be66-1f09bd65b902",
+        "object_type": "instrument",
+        "symbol": "WMT"
+      },
+      {
+        "object_id": "ca4821f9-06c3-4c22-bbb8-efe569f23d2b",
+        "object_type": "instrument",
+        "symbol": "TSM"
+      },
+      {
+        "object_id": "9a69c0d6-47b3-4d3e-b9f0-78d8e51630ac",
+        "object_type": "instrument",
+        "symbol": "SOFI"
+      },
+      {
+        "object_id": "ad059c69-0c1c-4c6b-8322-f53f1bbd69d4",
+        "object_type": "instrument",
+        "symbol": "INTC"
+      },
+      {
+        "object_id": "6ec6c70e-d686-4d73-b5a8-74fec96aca0e",
+        "object_type": "instrument",
+        "symbol": "PFE"
+      },
+      {
+        "object_id": "29d287a3-771b-4414-95ed-8669423303bf",
+        "object_type": "instrument",
+        "symbol": "UBER"
+      },
+      {
+        "object_id": "1e513292-5926-4dc4-8c3d-4af6b5836704",
+        "object_type": "instrument",
+        "symbol": "SNAP"
+      },
+      {
+        "object_id": "7a6a30e2-cf4d-40dd-8baa-0cea48de85e4",
+        "object_type": "instrument",
+        "symbol": "CVX"
+      },
+      {
+        "object_id": "ef99a2c4-adb2-4163-a2df-2d5722cc75b7",
+        "object_type": "instrument",
+        "symbol": "PLUG"
+      },
+      {
+        "object_id": "2bbdb493-dbb1-4e9c-ac98-6e7c93b117c0",
+        "object_type": "instrument",
+        "symbol": "GME"
+      },
+      {
+        "object_id": "25add190-d683-4983-808f-44edf7b58c93",
+        "object_type": "instrument",
+        "symbol": "LLY"
+      },
+      {
+        "object_id": "97b91844-533c-4f43-be7b-6c6852acb9a7",
+        "object_type": "instrument",
+        "symbol": "SGOV"
+      },
+      {
+        "object_id": "fff3ae05-cd10-4042-ac5c-b41987c4894c",
+        "object_type": "instrument",
+        "symbol": "VB"
+      },
+      {
+        "object_id": "4b4d198e-fe71-487c-8e3b-584732a2bfaa",
+        "object_type": "instrument",
+        "symbol": "CRWD"
+      },
+      {
+        "object_id": "74330aeb-5329-4571-98c7-cee3480048c3",
+        "object_type": "instrument",
+        "symbol": "NOK"
+      },
+      {
+        "object_id": "0dd811b3-7047-448d-96e0-7bf6ee4cfe45",
+        "object_type": "instrument",
+        "symbol": "BAC"
+      },
+      {
+        "object_id": "fd0c2695-e591-4c28-bdf7-068895ae3b14",
+        "object_type": "instrument",
+        "symbol": "JNJ"
+      },
+      {
+        "object_id": "534941b7-7e58-499a-adf4-2a0918b18bd4",
+        "object_type": "instrument",
+        "symbol": "MRVL"
+      },
+      {
+        "object_id": "45ccb9d7-b9f0-40aa-833f-8381a4e5c3e5",
+        "object_type": "instrument",
+        "symbol": "AAL"
+      },
+      {
+        "object_id": "90999f47-19d4-4bdf-91d7-2bf3733a3fcf",
+        "object_type": "instrument",
+        "symbol": "GLD"
+      },
+      {
+        "object_id": "b753f749-3b67-4dca-a80c-9bc2f2933097",
+        "object_type": "instrument",
+        "symbol": "SPHQ"
+      },
+      {
+        "object_id": "18c7a7ad-3527-47b4-84b4-ce4db0106531",
+        "object_type": "instrument",
+        "symbol": "SBUX"
+      },
+      {
+        "object_id": "93495afe-b84b-4664-881c-b6361b0edeef",
+        "object_type": "instrument",
+        "symbol": "V"
+      },
+      {
+        "object_id": "a587589f-3742-4e58-8e48-f94afae78c49",
+        "object_type": "instrument",
+        "symbol": "VONG"
+      },
+      {
+        "object_id": "797b5b1a-29bf-4338-822c-3f9c81a0e44b",
+        "object_type": "instrument",
+        "symbol": "CCL"
+      },
+      {
+        "object_id": "a7677c6d-455c-49ec-90c4-3679abd21fb9",
+        "object_type": "instrument",
+        "symbol": "XOM"
+      },
+      {
+        "object_id": "c3d567f5-bf6e-4af1-b3e6-94d0d88effe0",
+        "object_type": "instrument",
+        "symbol": "TLRY"
+      },
+      {
+        "object_id": "4b3b30de-3221-4c67-a57d-ad68d2488097",
+        "object_type": "instrument",
+        "symbol": "RKLB"
+      },
+      {
+        "object_id": "ecf1119a-d382-46bc-9d40-db9c442ed457",
+        "object_type": "instrument",
+        "symbol": "QUAL"
+      },
+      {
+        "object_id": "a4f0cca4-79dc-4297-9c02-5bce1909cd4b",
+        "object_type": "instrument",
+        "symbol": "BRK.B"
+      },
+      {
+        "object_id": "b9a6444e-ce3e-4186-be32-b82814d2b418",
+        "object_type": "instrument",
+        "symbol": "DAL"
+      },
+      {
+        "object_id": "aedbcff3-1e3c-469b-9594-44cffed43404",
+        "object_type": "instrument",
+        "symbol": "COIN"
+      },
+      {
+        "object_id": "be5fb320-73c5-4f9e-a825-1c632bdd5f92",
+        "object_type": "instrument",
+        "symbol": "ORCL"
+      },
+      {
+        "object_id": "d05566bf-b0cc-414b-a520-b9216bb80abf",
+        "object_type": "instrument",
+        "symbol": "SHOP"
+      },
+      {
+        "object_id": "2b456f6a-3287-4757-abf9-327383d2c708",
+        "object_type": "instrument",
+        "symbol": "T"
+      },
+      {
+        "object_id": "98bf9407-f2f2-4eb7-b2b7-07c811cc384a",
+        "object_type": "instrument",
+        "symbol": "SOUN"
+      },
+      {
+        "object_id": "520b16bd-8101-4f9e-a48a-65ffe1466555",
+        "object_type": "instrument",
+        "symbol": "DXJ"
+      },
+      {
+        "object_id": "20d50213-16f0-440c-855f-05aeedc71c63",
+        "object_type": "instrument",
+        "symbol": "GE"
+      },
+      {
+        "object_id": "d58d5d4e-5631-4ec8-a1d3-edd189454503",
+        "object_type": "instrument",
+        "symbol": "VYM"
+      },
+      {
+        "object_id": "2a536f87-a47f-4590-b507-f5bca03215ac",
+        "object_type": "instrument",
+        "symbol": "VST"
+      },
+      {
+        "object_id": "32e26768-17c8-4bcc-959b-9f45d5c217c3",
+        "object_type": "instrument",
+        "symbol": "CGC"
+      },
+      {
+        "object_id": "17302400-f9c0-423b-b370-beaf6cee021b",
+        "object_type": "instrument",
+        "symbol": "DJT"
+      },
+      {
+        "object_id": "a30e4e27-d132-4545-a710-1b11ed5694c8",
+        "object_type": "instrument",
+        "symbol": "QQQM"
+      },
+      {
+        "object_id": "68bae46a-c0a5-4cda-86a9-1d2460b0b7d3",
+        "object_type": "instrument",
+        "symbol": "NEE"
+      },
+      {
+        "object_id": "2bec0a11-2208-4c55-9819-e8ab02291b38",
+        "object_type": "instrument",
+        "symbol": "VXUS"
+      },
+      {
+        "object_id": "ae2e4ada-197d-42a4-825c-aff01cc3a8dd",
+        "object_type": "instrument",
+        "symbol": "IBM"
+      },
+      {
+        "object_id": "4c9edd7b-f43c-49fa-93aa-9e8f7f4d47a6",
+        "object_type": "instrument",
+        "symbol": "QBTS"
+      },
+      {
+        "object_id": "17ff1551-9ee8-46d9-afe0-68c4b050310a",
+        "object_type": "instrument",
+        "symbol": "IJR"
+      },
+      {
+        "object_id": "b649c88a-7abb-4e77-97a6-e71a821849e0",
+        "object_type": "instrument",
+        "symbol": "IWM"
+      },
+      {
+        "object_id": "eacb82b7-7a14-4c4c-8268-21bdaeca7b91",
+        "object_type": "instrument",
+        "symbol": "SCHG"
+      },
+      {
+        "object_id": "309344d3-af67-4190-9970-b10618959fe5",
+        "object_type": "instrument",
+        "symbol": "PYPL"
+      },
+      {
+        "object_id": "5ea5e761-1747-4911-beec-5a24af338329",
+        "object_type": "instrument",
+        "symbol": "QCOM"
+      },
+      {
+        "object_id": "279e98b9-2e23-4cf2-90ed-c085ea472105",
+        "object_type": "instrument",
+        "symbol": "ABBV"
+      },
+      {
+        "object_id": "ae7f719c-ba1a-4207-8d94-af40fb7310f8",
+        "object_type": "instrument",
+        "symbol": "BA"
+      },
+      {
+        "object_id": "c90d3267-7a72-48b4-a350-c9d521cf9a78",
+        "object_type": "instrument",
+        "symbol": "IONQ"
+      },
+      {
+        "object_id": "845852e1-eeb4-484a-b198-054778bf8222",
+        "object_type": "instrument",
+        "symbol": "RGTI"
+      },
+      {
+        "object_id": "43c1172a-9130-420a-ac9b-b01a6ff5dd54",
+        "object_type": "instrument",
+        "symbol": "JPM"
+      },
+      {
+        "object_id": "313f8eeb-ee05-4a5a-9f5a-188e5ac4b613",
+        "object_type": "instrument",
+        "symbol": "EMXC"
+      },
+      {
+        "object_id": "61588a64-59d0-42fd-8f82-aca10a40a937",
+        "object_type": "instrument",
+        "symbol": "ASHR"
+      },
+      {
+        "object_id": "740de869-8913-46fb-a31f-6ae14d20661e",
+        "object_type": "instrument",
+        "symbol": "SLV"
+      },
+      {
+        "object_id": "ba7509ae-13be-4e2e-9606-cba6969b70d6",
+        "object_type": "instrument",
+        "symbol": "BBAI"
+      },
+      {
+        "object_id": "25055233-cdb6-4e80-99f2-13ed1ce5a30a",
+        "object_type": "instrument",
+        "symbol": "MRK"
+      },
+      {
+        "object_id": "8118ec86-3d0b-46f2-a025-f362a3616440",
+        "object_type": "instrument",
+        "symbol": "O"
+      }
+    ],
+    "has_futures_contracts": false
+  },
+  "guide": "For instruments (object_type=instrument) the symbol is the ticker — pass to get_quotes for prices. For crypto (currency_pair), symbol is the pair (BTC-USD). The has_futures_contracts flag at the top tells you whether any futures items are present — futures behavior is different (the object_id is the active contract, not the product). When presenting to the user, lead with symbol + object_type; omit object_id unless asked."
+}
