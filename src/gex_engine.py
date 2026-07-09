@@ -77,6 +77,9 @@ def load_json(filepath, default):
 def save_json(filepath, data):
     """Saves a Python dictionary/list structure to filepath as formatted JSON."""
     try:
+        dir_name = os.path.dirname(filepath)
+        if dir_name:
+            os.makedirs(dir_name, exist_ok=True)
         with open(filepath, "w") as f:
             json.dump(data, f, indent=2)
     except Exception as e:
@@ -413,6 +416,77 @@ def cmd_analyze(args):
                 if args.rule7 is None: args.rule7 = rule7_derived
                 if args.rule9 is None: args.rule9 = rule9_derived
                 if args.rule10 is None: args.rule10 = rule10_derived
+                
+                # If hist-file is passed, derive Rule 8 and Rule 11 volatility proxies
+                if hasattr(args, "hist_file") and args.hist_file:
+                    try:
+                        import math
+                        with open(args.hist_file, "r") as f:
+                            hist_data = json.load(f)
+                        
+                        # Extract bars list
+                        bars = []
+                        if isinstance(hist_data, dict):
+                            results = hist_data.get("data", {}).get("results", [])
+                            if not results:
+                                results = hist_data.get("results", [])
+                            if results:
+                                for res in results:
+                                    if res.get("symbol", "").upper() == symbol:
+                                        bars = res.get("bars", [])
+                                        break
+                            if not bars:
+                                bars = hist_data.get("bars", [])
+                        elif isinstance(hist_data, list):
+                            bars = hist_data
+                            
+                        if bars:
+                            # Sort chronologically by begins_at
+                            if isinstance(bars[0], dict) and "begins_at" in bars[0]:
+                                bars.sort(key=lambda x: x.get("begins_at", ""))
+                                
+                            closes = []
+                            for bar in bars:
+                                try:
+                                    val = float(bar.get("close_price") or bar.get("close", 0.0))
+                                    if val > 0.0:
+                                        closes.append(val)
+                                except ValueError:
+                                    continue
+                                    
+                            if len(closes) > 1:
+                                # Calculate daily log returns
+                                log_returns = [math.log(closes[i] / closes[i-1]) for i in range(1, len(closes))]
+                                
+                                def calc_annualized_vol(returns_list):
+                                    n = len(returns_list)
+                                    if n < 2:
+                                        return 0.0
+                                    mean_ret = sum(returns_list) / n
+                                    variance = sum((x - mean_ret) ** 2 for x in returns_list) / (n - 1)
+                                    stdev_ret = math.sqrt(variance)
+                                    return stdev_ret * math.sqrt(252) * 100.0
+                                    
+                                # HV90 proxy (using all available log returns)
+                                hv90_val = calc_annualized_vol(log_returns)
+                                
+                                # RV10 proxy (using last 10 log returns)
+                                rv10_val = calc_annualized_vol(log_returns[-10:])
+                                
+                                # IV30 proxy: calculate if iv_sum and iv_count are set
+                                iv30_val = (iv_sum / iv_count) * 100.0 if iv_count > 0 else 0.0
+                                
+                                rule8_derived = iv30_val < hv90_val if iv30_val > 0.0 and hv90_val > 0.0 else True
+                                rule11_derived = rv10_val <= 35.0 if rv10_val > 0.0 else True
+                                
+                                if args.rule8 is None: args.rule8 = rule8_derived
+                                if args.rule11 is None: args.rule11 = rule11_derived
+                                
+                                print(format_color(f"📈 Volatility Profile Derivation complete for {symbol}:", "32", bold=True))
+                                print(f"  -> IV30 Proxy: {iv30_val:.2f}% vs HV90 Proxy: {hv90_val:.2f}% (Rule8: {rule8_derived})")
+                                print(f"  -> RV10: {rv10_val:.2f}% (Rule11 Setup Vol Compression: {'PASS' if rule11_derived else 'FAIL'})")
+                    except Exception as ve:
+                        print(f"Error deriving volatility indices from historical price files: {ve}", file=sys.stderr)
                 
                 print(format_color(f"🤖 Upgraded GEX Derivation complete for {symbol}:", "32", bold=True))
                 print(f"  -> COTMP: ${derived_cotmp:.2f}, pTrans: ${derived_ptrans:.2f}, nTrans: ${derived_ntrans:.2f}, +GEX: ${derived_gex:.2f}")
@@ -1109,6 +1183,7 @@ def main():
     p_analyze.add_argument("--spike-crash", action="store_true", dest="spike_crash", help="Trigger Spike-Crash check warning.")
     p_analyze.add_argument("--inst-file", type=str, help="Option instruments JSON file for derivation")
     p_analyze.add_argument("--quote-file", type=str, help="Option quotes JSON file for derivation")
+    p_analyze.add_argument("--hist-file", type=str, help="Underlier historical daily closes JSON file for volatility derivation")
     
     # Grade Checklist overrides if needed
     p_analyze.add_argument("--rule1", type=str2bool, help="Overriding total call GEX is positive (True/False)")

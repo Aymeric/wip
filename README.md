@@ -120,10 +120,10 @@ python3 src/gex_engine.py close-position <option_id_or_ticker> --close-premium <
 
 ## 🤖 GEX Profile Derivation Engine
 
-The `analyze` subcommand supports automatic offline GEX structural profile derivation directly from raw Robinhood option files. Rather than manually computing levels, you can pass absolute paths to the downloaded options instrument list file (`--inst-file`) and options quotes metrics file (`--quote-file`). 
+The `analyze` subcommand supports automatic offline GEX structural profile and volatility derivation directly from raw Robinhood files. Rather than manually computing levels or volatility rules, you can optionally pass paths to the downloaded options instruments file (`--inst-file`), options quotes metrics file (`--quote-file`), and historical daily closes file (`--hist-file`).
 
 ```bash
-python3 src/gex_engine.py analyze SUPN --spot 50.25 --inst-file data/downloads/20260708/supn_option_instruments_raw.json --quote-file data/downloads/20260708/supn_option_quotes_raw.json --db-change 0.65
+python3 src/gex_engine.py analyze SUPN --spot 50.25 --inst-file data/downloads/20260708/supn_option_instruments_raw.json --quote-file data/downloads/20260708/supn_option_quotes_raw.json --hist-file data/downloads/20260708/supn_historicals_raw.json --db-change 0.65
 ```
 
 ### Derivation Mechanics
@@ -131,6 +131,8 @@ python3 src/gex_engine.py analyze SUPN --spot 50.25 --inst-file data/downloads/2
 2. **pTrans (Positive Transition)**: Resolved as the strike price at or below the current Spot price that contains the highest put Open Interest.
 3. **nTrans (Negative Transition)**: Resolved as the strike price strictly below `pTrans` containing the next largest concentration of put Open Interest. This serves as the structural capital protection floor.
 4. **+GEX (T1 Target)**: Resolved as the strike price at or above the current Spot price containing the highest call Open Interest (the main dealer/call wall).
+5. **Implied vs. Realized Volatility (Rule 8)**: Calculated using options quotes within 15% of spot to compute log-return standard deviation over the full price history.
+6. **10-day Realized Volatility Compression (Rule 11)**: Calculated using the standard deviation of log returns over the last 10 trading session closes.
 
 ---
 

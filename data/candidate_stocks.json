@@ -1,17 +1,53 @@
 {
-  "last_updated": "2026-07-09T03:50:39.933864Z",
+  "last_updated": "2026-07-09T04:51:08.988343Z",
   "source_scans": [
     "GEX Momentum Candidates",
     "High options volume and IV"
   ],
   "user_additions": [],
   "excluded_active_positions": [
+    "SLS",
     "BABA",
-    "NKE",
-    "SLS"
+    "NKE"
   ],
   "total": 12,
   "candidates": [
+    {
+      "symbol": "PENG",
+      "source": "scanner",
+      "price": 81.49,
+      "chg_pct": 3.8486,
+      "iv": 1.600234,
+      "relative_options_volume": 3.1676982345410125,
+      "market_cap": 3182122489.0
+    },
+    {
+      "symbol": "OLLI",
+      "source": "scanner",
+      "price": 62.26,
+      "chg_pct": 0.6141,
+      "iv": 0.4463409,
+      "relative_options_volume": 2.6783141160537216,
+      "market_cap": 4112637454.0
+    },
+    {
+      "symbol": "ALHC",
+      "source": "scanner",
+      "price": 20.33,
+      "chg_pct": 1.4978,
+      "iv": 0.6322041,
+      "relative_options_volume": 2.58521975695793,
+      "market_cap": 4976083119.0
+    },
+    {
+      "symbol": "VG",
+      "source": "scanner",
+      "price": 12.5,
+      "chg_pct": 0.9693,
+      "iv": 0.6163063,
+      "relative_options_volume": 2.297038774450796,
+      "market_cap": 28793709567.0
+    },
     {
       "symbol": "TEL",
       "source": "scanner",
@@ -38,15 +74,6 @@
       "iv": null,
       "relative_options_volume": null,
       "market_cap": 6903841041.0
-    },
-    {
-      "symbol": "PENG",
-      "source": "scanner",
-      "price": 81.49,
-      "chg_pct": 3.8486,
-      "iv": 1.600234,
-      "relative_options_volume": 3.1676982345410125,
-      "market_cap": 3182122489.0
     },
     {
       "symbol": "AMTM",
@@ -92,33 +119,6 @@
       "iv": null,
       "relative_options_volume": null,
       "market_cap": 2131668262.0
-    },
-    {
-      "symbol": "ALHC",
-      "source": "scanner",
-      "price": 20.33,
-      "chg_pct": 1.4978,
-      "iv": 0.6322041,
-      "relative_options_volume": 2.58521975695793,
-      "market_cap": 4976083119.0
-    },
-    {
-      "symbol": "VG",
-      "source": "scanner",
-      "price": 12.5,
-      "chg_pct": 0.9693,
-      "iv": 0.6163063,
-      "relative_options_volume": 2.297038774450796,
-      "market_cap": 28793709567.0
-    },
-    {
-      "symbol": "OLLI",
-      "source": "scanner",
-      "price": 62.26,
-      "chg_pct": 0.6141,
-      "iv": 0.4463409,
-      "relative_options_volume": 2.6783141160537216,
-      "market_cap": 4112637454.0
     }
   ]
 }
