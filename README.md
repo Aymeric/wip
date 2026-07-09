@@ -54,9 +54,9 @@ This workspace is structured as follows:
    - [src/gex_engine.py](src/gex_engine.py): The main execution script. It enforces dynamic options analyses, status updates, portfolio trailing/loss stops, and tracks risk allocations.
 2. **Persistent Local Cache Databases**:
    - [data/regime.json](data/regime.json): Holds the computed status, gates, and metrics for the broad market Daily Regime Gates.
-   - [data/ticker_analyses.json](data/ticker_analyses.json): Accumulates setup grading metrics (Spot, transition levels, Delta Balance change thresholds). See [data/ticker_analyses.json Schema Documentation](#-ticker_analysesjson-schema-documentation) below for the complete specification.
-   - [data/active_options.json](data/active_options.json): Records open options positions, premium tracking, holding period, and stalling status. See [data/active_options.json Schema Documentation](#-active_optionsjson-schema-documentation) below for the complete specification.
-3. **Specialized Copilot Prompt Manifests** (located in the .github/prompts/ directory):
+   - [data/ticker_analyses.json](data/ticker_analyses.json): Accumulates setup grading metrics (Spot, transition levels, Delta Balance change thresholds). See the [data/ticker_analyses.json](data/ticker_analyses.json) [Schema Documentation](#-dataticker_analysesjson-schema-documentation) below for the complete specification.
+   - [data/active_options.json](data/active_options.json): Records open options positions, premium tracking, holding period, and stalling status. See the [data/active_options.json](data/active_options.json) [Schema Documentation](#-dataactive_optionsjson-schema-documentation) below for the complete specification.
+3. **Specialized Copilot Prompt Manifests** (located in the [.github/prompts/](.github/prompts/) directory):
    - [.github/prompts/gex-regime-trading.prompt.md](.github/prompts/gex-regime-trading.prompt.md): Implements rules-based options swing trading using GEX/dealer positioning mechanics.
    - [.github/prompts/robinhood-portfolio-analysis.prompt.md](.github/prompts/robinhood-portfolio-analysis.prompt.md): Pulls and parses holdings, evaluates cash reserves, and designs customized allocation rebalancing recommendations.
    - [.github/prompts/robinhood-agentic-trading.prompt.md](.github/prompts/robinhood-agentic-trading.prompt.md): Orchestrates buying power validation, tradability sweeps, and handles limit-order routing.
@@ -152,10 +152,11 @@ graph TD
 
 ### Dynamic Ingestion and Archiving
 When `update-candidates` is run, the engine:
-1. Searches the current directory and recursive [data/downloads/](data/downloads/) subdirectory for any new JSON files.
+1. Searches the current directory and recursive [data/downloads](data/downloads) subdirectory for any new JSON files.
 2. Inspects their schemas to identify native Robinhood scanner data blocks.
-3. Translates, copies, and timestamps them into [data/scans/](data/scans/) and [data/scans/history/](data/scans/history/) respectively to establish offline local scan databases.
-4. Removes temporary files from the workspace root to maintain strict repository cleanliness.
+3. Translates, copies, and timestamps them into [data/scans](data/scans) and [data/scans/history](data/scans/history) respectively to establish offline local scan databases.
+4. Filters list and write output to [data/candidate_stocks.json](data/candidate_stocks.json).
+5. Removes temporary files from the workspace root to maintain strict repository cleanliness.
 
 ### Standard Mechanical Screener Baseline
 Candidate stocks are filtered locally according to the following strict criteria:
@@ -224,9 +225,9 @@ graph TD
 
 ---
 
-## � Portfolio Recommendation Framework
+## 📏 Portfolio Recommendation Framework
 
-When executing portfolio reviews manually or via [robinhood-portfolio-analysis.prompt.md](.github/prompts/robinhood-portfolio-analysis.prompt.md), apply the following standard mechanics:
+When executing portfolio reviews manually or via [.github/prompts/robinhood-portfolio-analysis.prompt.md](.github/prompts/robinhood-portfolio-analysis.prompt.md), apply the following standard mechanics:
 
 - **Trim or Reduce**: Any position exceeding $15\text{--}20\%$ of net liquidation value to contain concentration risk.
 - **Add Sector Hedges**: Offset technology-biased exposure using broad-market instruments (e.g., Core S&P 500 or Total Stock Market indexes).
@@ -235,7 +236,7 @@ When executing portfolio reviews manually or via [robinhood-portfolio-analysis.p
 
 ---
 
-## 🗄️ active_options.json Schema Documentation
+## 🗄️ [data/active_options.json](data/active_options.json) Schema Documentation
 
 The cache file [data/active_options.json](data/active_options.json) acts as the local storage layer tracking active underlier positions, option Greeks, trailing progress, and time constraints.  
 
@@ -262,7 +263,9 @@ The cache file [data/active_options.json](data/active_options.json) acts as the 
       "Sizing Risk Weight (%)": 0.92,
       "Beta Sector Tag": "Consumer Cyclical",
       "Days Held": 1,
-      "Stalling Days": 0
+      "Stalling Days": 0,
+      "Underlier Spot": 42.89,
+      "Entry Date": "2026-06-29"
     }
   }
 }
@@ -291,10 +294,12 @@ The cache file [data/active_options.json](data/active_options.json) acts as the 
 | `Beta Sector Tag` | String| Sector classification identifier, utilized to compute aggregate technology industry limits. |
 | `Days Held` | Int | Incremental tracker checking how long positions are maintained for structural time halts. |
 | `Stalling Days` | Int | Standard sequential counter storing days of insufficient momentum. |
+| `Underlier Spot` | Float | Underlier's Spot price at the time of the portfolio trailing stops update. |
+| `Entry Date` | String | Date of options position entry formatted as `YYYY-MM-DD` sequence. |
 
 ---
 
-## 🗄️ ticker_analyses.json Schema Documentation
+## 🗄️ [data/ticker_analyses.json](data/ticker_analyses.json) Schema Documentation
 
 The cache file [data/ticker_analyses.json](data/ticker_analyses.json) is the incremental setup-grading store. Each analyzed candidate is merged in using its **ticker symbol as the unique key**, allowing setup analyses to accrue and persist across distinct sessions. Entries are written by the `analyze` CLI subcommand and refreshed with live spot prices (extended-hours preferred) on every prompt execution.
 
@@ -314,6 +319,14 @@ The cache file [data/ticker_analyses.json](data/ticker_analyses.json) is the inc
     "Risk/Reward": 4.49,
     "Signal Status": "CONFIRMED",
     "analyzed_date": "2026-07-05",
+    "spike_crash": false,
+    "rule1": true,
+    "rule2": true,
+    "rule7": true,
+    "rule8": true,
+    "rule9": true,
+    "rule10": true,
+    "rule11": true,
     "pegged_1_00_sessions": 0
   }
 }
@@ -322,7 +335,7 @@ The cache file [data/ticker_analyses.json](data/ticker_analyses.json) is the inc
 ### Parameter Details
 
 | Field | Type | Description |
-| :--- | :--- | :--- |
+| :--- | :--- | :---|
 | `Ticker` | String | Capitalized underlier symbol; duplicates the object key for self-contained records. |
 | `Spot` | Float | Latest underlier price. Uses `last_non_reg_trade_price` when its timestamp is more recent than `last_trade_price`, otherwise `last_trade_price`. |
 | `Grade` | Int | Structural quality score out of 11 boolean rules (call/put GEX ratios, OI depth, gamma positioning). $\ge 9$ required; $\le 8$ is a hard block. |
@@ -335,11 +348,19 @@ The cache file [data/ticker_analyses.json](data/ticker_analyses.json) is the inc
 | `Risk/Reward` | Float | $\frac{\text{+GEX} - \text{Spot}}{\text{Spot} - \text{pTrans}}$; must be $\ge 2.0$. May be negative when spot is above +GEX, or `999.0` as a sentinel when risk is non-positive. |
 | `Signal Status` | String | Classification outcome: `CONFIRMED`, `PENDING`, or `BLOCKED (...)` with the failed-filter reasons embedded in parentheses. |
 | `analyzed_date` | String | Date of the most recent full grading pass, encoded `YYYY-MM-DD`. |
+| `spike_crash` | Boolean | True if underlier is currently showing an abnormal volume or price posture consistent with a Spike-Crash profile, triggering a roadblock. |
+| `rule1` | Boolean | Standard or derived check value: Total call GEX is positive. |
+| `rule2` | Boolean | Standard or derived check value: Call GEX exceeds absolute Put GEX. |
+| `rule7` | Boolean | Standard or derived check value: Total underlier open interest exceeds 10,000 contracts for structural depth. |
+| `rule8` | Boolean | Standard or derived check value: Average 30-day option implied volatility is under historical 90-day realized volatility (undervalued premium). |
+| `rule9` | Boolean | Standard or derived check value: Open Interest depth at the +GEX target strike is the largest on the option chain. |
+| `rule10` | Boolean | Standard or derived check value: Dealer net gamma positioning at the primary Spot-neutral strike is positive. |
+| `rule11` | Boolean | Standard or derived check value: Underlier 10-day realized volatility is stable or compressed ($\le 35\%$). |
 | `pegged_1_00_sessions` | Int | Consecutive sessions with delta balance pegged at $1.00$. At $\ge 2$, the name is fully positioned and exempt from the db_change filter. Optional — absent on older records. |
 
 ---
 
-## 🗄️ regime.json Schema Documentation
+## 🗄️ [data/regime.json](data/regime.json) Schema Documentation
 
 The cache file [data/regime.json](data/regime.json) holds the recomputed results and gates for the broader market Daily Regime Check, evaluating overall system authorization thresholds.
 
@@ -378,7 +399,7 @@ The cache file [data/regime.json](data/regime.json) holds the recomputed results
 
 ---
 
-## 🗄️ candidate_stocks.json Schema Documentation
+## 🗄️ [data/candidate_stocks.json](data/candidate_stocks.json) Schema Documentation
 
 The cache file [data/candidate_stocks.json](data/candidate_stocks.json) persists the screened, prioritized, and formatted list of underlier securities matching GEX’s momentum criteria.
 

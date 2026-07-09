@@ -565,6 +565,76 @@ def cmd_analyze(args):
         print_color(f"- **Recommended Play**: NO ENTRY. Setup blocked by system safeguards.", "31", bold=True)
 
 
+def compute_exit_rule_state(spot, purchase_premium, mark_price, ptrans, ntrans, gex_t1, days_held, stalling_counter, dte):
+    """
+    Computes exit rule evaluation logic, proposed actions, and time status.
+    
+    Returns:
+        tuple[str, str, str, str, str]: (exit_rule_state, proposed_action, time_status, distance_ntrans, distance_max_stop)
+    """
+    pl_pct = ((mark_price - purchase_premium) / purchase_premium) * 100 if purchase_premium else 0.0
+    
+    exit_rule_state = "HOLD"
+    proposed_action = "No Action"
+    time_status = "ON TRACK"
+    
+    distance_ntrans = "N/A"
+    if ntrans:
+        dist = ((spot - ntrans) / ntrans) * 100
+        distance_ntrans = f"{dist:+.2f}%"
+        if spot < ntrans:
+            exit_rule_state = "STOP TRIGGERED (Structural Stop: Spot < nTrans)"
+            proposed_action = "Immediate Exit (Structural Stop)"
+            
+    distance_max_stop = "N/A"
+    if ptrans:
+        if spot < ptrans:
+            if not exit_rule_state.startswith("STOP TRIGGERED"):
+                if pl_pct <= -10.0:
+                    exit_rule_state = "STOP TRIGGERED (Max Asset Stop: -10% option loss below pTrans)"
+                    proposed_action = "Immediate Exit (Max Asset Stop)"
+            distance_max_stop = f"{pl_pct:+.2f}% vs -10.00% max"
+        else:
+            distance_max_stop = "Protection dormant (Spot > pTrans)"
+            
+    if days_held >= 7:
+        if gex_t1 and ptrans:
+            full_run = gex_t1 - ptrans
+            made_progress = spot - ptrans
+            progress_pct = (made_progress / full_run) * 100 if full_run > 0 else 0.0
+            if progress_pct < 50.0:
+                if not exit_rule_state.startswith("STOP TRIGGERED"):
+                    exit_rule_state = "STOP TRIGGERED (Time Stop: <50% progress by Day 7)"
+                    proposed_action = "Immediate Exit (Time Stop)"
+                time_status = "STALE (Time Limit Exceeded)"
+                
+    if stalling_counter >= 3:
+        if not exit_rule_state.startswith("STOP TRIGGERED"):
+            exit_rule_state = "STOP TRIGGERED (Stalling Stop: <10% daily progress for 3 consecutive days)"
+            proposed_action = "Immediate Exit (Stalling Stop)"
+        time_status = "STALLED"
+        
+    if gex_t1 and spot >= gex_t1:
+        if not exit_rule_state.startswith("STOP TRIGGERED"):
+            if pl_pct < 0:
+                exit_rule_state = "UNDERLIER TARGET MET (Option in Loss)"
+                proposed_action = "Exit position to limit further losses (Strike/Maturity mismatch or decay)"
+            else:
+                exit_rule_state = "PROFIT TAKE (T1 TARGET MET)"
+                proposed_action = "Exit for 100% gains OR Trail stop to entry price and target structural T2"
+
+    if dte is not None and dte < 0:
+        exit_rule_state = "EXPIRED (Contract past expiration)"
+        proposed_action = "Remove from tracker via close-position"
+        time_status = "EXPIRED"
+        
+    if exit_rule_state == "HOLD" and ptrans and spot < ptrans:
+        exit_rule_state = "WATCH"
+        proposed_action = "Hold existing, but add NOTHING"
+        
+    return exit_rule_state, proposed_action, time_status, distance_ntrans, distance_max_stop
+
+
 def cmd_portfolio(args):
     """Tracks position exits, risk sizing weights, and portfolio metrics."""
     options = load_json(OPTIONS_FILE, {"active_positions": {}})
@@ -626,63 +696,10 @@ def cmd_portfolio(args):
                 pass
         
         # Calculate stops
-        exit_rule_state = "HOLD"
-        proposed_action = "No Action"
-        
-        distance_ntrans = "N/A"
-        if ntrans:
-            dist = ((spot - ntrans) / ntrans) * 100
-            distance_ntrans = f"{dist:+.2f}%"
-            if spot < ntrans:
-                exit_rule_state = "STOP TRIGGERED (Structural Stop: Spot < nTrans)"
-                proposed_action = "Immediate Exit (Structural Stop)"
-                
-        distance_max_stop = "N/A"
-        # Option stop: 10% below entry while price is below pTrans
-        if ptrans:
-            if spot < ptrans:
-                if pl_pct <= -10.0:
-                    exit_rule_state = "STOP TRIGGERED (Max Asset Stop: -10% option loss below pTrans)"
-                    proposed_action = "Immediate Exit (Max Asset Stop)"
-                distance_max_stop = f"{pl_pct:+.2f}% vs -10.00% max"
-            else:
-                distance_max_stop = "Protection dormant (Spot > pTrans)"
-                
-        # Time stop verification
-        time_status = "ON TRACK"
-        if days_held >= 7:
-            # Progress tracking
-            if gex_t1 and ptrans:
-                full_run = gex_t1 - ptrans
-                made_progress = spot - ptrans
-                progress_pct = (made_progress / full_run) * 100 if full_run > 0 else 0.0
-                if progress_pct < 50.0:
-                    exit_rule_state = "STOP TRIGGERED (Time Stop: <50% progress by Day 7)"
-                    proposed_action = "Immediate Exit (Time Stop)"
-                    time_status = "STALE (Time Limit Exceeded)"
-                    
-        # Stalling stop verification
         stalling_counter = details.get("Stalling Days", 0)
-        if stalling_counter >= 3:
-            exit_rule_state = "STOP TRIGGERED (Stalling Stop: <10% daily progress for 3 consecutive days)"
-            proposed_action = "Immediate Exit (Stalling Stop)"
-            time_status = "STALLED"
-            
-        # Profit Target T1 Check
-        if gex_t1 and spot >= gex_t1:
-            exit_rule_state = "PROFIT TAKE (T1 TARGET MET)"
-            proposed_action = "Exit for 100% gains OR Trail stop to entry price and target structural T2"
-
-        # Expiration check overrides all other states
-        if dte is not None and dte < 0:
-            exit_rule_state = "EXPIRED (Contract past expiration)"
-            proposed_action = "Remove from tracker via close-position"
-            time_status = "EXPIRED"
-            
-        # Watch classification
-        if exit_rule_state == "HOLD" and ptrans and spot < ptrans:
-            exit_rule_state = "WATCH"
-            proposed_action = "Hold existing, but add NOTHING"
+        exit_rule_state, proposed_action, time_status, distance_ntrans, distance_max_stop = compute_exit_rule_state(
+            spot, purchase_premium, mark_price, ptrans, ntrans, gex_t1, days_held, stalling_counter, dte
+        )
             
         # Update metrics in position state
         details["Current Value"] = mark_price * 100
@@ -701,6 +718,12 @@ def cmd_portfolio(args):
             "HOLD": ("32", False),
             "WATCH": ("33", False),
             "PROFIT TAKE (T1 TARGET MET)": ("32", True),
+            "UNDERLIER TARGET MET (Option in Loss)": ("31", True),
+            "STOP TRIGGERED (Structural Stop: Spot < nTrans)": ("31", True),
+            "STOP TRIGGERED (Max Asset Stop: -10% option loss below pTrans)": ("31", True),
+            "STOP TRIGGERED (Time Stop: <50% progress by Day 7)": ("31", True),
+            "STOP TRIGGERED (Stalling Stop: <10% daily progress for 3 consecutive days)": ("31", True),
+            "EXPIRED (Contract past expiration)": ("31", True),
         }
         color_code, bold = status_colors.get(exit_rule_state, ("31", True))
         exit_rule_fmt = format_color(exit_rule_state, color_code, bold=bold)
