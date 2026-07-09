@@ -1,0 +1,1163 @@
+{
+  "data": {
+    "instruments": [
+      {
+        "id": "b0d04811-68bb-4ae6-bb9e-f2cfc1adc997",
+        "chain_id": "655b7c25-dc6d-4ea1-a3d6-aaf14c36a4f1",
+        "chain_symbol": "TEL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "110.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "c6b73781-1a28-4b52-88b4-ec0cd197b14b",
+        "chain_id": "655b7c25-dc6d-4ea1-a3d6-aaf14c36a4f1",
+        "chain_symbol": "TEL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "110.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "66d9e4ad-f304-4a66-82f2-33fac284ab60",
+        "chain_id": "655b7c25-dc6d-4ea1-a3d6-aaf14c36a4f1",
+        "chain_symbol": "TEL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "115.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "99626ab8-002d-427d-9e91-e8799b60680f",
+        "chain_id": "655b7c25-dc6d-4ea1-a3d6-aaf14c36a4f1",
+        "chain_symbol": "TEL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "115.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "45933643-6e35-4f03-952f-64bd57aee1e6",
+        "chain_id": "655b7c25-dc6d-4ea1-a3d6-aaf14c36a4f1",
+        "chain_symbol": "TEL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "120.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "c7d5f01d-9d90-47a0-8d87-2215638051f8",
+        "chain_id": "655b7c25-dc6d-4ea1-a3d6-aaf14c36a4f1",
+        "chain_symbol": "TEL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "120.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "570eb830-eea1-4710-9c00-d178f11f8bb1",
+        "chain_id": "655b7c25-dc6d-4ea1-a3d6-aaf14c36a4f1",
+        "chain_symbol": "TEL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "125.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "f8f77a0c-cd16-4452-a577-c5b24cb8a93a",
+        "chain_id": "655b7c25-dc6d-4ea1-a3d6-aaf14c36a4f1",
+        "chain_symbol": "TEL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "125.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "b8c19012-d173-435e-be5d-bf080cef3b36",
+        "chain_id": "655b7c25-dc6d-4ea1-a3d6-aaf14c36a4f1",
+        "chain_symbol": "TEL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "130.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "ef66c08e-2591-4f50-bd42-ab891e02ff13",
+        "chain_id": "655b7c25-dc6d-4ea1-a3d6-aaf14c36a4f1",
+        "chain_symbol": "TEL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "130.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "83310d55-7044-4677-afdd-fee8931c0c1a",
+        "chain_id": "655b7c25-dc6d-4ea1-a3d6-aaf14c36a4f1",
+        "chain_symbol": "TEL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "135.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "e7b13b69-4c89-4db5-86ff-ea6064fc70e4",
+        "chain_id": "655b7c25-dc6d-4ea1-a3d6-aaf14c36a4f1",
+        "chain_symbol": "TEL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "135.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "2c5cb925-648d-490a-b944-d90ea76c50ab",
+        "chain_id": "655b7c25-dc6d-4ea1-a3d6-aaf14c36a4f1",
+        "chain_symbol": "TEL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "140.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "690db614-5f9e-4382-8338-aa06de3eadbb",
+        "chain_id": "655b7c25-dc6d-4ea1-a3d6-aaf14c36a4f1",
+        "chain_symbol": "TEL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "140.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "387759ec-bbf5-4f3d-9397-cfbf64eb7775",
+        "chain_id": "655b7c25-dc6d-4ea1-a3d6-aaf14c36a4f1",
+        "chain_symbol": "TEL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "145.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "fbf53d3c-160f-486d-9642-12526450d0d7",
+        "chain_id": "655b7c25-dc6d-4ea1-a3d6-aaf14c36a4f1",
+        "chain_symbol": "TEL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "145.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "06ae776d-ed21-4f65-82a1-b3921ae742ff",
+        "chain_id": "655b7c25-dc6d-4ea1-a3d6-aaf14c36a4f1",
+        "chain_symbol": "TEL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "150.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "e7f7d862-e933-4bf0-bec0-243396e26355",
+        "chain_id": "655b7c25-dc6d-4ea1-a3d6-aaf14c36a4f1",
+        "chain_symbol": "TEL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "150.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "1292c0c3-c5dd-41d3-ba06-0798e803f8e7",
+        "chain_id": "655b7c25-dc6d-4ea1-a3d6-aaf14c36a4f1",
+        "chain_symbol": "TEL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "155.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "4567f582-778c-4946-a6ce-293461b2a7d3",
+        "chain_id": "655b7c25-dc6d-4ea1-a3d6-aaf14c36a4f1",
+        "chain_symbol": "TEL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "155.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "61313dd8-eee3-48c7-bcdc-3b4b6b335a6a",
+        "chain_id": "655b7c25-dc6d-4ea1-a3d6-aaf14c36a4f1",
+        "chain_symbol": "TEL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "160.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "b7b8edf5-8fe1-4b8d-8af5-95e3bd647a49",
+        "chain_id": "655b7c25-dc6d-4ea1-a3d6-aaf14c36a4f1",
+        "chain_symbol": "TEL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "160.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "96c30470-10e6-4e11-ba5e-4c25280132cb",
+        "chain_id": "655b7c25-dc6d-4ea1-a3d6-aaf14c36a4f1",
+        "chain_symbol": "TEL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "165.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "a5a10bec-a41e-4520-98fb-4bc061d554c3",
+        "chain_id": "655b7c25-dc6d-4ea1-a3d6-aaf14c36a4f1",
+        "chain_symbol": "TEL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "165.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "17772957-b71a-4c4f-b2d3-ca7df2361421",
+        "chain_id": "655b7c25-dc6d-4ea1-a3d6-aaf14c36a4f1",
+        "chain_symbol": "TEL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "170.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "c1cbed21-9ae2-42fd-b3e9-ab0d93c03662",
+        "chain_id": "655b7c25-dc6d-4ea1-a3d6-aaf14c36a4f1",
+        "chain_symbol": "TEL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "170.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "1cbfaafb-d2f1-4fb3-8264-50ab4bdb357e",
+        "chain_id": "655b7c25-dc6d-4ea1-a3d6-aaf14c36a4f1",
+        "chain_symbol": "TEL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "175.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "412f6a2a-a233-499b-84fe-8b8068320c4e",
+        "chain_id": "655b7c25-dc6d-4ea1-a3d6-aaf14c36a4f1",
+        "chain_symbol": "TEL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "175.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "122134c2-0b7b-4144-b456-c89c0944a056",
+        "chain_id": "655b7c25-dc6d-4ea1-a3d6-aaf14c36a4f1",
+        "chain_symbol": "TEL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "180.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "af715ba2-4395-4c10-bb61-61429bc6fb2a",
+        "chain_id": "655b7c25-dc6d-4ea1-a3d6-aaf14c36a4f1",
+        "chain_symbol": "TEL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "180.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "d49cdf51-9422-4d27-9d1e-0a324e09b83b",
+        "chain_id": "655b7c25-dc6d-4ea1-a3d6-aaf14c36a4f1",
+        "chain_symbol": "TEL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "185.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "e9849ba8-30fe-4488-9f75-e443fda3f2ca",
+        "chain_id": "655b7c25-dc6d-4ea1-a3d6-aaf14c36a4f1",
+        "chain_symbol": "TEL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "185.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "1f652f43-6c1a-4c6d-9b4e-434b08d7610e",
+        "chain_id": "655b7c25-dc6d-4ea1-a3d6-aaf14c36a4f1",
+        "chain_symbol": "TEL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "190.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "3d887eab-1789-43bd-bfe6-272f706b6bdd",
+        "chain_id": "655b7c25-dc6d-4ea1-a3d6-aaf14c36a4f1",
+        "chain_symbol": "TEL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "190.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "95f43447-2c63-4217-ad59-e4e898b5597e",
+        "chain_id": "655b7c25-dc6d-4ea1-a3d6-aaf14c36a4f1",
+        "chain_symbol": "TEL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "195.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "a6ebacbc-ba52-480d-903a-6df53c21bbdd",
+        "chain_id": "655b7c25-dc6d-4ea1-a3d6-aaf14c36a4f1",
+        "chain_symbol": "TEL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "195.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "42bc57e0-615d-4491-b540-0cc74b160450",
+        "chain_id": "655b7c25-dc6d-4ea1-a3d6-aaf14c36a4f1",
+        "chain_symbol": "TEL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "200.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "60b3d0e1-807a-4b57-9036-03d1394aade8",
+        "chain_id": "655b7c25-dc6d-4ea1-a3d6-aaf14c36a4f1",
+        "chain_symbol": "TEL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "200.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "2efa0c4a-248f-4cee-9490-7788af76fc93",
+        "chain_id": "655b7c25-dc6d-4ea1-a3d6-aaf14c36a4f1",
+        "chain_symbol": "TEL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "210.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "bc341ea8-8880-44d5-a3c0-539681a69e77",
+        "chain_id": "655b7c25-dc6d-4ea1-a3d6-aaf14c36a4f1",
+        "chain_symbol": "TEL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "210.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "d106d8ae-230c-43e1-a821-5debd9ab568b",
+        "chain_id": "655b7c25-dc6d-4ea1-a3d6-aaf14c36a4f1",
+        "chain_symbol": "TEL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "220.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "f12dc2ee-0a91-4d53-a439-abefc6377676",
+        "chain_id": "655b7c25-dc6d-4ea1-a3d6-aaf14c36a4f1",
+        "chain_symbol": "TEL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "220.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "6839a101-39f8-41f4-9348-a5faaa11c4e9",
+        "chain_id": "655b7c25-dc6d-4ea1-a3d6-aaf14c36a4f1",
+        "chain_symbol": "TEL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "230.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "f164f816-999a-436c-8f26-a527b7f0e7f9",
+        "chain_id": "655b7c25-dc6d-4ea1-a3d6-aaf14c36a4f1",
+        "chain_symbol": "TEL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "230.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "3642dcec-aa35-4c85-9fa8-ca5d2fb712f1",
+        "chain_id": "655b7c25-dc6d-4ea1-a3d6-aaf14c36a4f1",
+        "chain_symbol": "TEL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "240.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "fc2cc871-f4d1-4b78-8c87-bdc779276339",
+        "chain_id": "655b7c25-dc6d-4ea1-a3d6-aaf14c36a4f1",
+        "chain_symbol": "TEL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "240.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "1fbe2c6a-9f9a-44b1-a816-805d12952a3b",
+        "chain_id": "655b7c25-dc6d-4ea1-a3d6-aaf14c36a4f1",
+        "chain_symbol": "TEL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "250.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "65e8ac53-caf6-4662-af4b-122a0b281959",
+        "chain_id": "655b7c25-dc6d-4ea1-a3d6-aaf14c36a4f1",
+        "chain_symbol": "TEL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "250.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "22666090-5cf2-48a8-bdac-3963e55bed56",
+        "chain_id": "655b7c25-dc6d-4ea1-a3d6-aaf14c36a4f1",
+        "chain_symbol": "TEL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "260.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "34a9f66d-5bae-49cc-9c85-07f84d859b6a",
+        "chain_id": "655b7c25-dc6d-4ea1-a3d6-aaf14c36a4f1",
+        "chain_symbol": "TEL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "260.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "e76f5b49-76f8-45ed-9e77-1c1d89407c5b",
+        "chain_id": "655b7c25-dc6d-4ea1-a3d6-aaf14c36a4f1",
+        "chain_symbol": "TEL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "270.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "ecdb05b0-18f6-4e62-80c5-134b61c819ba",
+        "chain_id": "655b7c25-dc6d-4ea1-a3d6-aaf14c36a4f1",
+        "chain_symbol": "TEL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "270.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "69c14e8f-f2c9-43aa-8770-db5bcf890d45",
+        "chain_id": "655b7c25-dc6d-4ea1-a3d6-aaf14c36a4f1",
+        "chain_symbol": "TEL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "280.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "e0aa172e-0523-4430-87d6-ffe6b045271a",
+        "chain_id": "655b7c25-dc6d-4ea1-a3d6-aaf14c36a4f1",
+        "chain_symbol": "TEL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "280.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "b10fe994-22aa-4483-931e-9c1e298582d0",
+        "chain_id": "655b7c25-dc6d-4ea1-a3d6-aaf14c36a4f1",
+        "chain_symbol": "TEL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "290.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "cc4e3bd7-2c3b-4c50-b2db-3f847186fc52",
+        "chain_id": "655b7c25-dc6d-4ea1-a3d6-aaf14c36a4f1",
+        "chain_symbol": "TEL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "290.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "1e41f295-6856-4d9a-9a73-00254b4a5e6b",
+        "chain_id": "655b7c25-dc6d-4ea1-a3d6-aaf14c36a4f1",
+        "chain_symbol": "TEL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "300.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "2c9c7d37-0be9-4e01-80af-85fd06ccabb0",
+        "chain_id": "655b7c25-dc6d-4ea1-a3d6-aaf14c36a4f1",
+        "chain_symbol": "TEL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "300.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "3b259398-d830-4ffe-8fec-3e3006655f57",
+        "chain_id": "655b7c25-dc6d-4ea1-a3d6-aaf14c36a4f1",
+        "chain_symbol": "TEL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "310.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "d37b68fc-8956-4813-a4a8-77293b297c3f",
+        "chain_id": "655b7c25-dc6d-4ea1-a3d6-aaf14c36a4f1",
+        "chain_symbol": "TEL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "310.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "11c2a96f-695f-4915-bcc9-5b123114291c",
+        "chain_id": "655b7c25-dc6d-4ea1-a3d6-aaf14c36a4f1",
+        "chain_symbol": "TEL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "320.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "ef30976e-481c-47bc-a2ea-0cb73b202dcd",
+        "chain_id": "655b7c25-dc6d-4ea1-a3d6-aaf14c36a4f1",
+        "chain_symbol": "TEL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "320.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "39024ffb-e510-4b3a-a9be-0f6ee99399e7",
+        "chain_id": "655b7c25-dc6d-4ea1-a3d6-aaf14c36a4f1",
+        "chain_symbol": "TEL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "330.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "c64f5b5d-643e-4059-a0c1-0ee20ef834c8",
+        "chain_id": "655b7c25-dc6d-4ea1-a3d6-aaf14c36a4f1",
+        "chain_symbol": "TEL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "330.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "08437e43-2081-4898-9499-7ea4c9423039",
+        "chain_id": "655b7c25-dc6d-4ea1-a3d6-aaf14c36a4f1",
+        "chain_symbol": "TEL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "340.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "69d53f41-ae45-4ff3-971e-76ad501bd2fb",
+        "chain_id": "655b7c25-dc6d-4ea1-a3d6-aaf14c36a4f1",
+        "chain_symbol": "TEL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "340.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "a4d2b5d9-7748-42a5-820b-fd3d3053fa99",
+        "chain_id": "655b7c25-dc6d-4ea1-a3d6-aaf14c36a4f1",
+        "chain_symbol": "TEL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "350.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "bd61ca19-725e-4abf-8a4c-bd99f3f3215b",
+        "chain_id": "655b7c25-dc6d-4ea1-a3d6-aaf14c36a4f1",
+        "chain_symbol": "TEL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "350.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      }
+    ]
+  },
+  "guide": "Present chain_symbol, expiration_date, type, strike_price; flag state when not 'active' or tradability when not 'tradable'. Pass id to an order's leg.option_id. Quote sellout_datetime when the user asks \"when will Robinhood force-close this position?\" — it is the authoritative per-contract timestamp covering equity/index, AM/PM settle, and T-1 logic. underlying_type ('equity' or 'index') is informational; mention only when it affects strategy. When next is non-null, extract the cursor query param and call this tool again."
+}

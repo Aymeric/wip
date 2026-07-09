@@ -1,14 +1,14 @@
 {
-  "spy_change_pct": 0.1315,
-  "qqq_change_pct": 0.1265,
+  "spy_change_pct": 0.2737,
+  "qqq_change_pct": 0.3697,
   "basket_gate": "FAIL",
-  "bull_count": 10,
+  "bull_count": 8,
   "bear_count": 0,
-  "bull_bear_ratio": 999.0,
+  "bull_bear_ratio": 8.0,
   "bull_bear_gate": "PASS",
-  "vix_spot": 15.0,
-  "vix_delta_gate": "FAIL",
+  "vix_spot": 14.5,
+  "vix_delta_gate": "PASS",
   "hyg_change_pct": 0.0,
-  "system_authorization": "BLOCKED",
+  "system_authorization": "TRACK 1 OK",
   "last_updated": "2026-07-09"
 }

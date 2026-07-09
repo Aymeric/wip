@@ -32,6 +32,13 @@ OPTIONS_FILE = "data/active_options.json"
 CANDIDATES_FILE = "data/candidate_stocks.json"
 SCANS_DIR = "data/scans"
 
+# Standard Mechanical Screener Baseline Filter Constants
+MIN_PRICE = 5.0
+MAX_PRICE = 1000.0
+MIN_VOLUME = 200000
+MIN_CHG_PCT = 0.3
+MIN_MARKET_CAP = 1000000000
+
 
 
 def print_color(text, color_code, bold=False):
@@ -123,7 +130,7 @@ def compute_regime_gates(spy_pct, qqq_pct, bull_count, bear_count, vix_dealer_de
     """
     basket_gate = "PASS" if (spy_pct > 0.5 or qqq_pct > 0.5) else "FAIL"
     
-    bull_bear_ratio = round(bull_count / bear_count, 3) if bear_count > 0 else 999.0
+    bull_bear_ratio = round(bull_count / bear_count, 3) if bear_count > 0 else float(bull_count)
     bull_bear_gate = "PASS" if bull_bear_ratio > 3.0 else "FAIL"
     
     vix_delta_gate = "PASS" if vix_dealer_delta_bearish else "FAIL"
@@ -1345,6 +1352,12 @@ def cmd_update_candidates(args):
         
     candidates = {}
     
+    min_price = getattr(args, "min_price", MIN_PRICE)
+    max_price = getattr(args, "max_price", MAX_PRICE)
+    min_volume = getattr(args, "min_volume", MIN_VOLUME)
+    min_change = getattr(args, "min_change", MIN_CHG_PCT)
+    min_market_cap = getattr(args, "min_market_cap", MIN_MARKET_CAP)
+    
     def process_scan_file(filepath, source_name):
         if not os.path.exists(filepath):
             print(f"Offline file not found for {source_name}: {filepath}")
@@ -1374,13 +1387,13 @@ def cmd_update_candidates(args):
                 continue
                 
             # Apply filters
-            if not (5.0 <= price <= 500.0):
+            if not (min_price <= price <= max_price):
                 continue
-            if volume < 500000:
+            if volume < min_volume:
                 continue
-            if chg_pct < 0.5:
+            if chg_pct < min_change:
                 continue
-            if market_cap < 2000000000:
+            if market_cap < min_market_cap:
                 continue
                 
             iv = None
@@ -1414,9 +1427,33 @@ def cmd_update_candidates(args):
                     "market_cap": market_cap
                 }
 
-    # Process offline scans
-    process_scan_file(os.path.join(SCANS_DIR, "gex_momentum_candidates.json"), "GEX Momentum Candidates")
-    process_scan_file(os.path.join(SCANS_DIR, "high_options_volume_and_iv.json"), "High options volume and IV")
+    # Automatically discover and process all offline scans under SCANS_DIR
+    scans_processed = []
+    if os.path.exists(SCANS_DIR):
+        for item in sorted(os.listdir(SCANS_DIR)):
+            if item.endswith(".json"):
+                full_path = os.path.join(SCANS_DIR, item)
+                if os.path.isfile(full_path):
+                    try:
+                        with open(full_path, 'r') as f:
+                            sdata = json.load(f)
+                        scan_result = sdata.get("data", {}).get("result", {})
+                        if not scan_result or not isinstance(scan_result, dict):
+                            scan_result = sdata.get("result", {})
+                        if not scan_result or not isinstance(scan_result, dict):
+                            scan_result = sdata
+                        if isinstance(scan_result, dict) and scan_result.get("scan_title"):
+                            title = scan_result.get("scan_title")
+                            process_scan_file(full_path, title)
+                            scans_processed.append(title)
+                    except Exception:
+                        continue
+
+    # Fallback to defaults if no dynamic scans were processed
+    if not scans_processed:
+        process_scan_file(os.path.join(SCANS_DIR, "gex_momentum_candidates.json"), "GEX Momentum Candidates")
+        process_scan_file(os.path.join(SCANS_DIR, "high_options_volume_and_iv.json"), "High options volume and IV")
+        scans_processed = ["GEX Momentum Candidates", "High options volume and IV"]
     
     candidate_list = list(candidates.values())
     # Sort candidates by relative options volume if available, or day change % descending
@@ -1426,10 +1463,7 @@ def cmd_update_candidates(args):
     
     output_data = {
         "last_updated": utc_time,
-        "source_scans": [
-            "GEX Momentum Candidates",
-            "High options volume and IV"
-        ],
+        "source_scans": sorted(list(set(scans_processed))),
         "user_additions": [],
         "excluded_active_positions": active_positions,
         "total": len(candidate_list),
@@ -1523,7 +1557,12 @@ def main():
     p_close_pos.add_argument("--close-premium", type=float, dest="close_premium", help="Exit premium received (defaults to last Mark Price)")
     
     # update-candidates subcommand
-    subparsers.add_parser("update-candidates", help="Persist downloaded scans and update candidate_stocks.json.")
+    p_candidates = subparsers.add_parser("update-candidates", help="Persist downloaded scans and update candidate_stocks.json.")
+    p_candidates.add_argument("--min-price", type=float, dest="min_price", default=MIN_PRICE, help=f"Minimum stock price (default: {MIN_PRICE})")
+    p_candidates.add_argument("--max-price", type=float, dest="max_price", default=MAX_PRICE, help=f"Maximum stock price (default: {MAX_PRICE})")
+    p_candidates.add_argument("--min-volume", type=float, dest="min_volume", default=MIN_VOLUME, help=f"Minimum average trading volume (default: {MIN_VOLUME})")
+    p_candidates.add_argument("--min-change", type=float, dest="min_change", default=MIN_CHG_PCT, help=f"Minimum stock price day change % (default: {MIN_CHG_PCT})")
+    p_candidates.add_argument("--min-market-cap", type=float, dest="min_market_cap", default=MIN_MARKET_CAP, help=f"Minimum market capitalization (default: {MIN_MARKET_CAP})")
     
     args = parser.parse_args()
     

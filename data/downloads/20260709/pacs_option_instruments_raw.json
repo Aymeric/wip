@@ -1,0 +1,204 @@
+{
+  "data": {
+    "instruments": [
+      {
+        "id": "e828c214-59e3-4796-b5d0-cc0d4718a8fc",
+        "chain_id": "ff5ea983-a305-4af6-a04c-60c03eea8c0c",
+        "chain_symbol": "PACS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "strike_price": "20.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable"
+      },
+      {
+        "id": "f4a5a6c6-2e27-4c6a-b6e6-cf592b586a8c",
+        "chain_id": "ff5ea983-a305-4af6-a04c-60c03eea8c0c",
+        "chain_symbol": "PACS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "strike_price": "20.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable"
+      },
+      {
+        "id": "2bbeda11-ac3a-44c9-93f0-3bdede4cbdd7",
+        "chain_id": "ff5ea983-a305-4af6-a04c-60c03eea8c0c",
+        "chain_symbol": "PACS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "strike_price": "22.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable"
+      },
+      {
+        "id": "d21ed150-a47f-4720-88b6-bf869f019b96",
+        "chain_id": "ff5ea983-a305-4af6-a04c-60c03eea8c0c",
+        "chain_symbol": "PACS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "strike_price": "22.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable"
+      },
+      {
+        "id": "1aa49cca-43c6-4e6c-bb08-8262b793c0e7",
+        "chain_id": "ff5ea983-a305-4af6-a04c-60c03eea8c0c",
+        "chain_symbol": "PACS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "strike_price": "25.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable"
+      },
+      {
+        "id": "a5b2e2f0-5100-4bb9-88bc-64d2e3c41f91",
+        "chain_id": "ff5ea983-a305-4af6-a04c-60c03eea8c0c",
+        "chain_symbol": "PACS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "strike_price": "25.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable"
+      },
+      {
+        "id": "9093d1f2-607a-4d0d-9140-85e7231ea504",
+        "chain_id": "ff5ea983-a305-4af6-a04c-60c03eea8c0c",
+        "chain_symbol": "PACS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "strike_price": "30.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable"
+      },
+      {
+        "id": "c76ba105-b481-44ff-b555-273ea1683280",
+        "chain_id": "ff5ea983-a305-4af6-a04c-60c03eea8c0c",
+        "chain_symbol": "PACS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "strike_price": "30.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable"
+      },
+      {
+        "id": "6d9a9407-9131-4247-b07f-3e886f5e841a",
+        "chain_id": "ff5ea983-a305-4af6-a04c-60c03eea8c0c",
+        "chain_symbol": "PACS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "strike_price": "35.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable"
+      },
+      {
+        "id": "8bfa61a4-8d86-4efd-b7e7-78448be6eea4",
+        "chain_id": "ff5ea983-a305-4af6-a04c-60c03eea8c0c",
+        "chain_symbol": "PACS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "strike_price": "35.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable"
+      },
+      {
+        "id": "439b3886-a151-402a-b825-ef5717f74de6",
+        "chain_id": "ff5ea983-a305-4af6-a04c-60c03eea8c0c",
+        "chain_symbol": "PACS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "strike_price": "40.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable"
+      },
+      {
+        "id": "6220263d-eb69-4abd-a3b9-33ee2008be37",
+        "chain_id": "ff5ea983-a305-4af6-a04c-60c03eea8c0c",
+        "chain_symbol": "PACS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "strike_price": "40.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable"
+      },
+      {
+        "id": "bcffec5f-96fa-44ad-b57e-4af0d1357aea",
+        "chain_id": "ff5ea983-a305-4af6-a04c-60c03eea8c0c",
+        "chain_symbol": "PACS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "strike_price": "45.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable"
+      },
+      {
+        "id": "9cf07dd2-b09e-4307-8014-bca99da5234f",
+        "chain_id": "ff5ea983-a305-4af6-a04c-60c03eea8c0c",
+        "chain_symbol": "PACS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "strike_price": "45.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable"
+      },
+      {
+        "id": "66ca1bc8-2a9e-4179-9253-e4efa26d5912",
+        "chain_id": "ff5ea983-a305-4af6-a04c-60c03eea8c0c",
+        "chain_symbol": "PACS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "strike_price": "50.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable"
+      },
+      {
+        "id": "ed303976-2e84-4ab1-baaf-0e51964607a4",
+        "chain_id": "ff5ea983-a305-4af6-a04c-60c03eea8c0c",
+        "chain_symbol": "PACS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "strike_price": "50.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable"
+      },
+      {
+        "id": "cf3070ea-bc74-44b4-b247-ee7981b9bfc1",
+        "chain_id": "ff5ea983-a305-4af6-a04c-60c03eea8c0c",
+        "chain_symbol": "PACS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "strike_price": "55.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable"
+      },
+      {
+        "id": "c70e7625-11e6-4653-afef-ac8f79429fa4",
+        "chain_id": "ff5ea983-a305-4af6-a04c-60c03eea8c0c",
+        "chain_symbol": "PACS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "strike_price": "55.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable"
+      }
+    ]
+  }
+}

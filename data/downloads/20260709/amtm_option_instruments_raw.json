@@ -1,0 +1,204 @@
+{
+  "data": {
+    "instruments": [
+      {
+        "id": "91acf643-1688-4c3f-87a4-9cc033e320b9",
+        "chain_id": "a97e6c2b-7c89-4c32-a809-d1d157dc8b03",
+        "chain_symbol": "AMTM",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "strike_price": "12.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable"
+      },
+      {
+        "id": "987110a7-ea2e-4e8f-951c-ccc5f0cc074d",
+        "chain_id": "a97e6c2b-7c89-4c32-a809-d1d157dc8b03",
+        "chain_symbol": "AMTM",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "strike_price": "12.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable"
+      },
+      {
+        "id": "18975ba3-de21-423b-8e79-7c66e927809d",
+        "chain_id": "a97e6c2b-7c89-4c32-a809-d1d157dc8b03",
+        "chain_symbol": "AMTM",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "strike_price": "15.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable"
+      },
+      {
+        "id": "88479de2-a6c9-4e59-9dcc-8f7c8619fbea",
+        "chain_id": "a97e6c2b-7c89-4c32-a809-d1d157dc8b03",
+        "chain_symbol": "AMTM",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "strike_price": "15.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable"
+      },
+      {
+        "id": "63bf22e8-4d9e-40df-9322-b5ea44a09da5",
+        "chain_id": "a97e6c2b-7c89-4c32-a809-d1d157dc8b03",
+        "chain_symbol": "AMTM",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "strike_price": "17.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable"
+      },
+      {
+        "id": "dc15c6fd-48ca-43f9-9c2c-d2c1d2590c33",
+        "chain_id": "a97e6c2b-7c89-4c32-a809-d1d157dc8b03",
+        "chain_symbol": "AMTM",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "strike_price": "17.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable"
+      },
+      {
+        "id": "19bcdca6-7e07-48e8-868e-15cbe92259e9",
+        "chain_id": "a97e6c2b-7c89-4c32-a809-d1d157dc8b03",
+        "chain_symbol": "AMTM",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "strike_price": "20.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable"
+      },
+      {
+        "id": "b015f062-1c0b-40db-bbfd-28230c7d9636",
+        "chain_id": "a97e6c2b-7c89-4c32-a809-d1d157dc8b03",
+        "chain_symbol": "AMTM",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "strike_price": "20.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable"
+      },
+      {
+        "id": "5a4f2671-102b-4531-9246-6cc98e2eac4c",
+        "chain_id": "a97e6c2b-7c89-4c32-a809-d1d157dc8b03",
+        "chain_symbol": "AMTM",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "strike_price": "22.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable"
+      },
+      {
+        "id": "7b831200-b7dc-455d-b84b-fc913a6428e9",
+        "chain_id": "a97e6c2b-7c89-4c32-a809-d1d157dc8b03",
+        "chain_symbol": "AMTM",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "strike_price": "22.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable"
+      },
+      {
+        "id": "664309da-06b9-44d1-aacd-39f6522a7d6f",
+        "chain_id": "a97e6c2b-7c89-4c32-a809-d1d157dc8b03",
+        "chain_symbol": "AMTM",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "strike_price": "25.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable"
+      },
+      {
+        "id": "6f43dc11-ce7b-4efb-ae20-ab9b32149e26",
+        "chain_id": "a97e6c2b-7c89-4c32-a809-d1d157dc8b03",
+        "chain_symbol": "AMTM",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "strike_price": "25.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable"
+      },
+      {
+        "id": "4206810e-d730-40aa-9516-2fdc872623a5",
+        "chain_id": "a97e6c2b-7c89-4c32-a809-d1d157dc8b03",
+        "chain_symbol": "AMTM",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "strike_price": "27.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable"
+      },
+      {
+        "id": "502c387e-ec44-488a-955d-0ba642bfe677",
+        "chain_id": "a97e6c2b-7c89-4c32-a809-d1d157dc8b03",
+        "chain_symbol": "AMTM",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "strike_price": "27.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable"
+      },
+      {
+        "id": "37cce22e-3e3f-4a6f-83b5-f8bf2a79cf00",
+        "chain_id": "a97e6c2b-7c89-4c32-a809-d1d157dc8b03",
+        "chain_symbol": "AMTM",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "strike_price": "30.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable"
+      },
+      {
+        "id": "deafa48d-0053-470b-bcf6-dab0cd3488a6",
+        "chain_id": "a97e6c2b-7c89-4c32-a809-d1d157dc8b03",
+        "chain_symbol": "AMTM",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "strike_price": "30.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable"
+      },
+      {
+        "id": "191a0a66-7d2f-4258-947b-83b7e7254997",
+        "chain_id": "a97e6c2b-7c89-4c32-a809-d1d157dc8b03",
+        "chain_symbol": "AMTM",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "strike_price": "32.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable"
+      },
+      {
+        "id": "cd90aa19-f696-4318-99c0-8fea28513a20",
+        "chain_id": "a97e6c2b-7c89-4c32-a809-d1d157dc8b03",
+        "chain_symbol": "AMTM",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "strike_price": "32.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable"
+      }
+    ]
+  }
+}

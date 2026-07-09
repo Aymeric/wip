@@ -1,0 +1,60 @@
+{
+  "data": {
+    "positions": [
+      {
+        "option_id": "67c51ad2-f526-462e-8c15-c85a68866a9f",
+        "chain_id": "e7521c85-0276-4550-9c9e-77feccda7601",
+        "chain_symbol": "SLS",
+        "type": "long",
+        "quantity": "1.0000",
+        "average_price": "744.0000",
+        "expiration_date": "2026-10-16",
+        "trade_value_multiplier": "100.0000",
+        "intraday_average_open_price": "0.0000",
+        "intraday_quantity": "0.0000",
+        "pending_buy_quantity": "0.0000",
+        "pending_sell_quantity": "0.0000",
+        "pending_exercise_quantity": "0.0000",
+        "pending_assignment_quantity": "0.0000",
+        "pending_expiration_quantity": "0.0000",
+        "opened_at": "2026-07-01T02:58:40.298768Z"
+      },
+      {
+        "option_id": "79cd3800-e848-4d58-8997-308576acad72",
+        "chain_id": "21b6d389-dc88-40d2-8524-e43d5d6035f6",
+        "chain_symbol": "NKE",
+        "type": "long",
+        "quantity": "1.0000",
+        "average_price": "475.0000",
+        "expiration_date": "2026-10-16",
+        "trade_value_multiplier": "100.0000",
+        "intraday_average_open_price": "0.0000",
+        "intraday_quantity": "0.0000",
+        "pending_buy_quantity": "0.0000",
+        "pending_sell_quantity": "0.0000",
+        "pending_exercise_quantity": "0.0000",
+        "pending_assignment_quantity": "0.0000",
+        "pending_expiration_quantity": "0.0000",
+        "opened_at": "2026-06-29T17:20:37.774581Z"
+      },
+      {
+        "option_id": "fe2cebde-e0e6-4524-9d7e-cf07d8801ccf",
+        "chain_id": "6e3668ac-f69a-45ad-9a32-becc52c175f7",
+        "chain_symbol": "BABA",
+        "type": "long",
+        "quantity": "1.0000",
+        "average_price": "1500.0000",
+        "expiration_date": "2026-09-18",
+        "trade_value_multiplier": "100.0000",
+        "intraday_average_open_price": "0.0000",
+        "intraday_quantity": "0.0000",
+        "pending_buy_quantity": "0.0000",
+        "pending_sell_quantity": "0.0000",
+        "pending_exercise_quantity": "0.0000",
+        "pending_assignment_quantity": "0.0000",
+        "pending_expiration_quantity": "0.0000",
+        "opened_at": "2026-05-13T14:51:16.316372Z"
+      }
+    ]
+  }
+}

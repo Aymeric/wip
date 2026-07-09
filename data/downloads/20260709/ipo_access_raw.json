@@ -1,0 +1,237 @@
+{
+  "data": {
+    "items": [
+      {
+        "object_id": "c64600cc-e943-482b-8d0d-da84983975c2",
+        "object_type": "instrument",
+        "symbol": "LIME"
+      },
+      {
+        "object_id": "ef5d2600-32d1-41f5-bfbe-abacac264d2a",
+        "object_type": "instrument",
+        "symbol": "SPCX"
+      },
+      {
+        "object_id": "9cbf75ca-8ac0-4a5b-bffd-e776ea9049bb",
+        "object_type": "instrument",
+        "symbol": "LFTO"
+      },
+      {
+        "object_id": "692aa20c-decf-4510-8bd2-dab128ea15ca",
+        "object_type": "instrument",
+        "symbol": "REA"
+      },
+      {
+        "object_id": "4c75a259-01cd-450e-9a50-23350b3fb076",
+        "object_type": "instrument",
+        "symbol": "ELMT"
+      },
+      {
+        "object_id": "5c063f20-c232-4957-8e3b-2b0a99fcb94e",
+        "object_type": "instrument",
+        "symbol": "PSUS"
+      },
+      {
+        "object_id": "80e2d7cf-9e32-49ea-9e4f-41c81a5615df",
+        "object_type": "instrument",
+        "symbol": "RVI"
+      },
+      {
+        "object_id": "2f4dcc7e-90a1-4db4-8d77-e29f253d2c38",
+        "object_type": "instrument",
+        "symbol": "LIFE"
+      },
+      {
+        "object_id": "afc660d1-1d86-49ba-aee3-9695069daced",
+        "object_type": "instrument",
+        "symbol": "EQPT"
+      },
+      {
+        "object_id": "db3b40d2-709b-4093-a629-80847ea0212f",
+        "object_type": "instrument",
+        "symbol": "BTGO"
+      },
+      {
+        "object_id": "dcdadbe7-0309-48c0-8279-1c8dd1a19738",
+        "object_type": "instrument",
+        "symbol": "MDLN"
+      },
+      {
+        "object_id": "93c1d1fa-a34d-4529-94b8-c95de4049fe4",
+        "object_type": "instrument",
+        "symbol": "GLOO"
+      },
+      {
+        "object_id": "fb36a2c0-c9fb-4405-9041-bc1340a5788b",
+        "object_type": "instrument",
+        "symbol": "NAVN"
+      },
+      {
+        "object_id": "75b52ab2-366d-4f84-89cc-534d2076fe64",
+        "object_type": "instrument",
+        "symbol": "PXED"
+      },
+      {
+        "object_id": "d1a739f8-6cb8-4a4c-95ab-ace9613b4b2b",
+        "object_type": "instrument",
+        "symbol": "FRMI"
+      },
+      {
+        "object_id": "a69d3678-3e6a-46ec-9e64-fe1b2a6f1f52",
+        "object_type": "instrument",
+        "symbol": "PTRN"
+      },
+      {
+        "object_id": "b11a8b61-c6c7-4950-8982-f8930ec0142e",
+        "object_type": "instrument",
+        "symbol": "STUB"
+      },
+      {
+        "object_id": "b670f036-8739-4f54-8e32-6129f76f69c6",
+        "object_type": "instrument",
+        "symbol": "VIA"
+      },
+      {
+        "object_id": "99c35654-7c80-407b-b045-ecc098a3c658",
+        "object_type": "instrument",
+        "symbol": "GEMI"
+      },
+      {
+        "object_id": "92c98608-db55-408e-b2eb-b0c6d7f3baa7",
+        "object_type": "instrument",
+        "symbol": "FIGR"
+      },
+      {
+        "object_id": "5ba5ee58-2b48-4092-aee9-85173c8cb879",
+        "object_type": "instrument",
+        "symbol": "KLAR"
+      },
+      {
+        "object_id": "f87f301c-f18a-43d7-820a-66b30ac443e3",
+        "object_type": "instrument",
+        "symbol": "BLSH"
+      },
+      {
+        "object_id": "5d6b1a8d-1d5a-48f3-a4b6-68cdf641199a",
+        "object_type": "instrument",
+        "symbol": "FIG"
+      },
+      {
+        "object_id": "68bd6242-94d5-4eba-b0d5-f03b2ca9af3a",
+        "object_type": "instrument",
+        "symbol": "CRCL"
+      },
+      {
+        "object_id": "7c35e8d8-c623-4cd6-bf34-757a57fef6d5",
+        "object_type": "instrument",
+        "symbol": "AIRO"
+      },
+      {
+        "object_id": "aedbea74-d6f6-412a-865c-1c7f1957ed38",
+        "object_type": "instrument",
+        "symbol": "CRWV"
+      },
+      {
+        "object_id": "5180d78b-2334-4ab0-9dfb-c8a8fc4bc572",
+        "object_type": "instrument",
+        "symbol": "BIRD"
+      },
+      {
+        "object_id": "4bae008e-6d60-45ee-aac5-583b279a728f",
+        "object_type": "instrument",
+        "symbol": "RDDT"
+      },
+      {
+        "object_id": "56ee2b51-bbf8-4054-9db9-35e34fd59795",
+        "object_type": "instrument",
+        "symbol": "GUTS"
+      },
+      {
+        "object_id": "185d1287-967e-481a-92b9-cd801572b58e",
+        "object_type": "instrument",
+        "symbol": "ARM"
+      },
+      {
+        "object_id": "c3428303-869b-4a54-a5c2-704015441d17",
+        "object_type": "instrument",
+        "symbol": "CART"
+      },
+      {
+        "object_id": "cce0c8e5-f070-451b-bac9-e926d76cace2",
+        "object_type": "instrument",
+        "symbol": "NU"
+      },
+      {
+        "object_id": "03fddd0d-39b0-48e6-a001-d65ae2d23436",
+        "object_type": "instrument",
+        "symbol": "IREN"
+      },
+      {
+        "object_id": "f1b0e835-bdd2-4e0b-a3ed-8cda472723af",
+        "object_type": "instrument",
+        "symbol": "BRZE"
+      },
+      {
+        "object_id": "65852406-cbd8-45c0-a9d8-3c207845ef67",
+        "object_type": "instrument",
+        "symbol": "SG"
+      },
+      {
+        "object_id": "69e9e822-6928-4b55-a4e0-ff444cf53362",
+        "object_type": "instrument",
+        "symbol": "BLZE"
+      },
+      {
+        "object_id": "09cd6c24-9255-40cf-892a-9b1ec2bdd939",
+        "object_type": "instrument",
+        "symbol": "EXFY"
+      },
+      {
+        "object_id": "28771d81-c2ac-48e8-8920-af1f0f0a969f",
+        "object_type": "instrument",
+        "symbol": "NRDS"
+      },
+      {
+        "object_id": "b6dac47b-c05f-4ce3-bf6c-3a597c84f524",
+        "object_type": "instrument",
+        "symbol": "COCO"
+      },
+      {
+        "object_id": "eb21e7a1-92a1-493a-bf2a-318ad69e0f24",
+        "object_type": "instrument",
+        "symbol": "BRLT"
+      },
+      {
+        "object_id": "854e159c-ac6e-492d-a0e3-3ad211eb0b7b",
+        "object_type": "instrument",
+        "symbol": "RSKD"
+      },
+      {
+        "object_id": "ef29fd22-6e22-44ef-9911-a8f5bd68abd3",
+        "object_type": "instrument",
+        "symbol": "HOOD"
+      },
+      {
+        "object_id": "19b5089e-d5b1-4b7e-94f4-e58065147949",
+        "object_type": "instrument",
+        "symbol": "TEAD"
+      },
+      {
+        "object_id": "d75fd426-8ec9-4589-9454-318e0e0bf87f",
+        "object_type": "instrument",
+        "symbol": "DUOL"
+      },
+      {
+        "object_id": "04e49b34-55a1-4db4-8ce3-a8746a50a355",
+        "object_type": "instrument",
+        "symbol": "YOU"
+      },
+      {
+        "object_id": "ce60273a-7da9-41a7-a571-2c533061fef2",
+        "object_type": "instrument",
+        "symbol": "FIGS"
+      }
+    ],
+    "has_futures_contracts": false
+  }
+}

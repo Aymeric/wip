@@ -1,0 +1,1708 @@
+{
+  "data": {
+    "instruments": [
+      {
+        "id": "92d67a9a-2e1c-4ef9-97d2-01724ca19835",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "170.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "ab3bf62c-0d0a-4125-9bfc-dbde62c89c64",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "170.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "2a95297c-94a3-4a7d-af12-f9f3cceff2da",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "175.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "c96f46ce-3b6d-4de4-9d5c-1c27db99d4ba",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "175.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "a06f3b30-b7b3-4c49-95a6-d4cb9fe1f884",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "180.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "e835012f-7958-4fb4-8119-9c682f4a26d1",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "180.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "04b47a7e-1e46-45fe-9d62-4cf5300f06ca",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "185.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "c74b7588-f4a0-4d81-bd57-d31d95fb17e8",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "185.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "09355bfd-10e9-4ecf-917b-c3ae65295047",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "190.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "c146ad2a-e22e-4a3c-9472-7889e9826179",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "190.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "7bef246c-7424-45e2-a588-38c03df8091e",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "195.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "bc6b6c3e-53df-4420-b551-316a51316fa3",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "195.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "96b40a2c-0b7c-4f9d-b846-8a8bc3898c5a",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "200.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "e4fb5be4-8a67-4543-aa6e-295e5e608d35",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "200.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "6e6a9622-24a2-46f2-8877-7445534eb104",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "205.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "d84cd1fe-f0ee-4cd6-a469-3a073b38bd84",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "205.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "05c64710-800f-4b3d-88dd-81029f311e43",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "210.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "61b4850b-0227-4679-a933-894ba4327ca0",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "210.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "399fe941-0e54-4bdf-9e2c-1b4abbf717df",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "215.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "82c460d0-ffdf-488c-911e-3932fd72672a",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "215.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "3ab2dcc4-19b7-4ccc-b23f-574eaf40cb64",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "220.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "b77c0bfd-56e0-4ec9-b696-16ec158b2919",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "220.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "5aefbb43-8fb7-461b-8bbe-70cc7d3424f0",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "225.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "a5538e3e-a3a9-4577-b9bf-e4157acebfc1",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "225.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "5009792e-1925-455e-b95a-33317edd907d",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "230.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "ce50bcb3-25aa-4186-a94f-e5911ee72439",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "230.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "cabd6199-a7aa-40f7-a203-184a5a5c1713",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "235.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "e293072b-930f-4fe8-ae29-96a388a35fbf",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "235.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "304900b4-7fb9-4413-9fa7-99128e7ed0d6",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "240.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "74c5f01f-a2c7-4258-8fdb-3da1ffd260f0",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "240.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "8bc342cb-bbb9-42fe-a0d9-b2755b7a2375",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "245.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "aad943f4-e337-434a-b51d-ca4003a90156",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "245.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "8b572269-c2b4-4a05-b39f-ae7c37cf432b",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "250.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "bec6a061-dec8-414e-8523-e4458c5e2829",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "250.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "481e55c6-a1ff-46f6-b2fd-290a2bacb158",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "255.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "eaba55ed-b914-4ffe-9953-5d084611e731",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "255.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "6588d8e3-5124-42ca-87aa-67a2f79aec91",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "260.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "6bac945c-a711-4f02-a20e-b2beef36d422",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "260.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "728ccf38-703c-4a78-b653-b55c8dceeb78",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "265.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "bface1a4-b3d5-409e-8b2a-5d868b04e7f8",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "265.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "a48988d7-cda5-4c0b-9745-511327875fc3",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "270.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "bdfca2ee-ea1c-4abd-8e88-5a247bf3ff85",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "270.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "c29da57f-839e-4b07-acb3-fe0dbba1abbf",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "275.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "ffbc58ec-4b7d-429d-a481-a5f7fabd291d",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "275.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "3092d03e-637a-4c59-9b32-1482d07b295e",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "280.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "fe945726-b7f8-494a-965a-21690cf9dd3c",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "280.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "476ca918-6b0a-409d-a3f6-50b0e05eb75f",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "285.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "b8208f03-6bcf-4553-88a9-92d5f6f38a43",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "285.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "506dd5df-856d-49a3-acdc-a4e92c085cab",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "290.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "951bc855-becb-456c-8b0d-3e56c69878ef",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "290.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "26a32f71-aba8-4a00-a12f-0358155cc3ac",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "295.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "c2ef2829-93df-4926-8cb1-2032ec725e86",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "295.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "7448cee3-3432-4e91-a059-ad68a973823b",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "300.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "8565decb-2001-409c-a6ee-e6e52c2332a8",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "300.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "378ad0f5-ac3d-47c4-b8a1-8424e95a13a8",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "305.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "a497cb35-a155-4c68-89d1-64cae8e8a0ae",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "305.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "3a1ac3ca-3ec5-4459-8102-1ac7c23e4404",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "310.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "9690f071-bfca-419d-970b-c1ffa1303cd0",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "310.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "0ca84f02-c685-4c7c-98e9-848374b52264",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "315.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "7ee0276b-b188-4dcc-86ae-07bb935e7554",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "315.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "b5d9cf3c-d521-4339-89bb-fb760cbb01a3",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "320.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "ed8b0f51-73cc-4b29-ba43-68ed9b13bc8c",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "320.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "77105b58-f2ee-4903-b286-ab0e7b4cb6ed",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "325.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "fc6ab457-ba8f-4964-950a-cd75715c2e1f",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "325.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "41b2f747-ef74-4548-afe3-9f286e593d75",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "330.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "cade1fcb-de2c-4528-9ec3-8ff78df7bb79",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "330.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "4a49e701-2673-4984-b592-911758991b7a",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "335.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "538fdc72-c052-4520-8f0d-78682d17565f",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "335.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "36c4a601-1c45-4817-99ca-68740745fcdb",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "340.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "ec501c5b-0acb-49e0-8878-8dec0ac7b5f9",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "340.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "534538b8-fdb7-4b80-ada4-1ff4032e9bbc",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "345.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "b6bc988f-8a0b-425a-88e3-10f8e3e137b9",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "345.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "7f400c3f-44fe-4548-826b-61df7bfc443c",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "350.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "c4549468-8016-4251-99cd-91eba56ccd1b",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "350.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "5816c730-5fb0-4543-b7ad-4c9b44f2a5b7",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "355.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "e257fdef-8de8-4479-a894-727298f64379",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "355.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "578eaa18-1be8-4b20-beb7-45ff96fe4706",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "360.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "b8cc07ca-de9b-4b2f-858f-55a91b4ed65f",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "360.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "61bb1060-36c0-4c96-ac14-f7199268894b",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "365.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "bced8eb4-40e3-47d7-955e-6e339c146ffd",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "365.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "0980fca6-a83d-41bd-ae64-ca822cd83dc8",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "370.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "3bc737b5-1e9b-4305-9eb8-15c2f675086c",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "370.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "1a88fc46-f656-48e4-a88a-feb878275bd6",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "375.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "998c92db-6dda-4abe-9e05-e13f57203fea",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "375.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "5f38114b-4e32-4c06-8f03-b74b11c35c3c",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "380.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "7bac4944-727b-481a-8ee2-9046654c7fe8",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "380.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "1930acd2-e586-4d13-bde8-90a8aa1d9144",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "385.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "e5685eed-429c-460d-a4b8-968d6ba9aa29",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "385.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "72eb4f36-a11a-4b30-9e61-ff4d868bc756",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "390.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "ff5d3315-8ce2-4862-90a5-4ce5276265cc",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "390.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "a1d29f22-bd39-4b3f-ab9b-18f41a346040",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "400.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "d7f1b064-9b74-4d9d-8e8a-e89a63c273de",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "400.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "3ed8529f-8dc2-4c3c-8c2b-2e9f2b1497fc",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "410.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "4431ed1c-b812-443a-8d53-0868c43c0a1f",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "410.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "b12bf076-b8fc-444a-9de2-fc283df076d3",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "420.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "b24aaad9-4844-40cf-9504-c6ddc2092549",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "420.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "7935c919-33e2-40cf-a7dc-88cc3ccf31f4",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "430.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "8677109b-3369-4e47-9b2b-d8775b1840fc",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "430.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "104de248-9f3c-451b-9e6c-591b4be33c00",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "440.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "6d464553-4c12-41c9-a125-7990764c1f69",
+        "chain_id": "368b7ddd-0f44-4ef0-a4d3-182b40953ed7",
+        "chain_symbol": "RCL",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "440.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      }
+    ],
+    "next": "http://edge-internal.brokeback-shard-router.region.rh/options/instruments/?chain_symbol=RCL&cursor=cD00NDAuMDAwMA%3D%3D&expiration_dates=2026-08-07&state=active"
+  },
+  "guide": "Present chain_symbol, expiration_date, type, strike_price; flag state when not 'active' or tradability when not 'tradable'. Pass id to an order's leg.option_id. Quote sellout_datetime when the user asks \"when will Robinhood force-close this position?\" — it is the authoritative per-contract timestamp covering equity/index, AM/PM settle, and T-1 logic. underlying_type ('equity' or 'index') is informational; mention only when it affects strategy. When next is non-null, extract the cursor query param and call this tool again."
+}

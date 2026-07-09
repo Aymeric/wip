@@ -1,0 +1,1708 @@
+{
+  "data": {
+    "instruments": [
+      {
+        "id": "9fa32a47-3ef5-4457-82a1-b4d63b091193",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "210.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "f97e81e0-91a6-4b15-9612-82cd5636b024",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "210.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "a06b7254-c1a9-4b90-b4e4-3b7cd1de0a96",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "215.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "ed754895-e2f5-45fc-804c-870603deca49",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "215.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "0888ee1e-1e10-426c-b668-c123e925e1d9",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "220.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "36a39e7f-91eb-4111-8798-7d92739ba6bf",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "220.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "49248912-5cf0-4ac7-adb4-ba38622d06ea",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "225.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "ae3c0001-adba-4571-91e1-164bcab5c050",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "225.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "1d1ca401-18e8-4167-88ff-e4629b80a1ef",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "230.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "6a93370f-d1e8-4944-a568-97891c522ea2",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "230.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "04bff104-96d8-4244-8141-d9e49b34a1d5",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "235.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "50492329-625e-4ad7-9bc1-668205cf4dd0",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "235.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "5dd2ce9b-d337-45f9-973d-6c13f2381603",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "240.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "ced6dfb5-3a80-4325-9950-7d6920fae832",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "240.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "d3808743-acad-459f-b0f9-a94c90c431e0",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "245.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "d4f22388-9fd4-4cd1-98b8-2d7a93a21555",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "245.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "fd9626f2-d9ed-43b6-8fdc-3d2a548b99e6",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "250.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "fec83dff-b655-4482-8868-ea1f2316b728",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "250.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "cdbfd6ba-ce89-4f9f-85c9-197982c64c63",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "255.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "ecea10f3-08d5-4c7d-b30a-58bd3bdecbb5",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "255.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "503a42b7-e2ea-469b-a19a-472e3ff03996",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "260.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "c8c8c758-7e61-48b5-a1e0-057ca38bec58",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "260.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "ca9b29a2-7135-4bd8-a602-96bede530b1b",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "265.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "e7142dbf-afd2-4c15-984e-c8ba7d067857",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "265.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "19fe4cc4-577a-432d-886c-e8a6d2443c8c",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "270.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "370a4c7e-c5d5-482c-8d3c-28335c448bf4",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "270.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "412c7ac2-4be5-4af5-aaf4-a5f3b4419257",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "275.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "c29e52f7-16f8-40d2-b125-53d1fea65105",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "275.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "5110d266-2d46-4716-a178-eebf25c6153d",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "280.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "8b22899c-6b4f-475a-a1c1-efb6895f9ba7",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "280.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "6273034c-2834-4552-92b3-4b3c8c9b7bf3",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "285.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "dd010cf2-1de5-47ad-b3dd-7562c03d0611",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "285.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "2c95c31d-d1dd-4b88-8fa1-558619e7539e",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "290.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "dfe919d8-772b-4928-af66-b5beed60b6a8",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "290.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "5d8fe77d-2557-403f-8f10-7f603ae201c2",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "295.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "63c75664-0c90-4bcb-be49-8a74bced20a6",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "295.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "4cdf899b-73be-40f3-8c7b-ecec27bf47ca",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "300.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "8becd597-5d05-47d5-a96e-91db08732365",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "300.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "69699dfa-876a-4526-9b00-046c779cad08",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "305.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "f5481096-0f28-48c0-bdff-3603c394bee0",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "305.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "2c139b10-bf42-4826-8e52-b93f08614769",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "310.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "8dcf5342-7cab-4b88-8f19-281a0f387de6",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "310.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "30ecdf1e-c1fd-491c-a1e1-569221b99617",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "315.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "a07b544f-cba6-446c-a49e-d3067804db67",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "315.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "51760046-9794-43d3-a15d-2373a07c5eb8",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "320.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "66298e7c-c16d-4d1c-9872-986f62864f53",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "320.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "4f059bc8-bad9-4cc0-bb31-f976718c4a22",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "325.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "b4ac2917-d5ff-43fa-a4b8-c0e653837176",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "325.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "00ee7707-686c-47a0-b431-4629f0da93be",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "330.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "54e54d2b-379d-42ee-a7f1-5ec772e5f241",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "330.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "2c418c68-71b3-4bdc-817c-00b506d962df",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "335.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "33855ea6-5d87-4e68-a0f9-e122f19bd49b",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "335.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "3c59e1df-e776-44b0-b69b-064ed5f1cc29",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "340.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "7a592d18-4246-48f8-ad08-ff662a4ae0af",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "340.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "24bd2507-a110-4781-9034-659896521631",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "345.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "ac829f5c-9273-4ff7-9487-1f80eaf10cff",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "345.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "87e48e42-9a41-44ee-8c61-b8ed2a1336f9",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "350.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "b2680738-6529-4e2b-8590-ac8f72d7c02e",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "350.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "6876a993-20f1-4784-80bf-95c5e1d5be67",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "355.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "ef436838-e16e-4b53-ad05-de5740bd45fe",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "355.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "38477750-978f-4ae6-b3cd-0519ba9b139d",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "360.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "64ece0b4-1722-4e87-b736-b40445e6cb9f",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "360.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "079d6154-d761-4aa6-bd76-32235c962b80",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "365.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "64e3d4a3-75a9-42dc-8808-c01d353f8eed",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "365.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "0739225d-281d-4ba2-8bf9-9a0de4a2a795",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "370.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "1652a8b1-011c-418c-847a-81cb8ebd4be1",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "370.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "77eaeccb-ba67-4f46-98cb-7df3ebaf33b5",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "375.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "9f6414ca-3d8b-4964-b64a-e23d2e1bc30d",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "375.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "2f4a7b0c-f67e-438d-b37a-b647f91895a8",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "380.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "56c39414-b0b6-4f94-b048-4eb4194d4643",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "380.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "21cd0e31-5e8c-474d-93f8-1de72a13ed61",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "385.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "f3379fb5-4da6-4d5a-8332-2d49f6a8b76f",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "385.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "87da4f9f-4657-4f0f-8a75-8b08072b6491",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "390.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "9e0495c9-fd52-42f3-9a56-a07d52f2df9b",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "390.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "55535ac2-ab8c-4f6c-b3ef-209ac1fb21db",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "395.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "5afc031f-2550-4bf7-914b-a261dfe785d6",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "395.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "00de1738-7f6e-49ce-b15b-cf2c5f282dab",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "400.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "aa088032-b397-40f3-9ef8-7ac3085774a8",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "400.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "5ce0d61e-1457-4d15-8aea-7918aa972725",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "405.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "abc42baa-bb9b-4d74-b621-5fbd3774186b",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "405.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "947210b6-80f5-487c-9d0e-587d10fcc1ff",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "410.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "e3acb0d4-edaa-4785-a4e7-033983814ecf",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "410.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "7b3174ef-030b-4353-87ca-f2ce8475b2ee",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "415.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "8e81df0f-a202-4da3-9395-11ca7bc329e7",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "415.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "100feedd-2626-4cdc-9d40-463474537d13",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "420.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "d7f63b68-5ed6-4b76-bca6-ba9c24f89aba",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "420.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "4294f48f-2156-4cf2-9d54-863413fa118a",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "425.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "c1670a8e-0da7-4b13-9122-6bf12cf445c0",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "425.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "09ccec33-e07b-49fc-bd44-72f9fdb1adc8",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "430.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "8b555921-f694-4002-bc72-0d7eb1ea37f9",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "430.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "9884d693-94c5-4262-a1f8-10da3f44137d",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "435.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "f4c0626e-abed-4e8a-885b-04ff9cd03f31",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "435.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "ced6f98b-8c59-4df3-bd29-358380b553f3",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "440.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "efd7f1a2-bdfe-4de2-ba81-a5a860bcce3c",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "440.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "381a5927-27f8-4169-b7f6-d9bbc0406875",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "445.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "9b735ae1-1002-4c33-bf1c-23fa915deb22",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "445.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "e98a3aaf-c52d-4f37-bf8d-efd145b1c4bb",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "450.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "f0a0eaf9-f796-4bdf-9d23-ef8e3424cd1a",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "450.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "85668d9f-dc45-4f54-a410-d559a1d8b3bc",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "455.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "ba397a72-d5b5-48d0-a9a7-0c783de425d1",
+        "chain_id": "a3481306-ed6a-4dfa-9ac1-df71e3872e12",
+        "chain_symbol": "AVGO",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-07",
+        "sellout_datetime": "2026-08-07T19:30:00+00:00",
+        "strike_price": "455.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      }
+    ],
+    "next": "http://edge-internal.brokeback-shard-router.region.rh/options/instruments/?chain_symbol=AVGO&cursor=cD00NTUuMDAwMA%3D%3D&expiration_dates=2026-08-07&state=active"
+  },
+  "guide": "Present chain_symbol, expiration_date, type, strike_price; flag state when not 'active' or tradability when not 'tradable'. Pass id to an order's leg.option_id. Quote sellout_datetime when the user asks \"when will Robinhood force-close this position?\" — it is the authoritative per-contract timestamp covering equity/index, AM/PM settle, and T-1 logic. underlying_type ('equity' or 'index') is informational; mention only when it affects strategy. When next is non-null, extract the cursor query param and call this tool again."
+}

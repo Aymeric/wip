@@ -53,7 +53,7 @@ To calculate the **Bull:Bear Gate** reliably without a heavy static universe, qu
 - **Persist All Downloaded Raw Data in Repo**: Any raw API payload downloaded during the session (such as index quotes, sector ETF quotes, and especially large tool outputs like scans, option chains, instrument files, option quotes, and underlier historicals) must be copied and saved directly into the repository inside a date-specific raw API downloads folder (e.g., [data/downloads/20260708/etf_quotes.json](../../data/downloads/20260708/etf_quotes.json)).
 - **Incremental Setup Caching and Robinhood Sourced Syncing**: To ensure data freshness, always sync candidate stocks and active option positions with Robinhood on every execution.
   - When analyzing candidates, always fetch latest quotes and merge metrics (including Spot, Grade, db_change, COTMP Cushion, Risk/Reward, Signal Status, and analyzed date) into [data/ticker_analyses.json](../../data/ticker_analyses.json), utilizing the ticker as a unique key. When fetching the spot price for setup grading, check the timestamps of `last_trade_price` and `last_non_reg_trade_price` using simple lexicographic string comparison (`non_reg_time > reg_time`). Prefer `last_non_reg_trade_price` as the current spot if its timestamp is more recent than `last_trade_price`, otherwise use `last_trade_price`.
-  - **Robinhood Option Position Sync**: Retrieve active option positions automatically using `mcp_robinhood-tra_get_option_positions`. **Note**: This tool requires a real `account_number`. Always call `mcp_robinhood-tra_get_accounts` first to retrieve the active account number. For this workspace, the primary options-trading margin/individual account is `"5QR24141"`. For each active position, batch lookup real-time option statistics and Greeks via `mcp_robinhood-tra_get_option_quotes`. Also lookup real-time underlier prices using `mcp_robinhood-tra_get_equity_quotes` of all active position tickers to retrieve and update their latest Spot prices dynamically.
+  - **Robinhood Option Position Sync**: Retrieve active option positions automatically using `mcp_robinhood-tra_get_option_positions`. **Note**: This tool requires a real `account_number`. Always call `mcp_robinhood-tra_get_accounts` first to retrieve the active account number. For each active position, batch lookup real-time option statistics and Greeks via `mcp_robinhood-tra_get_option_quotes`. **Strict URI limit rule**: When querying option quotes, chunk option contract IDs into batches of at most **40** to prevent "Request-URI Too Large" (HTTP 414) errors caused by excessively long query strings. Also lookup real-time underlier prices using `mcp_robinhood-tra_get_equity_quotes` of all active position tickers to retrieve and update their latest Spot prices dynamically.
   - Persist their static metadata and latest quote states (including Option ID, Underlier, Strike, Expiration, Type, Purchase Premium, Delta, Gamma, Mark Price, Open Interest, and ImpVol) into [data/active_options.json](../../data/active_options.json) to accelerate future portfolio tracking and minimize duplicate options instrument calls. Keep active underlier spot prices updated inside [data/ticker_analyses.json](../../data/ticker_analyses.json) on every run using the retrieved equity quotes.
   - Use the synced mark prices and option attributes to feed downstream risk stops and portfolio CLI evaluations.
   - This allows both setup and options analyses to accrue and persist across distinct sessions.
@@ -77,7 +77,7 @@ Before grading any setup, derive the candidate list automatically from Robinhood
 **Important Scanner Constraint**: The custom `filter_type` enum values for scanner filtering are not discoverable via workspace tools, and attempts to guess them (e.g., `FILTER_TYPE_PRICE` or `FILTER_TYPE_LAST_PRICE`) are rejected by the server.
 **Workaround**: Use `mcp_robinhood-tra_create_scan` using *only* the built-in preset enums (such as `DAILY_GAINERS`, `DAILY_LOSERS`, `HIGH_OPTIONS_VOLUME_IV`, or `UPCOMING_EARNINGS`) and save with a recognizable name (e.g. `"GEX Momentum Candidates"`).
 Then, apply the baseline GEX filtering manually on the raw columns of the returned results (e.g., by running a custom Python script or filtering locally in your analysis):
-- **Price range**: $5–$500 (col `"Last"`)
+- **Price range**: $5–$1000 (col `"Last"`)
 - **Average volume**: ≥ 500,000 shares/day (col `"Volume"`)
 - **Day change %**: ≥ +0.5% (col `"% Change"`. **Warning**: The raw value in `"% Change"` is a fraction/ratio, e.g., `0.024` means $+2.42\%$, and `2.4234` means $+242.34\%$ — you must multiply by 100 before comparing to percent thresholds)
 - **Market cap**: ≥ $2B (col `"Market cap"`. Note that market cap is a raw absolute number, not scaled)
@@ -141,7 +141,7 @@ To ensure all candidate stocks are fully actionable and analyzed, you must run a
 When deriving real structural levels for a priority candidate (or when requested by the user), extract the option-chain-derived proxies using the following strict mechanical process:
 1. **Chain & expiration**: Call `mcp_robinhood-tra_get_option_chains(underlying_symbol=<TICKER>)` and pick the expiration closest to 30 calendar days out (front-month if nothing closer is available).
 2. **Contracts**: Call `mcp_robinhood-tra_get_option_instruments(chain_symbol=<TICKER>, expiration_dates=<chosen date>)` (paginate via `cursor` if `next` is set) to get every strike, type, and instrument ID for that specific expiration.
-3. **Quotes/Greeks**: Batch all instrument IDs from step 2 into a single sequential or chunked call to `mcp_robinhood-tra_get_option_quotes` (which returns `open_interest`, `gamma`, and `implied_volatility` per contract).
+3. **Quotes/Greeks**: Since querying options quotes can hit URI length limits, **you MUST chunk all instrument IDs from step 2 into batches of at most 40 instrument IDs each**. Execute a sequential or parallel set of requests to `mcp_robinhood-tra_get_option_quotes` for these chunks, then merge all the returned lists of option results into a unified options dataset.
 4. **Per-strike aggregation**: For each strike, sum call/put open interest (OI) and compute call/put GEX as `gex = open_interest * gamma * 100 * spot`.
    - **COTMP** = open-interest-weighted average strike across all puts (`sum(strike * put_oi) / sum(put_oi)`).
    - **pTrans** = the strike at/below spot with the largest put OI (representing the nearest major put wall/support).
@@ -242,11 +242,23 @@ For every open position fetched from Robinhood:
   - **Proposed Action**: [No Action / Immediate Exit / Place Sell Limit / Trail Stop to Entry]
 
 ### 🔍 Scanner Summary
-- **Scans Run**: [list scan names used]
+- **Scans Run**: [list_scan_names_used]
 - **Candidates Found**: [N from scanner, M from user input = Total]
+- **Filter Metrics**:
+  - Raw Tickers Sourced: [Total unique raw tickers processed]
+  - Excluded (Already Active): [Count]
+  - Excluded (Price is not $5–$1,000): [Count]
+  - Excluded (Avg Volume < 500,000): [Count]
+  - Excluded (Day Change < +0.5%): [Count]
+  - Excluded (Market Cap < $2B): [Count]
+  - Total Candidates Sourced: [Total passing tickers]
 - **Filtered Out (active positions)**: [list tickers skipped]
 ### 🔄 Ticker Analyses Refresh
 - **Candidates Refreshed**: [N candidates refreshed via spot-only cached update, M candidates with missing structural data fully derived, 0 candidates left untouched (all candidate structural GEX data is fully populated and current)]
+- **Refresh Details**:
+  | Ticker | Spot | Grade | db_change | COTMP Cushion | R/R Ratio | Signal Status |
+  | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+  | [TICKER] | $X.XX | X/11 | X.XX | X.XX% | X.XX:1 | [CONFIRMED / PENDING / BLOCKED (reasons)] |
 ### 🔍 Setup Breakdown: [TICKER]
 - **Current Spot**: $X.XX
 - **Key Gamma Levels**:

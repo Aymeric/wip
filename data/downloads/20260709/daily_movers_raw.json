@@ -1,0 +1,107 @@
+{
+  "data": {
+    "items": [
+      {
+        "object_id": "1d16d6cc-5c61-4072-961b-05f12f4557a3",
+        "object_type": "instrument",
+        "symbol": "FPRUY"
+      },
+      {
+        "object_id": "dbdb1bc4-a34d-4429-b204-5d8bd3abd37d",
+        "object_type": "instrument",
+        "symbol": "MAAS"
+      },
+      {
+        "object_id": "0fd773bc-d663-487d-aa3f-59a692aa7d30",
+        "object_type": "instrument",
+        "symbol": "SCCTY"
+      },
+      {
+        "object_id": "5f1b53ab-1913-4474-8cc3-15747ef97314",
+        "object_type": "instrument",
+        "symbol": "XYIGY"
+      },
+      {
+        "object_id": "603017fd-3bf8-441d-b21c-dee4bde70a77",
+        "object_type": "instrument",
+        "symbol": "ALHC"
+      },
+      {
+        "object_id": "d9d927f4-c5fc-455b-b882-8213d7e11a63",
+        "object_type": "instrument",
+        "symbol": "PENG"
+      },
+      {
+        "object_id": "e81d56f4-7d47-4094-a046-e6d2de31c5bf",
+        "object_type": "instrument",
+        "symbol": "KGDEY"
+      },
+      {
+        "object_id": "7e1d25a5-0d61-4bc1-884b-e795a42a4f83",
+        "object_type": "instrument",
+        "symbol": "PLBL"
+      },
+      {
+        "object_id": "5d679d96-b09f-4e10-854d-d08ffff0be41",
+        "object_type": "instrument",
+        "symbol": "MTTRY"
+      },
+      {
+        "object_id": "21491217-4342-4ec6-ba39-915ef61182b1",
+        "object_type": "instrument",
+        "symbol": "SWDHY"
+      },
+      {
+        "object_id": "0aa58aa5-ecb3-431a-8904-2424a25d9427",
+        "object_type": "instrument",
+        "symbol": "SPTX"
+      },
+      {
+        "object_id": "7eab0a91-1539-407a-9df6-6868b1d9da95",
+        "object_type": "instrument",
+        "symbol": "EOSER"
+      },
+      {
+        "object_id": "45739a03-d22f-4a93-858a-67fd43985f93",
+        "object_type": "instrument",
+        "symbol": "BZH"
+      },
+      {
+        "object_id": "50854721-5819-479a-aae6-a668d18a7685",
+        "object_type": "instrument",
+        "symbol": "PRME"
+      },
+      {
+        "object_id": "733c0f5a-570d-4392-a640-e2074adcfabf",
+        "object_type": "instrument",
+        "symbol": "OFRM"
+      },
+      {
+        "object_id": "b48b0750-797d-4f79-ada8-359d44abf12f",
+        "object_type": "instrument",
+        "symbol": "OPTU"
+      },
+      {
+        "object_id": "cd41ae41-26a6-4577-a752-e805af0435f2",
+        "object_type": "instrument",
+        "symbol": "HBGRY"
+      },
+      {
+        "object_id": "f2da3342-32b7-42ff-9c17-4981dec762a2",
+        "object_type": "instrument",
+        "symbol": "PHOE"
+      },
+      {
+        "object_id": "5b43f0aa-9202-492f-a366-47c555911ba0",
+        "object_type": "instrument",
+        "symbol": "CEPL"
+      },
+      {
+        "object_id": "9a8b0115-de64-4ce6-98d7-107f9749a281",
+        "object_type": "instrument",
+        "symbol": "ZSQR"
+      }
+    ],
+    "has_futures_contracts": false
+  }
+}
