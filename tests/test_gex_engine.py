@@ -400,6 +400,90 @@ class TestGEXEngine(unittest.TestCase):
                 saved_data = mock_save.call_args[0][1]
                 self.assertEqual(saved_data["excluded_active_positions"], [])
 
+    def test_active_positions_exclusion_with_options_and_stocks(self):
+        # Verify that both option underliers and stock tickers are excluded from candidates
+        from unittest.mock import patch
+        import gex_engine
+        
+        with patch('gex_engine.load_json') as mock_load:
+            # Simulated active options and stocks
+            mock_load.return_value = {
+                "options_positions": {
+                    "opt_1": {"Underlier": "AAPL"}
+                },
+                "stocks_positions": {
+                    "MSFT": {}
+                }
+            }
+            
+            class DummyArgs:
+                min_price = 5.0
+                max_price = 1000.0
+                min_volume = 200000
+                min_change = 0.3
+                min_market_cap = 1000000000
+                
+            with patch('gex_engine.persist_new_scans') as mock_persist, \
+                 patch('gex_engine.save_json') as mock_save:
+                
+                gex_engine.cmd_update_candidates(DummyArgs())
+                self.assertTrue(mock_save.called)
+                saved_data = mock_save.call_args[0][1]
+                self.assertIn("AAPL", saved_data["excluded_active_positions"])
+                self.assertIn("MSFT", saved_data["excluded_active_positions"])
+                self.assertEqual(saved_data["excluded_active_positions"], ["AAPL", "MSFT"])
+
+    def test_portfolio_concentration_alerts_options_and_stocks(self):
+        # Verify that both option underliers and stock tickers trigger high concentration warnings
+        import tempfile
+        from unittest.mock import patch, MagicMock
+        import gex_engine
+
+        with tempfile.NamedTemporaryFile(suffix=".json", delete=False) as tmp:
+            tmp_path = tmp.name
+        try:
+            # Set up 50k portfolio where AAPL option is 20k (40% >= 15% net_liq) and MSFT stock is 10k (20% >= 15% net_liq)
+            mock_data = {
+                "options_positions": {
+                    "opt_aapl": {
+                        "Underlier": "AAPL",
+                        "Strike": 150.0,
+                        "Expiration": "2026-08-08",
+                        "Type": "call",
+                        "Purchase Premium": 10.0,
+                        "Mark Price": 200.0,
+                        "Days Held": 1,
+                        "Stalling Days": 0
+                    }
+                },
+                "stocks_positions": {
+                    "MSFT": {
+                        "Ticker": "MSFT",
+                        "Shares": 25.0,
+                        "Average Buy Price": 100.0,
+                        "Current Price": 400.0,
+                        "Beta Sector Tag": "Technology/Beta"
+                    }
+                }
+            }
+            gex_engine.save_json(tmp_path, mock_data)
+            
+            with patch('gex_engine.OPTIONS_FILE', tmp_path), patch('sys.stdout') as mock_stdout:
+                mock_stdout.isatty = MagicMock(return_value=False)
+                class PortfolioArgs:
+                    net_liq = 50000.0
+                    spot_overrides = {}
+                gex_engine.cmd_portfolio(PortfolioArgs())
+                
+                # Check output calls to verify high concentration alerts were printed
+                output = "".join(call.args[0] for call in mock_stdout.write.call_args_list if call.args)
+                self.assertIn("HIGH CONCENTRATION ALERT", output)
+                self.assertIn("AAPL (40.00%)", output) # Option mark price 200.0 * 100 = 20000; 20k / 50k = 40%
+                self.assertIn("MSFT (20.00%)", output) # Stock shares 25.0 * 400.0 = 10000; 10k / 50k = 20%
+        finally:
+            if os.path.exists(tmp_path):
+                os.remove(tmp_path)
+
     def test_add_and_update_stocks_positions(self):
         import tempfile
         from unittest.mock import patch

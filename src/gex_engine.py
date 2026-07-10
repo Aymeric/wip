@@ -1795,10 +1795,24 @@ def cmd_portfolio(args):
     # Sizing warnings for high concentration (exceeding 15% of net liq)
     high_concentration = []
     for opt_id, details in positions.items():
-        curr_val = details.get("Mark Price", 1.0) * 100
-        curr_weight = (curr_val / net_liq) * 100
+        curr_val = details.get("Current Value")
+        if curr_val is None:
+            curr_val = float(details.get("Mark Price", 1.0)) * 100.0
+        curr_weight = (curr_val / net_liq) * 100.0
         if curr_weight >= 15.0:
             high_concentration.append(f"{details.get('Underlier')} ({curr_weight:.2f}%)")
+            
+    for ticker, details in stocks.items():
+        curr_val = details.get("Current Value")
+        if curr_val is None:
+            shares = float(details.get("Shares", 0.0))
+            spot = float(details.get("Current Price", 0.0))
+            if spot <= 0.0:
+                spot = float(details.get("Average Buy Price", 0.0))
+            curr_val = shares * spot
+        curr_weight = (curr_val / net_liq) * 100.0
+        if curr_weight >= 15.0:
+            high_concentration.append(f"{ticker} ({curr_weight:.2f}%)")
     
     if high_concentration:
         print_color(f"\n⚠️ HIGH CONCENTRATION ALERT: {', '.join(high_concentration)} exceed 15-20% portfolio Net Liquidation threshold.", "31", bold=True)
@@ -2120,12 +2134,23 @@ def cmd_update_candidates(args):
     # First persist any new scan downloads
     persist_new_scans()
     
-    # Load active positions to exclude
-    options = load_json(OPTIONS_FILE, {"options_positions": {}})
+    # Load active positions to exclude (both options and stocks)
+    options = load_json(OPTIONS_FILE, {"options_positions": {}, "stocks_positions": {}})
     positions = options.get("options_positions", {})
-    active_positions = []
+    stocks = options.get("stocks_positions", {})
+    
+    active_positions_set = set()
     if positions:
-        active_positions = list(set(details.get("Underlier", "").upper() for details in positions.values() if details.get("Underlier")))
+        for details in positions.values():
+            underlier = details.get("Underlier")
+            if underlier:
+                active_positions_set.add(underlier.upper())
+    if stocks:
+        for ticker in stocks.keys():
+            active_positions_set.add(ticker.upper())
+            
+    active_positions = sorted(list(active_positions_set))
+    if active_positions:
         print(f"Loaded active positions to exclude: {active_positions}")
         
     candidates = {}
