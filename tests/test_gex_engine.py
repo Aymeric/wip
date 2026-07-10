@@ -170,38 +170,58 @@ class TestGEXEngine(unittest.TestCase):
         self.assertEqual(exit_rule, "PROFIT TAKE (T1 TARGET MET)")
 
     def test_etf_file_regime_integration(self):
-        # Verify etf-file regime data processing via dummy args Namespace
-        class DummyArgs:
-            def __init__(self):
-                self.spy = None
-                self.qqq = None
-                self.bulls = None
-                self.bears = None
-                self.vix_bearish = None
-                self.vix_spot = 15.0
-                self.etf_file = "data/downloads/20260708/etf_quotes.json"
-                
-        # We can dynamically test the parsing engine on cached data file
-        args = DummyArgs()
-        from gex_engine import cmd_update_regime
-        # Should not raise exception and execute status check reporting success
-        cmd_update_regime(args)
+        import tempfile
+        from unittest.mock import patch
+        with tempfile.NamedTemporaryFile(suffix=".json", delete=False) as tmp:
+            tmp_path = tmp.name
+        try:
+            import gex_engine
+            with patch('gex_engine.REGIME_FILE', tmp_path):
+                # Verify etf-file regime data processing via dummy args Namespace
+                class DummyArgs:
+                    def __init__(self):
+                        self.spy = None
+                        self.qqq = None
+                        self.bulls = None
+                        self.bears = None
+                        self.vix_bearish = None
+                        self.vix_spot = 15.0
+                        self.etf_file = "data/downloads/20260708/etf_quotes.json"
+                        
+                # We can dynamically test the parsing engine on cached data file
+                args = DummyArgs()
+                from gex_engine import cmd_update_regime
+                # Should not raise exception and execute status check reporting success
+                cmd_update_regime(args)
+        finally:
+            if os.path.exists(tmp_path):
+                os.remove(tmp_path)
 
     def test_hyg_credit_divergence_integration(self):
-        class DummyArgs:
-            def __init__(self):
-                self.spy = None
-                self.qqq = None
-                self.bulls = None
-                self.bears = None
-                self.vix_bearish = None
-                self.vix_spot = 15.0
-                self.hyg = -0.45
-                self.etf_file = "data/downloads/20260708/etf_quotes.json"
-                
-        args = DummyArgs()
-        from gex_engine import cmd_update_regime
-        cmd_update_regime(args)
+        import tempfile
+        from unittest.mock import patch
+        with tempfile.NamedTemporaryFile(suffix=".json", delete=False) as tmp:
+            tmp_path = tmp.name
+        try:
+            import gex_engine
+            with patch('gex_engine.REGIME_FILE', tmp_path):
+                class DummyArgs:
+                    def __init__(self):
+                        self.spy = None
+                        self.qqq = None
+                        self.bulls = None
+                        self.bears = None
+                        self.vix_bearish = None
+                        self.vix_spot = 15.0
+                        self.hyg = -0.45
+                        self.etf_file = "data/downloads/20260708/etf_quotes.json"
+                        
+                args = DummyArgs()
+                from gex_engine import cmd_update_regime
+                cmd_update_regime(args)
+        finally:
+            if os.path.exists(tmp_path):
+                os.remove(tmp_path)
 
     def test_derive_gex_profile_standard(self):
         # Setup realistic raw options instruments and quotes payloads
@@ -310,6 +330,46 @@ class TestGEXEngine(unittest.TestCase):
         self.assertGreater(vol_profile["rv10_val"], 0.0)
         # Check rule derivations
         self.assertTrue(vol_profile["rule11_derived"]) # Realized 10-day is under 35.0%
+
+    def test_t2_target_exit_rules(self):
+        # Case 1: T2 Target Mode - Option price is above purchase premium, spot is below T2 target -> HOLD
+        exit_rule, action, time_st, dist_ntrans, dist_max = compute_exit_rule_state(
+            spot=295.0, purchase_premium=5.0, mark_price=6.0,
+            ptrans=285.0, ntrans=282.0, gex_t1=310.0,
+            days_held=2, stalling_counter=0, dte=15,
+            target_mode="T2", t2_target=320.0
+        )
+        self.assertEqual(exit_rule, "HOLD")
+        self.assertEqual(action, "No Action")
+
+        # Case 2: T2 Target Mode - Option price drops to entry premium (purchase premium) -> STOP TRIGGERED (Trailed Stop)
+        exit_rule, action, time_st, dist_ntrans, dist_max = compute_exit_rule_state(
+            spot=295.0, purchase_premium=5.0, mark_price=5.0,
+            ptrans=285.0, ntrans=282.0, gex_t1=310.0,
+            days_held=2, stalling_counter=0, dte=15,
+            target_mode="T2", t2_target=320.0
+        )
+        self.assertTrue("Trailed Stop" in exit_rule)
+        self.assertTrue("protect T1 gains" in action)
+
+        # Case 3: T2 Target Mode - Option price drops below entry premium -> STOP TRIGGERED (Trailed Stop)
+        exit_rule, action, time_st, dist_ntrans, dist_max = compute_exit_rule_state(
+            spot=295.0, purchase_premium=5.0, mark_price=4.5,
+            ptrans=285.0, ntrans=282.0, gex_t1=310.0,
+            days_held=2, stalling_counter=0, dte=15,
+            target_mode="T2", t2_target=320.0
+        )
+        self.assertTrue("Trailed Stop" in exit_rule)
+
+        # Case 4: T2 Target Mode - Spot meets or exceeds T2 target -> PROFIT TAKE (T2 TARGET MET)
+        exit_rule, action, time_st, dist_ntrans, dist_max = compute_exit_rule_state(
+            spot=325.0, purchase_premium=5.0, mark_price=12.0,
+            ptrans=285.0, ntrans=282.0, gex_t1=310.0,
+            days_held=2, stalling_counter=0, dte=15,
+            target_mode="T2", t2_target=320.0
+        )
+        self.assertEqual(exit_rule, "PROFIT TAKE (T2 TARGET MET)")
+        self.assertTrue("lock in full T2" in action)
 
 if __name__ == '__main__':
     unittest.main()

@@ -148,10 +148,10 @@ The `update-candidates` command runs an end-to-end ingestion and filtering pipel
 graph TD
     A[Raw Robinhood Download] -->|Copy/Dedup| B[data/scans/ Directory]
     B -->|Ingest & Parse| C[Process Scans]
-    C -->|Price Filter $5-500| D[Candidate Eligibility Checks]
-    C -->|Volume Filter >500k| D
-    C -->|Day Chg Filter >+0.5%| D
-    C -->|Market Cap Filter >$2B| D
+    C -->|Price Filter $5-1000| D[Candidate Eligibility Checks]
+    C -->|Volume Filter >=200k| D
+    C -->|Day Chg Filter >=+0.3%| D
+    C -->|Market Cap Filter >=$1B| D
     D -->|Exclude Active Positions| E[Priority Sorting]
     E -->|Write & Format| F[data/candidate_stocks.json]
 ```
@@ -166,11 +166,12 @@ When `update-candidates` is run, the engine:
 
 ### Standard Mechanical Screener Baseline
 Candidate stocks are filtered locally according to the following strict criteria:
-- **Price Range**: Underlier Spot price within $\$5.00$ and $\$500.00$.
-- **Daily Volume**: Trading volume must exceed $500,000$ shares to ensure depth.
-- **Session Percent Change**: Session daily gain must be at least $+0.5\%$.
-- **Market Sizing**: Minimum market cap of $\$2.0\text{ Billion}$.
-- **Exclusion**: Tickers of open contracts currently stored in [data/active_options.json](data/active_options.json) are automatically excluded to avoid over-exposure.
+- **Price Range**: Underlier Spot price within $\$5.00$ and $\$1{,}000.00$.
+- **Daily Volume**: Trading volume must be at least $200{,}000$ shares to ensure depth.
+- **Session Percent Change**: Session daily gain must be at least $+0.3\%$.
+- **Market Sizing**: Minimum market cap of $\$1.0\text{ Billion}$.
+- **Exclusion**: Tickers of open contracts currently stored in [data/active_options.json](data/active_options.json) are dynamically omitted to avoid concentration.
+
 
 ---
 

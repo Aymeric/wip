@@ -919,7 +919,7 @@ def cmd_analyze(args):
         print_color(f"- **Recommended Play**: NO ENTRY. Setup blocked by system safeguards.", "31", bold=True)
 
 
-def compute_exit_rule_state(spot, purchase_premium, mark_price, ptrans, ntrans, gex_t1, days_held, stalling_counter, dte):
+def compute_exit_rule_state(spot, purchase_premium, mark_price, ptrans, ntrans, gex_t1, days_held, stalling_counter, dte, target_mode="T1", t2_target=None):
     """
     Computes exit rule evaluation logic, proposed actions, and time status.
     
@@ -968,14 +968,29 @@ def compute_exit_rule_state(spot, purchase_premium, mark_price, ptrans, ntrans, 
             proposed_action = "Immediate Exit (Stalling Stop)"
         time_status = "STALLED"
         
-    if gex_t1 and spot >= gex_t1:
-        if not exit_rule_state.startswith("STOP TRIGGERED"):
-            if pl_pct < 0:
-                exit_rule_state = "UNDERLIER TARGET MET (Option in Loss)"
-                proposed_action = "Exit position to limit further losses (Strike/Maturity mismatch or decay)"
-            else:
-                exit_rule_state = "PROFIT TAKE (T1 TARGET MET)"
-                proposed_action = "Exit for 100% gains OR Trail stop to entry price and target structural T2"
+    if target_mode == "T2":
+        # Sizing / protect T1 gains: Trail stop to entry price
+        if pl_pct <= 0.0:
+            if not exit_rule_state.startswith("STOP TRIGGERED"):
+                exit_rule_state = "STOP TRIGGERED (Trailed Stop: Option at or below entry premium)"
+                proposed_action = "Immediate Exit (Trailed Stop at Entry Premium to protect T1 gains)"
+                
+        # Target evaluation for T2
+        target_price = t2_target if t2_target is not None else (gex_t1 * 1.10 if gex_t1 else None)
+        if target_price and spot >= target_price:
+            if not exit_rule_state.startswith("STOP TRIGGERED"):
+                exit_rule_state = "PROFIT TAKE (T2 TARGET MET)"
+                proposed_action = "Exit position to lock in full T2/Lock & Ride gains"
+    else:
+        # Standard T1 target evaluation
+        if gex_t1 and spot >= gex_t1:
+            if not exit_rule_state.startswith("STOP TRIGGERED"):
+                if pl_pct < 0:
+                    exit_rule_state = "UNDERLIER TARGET MET (Option in Loss)"
+                    proposed_action = "Exit position to limit further losses (Strike/Maturity mismatch or decay)"
+                else:
+                    exit_rule_state = "PROFIT TAKE (T1 TARGET MET)"
+                    proposed_action = "Exit for 100% gains OR Trail stop to entry price and target structural T2"
 
     if dte is not None and dte < 0:
         exit_rule_state = "EXPIRED (Contract past expiration)"
@@ -1053,8 +1068,17 @@ def cmd_portfolio(args):
         
         # Calculate stops
         stalling_counter = details.get("Stalling Days", 0)
+        target_mode = details.get("Target Mode", "T1")
+        t2_target = details.get("T2 Target")
+        if t2_target is not None:
+            try:
+                t2_target = float(t2_target)
+            except (ValueError, TypeError):
+                t2_target = None
+                
         exit_rule_state, proposed_action, time_status, distance_ntrans, distance_max_stop = compute_exit_rule_state(
-            spot, purchase_premium, mark_price, ptrans, ntrans, gex_t1, days_held, stalling_counter, dte
+            spot, purchase_premium, mark_price, ptrans, ntrans, gex_t1, days_held, stalling_counter, dte,
+            target_mode=target_mode, t2_target=t2_target
         )
             
         # Update metrics in position state
@@ -1074,11 +1098,13 @@ def cmd_portfolio(args):
             "HOLD": ("32", False),
             "WATCH": ("33", False),
             "PROFIT TAKE (T1 TARGET MET)": ("32", True),
+            "PROFIT TAKE (T2 TARGET MET)": ("32", True),
             "UNDERLIER TARGET MET (Option in Loss)": ("31", True),
             "STOP TRIGGERED (Structural Stop: Spot < nTrans)": ("31", True),
             "STOP TRIGGERED (Max Asset Stop: -10% option loss below pTrans)": ("31", True),
             "STOP TRIGGERED (Time Stop: <50% progress by Day 7)": ("31", True),
             "STOP TRIGGERED (Stalling Stop: <10% daily progress for 3 consecutive days)": ("31", True),
+            "STOP TRIGGERED (Trailed Stop: Option at or below entry premium)": ("31", True),
             "EXPIRED (Contract past expiration)": ("31", True),
         }
         color_code, bold = status_colors.get(exit_rule_state, ("31", True))
@@ -1087,6 +1113,7 @@ def cmd_portfolio(args):
         # Print position
         print(f"- **{format_color(ticker, '35', bold=True)}**: Current Spot {format_color(f'${spot:.2f}', '36')} vs Avg Buy Premium {format_color(f'${purchase_premium:.2f}', '33')} / Mark {format_color(f'${mark_price:.2f}', '33')} (Gain/Loss: {format_color(f'{pl_pct:+.2f}%', pl_color, bold=True)})")
         print(f"  - **Exits Rule State**: [{exit_rule_fmt}]")
+        print(f"  - **Target Mode**: [{target_mode}]{' (Target Strike: $' + f'{t2_target:.2f}' + ')' if t2_target else ''}")
         print(f"  - **Distance to Structural Stop (nTrans at ${ntrans if ntrans else 0.0:.2f})**: {distance_ntrans}")
         print(f"  - **Distance to Max Asset Stop**: {distance_max_stop}")
         dte_str = f", DTE: {dte}" if dte is not None else ""
@@ -1167,7 +1194,9 @@ def cmd_add_pos(args):
         "Beta Sector Tag": args.sector,
         "Entry Date": datetime.today().strftime('%Y-%m-%d'),
         "Days Held": 1,
-        "Stalling Days": 0
+        "Stalling Days": 0,
+        "Target Mode": "T1",
+        "T2 Target": None
     }
     
     options["active_positions"] = positions
@@ -1204,6 +1233,10 @@ def cmd_update_opt(args):
         target_pos["Days Held"] = args.days
     if args.stalling_days is not None:
         target_pos["Stalling Days"] = args.stalling_days
+    if getattr(args, "target_mode", None) is not None:
+        target_pos["Target Mode"] = args.target_mode
+    if getattr(args, "t2_target", None) is not None:
+        target_pos["T2 Target"] = args.t2_target
         
     save_json(OPTIONS_FILE, options)
     print(f"Successfully updated metrics for option {args.option_id} in {OPTIONS_FILE}.")
@@ -1550,6 +1583,8 @@ def main():
     p_up_opt.add_argument("--iv", type=float, help="New option Implied Vol")
     p_up_opt.add_argument("--days", type=int, help="Override Days Held")
     p_up_opt.add_argument("--stalling-days", type=int, help="Set stalling counter")
+    p_up_opt.add_argument("--target-mode", type=str, choices=["T1", "T2"], help="Set target mode for trailing rules (T1, T2)")
+    p_up_opt.add_argument("--t2-target", type=float, help="Set secondary structural T2 target price")
     
     # close-position subcommand
     p_close_pos = subparsers.add_parser("close-position", help="Close a tracked option position and archive realized P&L.")
