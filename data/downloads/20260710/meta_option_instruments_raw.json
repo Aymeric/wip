@@ -1,0 +1,160 @@
+{
+  "data": {
+    "instruments": [
+      {
+        "id": "put_META_590_0",
+        "strike_price": "590.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "META"
+      },
+      {
+        "id": "call_META_590_0",
+        "strike_price": "590.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "META"
+      },
+      {
+        "id": "put_META_600_0",
+        "strike_price": "600.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "META"
+      },
+      {
+        "id": "call_META_600_0",
+        "strike_price": "600.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "META"
+      },
+      {
+        "id": "put_META_610_0",
+        "strike_price": "610.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "META"
+      },
+      {
+        "id": "call_META_610_0",
+        "strike_price": "610.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "META"
+      },
+      {
+        "id": "put_META_620_0",
+        "strike_price": "620.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "META"
+      },
+      {
+        "id": "call_META_620_0",
+        "strike_price": "620.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "META"
+      },
+      {
+        "id": "put_META_630_0",
+        "strike_price": "630.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "META"
+      },
+      {
+        "id": "call_META_630_0",
+        "strike_price": "630.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "META"
+      },
+      {
+        "id": "put_META_640_0",
+        "strike_price": "640.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "META"
+      },
+      {
+        "id": "call_META_640_0",
+        "strike_price": "640.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "META"
+      },
+      {
+        "id": "put_META_650_0",
+        "strike_price": "650.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "META"
+      },
+      {
+        "id": "call_META_650_0",
+        "strike_price": "650.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "META"
+      },
+      {
+        "id": "put_META_660_0",
+        "strike_price": "660.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "META"
+      },
+      {
+        "id": "call_META_660_0",
+        "strike_price": "660.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "META"
+      },
+      {
+        "id": "put_META_670_0",
+        "strike_price": "670.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "META"
+      },
+      {
+        "id": "call_META_670_0",
+        "strike_price": "670.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "META"
+      },
+      {
+        "id": "put_META_680_0",
+        "strike_price": "680.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "META"
+      },
+      {
+        "id": "call_META_680_0",
+        "strike_price": "680.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "META"
+      },
+      {
+        "id": "put_META_690_0",
+        "strike_price": "690.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "META"
+      },
+      {
+        "id": "call_META_690_0",
+        "strike_price": "690.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "META"
+      }
+    ]
+  }
+}

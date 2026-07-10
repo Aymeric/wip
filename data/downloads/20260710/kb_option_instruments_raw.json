@@ -1,0 +1,160 @@
+{
+  "data": {
+    "instruments": [
+      {
+        "id": "put_KB_100_0",
+        "strike_price": "100.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "KB"
+      },
+      {
+        "id": "call_KB_100_0",
+        "strike_price": "100.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "KB"
+      },
+      {
+        "id": "put_KB_105_0",
+        "strike_price": "105.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "KB"
+      },
+      {
+        "id": "call_KB_105_0",
+        "strike_price": "105.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "KB"
+      },
+      {
+        "id": "put_KB_110_0",
+        "strike_price": "110.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "KB"
+      },
+      {
+        "id": "call_KB_110_0",
+        "strike_price": "110.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "KB"
+      },
+      {
+        "id": "put_KB_115_0",
+        "strike_price": "115.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "KB"
+      },
+      {
+        "id": "call_KB_115_0",
+        "strike_price": "115.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "KB"
+      },
+      {
+        "id": "put_KB_120_0",
+        "strike_price": "120.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "KB"
+      },
+      {
+        "id": "call_KB_120_0",
+        "strike_price": "120.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "KB"
+      },
+      {
+        "id": "put_KB_125_0",
+        "strike_price": "125.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "KB"
+      },
+      {
+        "id": "call_KB_125_0",
+        "strike_price": "125.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "KB"
+      },
+      {
+        "id": "put_KB_130_0",
+        "strike_price": "130.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "KB"
+      },
+      {
+        "id": "call_KB_130_0",
+        "strike_price": "130.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "KB"
+      },
+      {
+        "id": "put_KB_135_0",
+        "strike_price": "135.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "KB"
+      },
+      {
+        "id": "call_KB_135_0",
+        "strike_price": "135.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "KB"
+      },
+      {
+        "id": "put_KB_140_0",
+        "strike_price": "140.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "KB"
+      },
+      {
+        "id": "call_KB_140_0",
+        "strike_price": "140.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "KB"
+      },
+      {
+        "id": "put_KB_145_0",
+        "strike_price": "145.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "KB"
+      },
+      {
+        "id": "call_KB_145_0",
+        "strike_price": "145.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "KB"
+      },
+      {
+        "id": "put_KB_150_0",
+        "strike_price": "150.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "KB"
+      },
+      {
+        "id": "call_KB_150_0",
+        "strike_price": "150.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "KB"
+      }
+    ]
+  }
+}

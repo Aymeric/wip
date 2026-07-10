@@ -1,0 +1,314 @@
+{
+  "data": {
+    "results": [
+      {
+        "quote": {
+          "instrument_id": "put_BUD_70_0",
+          "open_interest": 100,
+          "gamma": 0.002,
+          "implied_volatility": "0.45",
+          "bid_price": "0.50",
+          "ask_price": "0.60",
+          "mark_price": "0.55",
+          "volume": 12,
+          "delta": "-0.5",
+          "updated_at": "2026-07-10T00:08:07Z"
+        }
+      },
+      {
+        "quote": {
+          "instrument_id": "call_BUD_70_0",
+          "open_interest": 100,
+          "gamma": 0.002,
+          "implied_volatility": "0.45",
+          "bid_price": "0.50",
+          "ask_price": "0.60",
+          "mark_price": "0.55",
+          "volume": 20,
+          "delta": "0.5",
+          "updated_at": "2026-07-10T00:08:07Z"
+        }
+      },
+      {
+        "quote": {
+          "instrument_id": "put_BUD_72_5",
+          "open_interest": 100,
+          "gamma": 0.002,
+          "implied_volatility": "0.45",
+          "bid_price": "0.50",
+          "ask_price": "0.60",
+          "mark_price": "0.55",
+          "volume": 12,
+          "delta": "-0.5",
+          "updated_at": "2026-07-10T00:08:07Z"
+        }
+      },
+      {
+        "quote": {
+          "instrument_id": "call_BUD_72_5",
+          "open_interest": 100,
+          "gamma": 0.002,
+          "implied_volatility": "0.45",
+          "bid_price": "0.50",
+          "ask_price": "0.60",
+          "mark_price": "0.55",
+          "volume": 20,
+          "delta": "0.5",
+          "updated_at": "2026-07-10T00:08:07Z"
+        }
+      },
+      {
+        "quote": {
+          "instrument_id": "put_BUD_75_0",
+          "open_interest": 1000,
+          "gamma": 0.002,
+          "implied_volatility": "0.45",
+          "bid_price": "0.50",
+          "ask_price": "0.60",
+          "mark_price": "0.55",
+          "volume": 12,
+          "delta": "-0.5",
+          "updated_at": "2026-07-10T00:08:07Z"
+        }
+      },
+      {
+        "quote": {
+          "instrument_id": "call_BUD_75_0",
+          "open_interest": 100,
+          "gamma": 0.002,
+          "implied_volatility": "0.45",
+          "bid_price": "0.50",
+          "ask_price": "0.60",
+          "mark_price": "0.55",
+          "volume": 20,
+          "delta": "0.5",
+          "updated_at": "2026-07-10T00:08:07Z"
+        }
+      },
+      {
+        "quote": {
+          "instrument_id": "put_BUD_77_5",
+          "open_interest": 800,
+          "gamma": 0.015,
+          "implied_volatility": "0.45",
+          "bid_price": "0.50",
+          "ask_price": "0.60",
+          "mark_price": "0.55",
+          "volume": 12,
+          "delta": "-0.5",
+          "updated_at": "2026-07-10T00:08:07Z"
+        }
+      },
+      {
+        "quote": {
+          "instrument_id": "call_BUD_77_5",
+          "open_interest": 100,
+          "gamma": 0.015,
+          "implied_volatility": "0.45",
+          "bid_price": "0.50",
+          "ask_price": "0.60",
+          "mark_price": "0.55",
+          "volume": 20,
+          "delta": "0.5",
+          "updated_at": "2026-07-10T00:08:07Z"
+        }
+      },
+      {
+        "quote": {
+          "instrument_id": "put_BUD_80_0",
+          "open_interest": 1200,
+          "gamma": 0.015,
+          "implied_volatility": "0.45",
+          "bid_price": "0.50",
+          "ask_price": "0.60",
+          "mark_price": "0.55",
+          "volume": 12,
+          "delta": "-0.5",
+          "updated_at": "2026-07-10T00:08:07Z"
+        }
+      },
+      {
+        "quote": {
+          "instrument_id": "call_BUD_80_0",
+          "open_interest": 100,
+          "gamma": 0.015,
+          "implied_volatility": "0.45",
+          "bid_price": "0.50",
+          "ask_price": "0.60",
+          "mark_price": "0.55",
+          "volume": 20,
+          "delta": "0.5",
+          "updated_at": "2026-07-10T00:08:07Z"
+        }
+      },
+      {
+        "quote": {
+          "instrument_id": "put_BUD_82_5",
+          "open_interest": 100,
+          "gamma": 0.015,
+          "implied_volatility": "0.45",
+          "bid_price": "0.50",
+          "ask_price": "0.60",
+          "mark_price": "0.55",
+          "volume": 12,
+          "delta": "-0.5",
+          "updated_at": "2026-07-10T00:08:07Z"
+        }
+      },
+      {
+        "quote": {
+          "instrument_id": "call_BUD_82_5",
+          "open_interest": 500,
+          "gamma": 0.015,
+          "implied_volatility": "0.45",
+          "bid_price": "0.50",
+          "ask_price": "0.60",
+          "mark_price": "0.55",
+          "volume": 20,
+          "delta": "0.5",
+          "updated_at": "2026-07-10T00:08:07Z"
+        }
+      },
+      {
+        "quote": {
+          "instrument_id": "put_BUD_85_0",
+          "open_interest": 100,
+          "gamma": 0.015,
+          "implied_volatility": "0.45",
+          "bid_price": "0.50",
+          "ask_price": "0.60",
+          "mark_price": "0.55",
+          "volume": 12,
+          "delta": "-0.5",
+          "updated_at": "2026-07-10T00:08:07Z"
+        }
+      },
+      {
+        "quote": {
+          "instrument_id": "call_BUD_85_0",
+          "open_interest": 100,
+          "gamma": 0.015,
+          "implied_volatility": "0.45",
+          "bid_price": "0.50",
+          "ask_price": "0.60",
+          "mark_price": "0.55",
+          "volume": 20,
+          "delta": "0.5",
+          "updated_at": "2026-07-10T00:08:07Z"
+        }
+      },
+      {
+        "quote": {
+          "instrument_id": "put_BUD_87_5",
+          "open_interest": 100,
+          "gamma": 0.002,
+          "implied_volatility": "0.45",
+          "bid_price": "0.50",
+          "ask_price": "0.60",
+          "mark_price": "0.55",
+          "volume": 12,
+          "delta": "-0.5",
+          "updated_at": "2026-07-10T00:08:07Z"
+        }
+      },
+      {
+        "quote": {
+          "instrument_id": "call_BUD_87_5",
+          "open_interest": 2000,
+          "gamma": 0.002,
+          "implied_volatility": "0.45",
+          "bid_price": "0.50",
+          "ask_price": "0.60",
+          "mark_price": "0.55",
+          "volume": 20,
+          "delta": "0.5",
+          "updated_at": "2026-07-10T00:08:07Z"
+        }
+      },
+      {
+        "quote": {
+          "instrument_id": "put_BUD_90_0",
+          "open_interest": 100,
+          "gamma": 0.002,
+          "implied_volatility": "0.45",
+          "bid_price": "0.50",
+          "ask_price": "0.60",
+          "mark_price": "0.55",
+          "volume": 12,
+          "delta": "-0.5",
+          "updated_at": "2026-07-10T00:08:07Z"
+        }
+      },
+      {
+        "quote": {
+          "instrument_id": "call_BUD_90_0",
+          "open_interest": 100,
+          "gamma": 0.002,
+          "implied_volatility": "0.45",
+          "bid_price": "0.50",
+          "ask_price": "0.60",
+          "mark_price": "0.55",
+          "volume": 20,
+          "delta": "0.5",
+          "updated_at": "2026-07-10T00:08:07Z"
+        }
+      },
+      {
+        "quote": {
+          "instrument_id": "put_BUD_92_5",
+          "open_interest": 100,
+          "gamma": 0.002,
+          "implied_volatility": "0.45",
+          "bid_price": "0.50",
+          "ask_price": "0.60",
+          "mark_price": "0.55",
+          "volume": 12,
+          "delta": "-0.5",
+          "updated_at": "2026-07-10T00:08:07Z"
+        }
+      },
+      {
+        "quote": {
+          "instrument_id": "call_BUD_92_5",
+          "open_interest": 100,
+          "gamma": 0.002,
+          "implied_volatility": "0.45",
+          "bid_price": "0.50",
+          "ask_price": "0.60",
+          "mark_price": "0.55",
+          "volume": 20,
+          "delta": "0.5",
+          "updated_at": "2026-07-10T00:08:07Z"
+        }
+      },
+      {
+        "quote": {
+          "instrument_id": "put_BUD_95_0",
+          "open_interest": 100,
+          "gamma": 0.002,
+          "implied_volatility": "0.45",
+          "bid_price": "0.50",
+          "ask_price": "0.60",
+          "mark_price": "0.55",
+          "volume": 12,
+          "delta": "-0.5",
+          "updated_at": "2026-07-10T00:08:07Z"
+        }
+      },
+      {
+        "quote": {
+          "instrument_id": "call_BUD_95_0",
+          "open_interest": 100,
+          "gamma": 0.002,
+          "implied_volatility": "0.45",
+          "bid_price": "0.50",
+          "ask_price": "0.60",
+          "mark_price": "0.55",
+          "volume": 20,
+          "delta": "0.5",
+          "updated_at": "2026-07-10T00:08:07Z"
+        }
+      }
+    ]
+  }
+}

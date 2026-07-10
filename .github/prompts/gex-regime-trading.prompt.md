@@ -291,7 +291,7 @@ Present the analysis with KaTeX formulas where helpful. Keep the output concise,
 
 ### 📊 GEX Regime Check
 - **Basket Gate**: [PASS/FAIL] (SPY: +X.XX%, QQQ: +Y.YY% - Threshold: SPY or QQQ Change > +0.50% to PASS)
-- **Bull:Bear Gate**: [PASS/FAIL] (Ratio: X.XX:1, Bulls: N, Bears: M - Threshold: Ratio > 3.00:1 to PASS from [data/regime.json](../../data/regime.json) Cache)
+- **Bull:Bear Gate**: [PASS/FAIL] (Ratio: X.XX:X - Threshold: Ratio > 3.00:1 to PASS from [data/regime.json](../../data/regime.json))
 - **VIX Delta Gate**: [PASS/FAIL] (VIX Spot: X.XX - Threshold: VIX Spot < Prior Close, or daily change of UVXY/VXX < 0.00% to PASS)
 - **System Authorization**: [Track 1 OK / All Tracks OK / BLOCKED]
 - **HYG Overlay / Sector Drifts**: [Warning/Info on credit divergences, e.g. HYG Credit Overlay: +X.XX% - RISK MITIGATION TRIGGERED / PASS]

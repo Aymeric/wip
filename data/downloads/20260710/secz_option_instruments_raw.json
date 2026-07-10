@@ -1,0 +1,160 @@
+{
+  "data": {
+    "instruments": [
+      {
+        "id": "put_SECZ_3_0",
+        "strike_price": "3.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "SECZ"
+      },
+      {
+        "id": "call_SECZ_3_0",
+        "strike_price": "3.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "SECZ"
+      },
+      {
+        "id": "put_SECZ_4_0",
+        "strike_price": "4.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "SECZ"
+      },
+      {
+        "id": "call_SECZ_4_0",
+        "strike_price": "4.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "SECZ"
+      },
+      {
+        "id": "put_SECZ_5_0",
+        "strike_price": "5.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "SECZ"
+      },
+      {
+        "id": "call_SECZ_5_0",
+        "strike_price": "5.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "SECZ"
+      },
+      {
+        "id": "put_SECZ_6_0",
+        "strike_price": "6.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "SECZ"
+      },
+      {
+        "id": "call_SECZ_6_0",
+        "strike_price": "6.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "SECZ"
+      },
+      {
+        "id": "put_SECZ_7_0",
+        "strike_price": "7.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "SECZ"
+      },
+      {
+        "id": "call_SECZ_7_0",
+        "strike_price": "7.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "SECZ"
+      },
+      {
+        "id": "put_SECZ_8_0",
+        "strike_price": "8.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "SECZ"
+      },
+      {
+        "id": "call_SECZ_8_0",
+        "strike_price": "8.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "SECZ"
+      },
+      {
+        "id": "put_SECZ_9_0",
+        "strike_price": "9.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "SECZ"
+      },
+      {
+        "id": "call_SECZ_9_0",
+        "strike_price": "9.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "SECZ"
+      },
+      {
+        "id": "put_SECZ_10_0",
+        "strike_price": "10.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "SECZ"
+      },
+      {
+        "id": "call_SECZ_10_0",
+        "strike_price": "10.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "SECZ"
+      },
+      {
+        "id": "put_SECZ_11_0",
+        "strike_price": "11.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "SECZ"
+      },
+      {
+        "id": "call_SECZ_11_0",
+        "strike_price": "11.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "SECZ"
+      },
+      {
+        "id": "put_SECZ_12_0",
+        "strike_price": "12.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "SECZ"
+      },
+      {
+        "id": "call_SECZ_12_0",
+        "strike_price": "12.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "SECZ"
+      },
+      {
+        "id": "put_SECZ_13_0",
+        "strike_price": "13.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "SECZ"
+      },
+      {
+        "id": "call_SECZ_13_0",
+        "strike_price": "13.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "SECZ"
+      }
+    ]
+  }
+}

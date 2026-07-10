@@ -1,0 +1,314 @@
+{
+  "data": {
+    "results": [
+      {
+        "quote": {
+          "instrument_id": "put_LTH_30_0",
+          "open_interest": 100,
+          "gamma": 0.002,
+          "implied_volatility": "0.45",
+          "bid_price": "0.50",
+          "ask_price": "0.60",
+          "mark_price": "0.55",
+          "volume": 12,
+          "delta": "-0.5",
+          "updated_at": "2026-07-10T00:08:07Z"
+        }
+      },
+      {
+        "quote": {
+          "instrument_id": "call_LTH_30_0",
+          "open_interest": 100,
+          "gamma": 0.002,
+          "implied_volatility": "0.45",
+          "bid_price": "0.50",
+          "ask_price": "0.60",
+          "mark_price": "0.55",
+          "volume": 20,
+          "delta": "0.5",
+          "updated_at": "2026-07-10T00:08:07Z"
+        }
+      },
+      {
+        "quote": {
+          "instrument_id": "put_LTH_32_5",
+          "open_interest": 100,
+          "gamma": 0.002,
+          "implied_volatility": "0.45",
+          "bid_price": "0.50",
+          "ask_price": "0.60",
+          "mark_price": "0.55",
+          "volume": 12,
+          "delta": "-0.5",
+          "updated_at": "2026-07-10T00:08:07Z"
+        }
+      },
+      {
+        "quote": {
+          "instrument_id": "call_LTH_32_5",
+          "open_interest": 100,
+          "gamma": 0.002,
+          "implied_volatility": "0.45",
+          "bid_price": "0.50",
+          "ask_price": "0.60",
+          "mark_price": "0.55",
+          "volume": 20,
+          "delta": "0.5",
+          "updated_at": "2026-07-10T00:08:07Z"
+        }
+      },
+      {
+        "quote": {
+          "instrument_id": "put_LTH_35_0",
+          "open_interest": 1000,
+          "gamma": 0.002,
+          "implied_volatility": "0.45",
+          "bid_price": "0.50",
+          "ask_price": "0.60",
+          "mark_price": "0.55",
+          "volume": 12,
+          "delta": "-0.5",
+          "updated_at": "2026-07-10T00:08:07Z"
+        }
+      },
+      {
+        "quote": {
+          "instrument_id": "call_LTH_35_0",
+          "open_interest": 100,
+          "gamma": 0.002,
+          "implied_volatility": "0.45",
+          "bid_price": "0.50",
+          "ask_price": "0.60",
+          "mark_price": "0.55",
+          "volume": 20,
+          "delta": "0.5",
+          "updated_at": "2026-07-10T00:08:07Z"
+        }
+      },
+      {
+        "quote": {
+          "instrument_id": "put_LTH_37_5",
+          "open_interest": 800,
+          "gamma": 0.002,
+          "implied_volatility": "0.45",
+          "bid_price": "0.50",
+          "ask_price": "0.60",
+          "mark_price": "0.55",
+          "volume": 12,
+          "delta": "-0.5",
+          "updated_at": "2026-07-10T00:08:07Z"
+        }
+      },
+      {
+        "quote": {
+          "instrument_id": "call_LTH_37_5",
+          "open_interest": 100,
+          "gamma": 0.002,
+          "implied_volatility": "0.45",
+          "bid_price": "0.50",
+          "ask_price": "0.60",
+          "mark_price": "0.55",
+          "volume": 20,
+          "delta": "0.5",
+          "updated_at": "2026-07-10T00:08:07Z"
+        }
+      },
+      {
+        "quote": {
+          "instrument_id": "put_LTH_40_0",
+          "open_interest": 1200,
+          "gamma": 0.015,
+          "implied_volatility": "0.45",
+          "bid_price": "0.50",
+          "ask_price": "0.60",
+          "mark_price": "0.55",
+          "volume": 12,
+          "delta": "-0.5",
+          "updated_at": "2026-07-10T00:08:07Z"
+        }
+      },
+      {
+        "quote": {
+          "instrument_id": "call_LTH_40_0",
+          "open_interest": 100,
+          "gamma": 0.015,
+          "implied_volatility": "0.45",
+          "bid_price": "0.50",
+          "ask_price": "0.60",
+          "mark_price": "0.55",
+          "volume": 20,
+          "delta": "0.5",
+          "updated_at": "2026-07-10T00:08:07Z"
+        }
+      },
+      {
+        "quote": {
+          "instrument_id": "put_LTH_42_5",
+          "open_interest": 100,
+          "gamma": 0.015,
+          "implied_volatility": "0.45",
+          "bid_price": "0.50",
+          "ask_price": "0.60",
+          "mark_price": "0.55",
+          "volume": 12,
+          "delta": "-0.5",
+          "updated_at": "2026-07-10T00:08:07Z"
+        }
+      },
+      {
+        "quote": {
+          "instrument_id": "call_LTH_42_5",
+          "open_interest": 500,
+          "gamma": 0.015,
+          "implied_volatility": "0.45",
+          "bid_price": "0.50",
+          "ask_price": "0.60",
+          "mark_price": "0.55",
+          "volume": 20,
+          "delta": "0.5",
+          "updated_at": "2026-07-10T00:08:07Z"
+        }
+      },
+      {
+        "quote": {
+          "instrument_id": "put_LTH_45_0",
+          "open_interest": 100,
+          "gamma": 0.015,
+          "implied_volatility": "0.45",
+          "bid_price": "0.50",
+          "ask_price": "0.60",
+          "mark_price": "0.55",
+          "volume": 12,
+          "delta": "-0.5",
+          "updated_at": "2026-07-10T00:08:07Z"
+        }
+      },
+      {
+        "quote": {
+          "instrument_id": "call_LTH_45_0",
+          "open_interest": 100,
+          "gamma": 0.015,
+          "implied_volatility": "0.45",
+          "bid_price": "0.50",
+          "ask_price": "0.60",
+          "mark_price": "0.55",
+          "volume": 20,
+          "delta": "0.5",
+          "updated_at": "2026-07-10T00:08:07Z"
+        }
+      },
+      {
+        "quote": {
+          "instrument_id": "put_LTH_47_5",
+          "open_interest": 100,
+          "gamma": 0.015,
+          "implied_volatility": "0.45",
+          "bid_price": "0.50",
+          "ask_price": "0.60",
+          "mark_price": "0.55",
+          "volume": 12,
+          "delta": "-0.5",
+          "updated_at": "2026-07-10T00:08:07Z"
+        }
+      },
+      {
+        "quote": {
+          "instrument_id": "call_LTH_47_5",
+          "open_interest": 2000,
+          "gamma": 0.015,
+          "implied_volatility": "0.45",
+          "bid_price": "0.50",
+          "ask_price": "0.60",
+          "mark_price": "0.55",
+          "volume": 20,
+          "delta": "0.5",
+          "updated_at": "2026-07-10T00:08:07Z"
+        }
+      },
+      {
+        "quote": {
+          "instrument_id": "put_LTH_50_0",
+          "open_interest": 100,
+          "gamma": 0.002,
+          "implied_volatility": "0.45",
+          "bid_price": "0.50",
+          "ask_price": "0.60",
+          "mark_price": "0.55",
+          "volume": 12,
+          "delta": "-0.5",
+          "updated_at": "2026-07-10T00:08:07Z"
+        }
+      },
+      {
+        "quote": {
+          "instrument_id": "call_LTH_50_0",
+          "open_interest": 100,
+          "gamma": 0.002,
+          "implied_volatility": "0.45",
+          "bid_price": "0.50",
+          "ask_price": "0.60",
+          "mark_price": "0.55",
+          "volume": 20,
+          "delta": "0.5",
+          "updated_at": "2026-07-10T00:08:07Z"
+        }
+      },
+      {
+        "quote": {
+          "instrument_id": "put_LTH_52_5",
+          "open_interest": 100,
+          "gamma": 0.002,
+          "implied_volatility": "0.45",
+          "bid_price": "0.50",
+          "ask_price": "0.60",
+          "mark_price": "0.55",
+          "volume": 12,
+          "delta": "-0.5",
+          "updated_at": "2026-07-10T00:08:07Z"
+        }
+      },
+      {
+        "quote": {
+          "instrument_id": "call_LTH_52_5",
+          "open_interest": 100,
+          "gamma": 0.002,
+          "implied_volatility": "0.45",
+          "bid_price": "0.50",
+          "ask_price": "0.60",
+          "mark_price": "0.55",
+          "volume": 20,
+          "delta": "0.5",
+          "updated_at": "2026-07-10T00:08:07Z"
+        }
+      },
+      {
+        "quote": {
+          "instrument_id": "put_LTH_55_0",
+          "open_interest": 100,
+          "gamma": 0.002,
+          "implied_volatility": "0.45",
+          "bid_price": "0.50",
+          "ask_price": "0.60",
+          "mark_price": "0.55",
+          "volume": 12,
+          "delta": "-0.5",
+          "updated_at": "2026-07-10T00:08:07Z"
+        }
+      },
+      {
+        "quote": {
+          "instrument_id": "call_LTH_55_0",
+          "open_interest": 100,
+          "gamma": 0.002,
+          "implied_volatility": "0.45",
+          "bid_price": "0.50",
+          "ask_price": "0.60",
+          "mark_price": "0.55",
+          "volume": 20,
+          "delta": "0.5",
+          "updated_at": "2026-07-10T00:08:07Z"
+        }
+      }
+    ]
+  }
+}

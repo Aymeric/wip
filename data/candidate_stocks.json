@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-07-10T05:13:06.305886Z",
+  "last_updated": "2026-07-10T05:24:15.680600Z",
   "source_scans": [
     "GEX Momentum Candidates",
     "High options volume and IV",
@@ -7,9 +7,9 @@
   ],
   "user_additions": [],
   "excluded_active_positions": [
-    "NKE",
     "BABA",
-    "SLS"
+    "SLS",
+    "NKE"
   ],
   "total": 26,
   "candidates": [

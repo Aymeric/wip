@@ -1,0 +1,314 @@
+{
+  "data": {
+    "results": [
+      {
+        "quote": {
+          "instrument_id": "put_SEI_57_5",
+          "open_interest": 100,
+          "gamma": 0.002,
+          "implied_volatility": "0.45",
+          "bid_price": "0.50",
+          "ask_price": "0.60",
+          "mark_price": "0.55",
+          "volume": 12,
+          "delta": "-0.5",
+          "updated_at": "2026-07-10T00:08:07Z"
+        }
+      },
+      {
+        "quote": {
+          "instrument_id": "call_SEI_57_5",
+          "open_interest": 100,
+          "gamma": 0.002,
+          "implied_volatility": "0.45",
+          "bid_price": "0.50",
+          "ask_price": "0.60",
+          "mark_price": "0.55",
+          "volume": 20,
+          "delta": "0.5",
+          "updated_at": "2026-07-10T00:08:07Z"
+        }
+      },
+      {
+        "quote": {
+          "instrument_id": "put_SEI_60_0",
+          "open_interest": 100,
+          "gamma": 0.002,
+          "implied_volatility": "0.45",
+          "bid_price": "0.50",
+          "ask_price": "0.60",
+          "mark_price": "0.55",
+          "volume": 12,
+          "delta": "-0.5",
+          "updated_at": "2026-07-10T00:08:07Z"
+        }
+      },
+      {
+        "quote": {
+          "instrument_id": "call_SEI_60_0",
+          "open_interest": 100,
+          "gamma": 0.002,
+          "implied_volatility": "0.45",
+          "bid_price": "0.50",
+          "ask_price": "0.60",
+          "mark_price": "0.55",
+          "volume": 20,
+          "delta": "0.5",
+          "updated_at": "2026-07-10T00:08:07Z"
+        }
+      },
+      {
+        "quote": {
+          "instrument_id": "put_SEI_62_5",
+          "open_interest": 1000,
+          "gamma": 0.002,
+          "implied_volatility": "0.45",
+          "bid_price": "0.50",
+          "ask_price": "0.60",
+          "mark_price": "0.55",
+          "volume": 12,
+          "delta": "-0.5",
+          "updated_at": "2026-07-10T00:08:07Z"
+        }
+      },
+      {
+        "quote": {
+          "instrument_id": "call_SEI_62_5",
+          "open_interest": 100,
+          "gamma": 0.002,
+          "implied_volatility": "0.45",
+          "bid_price": "0.50",
+          "ask_price": "0.60",
+          "mark_price": "0.55",
+          "volume": 20,
+          "delta": "0.5",
+          "updated_at": "2026-07-10T00:08:07Z"
+        }
+      },
+      {
+        "quote": {
+          "instrument_id": "put_SEI_65_0",
+          "open_interest": 800,
+          "gamma": 0.002,
+          "implied_volatility": "0.45",
+          "bid_price": "0.50",
+          "ask_price": "0.60",
+          "mark_price": "0.55",
+          "volume": 12,
+          "delta": "-0.5",
+          "updated_at": "2026-07-10T00:08:07Z"
+        }
+      },
+      {
+        "quote": {
+          "instrument_id": "call_SEI_65_0",
+          "open_interest": 100,
+          "gamma": 0.002,
+          "implied_volatility": "0.45",
+          "bid_price": "0.50",
+          "ask_price": "0.60",
+          "mark_price": "0.55",
+          "volume": 20,
+          "delta": "0.5",
+          "updated_at": "2026-07-10T00:08:07Z"
+        }
+      },
+      {
+        "quote": {
+          "instrument_id": "put_SEI_67_5",
+          "open_interest": 1200,
+          "gamma": 0.015,
+          "implied_volatility": "0.45",
+          "bid_price": "0.50",
+          "ask_price": "0.60",
+          "mark_price": "0.55",
+          "volume": 12,
+          "delta": "-0.5",
+          "updated_at": "2026-07-10T00:08:07Z"
+        }
+      },
+      {
+        "quote": {
+          "instrument_id": "call_SEI_67_5",
+          "open_interest": 100,
+          "gamma": 0.015,
+          "implied_volatility": "0.45",
+          "bid_price": "0.50",
+          "ask_price": "0.60",
+          "mark_price": "0.55",
+          "volume": 20,
+          "delta": "0.5",
+          "updated_at": "2026-07-10T00:08:07Z"
+        }
+      },
+      {
+        "quote": {
+          "instrument_id": "put_SEI_70_0",
+          "open_interest": 100,
+          "gamma": 0.015,
+          "implied_volatility": "0.45",
+          "bid_price": "0.50",
+          "ask_price": "0.60",
+          "mark_price": "0.55",
+          "volume": 12,
+          "delta": "-0.5",
+          "updated_at": "2026-07-10T00:08:07Z"
+        }
+      },
+      {
+        "quote": {
+          "instrument_id": "call_SEI_70_0",
+          "open_interest": 500,
+          "gamma": 0.015,
+          "implied_volatility": "0.45",
+          "bid_price": "0.50",
+          "ask_price": "0.60",
+          "mark_price": "0.55",
+          "volume": 20,
+          "delta": "0.5",
+          "updated_at": "2026-07-10T00:08:07Z"
+        }
+      },
+      {
+        "quote": {
+          "instrument_id": "put_SEI_72_5",
+          "open_interest": 100,
+          "gamma": 0.015,
+          "implied_volatility": "0.45",
+          "bid_price": "0.50",
+          "ask_price": "0.60",
+          "mark_price": "0.55",
+          "volume": 12,
+          "delta": "-0.5",
+          "updated_at": "2026-07-10T00:08:07Z"
+        }
+      },
+      {
+        "quote": {
+          "instrument_id": "call_SEI_72_5",
+          "open_interest": 100,
+          "gamma": 0.015,
+          "implied_volatility": "0.45",
+          "bid_price": "0.50",
+          "ask_price": "0.60",
+          "mark_price": "0.55",
+          "volume": 20,
+          "delta": "0.5",
+          "updated_at": "2026-07-10T00:08:07Z"
+        }
+      },
+      {
+        "quote": {
+          "instrument_id": "put_SEI_75_0",
+          "open_interest": 100,
+          "gamma": 0.015,
+          "implied_volatility": "0.45",
+          "bid_price": "0.50",
+          "ask_price": "0.60",
+          "mark_price": "0.55",
+          "volume": 12,
+          "delta": "-0.5",
+          "updated_at": "2026-07-10T00:08:07Z"
+        }
+      },
+      {
+        "quote": {
+          "instrument_id": "call_SEI_75_0",
+          "open_interest": 2000,
+          "gamma": 0.015,
+          "implied_volatility": "0.45",
+          "bid_price": "0.50",
+          "ask_price": "0.60",
+          "mark_price": "0.55",
+          "volume": 20,
+          "delta": "0.5",
+          "updated_at": "2026-07-10T00:08:07Z"
+        }
+      },
+      {
+        "quote": {
+          "instrument_id": "put_SEI_77_5",
+          "open_interest": 100,
+          "gamma": 0.002,
+          "implied_volatility": "0.45",
+          "bid_price": "0.50",
+          "ask_price": "0.60",
+          "mark_price": "0.55",
+          "volume": 12,
+          "delta": "-0.5",
+          "updated_at": "2026-07-10T00:08:07Z"
+        }
+      },
+      {
+        "quote": {
+          "instrument_id": "call_SEI_77_5",
+          "open_interest": 100,
+          "gamma": 0.002,
+          "implied_volatility": "0.45",
+          "bid_price": "0.50",
+          "ask_price": "0.60",
+          "mark_price": "0.55",
+          "volume": 20,
+          "delta": "0.5",
+          "updated_at": "2026-07-10T00:08:07Z"
+        }
+      },
+      {
+        "quote": {
+          "instrument_id": "put_SEI_80_0",
+          "open_interest": 100,
+          "gamma": 0.002,
+          "implied_volatility": "0.45",
+          "bid_price": "0.50",
+          "ask_price": "0.60",
+          "mark_price": "0.55",
+          "volume": 12,
+          "delta": "-0.5",
+          "updated_at": "2026-07-10T00:08:07Z"
+        }
+      },
+      {
+        "quote": {
+          "instrument_id": "call_SEI_80_0",
+          "open_interest": 100,
+          "gamma": 0.002,
+          "implied_volatility": "0.45",
+          "bid_price": "0.50",
+          "ask_price": "0.60",
+          "mark_price": "0.55",
+          "volume": 20,
+          "delta": "0.5",
+          "updated_at": "2026-07-10T00:08:07Z"
+        }
+      },
+      {
+        "quote": {
+          "instrument_id": "put_SEI_82_5",
+          "open_interest": 100,
+          "gamma": 0.002,
+          "implied_volatility": "0.45",
+          "bid_price": "0.50",
+          "ask_price": "0.60",
+          "mark_price": "0.55",
+          "volume": 12,
+          "delta": "-0.5",
+          "updated_at": "2026-07-10T00:08:07Z"
+        }
+      },
+      {
+        "quote": {
+          "instrument_id": "call_SEI_82_5",
+          "open_interest": 100,
+          "gamma": 0.002,
+          "implied_volatility": "0.45",
+          "bid_price": "0.50",
+          "ask_price": "0.60",
+          "mark_price": "0.55",
+          "volume": 20,
+          "delta": "0.5",
+          "updated_at": "2026-07-10T00:08:07Z"
+        }
+      }
+    ]
+  }
+}

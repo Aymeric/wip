@@ -1,0 +1,160 @@
+{
+  "data": {
+    "instruments": [
+      {
+        "id": "put_BEKE_11_0",
+        "strike_price": "11.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "BEKE"
+      },
+      {
+        "id": "call_BEKE_11_0",
+        "strike_price": "11.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "BEKE"
+      },
+      {
+        "id": "put_BEKE_12_0",
+        "strike_price": "12.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "BEKE"
+      },
+      {
+        "id": "call_BEKE_12_0",
+        "strike_price": "12.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "BEKE"
+      },
+      {
+        "id": "put_BEKE_13_0",
+        "strike_price": "13.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "BEKE"
+      },
+      {
+        "id": "call_BEKE_13_0",
+        "strike_price": "13.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "BEKE"
+      },
+      {
+        "id": "put_BEKE_14_0",
+        "strike_price": "14.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "BEKE"
+      },
+      {
+        "id": "call_BEKE_14_0",
+        "strike_price": "14.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "BEKE"
+      },
+      {
+        "id": "put_BEKE_15_0",
+        "strike_price": "15.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "BEKE"
+      },
+      {
+        "id": "call_BEKE_15_0",
+        "strike_price": "15.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "BEKE"
+      },
+      {
+        "id": "put_BEKE_16_0",
+        "strike_price": "16.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "BEKE"
+      },
+      {
+        "id": "call_BEKE_16_0",
+        "strike_price": "16.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "BEKE"
+      },
+      {
+        "id": "put_BEKE_17_0",
+        "strike_price": "17.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "BEKE"
+      },
+      {
+        "id": "call_BEKE_17_0",
+        "strike_price": "17.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "BEKE"
+      },
+      {
+        "id": "put_BEKE_18_0",
+        "strike_price": "18.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "BEKE"
+      },
+      {
+        "id": "call_BEKE_18_0",
+        "strike_price": "18.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "BEKE"
+      },
+      {
+        "id": "put_BEKE_19_0",
+        "strike_price": "19.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "BEKE"
+      },
+      {
+        "id": "call_BEKE_19_0",
+        "strike_price": "19.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "BEKE"
+      },
+      {
+        "id": "put_BEKE_20_0",
+        "strike_price": "20.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "BEKE"
+      },
+      {
+        "id": "call_BEKE_20_0",
+        "strike_price": "20.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "BEKE"
+      },
+      {
+        "id": "put_BEKE_21_0",
+        "strike_price": "21.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "BEKE"
+      },
+      {
+        "id": "call_BEKE_21_0",
+        "strike_price": "21.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "BEKE"
+      }
+    ]
+  }
+}

@@ -1,0 +1,404 @@
+{
+  "bars": [
+    {
+      "close_price": "50.05",
+      "begins_at": "2026-04-01T00:00:00Z"
+    },
+    {
+      "close_price": "50.51",
+      "begins_at": "2026-04-02T00:00:00Z"
+    },
+    {
+      "close_price": "50.79",
+      "begins_at": "2026-04-03T00:00:00Z"
+    },
+    {
+      "close_price": "50.84",
+      "begins_at": "2026-04-04T00:00:00Z"
+    },
+    {
+      "close_price": "50.87",
+      "begins_at": "2026-04-05T00:00:00Z"
+    },
+    {
+      "close_price": "51.07",
+      "begins_at": "2026-04-06T00:00:00Z"
+    },
+    {
+      "close_price": "51.5",
+      "begins_at": "2026-04-07T00:00:00Z"
+    },
+    {
+      "close_price": "52.01",
+      "begins_at": "2026-04-08T00:00:00Z"
+    },
+    {
+      "close_price": "52.35",
+      "begins_at": "2026-04-09T00:00:00Z"
+    },
+    {
+      "close_price": "52.46",
+      "begins_at": "2026-04-10T00:00:00Z"
+    },
+    {
+      "close_price": "52.48",
+      "begins_at": "2026-04-11T00:00:00Z"
+    },
+    {
+      "close_price": "52.62",
+      "begins_at": "2026-04-12T00:00:00Z"
+    },
+    {
+      "close_price": "53.0",
+      "begins_at": "2026-04-13T00:00:00Z"
+    },
+    {
+      "close_price": "53.53",
+      "begins_at": "2026-04-14T00:00:00Z"
+    },
+    {
+      "close_price": "53.95",
+      "begins_at": "2026-04-15T00:00:00Z"
+    },
+    {
+      "close_price": "54.13",
+      "begins_at": "2026-04-16T00:00:00Z"
+    },
+    {
+      "close_price": "54.14",
+      "begins_at": "2026-04-17T00:00:00Z"
+    },
+    {
+      "close_price": "54.23",
+      "begins_at": "2026-04-18T00:00:00Z"
+    },
+    {
+      "close_price": "54.56",
+      "begins_at": "2026-04-19T00:00:00Z"
+    },
+    {
+      "close_price": "55.08",
+      "begins_at": "2026-04-20T00:00:00Z"
+    },
+    {
+      "close_price": "55.57",
+      "begins_at": "2026-04-21T00:00:00Z"
+    },
+    {
+      "close_price": "55.83",
+      "begins_at": "2026-04-22T00:00:00Z"
+    },
+    {
+      "close_price": "55.87",
+      "begins_at": "2026-04-23T00:00:00Z"
+    },
+    {
+      "close_price": "55.91",
+      "begins_at": "2026-04-24T00:00:00Z"
+    },
+    {
+      "close_price": "56.18",
+      "begins_at": "2026-04-25T00:00:00Z"
+    },
+    {
+      "close_price": "56.68",
+      "begins_at": "2026-04-26T00:00:00Z"
+    },
+    {
+      "close_price": "57.22",
+      "begins_at": "2026-04-27T00:00:00Z"
+    },
+    {
+      "close_price": "57.56",
+      "begins_at": "2026-04-28T00:00:00Z"
+    },
+    {
+      "close_price": "57.65",
+      "begins_at": "2026-04-29T00:00:00Z"
+    },
+    {
+      "close_price": "57.67",
+      "begins_at": "2026-04-30T00:00:00Z"
+    },
+    {
+      "close_price": "57.87",
+      "begins_at": "2026-05-01T00:00:00Z"
+    },
+    {
+      "close_price": "58.33",
+      "begins_at": "2026-05-02T00:00:00Z"
+    },
+    {
+      "close_price": "58.9",
+      "begins_at": "2026-05-03T00:00:00Z"
+    },
+    {
+      "close_price": "59.33",
+      "begins_at": "2026-05-04T00:00:00Z"
+    },
+    {
+      "close_price": "59.48",
+      "begins_at": "2026-05-05T00:00:00Z"
+    },
+    {
+      "close_price": "59.5",
+      "begins_at": "2026-05-06T00:00:00Z"
+    },
+    {
+      "close_price": "59.63",
+      "begins_at": "2026-05-07T00:00:00Z"
+    },
+    {
+      "close_price": "60.03",
+      "begins_at": "2026-05-08T00:00:00Z"
+    },
+    {
+      "close_price": "60.61",
+      "begins_at": "2026-05-09T00:00:00Z"
+    },
+    {
+      "close_price": "61.12",
+      "begins_at": "2026-05-10T00:00:00Z"
+    },
+    {
+      "close_price": "61.36",
+      "begins_at": "2026-05-11T00:00:00Z"
+    },
+    {
+      "close_price": "61.39",
+      "begins_at": "2026-05-12T00:00:00Z"
+    },
+    {
+      "close_price": "61.47",
+      "begins_at": "2026-05-13T00:00:00Z"
+    },
+    {
+      "close_price": "61.8",
+      "begins_at": "2026-05-14T00:00:00Z"
+    },
+    {
+      "close_price": "62.37",
+      "begins_at": "2026-05-15T00:00:00Z"
+    },
+    {
+      "close_price": "62.95",
+      "begins_at": "2026-05-16T00:00:00Z"
+    },
+    {
+      "close_price": "63.28",
+      "begins_at": "2026-05-17T00:00:00Z"
+    },
+    {
+      "close_price": "63.35",
+      "begins_at": "2026-05-18T00:00:00Z"
+    },
+    {
+      "close_price": "63.38",
+      "begins_at": "2026-05-19T00:00:00Z"
+    },
+    {
+      "close_price": "63.64",
+      "begins_at": "2026-05-20T00:00:00Z"
+    },
+    {
+      "close_price": "64.18",
+      "begins_at": "2026-05-21T00:00:00Z"
+    },
+    {
+      "close_price": "64.81",
+      "begins_at": "2026-05-22T00:00:00Z"
+    },
+    {
+      "close_price": "65.23",
+      "begins_at": "2026-05-23T00:00:00Z"
+    },
+    {
+      "close_price": "65.37",
+      "begins_at": "2026-05-24T00:00:00Z"
+    },
+    {
+      "close_price": "65.38",
+      "begins_at": "2026-05-25T00:00:00Z"
+    },
+    {
+      "close_price": "65.57",
+      "begins_at": "2026-05-26T00:00:00Z"
+    },
+    {
+      "close_price": "66.05",
+      "begins_at": "2026-05-27T00:00:00Z"
+    },
+    {
+      "close_price": "66.7",
+      "begins_at": "2026-05-28T00:00:00Z"
+    },
+    {
+      "close_price": "67.22",
+      "begins_at": "2026-05-29T00:00:00Z"
+    },
+    {
+      "close_price": "67.44",
+      "begins_at": "2026-05-30T00:00:00Z"
+    },
+    {
+      "close_price": "67.46",
+      "begins_at": "2026-05-31T00:00:00Z"
+    },
+    {
+      "close_price": "67.57",
+      "begins_at": "2026-06-01T00:00:00Z"
+    },
+    {
+      "close_price": "67.99",
+      "begins_at": "2026-06-02T00:00:00Z"
+    },
+    {
+      "close_price": "68.64",
+      "begins_at": "2026-06-03T00:00:00Z"
+    },
+    {
+      "close_price": "69.25",
+      "begins_at": "2026-06-04T00:00:00Z"
+    },
+    {
+      "close_price": "69.56",
+      "begins_at": "2026-06-05T00:00:00Z"
+    },
+    {
+      "close_price": "69.61",
+      "begins_at": "2026-06-06T00:00:00Z"
+    },
+    {
+      "close_price": "69.67",
+      "begins_at": "2026-06-07T00:00:00Z"
+    },
+    {
+      "close_price": "70.01",
+      "begins_at": "2026-06-08T00:00:00Z"
+    },
+    {
+      "close_price": "70.63",
+      "begins_at": "2026-06-09T00:00:00Z"
+    },
+    {
+      "close_price": "71.3",
+      "begins_at": "2026-06-10T00:00:00Z"
+    },
+    {
+      "close_price": "71.72",
+      "begins_at": "2026-06-11T00:00:00Z"
+    },
+    {
+      "close_price": "71.83",
+      "begins_at": "2026-06-12T00:00:00Z"
+    },
+    {
+      "close_price": "71.86",
+      "begins_at": "2026-06-13T00:00:00Z"
+    },
+    {
+      "close_price": "72.11",
+      "begins_at": "2026-06-14T00:00:00Z"
+    },
+    {
+      "close_price": "72.68",
+      "begins_at": "2026-06-15T00:00:00Z"
+    },
+    {
+      "close_price": "73.4",
+      "begins_at": "2026-06-16T00:00:00Z"
+    },
+    {
+      "close_price": "73.93",
+      "begins_at": "2026-06-17T00:00:00Z"
+    },
+    {
+      "close_price": "74.12",
+      "begins_at": "2026-06-18T00:00:00Z"
+    },
+    {
+      "close_price": "74.13",
+      "begins_at": "2026-06-19T00:00:00Z"
+    },
+    {
+      "close_price": "74.3",
+      "begins_at": "2026-06-20T00:00:00Z"
+    },
+    {
+      "close_price": "74.81",
+      "begins_at": "2026-06-21T00:00:00Z"
+    },
+    {
+      "close_price": "75.54",
+      "begins_at": "2026-06-22T00:00:00Z"
+    },
+    {
+      "close_price": "76.16",
+      "begins_at": "2026-06-23T00:00:00Z"
+    },
+    {
+      "close_price": "76.46",
+      "begins_at": "2026-06-24T00:00:00Z"
+    },
+    {
+      "close_price": "76.49",
+      "begins_at": "2026-06-25T00:00:00Z"
+    },
+    {
+      "close_price": "76.59",
+      "begins_at": "2026-06-26T00:00:00Z"
+    },
+    {
+      "close_price": "77.01",
+      "begins_at": "2026-06-27T00:00:00Z"
+    },
+    {
+      "close_price": "77.73",
+      "begins_at": "2026-06-28T00:00:00Z"
+    },
+    {
+      "close_price": "78.44",
+      "begins_at": "2026-06-29T00:00:00Z"
+    },
+    {
+      "close_price": "78.85",
+      "begins_at": "2026-06-30T00:00:00Z"
+    },
+    {
+      "close_price": "78.93",
+      "begins_at": "2026-07-01T00:00:00Z"
+    },
+    {
+      "close_price": "78.98",
+      "begins_at": "2026-07-02T00:00:00Z"
+    },
+    {
+      "close_price": "79.31",
+      "begins_at": "2026-07-03T00:00:00Z"
+    },
+    {
+      "close_price": "79.98",
+      "begins_at": "2026-07-04T00:00:00Z"
+    },
+    {
+      "close_price": "80.76",
+      "begins_at": "2026-07-05T00:00:00Z"
+    },
+    {
+      "close_price": "81.29",
+      "begins_at": "2026-07-06T00:00:00Z"
+    },
+    {
+      "close_price": "81.45",
+      "begins_at": "2026-07-07T00:00:00Z"
+    },
+    {
+      "close_price": "81.47",
+      "begins_at": "2026-07-08T00:00:00Z"
+    },
+    {
+      "close_price": "82.11",
+      "begins_at": "2026-07-09T00:00:00Z"
+    }
+  ]
+}

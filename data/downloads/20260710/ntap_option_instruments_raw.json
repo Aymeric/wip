@@ -1,0 +1,160 @@
+{
+  "data": {
+    "instruments": [
+      {
+        "id": "put_NTAP_150_0",
+        "strike_price": "150.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "NTAP"
+      },
+      {
+        "id": "call_NTAP_150_0",
+        "strike_price": "150.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "NTAP"
+      },
+      {
+        "id": "put_NTAP_155_0",
+        "strike_price": "155.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "NTAP"
+      },
+      {
+        "id": "call_NTAP_155_0",
+        "strike_price": "155.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "NTAP"
+      },
+      {
+        "id": "put_NTAP_160_0",
+        "strike_price": "160.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "NTAP"
+      },
+      {
+        "id": "call_NTAP_160_0",
+        "strike_price": "160.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "NTAP"
+      },
+      {
+        "id": "put_NTAP_165_0",
+        "strike_price": "165.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "NTAP"
+      },
+      {
+        "id": "call_NTAP_165_0",
+        "strike_price": "165.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "NTAP"
+      },
+      {
+        "id": "put_NTAP_170_0",
+        "strike_price": "170.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "NTAP"
+      },
+      {
+        "id": "call_NTAP_170_0",
+        "strike_price": "170.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "NTAP"
+      },
+      {
+        "id": "put_NTAP_175_0",
+        "strike_price": "175.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "NTAP"
+      },
+      {
+        "id": "call_NTAP_175_0",
+        "strike_price": "175.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "NTAP"
+      },
+      {
+        "id": "put_NTAP_180_0",
+        "strike_price": "180.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "NTAP"
+      },
+      {
+        "id": "call_NTAP_180_0",
+        "strike_price": "180.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "NTAP"
+      },
+      {
+        "id": "put_NTAP_185_0",
+        "strike_price": "185.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "NTAP"
+      },
+      {
+        "id": "call_NTAP_185_0",
+        "strike_price": "185.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "NTAP"
+      },
+      {
+        "id": "put_NTAP_190_0",
+        "strike_price": "190.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "NTAP"
+      },
+      {
+        "id": "call_NTAP_190_0",
+        "strike_price": "190.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "NTAP"
+      },
+      {
+        "id": "put_NTAP_195_0",
+        "strike_price": "195.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "NTAP"
+      },
+      {
+        "id": "call_NTAP_195_0",
+        "strike_price": "195.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "NTAP"
+      },
+      {
+        "id": "put_NTAP_200_0",
+        "strike_price": "200.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "NTAP"
+      },
+      {
+        "id": "call_NTAP_200_0",
+        "strike_price": "200.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "NTAP"
+      }
+    ]
+  }
+}

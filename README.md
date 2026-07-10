@@ -1,8 +1,8 @@
 # 📊 GEX Options & Agentic Portfolio Trading Suite
 
-Welcome to the GEX Options & Agentic Portfolio Trading Suite! This repository provides an automated, programmatic mechanical trading workflow that integrates dealer gamma positioning checks, rule-based portfolio risk-management, futures strategy analysis, and secure execution on Robinhood.
+Welcome to the GEX Options & Agentic Portfolio Trading Suite! This repository provides an automated, programmatic mechanical trading workflow that integrates dealer gamma positioning checks, rule-based portfolio risk-management, and secure execution on Robinhood.
 
-The system consists of a Python mechanical GEX engine CLI and specialized Copilot prompts designed to guide interactive swing-trading decisions.
+The system consists of a **Python mechanical GEX engine CLI** and **specialized Copilot prompts** designed to guide interactive swing-trading decisions, with absolute discipline and zero emotional discretion.
 
 ---
 

@@ -1,0 +1,1435 @@
+{
+  "data": {
+    "instruments": [
+      {
+        "id": "637a4cfe-0e30-4630-bd0d-b90aa82ff0d1",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "23.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "cc969ffd-b288-4aa1-8ff2-1bc6a2a49085",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "23.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "45319607-822b-4363-8cff-3db862036100",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "24.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "d59c2e5a-237e-44c0-a90b-efa2cb95132c",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "24.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "0276cfff-168d-443d-9d12-6149ec5fac4e",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "25.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "563861d0-8f23-416c-a0c9-2681878d26ec",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "25.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "6aa10511-f4a4-43f2-9aa3-c85125de5583",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "26.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "6ea889a1-d016-4437-896c-868a91a97a0b",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "26.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "baa9f4cb-e54d-4ded-98ad-a54f09d50fd4",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "27.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "efb715c1-bc5a-456a-ada2-e9011eab9aba",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "27.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "4dbb2770-72ec-46df-a7eb-5a571dfd6279",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "28.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "79913827-b253-4360-861e-c5db3e4315f6",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "28.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "2e8fcfcc-67b6-42af-b527-5b26e1f1c354",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "29.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "3f84ff46-829f-44eb-ae8d-5f46a4320874",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "29.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "26cbb06d-db23-4a2d-a92d-0bd1c91bda09",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "30.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "3fdaa73b-03ce-4742-b1cf-8191cb12f28e",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "30.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "3500d43b-0831-474b-aadc-abd272abaa9d",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "31.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "f59e0777-54de-4d54-9e7d-d022f0e44fbd",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "31.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "0a383a3e-17a0-47e2-96d1-e0e39ec4e78b",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "32.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "20174d1d-6984-4fb6-9dd6-be44dbdd2e5d",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "32.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "905831bf-7148-47e1-811d-604992f5464e",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "33.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "b037e8ee-b06b-4b3e-9b12-2522f4106aab",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "33.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "a406642b-050f-41c8-8e5c-1ff7cadb5dc0",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "34.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "f5ae05a9-efe3-4664-9d3f-41f3e90c2285",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "34.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "be710c6a-db58-4fbd-b279-ba012a050e8c",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "35.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "db76d13f-a1ce-4336-a510-f4896752adc9",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "35.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "52528c21-78c0-4770-98ec-05965a625581",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "36.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "56b7911b-9c0a-41e2-989d-5151f59a3cb8",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "36.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "6f8d129f-f075-4305-82e7-98cd1e0da304",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "37.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "ab7b7f57-4623-4c6a-a0c6-5b5c37e0704d",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "37.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "3a65f73d-695c-4588-88b5-433de12f2f43",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "38.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "66bb0fba-51e1-4046-a95c-63e6a160c447",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "38.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "b328f62b-f52a-4c5c-9642-1da0b6f8196e",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "39.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "f6eb22ff-f786-4ddb-971a-883f955f4d28",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "39.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "9439752d-f87c-4c62-94e3-fcf8b3b689d2",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "40.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "ae89c661-b587-4ae8-b95e-456ff297165a",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "40.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "18f8adfe-d248-4035-a618-ffd42767f51f",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "41.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "6a071ba7-8b5a-47e6-a5b3-ab7bf52e68d6",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "41.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "3c1fc344-62a4-4674-88cf-325da29b6098",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "42.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "43a7fd35-0457-404f-b242-0eebabf0d4ce",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "42.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "40ce5650-4b93-4895-b185-78632adfb4d8",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "43.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "49517e1f-f9d4-4f96-946a-338ef913f5f3",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "43.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "83c17a9d-3a30-4d62-87f7-d0f810bc78ca",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "44.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "d7dfa1f6-cb26-4223-a8b3-43dc00a4476f",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "44.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "3bed417a-4eae-47ac-aaf7-383bf8e72b46",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "45.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "9145a7f2-fa70-45e4-9365-7edadbf0fbd5",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "45.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "2356fee9-ffd9-4ba3-a996-ed092af5b56d",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "46.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "5a0b39ff-fbf8-478b-a0d4-ac52db448ae3",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "46.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "7d0b5619-ea26-4679-a209-2969eb3f0afd",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "47.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "8232d076-4248-4c41-8abf-6b1a9cccdc19",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "47.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "806a1818-960b-4405-a273-129218d4a42c",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "48.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "a9a801c5-d19f-456a-a4ee-20cba544dce4",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "48.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "41c6963c-4a15-4893-a026-56e1b1955ef8",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "49.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "d53a3b73-1323-4643-857a-8c151bc04028",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "49.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "427844d8-4fff-4151-af40-6389d990e46b",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "50.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "eb880540-6cb1-4f8e-9df6-69d310f9ee7d",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "50.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "a2daf0d6-5af9-49a2-a2fd-6443656a1053",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "55.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "cbfab0a3-3347-48e7-9625-a784f240b6b0",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "55.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "68e71068-6391-475d-991c-3010cba59f26",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "60.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "bb93ebfd-4966-46e8-a1f1-49246ba0b3a1",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "60.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "33f2112a-1b07-47d9-a86d-a786f870abf0",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "65.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "f5d99d33-e96b-4c9e-a571-c2612407ef07",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "65.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "d6e266e7-f5e1-4c80-a7c6-f4f883d37e6d",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "70.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "f4178e49-906e-4325-a7fe-10ddcdf2caf3",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "70.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "3eab44e9-6065-4f8f-8c4b-f4bd7e31e548",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "75.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "e1b3d2b1-c099-496c-9420-faa7484246a4",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "75.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "c1a0833f-b4b3-4550-8c0e-9364742c9656",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "80.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "e3786f0d-1713-4829-b24e-bbdedb04451d",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "80.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "09a27029-493f-466d-9cff-5e1533e54414",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "85.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "e3e4245a-4952-4f03-8e72-0d1b85eb46cc",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "85.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "0bc2b91f-d458-4faf-8217-7dae5a19513a",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "90.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "83fafd76-88d3-429b-be34-bf5f2b7d6d84",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "90.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "86499b84-0858-4073-bf51-a9d66e27adac",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "95.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "df95b712-ceb2-4416-8287-fa4885ebf7dc",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "95.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "4c8e0a04-140e-4984-b43b-a5e602afbd10",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "100.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "aff4bcec-b858-478f-9d8d-abdd34574511",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "100.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "2ae3f973-44fd-4b90-8a4d-384dfc623f7d",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "105.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "647e153e-c6b9-4390-8bd6-b57f27b99841",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "105.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "c9128b65-b4e2-428f-a505-144ba52fa635",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "110.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "ead8e960-37ff-49e4-bbee-af5ca0dfff0d",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "110.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "26dfe80f-e718-4ece-a3a6-94212681418b",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "115.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "a71128b0-cbd7-4df3-ad0a-ed8a6291d7ce",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "115.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "1950ed1b-cc85-455a-aa7f-8c441a974d2a",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "120.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "42256ffc-c5ef-463c-8a7b-dadae3fabc3b",
+        "chain_id": "1dd75efe-b8ef-44f9-b798-655956aeb1b0",
+        "chain_symbol": "MRNA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "120.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      }
+    ]
+  },
+  "guide": "Present chain_symbol, expiration_date, type, strike_price; flag state when not 'active' or tradability when not 'tradable'. Pass id to an order's leg.option_id. Quote sellout_datetime when the user asks \"when will Robinhood force-close this position?\" — it is the authoritative per-contract timestamp covering equity/index, AM/PM settle, and T-1 logic. underlying_type ('equity' or 'index') is informational; mention only when it affects strategy. When next is non-null, extract the cursor query param and call this tool again."
+}

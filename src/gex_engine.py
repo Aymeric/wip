@@ -24,6 +24,98 @@ import argparse
 import re
 import shutil
 from datetime import datetime, timezone
+from dataclasses import dataclass, field
+from typing import Dict, List, Optional, Tuple, Any
+
+@dataclass
+class RegimeGates:
+    basket_gate: str
+    bull_bear_ratio: float
+    bull_bear_gate: str
+    vix_delta_gate: str
+    system_authorization: str
+    gates_passed: int
+
+    def validate(self) -> bool:
+        """Validates internal gates metrics."""
+        if self.basket_gate not in ("PASS", "FAIL"):
+            raise ValueError(f"Invalid basket_gate: {self.basket_gate}")
+        if self.bull_bear_gate not in ("PASS", "FAIL"):
+            raise ValueError(f"Invalid bull_bear_gate: {self.bull_bear_gate}")
+        if self.vix_delta_gate not in ("PASS", "FAIL"):
+            raise ValueError(f"Invalid vix_delta_gate: {self.vix_delta_gate}")
+        if not (0 <= self.gates_passed <= 3):
+            raise ValueError(f"Invalid gates_passed: {self.gates_passed}")
+        if self.bull_bear_ratio < 0:
+            raise ValueError(f"Invalid bull_bear_ratio: {self.bull_bear_ratio}")
+        return True
+
+
+@dataclass
+class OptionPosition:
+    option_id: str
+    underlier: str
+    strike: float
+    expiration: str
+    type: str  # 'call' or 'put'
+    purchase_premium: float
+    mark_price: float
+    days_held: int
+    stalling_days: int
+    target_mode: str = "T1"
+    t2_target: Optional[float] = None
+    delta: Optional[float] = None
+    gamma: Optional[float] = None
+    open_interest: Optional[int] = None
+    imp_vol: Optional[float] = None
+    beta_sector_tag: str = "Technology/Beta"
+    entry_date: Optional[str] = None
+
+    def validate(self) -> bool:
+        """Validates option position parameters."""
+        if not self.option_id:
+            raise ValueError("option_id cannot be empty")
+        if not self.underlier:
+            raise ValueError("underlier cannot be empty")
+        if self.strike <= 0:
+            raise ValueError(f"strike must be positive: {self.strike}")
+        if self.type.lower() not in ("call", "put"):
+            raise ValueError(f"type must be 'call' or 'put': {self.type}")
+        if self.purchase_premium <= 0:
+            raise ValueError(f"purchase_premium must be positive: {self.purchase_premium}")
+        if self.mark_price < 0:
+            raise ValueError(f"mark_price cannot be negative: {self.mark_price}")
+        if self.days_held < 1:
+            raise ValueError(f"days_held must be >= 1: {self.days_held}")
+        if self.stalling_days < 0:
+            raise ValueError(f"stalling_days must be >= 0: {self.stalling_days}")
+        if self.target_mode not in ("T1", "T2"):
+            raise ValueError(f"target_mode must be 'T1' or 'T2': {self.target_mode}")
+        return True
+
+
+@dataclass
+class StockPosition:
+    ticker: str
+    shares: float
+    average_buy_price: float
+    current_price: float
+    beta_sector_tag: str = "Equity"
+    entry_date: Optional[str] = None
+    asset_cost_basis: float = 0.0
+    current_value: float = 0.0
+
+    def validate(self) -> bool:
+        """Validates stock position parameters."""
+        if not self.ticker:
+            raise ValueError("ticker cannot be empty")
+        if self.shares <= 0:
+            raise ValueError(f"shares must be positive: {self.shares}")
+        if self.average_buy_price <= 0:
+            raise ValueError(f"average_buy_price must be positive: {self.average_buy_price}")
+        if self.current_price < 0:
+            raise ValueError(f"current_price cannot be negative: {self.current_price}")
+        return True
 
 # Define file paths relative to active workspace (current directory)
 REGIME_FILE = "data/regime.json"
@@ -41,7 +133,7 @@ MIN_MARKET_CAP = 1000000000
 
 
 
-def print_color(text, color_code, bold=False):
+def print_color(text: str, color_code: str, bold: bool = False) -> None:
     """Prints text in ANSI color if the output is a tty."""
     if sys.stdout.isatty():
         prefix = f"\033[{1 if bold else 0};{color_code}m"
@@ -51,14 +143,14 @@ def print_color(text, color_code, bold=False):
         print(text)
 
 
-def format_color(text, color_code, bold=False):
+def format_color(text: str, color_code: str, bold: bool = False) -> str:
     """Formats text with ANSI color codes if the output is a tty."""
     if sys.stdout.isatty():
         return f"\033[{1 if bold else 0};{color_code}m{text}\033[0m"
     return text
 
 
-def str2bool(value):
+def str2bool(value: Any) -> bool:
     """Parses CLI boolean flags reliably (argparse type=bool treats 'False' as True)."""
     if isinstance(value, bool):
         return value
@@ -69,10 +161,15 @@ def str2bool(value):
     raise argparse.ArgumentTypeError(f"Boolean value expected, got '{value}'")
 
 
-def load_json(filepath, default):
+def load_json(filepath: str, default: Any) -> Any:
     """Loads a JSON file from disk, returning default if absent or corrupted."""
     if not os.path.exists(filepath):
         return default
+    try:
+        if os.path.getsize(filepath) == 0:
+            return default
+    except Exception:
+        pass
     try:
         with open(filepath, "r") as f:
             return json.load(f)
@@ -81,7 +178,7 @@ def load_json(filepath, default):
         return default
 
 
-def save_json(filepath, data):
+def save_json(filepath: str, data: Any) -> None:
     """Saves a Python dictionary/list structure to filepath as formatted JSON."""
     try:
         dir_name = os.path.dirname(filepath)
@@ -93,7 +190,7 @@ def save_json(filepath, data):
         print(f"Error: Failed to save to {filepath}: {e}", file=sys.stderr)
 
 
-def get_regime_status():
+def get_regime_status() -> Dict[str, Any]:
     """Retrieves and packages current broad market Daily Regime Gates metrics."""
     regime = load_json(REGIME_FILE, {})
     etf_details = regime.get("etf_details", {})
@@ -158,7 +255,7 @@ def get_regime_status():
     }
 
 
-def compute_regime_gates(spy_pct, qqq_pct, bull_count, bear_count, vix_dealer_delta_bearish):
+def compute_regime_gates(spy_pct: float, qqq_pct: float, bull_count: int, bear_count: int, vix_dealer_delta_bearish: bool) -> Tuple[str, float, str, str, str, int]:
     """Mechanically computes the three Daily Regime Gates and system authorization.
 
     - Basket Gate: SPY or QQQ up more than +0.5% in the session.
@@ -1635,22 +1732,47 @@ def cmd_portfolio(args):
     print(f"- **Total Unrealized P&L**: {format_color(f'${unrealized_pl_dlr:+,.2f}', pl_color, bold=True)} ({format_color(f'{unrealized_pl_pct:+.2f}%', pl_color, bold=True)})")
     print(f"- **Cash Buffer / Liquid Reserves**: ${cash_buffer:,.2f} ({cash_buffer_pct:.2f}% of Net Liq) | Status: {cash_buffer_status}")
     
-    closed_positions = options.get("closed_positions", [])
-    if closed_positions:
-        total_closed = len(closed_positions)
-        profitable_closed = sum(1 for p in closed_positions if p.get("Realized P&L ($)", 0.0) > 0.0)
-        win_rate = (profitable_closed / total_closed) * 100.0 if total_closed > 0 else 0.0
-        total_realized_dlr = sum(p.get("Realized P&L ($)", 0.0) for p in closed_positions)
+    closed_options = options.get("closed_options", [])
+    closed_stocks = options.get("closed_stocks", [])
+    if closed_options or closed_stocks:
+        print("\n### 📊 Realized Performance Stats")
         
-        gross_profit = sum(p.get("Realized P&L ($)", 0.0) for p in closed_positions if p.get("Realized P&L ($)", 0.0) > 0.0)
-        gross_loss = abs(sum(p.get("Realized P&L ($)", 0.0) for p in closed_positions if p.get("Realized P&L ($)", 0.0) < 0.0))
-        profit_factor_str = f"{gross_profit / gross_loss:.2f}" if gross_loss > 0 else f"{gross_profit:.2f}" if gross_profit > 0 else "N/A"
-        
-        realized_color = "32" if total_realized_dlr >= 0 else "31"
-        print(f"\n### 📊 Realized Performance Stats ({total_closed} Closed Trades)")
-        print(f"- **Realized Win Rate**: {win_rate:.1f}% ({profitable_closed}/{total_closed} profitable)")
-        print(f"- **Total Realized P&L**: {format_color(f'${total_realized_dlr:+,.2f}', realized_color, bold=True)}")
-        print(f"- **Profit Factor**: {profit_factor_str}")
+        # Options specific stats
+        if closed_options:
+            total_closed_opt = len(closed_options)
+            profitable_closed_opt = sum(1 for p in closed_options if p.get("Realized P&L ($)", 0.0) > 0.0)
+            win_rate_opt = (profitable_closed_opt / total_closed_opt) * 100.0 if total_closed_opt > 0 else 0.0
+            total_realized_opt = sum(p.get("Realized P&L ($)", 0.0) for p in closed_options)
+            gross_p_opt = sum(p.get("Realized P&L ($)", 0.0) for p in closed_options if p.get("Realized P&L ($)", 0.0) > 0.0)
+            gross_l_opt = abs(sum(p.get("Realized P&L ($)", 0.0) for p in closed_options if p.get("Realized P&L ($)", 0.0) < 0.0))
+            pf_opt = f"{gross_p_opt / gross_l_opt:.2f}" if gross_l_opt > 0 else f"{gross_p_opt:.2f}" if gross_p_opt > 0 else "N/A"
+            opt_color = "32" if total_realized_opt >= 0 else "31"
+            print(f"- **Options Stats** ({total_closed_opt} trades): Realized Win Rate {win_rate_opt:.1f}% ({profitable_closed_opt}/{total_closed_opt} profitable) | Total Realized P&L: {format_color(f'${total_realized_opt:+,.2f}', opt_color, bold=True)} | PF: {pf_opt}")
+            
+        # Stocks specific stats
+        if closed_stocks:
+            total_closed_stk = len(closed_stocks)
+            profitable_closed_stk = sum(1 for s in closed_stocks if s.get("Realized P&L ($)", 0.0) > 0.0)
+            win_rate_stk = (profitable_closed_stk / total_closed_stk) * 100.0 if total_closed_stk > 0 else 0.0
+            total_realized_stk = sum(s.get("Realized P&L ($)", 0.0) for s in closed_stocks)
+            gross_p_stk = sum(s.get("Realized P&L ($)", 0.0) for s in closed_stocks if s.get("Realized P&L ($)", 0.0) > 0.0)
+            gross_l_stk = abs(sum(s.get("Realized P&L ($)", 0.0) for s in closed_stocks if s.get("Realized P&L ($)", 0.0) < 0.0))
+            pf_stk = f"{gross_p_stk / gross_l_stk:.2f}" if gross_l_stk > 0 else f"{gross_p_stk:.2f}" if gross_p_stk > 0 else "N/A"
+            stk_color = "32" if total_realized_stk >= 0 else "31"
+            print(f"- **Stocks Stats** ({total_closed_stk} trades): Realized Win Rate {win_rate_stk:.1f}% ({profitable_closed_stk}/{total_closed_stk} profitable) | Total Realized P&L: {format_color(f'${total_realized_stk:+,.2f}', stk_color, bold=True)} | PF: {pf_stk}")
+            
+        # Unified combined stats
+        if closed_options and closed_stocks:
+            all_closed = closed_options + closed_stocks
+            total_closed_all = len(all_closed)
+            profitable_closed_all = sum(1 for p in all_closed if p.get("Realized P&L ($)", 0.0) > 0.0)
+            win_rate_all = (profitable_closed_all / total_closed_all) * 100.0 if total_closed_all > 0 else 0.0
+            total_realized_all = sum(p.get("Realized P&L ($)", 0.0) for p in all_closed)
+            gross_p_all = sum(p.get("Realized P&L ($)", 0.0) for p in all_closed if p.get("Realized P&L ($)", 0.0) > 0.0)
+            gross_l_all = abs(sum(p.get("Realized P&L ($)", 0.0) for p in all_closed if p.get("Realized P&L ($)", 0.0) < 0.0))
+            pf_all = f"{gross_p_all / gross_l_all:.2f}" if gross_l_all > 0 else f"{gross_p_all:.2f}" if gross_p_all > 0 else "N/A"
+            all_color = "32" if total_realized_all >= 0 else "31"
+            print(f"- **Total Combined Realized P&L**: {format_color(f'${total_realized_all:+,.2f}', all_color, bold=True)} | Win Rate {win_rate_all:.1f}% | Combined PF: {pf_all}")
         
     print("\n### 📏 Sizing Constraints Checklist")
     # Sizing constraints check
@@ -1878,7 +2000,7 @@ def cmd_close_pos(args):
         print(f"Error: Option position with ID or Ticker {args.option_id} not found in portfolio.", file=sys.stderr)
         sys.exit(1)
         
-    closed = options.setdefault("closed_positions", [])
+    closed = options.setdefault("closed_options", [])
     for opt_id in matches:
         details = positions.pop(opt_id)
         purchase_premium = float(details.get("Purchase Premium", 0.0))
@@ -1898,7 +2020,7 @@ def cmd_close_pos(args):
         
     options["options_positions"] = positions
     save_json(OPTIONS_FILE, options)
-    print(f"Archived {len(matches)} position(s) to closed_positions in {OPTIONS_FILE}.")
+    print(f"Archived {len(matches)} position(s) to closed_options in {OPTIONS_FILE}.")
 
 
 def slugify(text):

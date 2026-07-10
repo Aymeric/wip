@@ -1,0 +1,160 @@
+{
+  "data": {
+    "instruments": [
+      {
+        "id": "put_ORCL_120_0",
+        "strike_price": "120.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "ORCL"
+      },
+      {
+        "id": "call_ORCL_120_0",
+        "strike_price": "120.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "ORCL"
+      },
+      {
+        "id": "put_ORCL_125_0",
+        "strike_price": "125.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "ORCL"
+      },
+      {
+        "id": "call_ORCL_125_0",
+        "strike_price": "125.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "ORCL"
+      },
+      {
+        "id": "put_ORCL_130_0",
+        "strike_price": "130.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "ORCL"
+      },
+      {
+        "id": "call_ORCL_130_0",
+        "strike_price": "130.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "ORCL"
+      },
+      {
+        "id": "put_ORCL_135_0",
+        "strike_price": "135.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "ORCL"
+      },
+      {
+        "id": "call_ORCL_135_0",
+        "strike_price": "135.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "ORCL"
+      },
+      {
+        "id": "put_ORCL_140_0",
+        "strike_price": "140.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "ORCL"
+      },
+      {
+        "id": "call_ORCL_140_0",
+        "strike_price": "140.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "ORCL"
+      },
+      {
+        "id": "put_ORCL_145_0",
+        "strike_price": "145.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "ORCL"
+      },
+      {
+        "id": "call_ORCL_145_0",
+        "strike_price": "145.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "ORCL"
+      },
+      {
+        "id": "put_ORCL_150_0",
+        "strike_price": "150.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "ORCL"
+      },
+      {
+        "id": "call_ORCL_150_0",
+        "strike_price": "150.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "ORCL"
+      },
+      {
+        "id": "put_ORCL_155_0",
+        "strike_price": "155.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "ORCL"
+      },
+      {
+        "id": "call_ORCL_155_0",
+        "strike_price": "155.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "ORCL"
+      },
+      {
+        "id": "put_ORCL_160_0",
+        "strike_price": "160.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "ORCL"
+      },
+      {
+        "id": "call_ORCL_160_0",
+        "strike_price": "160.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "ORCL"
+      },
+      {
+        "id": "put_ORCL_165_0",
+        "strike_price": "165.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "ORCL"
+      },
+      {
+        "id": "call_ORCL_165_0",
+        "strike_price": "165.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "ORCL"
+      },
+      {
+        "id": "put_ORCL_170_0",
+        "strike_price": "170.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "ORCL"
+      },
+      {
+        "id": "call_ORCL_170_0",
+        "strike_price": "170.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "ORCL"
+      }
+    ]
+  }
+}

@@ -1,0 +1,117 @@
+{
+  "data": {
+    "results": [
+      {
+        "quote": {
+          "instrument_id": "67c51ad2-f526-462e-8c15-c85a68866a9f",
+          "ask_price": "7.700000",
+          "ask_size": 726,
+          "bid_price": "5.900000",
+          "bid_size": 656,
+          "break_even_price": "20.800000",
+          "adjusted_mark_price": "6.800000",
+          "mark_price": "6.800000",
+          "high_fill_rate_buy_price": "7.391000",
+          "low_fill_rate_buy_price": "6.565000",
+          "high_fill_rate_sell_price": "6.208000",
+          "low_fill_rate_sell_price": "7.034000",
+          "previous_close_price": "6.600000",
+          "previous_close_date": "2026-07-08",
+          "implied_volatility": "2.654865",
+          "delta": "0.749024",
+          "gamma": "0.017086",
+          "rho": "0.008959",
+          "theta": "-0.030436",
+          "vega": "0.022354",
+          "open_interest": 1147,
+          "volume": 0,
+          "chance_of_profit_long": "0.159754",
+          "chance_of_profit_short": "0.840246",
+          "updated_at": "2026-07-09T19:59:59.852358528Z"
+        },
+        "close": {
+          "instrument_id": "67c51ad2-f526-462e-8c15-c85a68866a9f",
+          "symbol": "SLS",
+          "date": "2026-07-08",
+          "price": "6.6",
+          "interpolated": false,
+          "source": "ddb-market-snapshot"
+        }
+      },
+      {
+        "quote": {
+          "instrument_id": "79cd3800-e848-4d58-8997-308576acad72",
+          "ask_price": "5.350000",
+          "ask_size": 621,
+          "bid_price": "4.850000",
+          "bid_size": 623,
+          "break_even_price": "45.100000",
+          "adjusted_mark_price": "5.100000",
+          "mark_price": "5.100000",
+          "high_fill_rate_buy_price": "5.284000",
+          "low_fill_rate_buy_price": "5.080000",
+          "high_fill_rate_sell_price": "4.915000",
+          "low_fill_rate_sell_price": "5.119000",
+          "previous_close_price": "5.250000",
+          "previous_close_date": "2026-07-08",
+          "implied_volatility": "0.383630",
+          "delta": "0.686796",
+          "gamma": "0.041554",
+          "rho": "0.065580",
+          "theta": "-0.017868",
+          "vega": "0.078774",
+          "open_interest": 1312,
+          "volume": 4,
+          "chance_of_profit_long": "0.376607",
+          "chance_of_profit_short": "0.623393",
+          "updated_at": "2026-07-09T19:59:59.856421908Z"
+        },
+        "close": {
+          "instrument_id": "79cd3800-e848-4d58-8997-308576acad72",
+          "symbol": "NKE",
+          "date": "2026-07-08",
+          "price": "5.25",
+          "interpolated": false,
+          "source": "ddb-market-snapshot"
+        }
+      },
+      {
+        "quote": {
+          "instrument_id": "fe2cebde-e0e6-4524-9d7e-cf07d8801ccf",
+          "ask_price": "1.870000",
+          "ask_size": 85,
+          "bid_price": "1.500000",
+          "bid_size": 638,
+          "break_even_price": "146.690000",
+          "adjusted_mark_price": "1.690000",
+          "mark_price": "1.685000",
+          "high_fill_rate_buy_price": "1.799000",
+          "low_fill_rate_buy_price": "1.624000",
+          "high_fill_rate_sell_price": "1.570000",
+          "low_fill_rate_sell_price": "1.745000",
+          "previous_close_price": "1.620000",
+          "previous_close_date": "2026-07-08",
+          "implied_volatility": "0.504926",
+          "delta": "0.146281",
+          "gamma": "0.009287",
+          "rho": "0.028191",
+          "theta": "-0.041589",
+          "vega": "0.112106",
+          "open_interest": 9287,
+          "volume": 222,
+          "chance_of_profit_long": "0.092289",
+          "chance_of_profit_short": "0.907711",
+          "updated_at": "2026-07-09T19:59:59.993636938Z"
+        },
+        "close": {
+          "instrument_id": "fe2cebde-e0e6-4524-9d7e-cf07d8801ccf",
+          "symbol": "BABA",
+          "date": "2026-07-08",
+          "price": "1.62",
+          "interpolated": false,
+          "source": "ddb-market-snapshot"
+        }
+      }
+    ]
+  }
+}

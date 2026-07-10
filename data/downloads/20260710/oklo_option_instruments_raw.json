@@ -1,0 +1,160 @@
+{
+  "data": {
+    "instruments": [
+      {
+        "id": "put_OKLO_37_5",
+        "strike_price": "37.5",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "OKLO"
+      },
+      {
+        "id": "call_OKLO_37_5",
+        "strike_price": "37.5",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "OKLO"
+      },
+      {
+        "id": "put_OKLO_40_0",
+        "strike_price": "40.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "OKLO"
+      },
+      {
+        "id": "call_OKLO_40_0",
+        "strike_price": "40.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "OKLO"
+      },
+      {
+        "id": "put_OKLO_42_5",
+        "strike_price": "42.5",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "OKLO"
+      },
+      {
+        "id": "call_OKLO_42_5",
+        "strike_price": "42.5",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "OKLO"
+      },
+      {
+        "id": "put_OKLO_45_0",
+        "strike_price": "45.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "OKLO"
+      },
+      {
+        "id": "call_OKLO_45_0",
+        "strike_price": "45.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "OKLO"
+      },
+      {
+        "id": "put_OKLO_47_5",
+        "strike_price": "47.5",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "OKLO"
+      },
+      {
+        "id": "call_OKLO_47_5",
+        "strike_price": "47.5",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "OKLO"
+      },
+      {
+        "id": "put_OKLO_50_0",
+        "strike_price": "50.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "OKLO"
+      },
+      {
+        "id": "call_OKLO_50_0",
+        "strike_price": "50.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "OKLO"
+      },
+      {
+        "id": "put_OKLO_52_5",
+        "strike_price": "52.5",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "OKLO"
+      },
+      {
+        "id": "call_OKLO_52_5",
+        "strike_price": "52.5",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "OKLO"
+      },
+      {
+        "id": "put_OKLO_55_0",
+        "strike_price": "55.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "OKLO"
+      },
+      {
+        "id": "call_OKLO_55_0",
+        "strike_price": "55.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "OKLO"
+      },
+      {
+        "id": "put_OKLO_57_5",
+        "strike_price": "57.5",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "OKLO"
+      },
+      {
+        "id": "call_OKLO_57_5",
+        "strike_price": "57.5",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "OKLO"
+      },
+      {
+        "id": "put_OKLO_60_0",
+        "strike_price": "60.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "OKLO"
+      },
+      {
+        "id": "call_OKLO_60_0",
+        "strike_price": "60.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "OKLO"
+      },
+      {
+        "id": "put_OKLO_62_5",
+        "strike_price": "62.5",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "OKLO"
+      },
+      {
+        "id": "call_OKLO_62_5",
+        "strike_price": "62.5",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "OKLO"
+      }
+    ]
+  }
+}

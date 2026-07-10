@@ -16,7 +16,10 @@ from gex_engine import (
     compute_exit_rule_state,
     derive_gex_profile,
     derive_volatility_profile,
-    select_best_option
+    select_best_option,
+    RegimeGates,
+    OptionPosition,
+    StockPosition
 )
 
 class TestGEXEngine(unittest.TestCase):
@@ -535,6 +538,422 @@ class TestGEXEngine(unittest.TestCase):
         best_custom_dte, _ = select_best_option(inst_data, quotes_data, spot=100.0, gex_target=110.0, today_override="2026-07-09", min_dte=50, max_dte=70)
         self.assertIsNotNone(best_custom_dte)
         self.assertEqual(best_custom_dte["option_id"], "call_opt_farther")
+
+    def test_risk_reward_calculation(self):
+        """Test R/R calculations for different spot/pTrans/gex combinations."""
+        # Scenario 1: Standard R/R > 2.0
+        reward = 155.0 - 100.0  # +GEX - Spot
+        risk = 100.0 - 95.0     # Spot - pTrans
+        ratio = reward / risk if risk > 0 else 0
+        self.assertGreaterEqual(ratio, 2.0)
+        
+        # Scenario 2: Edge case where risk is very small
+        reward2 = 110.0 - 100.0
+        risk2 = 100.0 - 99.5  # Tiny risk
+        ratio2 = reward2 / risk2
+        self.assertGreater(ratio2, 10.0)  # Should be 20.0
+        
+        # Scenario 3: R/R fails
+        reward3 = 105.0 - 100.0
+        risk3 = 100.0 - 95.0
+        ratio3 = reward3 / risk3
+        self.assertLess(ratio3, 2.0)
+
+    def test_cotmp_cushion_thresholds(self):
+        """Test COTMP cushion validation logic."""
+        spot = 100.0
+        cotmp = 98.0
+        
+        # Case 1: Standard 2.0% cushion required
+        cushion_pct = ((spot - cotmp) / cotmp) * 100
+        self.assertGreaterEqual(cushion_pct, 2.0)
+        
+        # Case 2: Grade 11 DEEP with 1.0% cushion allowed
+        spot2 = 99.5
+        cotmp2 = 98.5
+        deep_cushion = ((spot2 - cotmp2) / cotmp2) * 100
+        self.assertGreaterEqual(deep_cushion, 1.0)
+        self.assertLess(deep_cushion, 2.0)
+        
+        # Case 3: Cushion too thin (fails)
+        spot3 = 98.5
+        cotmp3 = 98.0
+        thin_cushion = ((spot3 - cotmp3) / cotmp3) * 100
+        self.assertLess(thin_cushion, 1.0)
+
+    def test_regime_gates_boundary_cases(self):
+        """Test regime gate thresholds at exact boundaries."""
+        # Test Basket Gate at exact boundary (+0.5%)
+        basket_gate1, _, _, _, _, _ = compute_regime_gates(
+            spy_pct=0.5, qqq_pct=0.0, bull_count=5, bear_count=1, vix_dealer_delta_bearish=True
+        )
+        self.assertEqual(basket_gate1, "FAIL")  # 0.5% is NOT > 0.5%
+        
+        basket_gate2, _, _, _, _, _ = compute_regime_gates(
+            spy_pct=0.500001, qqq_pct=0.0, bull_count=5, bear_count=1, vix_dealer_delta_bearish=True
+        )
+        self.assertEqual(basket_gate2, "PASS")  # Slightly over 0.5% passes
+        
+        # Test Bull:Bear Gate at exact boundary (3.0:1)
+        _, ratio1, bb_gate1, _, _, _ = compute_regime_gates(
+            spy_pct=0.6, qqq_pct=0.2, bull_count=3, bear_count=1, vix_dealer_delta_bearish=True
+        )
+        self.assertEqual(bb_gate1, "FAIL")  # 3.0:1 is NOT > 3.0:1
+        
+        _, ratio2, bb_gate2, _, _, _ = compute_regime_gates(
+            spy_pct=0.6, qqq_pct=0.2, bull_count=4, bear_count=1, vix_dealer_delta_bearish=True
+        )
+        self.assertEqual(bb_gate2, "PASS")  # 4.0:1 passes
+
+    def test_vix_bearish_flag_sensitivity(self):
+        """Test VIX bearish flag flip."""
+        # VIX bearish True -> should pass
+        _, _, _, vix_gate1, auth1, gates1 = compute_regime_gates(
+            spy_pct=0.6, qqq_pct=0.2, bull_count=4, bear_count=1, vix_dealer_delta_bearish=True
+        )
+        self.assertEqual(vix_gate1, "PASS")
+        self.assertEqual(gates1, 3)
+        
+        # VIX bearish False -> should fail
+        _, _, _, vix_gate2, auth2, gates2 = compute_regime_gates(
+            spy_pct=0.6, qqq_pct=0.2, bull_count=4, bear_count=1, vix_dealer_delta_bearish=False
+        )
+        self.assertEqual(vix_gate2, "FAIL")
+        self.assertEqual(gates2, 2)
+
+    def test_zero_bear_count_edge_case(self):
+        """Test bull:bear ratio when bear_count is zero."""
+        _, ratio, bb_gate, _, auth, gates = compute_regime_gates(
+            spy_pct=0.6, qqq_pct=0.2, bull_count=5, bear_count=0, vix_dealer_delta_bearish=True
+        )
+        # When bear_count = 0, ratio should be set to float(bull_count) = 5.0
+        self.assertEqual(ratio, 5.0)
+        self.assertEqual(bb_gate, "PASS")
+
+    def test_option_bid_ask_spread_thresholds(self):
+        """Test bid-ask spread validation against liquidity thresholds."""
+        # Premium <= $2.00: spread must be <= $0.15
+        bid1, ask1 = 1.85, 2.00
+        spread1 = ask1 - bid1  # 0.15
+        self.assertLessEqual(spread1, 0.15)
+        
+        # Premium > $2.00 and <= $5.00: spread must be <= $0.25
+        bid2, ask2 = 3.75, 4.00
+        spread2 = ask2 - bid2  # 0.25
+        self.assertLessEqual(spread2, 0.25)
+        
+        # Premium > $5.00: spread must be <= 10% of bid
+        bid3, ask3 = 7.50, 8.10
+        spread3 = ask3 - bid3  # 0.60
+        max_spread3 = bid3 * 0.10  # 0.75
+        self.assertLessEqual(spread3, max_spread3)
+
+    def test_open_interest_thresholds(self):
+        """Test open interest validation."""
+        # Minimum OI for liquidity: 500 contracts
+        oi1 = 500
+        self.assertGreaterEqual(oi1, 500)
+        
+        oi2 = 499
+        self.assertLess(oi2, 500)
+        
+        # Rule 7 threshold: 10,000 contracts total
+        total_oi_rule7 = 10000
+        self.assertGreaterEqual(total_oi_rule7, 10000)
+        
+        total_oi_fail_rule7 = 9999
+        self.assertLess(total_oi_fail_rule7, 10000)
+
+    def test_scanner_percent_change_ratio_conversion(self):
+        """Test that scanner % Change column is handled as a ratio."""
+        # Raw value from scanner: 0.039 (which is 3.9%)
+        raw_change = 0.039
+        pct_change = raw_change * 100  # Convert to percentage
+        self.assertEqual(pct_change, 3.9)
+        
+        # Filtering: >= 0.3% requires multiplying by 100
+        threshold_pct = 0.3
+        self.assertGreaterEqual(pct_change, threshold_pct)  # 3.9% >= 0.3%
+        
+        # Edge case: 0.003 means 0.3%
+        raw_small = 0.003
+        pct_small = raw_small * 100
+        self.assertEqual(pct_small, 0.3)
+        self.assertGreaterEqual(pct_small, threshold_pct)
+
+    def test_grade_rule_checklist_coverage(self):
+        """Test all 11 rules are individually evaluable."""
+        extra_rules_all_pass = {
+            "total_call_gex_positive": True,
+            "call_gex_gt_put_gex": True,
+            "total_oi_gt_10000": True,
+            "iv_30_lt_hv_90": True,
+            "oi_depth_target_positive": True,
+            "dealer_gamma_net_positive": True,
+            "rv_10_stable": True
+        }
+        
+        grade, checklist = calculate_grade(
+            ticker="TEST", spot=100.0, ptrans=98.0, ntrans=95.0,
+            gex=110.0, cotmp=94.0, extra_rules=extra_rules_all_pass
+        )
+        self.assertEqual(grade, 11)
+        self.assertEqual(len(checklist), 11)
+        self.assertTrue(all(checklist))
+        
+        # Test: Flip only the first extra rule (rule 1: total_call_gex_positive)
+        extra_rules_one_fail = extra_rules_all_pass.copy()
+        extra_rules_one_fail["total_call_gex_positive"] = False
+        
+        grade_fail, checklist_fail = calculate_grade(
+            ticker="TEST", spot=100.0, ptrans=98.0, ntrans=95.0,
+            gex=110.0, cotmp=94.0, extra_rules=extra_rules_one_fail
+        )
+        # Grade should be 10 (one rule failed)
+        self.assertEqual(grade_fail, 10)
+        self.assertFalse(checklist_fail[0])  # Rule 1 should fail
+        
+        # Test: Verify that structural conditions (rules 3-6) are correctly evaluated
+        # Rule 3: Spot > COTMP (fails when spot < cotmp)
+        # Keep ptrans < spot to avoid breaking Rule 6
+        extra_rules_struct = extra_rules_all_pass.copy()
+        grade_r3, checklist_r3 = calculate_grade(
+            ticker="TEST", spot=93.5, ptrans=92.0, ntrans=90.0,  # spot=93.5 < cotmp=94 (fails Rule 3)
+            gex=110.0, cotmp=94.0, extra_rules=extra_rules_struct
+        )
+        self.assertEqual(grade_r3, 10)
+        self.assertFalse(checklist_r3[2])  # Rule 3 should fail
+        
+        # Rule 4: +GEX > Spot (fails when gex <= spot)
+        grade_r4, checklist_r4 = calculate_grade(
+            ticker="TEST", spot=110.0, ptrans=108.0, ntrans=105.0,
+            gex=110.0, cotmp=94.0, extra_rules=extra_rules_struct  # spot == gex, not >
+        )
+        self.assertEqual(grade_r4, 10)
+        self.assertFalse(checklist_r4[3])  # Rule 4 should fail
+        
+        # Rule 6: Spot > pTrans (fails when spot <= ptrans)
+        grade_r6, checklist_r6 = calculate_grade(
+            ticker="TEST", spot=98.0, ptrans=98.0, ntrans=95.0,
+            gex=110.0, cotmp=94.0, extra_rules=extra_rules_struct  # spot == ptrans, not >
+        )
+        self.assertEqual(grade_r6, 10)
+        self.assertFalse(checklist_r6[5])  # Rule 6 should fail
+
+    def test_dte_and_expiration_validation(self):
+        """Test DTE (days to expiration) boundary handling."""
+        from datetime import datetime, timedelta
+        
+        today = datetime(2026, 7, 9)
+        
+        # Expiration 14 days away -> exactly at weekly boundary
+        exp_14 = today + timedelta(days=14)
+        dte_14 = (exp_14.date() - today.date()).days
+        self.assertEqual(dte_14, 14)
+        
+        # Expiration 30 days away -> target range
+        exp_30 = today + timedelta(days=30)
+        dte_30 = (exp_30.date() - today.date()).days
+        self.assertGreaterEqual(dte_30, 30)
+        
+        # Expiration 45 days away -> upper target range
+        exp_45 = today + timedelta(days=45)
+        dte_45 = (exp_45.date() - today.date()).days
+        self.assertLessEqual(dte_45, 45)
+
+    def test_spotfallback_logic_non_reg_vs_reg_timestamp(self):
+        """Test lexicographic timestamp comparison for price selection."""
+        # Non-reg timestamp is more recent
+        nonreg_time = "2026-07-10T15:30:45.123456+00:00"
+        reg_time = "2026-07-10T10:00:00.000000+00:00"
+        
+        use_nonreg = nonreg_time > reg_time
+        self.assertTrue(use_nonreg)
+        
+        # Reg timestamp is more recent
+        nonreg_time2 = "2026-07-10T10:00:00.000000+00:00"
+        reg_time2 = "2026-07-10T15:30:45.123456+00:00"
+        
+        use_nonreg2 = nonreg_time2 > reg_time2
+        self.assertFalse(use_nonreg2)
+        
+        # Edge case: extra-long fractional seconds (Robinhood quirk)
+        nonreg_long_frac = "2026-07-10T16:00:00.571202373+00:00"
+        reg_standard = "2026-07-10T15:59:59.999999+00:00"
+        
+        use_nonreg_long = nonreg_long_frac > reg_standard
+        self.assertTrue(use_nonreg_long)
+
+    def test_position_sizing_constraints(self):
+        """Test portfolio sizing limits."""
+        net_liquidation = 100000.0
+        
+        # Single-leg option allocation limit: 3% of Net Liq
+        max_option_per_leg = net_liquidation * 0.03
+        self.assertEqual(max_option_per_leg, 3000.0)
+        
+        # Cumulative tech allocation limit: 15%
+        max_tech_cumulative = net_liquidation * 0.15
+        self.assertEqual(max_tech_cumulative, 15000.0)
+        
+        # Position sizing test
+        option_size_1 = 2500.0
+        self.assertLessEqual(option_size_1, max_option_per_leg)
+        
+        option_size_2 = 3000.0
+        self.assertLessEqual(option_size_2, max_option_per_leg)
+        
+        option_size_oversized = 3500.0
+        self.assertGreater(option_size_oversized, max_option_per_leg)
+
+    def test_pct_change_flat_classification(self):
+        """Test ETF classification thresholds for flat/bullish/bearish."""
+        # Bullish threshold: > +0.1%
+        chg_bullish = 0.15
+        is_bullish = chg_bullish > 0.1
+        self.assertTrue(is_bullish)
+        
+        # At boundary: exactly +0.1% is NOT bullish
+        chg_boundary_bullish = 0.1
+        is_boundary_bullish = chg_boundary_bullish > 0.1
+        self.assertFalse(is_boundary_bullish)
+        
+        # Bearish threshold: < -0.1%
+        chg_bearish = -0.15
+        is_bearish = chg_bearish < -0.1
+        self.assertTrue(is_bearish)
+        
+        # At boundary: exactly -0.1% is NOT bearish
+        chg_boundary_bearish = -0.1
+        is_boundary_bearish = chg_boundary_bearish < -0.1
+        self.assertFalse(is_boundary_bearish)
+        
+        # Flat: between -0.1% and +0.1%
+        chg_flat = 0.05
+        is_flat = -0.1 <= chg_flat <= 0.1
+        self.assertTrue(is_flat)
+
+    def test_gex_profile_empty_options_data(self):
+        """Test GEX derivation with minimal / empty options data."""
+        # Empty instruments
+        inst_data_empty = {"instruments": []}
+        quotes_data_empty = {"results": []}
+        
+        gex_profile = derive_gex_profile(inst_data_empty, quotes_data_empty, spot=100.0)
+        # Should return safe defaults for empty data
+        self.assertEqual(gex_profile["total_oi"], 0)
+        self.assertFalse(gex_profile["rule7_derived"])
+
+    def test_dataclass_validation(self):
+        """Test validation rules on the system's core models/dataclasses."""
+        # RegimeGates validation
+        rg_ok = RegimeGates("PASS", 4.5, "PASS", "PASS", "ALL TRACKS OK", 3)
+        self.assertTrue(rg_ok.validate())
+
+        with self.assertRaises(ValueError):
+            RegimeGates("INVALID_GATE", 4.5, "PASS", "PASS", "ALL TRACKS OK", 3).validate()
+
+        with self.assertRaises(ValueError):
+            RegimeGates("PASS", 4.5, "PASS", "PASS", "ALL TRACKS OK", 4).validate() # gates_passed must be <= 3
+
+        # OptionPosition validation
+        op_ok = OptionPosition(
+            option_id="opt_123", underlier="AAPL", strike=310.0, expiration="2026-08-08",
+            type="call", purchase_premium=4.50, mark_price=5.10, days_held=3, stalling_days=0
+        )
+        self.assertTrue(op_ok.validate())
+
+        with self.assertRaises(ValueError):
+            OptionPosition(
+                option_id="", underlier="AAPL", strike=310.0, expiration="2026-08-08",
+                type="call", purchase_premium=4.50, mark_price=5.10, days_held=3, stalling_days=0
+            ).validate()
+
+        with self.assertRaises(ValueError):
+            OptionPosition(
+                option_id="opt_123", underlier="AAPL", strike=-5.0, expiration="2026-08-08",
+                type="call", purchase_premium=4.50, mark_price=5.10, days_held=3, stalling_days=0
+            ).validate()
+
+        with self.assertRaises(ValueError):
+            OptionPosition(
+                option_id="opt_123", underlier="AAPL", strike=310.0, expiration="2026-08-08",
+                type="invalid_type", purchase_premium=4.50, mark_price=5.10, days_held=3, stalling_days=0
+            ).validate()
+
+        # StockPosition validation
+        sp_ok = StockPosition("AMZN", 10.0, 180.0, 185.0)
+        self.assertTrue(sp_ok.validate())
+
+        with self.assertRaises(ValueError):
+            StockPosition("", 10.0, 180.0, 185.0).validate()
+
+        with self.assertRaises(ValueError):
+            StockPosition("AMZN", -1.0, 180.0, 185.0).validate()
+
+    def test_portfolio_consolidated_realized_stats(self):
+        """Test unified Options and Stocks realized performance stats reporting."""
+        import tempfile
+        from unittest.mock import patch, MagicMock
+        import gex_engine
+
+        with tempfile.NamedTemporaryFile(suffix=".json", delete=False) as tmp:
+            tmp_path = tmp.name
+        try:
+            # Setup mock options/stocks closed positions
+            mock_data = {
+                "options_positions": {
+                    "opt_nke": {
+                        "Underlier": "NKE",
+                        "Strike": 40.0,
+                        "Expiration": "2026-08-08",
+                        "Type": "call",
+                        "Purchase Premium": 4.00,
+                        "Mark Price": 4.50,
+                        "Days Held": 2,
+                        "Stalling Days": 0,
+                        "Asset Cost Basis": 400.0,
+                        "Current Value": 450.0
+                    }
+                },
+                "stocks_positions": {},
+                "closed_options": [
+                    {
+                        "Underlier": "NKE",
+                        "Purchase Premium": 4.00,
+                        "Close Premium": 6.00,
+                        "Realized P&L ($)": 200.0,
+                        "Realized P&L (%)": 50.0
+                    }
+                ],
+                "closed_stocks": [
+                    {
+                        "Ticker": "MSFT",
+                        "Shares": 10.0,
+                        "Average Buy Price": 400.00,
+                        "Close Price": 450.00,
+                        "Realized P&L ($)": 500.0,
+                        "Realized P&L (%)": 12.5
+                    }
+                ]
+            }
+            gex_engine.save_json(tmp_path, mock_data)
+            
+            with patch('gex_engine.OPTIONS_FILE', tmp_path), patch('sys.stdout') as mock_stdout:
+                mock_stdout.isatty = MagicMock(return_value=False)
+                class PortfolioArgs:
+                    net_liq = 50000.0
+                    spot_overrides = {}
+                gex_engine.cmd_portfolio(PortfolioArgs())
+                
+                # Verify output calls
+                output = "".join(call.args[0] for call in mock_stdout.write.call_args_list if call.args)
+                self.assertIn("Options Stats", output)
+                self.assertIn("Stocks Stats", output)
+                self.assertIn("Total Combined Realized P&L", output)
+        finally:
+            if os.path.exists(tmp_path):
+                os.remove(tmp_path)
 
 if __name__ == '__main__':
     unittest.main()

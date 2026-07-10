@@ -1,0 +1,160 @@
+{
+  "data": {
+    "instruments": [
+      {
+        "id": "put_MNSO_7_0",
+        "strike_price": "7.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "MNSO"
+      },
+      {
+        "id": "call_MNSO_7_0",
+        "strike_price": "7.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "MNSO"
+      },
+      {
+        "id": "put_MNSO_8_0",
+        "strike_price": "8.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "MNSO"
+      },
+      {
+        "id": "call_MNSO_8_0",
+        "strike_price": "8.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "MNSO"
+      },
+      {
+        "id": "put_MNSO_9_0",
+        "strike_price": "9.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "MNSO"
+      },
+      {
+        "id": "call_MNSO_9_0",
+        "strike_price": "9.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "MNSO"
+      },
+      {
+        "id": "put_MNSO_10_0",
+        "strike_price": "10.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "MNSO"
+      },
+      {
+        "id": "call_MNSO_10_0",
+        "strike_price": "10.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "MNSO"
+      },
+      {
+        "id": "put_MNSO_11_0",
+        "strike_price": "11.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "MNSO"
+      },
+      {
+        "id": "call_MNSO_11_0",
+        "strike_price": "11.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "MNSO"
+      },
+      {
+        "id": "put_MNSO_12_0",
+        "strike_price": "12.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "MNSO"
+      },
+      {
+        "id": "call_MNSO_12_0",
+        "strike_price": "12.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "MNSO"
+      },
+      {
+        "id": "put_MNSO_13_0",
+        "strike_price": "13.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "MNSO"
+      },
+      {
+        "id": "call_MNSO_13_0",
+        "strike_price": "13.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "MNSO"
+      },
+      {
+        "id": "put_MNSO_14_0",
+        "strike_price": "14.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "MNSO"
+      },
+      {
+        "id": "call_MNSO_14_0",
+        "strike_price": "14.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "MNSO"
+      },
+      {
+        "id": "put_MNSO_15_0",
+        "strike_price": "15.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "MNSO"
+      },
+      {
+        "id": "call_MNSO_15_0",
+        "strike_price": "15.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "MNSO"
+      },
+      {
+        "id": "put_MNSO_16_0",
+        "strike_price": "16.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "MNSO"
+      },
+      {
+        "id": "call_MNSO_16_0",
+        "strike_price": "16.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "MNSO"
+      },
+      {
+        "id": "put_MNSO_17_0",
+        "strike_price": "17.0",
+        "type": "put",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "MNSO"
+      },
+      {
+        "id": "call_MNSO_17_0",
+        "strike_price": "17.0",
+        "type": "call",
+        "expiration_date": "2026-08-21",
+        "chain_symbol": "MNSO"
+      }
+    ]
+  }
+}
