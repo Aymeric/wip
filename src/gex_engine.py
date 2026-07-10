@@ -1753,8 +1753,10 @@ def cmd_portfolio(args):
     print(f"- **Total Unrealized P&L**: {format_color(f'${unrealized_pl_dlr:+,.2f}', pl_color, bold=True)} ({format_color(f'{unrealized_pl_pct:+.2f}%', pl_color, bold=True)})")
     print(f"- **Cash Buffer / Liquid Reserves**: ${cash_buffer:,.2f} ({cash_buffer_pct:.2f}% of Net Liq) | Status: {cash_buffer_status}")
     
-    closed_options = options.get("closed_options", [])
-    closed_stocks = options.get("closed_stocks", [])
+    closed_file = os.path.join(os.path.dirname(OPTIONS_FILE), "closed_positions.json")
+    closed_data = load_json(closed_file, {})
+    closed_options = closed_data.get("closed_options", options.get("closed_options", []))
+    closed_stocks = closed_data.get("closed_stocks", options.get("closed_stocks", []))
     if closed_options or closed_stocks:
         print("\n### 📊 Realized Performance Stats")
         
@@ -1957,7 +1959,17 @@ def cmd_close_stock_pos(args):
         print(f"Error: Stock position for {ticker} not found in portfolio.", file=sys.stderr)
         sys.exit(1)
         
-    closed = options.setdefault("closed_stocks", [])
+    closed_file = os.path.join(os.path.dirname(OPTIONS_FILE), "closed_positions.json")
+    closed_data = load_json(closed_file, {"closed_options": [], "closed_stocks": []})
+    closed = closed_data.setdefault("closed_stocks", [])
+    
+    # Extract any existing legacy closed_stocks from active_positions.json and merge
+    if "closed_stocks" in options:
+        legacy_closed = options.pop("closed_stocks", [])
+        for item in legacy_closed:
+            if item not in closed:
+                closed.append(item)
+                
     details = stocks.pop(ticker)
     
     shares = float(details.get("Shares", 0.0))
@@ -1981,7 +1993,8 @@ def cmd_close_stock_pos(args):
           
     options["stocks_positions"] = stocks
     save_json(OPTIONS_FILE, options)
-    print(f"Archived stock position for {ticker} to closed_stocks in {OPTIONS_FILE}.")
+    save_json(closed_file, closed_data)
+    print(f"Archived stock position for {ticker} to closed_stocks in {closed_file}.")
 
 
 def cmd_update_opt(args):
@@ -2035,7 +2048,17 @@ def cmd_close_pos(args):
         print(f"Error: Option position with ID or Ticker {args.option_id} not found in portfolio.", file=sys.stderr)
         sys.exit(1)
         
-    closed = options.setdefault("closed_options", [])
+    closed_file = os.path.join(os.path.dirname(OPTIONS_FILE), "closed_positions.json")
+    closed_data = load_json(closed_file, {"closed_options": [], "closed_stocks": []})
+    closed = closed_data.setdefault("closed_options", [])
+    
+    # Extract any existing legacy closed_options from active_positions.json and merge
+    if "closed_options" in options:
+        legacy_closed = options.pop("closed_options", [])
+        for item in legacy_closed:
+            if item not in closed:
+                closed.append(item)
+                
     for opt_id in matches:
         details = positions.pop(opt_id)
         purchase_premium = float(details.get("Purchase Premium", 0.0))
@@ -2055,7 +2078,175 @@ def cmd_close_pos(args):
         
     options["options_positions"] = positions
     save_json(OPTIONS_FILE, options)
-    print(f"Archived {len(matches)} position(s) to closed_options in {OPTIONS_FILE}.")
+    save_json(closed_file, closed_data)
+    print(f"Archived {len(matches)} position(s) to closed_options in {closed_file}.")
+
+
+def cmd_sync_pnl(args):
+    """Syncs P&L trade history from retrieved file to detect closed positions, and moves closed positions to closed_positions.json."""
+    pnl_file = args.pnl_file
+    if not pnl_file or not os.path.exists(pnl_file):
+        # Let's search inside data/downloads/ sequentially to locate the latest trade history
+        found = False
+        downloads_dir = "data/downloads"
+        if os.path.exists(downloads_dir):
+            for root, dirs, files in os.walk(downloads_dir):
+                for filee in files:
+                    if filee == "pnl_trade_history.json":
+                        pnl_file = os.path.join(root, filee)
+                        found = True
+                        break
+                if found:
+                    break
+        if not found:
+            # Fallback
+            pnl_file = "data/downloads/20260710/pnl_trade_history.json"
+            if not os.path.exists(pnl_file):
+                print(f"Error: P&L trade history file {args.pnl_file} not found and no local fallback found.", file=sys.stderr)
+                sys.exit(1)
+
+    print(f"Loading P&L trade history from: {pnl_file}")
+    pnl_data = load_json(pnl_file, {})
+    trades = pnl_data.get("data", {}).get("trades", [])
+    if not trades:
+        trades = pnl_data.get("trades", [])
+        
+    print(f"Found {len(trades)} trades in trade history.")
+
+    # Load active options and stocks
+    options = load_json(OPTIONS_FILE, {"options_positions": {}, "stocks_positions": {}})
+    positions = options.get("options_positions", {})
+    stocks = options.get("stocks_positions", {})
+
+    # Define the separate closed positions file path
+    closed_file = os.path.join(os.path.dirname(OPTIONS_FILE), "closed_positions.json")
+    closed_data = load_json(closed_file, {"closed_options": [], "closed_stocks": []})
+
+    # For safety/migration: if active_positions.json has existing closed items, migrate them!
+    migrated_opt = 0
+    migrated_stk = 0
+    if "closed_options" in options:
+        existing_closed_options = options.pop("closed_options")
+        for item in existing_closed_options:
+            if item not in closed_data["closed_options"]:
+                closed_data["closed_options"].append(item)
+                migrated_opt += 1
+    if "closed_stocks" in options:
+        existing_closed_stocks = options.pop("closed_stocks")
+        for item in existing_closed_stocks:
+            if item not in closed_data["closed_stocks"]:
+                closed_data["closed_stocks"].append(item)
+                migrated_stk += 1
+
+    if migrated_opt or migrated_stk:
+        print(f"Migrated {migrated_opt} options and {migrated_stk} stocks from {OPTIONS_FILE} to {closed_file}.")
+
+    newly_closed_stocks = 0
+    newly_closed_options = 0
+
+    # Sort trades chronologically to process them in order of occurrence
+    sorted_trades = []
+    for t in trades:
+        ts = t.get("timestamp", "")
+        sorted_trades.append((ts, t))
+    sorted_trades.sort(key=lambda x: x[0])
+
+    # 1. Detect Closed Stocks
+    stocks_to_remove = []
+    for ticker, details in stocks.items():
+        entry_date_str = details.get("Entry Date")
+        # Find matching close trade in trade history
+        for ts, t in sorted_trades:
+            trade_symbol = t.get("symbol", "").upper()
+            if trade_symbol == ticker:
+                # Check if trade timestamp is on or after the entry date
+                if entry_date_str:
+                    if ts < entry_date_str:
+                        continue
+                
+                # Match found! Use trade history to close the position
+                shares = float(details.get("Shares", 0.0))
+                avg_price = float(details.get("Average Buy Price", 0.0))
+                
+                try:
+                    close_price = float(t.get("price", avg_price))
+                    realized_dollar = float(t.get("realized_gain", 0.0))
+                except (ValueError, TypeError):
+                    close_price = avg_price
+                    realized_dollar = 0.0
+
+                cost_basis = shares * avg_price
+                realized_pct = (realized_dollar / cost_basis) * 100.0 if cost_basis > 0 else 0.0
+
+                details["Close Price"] = close_price
+                details["Close Date"] = ts[:10] if ts else datetime.today().strftime('%Y-%m-%d')
+                details["Realized P&L ($)"] = round(realized_dollar, 2)
+                details["Realized P&L (%)"] = round(realized_pct, 2)
+                details["Close Reason"] = "Detected closed via trade history sync"
+                
+                closed_data.setdefault("closed_stocks", []).append(details)
+                stocks_to_remove.append(ticker)
+                newly_closed_stocks += 1
+                
+                pl_color = "32" if realized_dollar >= 0 else "31"
+                print(f"Detected Closed Stock {format_color(ticker, '35', bold=True)}: "
+                      + format_color(f"Realized P&L {realized_pct:+.2f}% (${realized_dollar:+.2f})", pl_color, bold=True))
+                break
+
+    for ticker in stocks_to_remove:
+        stocks.pop(ticker)
+
+    # 2. Detect Closed Options
+    options_to_remove = []
+    for opt_id, details in positions.items():
+        underlier = details.get("Underlier", "").upper()
+        entry_date_str = details.get("Entry Date")
+        
+        for ts, t in sorted_trades:
+            trade_symbol = t.get("symbol", "").upper()
+            
+            if trade_symbol == underlier:
+                if entry_date_str and ts < entry_date_str:
+                    continue
+                
+                purchase_premium = float(details.get("Purchase Premium", 1.0))
+                try:
+                    close_premium = float(t.get("price", purchase_premium))
+                    realized_dollar = float(t.get("realized_gain", 0.0))
+                except (ValueError, TypeError):
+                    close_premium = purchase_premium
+                    realized_dollar = 0.0
+
+                realized_pct = ((close_premium - purchase_premium) / purchase_premium) * 100.0 if purchase_premium else 0.0
+                if realized_dollar and not realized_pct:
+                    realized_pct = (realized_dollar / (purchase_premium * 100.0)) * 100.0
+
+                details["Close Premium"] = close_premium
+                details["Close Date"] = ts[:10] if ts else datetime.today().strftime('%Y-%m-%d')
+                details["Realized P&L ($)"] = round(realized_dollar, 2)
+                details["Realized P&L (%)"] = round(realized_pct, 2)
+                details["Close Reason"] = "Detected closed via trade history sync"
+
+                closed_data.setdefault("closed_options", []).append(details)
+                options_to_remove.append(opt_id)
+                newly_closed_options += 1
+
+                pl_color = "32" if realized_dollar >= 0 else "31"
+                print(f"Detected Closed Option {format_color(underlier, '35', bold=True)} {details.get('Strike')} {details.get('Type')}: "
+                      + format_color(f"Realized P&L {realized_pct:+.2f}% (${realized_dollar:+.2f})", pl_color, bold=True))
+                break
+
+    for opt_id in options_to_remove:
+        positions.pop(opt_id)
+
+    # Save active and closed files
+    options["stocks_positions"] = stocks
+    options["options_positions"] = positions
+    save_json(OPTIONS_FILE, options)
+    save_json(closed_file, closed_data)
+
+    print(f"Sync complete. Newly closed: {newly_closed_stocks} stocks, {newly_closed_options} options.")
+    print(f"Closed positions saved to {closed_file}. Active positions saved to {OPTIONS_FILE}.")
 
 
 def slugify(text):
@@ -2645,6 +2836,10 @@ def main():
     p_up_sent.add_argument("--buzz", type=str, choices=["High", "Medium", "Low", "None", "Med"], required=True, help="Discussion volume / buzz")
     p_up_sent.add_argument("--narrative", type=str, required=True, help="Core narrative thesis / catalysts")
 
+    # sync-pnl subcommand
+    p_sync_pnl = subparsers.add_parser("sync-pnl", help="Sync trade history to detect closed positions and move them to closed_positions.json.")
+    p_sync_pnl.add_argument("--pnl-file", type=str, default="", help="Path to raw Robinhood P&L trade history JSON file")
+
     args = parser.parse_args()
     
     # Process spot overrides if they are provided
@@ -2685,6 +2880,8 @@ def main():
         cmd_sentiment(args)
     elif args.command == "update-sentiment":
         cmd_update_sentiment(args)
+    elif args.command == "sync-pnl":
+        cmd_sync_pnl(args)
 
 
 if __name__ == "__main__":

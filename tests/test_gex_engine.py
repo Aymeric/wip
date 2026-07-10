@@ -534,8 +534,11 @@ class TestGEXEngine(unittest.TestCase):
                 gex_engine.cmd_close_stock_pos(CloseArgs())
                 data = gex_engine.load_json(tmp_path, {})
                 self.assertNotIn("MSFT", data.get("stocks_positions", {}))
-                self.assertEqual(len(data.get("closed_stocks", [])), 1)
-                closed_item = data["closed_stocks"][0]
+                
+                closed_path = os.path.join(os.path.dirname(tmp_path), "closed_positions.json")
+                closed_data = gex_engine.load_json(closed_path, {})
+                self.assertEqual(len(closed_data.get("closed_stocks", [])), 1)
+                closed_item = closed_data["closed_stocks"][0]
                 self.assertEqual(closed_item["Ticker"], "MSFT")
                 self.assertEqual(closed_item["Close Price"], 450.00)
                 self.assertEqual(closed_item["Realized P&L ($)"], 1000.0) # (450 - 400) * 20 shares
@@ -543,6 +546,9 @@ class TestGEXEngine(unittest.TestCase):
         finally:
             if os.path.exists(tmp_path):
                 os.remove(tmp_path)
+            closed_path = os.path.join(os.path.dirname(tmp_path), "closed_positions.json")
+            if os.path.exists(closed_path):
+                os.remove(closed_path)
 
     def test_select_best_option(self):
         # Setup mock option files with different maturities and liquidity
@@ -1149,6 +1155,95 @@ class TestGEXEngine(unittest.TestCase):
             for path in (sent_path, analyses_path, options_path, cand_path):
                 if os.path.exists(path):
                     os.remove(path)
+
+    def test_sync_pnl(self):
+        """Test syncing from a mock P&L trade history file."""
+        import tempfile
+        from unittest.mock import patch
+        import gex_engine
+        
+        fd1, tmp_pnl = tempfile.mkstemp(suffix=".json")
+        fd2, tmp_options = tempfile.mkstemp(suffix=".json")
+        os.close(fd1)
+        os.close(fd2)
+        
+        try:
+            # Seed mock P&L history with one closed stock and one closed option trade
+            mock_pnl = {
+                "data": {
+                    "trades": [
+                        {
+                            "timestamp": "2026-07-10T15:30:11Z",
+                            "symbol": "AMZN",
+                            "side": "sell",
+                            "quantity": "50",
+                            "price": "245.44",
+                            "realized_gain": "1382.00"
+                        },
+                        {
+                            "timestamp": "2026-07-10T16:45:00Z",
+                            "symbol": "SLS",
+                            "side": "sell",
+                            "quantity": "1",
+                            "price": "6.80",
+                            "realized_gain": "-64.00"
+                        }
+                    ]
+                }
+            }
+            gex_engine.save_json(tmp_pnl, mock_pnl)
+            
+            # Seed active options & stocks
+            mock_active = {
+                "options_positions": {
+                    "sls_opt": {
+                        "Option ID": "67c51ad2-f526-462e-8c15-c85a68866a9f",
+                        "Underlier": "SLS",
+                        "Strike": "14.00",
+                        "Type": "call",
+                        "Purchase Premium": 7.44,
+                        "Entry Date": "2026-07-01"
+                    }
+                },
+                "stocks_positions": {
+                    "AMZN": {
+                        "Ticker": "AMZN",
+                        "Shares": 50.0,
+                        "Average Buy Price": 217.80,
+                        "Entry Date": "2026-07-09"
+                    }
+                }
+            }
+            gex_engine.save_json(tmp_options, mock_active)
+            
+            class SyncArgs:
+                pnl_file = tmp_pnl
+                
+            with patch('gex_engine.OPTIONS_FILE', tmp_options):
+                gex_engine.cmd_sync_pnl(SyncArgs())
+                
+                # Check option is closed and moved
+                active = gex_engine.load_json(tmp_options, {})
+                self.assertNotIn("AMZN", active.get("stocks_positions", {}))
+                self.assertNotIn("sls_opt", active.get("options_positions", {}))
+                
+                closed_path = os.path.join(os.path.dirname(tmp_options), "closed_positions.json")
+                closed = gex_engine.load_json(closed_path, {})
+                self.assertEqual(len(closed.get("closed_stocks", [])), 1)
+                self.assertEqual(len(closed.get("closed_options", [])), 1)
+                
+                self.assertEqual(closed["closed_stocks"][0]["Ticker"], "AMZN")
+                self.assertEqual(closed["closed_stocks"][0]["Realized P&L ($)"], 1382.0)
+                self.assertEqual(closed["closed_options"][0]["Underlier"], "SLS")
+                self.assertEqual(closed["closed_options"][0]["Realized P&L ($)"], -64.0)
+                
+        finally:
+            for path in (tmp_pnl, tmp_options):
+                if os.path.exists(path):
+                    os.remove(path)
+            closed_path = os.path.join(os.path.dirname(tmp_options), "closed_positions.json")
+            if os.path.exists(closed_path):
+                os.remove(closed_path)
 
 if __name__ == '__main__':
     unittest.main()

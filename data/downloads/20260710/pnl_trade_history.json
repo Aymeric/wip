@@ -1,0 +1,1610 @@
+{
+  "data": {
+    "account_number": "101241412",
+    "span": "all",
+    "trades": [
+      {
+        "timestamp": "2026-07-04T03:44:28Z",
+        "symbol": "",
+        "side": "",
+        "quantity": "45",
+        "price": "0",
+        "realized_gain": "-9.45"
+      },
+      {
+        "timestamp": "2026-07-04T00:57:47Z",
+        "symbol": "",
+        "side": "",
+        "quantity": "104",
+        "price": "0",
+        "realized_gain": "-9.36"
+      },
+      {
+        "timestamp": "2026-07-03T20:59:24Z",
+        "symbol": "",
+        "side": "",
+        "quantity": "19",
+        "price": "0",
+        "realized_gain": "-9.31"
+      },
+      {
+        "timestamp": "2026-07-02T14:51:50Z",
+        "symbol": "LITE",
+        "side": "",
+        "quantity": "1",
+        "price": "756.21",
+        "realized_gain": "-243.79"
+      },
+      {
+        "timestamp": "2026-06-24T13:03:31Z",
+        "symbol": "SGOV",
+        "side": "",
+        "quantity": "202.947557",
+        "price": "100.6100802681748960397685398",
+        "realized_gain": "12.99"
+      },
+      {
+        "timestamp": "2026-06-18T20:00:00Z",
+        "symbol": "IWM",
+        "side": "",
+        "quantity": "1",
+        "price": "0",
+        "realized_gain": "-510"
+      },
+      {
+        "timestamp": "2026-06-16T21:45:52Z",
+        "symbol": "",
+        "side": "",
+        "quantity": "28",
+        "price": "1",
+        "realized_gain": "8.96"
+      },
+      {
+        "timestamp": "2026-06-06T20:40:39Z",
+        "symbol": "",
+        "side": "",
+        "quantity": "91",
+        "price": "0",
+        "realized_gain": "-18.2"
+      },
+      {
+        "timestamp": "2026-06-01T17:28:38Z",
+        "symbol": "",
+        "side": "",
+        "quantity": "45",
+        "price": "0",
+        "realized_gain": "-4.05"
+      },
+      {
+        "timestamp": "2026-05-30T19:13:49Z",
+        "symbol": "",
+        "side": "",
+        "quantity": "20",
+        "price": "1",
+        "realized_gain": "10.4"
+      },
+      {
+        "timestamp": "2026-05-15T20:00:00Z",
+        "symbol": "META",
+        "side": "",
+        "quantity": "5",
+        "price": "0",
+        "realized_gain": "-375"
+      },
+      {
+        "timestamp": "2026-05-12T19:44:12Z",
+        "symbol": "RVI",
+        "side": "",
+        "quantity": "50",
+        "price": "53.18",
+        "realized_gain": "1409"
+      },
+      {
+        "timestamp": "2026-05-11T18:44:44Z",
+        "symbol": "LULU",
+        "side": "",
+        "quantity": "6",
+        "price": "127.5",
+        "realized_gain": "-195"
+      },
+      {
+        "timestamp": "2026-05-11T18:44:27Z",
+        "symbol": "GM",
+        "side": "",
+        "quantity": "10.024518",
+        "price": "76.03956619161140715194486159",
+        "realized_gain": "-89.54"
+      },
+      {
+        "timestamp": "2026-05-11T18:39:54Z",
+        "symbol": "XLI",
+        "side": "",
+        "quantity": "0.023701",
+        "price": "175.5200202523100291126956668",
+        "realized_gain": "0.43"
+      },
+      {
+        "timestamp": "2026-05-11T18:39:40Z",
+        "symbol": "XLP",
+        "side": "",
+        "quantity": "0.10461",
+        "price": "83.07045215562565720294426919",
+        "realized_gain": "0.49"
+      },
+      {
+        "timestamp": "2026-05-11T18:39:29Z",
+        "symbol": "XLF",
+        "side": "",
+        "quantity": "0.065435",
+        "price": "51.19584320317872698097348514",
+        "realized_gain": "-0.29"
+      },
+      {
+        "timestamp": "2026-05-11T18:39:15Z",
+        "symbol": "XLY",
+        "side": "",
+        "quantity": "0.019723",
+        "price": "119.6572529534046544643309841",
+        "realized_gain": "-0.05"
+      },
+      {
+        "timestamp": "2026-05-11T15:40:14Z",
+        "symbol": "TSLA",
+        "side": "",
+        "quantity": "1",
+        "price": "3200",
+        "realized_gain": "1200"
+      },
+      {
+        "timestamp": "2026-05-04T04:00:34Z",
+        "symbol": "SGOV",
+        "side": "",
+        "quantity": "50",
+        "price": "100.43",
+        "realized_gain": "-6.5"
+      },
+      {
+        "timestamp": "2026-04-06T15:39:41Z",
+        "symbol": "ET",
+        "side": "",
+        "quantity": "1.881863",
+        "price": "18.99713209728869742377633228",
+        "realized_gain": "2.04"
+      },
+      {
+        "timestamp": "2026-03-20T20:00:00Z",
+        "symbol": "UBER",
+        "side": "",
+        "quantity": "1",
+        "price": "0",
+        "realized_gain": "-350"
+      },
+      {
+        "timestamp": "2026-03-13T18:47:17Z",
+        "symbol": "GME",
+        "side": "",
+        "quantity": "40",
+        "price": "23.74",
+        "realized_gain": "-0.4"
+      },
+      {
+        "timestamp": "2026-03-13T17:47:04Z",
+        "symbol": "SOXS",
+        "side": "",
+        "quantity": "1",
+        "price": "46",
+        "realized_gain": "-154"
+      },
+      {
+        "timestamp": "2026-03-06T14:31:19Z",
+        "symbol": "META",
+        "side": "",
+        "quantity": "6",
+        "price": "639",
+        "realized_gain": "424.58"
+      },
+      {
+        "timestamp": "2026-03-05T17:50:37Z",
+        "symbol": "XLI",
+        "side": "",
+        "quantity": "7",
+        "price": "170.33",
+        "realized_gain": "144.2"
+      },
+      {
+        "timestamp": "2026-03-05T15:13:19Z",
+        "symbol": "XLP",
+        "side": "",
+        "quantity": "13",
+        "price": "85.64",
+        "realized_gain": "85.52"
+      },
+      {
+        "timestamp": "2026-02-26T15:20:26Z",
+        "symbol": "ARM",
+        "side": "",
+        "quantity": "40",
+        "price": "127.5",
+        "realized_gain": "651.5"
+      },
+      {
+        "timestamp": "2026-02-26T15:18:08Z",
+        "symbol": "CEG",
+        "side": "",
+        "quantity": "7",
+        "price": "310.18",
+        "realized_gain": "176.26"
+      },
+      {
+        "timestamp": "2026-02-26T14:57:04Z",
+        "symbol": "LRCX",
+        "side": "",
+        "quantity": "15",
+        "price": "237.53",
+        "realized_gain": "125.45"
+      },
+      {
+        "timestamp": "2026-02-26T14:31:17Z",
+        "symbol": "ET",
+        "side": "",
+        "quantity": "50",
+        "price": "18.34",
+        "realized_gain": "42"
+      },
+      {
+        "timestamp": "2026-02-20T21:00:00Z",
+        "symbol": "UBER",
+        "side": "",
+        "quantity": "1",
+        "price": "0",
+        "realized_gain": "-400"
+      },
+      {
+        "timestamp": "2026-02-20T21:00:00Z",
+        "symbol": "UBER",
+        "side": "",
+        "quantity": "1",
+        "price": "0",
+        "realized_gain": "-400"
+      },
+      {
+        "timestamp": "2026-02-20T21:00:00Z",
+        "symbol": "RIVN",
+        "side": "",
+        "quantity": "1",
+        "price": "0",
+        "realized_gain": "-250"
+      },
+      {
+        "timestamp": "2026-02-20T21:00:00Z",
+        "symbol": "FIG",
+        "side": "",
+        "quantity": "1",
+        "price": "0",
+        "realized_gain": "-350"
+      },
+      {
+        "timestamp": "2026-02-20T21:00:00Z",
+        "symbol": "DXCM",
+        "side": "",
+        "quantity": "1",
+        "price": "0",
+        "realized_gain": "-410"
+      },
+      {
+        "timestamp": "2026-02-12T16:05:49Z",
+        "symbol": "XLF",
+        "side": "",
+        "quantity": "19",
+        "price": "52.02",
+        "realized_gain": "-19.18"
+      },
+      {
+        "timestamp": "2026-02-05T17:30:09Z",
+        "symbol": "YMAG",
+        "side": "",
+        "quantity": "5.617454",
+        "price": "13.36548550286304080104616789",
+        "realized_gain": "-3.23"
+      },
+      {
+        "timestamp": "2026-02-05T15:11:47Z",
+        "symbol": "XLY",
+        "side": "",
+        "quantity": "10",
+        "price": "117.51",
+        "realized_gain": "33.75"
+      },
+      {
+        "timestamp": "2026-02-04T19:06:12Z",
+        "symbol": "SPY",
+        "side": "",
+        "quantity": "0.046491",
+        "price": "683.7882600933514013464971715",
+        "realized_gain": "-0.46"
+      },
+      {
+        "timestamp": "2026-02-04T16:49:14Z",
+        "symbol": "YMAG",
+        "side": "",
+        "quantity": "434",
+        "price": "13.48",
+        "realized_gain": "-707.31"
+      },
+      {
+        "timestamp": "2026-01-30T21:00:00Z",
+        "symbol": "BA",
+        "side": "",
+        "quantity": "1",
+        "price": "0",
+        "realized_gain": "-550"
+      },
+      {
+        "timestamp": "2026-01-30T18:21:40Z",
+        "symbol": "IWM",
+        "side": "",
+        "quantity": "10",
+        "price": "258.01",
+        "realized_gain": "-79.9"
+      },
+      {
+        "timestamp": "2026-01-27T17:46:09Z",
+        "symbol": "UNH",
+        "side": "",
+        "quantity": "0.039228",
+        "price": "281.686550423167125522585908",
+        "realized_gain": "-2.24"
+      },
+      {
+        "timestamp": "2026-01-27T14:30:20Z",
+        "symbol": "UNH",
+        "side": "",
+        "quantity": "4",
+        "price": "295.1825",
+        "realized_gain": "-193.05"
+      },
+      {
+        "timestamp": "2026-01-23T21:00:00Z",
+        "symbol": "NFLX",
+        "side": "",
+        "quantity": "1",
+        "price": "0",
+        "realized_gain": "-390"
+      },
+      {
+        "timestamp": "2026-01-22T17:37:24Z",
+        "symbol": "TGT",
+        "side": "",
+        "quantity": "0.190465",
+        "price": "105.4786968734413146772372877",
+        "realized_gain": "2.99"
+      },
+      {
+        "timestamp": "2026-01-21T17:58:15Z",
+        "symbol": "TGT",
+        "side": "",
+        "quantity": "15",
+        "price": "106.25",
+        "realized_gain": "229.25"
+      },
+      {
+        "timestamp": "2026-01-21T16:52:45Z",
+        "symbol": "AMZN",
+        "side": "",
+        "quantity": "10",
+        "price": "227.685",
+        "realized_gain": "26.85"
+      },
+      {
+        "timestamp": "2026-01-20T20:30:31Z",
+        "symbol": "CEG",
+        "side": "",
+        "quantity": "5",
+        "price": "293.19",
+        "realized_gain": "-34.05"
+      },
+      {
+        "timestamp": "2026-01-20T19:51:33Z",
+        "symbol": "AAPL",
+        "side": "",
+        "quantity": "10",
+        "price": "247.04",
+        "realized_gain": "-157.85"
+      },
+      {
+        "timestamp": "2026-01-20T19:27:11Z",
+        "symbol": "CRM",
+        "side": "",
+        "quantity": "7",
+        "price": "222.77",
+        "realized_gain": "-311.54"
+      },
+      {
+        "timestamp": "2026-01-19T03:18:32Z",
+        "symbol": "",
+        "side": "",
+        "quantity": "52",
+        "price": "0",
+        "realized_gain": "-18.72"
+      },
+      {
+        "timestamp": "2026-01-18T04:40:09Z",
+        "symbol": "",
+        "side": "",
+        "quantity": "157",
+        "price": "0",
+        "realized_gain": "-36.65"
+      },
+      {
+        "timestamp": "2026-01-13T16:49:40Z",
+        "symbol": "AMZN",
+        "side": "",
+        "quantity": "1",
+        "price": "2325",
+        "realized_gain": "1180"
+      },
+      {
+        "timestamp": "2026-01-13T04:26:01Z",
+        "symbol": "",
+        "side": "",
+        "quantity": "46",
+        "price": "0",
+        "realized_gain": "-18.86"
+      },
+      {
+        "timestamp": "2026-01-11T04:47:01Z",
+        "symbol": "",
+        "side": "",
+        "quantity": "100",
+        "price": "1",
+        "realized_gain": "91"
+      },
+      {
+        "timestamp": "2026-01-11T04:06:30Z",
+        "symbol": "",
+        "side": "",
+        "quantity": "267",
+        "price": "0.22",
+        "realized_gain": "-4.11"
+      },
+      {
+        "timestamp": "2026-01-09T04:45:48Z",
+        "symbol": "",
+        "side": "",
+        "quantity": "66",
+        "price": "0",
+        "realized_gain": "-18.48"
+      },
+      {
+        "timestamp": "2026-01-07T16:49:42Z",
+        "symbol": "JEPQ",
+        "side": "",
+        "quantity": "1.15914",
+        "price": "59.07828217471573752954776817",
+        "realized_gain": "0.5"
+      },
+      {
+        "timestamp": "2025-12-31T19:23:46Z",
+        "symbol": "UBER",
+        "side": "",
+        "quantity": "10",
+        "price": "81.887",
+        "realized_gain": "172.37"
+      },
+      {
+        "timestamp": "2025-12-31T19:23:26Z",
+        "symbol": "AAPL",
+        "side": "",
+        "quantity": "13.051577",
+        "price": "273.1600939871097569282240759",
+        "realized_gain": "1136.94"
+      },
+      {
+        "timestamp": "2025-12-31T19:23:16Z",
+        "symbol": "SPY",
+        "side": "",
+        "quantity": "16.177414",
+        "price": "685.3499576631963551158423713",
+        "realized_gain": "3752.75"
+      },
+      {
+        "timestamp": "2025-12-31T19:22:51Z",
+        "symbol": "AMZN",
+        "side": "",
+        "quantity": "37",
+        "price": "232.0435135135135135135135135",
+        "realized_gain": "3081.08"
+      },
+      {
+        "timestamp": "2025-12-31T19:19:20Z",
+        "symbol": "NVDA",
+        "side": "",
+        "quantity": "5.000771",
+        "price": "188.2209763254506155150875735",
+        "realized_gain": "328.65"
+      },
+      {
+        "timestamp": "2025-12-31T19:16:30Z",
+        "symbol": "JEPQ",
+        "side": "",
+        "quantity": "118",
+        "price": "58.42296610169491525423728814",
+        "realized_gain": "562.63"
+      },
+      {
+        "timestamp": "2025-12-31T19:07:14Z",
+        "symbol": "MSFT",
+        "side": "",
+        "quantity": "15.0329",
+        "price": "486.5448449733584338351216332",
+        "realized_gain": "2611.69"
+      },
+      {
+        "timestamp": "2025-12-31T19:00:54Z",
+        "symbol": "HOOD",
+        "side": "",
+        "quantity": "100",
+        "price": "114",
+        "realized_gain": "7804.98"
+      },
+      {
+        "timestamp": "2025-12-31T18:50:39Z",
+        "symbol": "AMD",
+        "side": "",
+        "quantity": "16",
+        "price": "216.895",
+        "realized_gain": "1256.18"
+      },
+      {
+        "timestamp": "2025-12-31T18:45:58Z",
+        "symbol": "GOOG",
+        "side": "",
+        "quantity": "35",
+        "price": "314.94",
+        "realized_gain": "6230.63"
+      },
+      {
+        "timestamp": "2025-12-29T05:21:41Z",
+        "symbol": "",
+        "side": "",
+        "quantity": "52",
+        "price": "0",
+        "realized_gain": "-18.72"
+      },
+      {
+        "timestamp": "2025-12-19T21:00:00Z",
+        "symbol": "NKE",
+        "side": "",
+        "quantity": "1",
+        "price": "0",
+        "realized_gain": "-400"
+      },
+      {
+        "timestamp": "2025-12-05T04:54:24Z",
+        "symbol": "",
+        "side": "",
+        "quantity": "51",
+        "price": "0",
+        "realized_gain": "-18.87"
+      },
+      {
+        "timestamp": "2025-11-28T14:30:00Z",
+        "symbol": "CHPY",
+        "side": "",
+        "quantity": "0.449166",
+        "price": "55.99266195571347786787067587",
+        "realized_gain": "1.69"
+      },
+      {
+        "timestamp": "2025-11-26T22:33:12Z",
+        "symbol": "CHPY",
+        "side": "",
+        "quantity": "15",
+        "price": "55.25",
+        "realized_gain": "125.57"
+      },
+      {
+        "timestamp": "2025-11-25T14:30:00Z",
+        "symbol": "GPTY",
+        "side": "",
+        "quantity": "18.634931",
+        "price": "43.42006954573644517385119376",
+        "realized_gain": "-40.93"
+      },
+      {
+        "timestamp": "2025-11-25T04:13:46Z",
+        "symbol": "",
+        "side": "",
+        "quantity": "50",
+        "price": "0",
+        "realized_gain": "-10"
+      },
+      {
+        "timestamp": "2025-11-23T21:27:46Z",
+        "symbol": "",
+        "side": "",
+        "quantity": "50",
+        "price": "1",
+        "realized_gain": "31"
+      },
+      {
+        "timestamp": "2025-11-21T21:00:00Z",
+        "symbol": "OMC",
+        "side": "",
+        "quantity": "1",
+        "price": "0",
+        "realized_gain": "-360"
+      },
+      {
+        "timestamp": "2025-11-21T04:47:41Z",
+        "symbol": "",
+        "side": "",
+        "quantity": "50",
+        "price": "1",
+        "realized_gain": "34"
+      },
+      {
+        "timestamp": "2025-11-18T04:27:08Z",
+        "symbol": "",
+        "side": "",
+        "quantity": "50",
+        "price": "0",
+        "realized_gain": "-18"
+      },
+      {
+        "timestamp": "2025-11-17T14:51:25Z",
+        "symbol": "ULTY",
+        "side": "",
+        "quantity": "18.034215",
+        "price": "4.204785181944431737117473647",
+        "realized_gain": "-0.04"
+      },
+      {
+        "timestamp": "2025-11-17T14:30:00Z",
+        "symbol": "ULTY",
+        "side": "",
+        "quantity": "0.937494",
+        "price": "4.181360094037935176118460491",
+        "realized_gain": "-0.27"
+      },
+      {
+        "timestamp": "2025-11-17T14:30:00Z",
+        "symbol": "LFGY",
+        "side": "",
+        "quantity": "26.9574",
+        "price": "28.21006476885753077077166196",
+        "realized_gain": "-49.37"
+      },
+      {
+        "timestamp": "2025-11-17T14:30:00Z",
+        "symbol": "YMAX",
+        "side": "",
+        "quantity": "0.065092",
+        "price": "10.75400970933448042770232901",
+        "realized_gain": "0"
+      },
+      {
+        "timestamp": "2025-11-17T04:25:33Z",
+        "symbol": "YMAX",
+        "side": "",
+        "quantity": "115",
+        "price": "10.89",
+        "realized_gain": "-153.06"
+      },
+      {
+        "timestamp": "2025-11-17T03:48:04Z",
+        "symbol": "ULTY",
+        "side": "",
+        "quantity": "1211",
+        "price": "4.18",
+        "realized_gain": "-996.95"
+      },
+      {
+        "timestamp": "2025-11-16T21:48:59Z",
+        "symbol": "",
+        "side": "",
+        "quantity": "30",
+        "price": "0",
+        "realized_gain": "-1.8"
+      },
+      {
+        "timestamp": "2025-11-16T21:22:09Z",
+        "symbol": "",
+        "side": "",
+        "quantity": "50",
+        "price": "1",
+        "realized_gain": "30.5"
+      },
+      {
+        "timestamp": "2025-11-14T04:22:37Z",
+        "symbol": "",
+        "side": "",
+        "quantity": "100",
+        "price": "0",
+        "realized_gain": "-9"
+      },
+      {
+        "timestamp": "2025-11-11T23:14:41Z",
+        "symbol": "F",
+        "side": "",
+        "quantity": "215.365148",
+        "price": "13.3000163981964249851605516",
+        "realized_gain": "157.99"
+      },
+      {
+        "timestamp": "2025-11-11T14:54:38Z",
+        "symbol": "F",
+        "side": "",
+        "quantity": "2",
+        "price": "565",
+        "realized_gain": "515"
+      },
+      {
+        "timestamp": "2025-11-11T14:52:30Z",
+        "symbol": "HOOD",
+        "side": "",
+        "quantity": "1",
+        "price": "-120",
+        "realized_gain": "105"
+      },
+      {
+        "timestamp": "2025-11-11T14:46:13Z",
+        "symbol": "F",
+        "side": "",
+        "quantity": "4",
+        "price": "565",
+        "realized_gain": "605"
+      },
+      {
+        "timestamp": "2025-11-11T14:30:00Z",
+        "symbol": "REMX",
+        "side": "",
+        "quantity": "10",
+        "price": "68.93",
+        "realized_gain": "3.5"
+      },
+      {
+        "timestamp": "2025-11-11T05:39:43Z",
+        "symbol": "EL",
+        "side": "",
+        "quantity": "9",
+        "price": "89.79",
+        "realized_gain": "186.57"
+      },
+      {
+        "timestamp": "2025-11-11T05:19:48Z",
+        "symbol": "EL",
+        "side": "",
+        "quantity": "1",
+        "price": "90",
+        "realized_gain": "20.94"
+      },
+      {
+        "timestamp": "2025-11-11T05:04:47Z",
+        "symbol": "FCX",
+        "side": "",
+        "quantity": "15",
+        "price": "40.8",
+        "realized_gain": "42"
+      },
+      {
+        "timestamp": "2025-11-11T04:38:36Z",
+        "symbol": "",
+        "side": "",
+        "quantity": "50",
+        "price": "1",
+        "realized_gain": "24"
+      },
+      {
+        "timestamp": "2025-11-10T16:55:14Z",
+        "symbol": "GOOG",
+        "side": "",
+        "quantity": "15",
+        "price": "286.27",
+        "realized_gain": "2146.39"
+      },
+      {
+        "timestamp": "2025-11-10T04:42:13Z",
+        "symbol": "",
+        "side": "",
+        "quantity": "100",
+        "price": "0",
+        "realized_gain": "-18"
+      },
+      {
+        "timestamp": "2025-11-07T04:36:44Z",
+        "symbol": "",
+        "side": "",
+        "quantity": "50",
+        "price": "0",
+        "realized_gain": "-12"
+      },
+      {
+        "timestamp": "2025-11-04T04:29:58Z",
+        "symbol": "",
+        "side": "",
+        "quantity": "100",
+        "price": "0",
+        "realized_gain": "-38"
+      },
+      {
+        "timestamp": "2025-11-03T14:32:57Z",
+        "symbol": "HOOD",
+        "side": "",
+        "quantity": "1",
+        "price": "-345",
+        "realized_gain": "55"
+      },
+      {
+        "timestamp": "2025-11-02T21:52:02Z",
+        "symbol": "",
+        "side": "",
+        "quantity": "50",
+        "price": "1",
+        "realized_gain": "20"
+      },
+      {
+        "timestamp": "2025-10-31T20:00:00Z",
+        "symbol": "V",
+        "side": "",
+        "quantity": "1",
+        "price": "0",
+        "realized_gain": "-315"
+      },
+      {
+        "timestamp": "2025-10-30T19:53:03Z",
+        "symbol": "HOOD",
+        "side": "",
+        "quantity": "1",
+        "price": "-207",
+        "realized_gain": "168"
+      },
+      {
+        "timestamp": "2025-10-29T18:26:49Z",
+        "symbol": "LULU",
+        "side": "",
+        "quantity": "10",
+        "price": "171.85",
+        "realized_gain": "-542.46"
+      },
+      {
+        "timestamp": "2025-10-29T18:08:29Z",
+        "symbol": "FCX",
+        "side": "",
+        "quantity": "1",
+        "price": "635",
+        "realized_gain": "370"
+      },
+      {
+        "timestamp": "2025-10-28T17:01:22Z",
+        "symbol": "UPS",
+        "side": "",
+        "quantity": "1",
+        "price": "625",
+        "realized_gain": "360"
+      },
+      {
+        "timestamp": "2025-10-28T03:18:43Z",
+        "symbol": "",
+        "side": "",
+        "quantity": "100",
+        "price": "0",
+        "realized_gain": "-18"
+      },
+      {
+        "timestamp": "2025-10-26T20:23:11Z",
+        "symbol": "",
+        "side": "",
+        "quantity": "100",
+        "price": "0",
+        "realized_gain": "-43"
+      },
+      {
+        "timestamp": "2025-10-24T04:28:40Z",
+        "symbol": "",
+        "side": "",
+        "quantity": "100",
+        "price": "0",
+        "realized_gain": "-33"
+      },
+      {
+        "timestamp": "2025-10-19T20:44:07Z",
+        "symbol": "",
+        "side": "",
+        "quantity": "200",
+        "price": "0",
+        "realized_gain": "-47"
+      },
+      {
+        "timestamp": "2025-10-14T03:32:25Z",
+        "symbol": "",
+        "side": "",
+        "quantity": "100",
+        "price": "1",
+        "realized_gain": "69"
+      },
+      {
+        "timestamp": "2025-10-13T19:55:40Z",
+        "symbol": "OPEN",
+        "side": "",
+        "quantity": "200",
+        "price": "7.2929",
+        "realized_gain": "678.58"
+      },
+      {
+        "timestamp": "2025-10-13T19:54:40Z",
+        "symbol": "IONQ",
+        "side": "",
+        "quantity": "5",
+        "price": "82.824",
+        "realized_gain": "193.37"
+      },
+      {
+        "timestamp": "2025-10-13T03:22:05Z",
+        "symbol": "",
+        "side": "",
+        "quantity": "300",
+        "price": "0",
+        "realized_gain": "-66"
+      },
+      {
+        "timestamp": "2025-10-13T01:38:29Z",
+        "symbol": "",
+        "side": "",
+        "quantity": "100",
+        "price": "0.63",
+        "realized_gain": "13"
+      },
+      {
+        "timestamp": "2025-10-13T01:07:11Z",
+        "symbol": "",
+        "side": "",
+        "quantity": "50",
+        "price": "0.48",
+        "realized_gain": "5"
+      },
+      {
+        "timestamp": "2025-10-13T00:49:26Z",
+        "symbol": "",
+        "side": "",
+        "quantity": "50",
+        "price": "0.63",
+        "realized_gain": "4.5"
+      },
+      {
+        "timestamp": "2025-10-12T03:00:31Z",
+        "symbol": "",
+        "side": "",
+        "quantity": "200",
+        "price": "0",
+        "realized_gain": "-73"
+      },
+      {
+        "timestamp": "2025-10-07T03:37:28Z",
+        "symbol": "",
+        "side": "",
+        "quantity": "100",
+        "price": "0",
+        "realized_gain": "-40.1"
+      },
+      {
+        "timestamp": "2025-10-07T02:11:37Z",
+        "symbol": "",
+        "side": "",
+        "quantity": "100",
+        "price": "0.61",
+        "realized_gain": "36"
+      },
+      {
+        "timestamp": "2025-10-06T03:26:55Z",
+        "symbol": "",
+        "side": "",
+        "quantity": "100",
+        "price": "0.97",
+        "realized_gain": "72"
+      },
+      {
+        "timestamp": "2025-09-26T13:55:32Z",
+        "symbol": "QQQ",
+        "side": "",
+        "quantity": "1",
+        "price": "340",
+        "realized_gain": "130"
+      },
+      {
+        "timestamp": "2025-09-25T13:46:10Z",
+        "symbol": "QQQ",
+        "side": "",
+        "quantity": "1",
+        "price": "900",
+        "realized_gain": "475"
+      },
+      {
+        "timestamp": "2025-09-23T03:34:37Z",
+        "symbol": "",
+        "side": "",
+        "quantity": "50",
+        "price": "0",
+        "realized_gain": "-30"
+      },
+      {
+        "timestamp": "2025-09-17T17:24:59Z",
+        "symbol": "TSLL",
+        "side": "",
+        "quantity": "1",
+        "price": "43",
+        "realized_gain": "-109"
+      },
+      {
+        "timestamp": "2025-09-14T05:41:15Z",
+        "symbol": "",
+        "side": "",
+        "quantity": "71",
+        "price": "0.93",
+        "realized_gain": "39.05"
+      },
+      {
+        "timestamp": "2025-09-14T05:28:50Z",
+        "symbol": "",
+        "side": "",
+        "quantity": "29",
+        "price": "0.75",
+        "realized_gain": "10.73"
+      },
+      {
+        "timestamp": "2025-09-03T19:12:49Z",
+        "symbol": "AMZY",
+        "side": "",
+        "quantity": "55",
+        "price": "14.91",
+        "realized_gain": "-8.22"
+      },
+      {
+        "timestamp": "2025-09-02T00:08:34Z",
+        "symbol": "AMZY",
+        "side": "",
+        "quantity": "3",
+        "price": "15.2",
+        "realized_gain": "-3.18"
+      },
+      {
+        "timestamp": "2025-09-02T00:00:47Z",
+        "symbol": "MSTY",
+        "side": "",
+        "quantity": "60",
+        "price": "15.54166666666666666666666667",
+        "realized_gain": "-26.4"
+      },
+      {
+        "timestamp": "2025-08-25T19:58:30Z",
+        "symbol": "FIG",
+        "side": "",
+        "quantity": "1",
+        "price": "70.45",
+        "realized_gain": "37.45"
+      },
+      {
+        "timestamp": "2025-08-24T23:47:11Z",
+        "symbol": "SHIB",
+        "side": "",
+        "quantity": "15000000.000000000000000000",
+        "price": "0.00001302",
+        "realized_gain": "-73.31"
+      },
+      {
+        "timestamp": "2025-07-23T13:30:00Z",
+        "symbol": "QCOM",
+        "side": "",
+        "quantity": "15.10907",
+        "price": "158.3499182941107559896141854",
+        "realized_gain": "-118.05"
+      },
+      {
+        "timestamp": "2025-07-14T18:30:24Z",
+        "symbol": "QDTE",
+        "side": "",
+        "quantity": "21.081136",
+        "price": "35.29980547537855644970935153",
+        "realized_gain": "14.34"
+      },
+      {
+        "timestamp": "2025-07-14T18:23:36Z",
+        "symbol": "QDTY",
+        "side": "",
+        "quantity": "20",
+        "price": "44.26",
+        "realized_gain": "-32.75"
+      },
+      {
+        "timestamp": "2025-07-14T18:23:01Z",
+        "symbol": "SDTY",
+        "side": "",
+        "quantity": "17",
+        "price": "45.1",
+        "realized_gain": "-18.58"
+      },
+      {
+        "timestamp": "2025-07-10T16:47:11Z",
+        "symbol": "AIRO",
+        "side": "",
+        "quantity": "1",
+        "price": "22.04",
+        "realized_gain": "12.04"
+      },
+      {
+        "timestamp": "2025-07-02T20:10:37Z",
+        "symbol": "GLD",
+        "side": "",
+        "quantity": "2",
+        "price": "309.32",
+        "realized_gain": "22.94"
+      },
+      {
+        "timestamp": "2025-06-30T15:59:33Z",
+        "symbol": "BRK.B",
+        "side": "",
+        "quantity": "1",
+        "price": "485.02",
+        "realized_gain": "79.26"
+      },
+      {
+        "timestamp": "2025-06-30T15:57:40Z",
+        "symbol": "BA",
+        "side": "",
+        "quantity": "2",
+        "price": "211.395",
+        "realized_gain": "16.39"
+      },
+      {
+        "timestamp": "2025-06-24T17:12:27Z",
+        "symbol": "UBER",
+        "side": "",
+        "quantity": "1",
+        "price": "640",
+        "realized_gain": "342"
+      },
+      {
+        "timestamp": "2025-06-20T20:00:00Z",
+        "symbol": "INTC",
+        "side": "",
+        "quantity": "1",
+        "price": "0",
+        "realized_gain": "-289"
+      },
+      {
+        "timestamp": "2025-06-20T20:00:00Z",
+        "symbol": "GOOG",
+        "side": "",
+        "quantity": "1",
+        "price": "0",
+        "realized_gain": "-765"
+      },
+      {
+        "timestamp": "2025-06-11T15:39:04Z",
+        "symbol": "PLUG",
+        "side": "",
+        "quantity": "10",
+        "price": "50",
+        "realized_gain": "400"
+      },
+      {
+        "timestamp": "2025-06-09T16:54:12Z",
+        "symbol": "PLUG",
+        "side": "",
+        "quantity": "25",
+        "price": "16",
+        "realized_gain": "250"
+      },
+      {
+        "timestamp": "2025-06-09T13:59:24Z",
+        "symbol": "NVTS",
+        "side": "",
+        "quantity": "5",
+        "price": "85",
+        "realized_gain": "250"
+      },
+      {
+        "timestamp": "2025-06-06T14:47:34Z",
+        "symbol": "PLUG",
+        "side": "",
+        "quantity": "25",
+        "price": "10",
+        "realized_gain": "50"
+      },
+      {
+        "timestamp": "2025-05-23T15:48:26Z",
+        "symbol": "RDTY",
+        "side": "",
+        "quantity": "10",
+        "price": "43.87",
+        "realized_gain": "-37.67"
+      },
+      {
+        "timestamp": "2025-05-19T13:30:02Z",
+        "symbol": "CRWV",
+        "side": "",
+        "quantity": "1",
+        "price": "76.89",
+        "realized_gain": "36.89"
+      },
+      {
+        "timestamp": "2025-05-19T13:30:00Z",
+        "symbol": "TSLA",
+        "side": "",
+        "quantity": "1",
+        "price": "336.26",
+        "realized_gain": "152.73"
+      },
+      {
+        "timestamp": "2025-05-16T20:00:00Z",
+        "symbol": "QCOM",
+        "side": "",
+        "quantity": "1",
+        "price": "0",
+        "realized_gain": "-780"
+      },
+      {
+        "timestamp": "2025-05-16T20:00:00Z",
+        "symbol": "GOOG",
+        "side": "",
+        "quantity": "1",
+        "price": "0",
+        "realized_gain": "-665"
+      },
+      {
+        "timestamp": "2025-05-02T13:35:03Z",
+        "symbol": "TSM",
+        "side": "",
+        "quantity": "1",
+        "price": "1103",
+        "realized_gain": "678"
+      },
+      {
+        "timestamp": "2025-04-17T20:00:00Z",
+        "symbol": "AAPL",
+        "side": "",
+        "quantity": "2",
+        "price": "0",
+        "realized_gain": "-474"
+      },
+      {
+        "timestamp": "2025-04-17T20:00:00Z",
+        "symbol": "GOOG",
+        "side": "",
+        "quantity": "3",
+        "price": "0",
+        "realized_gain": "-2230"
+      },
+      {
+        "timestamp": "2025-04-17T20:00:00Z",
+        "symbol": "GOOG",
+        "side": "",
+        "quantity": "4",
+        "price": "0",
+        "realized_gain": "-2194"
+      },
+      {
+        "timestamp": "2025-04-04T13:14:43Z",
+        "symbol": "YMAG",
+        "side": "",
+        "quantity": "200",
+        "price": "13.7916",
+        "realized_gain": "-789.57"
+      },
+      {
+        "timestamp": "2025-04-04T13:12:57Z",
+        "symbol": "DOGE",
+        "side": "",
+        "quantity": "1018.670000000000000000",
+        "price": "0.163634",
+        "realized_gain": "111.73"
+      },
+      {
+        "timestamp": "2025-04-04T13:12:37Z",
+        "symbol": "AVAX",
+        "side": "",
+        "quantity": "0.027900000000000000",
+        "price": "17.56",
+        "realized_gain": "-0.51"
+      },
+      {
+        "timestamp": "2025-04-04T13:10:08Z",
+        "symbol": "YMAG",
+        "side": "",
+        "quantity": "488",
+        "price": "13.79",
+        "realized_gain": "-2328.64"
+      },
+      {
+        "timestamp": "2025-04-04T03:27:49Z",
+        "symbol": "YMAG",
+        "side": "",
+        "quantity": "12",
+        "price": "14.32833333333333333333333333",
+        "realized_gain": "-58.47"
+      },
+      {
+        "timestamp": "2025-04-01T15:51:19Z",
+        "symbol": "VIX",
+        "side": "",
+        "quantity": "1",
+        "price": "480",
+        "realized_gain": "175"
+      },
+      {
+        "timestamp": "2025-03-21T20:00:00Z",
+        "symbol": "AMD",
+        "side": "",
+        "quantity": "1",
+        "price": "0",
+        "realized_gain": "-1245"
+      },
+      {
+        "timestamp": "2025-03-21T20:00:00Z",
+        "symbol": "GOOG",
+        "side": "",
+        "quantity": "1",
+        "price": "0",
+        "realized_gain": "-1130"
+      },
+      {
+        "timestamp": "2025-03-21T17:26:49Z",
+        "symbol": "INTC",
+        "side": "",
+        "quantity": "1",
+        "price": "155",
+        "realized_gain": "-150"
+      },
+      {
+        "timestamp": "2025-02-21T21:00:00Z",
+        "symbol": "QCOM",
+        "side": "",
+        "quantity": "1",
+        "price": "0",
+        "realized_gain": "-770"
+      },
+      {
+        "timestamp": "2025-02-07T19:37:12Z",
+        "symbol": "UBER",
+        "side": "",
+        "quantity": "1",
+        "price": "1080",
+        "realized_gain": "600"
+      },
+      {
+        "timestamp": "2025-02-06T15:30:45Z",
+        "symbol": "HOOD",
+        "side": "",
+        "quantity": "1",
+        "price": "-30",
+        "realized_gain": "35"
+      },
+      {
+        "timestamp": "2025-02-05T20:58:03Z",
+        "symbol": "QBTS",
+        "side": "",
+        "quantity": "100",
+        "price": "6.23",
+        "realized_gain": "291"
+      },
+      {
+        "timestamp": "2025-02-03T20:49:19Z",
+        "symbol": "AMZN",
+        "side": "",
+        "quantity": "1",
+        "price": "1610",
+        "realized_gain": "1020"
+      },
+      {
+        "timestamp": "2025-01-31T14:41:56Z",
+        "symbol": "AAPL",
+        "side": "",
+        "quantity": "1",
+        "price": "580",
+        "realized_gain": "305"
+      },
+      {
+        "timestamp": "2025-01-28T17:43:07Z",
+        "symbol": "MRK",
+        "side": "",
+        "quantity": "1",
+        "price": "121",
+        "realized_gain": "-129"
+      },
+      {
+        "timestamp": "2025-01-28T17:42:42Z",
+        "symbol": "MRK",
+        "side": "",
+        "quantity": "10",
+        "price": "97.055",
+        "realized_gain": "-29.45"
+      },
+      {
+        "timestamp": "2025-01-25T07:42:57Z",
+        "symbol": "TRUMP",
+        "side": "",
+        "quantity": "90.000000000000000000",
+        "price": "27.42",
+        "realized_gain": "-1020.38"
+      },
+      {
+        "timestamp": "2025-01-21T18:01:20Z",
+        "symbol": "HOOD",
+        "side": "",
+        "quantity": "1",
+        "price": "-105",
+        "realized_gain": "-5"
+      },
+      {
+        "timestamp": "2025-01-17T20:54:09Z",
+        "symbol": "STLA",
+        "side": "",
+        "quantity": "100.849634",
+        "price": "12.88502445135299152399502015",
+        "realized_gain": "-260.28"
+      },
+      {
+        "timestamp": "2025-01-17T20:53:37Z",
+        "symbol": "TGT",
+        "side": "",
+        "quantity": "9",
+        "price": "133.6322222222222222222222222",
+        "realized_gain": "104.6"
+      },
+      {
+        "timestamp": "2025-01-17T20:51:41Z",
+        "symbol": "PBR",
+        "side": "",
+        "quantity": "51.866336",
+        "price": "13.72258105912860318492518924",
+        "realized_gain": "-2.1"
+      },
+      {
+        "timestamp": "2025-01-17T20:48:48Z",
+        "symbol": "QBTS",
+        "side": "",
+        "quantity": "1",
+        "price": "443",
+        "realized_gain": "253"
+      },
+      {
+        "timestamp": "2025-01-17T20:47:20Z",
+        "symbol": "PFE",
+        "side": "",
+        "quantity": "2",
+        "price": "15",
+        "realized_gain": "-162"
+      },
+      {
+        "timestamp": "2025-01-17T20:46:56Z",
+        "symbol": "PFE",
+        "side": "",
+        "quantity": "1",
+        "price": "3",
+        "realized_gain": "-79"
+      },
+      {
+        "timestamp": "2025-01-17T20:46:43Z",
+        "symbol": "PFE",
+        "side": "",
+        "quantity": "1",
+        "price": "3",
+        "realized_gain": "-75"
+      },
+      {
+        "timestamp": "2025-01-17T20:45:40Z",
+        "symbol": "PFE",
+        "side": "",
+        "quantity": "61.91278",
+        "price": "26.33301234413961059412935423",
+        "realized_gain": "-68.44"
+      },
+      {
+        "timestamp": "2025-01-17T20:37:49Z",
+        "symbol": "QBTS",
+        "side": "",
+        "quantity": "1",
+        "price": "30",
+        "realized_gain": "-5"
+      },
+      {
+        "timestamp": "2025-01-17T14:39:37Z",
+        "symbol": "STLA",
+        "side": "",
+        "quantity": "1",
+        "price": "195",
+        "realized_gain": "15"
+      },
+      {
+        "timestamp": "2025-01-16T14:41:38Z",
+        "symbol": "HOOD",
+        "side": "",
+        "quantity": "1",
+        "price": "-240",
+        "realized_gain": "-185"
+      },
+      {
+        "timestamp": "2025-01-14T17:46:55Z",
+        "symbol": "QQQ",
+        "side": "",
+        "quantity": "1.001617",
+        "price": "503.7753951859842634460078054",
+        "realized_gain": "5.72"
+      },
+      {
+        "timestamp": "2025-01-08T19:06:40Z",
+        "symbol": "VOO",
+        "side": "",
+        "quantity": "1.006331",
+        "price": "540.9154641961740222650400316",
+        "realized_gain": "32.75"
+      },
+      {
+        "timestamp": "2025-01-07T21:02:49Z",
+        "symbol": "",
+        "side": "",
+        "quantity": "100",
+        "price": "0",
+        "realized_gain": "-39"
+      },
+      {
+        "timestamp": "2025-01-06T17:16:56Z",
+        "symbol": "QCOM",
+        "side": "",
+        "quantity": "1",
+        "price": "575",
+        "realized_gain": "110"
+      },
+      {
+        "timestamp": "2025-01-06T16:08:10Z",
+        "symbol": "GOOG",
+        "side": "",
+        "quantity": "1",
+        "price": "2800",
+        "realized_gain": "1730"
+      },
+      {
+        "timestamp": "2025-01-06T15:34:05Z",
+        "symbol": "PFE",
+        "side": "",
+        "quantity": "2",
+        "price": "125",
+        "realized_gain": "64"
+      },
+      {
+        "timestamp": "2024-12-23T19:35:15Z",
+        "symbol": "PARA",
+        "side": "",
+        "quantity": "1",
+        "price": "56",
+        "realized_gain": "-105"
+      },
+      {
+        "timestamp": "2024-12-23T18:37:27Z",
+        "symbol": "WBA",
+        "side": "",
+        "quantity": "2",
+        "price": "64",
+        "realized_gain": "-205"
+      },
+      {
+        "timestamp": "2024-12-23T18:32:05Z",
+        "symbol": "WBA",
+        "side": "",
+        "quantity": "1",
+        "price": "102",
+        "realized_gain": "-168"
+      },
+      {
+        "timestamp": "2024-12-23T18:31:00Z",
+        "symbol": "WBA",
+        "side": "",
+        "quantity": "100",
+        "price": "9.255",
+        "realized_gain": "17"
+      }
+    ],
+    "next_cursor": "asset_type=equity&last_closed_at=2024-12-23T16:58:39.732Z&id=676996bf-8af6-4871-a511-fbf4b47d1ea4,asset_type=option&last_closed_at=2024-12-23T17:48:25.413Z&id=67699f23-07e1-41be-a273-6a4f0ac27c25"
+  },
+  "guide": "trades are returned most-recent-first. Each entry is a closed/realizing trade with the realized gain/loss on it. price is the execution (close) price. The window is a preset span (not an arbitrary date range); default is the last week. Paginate with cursor: pass next_cursor from the previous response for the next page; an empty next_cursor means there are no more trades. An empty trades list means there were no realized trades in the window — a valid result, not an error. To filter more than one symbol, call once per symbol. Treat figures as informational, not a tax document or tax/performance advice."
+}

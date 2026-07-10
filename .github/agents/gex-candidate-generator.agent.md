@@ -3,7 +3,7 @@ name: "gex-candidate-generator"
 description: "Slices the raw Robinhood scanner presets and curated watchlists, applies baseline volume/price/market-cap filters, exclusions, and builds the daily trading universe."
 argument-hint: "Source candidates..."
 model: "Gemini 3.5 Flash"
-tools: [vscode, execute, read, edit, search, web, browser, 'robinhood-mcp/*', todo]
+tools: [vscode, execute, read, edit, search, web, browser, 'robinhood-trading/*', todo]
 user-invocable: false
 ---
 
@@ -20,8 +20,8 @@ Your job is to derive the daily candidate universe from Robinhood scanners and l
 ---
 
 ### Step 1: Query or Create Scans
-1. Call `mcp_robinhood-tra_get_scans` to identify existing saved breakout/momentum scans.
-2. If no saved scans exist, verify or create a scan definition using `mcp_robinhood-tra_create_scan` with built-in presets such as `HIGH_OPTIONS_VOLUME_IV` or `DAILY_GAINERS`.
+1. Call `robinhood-trading/get_scans` to identify existing saved breakout/momentum scans.
+2. If no saved scans exist, verify or create a scan definition using `robinhood-trading/create_scan` with built-in presets such as `HIGH_OPTIONS_VOLUME_IV` or `DAILY_GAINERS`.
    - **Important Scanner Constraint**: Because custom `filter_type` enums are not discoverable, do *not* specify programmatic filter fields. Create with a preset, and run it. The custom criteria will be applied locally on the returned results.
 
 ---
@@ -30,13 +30,13 @@ Your job is to derive the daily candidate universe from Robinhood scanners and l
 When building the candidate universe from Robinhood lists, enforce these strict sequential rules:
 1. **Target Lists**: Identify and retrieve the watchlist items for the following curated lists: `"100 most popular"`, `"Daily movers"`, `"Popular recurring investments"`, and `"IPO Access"`.
 2. **Preflight Block Check**: The public list `"Popular recurring investments"` may occasionally be absent from the results of `get_popular_watchlists` or `get_watchlists`. If it is unavailable, treat the mandatory preflight check as **blocked** and halt execution with an appropriate notice to the user.
-3. **Sequential Retrieval Bug Avoidance**: **Never** call `mcp_robinhood-tra_get_watchlist_items` in parallel (multiple calls in one batch). Parallel calls can return scrambled results where lists and IDs are mapped to the wrong lists. Always call them sequentially (one by one), and sanity-check the returned tickers against the expected list description (e.g., `"100 most popular"` should contain mega-cap symbols like AAPL, MSFT, and NVDA, not obscure small-caps).
+3. **Sequential Retrieval Bug Avoidance**: **Never** call `robinhood-trading/get_watchlist_items` in parallel (multiple calls in one batch). Parallel calls can return scrambled results where lists and IDs are mapped to the wrong lists. Always call them sequentially (one by one), and sanity-check the returned tickers against the expected list description (e.g., `"100 most popular"` should contain mega-cap symbols like AAPL, MSFT, and NVDA, not obscure small-caps).
 4. **Instrument Filter**: Include only `object_type` `"instrument"` or `"index"` symbols. Exclude unsupported instrument classes.
 
 ---
 
 ### Step 3: Run the Scan(s) and Collect Symbols
-1. Call `mcp_robinhood-tra_run_scan` for each relevant scan.
+1. Call `robinhood-trading/run_scan` for each relevant scan.
 2. Extract the list of ticker symbols and available scan columns (price, % change, IV, relative options volume, market cap, etc.) from the scan results.
 3. Combine all scanner-sourced tickers and list-sourced tickers into a unified collection.
 

@@ -3,7 +3,7 @@ name: "market-regime-analyst"
 description: "Execute the daily Market Regime Gates by checking indices, sector ETF quotes, and VIX metrics. Determines market authorization for model strategies."
 argument-hint: "Evaluate regime gates..."
 model: "Gemini 3.5 Flash"
-tools: [vscode, execute, read, edit, search, web, browser, 'robinhood-mcp/*', todo]
+tools: [vscode, execute, read, edit, search, web, browser, 'robinhood-trading/*', todo]
 user-invocable: false
 ---
 
@@ -24,15 +24,15 @@ Fetch live pricing and metadata across our broad indices and volatility benchmar
 
 1. **Broad Market Indices**: Check relative SPY & QQQ daily performance.
 2. **VIX Delta Gate**: Assess volatility trend.
-   - Call `mcp_robinhood-tra_get_indexes` with `symbols="VIX"` to obtain the VIX instrument ID, then call `mcp_robinhood-tra_get_index_quotes` for a real-time VIX level. Gate **PASSES** when VIX current level is below its prior close (vol compression). Gate **FAILS** when VIX is rising (vol expansion).
-   - **VIX Stale Date Fallback**: VIX index quotes often return a stale `venue_timestamp` (days old, with no separate prior-close field). If the retrieved VIX index has a stale timestamp (older than the current session date) or is unavailable, immediately fall back to using `mcp_robinhood-tra_get_equity_quotes` for `UVXY` or `VXX` as a directional proxy: the gate passes if the daily percent change of `UVXY` or `VXX` is negative on the day.
+   - Call `robinhood-trading/get_indexes` with `symbols="VIX"` to obtain the VIX instrument ID, then call `robinhood-trading/get_index_quotes` for a real-time VIX level. Gate **PASSES** when VIX current level is below its prior close (vol compression). Gate **FAILS** when VIX is rising (vol expansion).
+   - **VIX Stale Date Fallback**: VIX index quotes often return a stale `venue_timestamp` (days old, with no separate prior-close field). If the retrieved VIX index has a stale timestamp (older than the current session date) or is unavailable, immediately fall back to using `robinhood-trading/get_equity_quotes` for `UVXY` or `VXX` as a directional proxy: the gate passes if the daily percent change of `UVXY` or `VXX` is negative on the day.
 
 ---
 
 ### Step 2: Fetch and Calculate Sector-Breadth Gates (Bull:Bear Guide)
 To calculate the **Bull:Bear Gate** reliably, query the daily percent change of 15 key Sector and Broad-Market ETFs representing the core industry groups. This check is mandatory on every execution.
 
-- **ETF Reference Pool**: Call `mcp_robinhood-tra_get_equity_quotes` in a single batch call for the following 15 symbols:
+- **ETF Reference Pool**: Call `robinhood-trading/get_equity_quotes` in a single batch call for the following 15 symbols:
   - Broad Market/Styles: `SPY`, `QQQ`, `IWM`, `DIA`
   - Core Sectors: `XLK`, `XLF`, `XLV`, `XLY`, `XLP`, `XLI`, `XLU`, `XLB`, `XLRE`, `XLE`, `XLC`
 - **Calculate Gate Daily**: For each of the 15 ETFs, compute its daily change percentage using the retrieved quote details:

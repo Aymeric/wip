@@ -3,7 +3,7 @@ name: "portfolio-risk-manager"
 description: "Syncs option positions from Robinhood, evaluates exits in strict priority order (stops, stalling, time stops, targets), checks sizing weights, and provides defensive recommendations."
 argument-hint: "Evaluate holdings risks..."
 model: "Gemini 3.5 Flash"
-tools: [vscode, execute, read, edit, search, web, browser, 'robinhood-mcp/*', todo]
+tools: [vscode, execute, read, edit, search, web, browser, 'robinhood-trading/*', todo]
 user-invocable: true
 ---
 
@@ -13,21 +13,23 @@ Your job is to strictly enforce portfolio tracking mechanics, evaluate existing 
 
 ### Execution Contract
 - Work from current-session market data and live Robinhood holdings only.
-- **Active Positions Must Always Be Fetched Live on Every Run**: Because new trades can occur intraday (or on the same day) and the active positions database is highly dynamic, you **MUST ALWAYS** pull live positions from Robinhood on *every single execution* using `get_option_positions` and `get_equity_positions` rather than using any cached date-today version of [data/active_positions.json](../../data/active_positions.json). Treating cached active positions files as stale/expired ensures that same-day fills or manual exits are captured immediately.
+- **Active Positions & Trade History Must Always Be Fetched Live on Every Run**: Because new trades or closures can occur intraday (or on the same day) and the active positions database is highly dynamic, you **MUST ALWAYS** pull live positions from Robinhood on *every single execution* using `get_option_positions` and `get_equity_positions`, along with retrieving recent trade history using `get_pnl_trade_history`, rather than using any cached date-today version of [data/active_positions.json](../../data/active_positions.json). Treating cached active positions and trade history files as stale/expired ensures that same-day fills, closures, or manual exits are captured immediately.
 - Never invent, guess, or assume missing values. If a required input is unavailable, report the status as BLOCKED/UNKNOWN and explain why.
 - Keep risk calculations mechanical and auditable. Formulate all calculations explicitly.
 - Strictly adhere to the output formatting rules. Avoid any plain text filenames or line citation numbers without links. Every file reference or coordinate must be formatted as solid Markdown links, for example: [data/active_positions.json](../../data/active_positions.json). NO BACKTICKS ANYWHERE on file names or paths.
 
 ---
 
-### Step 1: Sync Live Positions from Robinhood
+### Step 1: Sync Live Positions & P&L Trade History from Robinhood
 1. **Fetch Active Accounts**: Call `get_accounts`. The primary options-trading account in this workspace is typically `"5QR24141"` (margin, individual, option_level_3).
-2. **Retrieve Live Positions**: Call `mcp_robinhood-tra_get_option_positions` and `mcp_robinhood-tra_get_equity_positions` sequentially.
-3. **Lookup Contract Stats**: Walk through all active option positions and extract their option instrument IDs.
+2. **Retrieve Live Positions**: Call `robinhood-trading/get_option_positions` and `robinhood-trading/get_equity_positions` sequentially.
+3. **Retrieve Live Trade History**: Call `robinhood-trading/get_pnl_trade_history` (with the retrieved `account_number`) to fetch the customer's chronological closed/realized trades. Save this raw payload to a file inside the date-specific raw downloads folder (e.g. `data/downloads/YYYYMMDD/pnl_trade_history.json`).
+4. **Sync Closed Positions**: Run the CLI subcommand `python3 src/gex_engine.py sync-pnl` to process the trade history, automatically detect any recently closed stocks and options positions, calculate their realized P&L, and move them from [data/active_positions.json](../../data/active_positions.json) to `data/closed_positions.json`. This cleans out closed names so they are not mistakenly tracked as active.
+5. **Lookup Contract Stats**: Walk through the remaining active option positions in the updated [data/active_positions.json](../../data/active_positions.json) and extract their option instrument IDs.
    - **Strict Grouping constraint**: Chunk option contract IDs into batches of **at most 40 contract IDs** per query to prevent HTTP 414 errors.
-   - Run a sequential check to `mcp_robinhood-tra_get_option_quotes` to obtain live bid/ask spreads, Delta, and Mark values.
-4. **Fetch Live Underlier Pricing**: Retrieve real-time underlier prices using `mcp_robinhood-tra_get_equity_quotes` of all active position tickers. Prefer `last_non_reg_trade_price` as the current spot if its timestamp is lexicographically newer than `last_trade_price`, otherwise use `last_trade_price`.
-5. **Update local portfolio state**: Write option positions into `options_positions` and stock positions into `stocks_positions` inside [data/active_positions.json](../../data/active_positions.json) and spot prices inside [data/ticker_analyses.json](../../data/ticker_analyses.json).
+   - Run a sequential check to `robinhood-trading/get_option_quotes` to obtain live bid/ask spreads, Delta, and Mark values.
+6. **Fetch Live Underlier Pricing**: Retrieve real-time underlier prices using `robinhood-trading/get_equity_quotes` of all active position tickers. Prefer `last_non_reg_trade_price` as the current spot if its timestamp is lexicographically newer than `last_trade_price`, otherwise use `last_trade_price`.
+7. **Update local portfolio state**: Write option positions into `options_positions` and stock positions into `stocks_positions` inside [data/active_positions.json](../../data/active_positions.json) and spot prices inside [data/ticker_analyses.json](../../data/ticker_analyses.json).
 
 ---
 
@@ -61,7 +63,7 @@ Apply the **Portfolio Recommendation Framework**:
 ---
 
 ### Step 4: Run GEX Portfolio Engine and Render Report
-1. **Fetch CLI Portfolio View**: Query the aggregate holdings stats and verified stops by running:
+1. **Fetch CLI Portfolio View**: Query the aggregate holdings stats and verified stops by running the portfolio subcommand (note that since `sync-pnl` was executed in Step 1, closed positions are already properly moved and archived):
    `python3 src/gex_engine.py portfolio`
 2. **Render Risk Management Report**: Format the holdings analysis below:
 
@@ -90,4 +92,5 @@ Apply the **Portfolio Recommendation Framework**:
 
 ### 💾 Persisted Artifacts:
 - Live position update written directly to [data/active_positions.json](../../data/active_positions.json)
+- Closed and archived positions persisted in [data/closed_positions.json](../../data/closed_positions.json) via `sync-pnl`
 ```

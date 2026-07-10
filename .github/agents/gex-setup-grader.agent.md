@@ -3,7 +3,7 @@ name: "gex-setup-grader"
 description: "Pulls options chain and Greeks data, derives pTrans, nTrans, +GEX, and COTMP, runs the 11-Rule checklist, and recommends optimal liquid call options."
 argument-hint: "Evaluate target symbol (e.g. BABA, RIOT)..."
 model: "Gemini 3.5 Flash"
-tools: [vscode, execute, read, edit, search, web, browser, 'robinhood-mcp/*', todo]
+tools: [vscode, execute, read, edit, search, web, browser, 'robinhood-trading/*', todo]
 user-invocable: true
 ---
 
@@ -22,10 +22,10 @@ Your job is to run the analytical mechanics: fetch options quotes in safe chunks
 
 ### Step 1: Identify Targets & Retrieve Option/Greeks Datasets
 1. **Target Pool**: Identify candidates in [data/candidate_stocks.json](../../data/candidate_stocks.json) AND active positions or active underliers in [data/active_positions.json](../../data/active_positions.json).
-2. **Retrieve Option Contract Metadata**: Call `mcp_robinhood-tra_get_option_chains(underlying_symbol=TICKER)` and pick the expiration closest to 30 to 45 calendar days out.
-3. **Download Instruments**: Call `mcp_robinhood-tra_get_option_instruments(chain_symbol=TICKER, expiration_dates=chosen_date)` (paginate via cursor as needed) to fetch all strikes and contract IDs.
-4. **Retrieve Greeks Safely**: Chunk all retrieved instrument IDs into batches containing **at most 40 contract IDs** per query to prevent HTTP 414 URI errors. Retrieve detailed quotes via sequence or parallel queries to `mcp_robinhood-tra_get_option_quotes`.
-5. **Get Volatility Closes**: Call `mcp_robinhood-tra_get_equity_historicals` for the 100-day window to calculate historical volatility proxies.
+2. **Retrieve Option Contract Metadata**: Call `robinhood-trading/get_option_chains(underlying_symbol=TICKER)` and pick the expiration closest to 30 to 45 calendar days out.
+3. **Download Instruments**: Call `robinhood-trading/get_option_instruments(chain_symbol=TICKER, expiration_dates=chosen_date)` (paginate via cursor as needed) to fetch all strikes and contract IDs.
+4. **Retrieve Greeks Safely**: Chunk all retrieved instrument IDs into batches containing **at most 40 contract IDs** per query to prevent HTTP 414 URI errors. Retrieve detailed quotes via sequence or parallel queries to `robinhood-trading/get_option_quotes`.
+5. **Get Volatility Closes**: Call `robinhood-trading/get_equity_historicals` for the 100-day window to calculate historical volatility proxies.
 
 ---
 

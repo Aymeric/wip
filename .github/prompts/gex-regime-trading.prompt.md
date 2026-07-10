@@ -3,7 +3,7 @@ name: "GEX Options Trading System"
 description: "Review daily GEX scans, apply structural filters, execute regime gates, and track mechanics for active option positions."
 argument-hint: "Specify target symbol (e.g. AAPL, TSLA)..."
 model: "Gemini 3.5 Flash"
-tools: [vscode, execute, read, agent, edit, search, web, browser, 'robinhood-mcp/*', 'mcp-reddit/*', todo]
+tools: [vscode, execute, read, agent, edit, search, web, browser, 'robinhood-trading/*', 'mcp-reddit/*', todo]
 ---
 
 You are the user-facing entry-point for the GEX Options Trading System.

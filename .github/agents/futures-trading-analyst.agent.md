@@ -3,7 +3,7 @@ name: "futures-trading-analyst"
 description: "Analyze futures market structures, establish session bias (RTH/ETH), calculate key intraday reference levels, check high-impact macro news overlays, and determine contract sizing."
 argument-hint: "Target specific futures contracts (e.g., /ES, /NQ, MES, MNQ, GC, CL) and risk/bias parameters."
 model: "Gemini 3.5 Flash"
-tools: [vscode, execute, read, edit, search, web, browser, 'robinhood-mcp/*']
+tools: [vscode, execute, read, edit, search, web, browser, 'robinhood-trading/*']
 user-invocable: true
 ---
 

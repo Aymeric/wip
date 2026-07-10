@@ -16,32 +16,48 @@ The division of labor is split between the **AI Copilot Agent**, the list of **L
 sequenceDiagram
     autonumber
     actor User as Swing Trader
-    participant Agent as Copilot Agent (LLM)
+    participant Agent as GEX Orchestrator (Subagent)
     participant MCP as Robinhood MCP Server
     participant DB as JSON Local Caches (regime, active_positions, etc.)
     participant CLI as Python CLI Tool (gex_engine.py)
+    participant Trader as Agentic Trader (Subagent)
 
-    User->>Agent: "Assess daily regime or run scans"
-    Note over Agent: Loads specialized prompt rules (system instructions)
+    User->>Agent: "Run daily workflow or analyze setup"
+    Note over Agent: Validates Daily Regime & syncs Position files
     Agent->>MCP: Call Robinhood API (get_equity_quotes, run_scan, get_option_quotes)
-    MCP-->>Agent: Return live market or option Greeks payload
-    Agent->>DB: Merge & update cached metrics sequentially
-    Agent->>CLI: Run status / update-regime / portfolio stops validation
-    CLI-->>Agent: Output CLI execution rules & trailing-stop states
-    Agent-->>User: Present structured mechanical trading recommendations of the day
+    MCP-->>Agent: Return live market, Greeks, and option chain payload
+    Agent->>DB: Update files (regime, candidate_stocks, ticker_analyses)
+    Agent->>CLI: Execute stops validation (portfolio / analyze)
+    CLI-->>Agent: Return trailing stops & option selection suggestions
+    Agent-->>User: Present GEX Report + Bold "EXECUTION APPROVAL REQUEST"
+    
+    rect rgb(240, 248, 255)
+        Note over User, Agent: Human-In-The-Loop Verification
+        User->>Agent: "YES" / Authorize Trade
+    end
+
+    Agent->>Trader: Spawn Agentic Trader with order specification (RunSubagent)
+    Note over Trader: Performs clearance & pre-trade risk thresholds checks
+    Trader->>MCP: Call Order Review (review_option_order / review_equity_order)
+    MCP-->>Trader: Return estimated costs, PDT warnings, bid-ask spread checks
+    Trader->>MCP: Call Order Placement with Unique ref_id UUID
+    MCP-->>Trader: Order fills & confirmation details
+    Trader->>CLI: Execute register/sync command (add-position)
+    CLI-->>Trader: Save update to database (active_positions.json)
+    Trader-->>Agent: Return Active Order Routing Report
+    Agent-->>User: Present Order Routing Report & confirmation verbatim in chat
 ```
 
 ### 1. Model Context Protocol (MCP) Integration
 The workspace utilizes an integrated Model Context Protocol (MCP) server bound to Robinhood. This server provides the LLM with direct, runtime capability to fetch real-time market data, pull portfolio allocations, and execute order routing.
-- **Data Gathering**: The agent calls `mcp_robinhood-tra_get_equity_quotes`, `mcp_robinhood-tra_get_option_quotes`, and `mcp_robinhood-tra_get_option_positions` dynamically. The returned JSON structures are recorded locally and feed the engine's algorithms.
-- **Automated Screening**: The agent calls `mcp_robinhood-tra_run_scan` or `mcp_robinhood-tra_get_scans` to identify volatility-compression or high-option-volume breakouts.
-- **Transaction Routing**: When a setup is `CONFIRMED` and broad-market gates authorization is active (`ALL TRACKS OK`), the agent evaluates portfolio sizing parameters, verifies available buying power via `mcp_robinhood-tra_get_accounts`, reviews option price spreads, and routes limit orders securely.
+- **Data Gathering**: The agent calls `robinhood-trading/get_equity_quotes`, `robinhood-trading/get_option_quotes`, and `robinhood-trading/get_option_positions` dynamically. The returned JSON structures are recorded locally and feed the engine's algorithms.
+- **Automated Screening**: The agent calls `robinhood-trading/run_scan` or `robinhood-trading/get_scans` to identify volatility-compression or high-option-volume breakouts.
+- **Transaction Routing**: When a setup is `CONFIRMED` and broad-market gates authorization is active (`ALL TRACKS OK`), the agent evaluates portfolio sizing parameters, verifies available buying power via `robinhood-trading/get_accounts`, reviews option price spreads, and routes limit orders securely.
 
 ### 2. Specialized LLM Prompts (Prompt-Driven Decisions & Dynamic Delegation)
-To enforce strict mechanical discipline and eliminate manual pricing or sizing calculation errors, the five targeted, machine-readable user-facing markdown prompt manifests (located in the [.github/prompts/](.github/prompts/) directory) act as instant delegation handlers. They do not process computations or fetch databases themselves; instead, they immediately delegate the user's active session request to its corresponding dedicated specialist subagent in the [.github/agents/](.github/agents/) directory using the `runSubagent` tool:
+To enforce strict mechanical discipline and eliminate manual pricing or sizing calculation errors, the four targeted, machine-readable user-facing markdown prompt manifests (located in the [.github/prompts/](.github/prompts/) directory) act as instant delegation handlers. They do not process computations or fetch databases themselves; instead, they immediately delegate the user's active session request to its corresponding dedicated specialist subagent in the [.github/agents/](.github/agents/) directory using the `runSubagent` tool:
 - [.github/prompts/gex-regime-trading.prompt.md](.github/prompts/gex-regime-trading.prompt.md): User-facing entry point for evaluating the daily broad-market regime gates, scanner candidacy list filtration, and candidate setup grading. Automatically delegates to the **GEX Orchestrator** ([.github/agents/gex-orchestrator.agent.md](.github/agents/gex-orchestrator.agent.md)) agent.
 - [.github/prompts/portfolio-analysis.prompt.md](.github/prompts/portfolio-analysis.prompt.md): User-facing entry point for tracking active underlier positions, processing standard trailing halts/time/stalling stops, checking cash-buffer metrics, and verifying concentration limits. Automatically delegates to the **Portfolio Risk Manager** ([.github/agents/portfolio-risk-manager.agent.md](.github/agents/portfolio-risk-manager.agent.md)) agent.
-- [.github/prompts/agentic-trading.prompt.md](.github/prompts/agentic-trading.prompt.md): User-facing entry point for account clearance verification, option/underlier tradability checks, pricing bid-ask spread boundaries, and placing secure broker limit orders. Automatically delegates to the **Agentic Trader** ([.github/agents/agentic-trader.agent.md](.github/agents/agentic-trader.agent.md)) agent.
 - [.github/prompts/futures-trading.prompt.md](.github/prompts/futures-trading.prompt.md): User-facing entry point for scanning economic catalysts, establishing trend biases, determining Initial Balance ranges, and calculating contract sizing brackets. Automatically delegates to the **Futures Trading Analyst** ([.github/agents/futures-trading-analyst.agent.md](.github/agents/futures-trading-analyst.agent.md)) agent.
 - [.github/prompts/reddit-sentiment-analyst.prompt.md](.github/prompts/reddit-sentiment-analyst.prompt.md): User-facing entry point for sweeping popular Reddit financial communities for public sentiment scores and spotting retail FOMO/capitulation divergences against major GEX levels. Automatically delegates to the **Reddit Sentiment Analyst** ([.github/agents/reddit-sentiment-analyst.agent.md](.github/agents/reddit-sentiment-analyst.agent.md)) agent.
 
@@ -115,7 +131,6 @@ This workspace is structured as follows:
 4. **Specialized Copilot Prompt Manifests (Delegation Layer)** (located in the [.github/prompts/](.github/prompts/) directory):
    - [.github/prompts/gex-regime-trading.prompt.md](.github/prompts/gex-regime-trading.prompt.md): Public entrance for broad market regime checks and daily setup grading. Delegates directly to the **GEX Orchestrator** subagent.
    - [.github/prompts/portfolio-analysis.prompt.md](.github/prompts/portfolio-analysis.prompt.md): Public entrance for risk/weight audits and trailing stop checks. Delegates directly to the **Portfolio Risk Manager** subagent.
-   - [.github/prompts/agentic-trading.prompt.md](.github/prompts/agentic-trading.prompt.md): Public entrance for broker limit-order entries and account clearance checks. Delegates directly to the **Agentic Trader** subagent.
    - [.github/prompts/futures-trading.prompt.md](.github/prompts/futures-trading.prompt.md): Public entrance for economic catalyst analyses and futures bracket parameters. Delegates directly to the **Futures Trading Analyst** subagent.
    - [.github/prompts/reddit-sentiment-analyst.prompt.md](.github/prompts/reddit-sentiment-analyst.prompt.md): Public entrance for live Reddit group scraping and divergence tracking. Delegates directly to the **Reddit Sentiment Analyst** subagent.
 ---
@@ -301,13 +316,18 @@ The `portfolio` subcommand automatically tracks trailing/loss stops, progress me
 ```mermaid
 graph TD
     A[Active Option Position] --> B{Calculate Stop Triggers Daily}
-    B -->|1. Spot < nTrans| C[Immediate Exit: Structural Stop]
-    B -->|2. Spot < pTrans AND Option P&L <= -10%| D[Immediate Exit: Max Asset Loss Stop]
-    B -->|3. Day 7 Progress < 50% from pTrans to +GEX| E[Immediate Exit: Time Halted Stop]
-    B -->|4. Stalled Days >= 3| F[Immediate Exit: Momentum Stalled Stop]
+    B -->|1. Spot < nTrans| C[Trigger: Structural Stop]
+    B -->|2. Spot < pTrans AND Option P&L <= -10%| D[Trigger: Max Asset Loss Stop]
+    B -->|3. Day 7 Progress < 50% from pTrans to +GEX| E[Trigger: Time Halted Stop]
+    B -->|4. Stalled Days >= 3| F[Trigger: Momentum Stalled Stop]
     B -->|5. Spot >= +GEX| G{Check Option Premium P&L}
-    G -->|P&L >= 0| H[Exit/Trail: Profit-Taking Target Met]
-    G -->|P&L < 0| I[Exit to Limit Loss: Strike/Expiry Mismatch]
+    G -->|P&L >= 0| H[Trigger: Profit-Taking Target Met]
+    G -->|P&L < 0| I[Trigger: Risk Exit Mismatched Premium]
+
+    C & D & E & F & H & I --> J{User Approval Box}
+    J -->|User Approves YES| K[Spawn agentic-trader Subagent]
+    K --> L[Secure Limit Order routed to broker]
+    J -->|User Declines / Postpones| M[Execution Postponed]
 ```
 
 ### 🛑 Sequential Evaluation & Priority Protection
@@ -344,6 +364,20 @@ If a defensive or trailing stop is triggered, any subsequent profit-taking evalu
      - **Option Premium is in Loss**: Exit position immediately to limit further losses (flags a structural/time mismatch).
 
 ---
+
+## 🤝 Interactive Order Execution Handoff & Human Approval
+
+To maintain strict risk control, prevent trade execution slippage, and securely route orders, the GEX master orchestrator uses a rules-based handoff process with mandatory **human-in-the-loop validation**:
+
+1. **Preceding Setup Actions**:
+   - **Entries**: When a setup is classified as `CONFIRMED` or `PENDING` (Step 6) and recommends a `"Buy Option contract"` action, the Orchestrator identifies the targeted ATM/OTM call contract and estimated sizing criteria.
+   - **Exits**: When an active position triggers a stop or a trailing/profit-taking exit (Step 7), the Orchestrator isolated the specific trigger parameter (`Structural`, `Max Loss`, `Time Stop`, `Stalling`, or `Profit Take`) to determine the target exit action.
+2. **Approval Request Box**:
+   - The Orchestrator displays a prominent, bold `EXECUTION APPROVAL REQUEST` detailing the trade parameters, underlier spot, bid/ask spreads, and recommended price boundaries.
+   - It prompts the user: "Would you like to hand execution for this action to the Agentic Trader subagent? Please reply with 'YES' to proceed."
+3. **Subagent Execution Routing**:
+   - Only upon detecting an explicit affirmative validation (such as `"YES"`) does the Orchestrator delegate execution by spawning the `agentic-trader` subagent via the subagent tool.
+   - The `agentic-trader` subagent verifies real-time permissions, executes pre-trade quotes/bids comparison, routes limit orders to broker channels, registers/registers the executed position locally in [data/active_positions.json](data/active_positions.json), and delivers an institutional-grade routing report.
 
 ---
 

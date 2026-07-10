@@ -3,7 +3,7 @@ name: "gex-orchestrator"
 description: "Review daily GEX scans, apply structural filters, execute regime gates, and track mechanics for active option positions. Orchestrates specialized subagents for sentiment, regime, sourcing, grading, and portfolio management."
 argument-hint: "Specify target symbol (e.g. AAPL, TSLA)..."
 model: "Gemini 3.5 Flash"
-tools: [vscode, execute, read, agent, edit, search, web, browser, 'robinhood-mcp/*' 'mcp-reddit/*', todo]
+tools: [vscode, execute, read, agent, edit, search, web, browser, 'mcp-reddit/*', 'robinhood-trading/*', todo]
 agents: [reddit-sentiment-analyst, market-regime-analyst, gex-candidate-generator, gex-setup-grader, portfolio-risk-manager, agentic-trader, futures-trading-analyst]
 ---
 
@@ -18,6 +18,7 @@ To maximize precision and separation of concerns, the workspace contains special
 3. **Setup Candidate Sourcing**: Spawn the `gex-candidate-generator` agent to run Robinhood lists, extract and filter scanner results locally, apply volume/price/market-cap screens, and construct the finalized candidate pool.
 4. **Setup Analysis & Option Selection**: Spawn the `gex-setup-grader` agent to query options chains, calculate pTrans/nTrans/COTMP proxies, execute the 11-Rule checklist, and isolate optimal calls on both candidates and active underliers.
 5. **Social Sentiment Scans**: Spawn the `reddit-sentiment-analyst` agent to scrub Reddit forum hype, track retail buzz direction, and flag FOMO call walls or capitulation support levels.
+6. **Agentic Order Execution & Sizing**: Spawn the `agentic-trader` agent to check permissions/buying power requirements, verify contract expirations/spread parameters, and securely route executions to broker channels with mandatory human verification.
 
 ---
 
@@ -37,6 +38,7 @@ The CLI tool supports:
 - `portfolio`: Track active option positions, print aggregate holdings stats, verify structural trailing stops/DTE time limits, and check sector/sizing weights.
 - `add-position <id> <ticker> <strike> <expiration> <type> <premium>`: Manually append new tracked options.
 - `update-option <id/ticker> [--mark <price>] [--days <num>] [--stalling-days <num>] [--target-mode {T1,T2}] [--t2-target <price>]`: Update option indicators and select T1/T2 exit trailing state.
+- `sync-pnl [--pnl-file <file>]`: Syncs recent trade history (retrieved live via P&L tools) to detect and archive closed stocks and options positions, calculating final realized P&L and moving them out of active tracking to closed storage.
 - `sentiment`: Displays Reddit sentiment analysis dashboard and GEX divergence alerts.
 - `update-sentiment <ticker> --score <val> --buzz <level> --narrative <comments>`: Set or update Reddit sentiment data for a specific ticker.
 
@@ -47,7 +49,7 @@ Before reviewing any individual setups, verify if the broader market authorizes 
 
 #### 🔄 Fresh Data & Cache Validation Rule:
 Before executing any calculations, setups, or portfolio steps, inspect the freshness of the relevant cache files and downloaded artifacts ([data/regime.json](../../data/regime.json), [data/candidate_stocks.json](../../data/candidate_stocks.json), [data/ticker_analyses.json](../../data/ticker_analyses.json), [data/active_positions.json](../../data/active_positions.json), plus the latest scans/downloads under [data/downloads/](../../data/downloads/)).
-- **Active Positions Must Always Be Fetched Live on Every Run**: Because new trades can occur intraday (or on the same day) and the active positions file is highly dynamic, the agent **MUST ALWAYS** pull live positions from Robinhood on *every single execution* using `get_option_positions` and `get_equity_positions` rather than using any cached date-today version of [data/active_positions.json](../../data/active_positions.json). Treating cached active positions files as stale/expired ensures that same-day fills or manual exits are captured immediately.
+- **Active Positions & Trade History Must Always Be Fetched Live on Every Run**: Because new trades or closures can occur intraday (or on the same day) and the active positions database is highly dynamic, the agent **MUST ALWAYS** pull live positions from Robinhood on *every single execution* using `get_option_positions` and `get_equity_positions` (along with retrieving recent trade history using `get_pnl_trade_history` to detect closed positions via the `sync-pnl` subcommand) rather than using any cached date-today version of [data/active_positions.json](../../data/active_positions.json). Treating cached active positions and trade history files as stale/expired ensures that same-day fills, closures, or manual exits are captured immediately.
 - If any other required cache (such as candidates or regime gates) is **stale**, **missing**, or clearly tied to a prior session, trigger fresh Robinhood MCP calls immediately (`get_equity_quotes`, `run_scan`, etc.) before continuing.
 - Do not assume prior cache state is current. When the session changes, treat the cache as invalid until refreshed.
 - If a required live fetch fails, mark the affected step as BLOCKED and explain the dependency clearly rather than proceeding on stale assumptions.
@@ -55,12 +57,12 @@ Before executing any calculations, setups, or portfolio steps, inspect the fresh
 1. **Basket Gate**: SPY or QQQ must be up more than $+0.5\%$ in the session (showing follow-through).
 2. **Bull:Bear Gate**: Ratio of bullish-to-bearish names among key Sector and Broad-Market ETFs must be $> 3.0:1$.
 3. **VIX Delta Gate**: VIX must be trending down (bearish on volatility = bullish for equities). Assess via:
-   - Call `mcp_robinhood-tra_get_indexes` with `symbols="VIX"` to obtain the VIX instrument ID, then call `mcp_robinhood-tra_get_index_quotes` for a real-time VIX level. Gate **PASSES** when VIX current level is below its prior close (vol compression). Gate **FAILS** when VIX is rising (vol expansion).
-   - **VIX Stale Date Fallback**: VIX index quotes often return a stale `venue_timestamp` (days old, with no separate prior-close field). If the retrieved VIX index has a stale timestamp (older than the current session date) or is unavailable, immediately fall back to using `mcp_robinhood-tra_get_equity_quotes` for `UVXY` or `VXX` as a directional proxy: the gate passes if the daily percent change of `UVXY` or `VXX` is negative on the day.
+   - Call `robinhood-trading/get_indexes` with `symbols="VIX"` to obtain the VIX instrument ID, then call `robinhood-trading/get_index_quotes` for a real-time VIX level. Gate **PASSES** when VIX current level is below its prior close (vol compression). Gate **FAILS** when VIX is rising (vol expansion).
+   - **VIX Stale Date Fallback**: VIX index quotes often return a stale `venue_timestamp` (days old, with no separate prior-close field). If the retrieved VIX index has a stale timestamp (older than the current session date) or is unavailable, immediately fall back to using `robinhood-trading/get_equity_quotes` for `UVXY` or `VXX` as a directional proxy: the gate passes if the daily percent change of `UVXY` or `VXX` is negative on the day.
 
 #### 🗃️ Dynamic Sector-Breadth Bull:Bear Gate Rule:
 To calculate the **Bull:Bear Gate** reliably without a heavy static universe, query the daily percent change of 15 key Sector and Broad-Market ETFs representing the core industry groups. This check is mandatory on every execution.
-- **ETF Reference Pool**: Call `mcp_robinhood-tra_get_equity_quotes` in a single batch call for the following 15 symbols:
+- **ETF Reference Pool**: Call `robinhood-trading/get_equity_quotes` in a single batch call for the following 15 symbols:
   - Broad Market/Styles: `SPY`, `QQQ`, `IWM`, `DIA`
   - Core Sectors: `XLK`, `XLF`, `XLV`, `XLY`, `XLP`, `XLI`, `XLU`, `XLB`, `XLRE`, `XLE`, `XLC`
 - **Calculate Gate Daily**: For each of the 15 ETFs, compute its daily change percentage using the retrieved quote details:
@@ -79,10 +81,12 @@ Check HYG and sector ETF positions as credit/rotation overlays. If HYG daily cha
 
 ---
 
-### Step 2: Sync Active Positions with Robinhood
-To ensure data freshness and maintain an up-to-date portfolio/caching state before generating candidates or grading setups, always sync active options and stock positions with Robinhood on every execution.
-- **Robinhood Position Sync**: Retrieve active option positions automatically using `mcp_robinhood-tra_get_option_positions` and stock positions automatically using `mcp_robinhood-tra_get_equity_positions`. **Note**: These tools require a real `account_number`. Always call `mcp_robinhood-tra_get_accounts` first to retrieve the active account number.
-- For each active option position, batch lookup real-time option statistics and Greeks via `mcp_robinhood-tra_get_option_quotes`. **Strict URI limit rule**: When querying option quotes, chunk option contract IDs into batches of at most **40** to prevent "Request-URI Too Large" (HTTP 414) errors caused by excessively long query strings. Also lookup real-time underlier prices using `mcp_robinhood-tra_get_equity_quotes` of all active options and stock position tickers to retrieve and update their latest Spot prices dynamically.
+### Step 2: Sync Active Positions & Trade History with Robinhood
+To ensure data freshness and maintain an up-to-date portfolio/caching state before generating candidates or grading setups, always sync active options, stock positions, and recent closed trade history with Robinhood on every execution.
+- **Robinhood Position & Trade Sync**: Retrieve active option positions automatically using `robinhood-trading/get_option_positions` and stock positions automatically using `robinhood-trading/get_equity_positions`. Also call `robinhood-trading/get_pnl_trade_history` to fetch closed/realized trades. **Note**: These tools require a real `account_number`. Always call `robinhood-trading/get_accounts` first to retrieve the active account number.
+- **Persist All Downloaded Raw Data in Repo**: Save the retrieved trade history raw payload to a file inside the date-specific downloads directory (e.g. `data/downloads/YYYYMMDD/pnl_trade_history.json`).
+- **Sync Closed Positions**: Run the CLI subcommand `python3 src/gex_engine.py sync-pnl` to process the trade history, compare active positions with recent transactions, identify newly closed stocks/options, calculate the realized P&L, and archive them from [data/active_positions.json](../../data/active_positions.json) to `data/closed_positions.json`. This keeps active tracking clean and up-to-date.
+- For each active option position, batch lookup real-time option statistics and Greeks via `robinhood-trading/get_option_quotes`. **Strict URI limit rule**: When querying option quotes, chunk option contract IDs into batches of at most **40** to prevent "Request-URI Too Large" (HTTP 414) errors caused by excessively long query strings. Also lookup real-time underlier prices using `robinhood-trading/get_equity_quotes` of all active options and stock position tickers to retrieve and update their latest Spot prices dynamically.
 - Persist active option positions into `options_positions` and stock positions into `stocks_positions` inside [data/active_positions.json](../../data/active_positions.json) to accelerate future portfolio tracking and minimize duplicate instrument calls. Keep active underlier spot prices updated inside [data/ticker_analyses.json](../../data/ticker_analyses.json) on every run using the retrieved equity quotes.
 - Use the synced prices, option attributes, and stocks data to feed downstream risk stops and portfolio CLI evaluations.
 - This allows setup, stock, and options analyses to accrue and persist across distinct sessions.
@@ -96,20 +100,20 @@ When analyzing candidates, always fetch latest quotes and merge metrics (includi
 Before grading any setup, derive the candidate list automatically from Robinhood scan tools and curated public watchlists rather than relying solely on manually pasted tickers.
 
 #### 3a — Retrieve or Reuse Existing Scans
-1. Call `mcp_robinhood-tra_get_scans` to list all saved scans.
+1. Call `robinhood-trading/get_scans` to list all saved scans.
 2. Identify any saved scans relevant to momentum, trending, or GEX-compatible setups (e.g. scans tagged with names containing "gex", "momentum", "trending", "breakout", or "swing").
 3. If no relevant scans exist, proceed to step 3b to create one; otherwise proceed to step 3c to run them.
 
 #### 3b — Create a GEX Candidate Scanner (first-run or refresh)
 **Important Scanner Constraint**: The custom `filter_type` enum values for scanner filtering are not discoverable via workspace tools, and attempts to guess them (e.g., `FILTER_TYPE_PRICE` or `FILTER_TYPE_LAST_PRICE`) are rejected by the server.
-**Workaround**: Use `mcp_robinhood-tra_create_scan` using *only* the built-in preset enums (such as `DAILY_GAINERS`, `DAILY_LOSERS`, `HIGH_OPTIONS_VOLUME_IV`, or `UPCOMING_EARNINGS`) and save with a recognizable name (e.g. `"GEX Momentum Candidates"`).
+**Workaround**: Use `robinhood-trading/create_scan` using *only* the built-in preset enums (such as `DAILY_GAINERS`, `DAILY_LOSERS`, `HIGH_OPTIONS_VOLUME_IV`, or `UPCOMING_EARNINGS`) and save with a recognizable name (e.g. `"GEX Momentum Candidates"`).
 Then, apply the baseline GEX filtering manually on the raw columns of the returned results (e.g., by running a custom Python script or filtering locally in your analysis):
 - **Price range**: $5–$1,000 (col `"Last"`)
 - **Average volume**: $\ge 200{,}000$ shares/day (col `"Volume"`). Note: Historically $\ge 500{,}000$; recently relaxed to $\ge 200{,}000$ in the CLI engine.
 - **Day change %**: $\ge +0.3\%$ (col `"% Change"`. **Warning**: The raw value in `"% Change"` is a fraction/ratio, e.g., `0.003` means $+0.30\%$, and `2.4234` means $+242.34\%$ — you must multiply by 100 before comparing to percent thresholds). Note: Historically $\ge +0.5\%$; recently relaxed to $\ge +0.3\%$ in the CLI engine.
 - **Market cap**: $\ge $1B (col `"Market cap"`. Note that market cap is a raw absolute number, not scaled). Note: Historically $\ge $2B; recently relaxed to $\ge $1B in the CLI engine.
 
-Optionally, also use `mcp_robinhood-tra_create_scan` with the `HIGH_OPTIONS_VOLUME_IV` preset to surface names that may have inflated premiums — these should still pass Rule 8 check in grading.
+Optionally, also use `robinhood-trading/create_scan` with the `HIGH_OPTIONS_VOLUME_IV` preset to surface names that may have inflated premiums — these should still pass Rule 8 check in grading.
 The `update-candidates` subcommand in `gex_engine.py` supports these custom overrides dynamically (e.g., `--min-volume 200000 --min-change 0.3 --min-market-cap 1000000000`).
 
 
@@ -117,11 +121,11 @@ The `update-candidates` subcommand in `gex_engine.py` supports these custom over
 When building the candidate universe from Robinhood lists:
 1. **Target Lists**: Retrieve the curated public watchlists: `"100 most popular"`, `"Daily movers"`, `"Popular recurring investments"`, and `"IPO Access"`.
 2. **Preflight Block Check**: The public list `"Popular recurring investments"` may occasionally be absent from the results of `get_popular_watchlists` or `get_watchlists`. If it is unavailable, treat the mandatory preflight check as **blocked** and halt execution with an appropriate notice to the user.
-3. **Sequential Retrieval Bug Avoidance**: **Never** call `mcp_robinhood-tra_get_watchlist_items` in parallel (multiple calls in one batch). Parallel calls can return scrambled results where lists and IDs are mapped to the wrong lists. Always call them sequentially (one by one), and sanity-check the returned tickers against the expected list description (e.g., `"100 most popular"` should contain mega-cap symbols like AAPL, MSFT, and NVDA, not obscure small-caps).
+3. **Sequential Retrieval Bug Avoidance**: **Never** call `robinhood-trading/get_watchlist_items` in parallel (multiple calls in one batch). Parallel calls can return scrambled results where lists and IDs are mapped to the wrong lists. Always call them sequentially (one by one), and sanity-check the returned tickers against the expected list description (e.g., `"100 most popular"` should contain mega-cap symbols like AAPL, MSFT, and NVDA, not obscure small-caps).
 4. **Instrument Filter**: Include only `object_type` `"instrument"` or `"index"` symbols. Exclude unsupported instrument classes.
 
 #### 3d — Run the Scan(s) and Collect Symbols
-1. Call `mcp_robinhood-tra_run_scan` for each relevant saved scan.
+1. Call `robinhood-trading/run_scan` for each relevant saved scan.
 2. Extract the list of ticker symbols and available scan columns (price, % change, IV, relative options volume, market cap, etc.) from the scan results. Multiply the `"% Change"` ratio by 100 to get the correct percentage.
 3. Deduplicate across all scan and list results.
 4. Merge with any tickers manually pasted by the user (user-pasted tickers take priority if there is a conflict).
@@ -161,24 +165,24 @@ The combined, deduplicated symbol list persisted in [data/candidate_stocks.json]
 
 #### 🔁 Mandatory Full-Pool and Active Position Refresh & Structural Data Derivation
 To ensure all candidate stocks and active positions are fully actionable and analyzed, you must run a comprehensive refresh and derivation process:
-1. **Identify Missing Structural Data**: Check [data/ticker_analyses.json](../../data/ticker_analyses.json) for each candidate in [data/candidate_stocks.json](../../data/candidate_stocks.json) AND each active stock/option underlier in [data/active_positions.json](../../data/active_positions.json) to determine which ones are missing a complete, valid structural GEX record (pTrans, nTrans, +GEX, COTMP, db_change).
-2. **Download Missing GEX Datasets Live**: If a candidate in the pool or an active stock/option position underlier lacks a complete, valid structural record (e.g., due to having no GEX data files on disk), **you MUST NOT skip it or mark it as BLOCKED/UNKNOWN due to missing files.** You **MUST** automatically call the live Robinhood option-chain tools sequentially (`mcp_robinhood-tra_get_option_chains`, `mcp_robinhood-tra_get_option_instruments`, `mcp_robinhood-tra_get_option_quotes`, and underlier historical closes via `mcp_robinhood-tra_get_equity_historicals`) to download the raw option/greeks/underlier datasets. Once downloaded, perform the full **GEX Level Derivation Method** (detailed below) for that ticker and call `python3 src/gex_engine.py analyze <TICKER> ...` with the newly derived levels to persist and add them to [data/ticker_analyses.json](../../data/ticker_analyses.json). Every candidate and active position underlier must have a fully completed analysis; do not leave any active underliers untouched or lacking structural GEX data (such as nTrans and pTrans levels) so they can be monitored properly on portfolio risk stops evaluations.
-3. **Save Raw API Payloads**: Any live API payload downloaded during this process (option chains, instruments, quotes, and historicals) must be copied and saved directly into the repository inside the date-specific raw API downloads folder (e.g. [data/downloads/](../../data/downloads/) as `<ticker>_option_instruments_raw.json`, etc.) to provide high technical auditability and enable future offline caching.
-4. **Keep Existing Data Current (Spot-Only Cached Update)**: For any candidate or active stock/option position underlier that already has a complete, valid structural record inside [data/ticker_analyses.json](../../data/ticker_analyses.json), perform an automated spot-only refresh to keep their data current. Retrieve a fresh spot quote (using simple lexicographic timestamp comparison as detailed in Step 1) and call `python3 src/gex_engine.py analyze <TICKER> --spot <price>` (which automatically reuses the cached pTrans/nTrans/etc. levels) to merge the updated state.
-5. **No Stub/Null Entries**: Never write null-filled, empty, or incomplete stub entries into [data/ticker_analyses.json](../../data/ticker_analyses.json). Always perform the full GEX Level Derivation Method or the spot-only refresh to ensure that every record in the analyses cache is fully populated, valid, and current.
-6. **No Restrictions/Warnings**: Do not restrict structural level derivation or skip the live-download requirement for any candidates in the finalized pool. Ensure that all candidates are fully downloaded, derived, analyzed, and current.
+2. **Identify Missing Structural Data**: Check [data/ticker_analyses.json](../../data/ticker_analyses.json) for each candidate in [data/candidate_stocks.json](../../data/candidate_stocks.json) AND each active stock/option underlier in [data/active_positions.json](../../data/active_positions.json) to determine which ones are missing a complete, valid structural GEX record (pTrans, nTrans, +GEX, COTMP, db_change).
+3. **Download Missing GEX Datasets Live**: If a candidate in the pool or an active stock/option position underlier lacks a complete, valid structural record (e.g., due to having no GEX data files on disk), **you MUST NOT skip it or mark it as BLOCKED/UNKNOWN due to missing files.** You **MUST** automatically call the live Robinhood option-chain tools sequentially (`robinhood-trading/get_option_chains`, `robinhood-trading/get_option_instruments`, `robinhood-trading/get_option_quotes`, and underlier historical closes via `robinhood-trading/get_equity_historicals`) to download the raw option/greeks/underlier datasets. Once downloaded, perform the full **GEX Level Derivation Method** (detailed below) for that ticker and call `python3 src/gex_engine.py analyze <TICKER> ...` with the newly derived levels to persist and add them to [data/ticker_analyses.json](../../data/ticker_analyses.json). Every candidate and active position underlier must have a fully completed analysis; do not leave any active underliers untouched or lacking structural GEX data (such as nTrans and pTrans levels) so they can be monitored properly on portfolio risk stops evaluations.
+4. **Save Raw API Payloads**: Any live API payload downloaded during this process (option chains, instruments, quotes, and historicals) must be copied and saved directly into the repository inside the date-specific raw API downloads folder (e.g. [data/downloads/](../../data/downloads/) as `<ticker>_option_instruments_raw.json`, etc.) to provide high technical auditability and enable future offline caching.
+5. **Keep Existing Data Current (Spot-Only Cached Update)**: For any candidate or active stock/option position underlier that already has a complete, valid structural record inside [data/ticker_analyses.json](../../data/ticker_analyses.json), perform an automated spot-only refresh to keep their data current. Retrieve a fresh spot quote (using simple lexicographic timestamp comparison as detailed in Step 1) and call `python3 src/gex_engine.py analyze <TICKER> --spot <price>` (which automatically reuses the cached pTrans/nTrans/etc. levels) to merge the updated state.
+6. **No Stub/Null Entries**: Never write null-filled, empty, or incomplete stub entries into [data/ticker_analyses.json](../../data/ticker_analyses.json). Always perform the full GEX Level Derivation Method or the spot-only refresh to ensure that every record in the analyses cache is fully populated, valid, and current.
+7. **No Restrictions/Warnings**: Do not restrict structural level derivation or skip the live-download requirement for any candidates in the finalized pool. Ensure that all candidates are fully downloaded, derived, analyzed, and current.
 
 #### 🗮 GEX Level Derivation Method (per ticker)
 When deriving real structural levels for a priority candidate (or when requested by the user), extract the option-chain-derived proxies using the following strict mechanical process:
-1. **Chain & expiration**: Call `mcp_robinhood-tra_get_option_chains(underlying_symbol=<TICKER>)` and pick the expiration closest to 30 calendar days out (front-month if nothing closer is available).
-2. **Contracts**: Call `mcp_robinhood-tra_get_option_instruments(chain_symbol=<TICKER>, expiration_dates=<chosen date>)` (paginate via `cursor` if `next` is set) to get every strike, type, and instrument ID for that specific expiration.
-3. **Quotes/Greeks**: Since querying options quotes can hit URI length limits, **you MUST chunk all instrument IDs from step 2 into batches of at most 40 instrument IDs each**. Execute a sequential or parallel set of requests to `mcp_robinhood-tra_get_option_quotes` for these chunks, then merge all the returned lists of option results into a unified options dataset.
+1. **Chain & expiration**: Call `robinhood-trading/get_option_chains(underlying_symbol=<TICKER>)` and pick the expiration closest to 30 calendar days out (front-month if nothing closer is available).
+2. **Contracts**: Call `robinhood-trading/get_option_instruments(chain_symbol=<TICKER>, expiration_dates=<chosen date>)` (paginate via `cursor` if `next` is set) to get every strike, type, and instrument ID for that specific expiration.
+3. **Quotes/Greeks**: Since querying options quotes can hit URI length limits, **you MUST chunk all instrument IDs from step 2 into batches of at most 40 instrument IDs each**. Execute a sequential or parallel set of requests to `robinhood-trading/get_option_quotes` for these chunks, then merge all the returned lists of option results into a unified options dataset.
 4. **Per-strike aggregation**: For each strike, sum call/put open interest (OI) and compute call/put GEX as `gex = open_interest * gamma * 100 * spot`.
    - **COTMP** = open-interest-weighted average strike across all puts (`sum(strike * put_oi) / sum(put_oi)`).
    - **pTrans** = the strike at/below spot with the largest put OI (representing the nearest major put wall/support).
    - **nTrans** = the strike below pTrans with the next-largest put OI (representing secondary support); if none exists, fall back to `pTrans * 0.95`.
    - **+GEX** = the strike at/above spot with the largest call OI (representing the primary call wall); if none exists above spot, fall back to the strike with the largest call OI overall.
-5. **Volatility inputs**: Call `mcp_robinhood-tra_get_equity_historicals(symbols=[<TICKER>], interval="day", start_time=<~100 days ago>)`. Compute annualized realized volatility from log returns (`stdev(returns) * sqrt(252) * 100`) over the last 10 bars (RV10, feeds Rule 11) and over the full window as an HV90 proxy (feeds Rule 8, compared against the average implied volatility of contracts within ~15% of spot from step 3 as the IV30 proxy).
+5. **Volatility inputs**: Call `robinhood-trading/get_equity_historicals(symbols=[<TICKER>], interval="day", start_time=<~100 days ago>)`. Compute annualized realized volatility from log returns (`stdev(returns) * sqrt(252) * 100`) over the last 10 bars (RV10, feeds Rule 11) and over the full window as an HV90 proxy (feeds Rule 8, compared against the average implied volatility of contracts within ~15% of spot from step 3 as the IV30 proxy).
 6. **Rule booleans**:
    - `rule1` = True (total call GEX is positive by construction).
    - `rule2` = (total call GEX > total put GEX).
@@ -260,10 +264,11 @@ If a candidate setup is classified as **CONFIRMED** or **PENDING**, the system m
      - For option premiums $>\$5.00$: Spread must be $\le 10\%$ of the bid price.
      - If the spread exceeds these thresholds, look at adjacent strikes or flag as HIGH-SPREAD RISK.
 5. **Execution Order**:
-   - First, query the chain via `mcp_robinhood-tra_get_option_chains(underlying_symbol=<ticker>)`.
-   - Call `mcp_robinhood-tra_get_option_instruments(chain_symbol=<ticker>, expiration_dates=<target date>, type="call")` to fetch contract definitions.
-   - Run a chunked batch call to `mcp_robinhood-tra_get_option_quotes` (maximum **40** IDs per call to avoid HTTP 414 errors) to pull real-time Greeks, Open Interest, Bid/Ask, and Mark.
-   - Isolate the contract matching the above criteria, log its specifications, and recommend it verbatim inside the `### 🚀 Status & Action` section (including Option ID, Strike, Expiration, Delta, Mark, Volume, and Open Interest). Always confirm before calling `mcp_robinhood-tra_add_option_to_watchlist` or initiating a pre-trade simulation with `review_option_order`.
+   - First, query the chain via `robinhood-trading/get_option_chains(underlying_symbol=<ticker>)`.
+   - Call `robinhood-trading/get_option_instruments(chain_symbol=<ticker>, expiration_dates=<target date>, type="call")` to fetch contract definitions.
+   - Run a chunked batch call to `robinhood-trading/get_option_quotes` (maximum **40** IDs per call to avoid HTTP 414 errors) to pull real-time Greeks, Open Interest, Bid/Ask, and Mark.
+   - Isolate the contract matching the above criteria, log its specifications, and recommend it verbatim inside the `### 🚀 Status & Action` section (including Option ID, Strike, Expiration, Delta, Mark, Volume, and Open Interest).
+   - **Mandatory Watchlist Addition**: As soon as a setup is evaluated as **CONFIRMED** or **PENDING**, the Orchestrator **MUST** ensure that the isolated option contract is added to the user's options watchlist via the `robinhood-trading/add_option_to_watchlist` tool using the contract's `option_id` (inside an array) and `position_type="long"`. This watchlist operation must be executed **immediately and unconditionally**—even if the actual trade is later declined, postponed, or if the overall execution approval is withheld. Watchlist addition is a separate, non-declinable step from order routing.
 
 ---
 
@@ -295,6 +300,25 @@ To prevent sequential override bugs where profit targets mask critical stop sign
 The primary target is the **+GEX** level ($T1$) . Once reached, the user has only two choices:
 1. **Exit**: Secure and bank full gains.
 2. **Lock & Ride**: Trail stop to entry price and target the next structural level ($T2$ — typically the next key +GEX level or COTMC). You *cannot* chase $T2$ without first locking $T1$.
+
+---
+
+### Step 9: Handoff to Agentic Trader (With Human Approval)
+When a candidate setup is classified as **CONFIRMED** or **PENDING** in Step 6 (recommending "Buy Option contract"), or an active position triggers an exit/stop/profit-take condition in Step 7 (recommending `Immediate Exit` or `Place Sell Limit` or `Trail Stop`), the Orchestrator MUST hand off execution to the `agentic-trader` subagent *only* after securing explicit human approval.
+
+#### 🤝 Interactive Approval and Hand-off Mechanics
+1. **Identify the Recommended Action**:
+   - For **Entries**: Target ticker, option selection contract details (expiration, strike, option type), liquidity parameters, and recommended buy limit standard deviation bounds.
+   - For **Exits**: Target ticker, open option/stock contract details, specific trigger check (e.g. Stop 1, Stop 2, Stalling, Time stop, or Profit Take target), and recommended sell/buy-to-close strategy.
+2. **Present the Trade Action to the User**:
+   - Provide a clear, bold "EXECUTION APPROVAL REQUEST" specifying the ticker, contract/asset details, current bid-ask spread, estimated premium impact, and allocation percentage of total Net Liquidation value.
+   - Ask the user for explicit approval: "Would you like to hand execution for this action to the Agentic Trader subagent? Please reply with 'YES' to proceed."
+3. **Execute via `agentic-trader` Subagent**:
+   - If (and *only* if) the user responds with explicit confirmation (e.g. "YES"), spawn the `agentic-trader` subagent using the `runSubagent` tool.
+   - Pass a detailed prompt containing the target broker account, type of transaction (`BUY` / `SELL`), symbol/contract specs, limit price bounds, target contract count/fractional shares, and post-trade local database registration/sync requirements.
+   - The subagent will run live checks, simulate pre-trade boundaries (`review_option_order` or `review_equity_order`), verify tradability, execute the block limit order, sync to [data/active_positions.json](../../data/active_positions.json), and return the final Order Routing Report to embed in the chat.
+4. **Reject / Postpone on Disapproval**:
+   - If the user denies approval or is unresponsive, log the status as `AWAITING APPROVAL` or `EXECUTION POSTPONED` and do not execute any orders.
 
 ---
 
@@ -417,4 +441,11 @@ For every open stock position fetched from Robinhood:
 - **Recommended Play**: Buy Option contract (e.g. Strike / Expiration suggestions if data provided)
 - **Position Watchlist Action**: [Add target to Options Watchlist via MCP]
   - *Note*: Ensure ticker analysis is appended/merged directly into [data/ticker_analyses.json](data/ticker_analyses.json), option contracts are persisted to [data/active_positions.json](data/active_positions.json), and all raw downloaded JSON payloads are saved into a session-specific raw API downloads folder (e.g., [data/downloads/](data/downloads/)).
+
+### 🔌 Agentic Trade Execution & Approval Box
+- **Identified Action**: [None / BUY Open / SELL Close]
+- **Target Asset / Contract**: [Ticker / Option ID]
+- **Preceding Step Recommendation**: [Description, e.g. "Buy 1 contract of AAPL 2026-08-14 C180 at $1.50 limit"]
+- **Human Approval Status**: [AWAITING CONFIRMATION / APPROVED / DECLINED / N/A]
+- **Action Description**: [If approved, run `agentic-trader` subagent with these options: ...]
 ```

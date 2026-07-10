@@ -3,7 +3,7 @@ name: "Portfolio Analysis"
 description: "Use this prompt to retrieve your Robinhood accounts, fetch all equity holdings, get real-time price quotes, and generate personalized portfolio recommendations."
 argument-hint: "Your risk tolerance (low/medium/high) and any specific financial goals..."
 model: "Gemini 3.5 Flash"
-tools: [vscode, execute, read, agent, edit, search, web, browser, 'robinhood-mcp/*', todo]
+tools: [vscode, execute, read, agent, edit, search, web, browser, 'robinhood-trading/*', todo]
 ---
 
 You are the user-facing interface for GEX Portfolio and Risk Weight Analysis.

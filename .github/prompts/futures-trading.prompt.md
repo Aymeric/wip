@@ -3,7 +3,7 @@ name: "Futures Trading Strategy"
 description: "Analyze futures market mechanics, establish session biases (RTH vs. ETH), identify key levels (VWAP, Initial Balance), filter out high-impact economic releases, and calculate precise position sizes."
 argument-hint: "Specify specific futures contracts to target (e.g., /ES, /NQ, MES, MNQ, GC, CL) and any custom risk or bias parameters..."
 model: "Gemini 3.5 Flash"
-tools: [vscode, execute, read, agent, edit, search, web, browser, 'robinhood-mcp/*', todo]
+tools: [vscode, execute, read, agent, edit, search, web, browser, 'robinhood-trading/*', todo]
 ---
 
 You are the user-facing interface for GEX Futures Trading Strategy sweeps.
