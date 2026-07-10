@@ -38,11 +38,12 @@ The workspace utilizes an integrated Model Context Protocol (MCP) server bound t
 - **Transaction Routing**: When a setup is `CONFIRMED` and broad-market gates authorization is active (`ALL TRACKS OK`), the agent evaluates portfolio sizing parameters, verifies available buying power via `mcp_robinhood-tra_get_accounts`, reviews option price spreads, and routes limit orders securely.
 
 ### 2. Specialized LLM Prompts (Prompt-Driven Decisons)
-Four targeted, machine-readable markdown prompt manifests (located in the [.github/prompts/](.github/prompts/) directory) govern the agent's behavior. These prompts provide System Instructions to enforce strict quantitative rules, eliminating emotional discretion:
+Five targeted, machine-readable markdown prompt manifests (located in the [.github/prompts/](.github/prompts/) directory) govern the agent's behavior. These prompts provide System Instructions to enforce strict quantitative rules, eliminating emotional discretion:
 - **[.github/prompts/gex-regime-trading.prompt.md](.github/prompts/gex-regime-trading.prompt.md)**: Coordinates the **Daily Broad-Market Regime Gates** calculations, parses the sector ETF pool, fallbacks to volatility indices or proxy tracking, and executes candidate setup grading. It mandates caching raw API responses in date-specific folders and sequential file updating to prevent parallel mismatch errors.
 - **[.github/prompts/robinhood-portfolio-analysis.prompt.md](.github/prompts/robinhood-portfolio-analysis.prompt.md)**: Standardizes cash-reserve evaluations, risk weighting calculations, and portfolio concentration limits ($\le 3.0\%$ of Net Liquidation Value per option leg; $\le 15.0\%$ cumulative technology allocation).
 - **[.github/prompts/robinhood-agentic-trading.prompt.md](.github/prompts/robinhood-agentic-trading.prompt.md)**: Manages secure buy/sell routing, price-spread buffers, buying power verification, and underlier tradability sweeps.
 - **[.github/prompts/futures-trading-strategy.prompt.md](.github/prompts/futures-trading-strategy.prompt.md)**: Directs intraday futures trading, calculating multi-timeframe trends, Initial Balance (IB) ranges, VWAP deviations, and strict contract-sizing limits.
+- **[.github/prompts/reddit-sentiment-analysis.prompt.md](.github/prompts/reddit-sentiment-analysis.prompt.md)**: Scans popular Reddit financial communities (including r/wallstreetbets, r/stocks, and r/options) via `mcp-reddit` to analyze retail sentiment trends against candidate stocks and active holdings, mapping crowd consensus against GEX dealer walls to signal contrarian turning points or FOMO warning thresholds.
 
 ---
 
@@ -61,6 +62,7 @@ This workspace is structured as follows:
    - [.github/prompts/robinhood-portfolio-analysis.prompt.md](.github/prompts/robinhood-portfolio-analysis.prompt.md): Pulls and parses holdings, evaluates cash reserves, and designs customized allocation rebalancing recommendations.
    - [.github/prompts/robinhood-agentic-trading.prompt.md](.github/prompts/robinhood-agentic-trading.prompt.md): Orchestrates buying power validation, tradability sweeps, and handles limit-order routing.
    - [.github/prompts/futures-trading-strategy.prompt.md](.github/prompts/futures-trading-strategy.prompt.md): Analyzes multi-timeframe trends, Initial Balance ranges, VWAP deviations, and strict contract-sizing calculations.
+   - [.github/prompts/reddit-sentiment-analysis.prompt.md](.github/prompts/reddit-sentiment-analysis.prompt.md): Conducts deep social media polling across r/wallstreetbets, r/stocks, and r/options using `mcp-reddit` to isolate public sentiment scores and identify FOMO or extreme capitulation risks in assets.
 
 ---
 
