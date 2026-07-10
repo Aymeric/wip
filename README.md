@@ -37,13 +37,58 @@ The workspace utilizes an integrated Model Context Protocol (MCP) server bound t
 - **Automated Screening**: The agent calls `mcp_robinhood-tra_run_scan` or `mcp_robinhood-tra_get_scans` to identify volatility-compression or high-option-volume breakouts.
 - **Transaction Routing**: When a setup is `CONFIRMED` and broad-market gates authorization is active (`ALL TRACKS OK`), the agent evaluates portfolio sizing parameters, verifies available buying power via `mcp_robinhood-tra_get_accounts`, reviews option price spreads, and routes limit orders securely.
 
-### 2. Specialized LLM Prompts (Prompt-Driven Decisons)
-Five targeted, machine-readable markdown prompt manifests (located in the [.github/prompts/](.github/prompts/) directory) govern the agent's behavior. These prompts provide System Instructions to enforce strict quantitative rules, eliminating emotional discretion:
-- **[.github/prompts/gex-regime-trading.prompt.md](.github/prompts/gex-regime-trading.prompt.md)**: Coordinates the **Daily Broad-Market Regime Gates** calculations, parses the sector ETF pool, fallbacks to volatility indices or proxy tracking, and executes candidate setup grading. It mandates caching raw API responses in date-specific folders and sequential file updating to prevent parallel mismatch errors.
-- **[.github/prompts/robinhood-portfolio-analysis.prompt.md](.github/prompts/robinhood-portfolio-analysis.prompt.md)**: Standardizes cash-reserve evaluations, risk weighting calculations, and portfolio concentration limits ($\le 3.0\%$ of Net Liquidation Value per option leg; $\le 15.0\%$ cumulative technology allocation).
-- **[.github/prompts/robinhood-agentic-trading.prompt.md](.github/prompts/robinhood-agentic-trading.prompt.md)**: Manages secure buy/sell routing, price-spread buffers, buying power verification, and underlier tradability sweeps.
-- **[.github/prompts/futures-trading-strategy.prompt.md](.github/prompts/futures-trading-strategy.prompt.md)**: Directs intraday futures trading, calculating multi-timeframe trends, Initial Balance (IB) ranges, VWAP deviations, and strict contract-sizing limits.
-- **[.github/prompts/reddit-sentiment-analysis.prompt.md](.github/prompts/reddit-sentiment-analysis.prompt.md)**: Scans popular Reddit financial communities (including r/wallstreetbets, r/stocks, and r/options) via `mcp-reddit` to analyze retail sentiment trends against candidate stocks and active holdings, mapping crowd consensus against GEX dealer walls to signal contrarian turning points or FOMO warning thresholds.
+### 2. Specialized LLM Prompts (Prompt-Driven Decisions & Dynamic Delegation)
+To enforce strict mechanical discipline and eliminate manual pricing or sizing calculation errors, the five targeted, machine-readable user-facing markdown prompt manifests (located in the [.github/prompts/](.github/prompts/) directory) act as instant delegation handlers. They do not process computations or fetch databases themselves; instead, they immediately delegate the user's active session request to its corresponding dedicated specialist subagent in the [.github/agents/](.github/agents/) directory using the `runSubagent` tool:
+- [.github/prompts/gex-regime-trading.prompt.md](.github/prompts/gex-regime-trading.prompt.md): User-facing entry point for evaluating the daily broad-market regime gates, scanner candidacy list filtration, and candidate setup grading. Automatically delegates to the **GEX Orchestrator** ([.github/agents/gex-orchestrator.agent.md](.github/agents/gex-orchestrator.agent.md)) agent.
+- [.github/prompts/portfolio-analysis.prompt.md](.github/prompts/portfolio-analysis.prompt.md): User-facing entry point for tracking active underlier positions, processing standard trailing halts/time/stalling stops, checking cash-buffer metrics, and verifying concentration limits. Automatically delegates to the **Portfolio Risk Manager** ([.github/agents/portfolio-risk-manager.agent.md](.github/agents/portfolio-risk-manager.agent.md)) agent.
+- [.github/prompts/agentic-trading.prompt.md](.github/prompts/agentic-trading.prompt.md): User-facing entry point for account clearance verification, option/underlier tradability checks, pricing bid-ask spread boundaries, and placing secure broker limit orders. Automatically delegates to the **Agentic Trader** ([.github/agents/agentic-trader.agent.md](.github/agents/agentic-trader.agent.md)) agent.
+- [.github/prompts/futures-trading.prompt.md](.github/prompts/futures-trading.prompt.md): User-facing entry point for scanning economic catalysts, establishing trend biases, determining Initial Balance ranges, and calculating contract sizing brackets. Automatically delegates to the **Futures Trading Analyst** ([.github/agents/futures-trading-analyst.agent.md](.github/agents/futures-trading-analyst.agent.md)) agent.
+- [.github/prompts/reddit-sentiment-analyst.prompt.md](.github/prompts/reddit-sentiment-analyst.prompt.md): User-facing entry point for sweeping popular Reddit financial communities for public sentiment scores and spotting retail FOMO/capitulation divergences against major GEX levels. Automatically delegates to the **Reddit Sentiment Analyst** ([.github/agents/reddit-sentiment-analyst.agent.md](.github/agents/reddit-sentiment-analyst.agent.md)) agent.
+
+---
+
+## 🤖 Specialized Copilot Subagents Architecture
+
+To maximize precision, separation of concerns, and tool leverage within the workspace, the system has been broken out into a modular, multi-agent cooperative architecture. The **GEX Orchestrator** ([.github/agents/gex-orchestrator.agent.md](.github/agents/gex-orchestrator.agent.md)) acts as the primary user-facing entry point and delegates specific tasks to specialized subagents:
+
+```mermaid
+graph TD
+    User([Swing Trader]) -->|Activate| Orchestrator[gex-orchestrator.agent.md<br/>Master Orchestrator]
+    
+    Orchestrator -->|1. Compute Regime Gates| Analyst[market-regime-analyst.agent.md<br/>Regime Gates & Volatility]
+    Orchestrator -->|2. Sync Positions & Enforce Trailing Stops| Risk[portfolio-risk-manager.agent.md<br/>Risk & Allocation Stop-Losses]
+    Orchestrator -->|3. Generate Candidates| Generator[gex-candidate-generator.agent.md<br/>Scanner & List Filtration]
+    Orchestrator -->|4. Grade Underliers & Isolate Calls| Grader[gex-setup-grader.agent.md<br/>Option-Chain GEX Derivation]
+    Orchestrator -->|5. Scan Social Sentiment Hype| Reddit[reddit-sentiment-analyst.agent.md<br/>Reddit Forum Scraper]
+    Orchestrator -->|6. Perform Secure Agentic Bids/Asks| Trader[agentic-trader.agent.md<br/>Agentic Order Placer]
+    Orchestrator -->|7. Intraday Multi-Timeframe Checks| Futures[futures-trading-analyst.agent.md<br/>Futures Strategy Analyst]
+    
+    Analyst -->|Save gates| RegimeDB[(data/regime.json)]
+    Generator -->|Extract pool| CandidatesDB[(data/candidate_stocks.json)]
+    Grader -->|Post setup profiles| AnalysesDB[(data/ticker_analyses.json)]
+    Risk -->|Track exit indicators| PositionsDB[(data/active_positions.json)]
+    Reddit -->|Save sentiment metrics| SentimentDB[(data/reddit_sentiment.json)]
+    Trader -->|Place trades & post tracking| PositionsDB
+```
+
+### 🛰️ The Specialized Agent Roster
+
+1. **GEX Orchestrator** ([.github/agents/gex-orchestrator.agent.md](.github/agents/gex-orchestrator.agent.md))
+   - **Role**: Primary entry point. Orchestrates the end-to-end workflow, manages interactive chat boundaries, and provides high-level mechanical grading summaries.
+2. **Market Regime Analyst** ([.github/agents/market-regime-analyst.agent.md](.github/agents/market-regime-analyst.agent.md))
+   - **Role**: Validates Daily Regime Gates (Basket Gate, Bull:Bear breadth ETF pool, VIX spot/proxy compression check) and logs warning reports for credit overlays (HYG).
+3. **GEX Candidate Generator** ([.github/agents/gex-candidate-generator.agent.md](.github/agents/gex-candidate-generator.agent.md))
+   - **Role**: Sources candidates from saved Robinhood scanners and sequential-safe watchlist retrieves (100 most popular, Daily movers, Popular recurring investments, IPO Access), applies manual screening parameter buffers, and filters active open positions.
+4. **GEX Setup Grader** ([.github/agents/gex-setup-grader.agent.md](.github/agents/gex-setup-grader.agent.md))
+   - **Role**: Computes mathematical proxies (pTrans, nTrans, +GEX, COTMP, realized/implied volatilities) from safe 40-contract chunk option chains, grades setup profiles out of 11 system rules, and isolates specific highly liquid ATM/OTM target call contracts matching strict bid-ask limits.
+5. **Portfolio Risk Manager** ([.github/agents/portfolio-risk-manager.agent.md](.github/agents/portfolio-risk-manager.agent.md))
+   - **Role**: Syncs active options and stock positions live, tracks holdings, enforces the strict priority-ordered exit stops framework (nTrans, -10% cost basis, 7-day time halving, stalls), and guards technology sector portfolio allocation boundaries ($\le 15.0\%$ cumulative).
+6. **Reddit Sentiment Analyst** ([.github/agents/reddit-sentiment-analyst.agent.md](.github/agents/reddit-sentiment-analyst.agent.md))
+   - **Role**: Sweeps wallstreetbets, stocks, options, investing, and spacs forums live to calculate sentiment scores ($\pm 1.0$) and discussion volume buzz, projecting retail hype against dealer call walls to generate FOMO/capitulation divergence alerts.
+7. **Agentic Trader** ([.github/agents/agentic-trader.agent.md](.github/agents/agentic-trader.agent.md))
+   - **Role**: Validates agentic account permissions, performs asset tradability checks, simulates reviews (dry-runs), places broker limit orders (equities/options), and registers positions securely in the local database.
+8. **Futures Trading Analyst** ([.github/agents/futures-trading-analyst.agent.md](.github/agents/futures-trading-analyst.agent.md))
+   - **Role**: Performs pre-market economic macro scans (Tier 1 catalysts), establishes trend biases ($200\text{ SMA}$/$21\text{ EMA}$), identifies Initial Balance / VWAP setups, and computes contract/bracket position sizes.
 
 ---
 
@@ -57,13 +102,22 @@ This workspace is structured as follows:
    - [data/regime.json](data/regime.json): Holds the computed status, gates, and metrics for the broad market Daily Regime Gates.
    - [data/ticker_analyses.json](data/ticker_analyses.json): Accumulates setup grading metrics (Spot, transition levels, Delta Balance change thresholds). See the [data/ticker_analyses.json](data/ticker_analyses.json) [Schema Documentation](#-dataticker_analysesjson-schema-documentation) below for the complete specification.
    - [data/active_positions.json](data/active_positions.json): Records open options positions, premium tracking, holding period, and stalling status. See the [data/active_positions.json](data/active_positions.json) [Schema Documentation](#-dataactive_positionsjson-schema-documentation) below for the complete specification.
-3. **Specialized Copilot Prompt Manifests** (located in the [.github/prompts/](.github/prompts/) directory):
-   - [.github/prompts/gex-regime-trading.prompt.md](.github/prompts/gex-regime-trading.prompt.md): Implements rules-based options swing trading using GEX/dealer positioning mechanics.
-   - [.github/prompts/robinhood-portfolio-analysis.prompt.md](.github/prompts/robinhood-portfolio-analysis.prompt.md): Pulls and parses holdings, evaluates cash reserves, and designs customized allocation rebalancing recommendations.
-   - [.github/prompts/robinhood-agentic-trading.prompt.md](.github/prompts/robinhood-agentic-trading.prompt.md): Orchestrates buying power validation, tradability sweeps, and handles limit-order routing.
-   - [.github/prompts/futures-trading-strategy.prompt.md](.github/prompts/futures-trading-strategy.prompt.md): Analyzes multi-timeframe trends, Initial Balance ranges, VWAP deviations, and strict contract-sizing calculations.
-   - [.github/prompts/reddit-sentiment-analysis.prompt.md](.github/prompts/reddit-sentiment-analysis.prompt.md): Conducts deep social media polling across r/wallstreetbets, r/stocks, and r/options using `mcp-reddit` to isolate public sentiment scores and identify FOMO or extreme capitulation risks in assets.
-
+   - [data/reddit_sentiment.json](data/reddit_sentiment.json): Local storage for Reddit social sentiment volume metrics and narrative catalysts per ticker.
+3. **Specialized Copilot Subagents** (located in the [.github/agents/](.github/agents/) directory):
+   - [.github/agents/gex-orchestrator.agent.md](.github/agents/gex-orchestrator.agent.md): Primary user-facing orchestrator. Coordinates the automated end-to-end mechanical evaluation workflow and coordinates setup grading.
+   - [.github/agents/market-regime-analyst.agent.md](.github/agents/market-regime-analyst.agent.md): Computes indexing regime gates (Basket Gate, Bull:Bear sector ETF ratios, VIX/proxy compression checks) and monitors HYG credit spreads.
+   - [.github/agents/gex-candidate-generator.agent.md](.github/agents/gex-candidate-generator.agent.md): Automates ingestion of saved filters and sequential list retrieval to construct and prioritize candidate databases.
+   - [.github/agents/gex-setup-grader.agent.md](.github/agents/gex-setup-grader.agent.md): Extracts structural GEX proxies (pTrans, nTrans, +GEX, COTMP) from chunked option chain sweeps, runs the 11-rule checklists, and isolates optimal liquid call contracts.
+   - [.github/agents/portfolio-risk-manager.agent.md](.github/agents/portfolio-risk-manager.agent.md): Pulls allocations live, enforces structural/trailing exits (nTrans support, -10% stop, 7-day limit, stalling indicators), and guards portfolio Net Liq concentration budgets.
+   - [.github/agents/reddit-sentiment-analyst.agent.md](.github/agents/reddit-sentiment-analyst.agent.md): Conducts social polling across r/wallstreetbets, r/options, and r/stocks using `mcp-reddit` to map crowd polarity scores ($\pm 1.0$) against GEX support/barrier walls.
+   - [.github/agents/agentic-trader.agent.md](.github/agents/agentic-trader.agent.md): Runs pre-trade clearance checks, reviews option spreads, reviews contract liquidity, simulates dry-runs, and routes secure limit orders.
+   - [.github/agents/futures-trading-analyst.agent.md](.github/agents/futures-trading-analyst.agent.md): Evaluates economic catalysts, trends, Initial Balance boundaries, and calculates precise contract-sizing parameters.
+4. **Specialized Copilot Prompt Manifests (Delegation Layer)** (located in the [.github/prompts/](.github/prompts/) directory):
+   - [.github/prompts/gex-regime-trading.prompt.md](.github/prompts/gex-regime-trading.prompt.md): Public entrance for broad market regime checks and daily setup grading. Delegates directly to the **GEX Orchestrator** subagent.
+   - [.github/prompts/portfolio-analysis.prompt.md](.github/prompts/portfolio-analysis.prompt.md): Public entrance for risk/weight audits and trailing stop checks. Delegates directly to the **Portfolio Risk Manager** subagent.
+   - [.github/prompts/agentic-trading.prompt.md](.github/prompts/agentic-trading.prompt.md): Public entrance for broker limit-order entries and account clearance checks. Delegates directly to the **Agentic Trader** subagent.
+   - [.github/prompts/futures-trading.prompt.md](.github/prompts/futures-trading.prompt.md): Public entrance for economic catalyst analyses and futures bracket parameters. Delegates directly to the **Futures Trading Analyst** subagent.
+   - [.github/prompts/reddit-sentiment-analyst.prompt.md](.github/prompts/reddit-sentiment-analyst.prompt.md): Public entrance for live Reddit group scraping and divergence tracking. Delegates directly to the **Reddit Sentiment Analyst** subagent.
 ---
 
 ## 🚀 Getting Started
@@ -125,6 +179,32 @@ python3 src/gex_engine.py update-option <option_id_or_ticker> --mark <mark_price
 ```bash
 python3 src/gex_engine.py close-position <option_id_or_ticker> --close-premium <exit_premium>
 ```
+
+#### Manually register an open stock position:
+```bash
+python3 src/gex_engine.py add-stock <ticker> <shares> <average_buy_price> [--sector <sector>]
+```
+
+#### Update cached stock tracking metrics:
+```bash
+python3 src/gex_engine.py update-stock <ticker> [--price <price>] [--shares <shares>] [--sector <sector>]
+```
+
+#### Close a tracked stock position and archive standard P&L:
+```bash
+python3 src/gex_engine.py close-stock <ticker> [--close-price <close_price>]
+```
+
+#### Display Reddit sentiment analysis dashboard and GEX divergence alerts:
+```bash
+python3 src/gex_engine.py sentiment
+```
+
+#### Register/update Reddit sentiment data for a ticker:
+```bash
+python3 src/gex_engine.py update-sentiment <ticker> --score <score> --buzz <buzz> --narrative <narrative>
+```
+*(Options for `--buzz` include `High`, `Medium`, `Low`, or `None`. `--score` must be between `-1.0` (capitulation/panic) and `+1.0` (FOMO/euphoria).)*
 
 ---
 
@@ -216,36 +296,52 @@ The core mechanics of the suite's quantitative setup grading program evaluate ca
 
 ## 🛡️ Portfolio Risk-Management & Exit Stops
 
-The `portfolio` subcommand automatically tracks trailing/loss stops, progress metrics, and overall concentration caps. It enforces five strict programmatic exit rules to lock in profits and contain downside risk:
+The `portfolio` subcommand automatically tracks trailing/loss stops, progress metrics, and overall concentration caps. It enforces five strict programmatic exit rules to lock in profits and contain downside risk. To eliminate human discretion and guarantee capital protection, these rules are evaluated in a **strict sequential priority queue** where defensive and protective halts always take absolute precedence over profit targets:
 
 ```mermaid
 graph TD
     A[Active Option Position] --> B{Calculate Stop Triggers Daily}
-    B -->|Spot < nTrans| C[Immediate Exit: Structural Stop]
-    B -->|Spot < pTrans AND Option P&L <= -10%| D[Immediate Exit: Max Asset Loss Stop]
-    B -->|Day 7 Progress < 50% from pTrans to +GEX| E[Immediate Exit: Time Halted Stop]
-    B -->|Stalling Days >= 3| F[Immediate Exit: Momentum Stalled Stop]
-    B -->|Spot >= +GEX| G[Exit/Trail: Profit taking Target met]
+    B -->|1. Spot < nTrans| C[Immediate Exit: Structural Stop]
+    B -->|2. Spot < pTrans AND Option P&L <= -10%| D[Immediate Exit: Max Asset Loss Stop]
+    B -->|3. Day 7 Progress < 50% from pTrans to +GEX| E[Immediate Exit: Time Halted Stop]
+    B -->|4. Stalled Days >= 3| F[Immediate Exit: Momentum Stalled Stop]
+    B -->|5. Spot >= +GEX| G{Check Option Premium P&L}
+    G -->|P&L >= 0| H[Exit/Trail: Profit-Taking Target Met]
+    G -->|P&L < 0| I[Exit to Limit Loss: Strike/Expiry Mismatch]
 ```
+
+### 🛑 Sequential Evaluation & Priority Protection
+If a defensive or trailing stop is triggered, any subsequent profit-taking evaluations are **fully blocked**. This prevents severely decayed or stalled option positions that happen to witness a late-stage underlying bounce from erroneously displaying a successful profit-take recommendation. Furthermore, if a position touches its target strike but has decayed into a loss, the system flags it as a risk-reduction exit to prevent holding a structurally mismatched position.
 
 ### Programmatic Stop-Loss Trigger Specifications
 
 1. **Structural Stop (nTrans Floor)**
    - **Condition**: Spot price breaks below `nTrans`.
+   - **Priority**: **Tier 1 (Highest)**.
    - **Action**: Immediate Exit. This stop respects structural dealer walls; breaking them invalidates the setup.
+
 2. **Max Asset Loss Protection Stop**
    - **Condition**: Spot price is below `ptrans` and option total return drops to $\le -10.0\%$.
+   - **Priority**: **Tier 2**.
    - **Action**: Immediate Exit. Ensures capital preservation while waiting for a pending setup to breakout.
+
 3. **Time-Halted Progress Stop (7-Day Limit)**
    - **Condition**: By Day 7, the stock's spot progress relative to its positive breakout level is under $50\%$:
      $$\text{Progress \%} = \frac{\text{Spot} - \text{pTrans}}{\text{+GEX} - \text{pTrans}} \times 100 < 50.0\%$$
+   - **Priority**: **Tier 3**.
    - **Action**: Close out position immediately. Avoids tying up portfolio capital in stale, grinding consolidations.
+
 4. **Momentum Stalling Stop**
    - **Condition**: Underlier achieves $< 10\%$ daily momentum for three consecutive session updates.
+   - **Priority**: **Tier 4**.
    - **Action**: Immediate Exit. Re-allocates funds to names showing fresh momentum flow.
+
 5. **Profit-Taking Target Stop**
    - **Condition**: Underlier Spot price touches or exceeds the `+GEX` (T1 Target) strike.
-   - **Action**: Exit for $100\%$ gains, or trail the stop to the original option entry premium to target the secondary structural `T2` level.
+   - **Priority**: **Tier 5 (Lowest)**.
+   - **Action**: 
+     - **Option Premium is in Profit**: Exit for $100\%$ gains, or trail the stop to the original option entry premium to target the secondary structural `T2` level.
+     - **Option Premium is in Loss**: Exit position immediately to limit further losses (flags a structural/time mismatch).
 
 ---
 
@@ -253,7 +349,7 @@ graph TD
 
 ## 📏 Portfolio Recommendation Framework
 
-When executing portfolio reviews manually or via [.github/prompts/robinhood-portfolio-analysis.prompt.md](.github/prompts/robinhood-portfolio-analysis.prompt.md), apply the following standard mechanics:
+When executing portfolio reviews manually or via [.github/prompts/portfolio-analysis.prompt.md](.github/prompts/portfolio-analysis.prompt.md), apply the following standard mechanics:
 
 - **Trim or Reduce**: Any position exceeding $15\text{--}20\%$ of net liquidation value to contain concentration risk.
 - **Add Sector Hedges**: Offset technology-biased exposure using broad-market instruments (e.g., Core S&P 500 or Total Stock Market indexes).

@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-07-10T05:24:15.680600Z",
+  "last_updated": "2026-07-10T20:17:42.070689Z",
   "source_scans": [
     "GEX Momentum Candidates",
     "High options volume and IV",
@@ -7,11 +7,21 @@
   ],
   "user_additions": [],
   "excluded_active_positions": [
+    "AAPL",
+    "AMZN",
     "BABA",
+    "GOOG",
+    "HOOD",
+    "META",
+    "MRNA",
+    "NFLX",
+    "NKE",
+    "NOW",
+    "RVI",
     "SLS",
-    "NKE"
+    "WU"
   ],
-  "total": 26,
+  "total": 25,
   "candidates": [
     {
       "symbol": "SHC",
@@ -30,15 +40,6 @@
       "iv": 0.9051008,
       "relative_options_volume": 3.5163497871381955,
       "market_cap": 4582871446.0
-    },
-    {
-      "symbol": "META",
-      "source": "scanner",
-      "price": 639.01,
-      "chg_pct": 1.1924,
-      "iv": 0.4584175,
-      "relative_options_volume": 3.3155094890545787,
-      "market_cap": 1530973863107.0
     },
     {
       "symbol": "OKLO",

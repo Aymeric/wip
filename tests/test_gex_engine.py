@@ -1039,5 +1039,116 @@ class TestGEXEngine(unittest.TestCase):
             if os.path.exists(tmp_path):
                 os.remove(tmp_path)
 
+    def test_sentiment_functionality(self):
+        """Test OptionSentiment dataclass validation and sentiment commands."""
+        import tempfile
+        from unittest.mock import patch, MagicMock
+        import gex_engine
+
+        # 1. OptionSentiment validation
+        s_ok = gex_engine.OptionSentiment("AAPL", 0.85, "High", "High option volume and FOMO")
+        self.assertTrue(s_ok.validate())
+
+        with self.assertRaises(ValueError):
+            gex_engine.OptionSentiment("", 0.85, "High", "Invalid ticker").validate()
+
+        with self.assertRaises(ValueError):
+            gex_engine.OptionSentiment("AAPL", -1.5, "High", "Invalid sentiment").validate()
+
+        with self.assertRaises(ValueError):
+            gex_engine.OptionSentiment("AAPL", 0.85, "SuperHigh", "Invalid buzz").validate()
+
+        # 2. Test cmd_update_sentiment and cmd_sentiment via temporary files
+        with tempfile.NamedTemporaryFile(suffix=".json", delete=False) as tmp_sent, \
+             tempfile.NamedTemporaryFile(suffix=".json", delete=False) as tmp_analyses, \
+             tempfile.NamedTemporaryFile(suffix=".json", delete=False) as tmp_options, \
+             tempfile.NamedTemporaryFile(suffix=".json", delete=False) as tmp_candidates:
+            
+            sent_path = tmp_sent.name
+            analyses_path = tmp_analyses.name
+            options_path = tmp_options.name
+            cand_path = tmp_candidates.name
+            
+        try:
+            # Seed Analyses (GEX indicators)
+            gex_engine.save_json(analyses_path, {
+                "OKLO": {
+                    "Ticker": "OKLO",
+                    "Spot": 50.0,
+                    "+GEX": 50.0,  # Spot is at Call Wall -> should trigger FOMO on positive sentiment
+                    "nTrans": 45.0,
+                    "COTMP": 44.0
+                },
+                "BABA": {
+                    "Ticker": "BABA",
+                    "Spot": 75.0,
+                    "+GEX": 90.0,
+                    "nTrans": 75.0,  # Spot is at nTrans -> should trigger Capitulation Watch on negative sentiment
+                    "COTMP": 70.0
+                }
+            })
+            # Seed Candidates
+            gex_engine.save_json(cand_path, {
+                "candidates": [
+                    {"symbol": "OKLO", "price": 50.0}
+                ]
+            })
+            # Seed Options (BABA is held)
+            gex_engine.save_json(options_path, {
+                "options_positions": {
+                    "baba_opt": {
+                        "Underlier": "BABA",
+                        "Strike": 80.0,
+                        "Type": "call",
+                        "Purchase Premium": 5.0,
+                        "Mark Price": 1.0,
+                        "Days Held": 10
+                    }
+                },
+                "stocks_positions": {}
+            })
+            # Seed Sentiment (empty initially)
+            gex_engine.save_json(sent_path, {})
+
+            # Patch files
+            with patch('gex_engine.SENTIMENT_FILE', sent_path), \
+                 patch('gex_engine.ANALYSES_FILE', analyses_path), \
+                 patch('gex_engine.OPTIONS_FILE', options_path), \
+                 patch('gex_engine.CANDIDATES_FILE', cand_path):
+                
+                # Update Sentiment for OKLO (exuberant FOMO setup)
+                class UpdateArgs1:
+                    ticker = "OKLO"
+                    score = 0.85
+                    buzz = "High"
+                    narrative = "Nuclear AI micro-reactor breakthrough FOMO."
+                gex_engine.cmd_update_sentiment(UpdateArgs1())
+                
+                # Update Sentiment for BABA (doom capitulation watch)
+                class UpdateArgs2:
+                    ticker = "BABA"
+                    score = -0.85
+                    buzz = "High"
+                    narrative = "Total retail capitulation."
+                gex_engine.cmd_update_sentiment(UpdateArgs2())
+                
+                # Check sentiment dashboard prints proper alerts
+                with patch('sys.stdout') as mock_stdout:
+                    mock_stdout.isatty = MagicMock(return_value=False)
+                    class SentimentArgs:
+                        pass
+                    gex_engine.cmd_sentiment(SentimentArgs())
+                    
+                    output = "".join(call.args[0] for call in mock_stdout.write.call_args_list if call.args)
+                    self.assertIn("Reddit Sentiment Analysis Report", output)
+                    self.assertIn("OKLO", output)
+                    self.assertIn("BABA", output)
+                    self.assertIn("FOMO ALERT", output)
+                    self.assertIn("CAPITULATION WATCH", output)
+        finally:
+            for path in (sent_path, analyses_path, options_path, cand_path):
+                if os.path.exists(path):
+                    os.remove(path)
+
 if __name__ == '__main__':
     unittest.main()

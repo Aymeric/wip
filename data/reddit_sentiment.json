@@ -1,0 +1,65 @@
+{
+  "BABA": {
+    "Ticker": "BABA",
+    "Sentiment": -0.85,
+    "Buzz": "High",
+    "Narrative": "Retail capitulation, heavy call selling, volume decay",
+    "last_updated": "2026-07-10T12:00:00Z"
+  },
+  "OKLO": {
+    "Ticker": "OKLO",
+    "Sentiment": 0.85,
+    "Buzz": "High",
+    "Narrative": "Meme breakouts, high volume call buying",
+    "last_updated": "2026-07-10T12:00:00Z"
+  },
+  "MARA": {
+    "Ticker": "MARA",
+    "Sentiment": 0.45,
+    "Buzz": "Medium",
+    "Narrative": "Bitcoin correlation discussion, expecting sector rotation.",
+    "last_updated": "2026-07-10T12:00:00Z"
+  },
+  "NFLX": {
+    "Ticker": "NFLX",
+    "Sentiment": 0.1,
+    "Buzz": "Low",
+    "Narrative": "Consolidation after earnings run, discussions drying up.",
+    "last_updated": "2026-07-10T12:00:00Z"
+  },
+  "NKE": {
+    "Ticker": "NKE",
+    "Sentiment": 0.6,
+    "Buzz": "Medium",
+    "Narrative": "Turnaround hype, retail call buying returning on reversal.",
+    "last_updated": "2026-07-10T12:00:00Z"
+  },
+  "META": {
+    "Ticker": "META",
+    "Sentiment": 0.5,
+    "Buzz": "High",
+    "Narrative": "AI monetization optimism, massive call buying, heavy retail mentions",
+    "last_updated": "2026-07-10T06:52:14.991152Z"
+  },
+  "SLS": {
+    "Ticker": "SLS",
+    "Sentiment": 0.2,
+    "Buzz": "Medium",
+    "Narrative": "Bio-tech speculation, clinical expectations, mixed retail opinions",
+    "last_updated": "2026-07-10T06:52:18.320541Z"
+  },
+  "NOW": {
+    "Ticker": "NOW",
+    "Sentiment": 0.85,
+    "Buzz": "High",
+    "Narrative": "Hyper-growth SaaS momentum, retail hype around breakout, heavy call chasing",
+    "last_updated": "2026-07-10T06:52:46.507201Z"
+  },
+  "AMD": {
+    "Ticker": "AMD",
+    "Sentiment": -0.8,
+    "Buzz": "High",
+    "Narrative": "Extreme semiconductor sell-off retail panic, retail capitulating, chasing puts near GEX support",
+    "last_updated": "2026-07-10T06:53:00.337440Z"
+  }
+}

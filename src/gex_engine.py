@@ -117,12 +117,33 @@ class StockPosition:
             raise ValueError(f"current_price cannot be negative: {self.current_price}")
         return True
 
+
+@dataclass
+class OptionSentiment:
+    ticker: str
+    sentiment: float
+    buzz: str  # 'High', 'Medium', 'Low', 'None'
+    narrative: str
+    last_updated: Optional[str] = field(default=None)
+
+    def validate(self) -> bool:
+        """Validates sentiment parameters."""
+        if not self.ticker:
+            raise ValueError("ticker cannot be empty")
+        if not (-1.0 <= self.sentiment <= 1.0):
+            raise ValueError(f"sentiment must be between -1.0 and +1.0: {self.sentiment}")
+        if self.buzz not in ("High", "Medium", "Low", "None", "Med"):
+            raise ValueError(f"buzz must be High, Medium, Low, or None: {self.buzz}")
+        return True
+
+
 # Define file paths relative to active workspace (current directory)
 REGIME_FILE = "data/regime.json"
 ANALYSES_FILE = "data/ticker_analyses.json"
 OPTIONS_FILE = "data/active_positions.json"
 CANDIDATES_FILE = "data/candidate_stocks.json"
 SCANS_DIR = "data/scans"
+SENTIMENT_FILE = "data/reddit_sentiment.json"
 
 # Standard Mechanical Screener Baseline Filter Constants
 MIN_PRICE = 5.0
@@ -2280,6 +2301,228 @@ def cmd_update_candidates(args):
         print(f"  - {c['symbol']}: price=${c['price']}, change={c['chg_pct']:.2f}%, iv={c['iv']}, rel_opt_vol={c['relative_options_volume']}")
 
 
+def cmd_update_sentiment(args):
+    """Registers or updates Reddit sentiment details for a ticker."""
+    sentiment_db = load_json(SENTIMENT_FILE, {})
+    ticker = args.ticker.upper()
+    
+    buzz = args.buzz
+    if buzz == "Med":
+        buzz = "Medium"
+        
+    utc_time = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
+    
+    sentiment_obj = OptionSentiment(
+        ticker=ticker,
+        sentiment=args.score,
+        buzz=buzz,
+        narrative=args.narrative,
+        last_updated=utc_time
+    )
+    
+    try:
+        sentiment_obj.validate()
+    except ValueError as e:
+        print(f"Error validating sentiment data: {e}", file=sys.stderr)
+        sys.exit(1)
+        
+    sentiment_db[ticker] = {
+        "Ticker": sentiment_obj.ticker,
+        "Sentiment": sentiment_obj.sentiment,
+        "Buzz": sentiment_obj.buzz,
+        "Narrative": sentiment_obj.narrative,
+        "last_updated": sentiment_obj.last_updated
+    }
+    
+    save_json(SENTIMENT_FILE, sentiment_db)
+    print(f"Successfully saved Reddit sentiment for {format_color(ticker, '35', bold=True)}.")
+
+
+def cmd_sentiment(args):
+    """Displays Reddit sentiment analysis dashboard and divergence alerts."""
+    sentiment_db = load_json(SENTIMENT_FILE, {})
+    analyses = load_json(ANALYSES_FILE, {})
+    options = load_json(OPTIONS_FILE, {"options_positions": {}, "stocks_positions": {}})
+    candidates_data = load_json(CANDIDATES_FILE, {"candidates": []})
+    
+    positions = options.get("options_positions", {})
+    stocks = options.get("stocks_positions", {})
+    candidates_list = candidates_data.get("candidates", [])
+    
+    cand_symbols = {c.get("symbol").upper() for c in candidates_list if c.get("symbol")}
+    opt_symbols = {details.get("Underlier").upper() for details in positions.values() if details.get("Underlier")}
+    stk_symbols = {t.upper() for t in stocks.keys()}
+    
+    if not sentiment_db:
+        print("### 🧠 Reddit Social Sentiment & GEX Divergence Dashboard")
+        print("No Reddit sentiment records found in database. Update sentiment using update-sentiment command.")
+        return
+        
+    total_candidates = sum(1 for sym in sentiment_db if sym in cand_symbols)
+    total_active = sum(1 for sym in sentiment_db if sym in opt_symbols or sym in stk_symbols)
+    
+    print("## Reddit Sentiment Analysis Report")
+    print("\n### Executive Summary:")
+    print(f"- **Scanned Assets**: {total_candidates} candidates, {total_active} active positions")
+    
+    # Calculate highest and lowest buzz
+    sorted_sentiment = sorted(sentiment_db.values(), key=lambda x: x.get("Sentiment", 0.0))
+    if sorted_sentiment:
+        lowest = sorted_sentiment[0]
+        highest = sorted_sentiment[-1]
+        
+        high_ticker = highest.get("Ticker")
+        high_score = highest.get("Sentiment", 0.0)
+        high_score_colored = format_color(f"{high_score:+.2f}", "32" if high_score >= 0 else "31", bold=True)
+        print(f"- **Highest Retail Buzz**: {format_color(high_ticker, '35', bold=True)} (Sentiment: {high_score_colored})")
+
+        low_ticker = lowest.get("Ticker")
+        low_score = lowest.get("Sentiment", 0.0)
+        low_score_colored = format_color(f"{low_score:+.2f}", "32" if low_score >= 0 else "31", bold=True)
+        print(f"- **Lowest Retail Buzz / Capitulation**: {format_color(low_ticker, '35', bold=True)} (Sentiment: {low_score_colored})")
+        
+    print("\n### Detailed Sentiment Dashboard:")
+    print("| Ticker | Asset Type | Reddit Buzz | Sentiment (-1 to +1) | Retail Narrative & Catalysts | GEX Alignment / Threat Level | Action Recommendation |")
+    print("| :--- | :--- | :--- | :--- | :--- | :--- | :--- |")
+    
+    fomo_alerts = []
+    cap_alerts = []
+    apathy_alerts = []
+    
+    for ticker, data in sorted(sentiment_db.items()):
+        ticker_upper = ticker.upper()
+        sentiment = float(data.get("Sentiment", 0.0))
+        buzz = data.get("Buzz", "None")
+        narrative = data.get("Narrative", "")
+        
+        # Determine Asset Type
+        if ticker_upper in opt_symbols:
+            asset_type = "Active Option"
+        elif ticker_upper in stk_symbols:
+            asset_type = "Active Stock"
+        elif ticker_upper in cand_symbols:
+            asset_type = "Candidate"
+        else:
+            asset_type = "Custom"
+            
+        # Retrieve GEX metrics from analyses and active positions
+        levels = analyses.get(ticker_upper, {})
+        ptrans = levels.get("pTrans")
+        ntrans = levels.get("nTrans")
+        gex_t1 = levels.get("+GEX")
+        cotmp = levels.get("COTMP")
+        
+        spot = levels.get("Spot")
+        if spot is None:
+            if ticker_upper in stocks:
+                spot = stocks[ticker_upper].get("Current Price") or stocks[ticker_upper].get("Spot")
+            elif ticker_upper in positions:
+                # Find the option slot
+                for opt_details in positions.values():
+                    if opt_details.get("Underlier") == ticker_upper:
+                        spot = opt_details.get("Underlier Spot") or opt_details.get("Spot")
+                        break
+                        
+        if spot is None:
+            for c in candidates_list:
+                if c.get("symbol") == ticker_upper:
+                    spot = c.get("price")
+                    break
+                    
+        # Check alignment / threat levels
+        threat_level = "NEUTRAL / BALANCED"
+        recommendation = "Hold according to core GEX mechanical trail"
+        
+        if spot is not None:
+            spot_val = float(spot)
+            ptrans_val = float(ptrans) if ptrans is not None else None
+            ntrans_val = float(ntrans) if ntrans is not None else None
+            gex_t1_val = float(gex_t1) if gex_t1 is not None else None
+            cotmp_val = float(cotmp) if cotmp is not None else None
+            
+            # Helper for pTrans alignment
+            pt_align = ""
+            if ptrans_val is not None:
+                pt_align = f" | pTrans: {'Spot >' if spot_val >= ptrans_val else 'Spot <'} ${ptrans_val:.2f}"
+            
+            # Helper for GEX/Wall
+            wall_str = f" | Wall (+GEX): ${gex_t1_val:.2f}" if gex_t1_val is not None else ""
+            
+            # 1. FOMO Alert: Bullish sentiment and spot near/above Call Wall
+            if sentiment >= 0.7 and gex_t1_val is not None and spot_val >= gex_t1_val * 0.98:
+                threat_level = format_color(f"⚠️ FOMO ALERT (Spot: ${spot_val:.2f} vs Wall: ${gex_t1_val:.2f}{pt_align})", "31", bold=True)
+                recommendation = "Chasing at +GEX. Avoid straight calls; Trim or write credits."
+                fomo_alerts.append((ticker_upper, spot_val, gex_t1_val, sentiment))
+            # 2. Capitulation watch: Bearish sentiment and spot testing support floor
+            elif sentiment <= -0.7:
+                support_floor = ntrans_val if ntrans_val is not None else cotmp_val
+                    
+                if support_floor is not None and spot_val <= support_floor * 1.03:
+                    threat_level = format_color(f"📉 CAPITULATION WATCH (Spot: ${spot_val:.2f} vs Floor: ${support_floor:.2f}{pt_align})", "33", bold=True)
+                    recommendation = "Value testing GEX floor. Monitor for reversal signs."
+                    cap_alerts.append((ticker_upper, spot_val, support_floor, sentiment))
+            # 3. Volumetric Apathy: Active positions with muted buzz/neutral sentiment
+            elif asset_type in ("Active Option", "Active Stock") and (abs(sentiment) <= 0.3 or buzz in ("Low", "None")):
+                threat_level = format_color(f"💤 VOLUMETRIC APATHY (Spot: ${spot_val:.2f}{wall_str}{pt_align})", "34")
+                recommendation = "Muted sentiment. Hand off to mechanical trail/stops."
+                apathy_alerts.append((ticker_upper, sentiment, buzz))
+            # 4. Aligned setups for candidates
+            elif asset_type == "Candidate" and sentiment >= 0.4:
+                headroom_str = ""
+                if gex_t1_val is not None:
+                    if gex_t1_val > spot_val:
+                        headroom = ((gex_t1_val - spot_val) / spot_val) * 100
+                        headroom_str = f" - {headroom:.1f}% to +GEX (${gex_t1_val:.2f})"
+                    else:
+                        headroom_str = f" - At/Above +GEX (${gex_t1_val:.2f})"
+                threat_level = format_color(f"👍 BULLISH ALIGNED (Spot: ${spot_val:.2f}{pt_align}{headroom_str})", "32")
+                recommendation = "Isolate options; setup has structural headroom to run."
+            else:
+                support_floor = ntrans_val if ntrans_val is not None else cotmp_val
+                
+                levels_info = f"Spot: ${spot_val:.2f}{pt_align}"
+                if support_floor is not None and gex_t1_val is not None:
+                    threat_level = f"NEUTRAL / BALANCED ({levels_info} | Range: ${support_floor:.2f} - ${gex_t1_val:.2f})"
+                elif gex_t1_val is not None:
+                    threat_level = f"NEUTRAL / BALANCED ({levels_info} | Wall: ${gex_t1_val:.2f})"
+                elif support_floor is not None:
+                    threat_level = f"NEUTRAL / BALANCED ({levels_info} | Floor: ${support_floor:.2f})"
+                else:
+                    threat_level = f"NEUTRAL / BALANCED ({levels_info})"
+        else:
+            if sentiment >= 0.7:
+                threat_level = "HIGH RETAIL BUZZ"
+                recommendation = "Monitor spot relation to GEX call wall before entering"
+            elif sentiment <= -0.7:
+                threat_level = "EXTREME PANIC / APATHY"
+                recommendation = "Check for capitulation setup near GEX support"
+                
+        sent_color = "32" if sentiment >= 0.4 else "31" if sentiment <= -0.4 else "37"
+        sentiment_fmt = format_color(f"{sentiment:+.2f}", sent_color, bold=True)
+        
+        # Print table row
+        print(f"| {format_color(ticker_upper, '35', bold=True)} | {asset_type} | {buzz} | {sentiment_fmt} | {narrative} | {threat_level} | {recommendation} |")
+        
+    # Key Social Hype & Divergence Alerts print out
+    print("\n### Key Social Hype & Divergence Alerts:")
+    idx = 1
+    for ticker_upper, spot_val, gex_val, sentiment in fomo_alerts:
+        print(f"{idx}. {format_color('⚠️ FOMO ALERT: ' + ticker_upper, '31', bold=True)}: Retail sentiment is extremely exuberant ({sentiment:+.2f}) on {ticker_upper}, but current price (${spot_val:.2f}) sits directly at or above the call wall of ${gex_val:.2f} found in {ANALYSES_FILE}. Chasing calls at this level carries a high risk of decay or reversal.")
+        idx += 1
+    for ticker_upper, spot_val, floor_val, sentiment in cap_alerts:
+        print(f"{idx}. {format_color('📉 CAPITULATION WATCH: ' + ticker_upper, '33', bold=True)}: Retail sentiment is deeply bearish ({sentiment:+.2f}) on {ticker_upper}, but the price (${spot_val:.2f}) is testing its GEX floor/support level (${floor_val:.2f}). Monitor for momentum reversal patterns for a contrarian recovery.")
+        idx += 1
+    for ticker_upper, sentiment, buzz in apathy_alerts:
+        print(f"{idx}. {format_color('💤 VOLUMETRIC APATHY: ' + ticker_upper, '34', bold=True)}: Active position {ticker_upper} is currently showing minimal social activity (Sentiment: {sentiment:+.2f}, Buzz: {buzz}). This matches the stalling or structural stops tracked in GEX local portfolio mechanics.")
+        idx += 1
+    if idx == 1:
+        print("No high-risk sentiment divergence flags found today. Setup alignments remain within standard execution parameters.")
+        
+    print("\n### Actionable Strategic Adjustments:")
+    print("- **Candidate Setup Refinement**: Prioritize setup evaluations for candidates with high organic retail buzz (aligned with GEX headroom runway) to ensure sustained breakouts.")
+    print("- **Active Position Protection**: Be disciplined on exiting BABA or dry options exhibiting volumetric apathy, as institutional rotations support the systematic stops.")
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="GEX Options Mechanical Engine - Rule validation CLI and storage keeper"
@@ -2392,6 +2635,16 @@ def main():
     p_candidates.add_argument("--min-change", type=float, dest="min_change", default=MIN_CHG_PCT, help=f"Minimum stock price day change percent (default: {MIN_CHG_PCT})")
     p_candidates.add_argument("--min-market-cap", type=float, dest="min_market_cap", default=MIN_MARKET_CAP, help=f"Minimum market capitalization (default: {MIN_MARKET_CAP})")
     
+    # sentiment subcommand
+    subparsers.add_parser("sentiment", help="Display Reddit sentiment analysis dashboard and divergence alerts.")
+
+    # update-sentiment subcommand
+    p_up_sent = subparsers.add_parser("update-sentiment", help="Register/update Reddit sentiment data for a ticker.")
+    p_up_sent.add_argument("ticker", type=str, help="Ticker symbol (e.g. BABA)")
+    p_up_sent.add_argument("--score", type=float, required=True, help="Sentiment score from -1.0 (capitulation) to +1.0 (FOMO)")
+    p_up_sent.add_argument("--buzz", type=str, choices=["High", "Medium", "Low", "None", "Med"], required=True, help="Discussion volume / buzz")
+    p_up_sent.add_argument("--narrative", type=str, required=True, help="Core narrative thesis / catalysts")
+
     args = parser.parse_args()
     
     # Process spot overrides if they are provided
@@ -2428,6 +2681,10 @@ def main():
         cmd_close_stock_pos(args)
     elif args.command == "update-candidates":
         cmd_update_candidates(args)
+    elif args.command == "sentiment":
+        cmd_sentiment(args)
+    elif args.command == "update-sentiment":
+        cmd_update_sentiment(args)
 
 
 if __name__ == "__main__":
