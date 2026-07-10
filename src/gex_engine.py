@@ -13,7 +13,7 @@ the CLI automates:
 File Paths and Cache Databases managed:
   - REGIME_FILE (data/regime.json): Daily market index, sector ETF breadth, and market gates cache.
   - ANALYSES_FILE (data/ticker_analyses.json): Incremental quantitative setup-grading persistent store.
-  - OPTIONS_FILE (data/active_options.json): Sized option transactions and Greeks tracker.
+  - OPTIONS_FILE (data/active_positions.json): Sized option transactions and Greeks tracker.
   - CANDIDATES_FILE (data/candidate_stocks.json): Screened and prioritized underlier candidates.
 """
 
@@ -28,7 +28,7 @@ from datetime import datetime, timezone
 # Define file paths relative to active workspace (current directory)
 REGIME_FILE = "data/regime.json"
 ANALYSES_FILE = "data/ticker_analyses.json"
-OPTIONS_FILE = "data/active_options.json"
+OPTIONS_FILE = "data/active_positions.json"
 CANDIDATES_FILE = "data/candidate_stocks.json"
 SCANS_DIR = "data/scans"
 
@@ -96,27 +96,65 @@ def save_json(filepath, data):
 def get_regime_status():
     """Retrieves and packages current broad market Daily Regime Gates metrics."""
     regime = load_json(REGIME_FILE, {})
+    etf_details = regime.get("etf_details", {})
     
-    spy_pct = regime.get("spy_change_pct", 0.0)
-    qqq_pct = regime.get("qqq_change_pct", 0.0)
-    basket_gate = regime.get("basket_gate", "FAIL")
-    bull_bear_ratio = regime.get("bull_bear_ratio", 0.0)
-    bull_bear_gate = regime.get("bull_bear_gate", "FAIL")
+    spy_det = etf_details.get("SPY", {})
+    qqq_det = etf_details.get("QQQ", {})
+    hyg_det = etf_details.get("HYG", {})
+    
+    spy_pct = spy_det.get("Daily Change %", regime.get("spy_change_pct", 0.0))
+    qqq_pct = qqq_det.get("Daily Change %", regime.get("qqq_change_pct", 0.0))
+    hyg_pct = hyg_det.get("Daily Change %", regime.get("hyg_change_pct", None))
+    
+    bull_count = sum(1 for sym, det in etf_details.items() if sym != "HYG" and det.get("Classification") == "BULLISH")
+    if not etf_details:
+        bull_count = regime.get("bull_count", 0)
+        
+    bear_count = sum(1 for sym, det in etf_details.items() if sym != "HYG" and det.get("Classification") == "BEARISH")
+    if not etf_details:
+        bear_count = regime.get("bear_count", 0)
+        
+    if bear_count > 0:
+        bull_bear_ratio = round(bull_count / bear_count, 3)
+    else:
+        bull_bear_ratio = float(bull_count) if etf_details else regime.get("bull_bear_ratio", 0.0)
+        
+    basket_gate = regime.get("basket_gate")
+    if basket_gate is None:
+        basket_gate = "PASS" if (spy_pct > 0.5 or qqq_pct > 0.5) else "FAIL"
+        
+    bull_bear_gate = regime.get("bull_bear_gate")
+    if bull_bear_gate is None:
+        bull_bear_gate = "PASS" if bull_bear_ratio > 3.0 else "FAIL"
+        
     vix_spot = regime.get("vix_spot", 0.0)
-    vix_delta_gate = regime.get("vix_delta_gate", "FAIL")
+    vix_bearish = regime.get("vix_bearish", None)
+    
+    vix_delta_gate = regime.get("vix_delta_gate")
+    if vix_delta_gate is None:
+        vix_delta_gate = "PASS" if vix_bearish else "FAIL"
+        
     system_auth = regime.get("system_authorization", "BLOCKED")
-    hyg_pct = regime.get("hyg_change_pct", None)
+    
+    gates_passed = regime.get("gates_passed")
+    if gates_passed is None:
+        gates_passed = sum(1 for g in (basket_gate, bull_bear_gate, vix_delta_gate) if g == "PASS")
     
     return {
         "spy_pct": spy_pct,
         "qqq_pct": qqq_pct,
         "basket_gate": basket_gate,
+        "bull_count": bull_count,
+        "bear_count": bear_count,
         "bull_bear_ratio": bull_bear_ratio,
         "bull_bear_gate": bull_bear_gate,
         "vix_spot": vix_spot,
+        "vix_bearish": vix_bearish,
         "vix_delta_gate": vix_delta_gate,
         "system_authorization": system_auth,
-        "hyg_pct": hyg_pct
+        "hyg_pct": hyg_pct,
+        "gates_passed": gates_passed,
+        "etf_details": etf_details
     }
 
 
@@ -183,6 +221,7 @@ def cmd_update_regime(args):
             bull_count = 0
             bear_count = 0
             found_symbols = {}
+            detailed_etfs = {}
             
             for item in results:
                 if not isinstance(item, dict):
@@ -218,9 +257,49 @@ def cmd_update_regime(args):
                         except ValueError:
                             pass
                             
+                    chg_pct = 0.0
                     if price > 0.0 and prev_close > 0.0:
                         chg_pct = ((price - prev_close) / prev_close) * 100.0
                         found_symbols[sym_upper] = chg_pct
+                        
+                    classification = "FLAT"
+                    if sym_upper != "HYG":
+                        if chg_pct > 0.1:
+                            classification = "BULLISH"
+                        elif chg_pct < -0.1:
+                            classification = "BEARISH"
+                    else:
+                        if chg_pct > 0.0:
+                            classification = "BULLISH"
+                        elif chg_pct < 0.0:
+                            classification = "BEARISH"
+                            
+                    etf_segment_names = {
+                        "SPY": "S&P 500 Broad Market",
+                        "QQQ": "Nasdaq 100 Growth Index",
+                        "IWM": "Russell 2000 Small Caps",
+                        "DIA": "Dow Jones Industrials Value",
+                        "XLK": "Technology",
+                        "XLF": "Financials",
+                        "XLV": "Health Care",
+                        "XLY": "Consumer Discretionary",
+                        "XLP": "Consumer Staples",
+                        "XLI": "Industrials",
+                        "XLU": "Utilities",
+                        "XLB": "Materials",
+                        "XLRE": "Real Estate",
+                        "XLE": "Energy",
+                        "XLC": "Communication Services",
+                        "HYG": "High Yield Corporate Bond ETF"
+                    }
+                    
+                    detailed_etfs[sym_upper] = {
+                        "Ticker": sym_upper,
+                        "ETF Segment / Sector Name": etf_segment_names.get(sym_upper, "Unknown Sector"),
+                        "Price": round(price, 2) if price > 0.0 else round(prev_close, 2),
+                        "Daily Change %": round(chg_pct, 4),
+                        "Classification": classification
+                    }
                         
             # Calculate SPY, QQQ changes
             spy_pct = found_symbols.get("SPY", 0.0)
@@ -285,18 +364,47 @@ def cmd_update_regime(args):
         spy_val, qqq_val, bulls_val, bears_val, vix_bearish_val
     )
     
+    etf_details = cached_regime.get("etf_details", {})
+    if hasattr(args, "etf_file") and args.etf_file and "found_symbols" in locals():
+        etf_details = detailed_etfs
+    else:
+        # Fallback construct basic etf_details objects on manual arguments update
+        etf_segment_names = {
+            "SPY": "S&P 500 Broad Market",
+            "QQQ": "Nasdaq 100 Growth Index",
+            "HYG": "High Yield Corporate Bond ETF"
+        }
+        for sym, val in [("SPY", spy_val), ("QQQ", qqq_val), ("HYG", hyg_val)]:
+            if val is not None:
+                chg_pct = float(val)
+                classification = "FLAT"
+                if sym != "HYG":
+                    if chg_pct > 0.1:
+                        classification = "BULLISH"
+                    elif chg_pct < -0.1:
+                        classification = "BEARISH"
+                else:
+                    if chg_pct > 0.0:
+                        classification = "BULLISH"
+                    elif chg_pct < 0.0:
+                        classification = "BEARISH"
+                etf_details[sym] = {
+                    "Ticker": sym,
+                    "ETF Segment / Sector Name": etf_segment_names.get(sym, "Unknown Sector"),
+                    "Price": 0.0,
+                    "Daily Change %": round(chg_pct, 4),
+                    "Classification": classification
+                }
+
     regime_data = {
-        "spy_change_pct": round(spy_val, 4),
-        "qqq_change_pct": round(qqq_val, 4),
         "basket_gate": basket_gate,
-        "bull_count": bulls_val,
-        "bear_count": bears_val,
-        "bull_bear_ratio": bull_bear_ratio,
         "bull_bear_gate": bull_bear_gate,
         "vix_spot": round(vix_spot_val, 2) if vix_spot_val is not None else cached_regime.get("vix_spot", 0.0),
+        "vix_bearish": vix_bearish_val,
         "vix_delta_gate": vix_delta_gate,
-        "hyg_change_pct": round(hyg_val, 4) if hyg_val is not None else cached_regime.get("hyg_change_pct", 0.0),
         "system_authorization": system_auth,
+        "gates_passed": gates_passed,
+        "etf_details": etf_details,
         "last_updated": datetime.today().strftime('%Y-%m-%d')
     }
     
@@ -308,6 +416,50 @@ def cmd_update_regime(args):
 
 def cmd_status(args):
     """View the current Daily Regime Gates."""
+    # 📅 Cache Freshness validation preflight health check
+    today_local = datetime.today().strftime('%Y-%m-%d')
+    today_utc = datetime.now(timezone.utc).strftime('%Y-%m-%d')
+    files_to_check = {
+        "Daily Regime": (REGIME_FILE, "run 'update-regime' subcommand"),
+        "Candidates List": (CANDIDATES_FILE, "run 'update-candidates' subcommand"),
+        "Active Options": (OPTIONS_FILE, "update options manually or via sync"),
+        "Ticker Analyses": (ANALYSES_FILE, "run 'analyze' subcommand for candidate symbols")
+    }
+    
+    print("### 📅 Cache Freshness Report")
+    for label, (filepath, action) in files_to_check.items():
+        if not os.path.exists(filepath):
+            print(f"- **{label}**: {format_color('MISSING', '31', bold=True)} -> *Action: {action}*")
+        else:
+            file_date = ""
+            try:
+                with open(filepath, "r") as f:
+                    content = json.load(f)
+                if isinstance(content, dict):
+                    if "last_updated" in content:
+                        val = content["last_updated"]
+                        if "T" in val:
+                            file_date = val.split("T")[0]
+                        else:
+                            file_date = val
+                    elif "analyzed_date" in content:
+                        file_date = content.get("analyzed_date", "")
+            except Exception:
+                pass
+            
+            if not file_date:
+                try:
+                    mtime = os.path.getmtime(filepath)
+                    file_date = datetime.fromtimestamp(mtime).strftime("%Y-%m-%d")
+                except Exception:
+                    file_date = "UNKNOWN"
+            
+            if file_date in (today_local, today_utc):
+                print(f"- **{label}**: {format_color(f'FRESH ({file_date})', '32')}")
+            else:
+                print(f"- **{label}**: {format_color(f'STALE ({file_date})', '33')} -> *Action: {action}*")
+    print()
+
     regime = get_regime_status()
     
     print("### 📊 GEX Regime Check")
@@ -335,7 +487,14 @@ def cmd_status(args):
         system_auth_str = format_color(system_auth_str, "32", bold=True)
         
     print(f"- **Basket Gate**: {bgate_status} (SPY: {spy_color_str}, QQQ: {qqq_color_str})")
-    print(f"- **Bull:Bear Gate**: {bbgate_status} (Ratio: {ratio_color_str} from {REGIME_FILE} Cache)")
+    
+    etf_details = regime.get("etf_details", {})
+    bullish_etfs = [sym for sym, det in etf_details.items() if sym != "HYG" and det.get("Classification") == "BULLISH"]
+    bearish_etfs = [sym for sym, det in etf_details.items() if sym != "HYG" and det.get("Classification") == "BEARISH"]
+    bull_str = ", ".join(sorted(bullish_etfs)) if bullish_etfs else "None"
+    bear_str = ", ".join(sorted(bearish_etfs)) if bearish_etfs else "None"
+    print(f"- **Bull:Bear Gate**: {bbgate_status} (Ratio: {ratio_color_str}, Bulls: {regime['bull_count']} [{bull_str}], Bears: {regime['bear_count']} [{bear_str}] from {REGIME_FILE} Cache)")
+    
     print(f"- **VIX Delta Gate**: {vixgate_status} (VIX Spot: {regime['vix_spot']:.2f})")
     print(f"- **System Authorization**: {system_auth_str}")
     
@@ -702,6 +861,212 @@ def derive_volatility_profile(hist_data, symbol, iv_sum, iv_count):
     }
 
 
+def select_best_option(inst_data, quotes_data, spot, gex_target, today_override=None, target_delta=0.45, min_dte=30, max_dte=45):
+    """
+    Isolates and recommends the single best call option contract based on
+    the 5-step Option Selection Protocol.
+    """
+    # 1. Parse instruments
+    instruments_list = []
+    if isinstance(inst_data, dict):
+        if "data" in inst_data and isinstance(inst_data["data"], dict):
+            instruments_list = inst_data["data"].get("instruments", [])
+        else:
+            instruments_list = inst_data.get("instruments", [])
+    elif isinstance(inst_data, list):
+        instruments_list = inst_data
+
+    inst_map = {}
+    for inst in instruments_list:
+        if not isinstance(inst, dict) or "id" not in inst:
+            continue
+        try:
+            inst_map[inst["id"]] = {
+                "strike": float(inst["strike_price"]) if "strike_price" in inst else float(inst.get("strike", 0.0)),
+                "type": inst["type"].lower(),
+                "expiration_date": inst.get("expiration_date"),
+                "symbol": inst.get("chain_symbol", "")
+            }
+        except (ValueError, KeyError, TypeError):
+            continue
+
+    # 2. Parse quotes
+    quotes_list = []
+    if isinstance(quotes_data, dict):
+        quotes_list = quotes_data.get("data", {}).get("results", [])
+        if not quotes_list:
+            quotes_list = quotes_data.get("data", [])
+        if not quotes_list:
+            quotes_list = quotes_data.get("results", [])
+    elif isinstance(quotes_data, list):
+        quotes_list = quotes_data
+
+    quotes_map = {}
+    for q_item in quotes_list:
+        if not isinstance(q_item, dict):
+            continue
+        q = q_item.get("quote", q_item)
+        if not isinstance(q, dict):
+            continue
+        opt_id = q.get("instrument_id") or q.get("id") or q.get("instrument")
+        if not opt_id:
+            continue
+        quotes_map[opt_id] = q
+
+    # 3. Identify and score monthly/active expiration dates
+    expirations = set()
+    for inst in inst_map.values():
+        if inst["expiration_date"] and inst["type"] == "call":
+            expirations.add(inst["expiration_date"])
+
+    if not expirations:
+        return None, []
+
+    today = today_override if today_override else datetime.today().date()
+    if isinstance(today, str):
+        today = datetime.strptime(today, "%Y-%m-%d").date()
+    elif isinstance(today, datetime):
+        today = today.date()
+
+    valid_expirations = []
+    for exp_str in expirations:
+        try:
+            exp_date = datetime.strptime(exp_str, "%Y-%m-%d").date()
+            dte = (exp_date - today).days
+            # Exclude short-term weekly expirations (< 14 days)
+            if dte >= 14:
+                valid_expirations.append((exp_str, dte))
+        except (ValueError, TypeError):
+            continue
+
+    if not valid_expirations:
+        return None, []
+
+    # Choose the expiration date closest to min_dte to max_dte calendar days.
+    # We want to minimize distance to the min_dte-max_dte window.
+    # If in window target distance is 0, else distance is to the nearest boundary.
+    def exp_target_distance(item):
+        exp_str, dte = item
+        if min_dte <= dte <= max_dte:
+            return (0, abs(dte - min_dte))
+        else:
+            return (1, min(abs(dte - min_dte), abs(dte - max_dte)))
+
+    # Sort expirations to find the single best matching expiration date
+    valid_expirations.sort(key=exp_target_distance)
+    chosen_exp, chosen_dte = valid_expirations[0]
+
+    # Gather contracts for this expiration
+    eligible_contracts = []
+    for opt_id, inst in inst_map.items():
+        if inst["expiration_date"] == chosen_exp and inst["type"] == "call":
+            q = quotes_map.get(opt_id)
+            if not q:
+                continue
+            
+            try:
+                strike = inst["strike"]
+                bid = float(q.get("bid_price") or 0.0)
+                ask = float(q.get("ask_price") or 0.0)
+                mark = float(q.get("mark_price") or q.get("adjusted_mark_price") or ((bid + ask) / 2.0))
+                oi = int(q.get("open_interest") or 0)
+                vol = int(q.get("volume") or 0)
+                delta = float(q.get("delta") or 0.0) if q.get("delta") is not None else None
+                gamma = float(q.get("gamma") or 0.0) if q.get("gamma") is not None else None
+                iv = float(q.get("implied_volatility") or q.get("implied_vol", 0.0))
+            except (ValueError, TypeError):
+                continue
+
+            # Crucial Constraint: Strike strictly below +GEX (T1 target)
+            if gex_target and strike >= gex_target:
+                continue
+
+            # Bid-Ask Spread Limit (The Liquidity Gate)
+            spread = ask - bid
+            spread_ok = False
+            if mark <= 2.0:
+                spread_ok = (spread <= 0.15)
+            elif mark <= 5.0:
+                spread_ok = (spread <= 0.25)
+            else:
+                spread_ok = (spread <= 0.10 * bid) if bid > 0 else (spread <= 0.10 * mark)
+
+            oi_ok = (oi >= 500)
+            liquidity_passed = oi_ok and spread_ok
+
+            # Strike Selection Guidelines:
+            # - Preferred strike is closest to ATM or slightly OTM (0.0% to +5.0% above current Spot)
+            # - Or Delta range between 0.40 and 0.50 (inclusive)
+            pct_above_spot = ((strike - spot) / spot) * 100 if spot > 0 else 0.0
+            strike_preferred = (0.0 <= pct_above_spot <= 5.0)
+
+            delta_preferred = False
+            if delta is not None:
+                delta_preferred = (target_delta - 0.05 <= delta <= target_delta + 0.05)
+
+            # Scoring contracts
+            # Tier 1: Liquidity passed + strike or delta preferred
+            # Tier 2: Liquidity passed
+            # Tier 3: Liquidity failed + strike or delta preferred
+            # Tier 4: Liquidity failed
+            
+            tier = 4
+            if liquidity_passed:
+                if strike_preferred or delta_preferred:
+                    tier = 1
+                else:
+                    tier = 2
+            else:
+                if strike_preferred or delta_preferred:
+                    tier = 3
+
+            # Score within tier
+            dist_to_atm = abs(strike - spot)
+            dist_to_ideal_delta = abs(delta - target_delta) if delta is not None else 1.0
+
+            eligible_contracts.append({
+                "option_id": opt_id,
+                "strike": strike,
+                "expiration_date": chosen_exp,
+                "dte": chosen_dte,
+                "bid": bid,
+                "ask": ask,
+                "mark": mark,
+                "spread": spread,
+                "spread_ok": spread_ok,
+                "oi": oi,
+                "oi_ok": oi_ok,
+                "vol": vol,
+                "delta": delta,
+                "gamma": gamma,
+                "iv": iv,
+                "liquidity_passed": liquidity_passed,
+                "strike_preferred": strike_preferred,
+                "delta_preferred": delta_preferred,
+                "pct_above_spot": pct_above_spot,
+                "tier": tier,
+                "dist_to_atm": dist_to_atm,
+                "dist_to_ideal_delta": dist_to_ideal_delta
+            })
+
+    if not eligible_contracts:
+        return None, []
+
+    # Sort eligible contracts:
+    # 1. Lower tier is better (1 is best, 4 is worst)
+    # 2. Prefer delta-preferred or strike-preferred
+    # 3. Minimize distance to ATM (closest to spot is ATM/slightly OTM)
+    # 4. If we have Delta, minimize distance to ideal delta (0.45)
+    eligible_contracts.sort(key=lambda x: (
+        x["tier"],
+        x["dist_to_atm"] if x["delta"] is None else x["dist_to_ideal_delta"],
+        x["dist_to_atm"]
+    ))
+
+    best_contract = eligible_contracts[0]
+    return best_contract, eligible_contracts
+
+
 def cmd_analyze(args):
     """Grades and analyzes options setups for a given ticker."""
     symbol = args.symbol.upper()
@@ -718,6 +1083,8 @@ def cmd_analyze(args):
                 spot = c["price"]
                 break
 
+    inst_data = None
+    quotes_data = None
     # If inst-file and quote-file are passed, perform mechanical local GEX profile derivation
     if hasattr(args, "inst_file") and args.inst_file and hasattr(args, "quote_file") and args.quote_file:
         try:
@@ -918,6 +1285,55 @@ def cmd_analyze(args):
     else:
         print_color(f"- **Recommended Play**: NO ENTRY. Setup blocked by system safeguards.", "31", bold=True)
 
+    if inst_data is not None and quotes_data is not None:
+        target_delta = getattr(args, "target_delta", 0.45)
+        min_dte = getattr(args, "min_dte", 30)
+        max_dte = getattr(args, "max_dte", 45)
+        best_option, _ = select_best_option(
+            inst_data, quotes_data, spot, gex,
+            target_delta=target_delta, min_dte=min_dte, max_dte=max_dte
+        )
+        if best_option:
+            print(f"\n### 🎯 Option Selection Recommendation")
+            print(f"- **Target Contract**: Call Option strike ${best_option['strike']:.2f} expiring {best_option['expiration_date']} (DTE: {best_option['dte']})")
+            print(f"- **Option ID**: {best_option['option_id']}")
+            print(f"- **Greeks & Pricing**:")
+            print(f"  - Mark Price: ${best_option['mark']:.2f} (Ask: ${best_option['ask']:.2f}, Bid: ${best_option['bid']:.2f}, Spread: ${best_option['spread']:.2f})")
+            delta_str = f"{best_option['delta']:.4f}" if best_option['delta'] is not None else "N/A"
+            gamma_str = f"{best_option['gamma']:.4f}" if best_option['gamma'] is not None else "N/A"
+            print(f"  - Delta: {delta_str} | Gamma: {gamma_str} | Implied Vol: {best_option['iv']*100:.1f}%")
+            print(f"  - Liquidity Metrics: Open Interest: {best_option['oi']} | Volume: {best_option['vol']}")
+            
+            # Print spread and liquidity warnings
+            flags = []
+            if not best_option['spread_ok']:
+                flags.append("HIGH-SPREAD RISK")
+            if not best_option['oi_ok']:
+                flags.append("LOW-OI RISK")
+            
+            if flags:
+                flag_str = " | ".join(flags)
+                print(format_color(f"  - ⚠️ WARNING: [{flag_str}] contract has wide bid-ask spread or insufficient open interest.", "33", bold=True))
+            else:
+                print(format_color("  - ✅ LIQUIDITY GATE: PASS", "32"))
+
+            # Sizing / Constraints calculator
+            net_liq = getattr(args, "net_liq", None)
+            if net_liq is None:
+                net_liq = 50000.0
+            
+            max_risk = net_liq * 0.03
+            cost_per_contract = best_option['mark'] * 100.0
+            if cost_per_contract > 0:
+                max_contracts = int(max_risk // cost_per_contract)
+            else:
+                max_contracts = 0
+                
+            print(f"- **Aggregate Sizing Simulation**:")
+            print(f"  - Portfolio Net Liq Reference: ${net_liq:,.2f}")
+            print(f"  - Single-Leg Max Sizing Allowed (3.0% Net Liq): ${max_risk:,.2f}")
+            print(f"  - Estimated Sizing Recommendation: {format_color(f'{max_contracts} contracts', '32', bold=True)} at ${best_option['mark']:.2f} per premium (Total Premium: ${max_contracts * cost_per_contract:,.2f})")
+
 
 def compute_exit_rule_state(spot, purchase_premium, mark_price, ptrans, ntrans, gex_t1, days_held, stalling_counter, dte, target_mode="T1", t2_target=None):
     """
@@ -1006,12 +1422,13 @@ def compute_exit_rule_state(spot, purchase_premium, mark_price, ptrans, ntrans, 
 
 def cmd_portfolio(args):
     """Tracks position exits, risk sizing weights, and portfolio metrics."""
-    options = load_json(OPTIONS_FILE, {"active_positions": {}})
+    options = load_json(OPTIONS_FILE, {"options_positions": {}, "stocks_positions": {}})
     analyses = load_json(ANALYSES_FILE, {})
     
-    positions = options.get("active_positions", {})
+    positions = options.get("options_positions", {})
+    stocks = options.get("stocks_positions", {})
     
-    if not positions:
+    if not positions and not stocks:
         print("### 🛡️ Active Portfolio Tracker & Exits (Current Positions)")
         print("No open positions found in cache.")
         return
@@ -1020,7 +1437,11 @@ def cmd_portfolio(args):
     
     tech_exposure = 0.0
     net_liq = args.net_liq if args.net_liq is not None else 50000.0 # Default total workspace valuation estimate
+    total_cost_basis = 0.0
+    total_current_value = 0.0
     
+    if positions:
+        print("\n### 🛡️ Active Options Positions (GEX Tracked)")
     for opt_id, details in positions.items():
         ticker = details.get("Underlier")
         purchase_premium = float(details.get("Purchase Premium", 1.0))
@@ -1120,6 +1541,117 @@ def cmd_portfolio(args):
         print(f"  - **Time / Momentum Tracking**: Day [{days_held}] of 7 (Status: [{time_status}]{dte_str})")
         print(f"  - **Proposed Action**: [{format_color(proposed_action, color_code, bold=bold)}]")
         
+        # Accumulate aggregate metrics
+        total_cost_basis += details.get("Asset Cost Basis") or (purchase_premium * 100.0)
+        total_current_value += details.get("Current Value") or (mark_price * 100.0)
+
+    if stocks:
+        print("\n### 📈 Active Stock Positions")
+    for ticker, details in stocks.items():
+        shares = float(details.get("Shares", 0.0))
+        avg_price = float(details.get("Average Buy Price", 0.0))
+        
+        levels = analyses.get(ticker, {})
+        ptrans = levels.get("pTrans")
+        ntrans = levels.get("nTrans")
+        gex_t1 = levels.get("+GEX")
+        
+        spot = args.spot_overrides.get(ticker) if args.spot_overrides else None
+        if spot is None:
+            spot = levels.get("Spot")
+        if spot is None:
+            spot = details.get("Current Price") or details.get("Spot")
+        if spot is None:
+            spot = avg_price
+            
+        cost_basis = shares * avg_price
+        curr_val = shares * spot
+        pl_dollar = curr_val - cost_basis
+        pl_pct = (pl_dollar / cost_basis) * 100.0 if cost_basis > 0 else 0.0
+        
+        # Determine exit rule states for stocks
+        exit_rule_state = "HOLD"
+        proposed_action = "No Action"
+        
+        distance_ntrans = "N/A"
+        if ntrans:
+            dist = ((spot - ntrans) / ntrans) * 100
+            distance_ntrans = f"{dist:+.2f}%"
+            if spot < ntrans:
+                exit_rule_state = "STOP TRIGGERED (Structural Stop: Spot < nTrans)"
+                proposed_action = "Immediate Exit (Structural Stop)"
+                
+        if exit_rule_state == "HOLD":
+            if gex_t1 and spot >= gex_t1:
+                exit_rule_state = "PROFIT TAKE (T1 TARGET MET)"
+                proposed_action = "Exit position or scale out at +GEX target to lock in gains"
+            elif ptrans and spot < ptrans:
+                exit_rule_state = "WATCH"
+                proposed_action = "Hold existing, but add NOTHING"
+                
+        details["Current Price"] = spot
+        details["Current Value"] = curr_val
+        details["P&L ($)"] = round(pl_dollar, 2)
+        details["P&L (%)"] = round(pl_pct, 2)
+        sizing_risk_weight = (cost_basis / net_liq) * 100
+        details["Sizing Risk Weight (%)"] = round(sizing_risk_weight, 2)
+        
+        details_sector_tag = details.get("Beta Sector Tag", "Equity")
+        if "Technology" in details_sector_tag or "Beta" in details_sector_tag:
+            tech_exposure += sizing_risk_weight
+            
+        pl_color = "32" if pl_pct >= 0 else "31"
+        status_colors = {
+            "HOLD": ("32", False),
+            "WATCH": ("33", False),
+            "PROFIT TAKE (T1 TARGET MET)": ("32", True),
+            "STOP TRIGGERED (Structural Stop: Spot < nTrans)": ("31", True),
+        }
+        color_code, bold = status_colors.get(exit_rule_state, ("31", True))
+        exit_rule_fmt = format_color(exit_rule_state, color_code, bold=bold)
+        
+        print(f"- **{format_color(ticker, '35', bold=True)}**: Current Spot {format_color(f'${spot:.2f}', '36')} vs Avg Buy Price {format_color(f'${avg_price:.2f}', '33')} (Shares: {shares:,.2f} | Gain/Loss: {format_color(f'{pl_pct:+.2f}%', pl_color, bold=True)} / {format_color(f'${pl_dollar:+.2f}', pl_color, bold=True)})")
+        print(f"  - **Exits Rule State**: [{exit_rule_fmt}]")
+        print(f"  - **Distance to GEX nTrans Stop (nTrans at ${ntrans if ntrans else 0.0:.2f})**: {distance_ntrans}")
+        print(f"  - **Proposed Action**: [{format_color(proposed_action, color_code, bold=bold)}]")
+        
+        total_cost_basis += cost_basis
+        total_current_value += curr_val
+        
+    # Aggregate Portfolio Metrics
+    unrealized_pl_dlr = total_current_value - total_cost_basis
+    unrealized_pl_pct = (unrealized_pl_dlr / total_cost_basis) * 100.0 if total_cost_basis > 0 else 0.0
+    options_exposure_pct = (total_current_value / net_liq) * 100.0
+    cash_buffer = net_liq - total_current_value
+    cash_buffer_pct = (cash_buffer / net_liq) * 100.0
+    
+    pl_color = "32" if unrealized_pl_dlr >= 0 else "31"
+    cash_buffer_status = format_color("PASS", "32", bold=True) if cash_buffer_pct >= 20.0 else format_color("WARNING (Low liquid buffer <20%)", "31", bold=True)
+    
+    print("\n### 📈 Aggregate Portfolio Summary")
+    print(f"- **Total Portfolio Net Liquidation (Net Liq)**: ${net_liq:,.2f}")
+    print(f"- **Total Positions Cost Basis**: ${total_cost_basis:,.2f}")
+    print(f"- **Total Positions Market Value**: ${total_current_value:,.2f} ({options_exposure_pct:.2f}% allocation)")
+    print(f"- **Total Unrealized P&L**: {format_color(f'${unrealized_pl_dlr:+,.2f}', pl_color, bold=True)} ({format_color(f'{unrealized_pl_pct:+.2f}%', pl_color, bold=True)})")
+    print(f"- **Cash Buffer / Liquid Reserves**: ${cash_buffer:,.2f} ({cash_buffer_pct:.2f}% of Net Liq) | Status: {cash_buffer_status}")
+    
+    closed_positions = options.get("closed_positions", [])
+    if closed_positions:
+        total_closed = len(closed_positions)
+        profitable_closed = sum(1 for p in closed_positions if p.get("Realized P&L ($)", 0.0) > 0.0)
+        win_rate = (profitable_closed / total_closed) * 100.0 if total_closed > 0 else 0.0
+        total_realized_dlr = sum(p.get("Realized P&L ($)", 0.0) for p in closed_positions)
+        
+        gross_profit = sum(p.get("Realized P&L ($)", 0.0) for p in closed_positions if p.get("Realized P&L ($)", 0.0) > 0.0)
+        gross_loss = abs(sum(p.get("Realized P&L ($)", 0.0) for p in closed_positions if p.get("Realized P&L ($)", 0.0) < 0.0))
+        profit_factor_str = f"{gross_profit / gross_loss:.2f}" if gross_loss > 0 else f"{gross_profit:.2f}" if gross_profit > 0 else "N/A"
+        
+        realized_color = "32" if total_realized_dlr >= 0 else "31"
+        print(f"\n### 📊 Realized Performance Stats ({total_closed} Closed Trades)")
+        print(f"- **Realized Win Rate**: {win_rate:.1f}% ({profitable_closed}/{total_closed} profitable)")
+        print(f"- **Total Realized P&L**: {format_color(f'${total_realized_dlr:+,.2f}', realized_color, bold=True)}")
+        print(f"- **Profit Factor**: {profit_factor_str}")
+        
     print("\n### 📏 Sizing Constraints Checklist")
     # Sizing constraints check
     over_allocated = []
@@ -1155,14 +1687,14 @@ def cmd_portfolio(args):
         print_color("⚠️ RECOMMENDED ACTION: Consider implementing broad-market sector hedges using S&P 500 or ETF benchmarks to defend capital variance.", "33", bold=False)
     
     # Save the updated indicators
-    options["active_positions"] = positions
+    options["options_positions"] = positions
     save_json(OPTIONS_FILE, options)
 
 
 def cmd_add_pos(args):
     """Add new options position manually."""
-    options = load_json(OPTIONS_FILE, {"active_positions": {}})
-    positions = options.get("active_positions", {})
+    options = load_json(OPTIONS_FILE, {"options_positions": {}})
+    positions = options.get("options_positions", {})
     
     if args.option_id in positions:
         print(f"Error: Option ID {args.option_id} already exists in portfolio. Use update-option to modify it.", file=sys.stderr)
@@ -1199,15 +1731,106 @@ def cmd_add_pos(args):
         "T2 Target": None
     }
     
-    options["active_positions"] = positions
+    options["options_positions"] = positions
     save_json(OPTIONS_FILE, options)
     print(f"Successfully added options position for {args.underlier.upper()} in {OPTIONS_FILE}.")
 
 
+def cmd_add_stock_pos(args):
+    """Add new stock position manually."""
+    options = load_json(OPTIONS_FILE, {"options_positions": {}, "stocks_positions": {}})
+    stocks = options.setdefault("stocks_positions", {})
+    ticker = args.ticker.upper()
+    
+    if ticker in stocks:
+        print(f"Error: Stock Ticker {ticker} already exists in portfolio. Use update-stock to modify it.", file=sys.stderr)
+        sys.exit(1)
+        
+    stocks[ticker] = {
+        "Ticker": ticker,
+        "Shares": args.shares,
+        "Average Buy Price": args.average_buy_price,
+        "Current Price": args.average_buy_price,
+        "Beta Sector Tag": args.sector,
+        "Entry Date": datetime.today().strftime('%Y-%m-%d'),
+        "Asset Cost Basis": args.shares * args.average_buy_price,
+        "Current Value": args.shares * args.average_buy_price,
+        "P&L (%)": 0.0,
+        "P&L ($)": 0.0,
+        "Sizing Risk Weight (%)": 0.0
+    }
+    
+    options["stocks_positions"] = stocks
+    save_json(OPTIONS_FILE, options)
+    print(f"Successfully added stock position for {ticker} in {OPTIONS_FILE}.")
+
+
+def cmd_update_stock_pos(args):
+    """Update stock position shares or price."""
+    options = load_json(OPTIONS_FILE, {"options_positions": {}, "stocks_positions": {}})
+    stocks = options.get("stocks_positions", {})
+    ticker = args.ticker.upper()
+    
+    if ticker not in stocks:
+        print(f"Error: Stock position for {ticker} not found in portfolio.", file=sys.stderr)
+        sys.exit(1)
+        
+    target_stock = stocks[ticker]
+    if args.price is not None:
+        target_stock["Current Price"] = args.price
+    if args.shares is not None:
+        target_stock["Shares"] = args.shares
+        target_stock["Asset Cost Basis"] = args.shares * target_stock.get("Average Buy Price", 0.0)
+    if args.sector is not None:
+        target_stock["Beta Sector Tag"] = args.sector
+        
+    # Save the updated stocks dict back using stocks_positions
+    options["stocks_positions"] = stocks
+    save_json(OPTIONS_FILE, options)
+    print(f"Successfully updated metrics for stock {ticker} in {OPTIONS_FILE}.")
+
+
+def cmd_close_stock_pos(args):
+    """Close a stock position and archive standard P&L."""
+    options = load_json(OPTIONS_FILE, {"options_positions": {}, "stocks_positions": {}})
+    stocks = options.get("stocks_positions", {})
+    ticker = args.ticker.upper()
+    
+    if ticker not in stocks:
+        print(f"Error: Stock position for {ticker} not found in portfolio.", file=sys.stderr)
+        sys.exit(1)
+        
+    closed = options.setdefault("closed_stocks", [])
+    details = stocks.pop(ticker)
+    
+    shares = float(details.get("Shares", 0.0))
+    avg_price = float(details.get("Average Buy Price", 0.0))
+    close_price = args.close_price if args.close_price is not None else float(details.get("Current Price", avg_price))
+    
+    cost_basis = shares * avg_price
+    current_val = shares * close_price
+    realized_dollar = current_val - cost_basis
+    realized_pct = (realized_dollar / cost_basis) * 100.0 if cost_basis > 0 else 0.0
+    
+    details["Close Price"] = close_price
+    details["Close Date"] = datetime.today().strftime('%Y-%m-%d')
+    details["Realized P&L ($)"] = round(realized_dollar, 2)
+    details["Realized P&L (%)"] = round(realized_pct, 2)
+    closed.append(details)
+    
+    pl_color = "32" if realized_dollar >= 0 else "31"
+    print(f"Closed stock position for {ticker}: "
+          + format_color(f"Realized P&L {realized_pct:+.2f}% (${realized_dollar:+.2f})", pl_color, bold=True))
+          
+    options["stocks_positions"] = stocks
+    save_json(OPTIONS_FILE, options)
+    print(f"Archived stock position for {ticker} to closed_stocks in {OPTIONS_FILE}.")
+
+
 def cmd_update_opt(args):
     """Update options evaluation price/mark and momentum tracking."""
-    options = load_json(OPTIONS_FILE, {"active_positions": {}})
-    positions = options.get("active_positions", {})
+    options = load_json(OPTIONS_FILE, {"options_positions": {}})
+    positions = options.get("options_positions", {})
     
     target_pos = None
     for opt_id, details in positions.items():
@@ -1244,8 +1867,8 @@ def cmd_update_opt(args):
 
 def cmd_close_pos(args):
     """Close a tracked options position and archive its realized P&L."""
-    options = load_json(OPTIONS_FILE, {"active_positions": {}})
-    positions = options.get("active_positions", {})
+    options = load_json(OPTIONS_FILE, {"options_positions": {}})
+    positions = options.get("options_positions", {})
     
     matches = [
         opt_id for opt_id, details in positions.items()
@@ -1273,7 +1896,7 @@ def cmd_close_pos(args):
         print(f"Closed {details.get('Underlier')} {details.get('Strike')} {details.get('Type')} ({opt_id}): "
               + format_color(f"Realized P&L {realized_pct:+.2f}% (${realized_dollar:+.2f})", pl_color, bold=True))
         
-    options["active_positions"] = positions
+    options["options_positions"] = positions
     save_json(OPTIONS_FILE, options)
     print(f"Archived {len(matches)} position(s) to closed_positions in {OPTIONS_FILE}.")
 
@@ -1376,9 +1999,9 @@ def cmd_update_candidates(args):
     persist_new_scans()
     
     # Load active positions to exclude
-    options = load_json(OPTIONS_FILE, {"active_positions": {}})
-    positions = options.get("active_positions", {})
-    active_positions = ["SLS", "NKE", "BABA"]  # Fallback defaults
+    options = load_json(OPTIONS_FILE, {"options_positions": {}})
+    positions = options.get("options_positions", {})
+    active_positions = []
     if positions:
         active_positions = list(set(details.get("Underlier", "").upper() for details in positions.values() if details.get("Underlier")))
         print(f"Loaded active positions to exclude: {active_positions}")
@@ -1544,6 +2167,10 @@ def main():
     p_analyze.add_argument("--inst-file", type=str, help="Option instruments JSON file for derivation")
     p_analyze.add_argument("--quote-file", type=str, help="Option quotes JSON file for derivation")
     p_analyze.add_argument("--hist-file", type=str, help="Underlier historical daily closes JSON file for volatility derivation")
+    p_analyze.add_argument("--net-liq", type=float, dest="net_liq", help="Estimated Portfolio Net Liq value for sizing checks")
+    p_analyze.add_argument("--target-delta", type=float, dest="target_delta", default=0.45, help="Option selection target delta (default: 0.45)")
+    p_analyze.add_argument("--min-dte", type=int, dest="min_dte", default=30, help="Option selection minimum DTE (default: 30)")
+    p_analyze.add_argument("--max-dte", type=int, dest="max_dte", default=45, help="Option selection maximum DTE (default: 45)")
     
     # Grade Checklist overrides if needed
     p_analyze.add_argument("--rule1", type=str2bool, help="Overriding total call GEX is positive (True/False)")
@@ -1591,12 +2218,31 @@ def main():
     p_close_pos.add_argument("option_id", type=str, help="Option ID or Ticker underlier name")
     p_close_pos.add_argument("--close-premium", type=float, dest="close_premium", help="Exit premium received (defaults to last Mark Price)")
     
+    # add-stock subcommand
+    p_add_stock = subparsers.add_parser("add-stock", help="Register a stock position in tracking sheet.")
+    p_add_stock.add_argument("ticker", type=str, help="Stock ticker symbol")
+    p_add_stock.add_argument("shares", type=float, help="Number of shares purchased")
+    p_add_stock.add_argument("average_buy_price", type=float, help="Average cost paid per share")
+    p_add_stock.add_argument("--sector", type=str, default="Equity", help="Target sector tag (default: Equity)")
+
+    # update-stock subcommand
+    p_up_stock = subparsers.add_parser("update-stock", help="Update stock tracking metrics.")
+    p_up_stock.add_argument("ticker", type=str, help="Stock ticker symbol")
+    p_up_stock.add_argument("--price", type=float, help="New current stock price")
+    p_up_stock.add_argument("--shares", type=float, help="New stock shares count")
+    p_up_stock.add_argument("--sector", type=str, help="New stock sector tag")
+
+    # close-stock subcommand
+    p_close_stock = subparsers.add_parser("close-stock", help="Close a tracked stock position and archive standard P&L.")
+    p_close_stock.add_argument("ticker", type=str, help="Stock ticker symbol")
+    p_close_stock.add_argument("--close-price", type=float, dest="close_price", help="Exit price received per share (defaults to last current price)")
+
     # update-candidates subcommand
     p_candidates = subparsers.add_parser("update-candidates", help="Persist downloaded scans and update candidate_stocks.json.")
     p_candidates.add_argument("--min-price", type=float, dest="min_price", default=MIN_PRICE, help=f"Minimum stock price (default: {MIN_PRICE})")
     p_candidates.add_argument("--max-price", type=float, dest="max_price", default=MAX_PRICE, help=f"Maximum stock price (default: {MAX_PRICE})")
     p_candidates.add_argument("--min-volume", type=float, dest="min_volume", default=MIN_VOLUME, help=f"Minimum average trading volume (default: {MIN_VOLUME})")
-    p_candidates.add_argument("--min-change", type=float, dest="min_change", default=MIN_CHG_PCT, help=f"Minimum stock price day change % (default: {MIN_CHG_PCT})")
+    p_candidates.add_argument("--min-change", type=float, dest="min_change", default=MIN_CHG_PCT, help=f"Minimum stock price day change percent (default: {MIN_CHG_PCT})")
     p_candidates.add_argument("--min-market-cap", type=float, dest="min_market_cap", default=MIN_MARKET_CAP, help=f"Minimum market capitalization (default: {MIN_MARKET_CAP})")
     
     args = parser.parse_args()
@@ -1627,6 +2273,12 @@ def main():
         cmd_update_opt(args)
     elif args.command == "close-position":
         cmd_close_pos(args)
+    elif args.command == "add-stock":
+        cmd_add_stock_pos(args)
+    elif args.command == "update-stock":
+        cmd_update_stock_pos(args)
+    elif args.command == "close-stock":
+        cmd_close_stock_pos(args)
     elif args.command == "update-candidates":
         cmd_update_candidates(args)
 

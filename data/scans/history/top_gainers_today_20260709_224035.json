@@ -1,0 +1,3223 @@
+{
+  "data": {
+    "result": {
+      "scan_id": "1da419ef-ce5d-4eee-a5ba-91c6e5762a29",
+      "scan_title": "Top Gainers Today",
+      "total_items": 307,
+      "results": [
+        {
+          "ticker": "VRAX",
+          "instrument_id": "56ee83fa-4179-4489-bf70-c27f050a2ad2",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "1.9402830188679243",
+            "Asset type": "STOCK",
+            "Last": "9.3501",
+            "Market cap": "2.574271e+06",
+            "Name": "Virax Biolabs",
+            "Net change": "6.1701",
+            "Relative volume": "1502.8144419894236",
+            "Symbol": "VRAX",
+            "Volume": "5.7643513663966e+07"
+          }
+        },
+        {
+          "ticker": "JLHL",
+          "instrument_id": "9e2e6b09-a633-4db4-b8c3-730a7f745f27",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.9441176470588234",
+            "Asset type": "STOCK",
+            "Last": "5.949",
+            "Market cap": "6.5632813e+07",
+            "Name": "Julong Holding Limited",
+            "Net change": "2.889",
+            "Relative volume": "40.495909228248195",
+            "Symbol": "JLHL",
+            "Volume": "3.379307973033e+07"
+          }
+        },
+        {
+          "ticker": "WRAP",
+          "instrument_id": "7bda6185-b74b-4a49-9f6b-b93f20967ab9",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.4968553459119495",
+            "Asset type": "STOCK",
+            "Last": "2.38",
+            "Market cap": "8.91812e+07",
+            "Name": "Wrap Technologies",
+            "Net change": "0.7899999999999998",
+            "Relative volume": "88.79505249110134",
+            "Symbol": "WRAP",
+            "Volume": "3.8428537209067e+07"
+          }
+        },
+        {
+          "ticker": "FBRX",
+          "instrument_id": "0a91fec4-d1a8-427a-8b8d-92a3b5ad1671",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.40767735665694854",
+            "Asset type": "STOCK",
+            "Last": "28.97",
+            "Market cap": "4.21044477e+08",
+            "Name": "Forte Biosciences",
+            "Net change": "8.39",
+            "Relative volume": "3.912935781042937",
+            "Symbol": "FBRX",
+            "Volume": "2.308939761756e+06"
+          }
+        },
+        {
+          "ticker": "TDTH",
+          "instrument_id": "d33d855a-023f-4c55-8317-08179810e01f",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.3633879781420765",
+            "Asset type": "STOCK",
+            "Last": "2.495",
+            "Market cap": "8.635508e+06",
+            "Name": "Trident Digital Tech Holdings Ltd",
+            "Net change": "0.665",
+            "Relative volume": "2.8761510437444544",
+            "Symbol": "TDTH",
+            "Volume": "6.044092054789e+06"
+          }
+        },
+        {
+          "ticker": "SDOT",
+          "instrument_id": "3d5bab92-7b78-4f34-80e1-7ff3e789b0c7",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.33776464795667177",
+            "Asset type": "STOCK",
+            "Last": "27.17",
+            "Market cap": "2.023606e+07",
+            "Name": "Sadot Group",
+            "Net change": "6.860000000000003",
+            "Relative volume": "1.0229772665640284",
+            "Symbol": "SDOT",
+            "Volume": "3.942002355741e+06"
+          }
+        },
+        {
+          "ticker": "TRAX",
+          "instrument_id": "19fac2b0-65b3-4bc8-938e-995ca05a6f56",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.33293211362542124",
+            "Asset type": "STOCK",
+            "Last": "27.685",
+            "Market cap": "7.25063677e+08",
+            "Name": "First Tracks Biotherapeutics",
+            "Net change": "6.914999999999999",
+            "Relative volume": "3.372893250016925",
+            "Symbol": "TRAX",
+            "Volume": "1.86187479837e+06"
+          }
+        },
+        {
+          "ticker": "RPGL",
+          "instrument_id": "a4280cec-ddc8-4300-86b0-7bb29bf0935d",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.29775280898876405",
+            "Asset type": "STOCK",
+            "Last": "2.31",
+            "Market cap": "1.959569e+06",
+            "Name": "Republic Power Group Limited",
+            "Net change": "0.53",
+            "Relative volume": "2.380575172678141",
+            "Symbol": "RPGL",
+            "Volume": "2.0447130229101e+07"
+          }
+        },
+        {
+          "ticker": "CIRC",
+          "instrument_id": "5123fbe0-8798-46bb-b737-3ec7394cc490",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.297346600331675",
+            "Asset type": "STOCK",
+            "Last": "0.7823",
+            "Market cap": "5.4247793e+07",
+            "Name": "Circle8 Group",
+            "Net change": "0.17930000000000001",
+            "Relative volume": "22.337735371648314",
+            "Symbol": "CIRC",
+            "Volume": "4.0573614943326e+07"
+          }
+        },
+        {
+          "ticker": "LASR",
+          "instrument_id": "683d27f2-93dd-4668-9a78-13ceecd667f3",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.2852760736196319",
+            "Asset type": "STOCK",
+            "Last": "75.42",
+            "Market cap": "3.308934869e+09",
+            "Name": "NLIGHT",
+            "Net change": "16.740000000000002",
+            "Relative volume": "2.096299010593487",
+            "Symbol": "LASR",
+            "Volume": "2.460326241066e+06"
+          }
+        },
+        {
+          "ticker": "SUNE",
+          "instrument_id": "e9b47bc8-3682-46c6-9ee3-9a1ad2fe2d9b",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.26540284360189575",
+            "Asset type": "STOCK",
+            "Last": "2.67",
+            "Market cap": "8.617427e+06",
+            "Name": "SUNation Energy,",
+            "Net change": "0.56",
+            "Relative volume": "1.639307673016168",
+            "Symbol": "SUNE",
+            "Volume": "1.8208863847964e+07"
+          }
+        },
+        {
+          "ticker": "RKTO",
+          "instrument_id": "b1dd1518-1b5d-40cf-8fa2-de27e18e5ae0",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.23080757726819545",
+            "Asset type": "STOCK",
+            "Last": "0.9876",
+            "Market cap": "1.7911434e+07",
+            "Name": "Rocket One",
+            "Net change": "0.18520000000000003",
+            "Relative volume": "60.296241290765934",
+            "Symbol": "RKTO",
+            "Volume": "1.15898284029019e+08"
+          }
+        },
+        {
+          "ticker": "PTLE",
+          "instrument_id": "1a88e3dd-5c3f-4b48-a2ad-6f80587ab869",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.20384615384615395",
+            "Asset type": "STOCK",
+            "Last": "9.39",
+            "Market cap": "4.8992751e+07",
+            "Name": "PTL Limited",
+            "Net change": "1.5900000000000007",
+            "Relative volume": "3.109387699889583",
+            "Symbol": "PTLE",
+            "Volume": "64672.48675"
+          }
+        },
+        {
+          "ticker": "ZSQR",
+          "instrument_id": "9a8b0115-de64-4ce6-98d7-107f9749a281",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.18839488636363647",
+            "Asset type": "STOCK",
+            "Last": "8.3663",
+            "Market cap": "3.71249464e+08",
+            "Name": "Z Squared",
+            "Net change": "1.3263000000000007",
+            "Relative volume": "0.48626995619715235",
+            "Symbol": "ZSQR",
+            "Volume": "307064.697028"
+          }
+        },
+        {
+          "ticker": "EVGN",
+          "instrument_id": "9fcd0460-5198-480b-80be-b359883cbf64",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.1842550108669403",
+            "Asset type": "STOCK",
+            "Last": "0.4904",
+            "Market cap": "5.455582e+06",
+            "Name": "Evogene",
+            "Net change": "0.07629999999999998",
+            "Relative volume": "567.245904461158",
+            "Symbol": "EVGN",
+            "Volume": "2.6963121766973e+07"
+          }
+        },
+        {
+          "ticker": "AP",
+          "instrument_id": "c0cca2a2-64ec-45c2-a249-f1ce55cb5f4c",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.17991631799163194",
+            "Asset type": "STOCK",
+            "Last": "8.46",
+            "Market cap": "1.45740209e+08",
+            "Name": "Ampco",
+            "Net change": "1.290000000000001",
+            "Relative volume": "1.994149944174475",
+            "Symbol": "AP",
+            "Volume": "338406.856384"
+          }
+        },
+        {
+          "ticker": "SVAC",
+          "instrument_id": "fb5b69a1-a37e-4c02-971b-a35f69ba4b29",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.17721518987341775",
+            "Asset type": "STOCK",
+            "Last": "9.3",
+            "Market cap": "2.40733335e+08",
+            "Name": "Spring Valley Acquisition Corp. III",
+            "Net change": "1.4000000000000004",
+            "Relative volume": "1.6515271050677194",
+            "Symbol": "SVAC",
+            "Volume": "204465.054517"
+          }
+        },
+        {
+          "ticker": "SPCB",
+          "instrument_id": "9274b579-3c7f-481d-a806-67d3cc6b6d03",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.17532782904322483",
+            "Asset type": "STOCK",
+            "Last": "12.1",
+            "Market cap": "5.6972408e+07",
+            "Name": "SuperCom",
+            "Net change": "1.8049999999999997",
+            "Relative volume": "2.243580987732747",
+            "Symbol": "SPCB",
+            "Volume": "86463.659832"
+          }
+        },
+        {
+          "ticker": "ELPW",
+          "instrument_id": "b9864e6e-edaf-4cd4-bbcc-6f2cd113724c",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.16949152542372878",
+            "Asset type": "STOCK",
+            "Last": "0.7521",
+            "Market cap": "2.026183e+06",
+            "Name": "Elong Power Holding Limited Class A",
+            "Net change": "0.10899999999999999",
+            "Relative volume": "9.238689075788118",
+            "Symbol": "ELPW",
+            "Volume": "1.2818890599988e+07"
+          }
+        },
+        {
+          "ticker": "LRMR",
+          "instrument_id": "cbb39085-b452-4af0-b0e2-cf0deb004264",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.16759002770083103",
+            "Asset type": "STOCK",
+            "Last": "4.215",
+            "Market cap": "3.75017402e+08",
+            "Name": "Larimar Therapeutics",
+            "Net change": "0.605",
+            "Relative volume": "0.9350928783484679",
+            "Symbol": "LRMR",
+            "Volume": "1.929738009346e+06"
+          }
+        },
+        {
+          "ticker": "CNTB",
+          "instrument_id": "e060c485-bdcc-4c0b-a2a1-251ed2d34e21",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.16675675675675658",
+            "Asset type": "STOCK",
+            "Last": "2.5902",
+            "Market cap": "1.40094572e+08",
+            "Name": "Connect Biopharma Holdings Limited",
+            "Net change": "0.37019999999999964",
+            "Relative volume": "2.3319689007736497",
+            "Symbol": "CNTB",
+            "Volume": "1.567648617446e+06"
+          }
+        },
+        {
+          "ticker": "OPENW",
+          "instrument_id": "44e5be2e-0701-45b1-b792-12fe2322e402",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.165567593028733",
+            "Asset type": "STOCK",
+            "Last": "0.4949",
+            "Market cap": "",
+            "Name": "Opendoor Technologies Inc Series K Warrants exercise price of $9.00",
+            "Net change": "0.07030000000000003",
+            "Relative volume": "1.5326439544412096",
+            "Symbol": "OPENW",
+            "Volume": "278786.11684"
+          }
+        },
+        {
+          "ticker": "OSTX",
+          "instrument_id": "202e2aa4-108e-48e8-b297-7e76432fb72f",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.1643835616438356",
+            "Asset type": "STOCK",
+            "Last": "1.7",
+            "Market cap": "6.5025634e+07",
+            "Name": "OS Therapies Incorporated",
+            "Net change": "0.24",
+            "Relative volume": "0.4667098057099421",
+            "Symbol": "OSTX",
+            "Volume": "699270.395219"
+          }
+        },
+        {
+          "ticker": "SAFX",
+          "instrument_id": "e0e6c04b-07b9-429a-ae68-4bf6f16d7ff1",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.16018060632122114",
+            "Asset type": "STOCK",
+            "Last": "0.5396",
+            "Market cap": "1.69046872e+08",
+            "Name": "XCF Global",
+            "Net change": "0.07449999999999996",
+            "Relative volume": "1.3184950058257396",
+            "Symbol": "SAFX",
+            "Volume": "3.148056389381e+06"
+          }
+        },
+        {
+          "ticker": "BGDE",
+          "instrument_id": "e4f0744c-e818-40ec-8d3b-d7db853f4f29",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.15083798882681565",
+            "Asset type": "STOCK",
+            "Last": "8.24",
+            "Market cap": "3.9532164e+07",
+            "Name": "Big Digital Energy",
+            "Net change": "1.08",
+            "Relative volume": "0.3711635213879211",
+            "Symbol": "BGDE",
+            "Volume": "36960.389334"
+          }
+        },
+        {
+          "ticker": "AGRZ",
+          "instrument_id": "ad8c5b88-8742-4170-b4c8-2c84d2caf6cf",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.15064365927143247",
+            "Asset type": "STOCK",
+            "Last": "0.4201",
+            "Market cap": "7.912989e+06",
+            "Name": "Agroz",
+            "Net change": "0.05499999999999999",
+            "Relative volume": "1.258907282681426",
+            "Symbol": "AGRZ",
+            "Volume": "176908.090794"
+          }
+        },
+        {
+          "ticker": "SNWV",
+          "instrument_id": "ffcf67cf-a401-4d4c-82b6-4e8de470f93b",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.1485148514851485",
+            "Asset type": "STOCK",
+            "Last": "11.6",
+            "Market cap": "8.6849657e+07",
+            "Name": "SANUWAVE Health, Inc",
+            "Net change": "1.5",
+            "Relative volume": "1.7981149435253343",
+            "Symbol": "SNWV",
+            "Volume": "194497.989794"
+          }
+        },
+        {
+          "ticker": "BBIO",
+          "instrument_id": "0d959ac4-098c-4b91-876c-94d28c09ec1b",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.14627218179496995",
+            "Asset type": "STOCK",
+            "Last": "89.7875",
+            "Market cap": "1.5341811085e+10",
+            "Name": "BridgeBio Pharma",
+            "Net change": "11.457499999999996",
+            "Relative volume": "4.355998349713328",
+            "Symbol": "BBIO",
+            "Volume": "8.977204187044e+06"
+          }
+        },
+        {
+          "ticker": "MARA",
+          "instrument_id": "8eec3912-304b-4ad9-b71a-39200fc34062",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.14600665557404333",
+            "Asset type": "STOCK",
+            "Last": "13.775",
+            "Market cap": "4.582871446e+09",
+            "Name": "MARA Holdings",
+            "Net change": "1.7550000000000008",
+            "Relative volume": "1.3841564066124437",
+            "Symbol": "MARA",
+            "Volume": "4.4043857775986e+07"
+          }
+        },
+        {
+          "ticker": "BJDX",
+          "instrument_id": "05380cca-a3cd-4a45-a7c6-9af0ee000a92",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.14440298507462687",
+            "Asset type": "STOCK",
+            "Last": "1.5335",
+            "Market cap": "1.355476e+06",
+            "Name": "Bluejay Diagnostics",
+            "Net change": "0.1935",
+            "Relative volume": "3.987465546737014",
+            "Symbol": "BJDX",
+            "Volume": "1.1846704778026e+07"
+          }
+        },
+        {
+          "ticker": "JZ",
+          "instrument_id": "a0004af4-7338-4215-a1ac-920937c6045d",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.14062499999999992",
+            "Asset type": "STOCK",
+            "Last": "3.65",
+            "Market cap": "7.718641e+06",
+            "Name": "Jianzhi Education Technology Group",
+            "Net change": "0.44999999999999973",
+            "Relative volume": "0.5229378603560002",
+            "Symbol": "JZ",
+            "Volume": "41255.668082"
+          }
+        },
+        {
+          "ticker": "FRVO",
+          "instrument_id": "b765a1ce-3c36-4888-a8af-89729cdf92e9",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.1400084853627493",
+            "Asset type": "STOCK",
+            "Last": "26.87",
+            "Market cap": "6.947728485e+09",
+            "Name": "Fervo Energy",
+            "Net change": "3.3000000000000007",
+            "Relative volume": "0.5106330827591217",
+            "Symbol": "FRVO",
+            "Volume": "1.46587312135e+06"
+          }
+        },
+        {
+          "ticker": "FXHO",
+          "instrument_id": "691d519f-fa64-442e-97a1-b2c24915c5fa",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.13705234159779628",
+            "Asset type": "STOCK",
+            "Last": "16.51",
+            "Market cap": "2.866059e+06",
+            "Name": "UTime Limited Class A",
+            "Net change": "1.990000000000002",
+            "Relative volume": "1.4375594211902654",
+            "Symbol": "FXHO",
+            "Volume": "124834.173964"
+          }
+        },
+        {
+          "ticker": "OPENL",
+          "instrument_id": "50f79d03-5f96-4ce3-b485-ce30f087a163",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.13527180783817935",
+            "Asset type": "STOCK",
+            "Last": "0.2694",
+            "Market cap": "",
+            "Name": "Opendoor Technologies Inc Series A Warrants exercise price of $13.00",
+            "Net change": "0.03209999999999996",
+            "Relative volume": "1.9995551493809751",
+            "Symbol": "OPENL",
+            "Volume": "472579.060883"
+          }
+        },
+        {
+          "ticker": "LGHL",
+          "instrument_id": "aa0d04d9-8c8d-4fe9-8aba-fbafd2874865",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.13189600507292318",
+            "Asset type": "STOCK",
+            "Last": "0.357",
+            "Market cap": "2.61968e+06",
+            "Name": "Lion Group",
+            "Net change": "0.04159999999999997",
+            "Relative volume": "326.865126757667",
+            "Symbol": "LGHL",
+            "Volume": "8.0765204202721e+07"
+          }
+        },
+        {
+          "ticker": "PENG",
+          "instrument_id": "d9d927f4-c5fc-455b-b882-8213d7e11a63",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.12590799031476993",
+            "Asset type": "STOCK",
+            "Last": "88.35",
+            "Market cap": "4.02101459e+09",
+            "Name": "Penguin Solutions",
+            "Net change": "9.879999999999995",
+            "Relative volume": "0.3264727515739367",
+            "Symbol": "PENG",
+            "Volume": "4.524150771424e+06"
+          }
+        },
+        {
+          "ticker": "CLRO",
+          "instrument_id": "ae0de6a0-29c8-441c-b077-6ebdfd0b5922",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.12499999999999996",
+            "Asset type": "STOCK",
+            "Last": "11.43",
+            "Market cap": "2.7476481e+07",
+            "Name": "ClearOne",
+            "Net change": "1.2699999999999996",
+            "Relative volume": "0.25745324668261976",
+            "Symbol": "CLRO",
+            "Volume": "1.606848301846e+06"
+          }
+        },
+        {
+          "ticker": "AEHR",
+          "instrument_id": "6f1d6009-642b-4326-9b7d-21e9ccd61aba",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.12417145382235958",
+            "Asset type": "STOCK",
+            "Last": "76.32",
+            "Market cap": "2.133474218e+09",
+            "Name": "Aehr",
+            "Net change": "8.429999999999993",
+            "Relative volume": "1.0262119482115768",
+            "Symbol": "AEHR",
+            "Volume": "1.545667385122e+06"
+          }
+        },
+        {
+          "ticker": "AVX",
+          "instrument_id": "26828fbd-f040-4597-a858-a6cf0208f3fc",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.12391930835734861",
+            "Asset type": "STOCK",
+            "Last": "5.85",
+            "Market cap": "3.9281774e+07",
+            "Name": "Avax One Technology",
+            "Net change": "0.6449999999999996",
+            "Relative volume": "0.44922112413516874",
+            "Symbol": "AVX",
+            "Volume": "14657.407639"
+          }
+        },
+        {
+          "ticker": "TXG",
+          "instrument_id": "02211486-6394-4c50-881f-3775e1ea9615",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.1226314384841206",
+            "Asset type": "STOCK",
+            "Last": "42.065",
+            "Market cap": "4.757683182e+09",
+            "Name": "10x Genomics",
+            "Net change": "4.594999999999999",
+            "Relative volume": "0.37592771013362286",
+            "Symbol": "TXG",
+            "Volume": "1.165493622403e+06"
+          }
+        },
+        {
+          "ticker": "MGIH",
+          "instrument_id": "5f1fd894-1a8b-45fa-9c9b-197a3274f337",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.12162162162162159",
+            "Asset type": "STOCK",
+            "Last": "1.66",
+            "Market cap": "1.71e+07",
+            "Name": "Millennium Group International",
+            "Net change": "0.17999999999999994",
+            "Relative volume": "0.20566161042185152",
+            "Symbol": "MGIH",
+            "Volume": "200147"
+          }
+        },
+        {
+          "ticker": "ALGM",
+          "instrument_id": "12b77014-8586-4668-9e61-08193baef688",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.12076168269697844",
+            "Asset type": "STOCK",
+            "Last": "57.68",
+            "Market cap": "9.588395978e+09",
+            "Name": "Allegro MicroSystems,",
+            "Net change": "6.214999999999996",
+            "Relative volume": "0.32027835630403473",
+            "Symbol": "ALGM",
+            "Volume": "1.112028845706e+06"
+          }
+        },
+        {
+          "ticker": "CYCN",
+          "instrument_id": "d63d797e-0744-4a8a-b413-c5b47312b2c2",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.11942446043165468",
+            "Asset type": "STOCK",
+            "Last": "3.89",
+            "Market cap": "1.5112795e+07",
+            "Name": "Cyclerion Therapeutics",
+            "Net change": "0.41500000000000004",
+            "Relative volume": "6.1856215569727535",
+            "Symbol": "CYCN",
+            "Volume": "39988.01455"
+          }
+        },
+        {
+          "ticker": "IOTR",
+          "instrument_id": "c455426b-6f01-4589-bdb2-9c98d73dc8e6",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.11864406779661014",
+            "Asset type": "STOCK",
+            "Last": "3.96",
+            "Market cap": "1.7218113e+07",
+            "Name": "iOThree LTD",
+            "Net change": "0.41999999999999993",
+            "Relative volume": "0.04340245987077771",
+            "Symbol": "IOTR",
+            "Volume": "1.148552087645e+06"
+          }
+        },
+        {
+          "ticker": "LITE",
+          "instrument_id": "cdddef8e-5aa9-4421-bcda-80f98df635f0",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.11774855041719698",
+            "Asset type": "STOCK",
+            "Last": "790.36",
+            "Market cap": "5.501238e+10",
+            "Name": "Lumentum",
+            "Net change": "83.25999999999999",
+            "Relative volume": "1.1321801357006573",
+            "Symbol": "LITE",
+            "Volume": "2.947461048058e+06"
+          }
+        },
+        {
+          "ticker": "ONTO",
+          "instrument_id": "4e67cb0d-6af4-45f5-b1a5-ab08ef4e5d55",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.11772173614685195",
+            "Asset type": "STOCK",
+            "Last": "325.76",
+            "Market cap": "1.4497762602e+10",
+            "Name": "Onto Innovation",
+            "Net change": "34.31",
+            "Relative volume": "0.6161550785553402",
+            "Symbol": "ONTO",
+            "Volume": "847402.727938"
+          }
+        },
+        {
+          "ticker": "ISPR",
+          "instrument_id": "2ecc4f47-7933-4325-8b42-7b50102fae4d",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.11620155038759683",
+            "Asset type": "STOCK",
+            "Last": "1.4399",
+            "Market cap": "7.404522e+07",
+            "Name": "Ispire Technology",
+            "Net change": "0.14989999999999992",
+            "Relative volume": "0.31694688715176655",
+            "Symbol": "ISPR",
+            "Volume": "63032.636105"
+          }
+        },
+        {
+          "ticker": "COHU",
+          "instrument_id": "8c051dc7-a5fa-4e08-ab0e-83f846d4e6cc",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.11550268610897935",
+            "Asset type": "STOCK",
+            "Last": "58.14",
+            "Market cap": "2.458779085e+09",
+            "Name": "Cohu",
+            "Net change": "6.020000000000003",
+            "Relative volume": "0.26593630623521053",
+            "Symbol": "COHU",
+            "Volume": "339864.261376"
+          }
+        },
+        {
+          "ticker": "UIS",
+          "instrument_id": "721fa23c-fd5f-49f7-aa1a-773e9449f299",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.11480337078651687",
+            "Asset type": "STOCK",
+            "Last": "3.9687",
+            "Market cap": "2.59542405e+08",
+            "Name": "Unisys",
+            "Net change": "0.40870000000000006",
+            "Relative volume": "0.7288140464251323",
+            "Symbol": "UIS",
+            "Volume": "558505.364948"
+          }
+        },
+        {
+          "ticker": "ARM",
+          "instrument_id": "185d1287-967e-481a-92b9-cd801572b58e",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.11434185984545692",
+            "Asset type": "STOCK",
+            "Last": "334.57",
+            "Market cap": "3.20679966902e+11",
+            "Name": "Arm Holdings plc",
+            "Net change": "34.329999999999984",
+            "Relative volume": "0.6529088344633267",
+            "Symbol": "ARM",
+            "Volume": "4.024898533133e+06"
+          }
+        },
+        {
+          "ticker": "MXL",
+          "instrument_id": "0ef5bd53-61e1-4fc0-9598-bd75a8d52146",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.11423590935502613",
+            "Asset type": "STOCK",
+            "Last": "95.88",
+            "Market cap": "7.705429771e+09",
+            "Name": "MaxLinear",
+            "Net change": "9.829999999999998",
+            "Relative volume": "0.4100021223144133",
+            "Symbol": "MXL",
+            "Volume": "1.494127501905e+06"
+          }
+        },
+        {
+          "ticker": "OPEN",
+          "instrument_id": "5710bbf9-ee20-4bd0-9521-9fc81788a089",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.1137787056367432",
+            "Asset type": "STOCK",
+            "Last": "5.335",
+            "Market cap": "4.621088467e+09",
+            "Name": "Opendoor Technologies",
+            "Net change": "0.5449999999999999",
+            "Relative volume": "0.405907102956657",
+            "Symbol": "OPEN",
+            "Volume": "4.1418847504958e+07"
+          }
+        },
+        {
+          "ticker": "RNAZ",
+          "instrument_id": "f0fcd640-dccd-4172-a16f-76e7d3766d28",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.1136507936507936",
+            "Asset type": "STOCK",
+            "Last": "8.77",
+            "Market cap": "7.450367e+06",
+            "Name": "TransCode Therapeutics",
+            "Net change": "0.8949999999999996",
+            "Relative volume": "0.30905972475364485",
+            "Symbol": "RNAZ",
+            "Volume": "10558.90719"
+          }
+        },
+        {
+          "ticker": "ISPC",
+          "instrument_id": "266562a0-a8be-41bc-b67e-2ca69a14f78d",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.11353711790393003",
+            "Asset type": "STOCK",
+            "Last": "2.55",
+            "Market cap": "3.291089e+06",
+            "Name": "iSpecimen",
+            "Net change": "0.2599999999999998",
+            "Relative volume": "6.739636017567973",
+            "Symbol": "ISPC",
+            "Volume": "272922.1937"
+          }
+        },
+        {
+          "ticker": "LABT",
+          "instrument_id": "9ca1ace5-a80e-4366-892d-8cf9f87f3b31",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.1134873949579833",
+            "Asset type": "STOCK",
+            "Last": "2.6501",
+            "Market cap": "4.136627e+06",
+            "Name": "Lakewood-Amedex Biotherapeutics Inc",
+            "Net change": "0.27010000000000023",
+            "Relative volume": "1.214099858062734",
+            "Symbol": "LABT",
+            "Volume": "130384.112701"
+          }
+        },
+        {
+          "ticker": "CBRS",
+          "instrument_id": "91b55ab3-1b74-4e8c-a2b5-9423584619db",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.11311358133392035",
+            "Asset type": "STOCK",
+            "Last": "202.275",
+            "Market cap": "4.0509776068e+10",
+            "Name": "Cerebras Systems",
+            "Net change": "20.555000000000007",
+            "Relative volume": "0.7476667972271163",
+            "Symbol": "CBRS",
+            "Volume": "2.540462425949e+06"
+          }
+        },
+        {
+          "ticker": "HELE",
+          "instrument_id": "acad0b54-8d15-49a9-9cc7-8c5f1becb743",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.11261171797418076",
+            "Asset type": "STOCK",
+            "Last": "28.01",
+            "Market cap": "5.86377635e+08",
+            "Name": "Helen of Troy",
+            "Net change": "2.835000000000001",
+            "Relative volume": "0.27587327205037526",
+            "Symbol": "HELE",
+            "Volume": "351644.162848"
+          }
+        },
+        {
+          "ticker": "CRMT",
+          "instrument_id": "f5e75a52-4ff6-4bf9-a7ba-254f81d3a08a",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.11178247734138975",
+            "Asset type": "STOCK",
+            "Last": "3.68",
+            "Market cap": "2.7232036e+07",
+            "Name": "America's Car-Mart",
+            "Net change": "0.3700000000000001",
+            "Relative volume": "0.37020319206552504",
+            "Symbol": "CRMT",
+            "Volume": "149041.988781"
+          }
+        },
+        {
+          "ticker": "XCUR",
+          "instrument_id": "b7b21365-93bc-4341-a452-f7c3969a09f3",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.11176470588235292",
+            "Asset type": "STOCK",
+            "Last": "1.89",
+            "Market cap": "1.0835692e+07",
+            "Name": "Exicure",
+            "Net change": "0.18999999999999995",
+            "Relative volume": "1.2062386548645188",
+            "Symbol": "XCUR",
+            "Volume": "38102.4119"
+          }
+        },
+        {
+          "ticker": "XCH",
+          "instrument_id": "cc2a8131-e345-4419-b4fb-dfaa0f36cb6a",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.11012183692596066",
+            "Asset type": "STOCK",
+            "Last": "0.7107",
+            "Market cap": "5.5286163e+07",
+            "Name": "XCHG Limited",
+            "Net change": "0.07050000000000001",
+            "Relative volume": "2.704091527386081",
+            "Symbol": "XCH",
+            "Volume": "487717.319195"
+          }
+        },
+        {
+          "ticker": "ERNA",
+          "instrument_id": "1ab3a02b-30a4-47b3-9e82-831fe2349d13",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.10994764397905757",
+            "Asset type": "STOCK",
+            "Last": "6.36",
+            "Market cap": "6.718078e+06",
+            "Name": "Ernexa Therapeutics",
+            "Net change": "0.6299999999999999",
+            "Relative volume": "1.2940617776386296",
+            "Symbol": "ERNA",
+            "Volume": "26290.345202"
+          }
+        },
+        {
+          "ticker": "ASX",
+          "instrument_id": "5afcc355-5a13-4a0d-a811-5fb7162ea781",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.10994239919859757",
+            "Asset type": "STOCK",
+            "Last": "44.32",
+            "Market cap": "8.5746560223e+10",
+            "Name": "ASE Technology",
+            "Net change": "4.390000000000001",
+            "Relative volume": "0.43503179913601175",
+            "Symbol": "ASX",
+            "Volume": "4.37360233715e+06"
+          }
+        },
+        {
+          "ticker": "FIEE",
+          "instrument_id": "8729ccbf-bf27-4baf-882c-5059ee3fe1d8",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.10928961748633864",
+            "Asset type": "STOCK",
+            "Last": "4.06",
+            "Market cap": "3.1214668e+07",
+            "Name": "FiEE, Inc",
+            "Net change": "0.39999999999999947",
+            "Relative volume": "1.5191154858945175",
+            "Symbol": "FIEE",
+            "Volume": "2596.031645"
+          }
+        },
+        {
+          "ticker": "IMOS",
+          "instrument_id": "fb93c5d7-002a-414b-9fb8-3b27241131ce",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.10694872924930221",
+            "Asset type": "STOCK",
+            "Last": "75.35",
+            "Market cap": "2.315668649e+09",
+            "Name": "ChipMOS Technologies",
+            "Net change": "7.280000000000001",
+            "Relative volume": "0.8376273393573492",
+            "Symbol": "IMOS",
+            "Volume": "60043.978982"
+          }
+        },
+        {
+          "ticker": "SXTC",
+          "instrument_id": "9f58431a-e368-4d35-adb6-0cfd00ea4fd2",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.10584313725490206",
+            "Asset type": "STOCK",
+            "Last": "2.8199",
+            "Market cap": "9.7456106e+07",
+            "Name": "China SXT Pharmaceuticals",
+            "Net change": "0.26990000000000025",
+            "Relative volume": "0.01959169200350986",
+            "Symbol": "SXTC",
+            "Volume": "1723.920973"
+          }
+        },
+        {
+          "ticker": "MNPR",
+          "instrument_id": "1628ede7-bd04-45bd-b641-09ba4883df07",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.10506698901984494",
+            "Asset type": "STOCK",
+            "Last": "109.7",
+            "Market cap": "6.64078016e+08",
+            "Name": "Monopar Therapeutics",
+            "Net change": "10.430000000000007",
+            "Relative volume": "0.5997792230560468",
+            "Symbol": "MNPR",
+            "Volume": "178773.890134"
+          }
+        },
+        {
+          "ticker": "BGM",
+          "instrument_id": "886fb135-107e-4aba-bd1f-9f2e434beeea",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.10474371219356889",
+            "Asset type": "STOCK",
+            "Last": "0.347",
+            "Market cap": "1.25835796e+08",
+            "Name": "BGM Group Ltd.",
+            "Net change": "0.032899999999999985",
+            "Relative volume": "0.609368661835207",
+            "Symbol": "BGM",
+            "Volume": "99900.521675"
+          }
+        },
+        {
+          "ticker": "FLNC",
+          "instrument_id": "194283c1-e1ac-4aef-b72a-8e7a266be5f1",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.10397653194263357",
+            "Asset type": "STOCK",
+            "Last": "16.935",
+            "Market cap": "2.037328256e+09",
+            "Name": "Fluence Energy",
+            "Net change": "1.5949999999999989",
+            "Relative volume": "0.3535417701238358",
+            "Symbol": "FLNC",
+            "Volume": "5.466179456115e+06"
+          }
+        },
+        {
+          "ticker": "POM",
+          "instrument_id": "090097d7-b4ef-49dd-98c4-6ece48085462",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.10344827586206906",
+            "Asset type": "STOCK",
+            "Last": "1.6",
+            "Market cap": "1.1033774e+07",
+            "Name": "PomDoctor",
+            "Net change": "0.15000000000000013",
+            "Relative volume": "0.5399832077190272",
+            "Symbol": "POM",
+            "Volume": "6570.155682"
+          }
+        },
+        {
+          "ticker": "ICHR",
+          "instrument_id": "4a9888b1-627f-4f62-ac41-c958a47de528",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.10274743835153699",
+            "Asset type": "STOCK",
+            "Last": "97.935",
+            "Market cap": "3.095845635e+09",
+            "Name": "Ichor Holdings",
+            "Net change": "9.125",
+            "Relative volume": "0.2994839035693272",
+            "Symbol": "ICHR",
+            "Volume": "516484.729737"
+          }
+        },
+        {
+          "ticker": "MOB",
+          "instrument_id": "2c8a991c-6d97-4209-9cdb-9bfb188c2690",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.10261569416499008",
+            "Asset type": "STOCK",
+            "Last": "5.48",
+            "Market cap": "6.3040521e+07",
+            "Name": "Mobilicom",
+            "Net change": "0.5100000000000007",
+            "Relative volume": "0.8705213076063499",
+            "Symbol": "MOB",
+            "Volume": "73543.348664"
+          }
+        },
+        {
+          "ticker": "QGEN",
+          "instrument_id": "ebf2d55d-9c53-44f8-8ff3-4ac461df123d",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.10052631578947369",
+            "Asset type": "STOCK",
+            "Last": "41.82",
+            "Market cap": "7.8375e+09",
+            "Name": "QIAGEN",
+            "Net change": "3.8200000000000003",
+            "Relative volume": "3.604054283947848",
+            "Symbol": "QGEN",
+            "Volume": "9.042109220336e+06"
+          }
+        },
+        {
+          "ticker": "SHAZ",
+          "instrument_id": "72c7fdb1-b8e2-41b9-90cc-0fef83532411",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.10049888407509519",
+            "Asset type": "STOCK",
+            "Last": "83.825",
+            "Market cap": "1.787264076e+09",
+            "Name": "SharonAI Holdings",
+            "Net change": "7.655000000000001",
+            "Relative volume": "0.6148104258207341",
+            "Symbol": "SHAZ",
+            "Volume": "1.085470719041e+06"
+          }
+        },
+        {
+          "ticker": "BTDR",
+          "instrument_id": "a331e34f-ff0f-4349-85ec-317890b7531b",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.09952229299363057",
+            "Asset type": "STOCK",
+            "Last": "13.81",
+            "Market cap": "3.056019481e+09",
+            "Name": "Bitdeer Technologies",
+            "Net change": "1.25",
+            "Relative volume": "0.2724453424259775",
+            "Symbol": "BTDR",
+            "Volume": "3.087800184e+06"
+          }
+        },
+        {
+          "ticker": "MTVA",
+          "instrument_id": "ac6262cc-6746-464e-9c77-cee046767ab1",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.09935897435897437",
+            "Asset type": "STOCK",
+            "Last": "1.715",
+            "Market cap": "8.10806e+06",
+            "Name": "MetaVia",
+            "Net change": "0.15500000000000003",
+            "Relative volume": "1.7544600580763432",
+            "Symbol": "MTVA",
+            "Volume": "159947.2255"
+          }
+        },
+        {
+          "ticker": "CATO",
+          "instrument_id": "289fae91-f719-45b4-8971-89175320ede0",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.09900958466453684",
+            "Asset type": "STOCK",
+            "Last": "3.4399",
+            "Market cap": "6.2471224e+07",
+            "Name": "Cato",
+            "Net change": "0.3099000000000003",
+            "Relative volume": "0.5926113340894275",
+            "Symbol": "CATO",
+            "Volume": "100551.055431"
+          }
+        },
+        {
+          "ticker": "EIKN",
+          "instrument_id": "c6c09510-4d75-4d01-ab45-8d648dbc8428",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.09841417910447758",
+            "Asset type": "STOCK",
+            "Last": "11.775",
+            "Market cap": "5.80366092e+08",
+            "Name": "Eikon Therapeutics",
+            "Net change": "1.0549999999999997",
+            "Relative volume": "0.3109941170719281",
+            "Symbol": "EIKN",
+            "Volume": "164205.320427"
+          }
+        },
+        {
+          "ticker": "SYNA",
+          "instrument_id": "86d9605f-2232-4c17-bdcd-5cba19534c61",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.09811947799302902",
+            "Asset type": "STOCK",
+            "Last": "135.475",
+            "Market cap": "4.812131056e+09",
+            "Name": "Synaptics",
+            "Net change": "12.10499999999999",
+            "Relative volume": "0.37199698481553023",
+            "Symbol": "SYNA",
+            "Volume": "514286.307058"
+          }
+        },
+        {
+          "ticker": "LGCL",
+          "instrument_id": "77352e58-85f2-42c7-9be6-8f686a3a7584",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.09756097560975618",
+            "Asset type": "STOCK",
+            "Last": "1.35",
+            "Market cap": "5.4348092e+07",
+            "Name": "Lucas GC Limited",
+            "Net change": "0.1200000000000001",
+            "Relative volume": "0.8387114525544396",
+            "Symbol": "LGCL",
+            "Volume": "247658.489576"
+          }
+        },
+        {
+          "ticker": "VECO",
+          "instrument_id": "c57f553e-e750-42aa-970a-98ad5ea50cbd",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.09748485404809991",
+            "Asset type": "STOCK",
+            "Last": "59.78",
+            "Market cap": "3.323273258e+09",
+            "Name": "Veeco",
+            "Net change": "5.310000000000002",
+            "Relative volume": "0.5119249646852919",
+            "Symbol": "VECO",
+            "Volume": "471657.285322"
+          }
+        },
+        {
+          "ticker": "MTC",
+          "instrument_id": "34671015-f5eb-4c8a-a12d-490ad02c03df",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.09740259740259744",
+            "Asset type": "STOCK",
+            "Last": "2.535",
+            "Market cap": "2.31043721e+08",
+            "Name": "MMTec",
+            "Net change": "0.2250000000000001",
+            "Relative volume": "0.30865496755585786",
+            "Symbol": "MTC",
+            "Volume": "8080.5945"
+          }
+        },
+        {
+          "ticker": "OUST",
+          "instrument_id": "1bde98cd-fe4a-424f-aa39-ffc1ce11eaba",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.09652153881594115",
+            "Asset type": "STOCK",
+            "Last": "47.6",
+            "Market cap": "2.919316803e+09",
+            "Name": "Ouster",
+            "Net change": "4.190000000000005",
+            "Relative volume": "0.46963923974174554",
+            "Symbol": "OUST",
+            "Volume": "2.395850679881e+06"
+          }
+        },
+        {
+          "ticker": "CNMD",
+          "instrument_id": "c3aec410-c626-4ef9-9dc3-6a080ee97e57",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.09556415599880898",
+            "Asset type": "STOCK",
+            "Last": "36.8",
+            "Market cap": "1.011367826e+09",
+            "Name": "Conmed",
+            "Net change": "3.2099999999999937",
+            "Relative volume": "0.9290296482260492",
+            "Symbol": "CNMD",
+            "Volume": "495628.798254"
+          }
+        },
+        {
+          "ticker": "FTH",
+          "instrument_id": "48f1b4fa-d9b1-419f-8a76-1888c4c3579b",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.09403997144896509",
+            "Asset type": "STOCK",
+            "Last": "30.655",
+            "Market cap": "7.22320687e+08",
+            "Name": "Faeth Therapeutics",
+            "Net change": "2.6350000000000016",
+            "Relative volume": "0.7633101306694955",
+            "Symbol": "FTH",
+            "Volume": "76587.684449"
+          }
+        },
+        {
+          "ticker": "PACB",
+          "instrument_id": "2294d162-de38-4fa8-84a3-9a98a913fdf0",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.09333333333333327",
+            "Asset type": "STOCK",
+            "Last": "1.64",
+            "Market cap": "4.62796515e+08",
+            "Name": "Pacific Biosciences",
+            "Net change": "0.1399999999999999",
+            "Relative volume": "0.6013342349873992",
+            "Symbol": "PACB",
+            "Volume": "2.491511952906e+06"
+          }
+        },
+        {
+          "ticker": "AG",
+          "instrument_id": "928e6c61-d500-46a2-9fb0-19aeebd5553e",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.09272151898734175",
+            "Asset type": "STOCK",
+            "Last": "17.265",
+            "Market cap": "7.780253036e+09",
+            "Name": "First Majestic Silver",
+            "Net change": "1.4649999999999999",
+            "Relative volume": "0.45679493282378525",
+            "Symbol": "AG",
+            "Volume": "6.895222593393e+06"
+          }
+        },
+        {
+          "ticker": "YCBD",
+          "instrument_id": "620ee861-5e44-47d4-ae09-3d5511c9dd2f",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.09253333333333336",
+            "Asset type": "STOCK",
+            "Last": "0.8194",
+            "Market cap": "7.873439e+06",
+            "Name": "cbdMD",
+            "Net change": "0.06940000000000002",
+            "Relative volume": "0.5731994370107878",
+            "Symbol": "YCBD",
+            "Volume": "150095.40311"
+          }
+        },
+        {
+          "ticker": "ON",
+          "instrument_id": "dad8fa2c-1e8d-4cb9-b354-1f0b91a4193e",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.092067384582578",
+            "Asset type": "STOCK",
+            "Last": "102.425",
+            "Market cap": "3.6501717611e+10",
+            "Name": "ON Semiconductor",
+            "Net change": "8.634999999999991",
+            "Relative volume": "0.44678077968772917",
+            "Symbol": "ON",
+            "Volume": "5.438957472742e+06"
+          }
+        },
+        {
+          "ticker": "INBX",
+          "instrument_id": "2c102c92-b4d1-4a74-9b5a-96a9b0a8939f",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.09196704428424313",
+            "Asset type": "STOCK",
+            "Last": "106.03",
+            "Market cap": "1.42457216e+09",
+            "Name": "Inhibrx Biosciences",
+            "Net change": "8.930000000000007",
+            "Relative volume": "0.5685977254488889",
+            "Symbol": "INBX",
+            "Volume": "284155.575421"
+          }
+        },
+        {
+          "ticker": "VICR",
+          "instrument_id": "5b65a3a6-f5d7-4660-8695-8f1594a0aeb1",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.09146526827785374",
+            "Asset type": "STOCK",
+            "Last": "287.23",
+            "Market cap": "1.1995203065e+10",
+            "Name": "Vicor",
+            "Net change": "24.069999999999993",
+            "Relative volume": "0.4024045639230909",
+            "Symbol": "VICR",
+            "Volume": "244148.88946"
+          }
+        },
+        {
+          "ticker": "OPENZ",
+          "instrument_id": "98079e14-2536-4bc0-8eaf-dc1df7bb4485",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.09106382978723418",
+            "Asset type": "STOCK",
+            "Last": "0.2564",
+            "Market cap": "",
+            "Name": "Opendoor Technologies Inc Series Z Warrants exercise price of $17.00",
+            "Net change": "0.02140000000000003",
+            "Relative volume": "1.2587732394503806",
+            "Symbol": "OPENZ",
+            "Volume": "376553.007621"
+          }
+        },
+        {
+          "ticker": "FORM",
+          "instrument_id": "9f8a2453-4dd9-4cc7-b4bf-5570acfb5396",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.09062191952683929",
+            "Asset type": "STOCK",
+            "Last": "121.7025",
+            "Market cap": "8.694295721e+09",
+            "Name": "FormFactor",
+            "Net change": "10.112499999999997",
+            "Relative volume": "0.4778725620422573",
+            "Symbol": "FORM",
+            "Volume": "734239.582615"
+          }
+        },
+        {
+          "ticker": "CTW",
+          "instrument_id": "48c44ff1-4cc2-41bf-8625-d2be0534256b",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.0905349794238682",
+            "Asset type": "STOCK",
+            "Last": "2.65",
+            "Market cap": "1.51632e+08",
+            "Name": "CTW",
+            "Net change": "0.21999999999999975",
+            "Relative volume": "0.29168487038136987",
+            "Symbol": "CTW",
+            "Volume": "2971"
+          }
+        },
+        {
+          "ticker": "AIBZ",
+          "instrument_id": "781ef84b-a321-45c1-9681-4665a32716a1",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.09052333804809047",
+            "Asset type": "STOCK",
+            "Last": "7.71",
+            "Market cap": "3.97235191e+08",
+            "Name": "Bitzero Holdings Inc.",
+            "Net change": "0.6399999999999997",
+            "Relative volume": "0.8114834086616628",
+            "Symbol": "AIBZ",
+            "Volume": "741450.785014"
+          }
+        },
+        {
+          "ticker": "ACMR",
+          "instrument_id": "56d27272-f09d-4a64-90ef-26045e3c8657",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.09044560008157444",
+            "Asset type": "STOCK",
+            "Last": "106.94",
+            "Market cap": "6.777567389e+09",
+            "Name": "ACM Research",
+            "Net change": "8.870000000000005",
+            "Relative volume": "0.5439122509393451",
+            "Symbol": "ACMR",
+            "Volume": "601611.133636"
+          }
+        },
+        {
+          "ticker": "PESI",
+          "instrument_id": "453e4a4f-7dc8-43a2-acc9-807df768ef38",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.08873841767640778",
+            "Asset type": "STOCK",
+            "Last": "15.275",
+            "Market cap": "2.97273799e+08",
+            "Name": "Perma-Fix Environmental Services",
+            "Net change": "1.245000000000001",
+            "Relative volume": "0.4593486696349389",
+            "Symbol": "PESI",
+            "Volume": "123302.725374"
+          }
+        },
+        {
+          "ticker": "FLEX",
+          "instrument_id": "aa3f14f6-7dcb-49df-9737-9443f8364a7b",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.08757591662292874",
+            "Asset type": "STOCK",
+            "Last": "145.05",
+            "Market cap": "4.8865374816e+10",
+            "Name": "Flex",
+            "Net change": "11.680000000000007",
+            "Relative volume": "0.37469334115758735",
+            "Symbol": "FLEX",
+            "Volume": "1.65313804408e+06"
+          }
+        },
+        {
+          "ticker": "WBX",
+          "instrument_id": "166bdc15-f3a0-492b-88c7-8958c43e06b5",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.08737864077669888",
+            "Asset type": "STOCK",
+            "Last": "5.6",
+            "Market cap": "1.15532271e+08",
+            "Name": "Wallbox",
+            "Net change": "0.4499999999999993",
+            "Relative volume": "0.7806486770390973",
+            "Symbol": "WBX",
+            "Volume": "36336.19855"
+          }
+        },
+        {
+          "ticker": "ONCY",
+          "instrument_id": "52b18df9-79a9-40d8-9b65-321a7ca29a58",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.08721443897513574",
+            "Asset type": "STOCK",
+            "Last": "0.8614",
+            "Market cap": "9.4564227e+07",
+            "Name": "Oncolytics Biotech",
+            "Net change": "0.06910000000000005",
+            "Relative volume": "0.32771776159547994",
+            "Symbol": "ONCY",
+            "Volume": "622185.262865"
+          }
+        },
+        {
+          "ticker": "CIFR",
+          "instrument_id": "4bf35186-af0d-4b7a-8bd6-5a9aec827f1c",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.08695652173913036",
+            "Asset type": "STOCK",
+            "Last": "23.75",
+            "Market cap": "8.937724954e+09",
+            "Name": "Cipher Mining",
+            "Net change": "1.8999999999999986",
+            "Relative volume": "0.5778484262417312",
+            "Symbol": "CIFR",
+            "Volume": "1.2901118375587e+07"
+          }
+        },
+        {
+          "ticker": "SNDK",
+          "instrument_id": "badc834a-d185-42b1-8a6a-3f7ba5571fe9",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.08658043747611711",
+            "Asset type": "STOCK",
+            "Last": "1876.72",
+            "Market cap": "2.55777668222e+11",
+            "Name": "Sandisk Corporation",
+            "Net change": "149.53999999999996",
+            "Relative volume": "0.5349396588135814",
+            "Symbol": "SNDK",
+            "Volume": "6.675155936182e+06"
+          }
+        },
+        {
+          "ticker": "ALAB",
+          "instrument_id": "43c6a2de-0e31-45ac-b763-02878837503d",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.08553769457727133",
+            "Asset type": "STOCK",
+            "Last": "426.79",
+            "Market cap": "6.7390745297e+10",
+            "Name": "Astera Labs, Inc.",
+            "Net change": "33.629999999999995",
+            "Relative volume": "0.4438357576368395",
+            "Symbol": "ALAB",
+            "Volume": "1.550028051221e+06"
+          }
+        },
+        {
+          "ticker": "AMKR",
+          "instrument_id": "43080850-c184-4980-86f8-9fe32e32744c",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.08533851442235851",
+            "Asset type": "STOCK",
+            "Last": "72.62",
+            "Market cap": "1.6585150179e+10",
+            "Name": "Amkor Technology",
+            "Net change": "5.710000000000008",
+            "Relative volume": "0.49269125060235586",
+            "Symbol": "AMKR",
+            "Volume": "2.251242116036e+06"
+          }
+        },
+        {
+          "ticker": "ATXG",
+          "instrument_id": "51979b5c-bb8b-4ecd-9e63-a39cb63a80dc",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.0844504021447721",
+            "Asset type": "STOCK",
+            "Last": "4.045",
+            "Market cap": "3.847252e+06",
+            "Name": "Addentax Group",
+            "Net change": "0.31499999999999995",
+            "Relative volume": "1.226982446388352",
+            "Symbol": "ATXG",
+            "Volume": "2256.752333"
+          }
+        },
+        {
+          "ticker": "HKIT",
+          "instrument_id": "88536015-790c-409f-9b12-e8011d063d6e",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.08430913348946144",
+            "Asset type": "STOCK",
+            "Last": "4.63",
+            "Market cap": "3.7765812e+07",
+            "Name": "Hitek Global Inc.",
+            "Net change": "0.3600000000000003",
+            "Relative volume": "0.7615054941543599",
+            "Symbol": "HKIT",
+            "Volume": "84285.111209"
+          }
+        },
+        {
+          "ticker": "ASBP",
+          "instrument_id": "6ae44f11-cf77-435d-bcb0-5ab2c2ccf64c",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.08391003460207602",
+            "Asset type": "STOCK",
+            "Last": "6.265",
+            "Market cap": "7.538261e+06",
+            "Name": "Aspire Biopharma",
+            "Net change": "0.48499999999999943",
+            "Relative volume": "1.214717516616854",
+            "Symbol": "ASBP",
+            "Volume": "37287.742704"
+          }
+        },
+        {
+          "ticker": "LTRX",
+          "instrument_id": "c2141a8a-226d-4ea2-bf81-9170dbf0138e",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.08364661654135326",
+            "Asset type": "STOCK",
+            "Last": "5.765",
+            "Market cap": "2.37763822e+08",
+            "Name": "Lantronix",
+            "Net change": "0.4449999999999994",
+            "Relative volume": "0.5534949566794933",
+            "Symbol": "LTRX",
+            "Volume": "357015.115819"
+          }
+        },
+        {
+          "ticker": "KLIC",
+          "instrument_id": "33a262a2-a14d-4877-9e3e-f708e0df2880",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.08318142569317856",
+            "Asset type": "STOCK",
+            "Last": "112.9",
+            "Market cap": "5.454655769e+09",
+            "Name": "Kulicke & Soffa",
+            "Net change": "8.670000000000002",
+            "Relative volume": "0.19977411350515387",
+            "Symbol": "KLIC",
+            "Volume": "273343.386984"
+          }
+        },
+        {
+          "ticker": "NUAI",
+          "instrument_id": "ad545ca0-b0d4-47df-80ca-0d0146ab51d2",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.08275862068965525",
+            "Asset type": "STOCK",
+            "Last": "4.71",
+            "Market cap": "4.40109082e+08",
+            "Name": "New Era Energy & Digital",
+            "Net change": "0.3600000000000003",
+            "Relative volume": "0.38448627214372577",
+            "Symbol": "NUAI",
+            "Volume": "3.250502562063e+06"
+          }
+        },
+        {
+          "ticker": "USBC",
+          "instrument_id": "d12828da-5e76-41c5-8c8a-9886e8ec40af",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.08258064516129036",
+            "Asset type": "STOCK",
+            "Last": "0.3356",
+            "Market cap": "1.20324772e+08",
+            "Name": "USBC",
+            "Net change": "0.02560000000000001",
+            "Relative volume": "0.19564622559825312",
+            "Symbol": "USBC",
+            "Volume": "44820.1319"
+          }
+        },
+        {
+          "ticker": "OCC",
+          "instrument_id": "fbc64755-f204-4034-a137-3d3bcc59c5c3",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.08244808055380733",
+            "Asset type": "STOCK",
+            "Last": "17.2001",
+            "Market cap": "1.40527304e+08",
+            "Name": "Optical Cable",
+            "Net change": "1.3100999999999985",
+            "Relative volume": "0.8075470561118135",
+            "Symbol": "OCC",
+            "Volume": "312846.085037"
+          }
+        },
+        {
+          "ticker": "ODTX",
+          "instrument_id": "1e0ddcdf-b672-4f85-9043-b141c9e01a10",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.08226221079691512",
+            "Asset type": "STOCK",
+            "Last": "16.84",
+            "Market cap": "7.47367339e+08",
+            "Name": "Odyssey Therapeutics",
+            "Net change": "1.2799999999999994",
+            "Relative volume": "0.11545265771332858",
+            "Symbol": "ODTX",
+            "Volume": "35255.03634"
+          }
+        },
+        {
+          "ticker": "UBXG",
+          "instrument_id": "3e09b037-c6cb-412c-9b77-96a54a77ab42",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.082089552238806",
+            "Asset type": "STOCK",
+            "Last": "4.35",
+            "Market cap": "7.308488e+06",
+            "Name": "U-BX Technology Ltd.",
+            "Net change": "0.33000000000000007",
+            "Relative volume": "0.3385010332943843",
+            "Symbol": "UBXG",
+            "Volume": "450128.258786"
+          }
+        },
+        {
+          "ticker": "AKO.B",
+          "instrument_id": "978a070f-8d6f-4728-a279-a9e017143bd6",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.08175438596491222",
+            "Asset type": "STOCK",
+            "Last": "30.83",
+            "Market cap": "4.160025943e+09",
+            "Name": "Embotelladora Andina Series B",
+            "Net change": "2.3299999999999983",
+            "Relative volume": "0.31608497983856265",
+            "Symbol": "AKO.B",
+            "Volume": "1055.287276"
+          }
+        },
+        {
+          "ticker": "DHX",
+          "instrument_id": "7b3fdd27-d5f1-415e-94a0-70104e0f9349",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.08153846153846156",
+            "Asset type": "STOCK",
+            "Last": "4.218",
+            "Market cap": "1.68474177e+08",
+            "Name": "DHI",
+            "Net change": "0.31800000000000006",
+            "Relative volume": "0.8844811770047651",
+            "Symbol": "DHX",
+            "Volume": "115687.042445"
+          }
+        },
+        {
+          "ticker": "FCEL",
+          "instrument_id": "3c99910e-9038-4838-9537-f8878fd46e03",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.08118899733806574",
+            "Asset type": "STOCK",
+            "Last": "24.37",
+            "Market cap": "1.523888219e+09",
+            "Name": "FuelCell Energy",
+            "Net change": "1.8300000000000018",
+            "Relative volume": "0.49172996737631175",
+            "Symbol": "FCEL",
+            "Volume": "1.0618741240487e+07"
+          }
+        },
+        {
+          "ticker": "ENTG",
+          "instrument_id": "b59a191c-8db4-4482-b0ba-77532fa395fc",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.08099340374148423",
+            "Asset type": "STOCK",
+            "Last": "149.95",
+            "Market cap": "2.11262945e+10",
+            "Name": "Entegris",
+            "Net change": "11.234999999999985",
+            "Relative volume": "0.3385430996043595",
+            "Symbol": "ENTG",
+            "Volume": "1.132330656539e+06"
+          }
+        },
+        {
+          "ticker": "SPHL",
+          "instrument_id": "397dece0-4f2f-41c4-99a8-9ce82a13b3c4",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.08097087378640776",
+            "Asset type": "STOCK",
+            "Last": "3.3402",
+            "Market cap": "6.921658e+06",
+            "Name": "Springview Holdings",
+            "Net change": "0.2502",
+            "Relative volume": "0.526531598119018",
+            "Symbol": "SPHL",
+            "Volume": "96003.134244"
+          }
+        },
+        {
+          "ticker": "SAIH",
+          "instrument_id": "ae305257-a7fd-439b-ad08-5afbf10d638c",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.08063175394846224",
+            "Asset type": "STOCK",
+            "Last": "13",
+            "Market cap": "2.177863e+07",
+            "Name": "SAIHEAT Limited",
+            "Net change": "0.9700000000000006",
+            "Relative volume": "2.753297362110312",
+            "Symbol": "SAIH",
+            "Volume": "9185"
+          }
+        },
+        {
+          "ticker": "PRFX",
+          "instrument_id": "9e6d5b72-5eb9-4257-a541-65818a34d52a",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.08047244094488194",
+            "Asset type": "STOCK",
+            "Last": "1.3722",
+            "Market cap": "3.832705e+06",
+            "Name": "PRF Technologies",
+            "Net change": "0.10220000000000007",
+            "Relative volume": "0.5151988476541791",
+            "Symbol": "PRFX",
+            "Volume": "164566.942047"
+          }
+        },
+        {
+          "ticker": "VIAV",
+          "instrument_id": "f5936e42-5af8-4821-9cfb-e4c5e63e384d",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.08034398034398024",
+            "Asset type": "STOCK",
+            "Last": "43.97",
+            "Market cap": "1.0037638976e+10",
+            "Name": "Viavi",
+            "Net change": "3.269999999999996",
+            "Relative volume": "0.20651744542721567",
+            "Symbol": "VIAV",
+            "Volume": "1.038423887112e+06"
+          }
+        },
+        {
+          "ticker": "NCLH",
+          "instrument_id": "3ce80e3c-14bf-45d6-af36-600679a10043",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.08014618299945857",
+            "Asset type": "STOCK",
+            "Last": "19.9503",
+            "Market cap": "8.479764285e+09",
+            "Name": "Norwegian Cruise Line",
+            "Net change": "1.4802999999999997",
+            "Relative volume": "0.3083294125558209",
+            "Symbol": "NCLH",
+            "Volume": "6.126859467042e+06"
+          }
+        },
+        {
+          "ticker": "KEEL",
+          "instrument_id": "d50a2a3f-c37b-485d-bcbf-8b70ca0c3f8d",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.08004385964912286",
+            "Asset type": "STOCK",
+            "Last": "4.925",
+            "Market cap": "2.734815964e+09",
+            "Name": "Keel Infrastructure",
+            "Net change": "0.3650000000000002",
+            "Relative volume": "0.5159368164174917",
+            "Symbol": "KEEL",
+            "Volume": "1.4327743802319e+07"
+          }
+        },
+        {
+          "ticker": "ZKIN",
+          "instrument_id": "0eef1aea-36d0-4575-9fe7-3da38c6befb0",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.07971014492753631",
+            "Asset type": "STOCK",
+            "Last": "1.49",
+            "Market cap": "7.9090985e+07",
+            "Name": "ZK International",
+            "Net change": "0.1100000000000001",
+            "Relative volume": "0.41902899967416096",
+            "Symbol": "ZKIN",
+            "Volume": "3858"
+          }
+        },
+        {
+          "ticker": "SITM",
+          "instrument_id": "913f6edf-9d5b-4856-9e5c-0c1e7c8285f6",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.07916619018835874",
+            "Asset type": "STOCK",
+            "Last": "660.59",
+            "Market cap": "1.834505939e+10",
+            "Name": "Sitime",
+            "Net change": "48.460000000000036",
+            "Relative volume": "0.41178761690331467",
+            "Symbol": "SITM",
+            "Volume": "212135.689883"
+          }
+        },
+        {
+          "ticker": "VSH",
+          "instrument_id": "fefa405e-cff5-4e6b-9349-e28d8e4c0f00",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.07869163308840958",
+            "Asset type": "STOCK",
+            "Last": "45.51",
+            "Market cap": "6.471013769e+09",
+            "Name": "Vishay",
+            "Net change": "3.3200000000000003",
+            "Relative volume": "0.2659609663637524",
+            "Symbol": "VSH",
+            "Volume": "2.009763697972e+06"
+          }
+        },
+        {
+          "ticker": "NVTS",
+          "instrument_id": "fb3fdd73-6829-4ff8-8f6a-b3b9e213aedf",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.07859281437125754",
+            "Asset type": "STOCK",
+            "Last": "14.41",
+            "Market cap": "3.256331874e+09",
+            "Name": "Navitas Semiconductor",
+            "Net change": "1.0500000000000007",
+            "Relative volume": "0.44872160211463935",
+            "Symbol": "NVTS",
+            "Volume": "8.716630644597e+06"
+          }
+        },
+        {
+          "ticker": "GLW",
+          "instrument_id": "b1da369e-90cb-4066-9b6c-552b090e112b",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.07765038308971359",
+            "Asset type": "STOCK",
+            "Last": "198.32",
+            "Market cap": "1.58383178934e+11",
+            "Name": "Corning",
+            "Net change": "14.289999999999992",
+            "Relative volume": "0.7181466182550202",
+            "Symbol": "GLW",
+            "Volume": "6.06557121543e+06"
+          }
+        },
+        {
+          "ticker": "RMBS",
+          "instrument_id": "9ff72d95-03b5-413e-bcd7-414d72146bfb",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.0771616198467712",
+            "Asset type": "STOCK",
+            "Last": "118.1",
+            "Market cap": "1.1856137061e+10",
+            "Name": "Rambus",
+            "Net change": "8.459999999999994",
+            "Relative volume": "0.409766456254526",
+            "Symbol": "RMBS",
+            "Volume": "932726.416614"
+          }
+        },
+        {
+          "ticker": "GLSI",
+          "instrument_id": "c206f622-45ce-454f-b811-110280adb1a5",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.07710651828298877",
+            "Asset type": "STOCK",
+            "Last": "20.325",
+            "Market cap": "2.78225432e+08",
+            "Name": "Greenwich LifeSciences",
+            "Net change": "1.4549999999999983",
+            "Relative volume": "0.42744099690590287",
+            "Symbol": "GLSI",
+            "Volume": "72583.466861"
+          }
+        },
+        {
+          "ticker": "OMSE",
+          "instrument_id": "7820303b-2e56-47a8-af5b-a25c8139d276",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.07692307692307698",
+            "Asset type": "STOCK",
+            "Last": "4.48",
+            "Market cap": "1.76586608e+08",
+            "Name": "OMS Energy Technologies Inc",
+            "Net change": "0.3200000000000003",
+            "Relative volume": "1.226128589921783",
+            "Symbol": "OMSE",
+            "Volume": "22367.301355"
+          }
+        },
+        {
+          "ticker": "GPRO",
+          "instrument_id": "c74a93bc-58f3-4ccb-b4e3-30c65e2f88c8",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.07677569453948274",
+            "Asset type": "STOCK",
+            "Last": "0.7868",
+            "Market cap": "1.26408984e+08",
+            "Name": "GoPro",
+            "Net change": "0.05610000000000004",
+            "Relative volume": "0.6564373435023024",
+            "Symbol": "GPRO",
+            "Volume": "3.997439736918e+06"
+          }
+        },
+        {
+          "ticker": "DGNX",
+          "instrument_id": "2d72d7cd-fb32-4fae-8077-f9abb0565a7a",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.07638095238095242",
+            "Asset type": "STOCK",
+            "Last": "1.1302",
+            "Market cap": "3.0264978e+07",
+            "Name": "Diginex Limited",
+            "Net change": "0.08020000000000005",
+            "Relative volume": "0.7485596628971569",
+            "Symbol": "DGNX",
+            "Volume": "289614.544189"
+          }
+        },
+        {
+          "ticker": "HTZ",
+          "instrument_id": "58dfacbd-4492-4852-9641-cb191faba14d",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.07619289340101518",
+            "Asset type": "STOCK",
+            "Last": "2.1201",
+            "Market cap": "6.2205611e+08",
+            "Name": "Hertz Global",
+            "Net change": "0.1500999999999999",
+            "Relative volume": "0.6677335994981557",
+            "Symbol": "HTZ",
+            "Volume": "1.7508108745103e+07"
+          }
+        },
+        {
+          "ticker": "PDFS",
+          "instrument_id": "4449c9d3-6bd6-43f4-bbd1-98e17ec0a68f",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.07611598626478433",
+            "Asset type": "STOCK",
+            "Last": "56.41",
+            "Market cap": "2.194705882e+09",
+            "Name": "PDF Solutions",
+            "Net change": "3.989999999999995",
+            "Relative volume": "0.18370030117347314",
+            "Symbol": "PDFS",
+            "Volume": "138714.477942"
+          }
+        },
+        {
+          "ticker": "DWSN",
+          "instrument_id": "1aeceb25-9370-45a1-a0f4-7dc9502d75a3",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.0760709010339735",
+            "Asset type": "STOCK",
+            "Last": "7.285",
+            "Market cap": "2.0960667e+08",
+            "Name": "Dawson Geophysical",
+            "Net change": "0.5150000000000006",
+            "Relative volume": "1.1112017766891669",
+            "Symbol": "DWSN",
+            "Volume": "249536.302752"
+          }
+        },
+        {
+          "ticker": "CCXI",
+          "instrument_id": "e31af3cd-5bde-4d9b-a2d5-bf3d4a904464",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.0760157273918743",
+            "Asset type": "STOCK",
+            "Last": "16.42",
+            "Market cap": "8.54438e+08",
+            "Name": "Churchill Capital Corp XI Class A",
+            "Net change": "1.160000000000002",
+            "Relative volume": "0.4895678746172287",
+            "Symbol": "CCXI",
+            "Volume": "1.90361835785e+06"
+          }
+        },
+        {
+          "ticker": "INUV",
+          "instrument_id": "f6a69d13-e420-4a9e-b9d8-6fe7cefdb359",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.0759047619047618",
+            "Asset type": "STOCK",
+            "Last": "1.1297",
+            "Market cap": "1.7274619e+07",
+            "Name": "Inuvo",
+            "Net change": "0.07969999999999988",
+            "Relative volume": "0.319913581192383",
+            "Symbol": "INUV",
+            "Volume": "43098.45676"
+          }
+        },
+        {
+          "ticker": "ALHC",
+          "instrument_id": "603017fd-3bf8-441d-b21c-dee4bde70a77",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.07588617074388415",
+            "Asset type": "STOCK",
+            "Last": "21.55",
+            "Market cap": "4.140878474e+09",
+            "Name": "Alignment Healthcare",
+            "Net change": "1.5199999999999996",
+            "Relative volume": "0.20228349629226852",
+            "Symbol": "ALHC",
+            "Volume": "3.107353993189e+06"
+          }
+        },
+        {
+          "ticker": "TVGN",
+          "instrument_id": "0b007eac-299c-41f2-9e3f-bdf803c4f572",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.07499999999999994",
+            "Asset type": "STOCK",
+            "Last": "5.59",
+            "Market cap": "2.2404711e+07",
+            "Name": "Tevogen Bio Holdings",
+            "Net change": "0.3899999999999997",
+            "Relative volume": "0.23068589049780527",
+            "Symbol": "TVGN",
+            "Volume": "3861.1672"
+          }
+        },
+        {
+          "ticker": "REA",
+          "instrument_id": "692aa20c-decf-4510-8bd2-dab128ea15ca",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.07497857754927163",
+            "Asset type": "STOCK",
+            "Last": "12.545",
+            "Market cap": "2.3231798e+08",
+            "Name": "Rare Earths Americas",
+            "Net change": "0.875",
+            "Relative volume": "0.6535472385484692",
+            "Symbol": "REA",
+            "Volume": "123437.987345"
+          }
+        },
+        {
+          "ticker": "ADPT",
+          "instrument_id": "f35ade95-5be1-4002-9307-fbeac2648112",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.07490079365079373",
+            "Asset type": "STOCK",
+            "Last": "21.67",
+            "Market cap": "3.226494942e+09",
+            "Name": "Adaptive Biotechnologies",
+            "Net change": "1.5100000000000016",
+            "Relative volume": "0.3136543555729274",
+            "Symbol": "ADPT",
+            "Volume": "788536.501502"
+          }
+        },
+        {
+          "ticker": "CRSR",
+          "instrument_id": "05ed24c2-e369-4947-a093-29069ae42072",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.07449209932279911",
+            "Asset type": "STOCK",
+            "Last": "9.52",
+            "Market cap": "9.46976389e+08",
+            "Name": "Corsair Gaming",
+            "Net change": "0.6600000000000001",
+            "Relative volume": "0.33033689468647454",
+            "Symbol": "CRSR",
+            "Volume": "475639.804977"
+          }
+        },
+        {
+          "ticker": "MIND",
+          "instrument_id": "984745cc-b94b-4dea-8008-31398e0e5b07",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.07438016528925627",
+            "Asset type": "STOCK",
+            "Last": "5.2",
+            "Market cap": "4.3991026e+07",
+            "Name": "MIND Technology",
+            "Net change": "0.3600000000000003",
+            "Relative volume": "0.6766955854902658",
+            "Symbol": "MIND",
+            "Volume": "52751.70296"
+          }
+        },
+        {
+          "ticker": "AEIS",
+          "instrument_id": "5c2a6c00-3a90-4ef2-93eb-c67013e4d9ec",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.07413840076283898",
+            "Asset type": "STOCK",
+            "Last": "315.41",
+            "Market cap": "1.1745528468e+10",
+            "Name": "Advanced Energy",
+            "Net change": "21.77000000000004",
+            "Relative volume": "0.25744519282003564",
+            "Symbol": "AEIS",
+            "Volume": "241843.624091"
+          }
+        },
+        {
+          "ticker": "FIGR",
+          "instrument_id": "92c98608-db55-408e-b2eb-b0c6d7f3baa7",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.07413376835236535",
+            "Asset type": "STOCK",
+            "Last": "32.9222",
+            "Market cap": "6.775635517e+09",
+            "Name": "Figure Technology Solutions",
+            "Net change": "2.272199999999998",
+            "Relative volume": "0.41417394514774997",
+            "Symbol": "FIGR",
+            "Volume": "879392.284238"
+          }
+        },
+        {
+          "ticker": "MU",
+          "instrument_id": "0a8a072c-e52c-4e41-a2ee-8adbd72217d3",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.07378794266441821",
+            "Asset type": "STOCK",
+            "Last": "1018.81",
+            "Market cap": "1.071568221668e+12",
+            "Name": "Micron Technology",
+            "Net change": "70.00999999999999",
+            "Relative volume": "0.49355661237351856",
+            "Symbol": "MU",
+            "Volume": "2.1726986320469e+07"
+          }
+        },
+        {
+          "ticker": "GH",
+          "instrument_id": "c7eb3085-d783-4d86-b37a-fe56c334787e",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.07357751168598323",
+            "Asset type": "STOCK",
+            "Last": "167.6606",
+            "Market cap": "2.0708130911e+10",
+            "Name": "Guardant Health",
+            "Net change": "11.4906",
+            "Relative volume": "0.474341007902585",
+            "Symbol": "GH",
+            "Volume": "1.582149276948e+06"
+          }
+        },
+        {
+          "ticker": "VWAV",
+          "instrument_id": "a470b0be-3ff0-4f85-a8b1-204d7bde39c5",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.0733496332518337",
+            "Asset type": "STOCK",
+            "Last": "4.39",
+            "Market cap": "1.09148601e+08",
+            "Name": "VisionWave Holdings",
+            "Net change": "0.2999999999999998",
+            "Relative volume": "0.40752032572354246",
+            "Symbol": "VWAV",
+            "Volume": "256135.690913"
+          }
+        },
+        {
+          "ticker": "WDC",
+          "instrument_id": "81aace36-131a-4fed-98a5-cfe9fc29814e",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.07306923496274767",
+            "Asset type": "STOCK",
+            "Last": "590.51",
+            "Market cap": "1.89678576689e+11",
+            "Name": "Western Digital",
+            "Net change": "40.210000000000036",
+            "Relative volume": "0.5237973249581936",
+            "Symbol": "WDC",
+            "Volume": "3.636268089974e+06"
+          }
+        },
+        {
+          "ticker": "SILC",
+          "instrument_id": "1a18e062-6935-4995-a9b7-1871ed431882",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.0728190338860851",
+            "Asset type": "STOCK",
+            "Last": "44.64",
+            "Market cap": "2.39158093e+08",
+            "Name": "Silicom",
+            "Net change": "3.030000000000001",
+            "Relative volume": "0.2479824821873951",
+            "Symbol": "SILC",
+            "Volume": "23529.967975"
+          }
+        },
+        {
+          "ticker": "WXM",
+          "instrument_id": "a14c9b99-cb74-4ab4-85b8-c86580ef4169",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.0727272727272728",
+            "Asset type": "STOCK",
+            "Last": "2.95",
+            "Market cap": "7.492996e+06",
+            "Name": "WF International Limited",
+            "Net change": "0.20000000000000018",
+            "Relative volume": "1.459855878012789",
+            "Symbol": "WXM",
+            "Volume": "89036.61"
+          }
+        },
+        {
+          "ticker": "FDXF",
+          "instrument_id": "8486c891-38e9-4810-8a97-e532e5afe4b2",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.07259246336357274",
+            "Asset type": "STOCK",
+            "Last": "153.7025",
+            "Market cap": "2.1338252584e+10",
+            "Name": "FedEx Freight Holding Company",
+            "Net change": "10.402499999999975",
+            "Relative volume": "0.2717005612831167",
+            "Symbol": "FDXF",
+            "Volume": "359558.833856"
+          }
+        },
+        {
+          "ticker": "CEVA",
+          "instrument_id": "55e0f001-2530-4f6f-b493-cb8fb76768fe",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.07248653500897659",
+            "Asset type": "STOCK",
+            "Last": "47.79",
+            "Market cap": "1.240020514e+09",
+            "Name": "CEVA",
+            "Net change": "3.229999999999997",
+            "Relative volume": "0.49881525206857286",
+            "Symbol": "CEVA",
+            "Volume": "272024.007274"
+          }
+        },
+        {
+          "ticker": "MKSI",
+          "instrument_id": "2f08729a-19cb-43d9-a6a7-cf394079394a",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.07239760725836462",
+            "Asset type": "STOCK",
+            "Last": "374.685",
+            "Market cap": "2.3599243231e+10",
+            "Name": "MKS Inc",
+            "Net change": "25.295000000000016",
+            "Relative volume": "0.3346785666619147",
+            "Symbol": "MKSI",
+            "Volume": "411119.641775"
+          }
+        },
+        {
+          "ticker": "POWI",
+          "instrument_id": "d174fb73-4dbf-41bd-bac1-ccca404f61b6",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.07237436051760461",
+            "Asset type": "STOCK",
+            "Last": "71.27",
+            "Market cap": "3.699806937e+09",
+            "Name": "Power Integrations",
+            "Net change": "4.810000000000002",
+            "Relative volume": "0.18583077029268855",
+            "Symbol": "POWI",
+            "Volume": "175458.520873"
+          }
+        },
+        {
+          "ticker": "AMD",
+          "instrument_id": "940fc3f5-1db5-4fed-b452-f3a2e4562b5f",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.07235473178651149",
+            "Asset type": "STOCK",
+            "Last": "554.8417",
+            "Market cap": "8.43680923621e+11",
+            "Name": "AMD",
+            "Net change": "37.43669999999997",
+            "Relative volume": "0.562815459239435",
+            "Symbol": "AMD",
+            "Volume": "1.3426942183789e+07"
+          }
+        },
+        {
+          "ticker": "VPG",
+          "instrument_id": "822c8602-8909-4036-8dcf-c440019e496e",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.07220935618341827",
+            "Asset type": "STOCK",
+            "Last": "115.745",
+            "Market cap": "1.435842949e+09",
+            "Name": "Vishay Precision",
+            "Net change": "7.795000000000002",
+            "Relative volume": "0.3522796816438199",
+            "Symbol": "VPG",
+            "Volume": "180418.538476"
+          }
+        },
+        {
+          "ticker": "AAOI",
+          "instrument_id": "aee03284-144f-4f82-a97b-f063e338288d",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.0719154141908424",
+            "Asset type": "STOCK",
+            "Last": "122.67",
+            "Market cap": "9.182982255e+09",
+            "Name": "Applied Optoelectronics",
+            "Net change": "8.230000000000004",
+            "Relative volume": "0.7737034009144692",
+            "Symbol": "AAOI",
+            "Volume": "4.918669251304e+06"
+          }
+        },
+        {
+          "ticker": "GRML",
+          "instrument_id": "c9ec6e27-7827-48cd-a6c9-98d85863a636",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.07189542483660125",
+            "Asset type": "STOCK",
+            "Last": "0.246",
+            "Market cap": "3.4546465e+07",
+            "Name": "Greenland Mines Ltd.",
+            "Net change": "0.016499999999999987",
+            "Relative volume": "1.4373674575568007",
+            "Symbol": "GRML",
+            "Volume": "3.202539799536e+06"
+          }
+        },
+        {
+          "ticker": "COAG",
+          "instrument_id": "214939a5-f682-47eb-8ece-e4b52df36dba",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.07170256712894658",
+            "Asset type": "STOCK",
+            "Last": "36.32",
+            "Market cap": "1.595223278e+09",
+            "Name": "Hemab Therapeutics Holdings",
+            "Net change": "2.4299999999999997",
+            "Relative volume": "0.24866466847064056",
+            "Symbol": "COAG",
+            "Volume": "86324.007133"
+          }
+        },
+        {
+          "ticker": "FBIO",
+          "instrument_id": "de2f3d1b-c40f-43f9-9f0c-1a871b568d33",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.07166666666666661",
+            "Asset type": "STOCK",
+            "Last": "3.215",
+            "Market cap": "9.9657216e+07",
+            "Name": "Fortress Biotech",
+            "Net change": "0.21499999999999986",
+            "Relative volume": "1.199929940904493",
+            "Symbol": "FBIO",
+            "Volume": "493484.505995"
+          }
+        },
+        {
+          "ticker": "MTSI",
+          "instrument_id": "1ce85fbe-0c1f-4057-870e-8bbc2865041e",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.07158536185827069",
+            "Asset type": "STOCK",
+            "Last": "327.08",
+            "Market cap": "2.3287759098e+10",
+            "Name": "MACOM",
+            "Net change": "21.849999999999966",
+            "Relative volume": "0.2673294020127998",
+            "Symbol": "MTSI",
+            "Volume": "460544.030085"
+          }
+        },
+        {
+          "ticker": "CIEN",
+          "instrument_id": "7c8be10c-443c-44f1-a743-e7899597b561",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.07139941492618536",
+            "Asset type": "STOCK",
+            "Last": "472.455",
+            "Market cap": "6.2420592014e+10",
+            "Name": "Ciena",
+            "Net change": "31.484999999999957",
+            "Relative volume": "0.5368785230667261",
+            "Symbol": "CIEN",
+            "Volume": "980591.570057"
+          }
+        },
+        {
+          "ticker": "AVTR",
+          "instrument_id": "e2466174-896d-4387-b16b-688ea8592368",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.07120901639344265",
+            "Asset type": "STOCK",
+            "Last": "10.455",
+            "Market cap": "6.663692723e+09",
+            "Name": "Avantor",
+            "Net change": "0.6950000000000003",
+            "Relative volume": "0.5115100549468996",
+            "Symbol": "AVTR",
+            "Volume": "3.57380718707e+06"
+          }
+        },
+        {
+          "ticker": "TGB",
+          "instrument_id": "1cfb1a50-85e5-461d-be56-33aa9a4a7f28",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.07111282843894909",
+            "Asset type": "STOCK",
+            "Last": "6.9301",
+            "Market cap": "2.364332161e+09",
+            "Name": "Trekor Metals Limited",
+            "Net change": "0.4601000000000006",
+            "Relative volume": "0.23128842109829992",
+            "Symbol": "TGB",
+            "Volume": "2.125620382976e+06"
+          }
+        },
+        {
+          "ticker": "WOLF",
+          "instrument_id": "88f4238e-756a-4136-a395-d5affd062e71",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.07083100948131621",
+            "Asset type": "STOCK",
+            "Last": "38.4",
+            "Market cap": "1.863719541e+09",
+            "Name": "Wolfspeed",
+            "Net change": "2.539999999999999",
+            "Relative volume": "0.43591672020801114",
+            "Symbol": "WOLF",
+            "Volume": "1.513843379341e+06"
+          }
+        },
+        {
+          "ticker": "LSCC",
+          "instrument_id": "06d162bd-1577-4d99-8168-03d506de5c8a",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.07080314009661855",
+            "Asset type": "STOCK",
+            "Last": "141.86",
+            "Market cap": "1.8142580423e+10",
+            "Name": "Lattice Semiconductor",
+            "Net change": "9.380000000000024",
+            "Relative volume": "0.19114324299466567",
+            "Symbol": "LSCC",
+            "Volume": "297693.751739"
+          }
+        },
+        {
+          "ticker": "ALMR",
+          "instrument_id": "3a518da1-1fcc-4c08-a803-67e68532e98c",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.07075098814229246",
+            "Asset type": "STOCK",
+            "Last": "27.09",
+            "Market cap": "1.754266117e+09",
+            "Name": "Alamar Biosciences",
+            "Net change": "1.7899999999999991",
+            "Relative volume": "0.43261162146636817",
+            "Symbol": "ALMR",
+            "Volume": "71656.371115"
+          }
+        },
+        {
+          "ticker": "WYHG",
+          "instrument_id": "bfc72974-637a-4257-afa8-0fce8a1a9dd3",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.07049608355091373",
+            "Asset type": "STOCK",
+            "Last": "4.1",
+            "Market cap": "1.0641619e+07",
+            "Name": "Wing Yip Food Holdings Group",
+            "Net change": "0.2699999999999996",
+            "Relative volume": "0.5374743470928112",
+            "Symbol": "WYHG",
+            "Volume": "7489.814779"
+          }
+        },
+        {
+          "ticker": "GMTL",
+          "instrument_id": "26d65055-604c-4e0f-830f-2b0280d02e9c",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.07027942421676546",
+            "Asset type": "STOCK",
+            "Last": "12.64",
+            "Market cap": "4.73185699e+08",
+            "Name": "Guardian Metal Resources",
+            "Net change": "0.8300000000000001",
+            "Relative volume": "0.09639049472324364",
+            "Symbol": "GMTL",
+            "Volume": "30416.961783"
+          }
+        },
+        {
+          "ticker": "CAST",
+          "instrument_id": "c924a631-8caf-4a79-bf4f-a5634471b173",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.07012195121951219",
+            "Asset type": "STOCK",
+            "Last": "3.51",
+            "Market cap": "1.57017504e+08",
+            "Name": "FreeCast, Inc.",
+            "Net change": "0.22999999999999998",
+            "Relative volume": "2.486295058598227",
+            "Symbol": "CAST",
+            "Volume": "1.22474901081e+06"
+          }
+        },
+        {
+          "ticker": "RIVN",
+          "instrument_id": "acc0099d-bae4-4589-936c-e36c5c5321ed",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.06992797118847534",
+            "Asset type": "STOCK",
+            "Last": "17.825",
+            "Market cap": "2.2676235426e+10",
+            "Name": "Rivian Automotive",
+            "Net change": "1.1649999999999991",
+            "Relative volume": "0.2780445409902228",
+            "Symbol": "RIVN",
+            "Volume": "3.0864490274009e+07"
+          }
+        },
+        {
+          "ticker": "XRXDW",
+          "instrument_id": "b07dab6e-8653-4578-abe7-fd2f5f2839ae",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.06980656013456688",
+            "Asset type": "STOCK",
+            "Last": "0.2544",
+            "Market cap": "",
+            "Name": "Xerox. Warrant",
+            "Net change": "0.016600000000000004",
+            "Relative volume": "0.7544427773192266",
+            "Symbol": "XRXDW",
+            "Volume": "59677.990859"
+          }
+        },
+        {
+          "ticker": "SMXT",
+          "instrument_id": "e2ba6982-89c5-4f1f-93e5-e0ac7512dedb",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.06972586412395702",
+            "Asset type": "STOCK",
+            "Last": "0.359",
+            "Market cap": "1.9097845e+07",
+            "Name": "Solarmax Technology",
+            "Net change": "0.023399999999999976",
+            "Relative volume": "0.5047024867644231",
+            "Symbol": "SMXT",
+            "Volume": "84840.613855"
+          }
+        },
+        {
+          "ticker": "WATT",
+          "instrument_id": "b7c1e311-8ea6-4ee6-9268-48b6e462f296",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.06959910913140312",
+            "Asset type": "STOCK",
+            "Last": "19.21",
+            "Market cap": "9.8799773e+07",
+            "Name": "Energous",
+            "Net change": "1.25",
+            "Relative volume": "0.28205903371444474",
+            "Symbol": "WATT",
+            "Volume": "78040.05763"
+          }
+        },
+        {
+          "ticker": "CRDO",
+          "instrument_id": "e84dc27d-7b8e-4f21-b3bd-5b02a5c99bc6",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.06934941435695233",
+            "Asset type": "STOCK",
+            "Last": "276.63",
+            "Market cap": "4.8239967433e+10",
+            "Name": "Credo Technology Group",
+            "Net change": "17.939999999999998",
+            "Relative volume": "0.47721447975371756",
+            "Symbol": "CRDO",
+            "Volume": "2.745860342533e+06"
+          }
+        },
+        {
+          "ticker": "EXK",
+          "instrument_id": "daa0592a-a6b7-4dd6-ae6a-deb074c22e16",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.06930051813471516",
+            "Asset type": "STOCK",
+            "Last": "8.255",
+            "Market cap": "2.285651151e+09",
+            "Name": "Endeavour Silver",
+            "Net change": "0.535000000000001",
+            "Relative volume": "0.36417559405563904",
+            "Symbol": "EXK",
+            "Volume": "2.136703983735e+06"
+          }
+        },
+        {
+          "ticker": "ENVX",
+          "instrument_id": "5f63ccbd-8e2c-42ba-beab-1bf10e119c0b",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.06926829268292692",
+            "Asset type": "STOCK",
+            "Last": "5.48",
+            "Market cap": "1.116945612e+09",
+            "Name": "Enovix",
+            "Net change": "0.3550000000000004",
+            "Relative volume": "1.102738550167524",
+            "Symbol": "ENVX",
+            "Volume": "6.083792970217e+06"
+          }
+        },
+        {
+          "ticker": "TBBK",
+          "instrument_id": "438867e8-77aa-4bce-b342-46d2f1620223",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.0691734094875456",
+            "Asset type": "STOCK",
+            "Last": "67.39",
+            "Market cap": "2.627549445e+09",
+            "Name": "Bancorp",
+            "Net change": "4.359999999999999",
+            "Relative volume": "0.5201349968577702",
+            "Symbol": "TBBK",
+            "Volume": "243168.278567"
+          }
+        },
+        {
+          "ticker": "MRVL",
+          "instrument_id": "534941b7-7e58-499a-adf4-2a0918b18bd4",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.06913771524750756",
+            "Asset type": "STOCK",
+            "Last": "247.7299",
+            "Market cap": "2.03163328e+11",
+            "Name": "Marvell Technology",
+            "Net change": "16.01989999999998",
+            "Relative volume": "0.43010412684117233",
+            "Symbol": "MRVL",
+            "Volume": "1.1101171500336e+07"
+          }
+        },
+        {
+          "ticker": "TSEM",
+          "instrument_id": "cbd02cf6-25e2-470a-bbb0-e9fd76d6707f",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.06912782648823267",
+            "Asset type": "STOCK",
+            "Last": "231.68",
+            "Market cap": "2.4302699896e+10",
+            "Name": "Tower Semiconductor",
+            "Net change": "14.980000000000018",
+            "Relative volume": "0.593954396081352",
+            "Symbol": "TSEM",
+            "Volume": "858104.839385"
+          }
+        },
+        {
+          "ticker": "NRGV",
+          "instrument_id": "abb0e04b-2bae-4d7b-84a5-e04ee8d51a9b",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.06901408450704229",
+            "Asset type": "STOCK",
+            "Last": "3.795",
+            "Market cap": "6.3878706e+08",
+            "Name": "Energy Vault Holdings",
+            "Net change": "0.2450000000000001",
+            "Relative volume": "0.2701833890164952",
+            "Symbol": "NRGV",
+            "Volume": "1.142373988322e+06"
+          }
+        },
+        {
+          "ticker": "SRFM",
+          "instrument_id": "8ce9e8e0-f2b0-493f-badf-37c1d74b0914",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.0688389679715302",
+            "Asset type": "STOCK",
+            "Last": "0.9611",
+            "Market cap": "9.9806338e+07",
+            "Name": "Surf Air Mobility",
+            "Net change": "0.061899999999999955",
+            "Relative volume": "0.5952586092616308",
+            "Symbol": "SRFM",
+            "Volume": "2.080089177143e+06"
+          }
+        },
+        {
+          "ticker": "BAND",
+          "instrument_id": "549ee3c9-9135-49b9-8677-375f28810376",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.06859128954461638",
+            "Asset type": "STOCK",
+            "Last": "75.325",
+            "Market cap": "2.257540316e+09",
+            "Name": "Bandwidth",
+            "Net change": "4.835000000000008",
+            "Relative volume": "0.27484737968046075",
+            "Symbol": "BAND",
+            "Volume": "620914.995903"
+          }
+        },
+        {
+          "ticker": "BLZE",
+          "instrument_id": "69e9e822-6928-4b55-a4e0-ff444cf53362",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.06820950060901323",
+            "Asset type": "STOCK",
+            "Last": "17.54",
+            "Market cap": "9.85441883e+08",
+            "Name": "Backblaze",
+            "Net change": "1.1199999999999974",
+            "Relative volume": "1.3078685026726742",
+            "Symbol": "BLZE",
+            "Volume": "2.199766919742e+06"
+          }
+        },
+        {
+          "ticker": "NOK",
+          "instrument_id": "74330aeb-5329-4571-98c7-cee3480048c3",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.0682008368200838",
+            "Asset type": "STOCK",
+            "Last": "12.765",
+            "Market cap": "6.4940761374e+10",
+            "Name": "Nokia",
+            "Net change": "0.8150000000000013",
+            "Relative volume": "0.741820069359989",
+            "Symbol": "NOK",
+            "Volume": "4.3472271055314e+07"
+          }
+        },
+        {
+          "ticker": "CCLD",
+          "instrument_id": "0fea948a-5bf0-49aa-89e3-62f4c0d0e598",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.06807511737089203",
+            "Asset type": "STOCK",
+            "Last": "2.275",
+            "Market cap": "9.0509981e+07",
+            "Name": "CareCloud",
+            "Net change": "0.14500000000000002",
+            "Relative volume": "0.44341898975314986",
+            "Symbol": "CCLD",
+            "Volume": "134206.87036"
+          }
+        },
+        {
+          "ticker": "AMAT",
+          "instrument_id": "18006bfb-cbad-4326-8348-738c94ea47fa",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.06792287467134094",
+            "Asset type": "STOCK",
+            "Last": "609.25",
+            "Market cap": "4.52953854815e+11",
+            "Name": "Applied Materials",
+            "Net change": "38.75",
+            "Relative volume": "0.6298233946752025",
+            "Symbol": "AMAT",
+            "Volume": "4.768644597947e+06"
+          }
+        },
+        {
+          "ticker": "FEIM",
+          "instrument_id": "d1748546-3788-4cf4-beaf-62206fafe1a6",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.06742915670877438",
+            "Asset type": "STOCK",
+            "Last": "62.53",
+            "Market cap": "5.76540083e+08",
+            "Name": "Frequency Electronics",
+            "Net change": "3.950000000000003",
+            "Relative volume": "0.2742078052364925",
+            "Symbol": "FEIM",
+            "Volume": "72635.918739"
+          }
+        },
+        {
+          "ticker": "CNL",
+          "instrument_id": "28f9be91-0d4c-4582-b9ba-23c30c03c48d",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.06739679865206409",
+            "Asset type": "STOCK",
+            "Last": "12.67",
+            "Market cap": "1.099391351e+09",
+            "Name": "Collective Mining Ltd.",
+            "Net change": "0.8000000000000007",
+            "Relative volume": "0.11696547009512821",
+            "Symbol": "CNL",
+            "Volume": "8849.911048"
+          }
+        },
+        {
+          "ticker": "CTNT",
+          "instrument_id": "f03a463d-1da8-49fa-84e4-a9a35ddf416a",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.06736196319018413",
+            "Asset type": "STOCK",
+            "Last": "1.7398",
+            "Market cap": "5.118212e+06",
+            "Name": "Cheetah Net Supply Chain Service",
+            "Net change": "0.10980000000000012",
+            "Relative volume": "0.38799569707644155",
+            "Symbol": "CTNT",
+            "Volume": "215027.605205"
+          }
+        },
+        {
+          "ticker": "NXL",
+          "instrument_id": "0c10d16d-e762-435f-9e25-31420ac62044",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.06721271982654776",
+            "Asset type": "STOCK",
+            "Last": "0.443",
+            "Market cap": "8.941528e+06",
+            "Name": "Nexalin Technology",
+            "Net change": "0.02789999999999998",
+            "Relative volume": "0.20395308649644955",
+            "Symbol": "NXL",
+            "Volume": "138470.787881"
+          }
+        },
+        {
+          "ticker": "KLAC",
+          "instrument_id": "75d8a411-a432-4c40-92a8-839a11b315b1",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.06720770413238078",
+            "Asset type": "STOCK",
+            "Last": "236.045",
+            "Market cap": "2.88921950947e+11",
+            "Name": "KLA",
+            "Net change": "14.86499999999998",
+            "Relative volume": "0.39553826794991703",
+            "Symbol": "KLAC",
+            "Volume": "5.190377375394e+06"
+          }
+        },
+        {
+          "ticker": "SSMR",
+          "instrument_id": "39201224-963e-422e-a455-b3282733adab",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.0670391061452514",
+            "Asset type": "STOCK",
+            "Last": "13.37",
+            "Market cap": "1.800894335e+09",
+            "Name": "Sunshine Silver Mining & Refining Company",
+            "Net change": "0.8399999999999999",
+            "Relative volume": "0.8041842795137164",
+            "Symbol": "SSMR",
+            "Volume": "136344.447191"
+          }
+        },
+        {
+          "ticker": "STRL",
+          "instrument_id": "7c703958-6e3e-4079-9787-d6ecc8b25bf3",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.06691185373531892",
+            "Asset type": "STOCK",
+            "Last": "704.93",
+            "Market cap": "2.0274823526e+10",
+            "Name": "Sterling Infrastructure",
+            "Net change": "44.20999999999992",
+            "Relative volume": "0.29688698277174735",
+            "Symbol": "STRL",
+            "Volume": "205522.723524"
+          }
+        },
+        {
+          "ticker": "FLUX",
+          "instrument_id": "e8e10eeb-d240-468b-b800-e405c139679e",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.06686804888095577",
+            "Asset type": "STOCK",
+            "Last": "0.777",
+            "Market cap": "1.5557495e+07",
+            "Name": "Flux Power",
+            "Net change": "0.04870000000000008",
+            "Relative volume": "0.5001403150733053",
+            "Symbol": "FLUX",
+            "Volume": "29134.980437"
+          }
+        },
+        {
+          "ticker": "TYGO",
+          "instrument_id": "e39023cc-5164-4c43-9690-ef2360c546b2",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.06684491978609625",
+            "Asset type": "STOCK",
+            "Last": "1.995",
+            "Market cap": "1.40434968e+08",
+            "Name": "Tigo Energy",
+            "Net change": "0.125",
+            "Relative volume": "0.9527700926704232",
+            "Symbol": "TYGO",
+            "Volume": "1.21429889604e+06"
+          }
+        },
+        {
+          "ticker": "CHRN",
+          "instrument_id": "ef62d359-9208-470f-b029-94d3779beaa8",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.06659267480577133",
+            "Asset type": "STOCK",
+            "Last": "19.22",
+            "Market cap": "2.616771146e+09",
+            "Name": "ChronoScale Holdings Corporation",
+            "Net change": "1.1999999999999993",
+            "Relative volume": "0.4378785300026783",
+            "Symbol": "CHRN",
+            "Volume": "101256.458528"
+          }
+        },
+        {
+          "ticker": "HPE",
+          "instrument_id": "5e0dcc39-6692-4126-8741-e6e26f13672b",
+          "instrument_type": "EQUITY",
+          "columns": {
+            "% Change": "0.06648757555406311",
+            "Asset type": "STOCK",
+            "Last": "47.64",
+            "Market cap": "5.9152171283e+10",
+            "Name": "HP Enterprise",
+            "Net change": "2.969999999999999",
+            "Relative volume": "0.37218252495931947",
+            "Symbol": "HPE",
+            "Volume": "6.852296133228e+06"
+          }
+        }
+      ],
+      "sorted_by": "% Change desc",
+      "filters_applied": [
+        {
+          "filter_type": "Asset type",
+          "predicate": "ANY_OF",
+          "values": [
+            "STOCK"
+          ]
+        }
+      ],
+      "cortex_managed": false
+    }
+  },
+  "guide": "How to interpret the response:\n- result.total_items is the total number of instruments matching the scan's filters. result.results may contain fewer entries if the scan's frontend_limit caps the rows — mention this to the user when total_items > len(results).\n- result.results is an array of matching instruments. Each entry has:\n  - ticker: trading symbol (e.g. \"AAPL\"). Empty when the scan does not have a Symbol/Ticker column visible — use instrument_id then.\n  - instrument_id: Robinhood instrument UUID. Pass this to other trading tools that take an instrument_id.\n  - instrument_type: STOCK, ETF, etc.\n  - columns: map of column display name -> cell value. Values are pre-formatted strings from upstream — re-format only if needed for the user.\n- result.sorted_by tells you the row order (e.g. \"Volume desc\"). Mention it when describing the table.\n- result.filters_applied lists the filters in effect — useful for confirming \"this scan currently filters by RSI > 70\".\n- result.cortex_managed: true means the scan was created by Cortex inside Legend. Reads are fine, but update_scan_filters / update_scan_config will reject Cortex-managed scans — tell the user that if they ask to modify it.\n\nWhen presenting results:\n- Render as a table with ticker as the leftmost column followed by the most user-relevant columns (% Change, Volume, etc.).\n- State total_items so the user knows how big the match set is.\n- Note that results are live as of execution time — they will differ if run again later.\n- If results is empty: tell the user the scan returned 0 matches right now. Suggest relaxing filters with update_scan_filters if they want broader results.\n\nError handling:\n- \"scan does not exist or you do not have access to it\" → the scan_id is wrong or the scan belongs to a different user. Suggest get_scans to see available scans.\n- Rate-limited or upstream failure → surface the error verbatim, no automatic retry."
+}

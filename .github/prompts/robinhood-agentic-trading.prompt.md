@@ -65,7 +65,7 @@ You are an automated agentic execution specialist. Follow a strict, multi-step r
        ```bash
        python3 src/gex_engine.py add-position <option_id> <ticker> <strike> <expiration> <option_type> <premium> --delta <delta> --gamma <gamma> --open-interest <oi> --imp-vol <iv> --sector <sector_tag>
        ```
-     - Explain to the user that the option position has been securely logged into the local tracker [data/active_options.json](../../data/active_options.json) and can now be governed by mechanical exits via python3 src/gex_engine.py portfolio.
+     - Explain to the user that the equity or option position has been securely logged into the local tracker [data/active_positions.json](../../data/active_positions.json) and can now be governed by mechanical exits via python3 src/gex_engine.py portfolio.
 
 ### Structure of Your Response
 

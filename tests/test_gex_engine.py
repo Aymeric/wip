@@ -15,7 +15,8 @@ from gex_engine import (
     compute_regime_gates, 
     compute_exit_rule_state,
     derive_gex_profile,
-    derive_volatility_profile
+    derive_volatility_profile,
+    select_best_option
 )
 
 class TestGEXEngine(unittest.TestCase):
@@ -143,7 +144,7 @@ class TestGEXEngine(unittest.TestCase):
         self.assertTrue("EXPIRED" in exit_rule)
 
         # Case 8: Profit Target T1 Check Priority vs. Option Decay Loss
-        # Spot is above +GEX (310), but options premium is in a loss (-89.2% like BABA in active_options)
+        # Spot is above +GEX (310), but options premium is in a loss (-89.2% like BABA in active_positions)
         # Stalling is active, meaning Stalling Stop has triggered.
         # Previously BABA showed profit take. Now it should trigger the defensive Stalling Stop.
         exit_rule, action, time_st, dist_ntrans, dist_max = compute_exit_rule_state(
@@ -370,6 +371,170 @@ class TestGEXEngine(unittest.TestCase):
         )
         self.assertEqual(exit_rule, "PROFIT TAKE (T2 TARGET MET)")
         self.assertTrue("lock in full T2" in action)
+
+    def test_active_positions_exclusion_empty(self):
+        # Verify that if positions are empty, active_positions list is empty and does not use hardcoded defaults
+        from unittest.mock import patch
+        import gex_engine
+        
+        with patch('gex_engine.load_json') as mock_load:
+            # Simulated empty options file
+            mock_load.return_value = {"options_positions": {}}
+            
+            # Create dummy args
+            class DummyArgs:
+                min_price = 5.0
+                max_price = 1000.0
+                min_volume = 200000
+                min_change = 0.3
+                min_market_cap = 1000000000
+                
+            with patch('gex_engine.persist_new_scans') as mock_persist, \
+                 patch('gex_engine.save_json') as mock_save:
+                
+                gex_engine.cmd_update_candidates(DummyArgs())
+                self.assertTrue(mock_save.called)
+                saved_data = mock_save.call_args[0][1]
+                self.assertEqual(saved_data["excluded_active_positions"], [])
+
+    def test_add_and_update_stocks_positions(self):
+        import tempfile
+        from unittest.mock import patch
+        import gex_engine
+
+        # Using a temporary file path for active_positions.json to mock file interactions
+        with tempfile.NamedTemporaryFile(suffix=".json", delete=False) as tmp:
+            tmp_path = tmp.name
+        try:
+            with patch('gex_engine.OPTIONS_FILE', tmp_path):
+                # 1) Add stock position
+                class AddArgs:
+                    ticker = "MSFT"
+                    shares = 15.0
+                    average_buy_price = 400.00
+                    sector = "Technology/Beta"
+                
+                gex_engine.cmd_add_stock_pos(AddArgs())
+                
+                # Check stored structure
+                data = gex_engine.load_json(tmp_path, {})
+                stocks = data.get("stocks_positions", {})
+                self.assertIn("MSFT", stocks)
+                self.assertEqual(stocks["MSFT"]["Shares"], 15.0)
+                self.assertEqual(stocks["MSFT"]["Average Buy Price"], 400.00)
+                self.assertEqual(stocks["MSFT"]["Beta Sector Tag"], "Technology/Beta")
+
+                # 2) Update stock position
+                class UpdateArgs:
+                    ticker = "MSFT"
+                    price = 425.00
+                    shares = 20.0
+                    sector = "Beta Core"
+                
+                gex_engine.cmd_update_stock_pos(UpdateArgs())
+                data = gex_engine.load_json(tmp_path, {})
+                target = data.get("stocks_positions", {}).get("MSFT", {})
+                self.assertEqual(target["Current Price"], 425.00)
+                self.assertEqual(target["Shares"], 20.0)
+                self.assertEqual(target["Beta Sector Tag"], "Beta Core")
+                self.assertEqual(target["Asset Cost Basis"], 8000.0) # 20 shares * 400 avg price
+
+                # 3) Close stock position
+                class CloseArgs:
+                    ticker = "MSFT"
+                    close_price = 450.00
+                
+                gex_engine.cmd_close_stock_pos(CloseArgs())
+                data = gex_engine.load_json(tmp_path, {})
+                self.assertNotIn("MSFT", data.get("stocks_positions", {}))
+                self.assertEqual(len(data.get("closed_stocks", [])), 1)
+                closed_item = data["closed_stocks"][0]
+                self.assertEqual(closed_item["Ticker"], "MSFT")
+                self.assertEqual(closed_item["Close Price"], 450.00)
+                self.assertEqual(closed_item["Realized P&L ($)"], 1000.0) # (450 - 400) * 20 shares
+                self.assertEqual(closed_item["Realized P&L (%)"], 12.5) # (450 - 400) / 400
+        finally:
+            if os.path.exists(tmp_path):
+                os.remove(tmp_path)
+
+    def test_select_best_option(self):
+        # Setup mock option files with different maturities and liquidity
+        inst_data = {
+            "instruments": [
+                # Expiration is 30 days exactly from 2026-07-09 => 2026-08-08
+                {"id": "call_opt_perfect", "expiration_date": "2026-08-08", "strike_price": "102.0000", "type": "call", "chain_symbol": "TEST"},
+                {"id": "call_opt_too_high_strike", "expiration_date": "2026-08-08", "strike_price": "115.0000", "type": "call", "chain_symbol": "TEST"},
+                {"id": "call_opt_too_soon_weekly", "expiration_date": "2026-07-15", "strike_price": "100.0000", "type": "call", "chain_symbol": "TEST"}, # 6 days away
+                {"id": "put_opt", "expiration_date": "2026-08-08", "strike_price": "100.0000", "type": "put", "chain_symbol": "TEST"},
+                # Expiration is farther away
+                {"id": "call_opt_farther", "expiration_date": "2026-09-08", "strike_price": "102.0000", "type": "call", "chain_symbol": "TEST"}
+            ]
+        }
+        quotes_data = {
+            "results": [
+                {
+                    "quote": {
+                        "instrument_id": "call_opt_perfect",
+                        "bid_price": "2.40", "ask_price": "2.50", "mark_price": "2.45",
+                        "open_interest": 600, "volume": 12, "delta": "0.45", "gamma": "0.02"
+                    }
+                },
+                {
+                    "quote": {
+                        "instrument_id": "call_opt_too_high_strike",
+                        "bid_price": "0.40", "ask_price": "0.45", "mark_price": "0.42",
+                        "open_interest": 800, "volume": 5, "delta": "0.15", "gamma": "0.01"
+                    }
+                },
+                {
+                    "quote": {
+                        "instrument_id": "call_opt_too_soon_weekly",
+                        "bid_price": "1.40", "ask_price": "1.45", "mark_price": "1.42",
+                        "open_interest": 1200, "volume": 50, "delta": "0.52", "gamma": "0.03"
+                    }
+                },
+                {
+                    "quote": {
+                        "instrument_id": "put_opt",
+                        "bid_price": "1.10", "ask_price": "1.15", "mark_price": "1.12",
+                        "open_interest": 2000, "volume": 30, "delta": "-0.48", "gamma": "0.02"
+                    }
+                },
+                {
+                    "quote": {
+                        "instrument_id": "call_opt_farther",
+                        "bid_price": "3.40", "ask_price": "3.55", "mark_price": "3.47",
+                        "open_interest": 700, "volume": 8, "delta": "0.46", "gamma": "0.015"
+                    }
+                }
+            ]
+        }
+
+        # Spot is 100.0, +GEX target (gex_target) is 110.0. Target date is 2026-07-09.
+        best, eligible = select_best_option(inst_data, quotes_data, spot=100.0, gex_target=110.0, today_override="2026-07-09")
+        
+        self.assertIsNotNone(best)
+        self.assertEqual(best["option_id"], "call_opt_perfect")
+        self.assertEqual(best["strike"], 102.0)
+        self.assertEqual(best["expiration_date"], "2026-08-08")
+        self.assertTrue(best["spread_ok"])
+        self.assertTrue(best["oi_ok"])
+        self.assertTrue(best["liquidity_passed"])
+        
+        # Verify the list handles exclusions correctly
+        # Strikes must be strictly below +GEX (110.0), so 115.0 call is omitted
+        for contract in eligible:
+            self.assertLess(contract["strike"], 110.0)
+
+        # Test with custom target_delta (e.g. 0.15 should prefer the high strike call contract)
+        best_custom_delta, _ = select_best_option(inst_data, quotes_data, spot=100.0, gex_target=120.0, today_override="2026-07-09", target_delta=0.15)
+        self.assertIsNotNone(best_custom_delta)
+        self.assertEqual(best_custom_delta["option_id"], "call_opt_too_high_strike")
+
+        # Test with custom DTE parameters (e.g. selecting farther monthly duration, min_dte=50 to max_dte=70)
+        best_custom_dte, _ = select_best_option(inst_data, quotes_data, spot=100.0, gex_target=110.0, today_override="2026-07-09", min_dte=50, max_dte=70)
+        self.assertIsNotNone(best_custom_dte)
+        self.assertEqual(best_custom_dte["option_id"], "call_opt_farther")
 
 if __name__ == '__main__':
     unittest.main()

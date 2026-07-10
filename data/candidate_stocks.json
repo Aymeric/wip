@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-07-10T03:09:25.635704Z",
+  "last_updated": "2026-07-10T05:13:06.305886Z",
   "source_scans": [
     "GEX Momentum Candidates",
     "High options volume and IV",
@@ -7,848 +7,245 @@
   ],
   "user_additions": [],
   "excluded_active_positions": [
-    "BABA",
     "NKE",
+    "BABA",
     "SLS"
   ],
-  "total": 93,
+  "total": 26,
   "candidates": [
     {
-      "symbol": "AVGO",
+      "symbol": "SHC",
       "source": "scanner",
-      "price": 392.04,
-      "chg_pct": 0.8619,
-      "iv": 0.5168624145336074,
-      "relative_options_volume": 3.2443657767537455,
-      "market_cap": 1764015585814.0
-    },
-    {
-      "symbol": "TSLA",
-      "source": "scanner",
-      "price": 395.9,
-      "chg_pct": 0.4669,
-      "iv": 0.4769983,
-      "relative_options_volume": 3.0480699339285957,
-      "market_cap": 1513181147625.0
-    },
-    {
-      "symbol": "RCL",
-      "source": "scanner",
-      "price": 282.97,
-      "chg_pct": 0.719,
-      "iv": 0.5439675,
-      "relative_options_volume": 2.8714334008003592,
-      "market_cap": 75700714490.0
-    },
-    {
-      "symbol": "AAPL",
-      "source": "scanner",
-      "price": 314.54,
-      "chg_pct": 0.367,
-      "iv": 0.28042626866205733,
-      "relative_options_volume": 2.624403680915135,
-      "market_cap": 4562774014960.0
+      "price": 18.49,
+      "chg_pct": 0.5438,
+      "iv": 0.3927208,
+      "relative_options_volume": 4.180894308943089,
+      "market_cap": 4984719055.0
     },
     {
       "symbol": "MARA",
       "source": "scanner",
-      "price": 12.11,
-      "chg_pct": 0.7488,
+      "price": 13.42,
+      "chg_pct": 1.5129,
       "iv": 0.9051008,
-      "relative_options_volume": 2.601304431338109,
-      "market_cap": 4594309561.0
+      "relative_options_volume": 3.5163497871381955,
+      "market_cap": 4582871446.0
     },
     {
-      "symbol": "ANET",
+      "symbol": "META",
       "source": "scanner",
-      "price": 182.38,
-      "chg_pct": 0.7346,
-      "iv": 0.7806345175627946,
-      "relative_options_volume": 2.5492306870963386,
-      "market_cap": 209601344649.0
+      "price": 639.01,
+      "chg_pct": 1.1924,
+      "iv": 0.4584175,
+      "relative_options_volume": 3.3155094890545787,
+      "market_cap": 1530973863107.0
     },
     {
-      "symbol": "VG",
+      "symbol": "OKLO",
       "source": "scanner",
-      "price": 12.43,
-      "chg_pct": 0.4039,
-      "iv": 0.6163063,
-      "relative_options_volume": 2.2970387744507956,
-      "market_cap": 28793709567.0
+      "price": 49.64,
+      "chg_pct": 0.751,
+      "iv": 0.8871929,
+      "relative_options_volume": 3.1401495487634317,
+      "market_cap": 8226293865.0
     },
     {
-      "symbol": "DAL",
+      "symbol": "WDFC",
       "source": "scanner",
-      "price": 87.61,
-      "chg_pct": 0.3666,
-      "iv": 0.4714754396473027,
-      "relative_options_volume": 2.1959112191705,
-      "market_cap": 58229408354.0
+      "price": 276.96,
+      "chg_pct": 15.6796,
+      "iv": 0.5353319,
+      "relative_options_volume": 3.050261256281706,
+      "market_cap": 3317967579.0
     },
     {
-      "symbol": "BE",
+      "symbol": "VIK",
       "source": "scanner",
-      "price": 255.6,
-      "chg_pct": 0.5152,
-      "iv": 1.626558136977101,
-      "relative_options_volume": 2.164214684901305,
-      "market_cap": 76677533496.0
+      "price": 101.79,
+      "chg_pct": 0.5731,
+      "iv": 0.3772211,
+      "relative_options_volume": 2.2219388401109343,
+      "market_cap": 43710013438.0
     },
     {
-      "symbol": "GLOB",
+      "symbol": "ORCL",
       "source": "scanner",
-      "price": 30.83,
-      "chg_pct": 3.1104,
-      "iv": 0.8661549237153345,
-      "relative_options_volume": 2.0000164755933603,
-      "market_cap": 1366632947.0
+      "price": 144.88,
+      "chg_pct": 0.4576,
+      "iv": 0.5772339,
+      "relative_options_volume": 2.1907979956877446,
+      "market_cap": 404677370790.0
     },
     {
-      "symbol": "LASR",
+      "symbol": "NTAP",
       "source": "scanner",
-      "price": 75.42,
-      "chg_pct": 28.5276,
-      "iv": null,
-      "relative_options_volume": null,
-      "market_cap": 3308934869.0
-    },
-    {
-      "symbol": "BBIO",
-      "source": "scanner",
-      "price": 89.79,
-      "chg_pct": 14.6272,
-      "iv": null,
-      "relative_options_volume": null,
-      "market_cap": 15341811085.0
-    },
-    {
-      "symbol": "FRVO",
-      "source": "scanner",
-      "price": 26.87,
-      "chg_pct": 14.0008,
-      "iv": null,
-      "relative_options_volume": null,
-      "market_cap": 6947728485.0
-    },
-    {
-      "symbol": "PENG",
-      "source": "scanner",
-      "price": 88.35,
-      "chg_pct": 12.5908,
-      "iv": null,
-      "relative_options_volume": null,
-      "market_cap": 4021014590.0
-    },
-    {
-      "symbol": "AEHR",
-      "source": "scanner",
-      "price": 76.32,
-      "chg_pct": 12.4171,
-      "iv": null,
-      "relative_options_volume": null,
-      "market_cap": 2133474218.0
-    },
-    {
-      "symbol": "TXG",
-      "source": "scanner",
-      "price": 42.06,
-      "chg_pct": 12.2631,
-      "iv": null,
-      "relative_options_volume": null,
-      "market_cap": 4757683182.0
-    },
-    {
-      "symbol": "ALGM",
-      "source": "scanner",
-      "price": 57.68,
-      "chg_pct": 12.0762,
-      "iv": null,
-      "relative_options_volume": null,
-      "market_cap": 9588395978.0
-    },
-    {
-      "symbol": "LITE",
-      "source": "scanner",
-      "price": 790.36,
-      "chg_pct": 11.7749,
-      "iv": null,
-      "relative_options_volume": null,
-      "market_cap": 55012380000.0
-    },
-    {
-      "symbol": "ONTO",
-      "source": "scanner",
-      "price": 325.76,
-      "chg_pct": 11.7722,
-      "iv": null,
-      "relative_options_volume": null,
-      "market_cap": 14497762602.0
-    },
-    {
-      "symbol": "COHU",
-      "source": "scanner",
-      "price": 58.14,
-      "chg_pct": 11.5503,
-      "iv": null,
-      "relative_options_volume": null,
-      "market_cap": 2458779085.0
-    },
-    {
-      "symbol": "ARM",
-      "source": "scanner",
-      "price": 334.57,
-      "chg_pct": 11.4342,
-      "iv": null,
-      "relative_options_volume": null,
-      "market_cap": 320679966902.0
-    },
-    {
-      "symbol": "MXL",
-      "source": "scanner",
-      "price": 95.88,
-      "chg_pct": 11.4236,
-      "iv": null,
-      "relative_options_volume": null,
-      "market_cap": 7705429771.0
-    },
-    {
-      "symbol": "OPEN",
-      "source": "scanner",
-      "price": 5.33,
-      "chg_pct": 11.3779,
-      "iv": null,
-      "relative_options_volume": null,
-      "market_cap": 4621088467.0
-    },
-    {
-      "symbol": "CBRS",
-      "source": "scanner",
-      "price": 202.28,
-      "chg_pct": 11.3114,
-      "iv": null,
-      "relative_options_volume": null,
-      "market_cap": 40509776068.0
-    },
-    {
-      "symbol": "FLNC",
-      "source": "scanner",
-      "price": 16.93,
-      "chg_pct": 10.3977,
-      "iv": null,
-      "relative_options_volume": null,
-      "market_cap": 2037328256.0
-    },
-    {
-      "symbol": "ICHR",
-      "source": "scanner",
-      "price": 97.94,
-      "chg_pct": 10.2747,
-      "iv": null,
-      "relative_options_volume": null,
-      "market_cap": 3095845635.0
-    },
-    {
-      "symbol": "QGEN",
-      "source": "scanner",
-      "price": 41.82,
-      "chg_pct": 10.0526,
-      "iv": null,
-      "relative_options_volume": null,
-      "market_cap": 7837500000.0
-    },
-    {
-      "symbol": "BTDR",
-      "source": "scanner",
-      "price": 13.81,
-      "chg_pct": 9.9522,
-      "iv": null,
-      "relative_options_volume": null,
-      "market_cap": 3056019481.0
-    },
-    {
-      "symbol": "SYNA",
-      "source": "scanner",
-      "price": 135.47,
-      "chg_pct": 9.8119,
-      "iv": null,
-      "relative_options_volume": null,
-      "market_cap": 4812131056.0
-    },
-    {
-      "symbol": "VECO",
-      "source": "scanner",
-      "price": 59.78,
-      "chg_pct": 9.7485,
-      "iv": null,
-      "relative_options_volume": null,
-      "market_cap": 3323273258.0
-    },
-    {
-      "symbol": "OUST",
-      "source": "scanner",
-      "price": 47.6,
-      "chg_pct": 9.6522,
-      "iv": null,
-      "relative_options_volume": null,
-      "market_cap": 2919316803.0
-    },
-    {
-      "symbol": "CNMD",
-      "source": "scanner",
-      "price": 36.8,
-      "chg_pct": 9.5564,
-      "iv": null,
-      "relative_options_volume": null,
-      "market_cap": 1011367826.0
-    },
-    {
-      "symbol": "AG",
-      "source": "scanner",
-      "price": 17.27,
-      "chg_pct": 9.2722,
-      "iv": null,
-      "relative_options_volume": null,
-      "market_cap": 7780253036.0
-    },
-    {
-      "symbol": "ON",
-      "source": "scanner",
-      "price": 102.42,
-      "chg_pct": 9.2067,
-      "iv": null,
-      "relative_options_volume": null,
-      "market_cap": 36501717611.0
-    },
-    {
-      "symbol": "INBX",
-      "source": "scanner",
-      "price": 106.03,
-      "chg_pct": 9.1967,
-      "iv": null,
-      "relative_options_volume": null,
-      "market_cap": 1424572160.0
-    },
-    {
-      "symbol": "VICR",
-      "source": "scanner",
-      "price": 287.23,
-      "chg_pct": 9.1465,
-      "iv": null,
-      "relative_options_volume": null,
-      "market_cap": 11995203065.0
-    },
-    {
-      "symbol": "FORM",
-      "source": "scanner",
-      "price": 121.7,
-      "chg_pct": 9.0622,
-      "iv": null,
-      "relative_options_volume": null,
-      "market_cap": 8694295721.0
-    },
-    {
-      "symbol": "ACMR",
-      "source": "scanner",
-      "price": 106.94,
-      "chg_pct": 9.0446,
-      "iv": null,
-      "relative_options_volume": null,
-      "market_cap": 6777567389.0
-    },
-    {
-      "symbol": "FLEX",
-      "source": "scanner",
-      "price": 145.05,
-      "chg_pct": 8.7576,
-      "iv": null,
-      "relative_options_volume": null,
-      "market_cap": 48865374816.0
-    },
-    {
-      "symbol": "CIFR",
-      "source": "scanner",
-      "price": 23.75,
-      "chg_pct": 8.6957,
-      "iv": null,
-      "relative_options_volume": null,
-      "market_cap": 8937724954.0
-    },
-    {
-      "symbol": "ALAB",
-      "source": "scanner",
-      "price": 426.79,
-      "chg_pct": 8.5538,
-      "iv": null,
-      "relative_options_volume": null,
-      "market_cap": 67390745297.0
-    },
-    {
-      "symbol": "AMKR",
-      "source": "scanner",
-      "price": 72.62,
-      "chg_pct": 8.5339,
-      "iv": null,
-      "relative_options_volume": null,
-      "market_cap": 16585150179.0
-    },
-    {
-      "symbol": "AZZ",
-      "source": "scanner",
-      "price": 155.59,
-      "chg_pct": 8.3526,
-      "iv": null,
-      "relative_options_volume": null,
-      "market_cap": 4323893822.0
-    },
-    {
-      "symbol": "KLIC",
-      "source": "scanner",
-      "price": 112.9,
-      "chg_pct": 8.3181,
-      "iv": null,
-      "relative_options_volume": null,
-      "market_cap": 5454655769.0
-    },
-    {
-      "symbol": "FCEL",
-      "source": "scanner",
-      "price": 24.37,
-      "chg_pct": 8.1189,
-      "iv": null,
-      "relative_options_volume": null,
-      "market_cap": 1523888219.0
-    },
-    {
-      "symbol": "ENTG",
-      "source": "scanner",
-      "price": 149.95,
-      "chg_pct": 8.0993,
-      "iv": null,
-      "relative_options_volume": null,
-      "market_cap": 21126294500.0
-    },
-    {
-      "symbol": "VIAV",
-      "source": "scanner",
-      "price": 43.97,
-      "chg_pct": 8.0344,
-      "iv": null,
-      "relative_options_volume": null,
-      "market_cap": 10037638976.0
-    },
-    {
-      "symbol": "NCLH",
-      "source": "scanner",
-      "price": 19.95,
-      "chg_pct": 8.0146,
-      "iv": null,
-      "relative_options_volume": null,
-      "market_cap": 8479764285.0
-    },
-    {
-      "symbol": "SITM",
-      "source": "scanner",
-      "price": 660.59,
-      "chg_pct": 7.9166,
-      "iv": null,
-      "relative_options_volume": null,
-      "market_cap": 18345059390.0
-    },
-    {
-      "symbol": "VSH",
-      "source": "scanner",
-      "price": 45.51,
-      "chg_pct": 7.8692,
-      "iv": null,
-      "relative_options_volume": null,
-      "market_cap": 6471013769.0
-    },
-    {
-      "symbol": "NVTS",
-      "source": "scanner",
-      "price": 14.41,
-      "chg_pct": 7.8593,
-      "iv": null,
-      "relative_options_volume": null,
-      "market_cap": 3256331874.0
-    },
-    {
-      "symbol": "GLW",
-      "source": "scanner",
-      "price": 198.32,
-      "chg_pct": 7.765,
-      "iv": null,
-      "relative_options_volume": null,
-      "market_cap": 158383178934.0
-    },
-    {
-      "symbol": "RMBS",
-      "source": "scanner",
-      "price": 118.1,
-      "chg_pct": 7.7162,
-      "iv": null,
-      "relative_options_volume": null,
-      "market_cap": 11856137061.0
-    },
-    {
-      "symbol": "ALHC",
-      "source": "scanner",
-      "price": 21.55,
-      "chg_pct": 7.5886,
-      "iv": null,
-      "relative_options_volume": null,
-      "market_cap": 4140878474.0
-    },
-    {
-      "symbol": "ADPT",
-      "source": "scanner",
-      "price": 21.67,
-      "chg_pct": 7.4901,
-      "iv": null,
-      "relative_options_volume": null,
-      "market_cap": 3226494942.0
-    },
-    {
-      "symbol": "AEIS",
-      "source": "scanner",
-      "price": 315.41,
-      "chg_pct": 7.4138,
-      "iv": null,
-      "relative_options_volume": null,
-      "market_cap": 11745528468.0
-    },
-    {
-      "symbol": "FIGR",
-      "source": "scanner",
-      "price": 32.92,
-      "chg_pct": 7.4134,
-      "iv": null,
-      "relative_options_volume": null,
-      "market_cap": 6775635517.0
-    },
-    {
-      "symbol": "GH",
-      "source": "scanner",
-      "price": 167.66,
-      "chg_pct": 7.3578,
-      "iv": null,
-      "relative_options_volume": null,
-      "market_cap": 20708130911.0
-    },
-    {
-      "symbol": "WDC",
-      "source": "scanner",
-      "price": 590.51,
-      "chg_pct": 7.3069,
-      "iv": null,
-      "relative_options_volume": null,
-      "market_cap": 189678576689.0
-    },
-    {
-      "symbol": "FDXF",
-      "source": "scanner",
-      "price": 153.7,
-      "chg_pct": 7.2592,
-      "iv": null,
-      "relative_options_volume": null,
-      "market_cap": 21338252584.0
-    },
-    {
-      "symbol": "CEVA",
-      "source": "scanner",
-      "price": 47.79,
-      "chg_pct": 7.2487,
-      "iv": null,
-      "relative_options_volume": null,
-      "market_cap": 1240020514.0
-    },
-    {
-      "symbol": "MKSI",
-      "source": "scanner",
-      "price": 374.69,
-      "chg_pct": 7.2398,
-      "iv": null,
-      "relative_options_volume": null,
-      "market_cap": 23599243231.0
-    },
-    {
-      "symbol": "AMD",
-      "source": "scanner",
-      "price": 554.84,
-      "chg_pct": 7.2355,
-      "iv": null,
-      "relative_options_volume": null,
-      "market_cap": 843680923621.0
-    },
-    {
-      "symbol": "AAOI",
-      "source": "scanner",
-      "price": 122.67,
-      "chg_pct": 7.1915,
-      "iv": null,
-      "relative_options_volume": null,
-      "market_cap": 9182982255.0
-    },
-    {
-      "symbol": "MTSI",
-      "source": "scanner",
-      "price": 327.08,
-      "chg_pct": 7.1585,
-      "iv": null,
-      "relative_options_volume": null,
-      "market_cap": 23287759098.0
-    },
-    {
-      "symbol": "CIEN",
-      "source": "scanner",
-      "price": 472.45,
-      "chg_pct": 7.1399,
-      "iv": null,
-      "relative_options_volume": null,
-      "market_cap": 62420592014.0
-    },
-    {
-      "symbol": "AVTR",
-      "source": "scanner",
-      "price": 10.46,
-      "chg_pct": 7.1209,
-      "iv": null,
-      "relative_options_volume": null,
-      "market_cap": 6663692723.0
-    },
-    {
-      "symbol": "TGB",
-      "source": "scanner",
-      "price": 6.93,
-      "chg_pct": 7.1113,
-      "iv": null,
-      "relative_options_volume": null,
-      "market_cap": 2364332161.0
-    },
-    {
-      "symbol": "WOLF",
-      "source": "scanner",
-      "price": 38.4,
-      "chg_pct": 7.0831,
-      "iv": null,
-      "relative_options_volume": null,
-      "market_cap": 1863719541.0
-    },
-    {
-      "symbol": "LSCC",
-      "source": "scanner",
-      "price": 141.86,
-      "chg_pct": 7.0803,
-      "iv": null,
-      "relative_options_volume": null,
-      "market_cap": 18142580423.0
-    },
-    {
-      "symbol": "RIVN",
-      "source": "scanner",
-      "price": 17.82,
-      "chg_pct": 6.9928,
-      "iv": null,
-      "relative_options_volume": null,
-      "market_cap": 22676235426.0
-    },
-    {
-      "symbol": "CRDO",
-      "source": "scanner",
-      "price": 276.63,
-      "chg_pct": 6.9349,
-      "iv": null,
-      "relative_options_volume": null,
-      "market_cap": 48239967433.0
-    },
-    {
-      "symbol": "EXK",
-      "source": "scanner",
-      "price": 8.26,
-      "chg_pct": 6.9301,
-      "iv": null,
-      "relative_options_volume": null,
-      "market_cap": 2285651151.0
-    },
-    {
-      "symbol": "ENVX",
-      "source": "scanner",
-      "price": 5.48,
-      "chg_pct": 6.9268,
-      "iv": null,
-      "relative_options_volume": null,
-      "market_cap": 1116945612.0
-    },
-    {
-      "symbol": "TBBK",
-      "source": "scanner",
-      "price": 67.39,
-      "chg_pct": 6.9173,
-      "iv": null,
-      "relative_options_volume": null,
-      "market_cap": 2627549445.0
+      "price": 172.51,
+      "chg_pct": 0.4542,
+      "iv": 0.467076,
+      "relative_options_volume": 2.144347937285529,
+      "market_cap": 32405155925.0
     },
     {
-      "symbol": "MRVL",
+      "symbol": "EQPT",
       "source": "scanner",
-      "price": 247.73,
-      "chg_pct": 6.9138,
+      "price": 18.25,
+      "chg_pct": 14.0625,
       "iv": null,
       "relative_options_volume": null,
-      "market_cap": 203163328000.0
+      "market_cap": 4180593481.0
     },
     {
-      "symbol": "TSEM",
+      "symbol": "CCC",
       "source": "scanner",
-      "price": 231.68,
-      "chg_pct": 6.9128,
+      "price": 6.08,
+      "chg_pct": 13.0112,
       "iv": null,
       "relative_options_volume": null,
-      "market_cap": 24302699896.0
+      "market_cap": 3192956515.0
     },
     {
-      "symbol": "BAND",
+      "symbol": "KB",
       "source": "scanner",
-      "price": 75.33,
-      "chg_pct": 6.8591,
+      "price": 123.9,
+      "chg_pct": 7.3936,
       "iv": null,
       "relative_options_volume": null,
-      "market_cap": 2257540316.0
+      "market_cap": 39457694551.0
     },
     {
-      "symbol": "NOK",
+      "symbol": "KC",
       "source": "scanner",
-      "price": 12.77,
-      "chg_pct": 6.8201,
+      "price": 11.16,
+      "chg_pct": 6.5903,
       "iv": null,
       "relative_options_volume": null,
-      "market_cap": 64940761374.0
+      "market_cap": 3207000349.0
     },
     {
-      "symbol": "AMAT",
+      "symbol": "SECZ",
       "source": "scanner",
-      "price": 609.25,
-      "chg_pct": 6.7923,
+      "price": 7.93,
+      "chg_pct": 6.443,
       "iv": null,
       "relative_options_volume": null,
-      "market_cap": 452953854815.0
+      "market_cap": 1097144940.0
     },
     {
-      "symbol": "KLAC",
+      "symbol": "SEI",
       "source": "scanner",
-      "price": 236.04,
-      "chg_pct": 6.7208,
+      "price": 70.88,
+      "chg_pct": 3.8383,
       "iv": null,
       "relative_options_volume": null,
-      "market_cap": 288921950947.0
+      "market_cap": 4061225735.0
     },
     {
-      "symbol": "STRL",
+      "symbol": "BEKE",
       "source": "scanner",
-      "price": 704.93,
-      "chg_pct": 6.6912,
+      "price": 15.8,
+      "chg_pct": 3.6066,
       "iv": null,
       "relative_options_volume": null,
-      "market_cap": 20274823526.0
+      "market_cap": 17114054722.0
     },
     {
-      "symbol": "HPE",
+      "symbol": "BUD",
       "source": "scanner",
-      "price": 47.64,
-      "chg_pct": 6.6488,
+      "price": 82.11,
+      "chg_pct": 3.4913,
       "iv": null,
       "relative_options_volume": null,
-      "market_cap": 59152171283.0
+      "market_cap": 153447526464.0
     },
     {
-      "symbol": "ASX",
+      "symbol": "DPC",
       "source": "scanner",
-      "price": 41.98,
-      "chg_pct": 5.134,
+      "price": 49.98,
+      "chg_pct": 3.4568,
       "iv": null,
       "relative_options_volume": null,
-      "market_cap": 89313617128.0
+      "market_cap": 6917934740.0
     },
     {
-      "symbol": "RGC",
+      "symbol": "MNSO",
       "source": "scanner",
-      "price": 6.79,
-      "chg_pct": 4.6225,
+      "price": 11.83,
+      "chg_pct": 3.1386,
       "iv": null,
       "relative_options_volume": null,
-      "market_cap": 2942209002.0
+      "market_cap": 3557049954.0
     },
     {
-      "symbol": "TEL",
+      "symbol": "LTH",
       "source": "scanner",
-      "price": 205.0,
-      "chg_pct": 4.4639,
+      "price": 42.97,
+      "chg_pct": 3.1142,
       "iv": null,
       "relative_options_volume": null,
-      "market_cap": 57748664874.0
+      "market_cap": 9238013627.0
     },
     {
-      "symbol": "SHAZ",
+      "symbol": "DHC",
       "source": "scanner",
-      "price": 79.55,
-      "chg_pct": 4.4374,
+      "price": 9.34,
+      "chg_pct": 3.0905,
       "iv": null,
       "relative_options_volume": null,
-      "market_cap": 1683669867.0
+      "market_cap": 2186225541.0
     },
     {
-      "symbol": "PACS",
+      "symbol": "LHX",
       "source": "scanner",
-      "price": 45.78,
-      "chg_pct": 3.9982,
+      "price": 298.78,
+      "chg_pct": 3.0738,
       "iv": null,
       "relative_options_volume": null,
-      "market_cap": 6903841041.0
+      "market_cap": 54666390421.0
     },
     {
-      "symbol": "KYIV",
+      "symbol": "XXI",
       "source": "scanner",
-      "price": 16.1,
-      "chg_pct": 3.404,
+      "price": 5.38,
+      "chg_pct": 3.0651,
       "iv": null,
       "relative_options_volume": null,
-      "market_cap": 3617632988.0
+      "market_cap": 1817273060.0
     },
     {
-      "symbol": "AMTM",
+      "symbol": "SGML",
       "source": "scanner",
-      "price": 21.58,
-      "chg_pct": 3.3525,
+      "price": 12.18,
+      "chg_pct": 3.0457,
       "iv": null,
       "relative_options_volume": null,
-      "market_cap": 5174619636.0
+      "market_cap": 1294541236.0
     },
     {
-      "symbol": "GNK",
+      "symbol": "DLB",
       "source": "scanner",
-      "price": 26.0,
-      "chg_pct": 3.3386,
+      "price": 51.63,
+      "chg_pct": 3.0128,
       "iv": null,
       "relative_options_volume": null,
-      "market_cap": 1090733586.0
+      "market_cap": 4718553975.0
     },
     {
-      "symbol": "MTH",
+      "symbol": "NAD",
       "source": "scanner",
-      "price": 77.01,
-      "chg_pct": 3.2582,
+      "price": 12.34,
+      "chg_pct": 3.005,
       "iv": null,
       "relative_options_volume": null,
-      "market_cap": 5223467528.0
+      "market_cap": 2794567252.0
     },
     {
-      "symbol": "WYFI",
+      "symbol": "BOBS",
       "source": "scanner",
-      "price": 37.92,
-      "chg_pct": 3.2118,
+      "price": 15.79,
+      "chg_pct": 3.0007,
       "iv": null,
       "relative_options_volume": null,
-      "market_cap": 1290487098.0
+      "market_cap": 1907161295.0
     }
   ]
 }

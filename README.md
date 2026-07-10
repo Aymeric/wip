@@ -18,7 +18,7 @@ sequenceDiagram
     actor User as Swing Trader
     participant Agent as Copilot Agent (LLM)
     participant MCP as Robinhood MCP Server
-    participant DB as JSON Local Caches (regime, active_options, etc.)
+    participant DB as JSON Local Caches (regime, active_positions, etc.)
     participant CLI as Python CLI Tool (gex_engine.py)
 
     User->>Agent: "Assess daily regime or run scans"
@@ -55,7 +55,7 @@ This workspace is structured as follows:
 2. **Persistent Local Cache Databases**:
    - [data/regime.json](data/regime.json): Holds the computed status, gates, and metrics for the broad market Daily Regime Gates.
    - [data/ticker_analyses.json](data/ticker_analyses.json): Accumulates setup grading metrics (Spot, transition levels, Delta Balance change thresholds). See the [data/ticker_analyses.json](data/ticker_analyses.json) [Schema Documentation](#-dataticker_analysesjson-schema-documentation) below for the complete specification.
-   - [data/active_options.json](data/active_options.json): Records open options positions, premium tracking, holding period, and stalling status. See the [data/active_options.json](data/active_options.json) [Schema Documentation](#-dataactive_optionsjson-schema-documentation) below for the complete specification.
+   - [data/active_positions.json](data/active_positions.json): Records open options positions, premium tracking, holding period, and stalling status. See the [data/active_positions.json](data/active_positions.json) [Schema Documentation](#-dataactive_positionsjson-schema-documentation) below for the complete specification.
 3. **Specialized Copilot Prompt Manifests** (located in the [.github/prompts/](.github/prompts/) directory):
    - [.github/prompts/gex-regime-trading.prompt.md](.github/prompts/gex-regime-trading.prompt.md): Implements rules-based options swing trading using GEX/dealer positioning mechanics.
    - [.github/prompts/robinhood-portfolio-analysis.prompt.md](.github/prompts/robinhood-portfolio-analysis.prompt.md): Pulls and parses holdings, evaluates cash reserves, and designs customized allocation rebalancing recommendations.
@@ -91,6 +91,10 @@ Gates are computed mechanically: **Basket** (SPY or QQQ > $+0.5\%$), **Bull:Bear
 #### Dynamically grade a quantitative GEX setup:
 ```bash
 python3 src/gex_engine.py analyze AAPL --spot 289.55 --ptrans 285.00 --ntrans 282.00 --gex 310.00 --cotmp 280.00 --db-change 0.55
+```
+Or leverage advanced parameterized option selection parameters to target particular durations or delta zones:
+```bash
+python3 src/gex_engine.py analyze AAPL --spot 289.55 --ptrans 285.00 --ntrans 282.00 --gex 310.00 --cotmp 280.00 --db-change 0.55 --target-delta 0.50 --min-dte 30 --max-dte 60
 ```
 *(Optionally, GEX transition levels can be dynamically derived from option chain payloads: see the section below).*
 
@@ -138,6 +142,14 @@ python3 src/gex_engine.py analyze SUPN --spot 50.25 --inst-file data/downloads/2
 5. **Implied vs. Realized Volatility (Rule 8)**: Calculated using options quotes within 15% of spot to compute log-return standard deviation over the full price history.
 6. **10-day Realized Volatility Compression (Rule 11)**: Calculated using the standard deviation of log returns over the last 10 trading session closes.
 
+### 🎯 Option Selection & Portfolio Sizing Simulation
+When option profiles are successfully derived via `--inst-file` and `--quote-file`, the system automatically executes the **Option Selection Protocol** and a **Sizing Constraints Simulator**:
+- **Option Selection Protocol**: Automatically isolates, ranks, and recommends the single best Call option contract closest to 30-45 calendar days (configurable using `--min-dte` and `--max-dte`) based on strict delta guidelines targeting the standard 0.45 zone (configurable via `--target-delta`), strike proximity, entry premium, and bid-ask spread liquidity.
+- **Sizing Constraints Simulator**: Automatically calculates recommended contract counts based on single-leg $\le 3.0\%$ portfolio Net Liquidation Rules. The portfolio value defaults to $\$50{,}000.00{}$ but can be customized using the `--net-liq` argument:
+  ```bash
+  python3 src/gex_engine.py analyze SUPN --spot 50.25 --inst-file data/downloads/20260708/supn_option_instruments_raw.json --quote-file data/downloads/20260708/supn_option_quotes_raw.json --hist-file data/downloads/20260708/supn_historicals_raw.json --db-change 0.65 --net-liq 125000 --target-delta 0.50 --min-dte 30 --max-dte 60
+  ```
+
 ---
 
 ## 📅 GEX Candidates Sourcing & `update-candidates` Pipeline
@@ -160,17 +172,22 @@ graph TD
 When `update-candidates` is run, the engine:
 1. Searches the current directory and recursive [data/downloads](data/downloads) subdirectory for any new JSON files.
 2. Inspects their schemas to identify native Robinhood scanner data blocks.
-3. Translates, copies, and timestamps them into [data/scans](data/scans) and [data/scans/history](data/scans/history) respectively to establish offline local scan databases.
-4. Filters list and write output to [data/candidate_stocks.json](data/candidate_stocks.json).
-5. Removes temporary files from the workspace root to maintain strict repository cleanliness.
+3. Translates, copies, and timestamps them into [data/scans](data/scans) and [data/scans/history](data/scans/history) respectively to establish offline local scan databases. It also dynamically discovers and processes any valid active scan files placed inside [data/scans](data/scans) (such as Top Gainers Today) automatically alongside standard ones.
+4. Custom filters and prioritizes the pooled candidate tickers, writing the consolidated output directly to [data/candidate_stocks.json](data/candidate_stocks.json).
+5. Deletes temporary JSON logs from the workspace root to preserve strict repository cleanliness.
 
-### Standard Mechanical Screener Baseline
-Candidate stocks are filtered locally according to the following strict criteria:
-- **Price Range**: Underlier Spot price within $\$5.00$ and $\$1{,}000.00$.
-- **Daily Volume**: Trading volume must be at least $200{,}000$ shares to ensure depth.
-- **Session Percent Change**: Session daily gain must be at least $+0.3\%$.
-- **Market Sizing**: Minimum market cap of $\$1.0\text{ Billion}$.
-- **Exclusion**: Tickers of open contracts currently stored in [data/active_options.json](data/active_options.json) are dynamically omitted to avoid concentration.
+### Standard Mechanical Screener Baseline & Custom Overrides
+Candidate stocks are filtered locally according to robust baseline filters, which can be fully customized or overridden via command-line arguments:
+- **Price Range** (override with `--min-price` and `--max-price`): Underlier spot price boundaries, defaulting to a range of $\$5.00$ to $\$1{,}000.00$.
+- **Daily Volume** (override with `--min-volume`): Minimum average trading volume, defaulting to $200{,}000$ shares to ensure depth.
+- **Session Percent Change** (override with `--min-change`): Minimum session daily gain percentage, defaulting to $+0.3\%$.
+- **Market Capitalization** (override with `--min-market-cap`): Minimum equity market cap, defaulting to $\$1.0\text{ Billion}$ ($\$1{,}000{,}000{,}000.00$).
+- **Exclusion**: Tickers of open contracts currently stored in [data/active_positions.json](data/active_positions.json) are dynamically omitted to avoid concentration and focus capital.
+
+To invoke candidate updates with tighter custom filters, run:
+```bash
+python3 src/gex_engine.py update-candidates --min-volume 500000 --min-change 0.5 --min-market-cap 2000000000
+```
 
 
 ---
@@ -243,14 +260,14 @@ When executing portfolio reviews manually or via [.github/prompts/robinhood-port
 
 ---
 
-## 🗄️ [data/active_options.json](data/active_options.json) Schema Documentation
+## 🗄️ [data/active_positions.json](data/active_positions.json) Schema Documentation
 
-The cache file [data/active_options.json](data/active_options.json) acts as the local storage layer tracking active underlier positions, option Greeks, trailing progress, and time constraints.  
+The cache file [data/active_positions.json](data/active_positions.json) acts as the local storage layer tracking active options contracts and stock holdings, along with sizing calculations, P&L calculations, and duration parameters.
 
 ### Schema Definition
 ```json
 {
-  "active_positions": {
+  "options_positions": {
     "<Option_ID_UUID>": {
       "Option ID": "79cd3800-e848-4d58-8997-308576acad72",
       "Underlier": "NKE",
@@ -274,11 +291,26 @@ The cache file [data/active_options.json](data/active_options.json) acts as the 
       "Underlier Spot": 42.89,
       "Entry Date": "2026-06-29"
     }
+  },
+  "stocks_positions": {
+    "<TICKER>": {
+      "Ticker": "AAPL",
+      "Shares": 10.0,
+      "Average Buy Price": 150.0,
+      "Current Price": 314.54,
+      "Beta Sector Tag": "Technology/Beta",
+      "Entry Date": "2026-07-09",
+      "Asset Cost Basis": 1500.0,
+      "Current Value": 3145.40,
+      "P&L ($)": 1645.40,
+      "P&L (%)": 109.69,
+      "Sizing Risk Weight (%)": 3.00
+    }
   }
 }
 ```
 
-### Parameter Details
+### Parameter Details (Options Positions)
 
 | Field | Type | Description |
 | :--- | :--- | :--- |
@@ -296,13 +328,22 @@ The cache file [data/active_options.json](data/active_options.json) acts as the 
 | `Asset Cost Basis` | Float | Total original purchase capital committed ($\text{Purchase Premium} \times 100$). |
 | `Current Value` | Float | Standard live market value of the contract ($\text{Mark Price} \times 100$). |
 | `P&L (%)` | Float | Relative total return calculated directly from cost basis and mark price. |
+
+### Parameter Details (Stock Positions)
+
+| Field | Type | Description |
+| :--- | :--- | :--- |
+| `Ticker` | String | Capitalized ticker symbol of the equity asset (e.g. `AAPL`). |
+| `Shares` | Float | Nominal count of stock shares held. |
+| `Average Buy Price` | Float | Purchase cost basis per individual stock share. |
+| `Current Price` | Float | Current spot market price of the equity asset. |
+| `Beta Sector Tag` | String | Sector classification identifier used for technological weight totals. |
+| `Asset Cost Basis` | Float | Total original capital committed ($\text{Shares} \times \text{Average Buy Price}$). |
+| `Current Value` | Float | Standard live market value of the stock holdings ($\text{Shares} \times \text{Current Price}$). |
 | `P&L ($)` | Float | Nominal dollars returned to date. |
-| `Sizing Risk Weight (%)` | Float | Portion of targeted Portfolio Value ($\text{Net Liq}$) allocated to this contract. |
-| `Beta Sector Tag` | String| Sector classification identifier, utilized to compute aggregate technology industry limits. |
-| `Days Held` | Int | Incremental tracker checking how long positions are maintained for structural time halts. |
-| `Stalling Days` | Int | Standard sequential counter storing days of insufficient momentum. |
-| `Underlier Spot` | Float | Underlier's Spot price at the time of the portfolio trailing stops update. |
-| `Entry Date` | String | Date of options position entry formatted as `YYYY-MM-DD` sequence. |
+| `P&L (%)` | Float | Relative total return calculated directly from cost basis and current spot price. |
+| `Sizing Risk Weight (%)`| Float | Portion of Portfolio Net Liquidity value allocated to this stock holding. |
+| `Entry Date` | String | Date of stock position manually registered formatted in `YYYY-MM-DD` sequence. |
 
 ---
 
@@ -374,16 +415,20 @@ The cache file [data/regime.json](data/regime.json) holds the recomputed results
 ### Schema Definition
 ```json
 {
-  "spy_change_pct": -0.309,
-  "qqq_change_pct": 0.283,
   "basket_gate": "FAIL",
-  "bull_count": 3,
-  "bear_count": 12,
-  "bull_bear_ratio": 0.25,
   "bull_bear_gate": "FAIL",
   "vix_spot": 16.9,
   "vix_delta_gate": "FAIL",
   "system_authorization": "BLOCKED",
+  "etf_details": {
+    "SPY": {
+      "Ticker": "SPY",
+      "ETF Segment / Sector Name": "S&P 500 Broad Market",
+      "Price": 745.34,
+      "Daily Change %": -0.3090,
+      "Classification": "BEARISH"
+    }
+  },
   "last_updated": "2026-07-08"
 }
 ```
@@ -392,16 +437,12 @@ The cache file [data/regime.json](data/regime.json) holds the recomputed results
 
 | Field | Type | Description |
 | :--- | :--- | :--- |
-| `spy_change_pct` | Float | Session percent change for SPY S&P 500 ETF. |
-| `qqq_change_pct` | Float | Session percent change for QQQ Nasdaq 100 ETF. |
 | `basket_gate` | String | Broad market threshold evaluation: `"PASS"` if SPY or QQQ $> +0.5\%$, otherwise `"FAIL"`. |
-| `bull_count` | Int | Count of underlying sector ETFs displaying positive session performance ($> +0.1\%$). |
-| `bear_count` | Int | Count of underlying sector ETFs displaying negative session performance ($< -0.1\%$). |
-| `bull_bear_ratio` | Float | Ratio of bullish to bearish sectors. Resolves to `999.0` as a sentinel ratio when bears equal 0. |
-| `bull_bear_gate` | String | Broad-market breadth indicator check: `"PASS"` if `bull_bear_ratio` $> 3.0$, otherwise `"FAIL"`. |
+| `bull_bear_gate` | String | Broad-market breadth indicator check: `"PASS"` if the bullish-to-bearish ratio $> 3.0$, otherwise `"FAIL"`. |
 | `vix_spot` | Float | Value of the spot CBOE Volatility index. |
 | `vix_delta_gate` | String | Volatility positioning check: `"PASS"` if VIX spot is below prior-close or proxy daily change (UVXY/VXX) is negative. |
 | `system_authorization`| String | Trading mode clearance output: `"ALL TRACKS OK"`, `"TRACK 1 OK"`, or `"BLOCKED"`. |
+| `etf_details` | Object | Scope-limited object dictionary mapping symbols to Ticker, ETF Segment / Sector Name, Price, Daily Change % and Classification. |
 | `last_updated` | String | Timestamp recording date of the regime calculation in `YYYY-MM-DD` sequence. |
 
 ---

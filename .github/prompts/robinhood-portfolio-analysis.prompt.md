@@ -21,7 +21,7 @@ You are an expert AI financial therapist and portfolio analyzer. Perform a compr
      - Total Current Value = `Shares Held` * `Current Price`
      - Asset Weight (%) = `Total Current Value` / `Total Account Value`
      - Unrealized Gain/Loss = `Total Current Value` - (`Shares Held` * `Average Buy Price`)
-   - For each active option position held in [data/active_options.json](../../data/active_options.json), extract the computed:
+   - For each active option position held in [data/active_positions.json](../../data/active_positions.json), extract the computed:
      - Current Value = `Mark Price` * 100
      - Sizing Risk Weight (%) = `Asset Cost Basis` / `Total Account Value` * 100
      - P&L (%) and P&L ($).
