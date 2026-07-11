@@ -20,8 +20,11 @@ Your job is to derive the daily candidate universe from Robinhood scanners and l
 ---
 
 ### Step 1: Query or Create Scans
-1. Call `robinhood-trading/get_scans` to identify existing saved breakout/momentum scans.
-2. If no saved scans exist, verify or create a scan definition using `robinhood-trading/create_scan` with built-in presets such as `HIGH_OPTIONS_VOLUME_IV` or `DAILY_GAINERS`.
+1. Call `robinhood-trading/get_scans` to identify existing saved breakout, momentum, and catalyst scans.
+2. Verify or ensure the following standard scans exist (create them using `robinhood-trading/create_scan` if missing):
+   - `"Upcoming Earnings GEX"`: Sourced with the `UPCOMING_EARNINGS` preset. Filters for companies with earnings announcements scheduled in the next 7 days, capturing high pre-earnings IV expansion and positioning.
+   - `"GEX Momentum Candidates"`: Sourced with the `DAILY_GAINERS` preset (or standard momentum setups).
+   - `"High options volume and IV"`: Sourced with the `HIGH_OPTIONS_VOLUME_IV` preset.
    - **Important Scanner Constraint**: Because custom `filter_type` enums are not discoverable, do *not* specify programmatic filter fields. Create with a preset, and run it. The custom criteria will be applied locally on the returned results.
 
 ---
@@ -52,10 +55,14 @@ Apply the baseline GEX filtering manually on the raw columns of the returned res
 
 ---
 
-### Step 5: Save State & Update Candidate DB
-Write the final candidate pool to [data/candidate_stocks.json](../../data/candidate_stocks.json) as a **full replacement** — do not merge with any prior contents.
-Using the virtual environment's Python, invoke:
-`python3 src/gex_engine.py update-candidates` (which automatically discovers and parses any valid scans saved in the repository under [data/scans/](../../data/scans/)).
+### Step 5: Save State, Update Candidate DB, & Watchlist Synchronization
+1. **Save Candidate DB**: Write the final candidate pool to [data/candidate_stocks.json](../../data/candidate_stocks.json) as a **full replacement** — do not merge with any prior contents.
+   Using the virtual environment's Python, invoke:
+   `python3 src/gex_engine.py update-candidates` (which automatically discovers and parses any valid scans saved in the repository under [data/scans/](../../data/scans/)).
+2. **Broker Watchlist Sync (The Mobile Bridge)**:
+   - Call `robinhood-trading/get_watchlists` to check for the existence of watchlists named `"GEX_DAILY_CANDIDATES"` and `"GEX_ACTIVE_PORTFOLIO"`. If missing, create them using `robinhood-trading/create_watchlist`.
+   - Clear existing stale tickers on `"GEX_DAILY_CANDIDATES"` by calling `robinhood-trading/remove_from_watchlist` in sequence (or as batches).
+   - Dynamic Sync: Add all newly generated candidate symbols with `Screen Passed` status to `"GEX_DAILY_CANDIDATES"` using `robinhood-trading/add_to_watchlist`. This ensures that candidates are pushed directly to the user's Robinhood mobile or Legend app for real-time mobile push-alert tracking.
 
 #### Structure:
 ```json
@@ -99,6 +106,7 @@ Format the candidate generation results following the visual guidelines:
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 | TICKER | scanner / watchlists | $X.XX | +Y.YY% | $C.CC B | $V.VV M | 📈 Screen Passed |
 
-### 💾 Persisted Artifacts:
+### 💾 Persisted Artifacts & Syncing Details:
 - Overwrote active pool inside [data/candidate_stocks.json](../../data/candidate_stocks.json)
+- **Synchronized Broker Watchlists**: Successfully cleared and synchronized candidate list back to your `"GEX_DAILY_CANDIDATES"` watchlist on Robinhood Mobile & Legend software.
 ```

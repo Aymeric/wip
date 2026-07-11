@@ -20,10 +20,12 @@ Your job is to strictly enforce portfolio tracking mechanics, evaluate existing 
 
 ---
 
-### Step 1: Sync Live Positions & P&L Trade History from Robinhood
+### Step 1: Sync Live Positions, Trade History, & Realized P&L from Robinhood
 1. **Fetch Active Accounts**: Call `get_accounts`. The primary options-trading account in this workspace is typically `"5QR24141"` (margin, individual, option_level_3).
 2. **Retrieve Live Positions**: Call `robinhood-trading/get_option_positions` and `robinhood-trading/get_equity_positions` sequentially.
-3. **Retrieve Live Trade History**: Call `robinhood-trading/get_pnl_trade_history` (with the retrieved `account_number`) to fetch the customer's chronological closed/realized trades. Save this raw payload to a file inside the date-specific raw downloads folder (e.g. `data/downloads/YYYYMMDD/pnl_trade_history.json`).
+3. **Retrieve Live Trade History & Realized P&L**: 
+   - Call `robinhood-trading/get_pnl_trade_history` (with the retrieved `account_number`) to fetch the customer's chronological closed/realized trades. Save this raw payload to a file inside the date-specific raw downloads folder (e.g. `data/downloads/YYYYMMDD/pnl_trade_history.json`).
+   - Call `robinhood-trading/get_realized_pnl` (with the retrieved `account_number`, asset_classes `["equity", "option"]`, span `"month"`) to retrieve the 30-day realized performance metrics from the broker. Save this raw payload to `data/downloads/YYYYMMDD/realized_pnl_monthly.json`.
 4. **Sync Closed Positions**: Run the CLI subcommand `python3 src/gex_engine.py sync-pnl` to process the trade history, automatically detect any recently closed stocks and options positions, calculate their realized P&L, and move them from [data/active_positions.json](../../data/active_positions.json) to `data/closed_positions.json`. This cleans out closed names so they are not mistakenly tracked as active.
 5. **Lookup Contract Stats**: Walk through the remaining active option positions in the updated [data/active_positions.json](../../data/active_positions.json) and extract their option instrument IDs.
    - **Strict Grouping constraint**: Chunk option contract IDs into batches of **at most 40 contract IDs** per query to prevent HTTP 414 errors.
@@ -49,12 +51,14 @@ For each active option, inspect underlier spots against historical bounds cached
 
 ---
 
-### Step 3: Sizing and Sector Concentration Grader
-Enforce portfolio asset allocation limits to contain systemic drawdown:
+### Step 3: Sizing, Drawdown & Sector Concentration Grader
+Enforce portfolio asset allocation limits and drawdown gates to contain systemic risk:
 
 - **Single Option Asset Limit**: Limit single-leg options allocation to at most $3.00\%$ of Net Liquidation Value per position.
 - **Technology Sector Bias limit**: Cap aggregate high-beta technology sector exposure at a maximum of $15.00\%$ to protect portfolio collateral.
 - **Cash Reserve Requirement**: Maintain solid liquidity cash buffers for defensive needs.
+- **Monthly Realized Drawdown Gate**: Check the 30-day realized P&L returned by `get_realized_pnl` against the Net Liquidation Value.
+  - If the absolute 30-day realized loss exceeds **$10.00\%$** of Net Liquidation Value, flag a strict **MAX LOSS DRAWDOWN BLOCK** in the report. This block must immediately suspend any new candidate purchases (blocking them from passing system authorization bounds).
 
 Apply the **Portfolio Recommendation Framework**:
 - **Trim or Reduce**: Any position exceeding $15.00\text{--}20.00\%$ of net liquidation value to contain concentration risk.
@@ -65,11 +69,17 @@ Apply the **Portfolio Recommendation Framework**:
 ### Step 4: Run GEX Portfolio Engine and Render Report
 1. **Fetch CLI Portfolio View**: Query the aggregate holdings stats and verified stops by running the portfolio subcommand (note that since `sync-pnl` was executed in Step 1, closed positions are already properly moved and archived):
    `python3 src/gex_engine.py portfolio`
-2. **Render Risk Management Report**: Format the holdings analysis below:
+2. **Render Risk Management Report**: Format the holdings and performance analysis below:
 
 #### Layout:
 ```markdown
 ## GEX Portfolio risk & holdings Report - [Current Date]
+
+### 📈 Live Brokerage P&L Performance Dashboard:
+- **Monthly Realized P&L**: [-$X,XXX.XX / +$X,XXX.XX] ([P&L %]) over [N] closing trades
+- **Equities Realized P&L**: [-$X.XX / +$X.XX]
+- **Options Realized P&L**: [-$X.XX / +$X.XX]
+- **Monthly Drawdown Gate Status**: 🟢 PASS (Realized drawdown within safe parameters) / 🔴 FAIL - MAX LOSS DRAWDOWN BLOCK ACTIVE (New entries prohibited)
 
 ### 📂 Live Portfolio Balance & Sizing Dashboard:
 | Contract ID / Symbol | Asset Class | Entry Mark | Current Mark | Holding P&L % | Weight (% Net Liq) | Watchdog Status |
@@ -93,4 +103,5 @@ Apply the **Portfolio Recommendation Framework**:
 ### 💾 Persisted Artifacts:
 - Live position update written directly to [data/active_positions.json](../../data/active_positions.json)
 - Closed and archived positions persisted in [data/closed_positions.json](../../data/closed_positions.json) via `sync-pnl`
+- Saved quarterly and monthly realized reports to [data/downloads/](../../data/downloads/)
 ```

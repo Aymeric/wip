@@ -23,11 +23,15 @@ Before drafting any order, confirm trading clearance:
 
 ---
 
-### Step 2: Asset-specific Verification & Tradability Safeguard
+### Step 2: Asset-specific Verification & Tax-Optimized Sourcing
 
 #### For Equities (Stocks/ETFs):
 1. Before drafting any trade, call `robinhood-trading/get_equity_tradability` with the target symbol and the active account number.
 2. Confirm fractional share support or active constraints listed by the exchange.
+3. **Tax-Optimized Lot Harvesting (SELL orders only)**: 
+   - Call `robinhood-trading/get_equity_tax_lots` with the target symbol and the active account number.
+   - Filter and prioritize the returned lots to identify high-cost-basis lots (to minimize capital gains / harvest tax losses) or long-term lots (held $> 365$ days) to optimize tax impact.
+   - Map these lots to build a structures `tax_lots` parameter containing `[{open_lot_id, quantity}]` tuples that sum up exactly to the total exit share quantity.
 
 #### For Options:
 1. Identify if the account has option levels enabled (`option_level_2` or `option_level_3`). If-empty, stop and instruct on options elevation.
@@ -42,12 +46,12 @@ Before drafting any order, confirm trading clearance:
 ### Step 3: Simulate Order Reviews (Preflight Dry-run)
 
 #### For Equities (Stocks/ETFs):
-1. Call `robinhood-trading/review_equity_order` to perform a dry-run check.
+1. Call `robinhood-trading/review_equity_order` to perform a dry-run check. Incorporate the `tax_lots` structure prepared in Step 2 if routing a sell order.
 2. If fetching quotes, check both `last_trade_price` and `last_non_reg_trade_price` from the quote results. If the timestamp `venue_last_non_reg_trade_time` is more recent than `venue_last_trade_time`, prefer the non-regular extended trading hours price `last_non_reg_trade_price` as the current spot price; otherwise, use `last_trade_price`.
 3. Standardize a **marketable limit order** (placing the limit at the current ask is preferred over a market order to prevent price slippage).
 
 #### For Options:
-1. Call `robinhood-trading/review_option_order` with the selected `chain_symbol`, `legs` listing the `option_id`, `side` (`buy`), and `position_effect` (`open`).
+1. Call `robinhood-trading/review_option_order` with the selected `chain_symbol`, `legs` listing the `option_id`, `side` (`buy` or `sell`), and `position_effect` (`open` or `close`).
 2. Log and review:
    - Greeks, Greeks changes, Implied Volatility (IV), and bid-ask spreads.
    - Estimated premium and option buying power impact.
@@ -55,10 +59,16 @@ Before drafting any order, confirm trading clearance:
 
 ---
 
-### Step 4: Secure order placement
+### Step 4: Secure Order Placement & Watchdog Restriking
+
 1. Avoid placing trades without user confirmation. Pause and clearly present the simulated contract specs and values. If they explicitly configured "skip review", you can proceed without pausing.
 2. Generate a unique UUID `ref_id` for idempotency protection.
 3. Call `robinhood-trading/place_equity_order` or `robinhood-trading/place_option_order`.
+4. **Order Watchdog & Restrike Mechanism**:
+   - Once placed, monitor the order status for up to **90 seconds** by calling `robinhood-trading/get_option_orders` or `robinhood-trading/get_equity_orders`.
+   - If the order remains unfilled (`unconfirmed`, `queued`, or `confirmed` but resting) and the bid-ask spreads or underlying spot price has shifted more than $1.50\%$ away from the limit level making a fill improbable:
+     - Invoke `robinhood-trading/cancel_option_order` to cancel the resting option order.
+     - Prompt the user to authorize an adjusted **restrike limit price** based on the updated bid-ask midpoints.
 
 ---
 
@@ -88,8 +98,8 @@ Format a concise order execution report following layout parameters:
 - **Estimated Cash Balance / Buying Power**: $C,CC
 
 ### 📊 Pre-Trade Contract Specs:
-- **Symbol & Contract**: [Ticker / Option ID]
-- **Trade Side / Action**: [BUY Open / SELL Close]
+- **Symbol & Contract**: [Ticker / Option ID / Selected Tax Lots]
+- **Trade Side / Action**: [BUY Open / SELL Close (Tax-Harvested)]
 - **Simulated Spot Price**: $S.SS (checking regular vs. non-regular hours price)
 - **Bid-Ask Spread Margin**: $W.WW wide (Mark: $M.MM, Bid: $B.BB, Ask: $A.AA)
 - **Recommended Limit Level**: $L.LL
@@ -99,7 +109,8 @@ Format a concise order execution report following layout parameters:
 - **Capital Cost Basis**: $N,NNN.NN
 - **PDT / Day-Trading Alert Status**: [OK / Warning]
 
-### 🏁 Transaction Status: 🟢 ORDER PLACED / 🟡 REVIEWING USER RESPONSE / 🔴 ABORTED
+### 🏁 Watchdog & Transaction Status: 🟢 ORDER PLACED / 🟡 RESTRIKING ORDER / 🔴 ABORTED
 - **Order ID / Ref Key**: `ref-uuid-xxxx-xxxx`
 - **GEX Engine database updated**: Merged position to [data/active_positions.json](../../data/active_positions.json) (or moved/archived to [data/closed_positions.json](../../data/closed_positions.json) if closure)
+- **Broker Tax Lots Specified**: [Lot IDs and tax loss harvested details or 'Default FIFO']
 ```

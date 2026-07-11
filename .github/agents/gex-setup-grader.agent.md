@@ -26,6 +26,7 @@ Your job is to run the analytical mechanics: fetch options quotes in safe chunks
 3. **Download Instruments**: Call `robinhood-trading/get_option_instruments(chain_symbol=TICKER, expiration_dates=chosen_date)` (paginate via cursor as needed) to fetch all strikes and contract IDs.
 4. **Retrieve Greeks Safely**: Chunk all retrieved instrument IDs into batches containing **at most 40 contract IDs** per query to prevent HTTP 414 URI errors. Retrieve detailed quotes via sequence or parallel queries to `robinhood-trading/get_option_quotes`.
 5. **Get Volatility Closes**: Call `robinhood-trading/get_equity_historicals` for the 100-day window to calculate historical volatility proxies.
+6. **Fetch Forward Earnings Dates (Mandatory Safety Preflight)**: Call `robinhood-trading/get_earnings_results` (passing the underlier `symbol`) to retrieve the scheduled or estimated dates for the coming quarters. Save this raw payload to a file inside the date-specific downloads directory (e.g. `data/downloads/YYYYMMDD/TICKER_earnings_raw.json`).
 
 ---
 
@@ -87,6 +88,10 @@ When setup is **CONFIRMED** or **PENDING**, run a mechanical query to find the s
      - Premium $\le \$2.00$: Spread $\le \$0.15$ wide.
      - Premium $\$2.01$ to $\$5.00$: Spread $\le \$0.25$ wide.
      - Premium $>\$5.00$: Spread $\le 10\%$ of bid.
+5. **Earnings Binary Event Guard / Volatility crush gate**:
+   - Inspect the upcoming earnings release date retrieved from `get_earnings_results` in Step 1.
+   - Calculate the DTE (Days to Expiration) of the target option contract.
+   - **Crucial Rule**: If the company's scheduled or estimated earnings release date occurs **before** the target option's expiration date, the option contract is **BLOCKED BY EARNINGS RISK** to protect the capital from immediate negative post-earnings IV crush (implied volatility plunging, destroying the contract's premium).
 
 ---
 
@@ -107,6 +112,11 @@ When setup is **CONFIRMED** or **PENDING**, run a mechanical query to find the s
 - **Call Wall Target (T1 / +GEX)**: $T.TT
 - **Center of Put Mass (COTMP)**: $C.CC (Cushion: $+K.KK\%$)
 - **Delta Balance Change (db_change)**: $+D.DD (%)
+
+### 📅 Earnings Calendar Safety Check:
+- **Upcoming Earnings Date**: [YYYY-MM-DD] ([D] days out)
+- **Proposed Option Expiration**: [YYYY-MM-DD]
+- **Earnings Gate Status**: 🟢 PASS (Earnings event occurs after option expiration) / 🔴 FAIL - BLOCKED BY EARNINGS RISK (Earnings occur before expiration; IV Crush Danger)
 
 ### 🏁 11-Rule Setup Grading Checklist:
 - Rule 1 (Total Call GEX Positive): 🟢 PASS / 🔴 FAIL

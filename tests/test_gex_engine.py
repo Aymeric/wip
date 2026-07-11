@@ -1245,5 +1245,80 @@ class TestGEXEngine(unittest.TestCase):
             if os.path.exists(closed_path):
                 os.remove(closed_path)
 
+    def test_rankings_command(self):
+        """Test GEX ticker setup rankings and report command."""
+        import tempfile
+        from unittest.mock import patch, MagicMock
+        import gex_engine
+
+        with tempfile.NamedTemporaryFile(suffix=".json", delete=False) as tmp_analyses:
+            analyses_path = tmp_analyses.name
+        try:
+            # Seed Analyses (GEX entries)
+            gex_engine.save_json(analyses_path, {
+                "AAPL": {
+                    "Ticker": "AAPL",
+                    "Spot": 315.0,
+                    "Grade": 11,
+                    "pTrans": 310.0,
+                    "nTrans": 305.0,
+                    "+GEX": 330.0,
+                    "COTMP": 300.0,
+                    "db_change": 0.55,
+                    "COTMP Cushion": 5.0,
+                    "Risk/Reward": 3.0,
+                    "Signal Status": "CONFIRMED"
+                },
+                "TSLA": {
+                    "Ticker": "TSLA",
+                    "Spot": 240.0,
+                    "Grade": 8,
+                    "pTrans": 250.0,
+                    "nTrans": 240.0,
+                    "+GEX": 260.0,
+                    "COTMP": 235.0,
+                    "db_change": 0.20,
+                    "COTMP Cushion": 2.13,
+                    "Risk/Reward": 0.8,
+                    "Signal Status": "BLOCKED (Grade <= 8)"
+                }
+            })
+
+            with patch('gex_engine.ANALYSES_FILE', analyses_path), patch('sys.stdout') as mock_stdout:
+                mock_stdout.isatty = MagicMock(return_value=False)
+                
+                class RankingsArgs:
+                    status = "ALL"
+                    min_grade = None
+                    sort = "grade"
+                
+                gex_engine.cmd_rankings(RankingsArgs())
+                
+                # Check printed output contents
+                output = "".join(call.args[0] for call in mock_stdout.write.call_args_list if call.args)
+                self.assertIn("GEX Setup Rankings & Report", output)
+                self.assertIn("AAPL", output)
+                self.assertIn("TSLA", output)
+                self.assertIn("CONFIRMED", output)
+                self.assertIn("BLOCKED", output)
+                self.assertIn("GEX Setup Database Metrics Summary", output)
+                
+                # Try filtering by CONFIRMED status
+                class RankingsFilterArgs:
+                    status = "CONFIRMED"
+                    min_grade = 9
+                    sort = "grade"
+                
+                mock_stdout.reset_mock()
+                gex_engine.cmd_rankings(RankingsFilterArgs())
+                output_filtered = "".join(call.args[0] for call in mock_stdout.write.call_args_list if call.args)
+                self.assertIn("AAPL", output_filtered)
+                self.assertNotIn("TSLA", output_filtered)
+
+        finally:
+            if os.path.exists(analyses_path):
+                os.remove(analyses_path)
+
+
 if __name__ == '__main__':
     unittest.main()

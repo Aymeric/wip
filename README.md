@@ -74,8 +74,8 @@ graph TD
     Orchestrator -->|1. Compute Regime Gates| Analyst[market-regime-analyst.agent.md<br/>Regime Gates & Volatility]
     Orchestrator -->|2. Sync Positions & Enforce Trailing Stops| Risk[portfolio-risk-manager.agent.md<br/>Risk & Allocation Stop-Losses]
     Orchestrator -->|3. Generate Candidates| Generator[gex-candidate-generator.agent.md<br/>Scanner & List Filtration]
-    Orchestrator -->|4. Grade Underliers & Isolate Calls| Grader[gex-setup-grader.agent.md<br/>Option-Chain GEX Derivation]
-    Orchestrator -->|5. Scan Social Sentiment Hype| Reddit[reddit-sentiment-analyst.agent.md<br/>Reddit Forum Scraper]
+    Orchestrator -->|4. Scan Social Sentiment Hype| Reddit[reddit-sentiment-analyst.agent.md<br/>Reddit Forum Scraper]
+    Orchestrator -->|5. Grade Underliers & Isolate Calls| Grader[gex-setup-grader.agent.md<br/>Option-Chain GEX Derivation]
     Orchestrator -->|6. Perform Secure Agentic Bids/Asks| Trader[agentic-trader.agent.md<br/>Agentic Order Placer]
     Orchestrator -->|7. Intraday Multi-Timeframe Checks| Futures[futures-trading-analyst.agent.md<br/>Futures Strategy Analyst]
     
@@ -93,14 +93,14 @@ graph TD
    - **Role**: Primary entry point. Orchestrates the end-to-end workflow, manages interactive chat boundaries, and provides high-level mechanical grading summaries.
 2. **Market Regime Analyst** ([.github/agents/market-regime-analyst.agent.md](.github/agents/market-regime-analyst.agent.md))
    - **Role**: Validates Daily Regime Gates (Basket Gate, Bull:Bear breadth ETF pool, VIX spot/proxy compression check) and logs warning reports for credit overlays (HYG).
-3. **GEX Candidate Generator** ([.github/agents/gex-candidate-generator.agent.md](.github/agents/gex-candidate-generator.agent.md))
-   - **Role**: Sources candidates from saved Robinhood scanners and sequential-safe watchlist retrieves (100 most popular, Daily movers, Popular recurring investments, IPO Access), applies manual screening parameter buffers, and filters active open positions.
-4. **GEX Setup Grader** ([.github/agents/gex-setup-grader.agent.md](.github/agents/gex-setup-grader.agent.md))
-   - **Role**: Computes mathematical proxies (pTrans, nTrans, +GEX, COTMP, realized/implied volatilities) from safe 40-contract chunk option chains, grades setup profiles out of 11 system rules, and isolates specific highly liquid ATM/OTM target call contracts matching strict bid-ask limits.
-5. **Portfolio Risk Manager** ([.github/agents/portfolio-risk-manager.agent.md](.github/agents/portfolio-risk-manager.agent.md))
+3. **Portfolio Risk Manager** ([.github/agents/portfolio-risk-manager.agent.md](.github/agents/portfolio-risk-manager.agent.md))
    - **Role**: Syncs active options and stock positions live, tracks holdings, enforces the strict priority-ordered exit stops framework (nTrans, -10% cost basis, 7-day time halving, stalls), and guards technology sector portfolio allocation boundaries ($\le 15.0\%$ cumulative).
-6. **Reddit Sentiment Analyst** ([.github/agents/reddit-sentiment-analyst.agent.md](.github/agents/reddit-sentiment-analyst.agent.md))
+4. **GEX Candidate Generator** ([.github/agents/gex-candidate-generator.agent.md](.github/agents/gex-candidate-generator.agent.md))
+   - **Role**: Sources candidates from saved Robinhood scanners and sequential-safe watchlist retrieves (100 most popular, Daily movers, Popular recurring investments, IPO Access), applies manual screening parameter buffers, and filters active open positions.
+5. **Reddit Sentiment Analyst** ([.github/agents/reddit-sentiment-analyst.agent.md](.github/agents/reddit-sentiment-analyst.agent.md))
    - **Role**: Sweeps wallstreetbets, stocks, options, investing, and spacs forums live to calculate sentiment scores ($\pm 1.0$) and discussion volume buzz, projecting retail hype against dealer call walls to generate FOMO/capitulation divergence alerts.
+6. **GEX Setup Grader** ([.github/agents/gex-setup-grader.agent.md](.github/agents/gex-setup-grader.agent.md))
+   - **Role**: Computes mathematical proxies (pTrans, nTrans, +GEX, COTMP, realized/implied volatilities) from safe 40-contract chunk option chains, grades setup profiles out of 11 system rules, and isolates specific highly liquid ATM/OTM target call contracts matching strict bid-ask limits.
 7. **Agentic Trader** ([.github/agents/agentic-trader.agent.md](.github/agents/agentic-trader.agent.md))
    - **Role**: Validates agentic account permissions, performs asset tradability checks, simulates reviews (dry-runs), places broker limit orders (equities/options), and registers positions securely in the local database.
 8. **Futures Trading Analyst** ([.github/agents/futures-trading-analyst.agent.md](.github/agents/futures-trading-analyst.agent.md))
@@ -120,12 +120,12 @@ This workspace is structured as follows:
    - [data/active_positions.json](data/active_positions.json): Records open options positions, premium tracking, holding period, and stalling status. See the [data/active_positions.json](data/active_positions.json) [Schema Documentation](#-dataactive_positionsjson-schema-documentation) below for the complete specification.
    - [data/reddit_sentiment.json](data/reddit_sentiment.json): Local storage for Reddit social sentiment volume metrics and narrative catalysts per ticker.
 3. **Specialized Copilot Subagents** (located in the [.github/agents/](.github/agents/) directory):
-   - [.github/agents/gex-orchestrator.agent.md](.github/agents/gex-orchestrator.agent.md): Primary user-facing orchestrator. Coordinates the automated end-to-end mechanical evaluation workflow and coordinates setup grading.
+   - [.github/agents/gex-orchestrator.agent.md](.github/agents/gex-orchestrator.agent.md): Primary user-facing orchestrator. Coordinates the automated end-to-end evaluation workflow and coordinates setup grading.
    - [.github/agents/market-regime-analyst.agent.md](.github/agents/market-regime-analyst.agent.md): Computes indexing regime gates (Basket Gate, Bull:Bear sector ETF ratios, VIX/proxy compression checks) and monitors HYG credit spreads.
+   - [.github/agents/portfolio-risk-manager.agent.md](.github/agents/portfolio-risk-manager.agent.md): Syncs option/stock positions live, tracks holdings, enforces strict priority-ordered exits (nTrans support, -10% stop, time stops, stalling indicators), and guards portfolio net collateral allocation limits.
    - [.github/agents/gex-candidate-generator.agent.md](.github/agents/gex-candidate-generator.agent.md): Automates ingestion of saved filters and sequential list retrieval to construct and prioritize candidate databases.
-   - [.github/agents/gex-setup-grader.agent.md](.github/agents/gex-setup-grader.agent.md): Extracts structural GEX proxies (pTrans, nTrans, +GEX, COTMP) from chunked option chain sweeps, runs the 11-rule checklists, and isolates optimal liquid call contracts.
-   - [.github/agents/portfolio-risk-manager.agent.md](.github/agents/portfolio-risk-manager.agent.md): Pulls allocations live, enforces structural/trailing exits (nTrans support, -10% stop, 7-day limit, stalling indicators), and guards portfolio Net Liq concentration budgets.
    - [.github/agents/reddit-sentiment-analyst.agent.md](.github/agents/reddit-sentiment-analyst.agent.md): Conducts social polling across r/wallstreetbets, r/options, and r/stocks using `mcp-reddit` to map crowd polarity scores ($\pm 1.0$) against GEX support/barrier walls.
+   - [.github/agents/gex-setup-grader.agent.md](.github/agents/gex-setup-grader.agent.md): Extracts structural GEX proxies (pTrans, nTrans, +GEX, COTMP) from chunked option chain sweeps, runs the 11-rule checklists, and isolates optimal liquid call contracts.
    - [.github/agents/agentic-trader.agent.md](.github/agents/agentic-trader.agent.md): Runs pre-trade clearance checks, reviews option spreads, reviews contract liquidity, simulates dry-runs, and routes secure limit orders.
    - [.github/agents/futures-trading-analyst.agent.md](.github/agents/futures-trading-analyst.agent.md): Evaluates economic catalysts, trends, Initial Balance boundaries, and calculates precise contract-sizing parameters.
 4. **Specialized Copilot Prompt Manifests (Delegation Layer)** (located in the [.github/prompts/](.github/prompts/) directory):
@@ -220,6 +220,12 @@ python3 src/gex_engine.py sentiment
 python3 src/gex_engine.py update-sentiment <ticker> --score <score> --buzz <buzz> --narrative <narrative>
 ```
 *(Options for `--buzz` include `High`, `Medium`, `Low`, or `None`. `--score` must be between `-1.0` (capitulation/panic) and `+1.0` (FOMO/euphoria).)*
+
+#### Display a beautiful ranked report of all historically analyzed ticker setups:
+```bash
+python3 src/gex_engine.py rankings [--status <ALL/CONFIRMED/PENDING/BLOCKED>] [--min-grade <0-11>] [--sort <grade/spot/cushion/rr/status>]
+```
+*(This loads all historically stored quantitative candidate gradings inside [data/ticker_analyses.json](data/ticker_analyses.json), filters them by minimum grade or signal status, sorts them according to your custom preferences, and renders a stunningly aligned terminal board including current execution-readiness validations).*
 
 ---
 
@@ -476,6 +482,98 @@ The cache file [data/active_positions.json](data/active_positions.json) acts as 
 | `P&L (%)` | Float | Relative total return calculated directly from cost basis and current spot price. |
 | `Sizing Risk Weight (%)`| Float | Portion of Portfolio Net Liquidity value allocated to this stock holding. |
 | `Entry Date` | String | Date of stock position manually registered formatted in `YYYY-MM-DD` sequence. |
+
+---
+
+## 🗄️ [data/closed_positions.json](data/closed_positions.json) Schema Documentation
+
+The cache file [data/closed_positions.json](data/closed_positions.json) acts as the local storage layer tracking closed and archived options contracts and stock holdings, along with closure dates, final realized profits/losses, and reasons for exit.
+
+### Schema Definition
+```json
+{
+  "closed_options": [
+    {
+      "Option ID": "79cd3800-e848-4d58-8997-308576acad72",
+      "Underlier": "SLS",
+      "Strike": "14.00",
+      "Expiration": "2026-10-16",
+      "Type": "call",
+      "Purchase Premium": "7.44",
+      "Delta": "0.4500",
+      "Gamma": "0.0120",
+      "Mark Price": 6.80,
+      "Open Interest": 1317,
+      "ImpVol": "0.4500",
+      "Asset Cost Basis": 744.0,
+      "Current Value": 680.0,
+      "P&L (%)": -8.60,
+      "P&L ($)": -64.0,
+      "Beta Sector Tag": "Healthcare",
+      "Days Held": 9,
+      "Stalling Days": 0,
+      "Underlier Spot": 13.50,
+      "Entry Date": "2026-07-01",
+      "Close Premium": 6.80,
+      "Close Date": "2026-07-10",
+      "Realized P&L ($)": -64.0,
+      "Realized P&L (%)": -8.60,
+      "Close Reason": "Detected closed via trade history sync"
+    }
+  ],
+  "closed_stocks": [
+    {
+      "Ticker": "AMZN",
+      "Shares": 50.0,
+      "Average Buy Price": 217.80,
+      "Current Price": 245.44,
+      "Beta Sector Tag": "Consumer Cyclical",
+      "Entry Date": "2026-07-09",
+      "Asset Cost Basis": 10890.0,
+      "Current Value": 12272.0,
+      "P&L ($)": 1382.00,
+      "P&L (%)": 12.69,
+      "Sizing Risk Weight (%)": 21.78,
+      "Close Price": 245.44,
+      "Close Date": "2026-07-10",
+      "Realized P&L ($)": 1382.0,
+      "Realized P&L (%)": 12.69,
+      "Close Reason": "Detected closed via trade history sync"
+    }
+  ]
+}
+```
+
+### Parameter Details (Closed Options)
+
+| Field | Type | Description |
+| :--- | :--- | :--- |
+| `Option ID` | String | Unique contract tracking UUID sourced from Robinhood. |
+| `Underlier` | String | Capitalized ticker symbol of the underlying equity asset (e.g. `SLS`). |
+| `Strike` | String | Option contract target purchase strike price. |
+| `Expiration` | String | Contract maturity date encoded in `YYYY-MM-DD` sequence. |
+| `Type` | String | Option transaction parameter: `"call"` or `"put"`. |
+| `Purchase Premium` | Decimal | Premium price per contract paid on order execution. |
+| `Asset Cost Basis` | Float | Total original purchase capital committed ($\text{Purchase Premium} \times 100$). |
+| `Close Premium` | Float | Premium price per contract received on order closure. |
+| `Close Date` | String | Date of option closure formatted in `YYYY-MM-DD` sequence. |
+| `Realized P&L ($)` | Float | Absolute nominal dollars realized from option closure ($\text{Close Premium} - \text{Purchase Premium}$) $\times 100$. |
+| `Realized P&L (%)` | Float | Relative total return percentage realized upon option closure. |
+| `Close Reason` | String | Explicit reason details for closing/archiving (e.g. `"Detected closed via trade history sync"`). |
+
+### Parameter Details (Closed Stocks)
+
+| Field | Type | Description |
+| :--- | :--- | :--- |
+| `Ticker` | String | Capitalized ticker symbol of the equity asset (e.g. `AMZN`). |
+| `Shares` | Float | Nominal count of stock shares held and closed. |
+| `Average Buy Price` | Float | Original purchase cost basis per individual stock share. |
+| `Asset Cost Basis` | Float | Total original capital committed ($\text{Shares} \times \text{Average Buy Price}$). |
+| `Close Price` | Float | Price received per stock share upon closure. |
+| `Close Date` | String | Date of stock position closure formatted in `YYYY-MM-DD` sequence. |
+| `Realized P&L ($)` | Float | Absolute nominal dollars realized from stock position closure ($\text{Shares} \times (\text{Close Price} - \text{Average Buy Price})$). |
+| `Realized P&L (%)` | Float | Relative total return percentage realized upon stock position closure. |
+| `Close Reason` | String | Explicit reason details for stock closure (e.g. `"Detected closed via trade history sync"`). |
 
 ---
 

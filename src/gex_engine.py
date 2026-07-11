@@ -482,6 +482,14 @@ def cmd_update_regime(args):
         spy_val, qqq_val, bulls_val, bears_val, vix_bearish_val
     )
     
+    # 3. Monthly Drawdown Gate Check
+    net_liq_val = getattr(args, "net_liq", None)
+    if net_liq_val is None:
+        net_liq_val = 50000.0
+    monthly_pnl_dlr, monthly_pnl_pct, drawdown_gate_status, monthly_cnt = get_monthly_realized_pnl(net_liq_val)
+    if drawdown_gate_status == "FAIL":
+        system_auth = "MAX LOSS DRAWDOWN BLOCK"
+    
     etf_details = cached_regime.get("etf_details", {})
     if hasattr(args, "etf_file") and args.etf_file and "found_symbols" in locals():
         etf_details = detailed_etfs
@@ -523,7 +531,11 @@ def cmd_update_regime(args):
         "system_authorization": system_auth,
         "gates_passed": gates_passed,
         "etf_details": etf_details,
-        "last_updated": datetime.today().strftime('%Y-%m-%d')
+        "last_updated": datetime.today().strftime('%Y-%m-%d'),
+        "monthly_pnl_dlr": monthly_pnl_dlr,
+        "monthly_pnl_pct": monthly_pnl_pct,
+        "drawdown_gate_status": drawdown_gate_status,
+        "monthly_cnt": monthly_cnt
     }
     
     save_json(REGIME_FILE, regime_data)
@@ -614,6 +626,19 @@ def cmd_status(args):
     print(f"- **Bull:Bear Gate**: {bbgate_status} (Ratio: {ratio_color_str}, Bulls: {regime['bull_count']} [{bull_str}], Bears: {regime['bear_count']} [{bear_str}] from {REGIME_FILE} Cache)")
     
     print(f"- **VIX Delta Gate**: {vixgate_status} (VIX Spot: {regime['vix_spot']:.2f})")
+    
+    # 30-Day Drawdown Gate Check
+    drawdown_gate_status = regime.get("drawdown_gate_status", "PASS")
+    monthly_pnl_dlr = regime.get("monthly_pnl_dlr", 0.0)
+    monthly_pnl_pct = regime.get("monthly_pnl_pct", 0.0)
+    monthly_cnt = regime.get("monthly_cnt", 0)
+    
+    drawdown_color = "32" if drawdown_gate_status == "PASS" else "31"
+    drawdown_fmt = format_color(drawdown_gate_status, drawdown_color, bold=True)
+    m_pnl_color = "32" if monthly_pnl_dlr >= 0 else "31"
+    m_pnl_fmt = format_color(f"${monthly_pnl_dlr:+,.2f} ({monthly_pnl_pct:+.2f}%)", m_pnl_color, bold=True)
+    print(f"- **Account Drawdown Gate**: {drawdown_fmt} (30-Day Realized: {m_pnl_fmt} over {monthly_cnt} closed trades)")
+    
     print(f"- **System Authorization**: {system_auth_str}")
     
     hyg_pct = regime.get("hyg_pct")
@@ -627,6 +652,39 @@ def cmd_status(args):
             print_color("\n⚠️ CREDIT DIVERGENCE DETECTED: HYG daily change of < -0.30% while equities are positive.", "33", bold=True)
             print_color("⚠️ RISK MITIGATION TRIGGERED: Reduce position sizing on new options entries by 50%.", "33", bold=True)
             
+    if etf_details:
+        print("\n### 📈 Sector & Broad Market ETF Breadth Board")
+        print("  " + "-" * 75)
+        print(f"  {'Ticker':<8} | {'ETF Segment / Sector Name':<32} | {'Daily Change':<12} | {'Classification':<12}")
+        print("  " + "-" * 75)
+        # Sort by classification (BULLISH, FLAT, BEARISH) then daily change %
+        def sort_key(x):
+            c_val = 0
+            if x.get("Classification") == "BULLISH":
+                c_val = 2
+            elif x.get("Classification") == "FLAT":
+                c_val = 1
+            else:
+                c_val = 0
+            return (c_val, float(x.get("Daily Change %", 0.0)))
+        sorted_etfs = sorted(etf_details.values(), key=sort_key, reverse=True)
+        for det in sorted_etfs:
+            ticker = det.get("Ticker", "")
+            name = det.get("ETF Segment / Sector Name", "")
+            chg = float(det.get("Daily Change %", 0.0))
+            classification = det.get("Classification", "FLAT")
+            
+            # Formats with color
+            chg_color = "32" if chg > 0.05 else ("31" if chg < -0.05 else "33")
+            class_color = "32" if classification == "BULLISH" else ("31" if classification == "BEARISH" else "33")
+            
+            chg_str = f"{chg:+.2f}%"
+            chg_fmt = format_color(f"{chg_str:<12}", chg_color, bold=True)
+            class_fmt = format_color(f"{classification:<12}", class_color, bold=True)
+            ticker_fmt = format_color(f"{ticker:<8}", "35", bold=True)
+            print(f"  {ticker_fmt} | {name:<32} | {chg_fmt} | {class_fmt}")
+        print("  " + "-" * 75)
+
     # Simple alert or summary
     if regime['system_authorization'] == "BLOCKED":
         print_color("\n🛑 SYSTEM STATUS: BLOCKED. No new entries authorized today.", "31", bold=True)
@@ -1538,6 +1596,76 @@ def compute_exit_rule_state(spot, purchase_premium, mark_price, ptrans, ntrans, 
     return exit_rule_state, proposed_action, time_status, distance_ntrans, distance_max_stop
 
 
+def get_monthly_realized_pnl(net_liq: float) -> Tuple[float, float, str, int]:
+    """
+    Computes or retrieves the trailing 30-day realized P&L from raw files.
+    First checks for realized_pnl_monthly.json under data/downloads/, 
+    otherwise falls back to parsing pnl_trade_history.json.
+    Returns (realized_pnl_dollar, realized_pnl_pct, status_string, trade_count).
+    """
+    pnl_file = ""
+    monthly_file = ""
+    downloads_dir = "data/downloads"
+    
+    if os.path.exists(downloads_dir):
+        # Scan data/downloads/ to locate any saved files
+        for root, dirs, files in os.walk(downloads_dir):
+            for filee in files:
+                if filee == "realized_pnl_monthly.json":
+                    monthly_file = os.path.join(root, filee)
+                elif filee == "pnl_trade_history.json" and not pnl_file:
+                    pnl_file = os.path.join(root, filee)
+                    
+    # Try parsing monthly realized portfolio aggregate file
+    if monthly_file and os.path.exists(monthly_file):
+        try:
+            with open(monthly_file, 'r') as f:
+                data = json.load(f)
+            # Support multiple formats
+            res = data.get("realized_pnl", data.get("data", {}))
+            if isinstance(res, dict):
+                pnl_val = float(res.get("realized_gain_loss", res.get("total_realized_pnl", 0.0)))
+                pct_val = (pnl_val / net_liq) * 100.0 if net_liq > 0 else 0.0
+                cnt = int(res.get("closing_trades_count", res.get("trade_count", 0)))
+                status = "FAIL" if (pnl_val < 0 and abs(pnl_val) >= (net_liq * 0.10)) else "PASS"
+                return pnl_val, pct_val, status, cnt
+        except Exception:
+            pass
+            
+    # Try parsing pnl_trade_history trades within the last 30 days
+    if pnl_file and os.path.exists(pnl_file):
+        try:
+            with open(pnl_file, 'r') as f:
+                data = json.load(f)
+            trades = data.get("data", {}).get("trades", [])
+            if not trades:
+                trades = data.get("trades", [])
+                
+            total_gain = 0.0
+            trade_count = 0
+            # Define current system session date
+            now_dt = datetime.strptime("2026-07-11", "%Y-%m-%d")
+            for t in trades:
+                ts = t.get("timestamp", "")
+                if not ts:
+                    continue
+                try:
+                    ts_dt = datetime.strptime(ts[:10], "%Y-%m-%d")
+                    if (now_dt - ts_dt).days <= 30:
+                        total_gain += float(t.get("realized_gain", t.get("realized_gain_loss", 0.0)))
+                        trade_count += 1
+                except Exception:
+                    continue
+                    
+            pct_val = (total_gain / net_liq) * 100.0 if net_liq > 0 else 0.0
+            status = "FAIL" if (total_gain < 0 and abs(total_gain) >= (net_liq * 0.10)) else "PASS"
+            return total_gain, pct_val, status, trade_count
+        except Exception:
+            pass
+            
+    return 0.0, 0.0, "PASS", 0
+
+
 def cmd_portfolio(args):
     """Tracks position exits, risk sizing weights, and portfolio metrics."""
     options = load_json(OPTIONS_FILE, {"options_positions": {}, "stocks_positions": {}})
@@ -1553,8 +1681,205 @@ def cmd_portfolio(args):
         
     print("### 🛡️ Active Portfolio Tracker & Exits (Current Positions)")
     
-    tech_exposure = 0.0
     net_liq = args.net_liq if args.net_liq is not None else 50000.0 # Default total workspace valuation estimate
+    table_rows = []
+    
+    total_net_delta_shares = 0.0
+    total_net_delta_exposure_dlr = 0.0
+    
+    # 1. Option Pre-calculations
+    for opt_id, details in positions.items():
+        ticker = details.get("Underlier", "")
+        purchase_premium = float(details.get("Purchase Premium", 1.0))
+        mark_price = float(details.get("Mark Price", 1.0))
+        strike = details.get("Strike")
+        expiration = details.get("Expiration")
+        
+        # Calculate P&L
+        pl_dollar = (mark_price - purchase_premium) * 100
+        pl_pct = ((mark_price - purchase_premium) / purchase_premium) * 100 if purchase_premium else 0.0
+        
+        # Fetch levels from analyses if available
+        levels = analyses.get(ticker, {})
+        ptrans = levels.get("pTrans")
+        ntrans = levels.get("nTrans")
+        gex_t1 = levels.get("+GEX")
+        spot = args.spot_overrides.get(ticker) if args.spot_overrides else None
+        if spot is None:
+            spot = levels.get("Spot")
+        if spot is None:
+            spot = details.get("Underlier Spot") or details.get("Spot")
+        if spot is None:
+            spot = float(strike) if strike else 100.0
+            
+        # Entry date calculation
+        days_held = details.get("Days Held", 1)
+        entry_date = details.get("Entry Date")
+        if entry_date:
+            try:
+                days_held = max((datetime.today() - datetime.strptime(entry_date, "%Y-%m-%d")).days + 1, 1)
+            except ValueError:
+                pass
+                
+        # DTE
+        dte = None
+        if expiration:
+            try:
+                dte = (datetime.strptime(expiration, "%Y-%m-%d") - datetime.today()).days
+            except ValueError:
+                pass
+                
+        stalling_counter = details.get("Stalling Days", 0)
+        target_mode = details.get("Target Mode", "T1")
+        t2_target = details.get("T2 Target")
+        if t2_target is not None:
+            try:
+                t2_target = float(t2_target)
+            except (ValueError, TypeError):
+                t2_target = None
+                
+        exit_rule_state, _, _, _, _ = compute_exit_rule_state(
+            spot, purchase_premium, mark_price, ptrans, ntrans, gex_t1, days_held, stalling_counter, dte,
+            target_mode=target_mode, t2_target=t2_target
+        )
+        
+        cost_basis = details.get("Asset Cost Basis") or (purchase_premium * 100.0)
+        current_value = mark_price * 100.0
+        sizing_risk_weight = (cost_basis / net_liq) * 100
+        
+        table_rows.append({
+            "ticker": ticker,
+            "asset_cls": "Option",
+            "spot": spot,
+            "cost_basis": cost_basis,
+            "current_value": current_value,
+            "pnl_dlr": pl_dollar,
+            "pnl_pct": pl_pct,
+            "weight": sizing_risk_weight,
+            "rule_state": exit_rule_state
+        })
+
+        # Delta calculations
+        try:
+            delta_val = float(details.get("Delta") or 0.5)
+        except Exception:
+            delta_val = 0.5
+            
+        opt_type = details.get("Type", "call").lower()
+        if opt_type == "put" and delta_val > 0:
+            delta_val = -delta_val
+        elif opt_type == "call" and delta_val < 0:
+            delta_val = -delta_val
+            
+        contracts_count = 1.0
+        if "Quantity" in details:
+            try:
+                contracts_count = float(details["Quantity"])
+            except (ValueError, TypeError):
+                pass
+        elif purchase_premium > 0:
+            contracts_count = round(cost_basis / (purchase_premium * 100.0), 2)
+            if contracts_count <= 0:
+                contracts_count = 1.0
+                
+        delta_shares = delta_val * 100.0 * contracts_count
+        delta_exposure = delta_shares * spot
+        total_net_delta_shares += delta_shares
+        total_net_delta_exposure_dlr += delta_exposure
+        
+    # 2. Stock Pre-calculations
+    for ticker, details in stocks.items():
+        shares = float(details.get("Shares", 0.0))
+        avg_price = float(details.get("Average Buy Price", 0.0))
+        
+        levels = analyses.get(ticker, {})
+        ptrans = levels.get("pTrans")
+        ntrans = levels.get("nTrans")
+        gex_t1 = levels.get("+GEX")
+        
+        spot = args.spot_overrides.get(ticker) if args.spot_overrides else None
+        if spot is None:
+            spot = levels.get("Spot")
+        if spot is None:
+            spot = details.get("Current Price") or details.get("Spot")
+        if spot is None:
+            spot = avg_price
+            
+        cost_basis = shares * avg_price
+        curr_val = shares * spot
+        pl_dollar = curr_val - cost_basis
+        pl_pct = (pl_dollar / cost_basis) * 100.0 if cost_basis > 0 else 0.0
+        
+        exit_rule_state = "HOLD"
+        if ntrans:
+            if spot < ntrans:
+                exit_rule_state = "STOP TRIGGERED (Structural)"
+        if exit_rule_state == "HOLD":
+            if gex_t1 and spot >= gex_t1:
+                exit_rule_state = "PROFIT TAKE"
+            elif ptrans and spot < ptrans:
+                exit_rule_state = "WATCH"
+                
+        sizing_risk_weight = (cost_basis / net_liq) * 100
+        
+        table_rows.append({
+            "ticker": ticker,
+            "asset_cls": "Stock",
+            "spot": spot,
+            "cost_basis": cost_basis,
+            "current_value": curr_val,
+            "pnl_dlr": pl_dollar,
+            "pnl_pct": pl_pct,
+            "weight": sizing_risk_weight,
+            "rule_state": exit_rule_state
+        })
+
+        # Delta calculations for stocks (1 share = 1.0 delta)
+        total_net_delta_shares += shares
+        total_net_delta_exposure_dlr += shares * spot
+
+    print("\n### 📊 Portfolio Allocation & Performance Matrix")
+    print("  " + "-" * 115)
+    print(f"  {'Ticker':<6} | {'Class':<7} | {'Spot':<8} | {'Cost Basis':<11} | {'Current Val':<12} | {'Unrealized P&L':<22} | {'Weight':<7} | {'Rule State'}")
+    print("  " + "-" * 115)
+    
+    for r in table_rows:
+        tk_str = f"{r['ticker']:<6}"
+        tk_fmt = format_color(tk_str, "35", bold=True)
+        
+        cls_fmt = f"{r['asset_cls']:<7}"
+        spot_fmt = f"${r['spot']:<7.2f}"
+        
+        cb_fmt = f"${r['cost_basis']:<10,.2f}"
+        cv_fmt = f"${r['current_value']:<11,.2f}"
+        
+        pnl_str = f"{r['pnl_dlr']:+,.2f} ({r['pnl_pct']:+.2f}%)"
+        pnl_color = "32" if r['pnl_dlr'] >= 0 else "31"
+        pnl_fmt = format_color(f"{pnl_str:<22}", pnl_color, bold=True)
+        
+        weight_fmt = f"{r['weight']:<6.2f}%"
+        
+        # Color coding rule states in table
+        r_state = r['rule_state']
+        if "STOP" in r_state or "EXPIRED" in r_state:
+            r_color, r_bold = "31", True
+        elif "PROFIT" in r_state or "MET" in r_state:
+            r_color, r_bold = "32", True
+        elif "WATCH" in r_state:
+            r_color, r_bold = "33", False
+        else:
+            r_color, r_bold = "32", False
+        
+        r_state_short = r_state
+        if len(r_state_short) > 32:
+            r_state_short = r_state_short[:29] + "..."
+        r_fmt = format_color(r_state_short, r_color, bold=r_bold)
+        
+        print(f"  {tk_fmt} | {cls_fmt} | {spot_fmt} | {cb_fmt} | {cv_fmt} | {pnl_fmt} | {weight_fmt} | {r_fmt}")
+        
+    print("  " + "-" * 115)
+    
+    tech_exposure = 0.0
     total_cost_basis = 0.0
     total_current_value = 0.0
     
@@ -1746,11 +2071,28 @@ def cmd_portfolio(args):
     pl_color = "32" if unrealized_pl_dlr >= 0 else "31"
     cash_buffer_status = format_color("PASS", "32", bold=True) if cash_buffer_pct >= 20.0 else format_color("WARNING (Low liquid buffer <20%)", "31", bold=True)
     
+    # 3. Trailing 30-Day Realized Drawdown Gate
+    monthly_pnl_dlr, monthly_pnl_pct, drawdown_gate_status, monthly_cnt = get_monthly_realized_pnl(net_liq)
+    
     print("\n### 📈 Aggregate Portfolio Summary")
     print(f"- **Total Portfolio Net Liquidation (Net Liq)**: ${net_liq:,.2f}")
     print(f"- **Total Positions Cost Basis**: ${total_cost_basis:,.2f}")
     print(f"- **Total Positions Market Value**: ${total_current_value:,.2f} ({options_exposure_pct:.2f}% allocation)")
     print(f"- **Total Unrealized P&L**: {format_color(f'${unrealized_pl_dlr:+,.2f}', pl_color, bold=True)} ({format_color(f'{unrealized_pl_pct:+.2f}%', pl_color, bold=True)})")
+    
+    # Cumulative portfolio delta exposure
+    delta_shares_color = "32" if total_net_delta_shares >= 0 else "31"
+    delta_exposure_color = "32" if total_net_delta_exposure_dlr >= 0 else "31"
+    ds_fmt = format_color(f"{total_net_delta_shares:+,.2f} shares", delta_shares_color, bold=True)
+    de_fmt = format_color(f"${total_net_delta_exposure_dlr:+,.2f}", delta_exposure_color, bold=True)
+    print(f"- **Cumulative Portfolio Net Delta**: {ds_fmt} (Delta-Equivalent directional Exposure: {de_fmt})")
+    
+    # Live Brokerage 30-day realized statistics
+    m_pnl_color = "32" if monthly_pnl_dlr >= 0 else "31"
+    gate_color = "32" if drawdown_gate_status == "PASS" else "31"
+    gate_fmt = format_color(drawdown_gate_status, gate_color, bold=True)
+    print(f"- **Trailing 30-Day Realized P&L**: {format_color(f'${monthly_pnl_dlr:+,.2f}', m_pnl_color, bold=True)} ({format_color(f'{monthly_pnl_pct:+.2f}%', m_pnl_color, bold=True)}) over {monthly_cnt} closed trades")
+    print(f"- **Monthly Drawdown Gate**: {gate_fmt} " + (f"({format_color('BREACH ACTIVE: Prohibiting new entries', '31', bold=True)})" if drawdown_gate_status == "FAIL" else "(Drawdown within safe parameters)"))
     print(f"- **Cash Buffer / Liquid Reserves**: ${cash_buffer:,.2f} ({cash_buffer_pct:.2f}% of Net Liq) | Status: {cash_buffer_status}")
     
     closed_file = os.path.join(os.path.dirname(OPTIONS_FILE), "closed_positions.json")
@@ -2714,6 +3056,166 @@ def cmd_sentiment(args):
     print("- **Active Position Protection**: Be disciplined on exiting BABA or dry options exhibiting volumetric apathy, as institutional rotations support the systematic stops.")
 
 
+def cmd_rankings(args):
+    """Displays a beautiful ranked report of all historically analyzed ticker setups."""
+    analyses = load_json(ANALYSES_FILE, {})
+    if not analyses:
+        print("### 🔍 GEX Setup Rankings & Report")
+        print(f"No analyzed tickers found in database ({ANALYSES_FILE}). Run the 'analyze' subcommand for some ticker symbols first.")
+        return
+
+    status_filter = args.status.upper() if getattr(args, "status", None) else "ALL"
+    min_grade = getattr(args, "min_grade", None)
+    sort_by = getattr(args, "sort", "grade").lower()
+
+    filtered_analyses = []
+    for ticker, data in analyses.items():
+        grade = data.get("Grade", 0)
+        status = data.get("Signal Status", "BLOCKED")
+        
+        # Check filters
+        if min_grade is not None and grade < min_grade:
+            continue
+            
+        if status_filter != "ALL":
+            if status_filter == "CONFIRMED" and not status.startswith("CONFIRMED"):
+                continue
+            if status_filter == "PENDING" and not status.startswith("PENDING"):
+                continue
+            if status_filter == "BLOCKED" and not status.startswith("BLOCKED"):
+                continue
+
+        filtered_analyses.append(data)
+
+    if not filtered_analyses:
+        print("### 🔍 GEX Setup Rankings & Report")
+        print(f"No tickers matched the specified filters (Status: {status_filter}, Min Grade: {min_grade or 'Any'}).")
+        return
+
+    # Sorting
+    if sort_by == "spot":
+        filtered_analyses.sort(key=lambda x: x.get("Spot", 0.0), reverse=True)
+    elif sort_by == "cushion":
+        filtered_analyses.sort(key=lambda x: x.get("COTMP Cushion", 0.0), reverse=True)
+    elif sort_by == "rr":
+        filtered_analyses.sort(key=lambda x: x.get("Risk/Reward", 0.0), reverse=True)
+    elif sort_by == "status":
+        filtered_analyses.sort(key=lambda x: x.get("Signal Status", ""), reverse=False)
+    else: # Grade (default)
+        filtered_analyses.sort(key=lambda x: (x.get("Grade", 0), x.get("COTMP Cushion", 0.0)), reverse=True)
+
+    print("### 🔍 GEX Setup Rankings & Report")
+    print(f"Filters active -> Status Rank: {format_color(status_filter, '35', bold=True)} | Min Grade: {format_color(str(min_grade) if min_grade is not None else 'None', '35', bold=True)}")
+    print("  " + "-" * 125)
+    print(f"  {'Ticker':<8} | {'Spot':<8} | {'Grade':<6} | {'pTrans':<8} | {'nTrans':<8} | {'+GEX':<8} | {'COTMP':<8} | {'db_change':<10} | {'Cushion %':<10} | {'R/R':<6} | {'Signal Status'}")
+    print("  " + "-" * 125)
+
+    for data in filtered_analyses:
+        ticker = data.get("Ticker", "")
+        spot = data.get("Spot", 0.0)
+        grade = data.get("Grade", 0)
+        ptrans = data.get("pTrans", 0.0)
+        ntrans = data.get("nTrans", 0.0)
+        gex = data.get("+GEX", 0.0)
+        cotmp = data.get("COTMP", 0.0)
+        db_change = data.get("db_change", 0.0)
+        cushion = data.get("COTMP Cushion", 0.0)
+        rr = data.get("Risk/Reward", 0.0)
+        status = data.get("Signal Status", "BLOCKED")
+
+        ticker_str = f"{ticker:<8}"
+        ticker_fmt = format_color(ticker_str, "35", bold=True)
+        
+        spot_str = f"${spot:.2f}"
+        spot_fmt = f"{spot_str:<8}"
+        
+        grade_str = f"{grade}/11"
+        grade_padded = f"{grade_str:<6}"
+        grade_color = "32" if grade >= 9 else "31"
+        grade_fmt = format_color(grade_padded, grade_color, bold=True)
+        
+        ptrans_str = f"${ptrans:.2f}"
+        ptrans_fmt = f"{ptrans_str:<8}"
+        
+        ntrans_str = f"${ntrans:.2f}"
+        ntrans_fmt = f"{ntrans_str:<8}"
+        
+        gex_str = f"${gex:.2f}"
+        gex_fmt = f"{gex_str:<8}"
+        
+        cotmp_str = f"${cotmp:.2f}"
+        cotmp_fmt = f"{cotmp_str:<8}"
+        
+        status_core = "BLOCKED"
+        status_reason = ""
+        if "(" in status:
+            parts = status.split("(", 1)
+            status_core = parts[0].strip()
+            status_reason = "(" + parts[1]
+        else:
+            status_core = status.strip()
+            
+        status_color = "31"
+        if status_core.startswith("CONFIRMED"):
+            status_color = "32"
+        elif status_core.startswith("PENDING"):
+            status_color = "33"
+            
+        status_core_padded = f"{status_core:<12}"
+        status_fmt = format_color(status_core_padded, status_color, bold=True)
+        if status_reason:
+            status_fmt += f" {status_reason}"
+
+        db_str = f"{db_change:+.2f}"
+        db_fmt = f"{db_str:<10}"
+        
+        cushion_str = f"{cushion:+.2f}%"
+        cushion_fmt = f"{cushion_str:<10}"
+        
+        rr_str = f"{rr:.2f}" if rr != 999.0 else "999.00"
+        rr_fmt = f"{rr_str:<6}"
+
+        line = f"  {ticker_fmt} | {spot_fmt} | {grade_fmt} | {ptrans_fmt} | {ntrans_fmt} | {gex_fmt} | {cotmp_fmt} | {db_fmt} | {cushion_fmt} | {rr_fmt} | {status_fmt}"
+        print(line)
+
+    print("  " + "-" * 125)
+    
+    # Summary of databases metrics
+    total_scanned = len(filtered_analyses)
+    total_confirmed = sum(1 for d in filtered_analyses if d.get("Signal Status", "").startswith("CONFIRMED"))
+    total_pending = sum(1 for d in filtered_analyses if d.get("Signal Status", "").startswith("PENDING"))
+    total_blocked = sum(1 for d in filtered_analyses if d.get("Signal Status", "").startswith("BLOCKED"))
+    avg_grade = sum(d.get("Grade", 0) for d in filtered_analyses) / total_scanned if total_scanned > 0 else 0.0
+    avg_cushion = sum(d.get("COTMP Cushion", 0.0) for d in filtered_analyses) / total_scanned if total_scanned > 0 else 0.0
+    
+    print("\n### 📊 GEX Setup Database Metrics Summary")
+    print(f"- **Total Stored Scored Underliers**: {total_scanned}")
+    print(f"  -> {format_color('CONFIRMED', '32', bold=True)}: {total_confirmed} | {format_color('PENDING', '33', bold=True)}: {total_pending} | {format_color('BLOCKED', '31', bold=True)}: {total_blocked}")
+    print(f"  -> Average Setup Grade: {avg_grade:.2f}/11")
+    print(f"  -> Average COTMP Margin Cushion: {avg_cushion:+.2f}%")
+    
+    # Highlight CONFIRMED candidates that are ready for play
+    confirmed_setups = [d for d in filtered_analyses if d.get("Signal Status", "").startswith("CONFIRMED")]
+    regime = get_regime_status()
+    auth = regime.get("system_authorization", "BLOCKED")
+    
+    if confirmed_setups:
+        print_color(f"\n⚡ {len(confirmed_setups)} CONFIRMED GEX SETUPS DETECTED:", "32", bold=True)
+        for s in confirmed_setups:
+            ticker = s.get("Ticker")
+            spot = s.get("Spot")
+            gex = s.get("+GEX")
+            grade = s.get("Grade")
+            print_color(f"  -> {ticker}: Spot ${spot:.2f} above pTrans. Setup Target is +GEX at ${gex:.2f} (Grade {grade}/11)", "32")
+        
+        if "BLOCK" in auth:
+            print_color(f"\n⚠️ WARNING: System Authorization is BLOCKED. New entries are legally restricted by GEX regime rules today.", "31", bold=True)
+        else:
+            print_color(f"\n🚀 System Authorization is {auth}. GEX setups eligible for manual or agentic execution approval request!", "32", bold=True)
+    else:
+        print_color("\n💤 No CONFIRMED GEX setups matching current filters or market status.", "33")
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="GEX Options Mechanical Engine - Rule validation CLI and storage keeper"
@@ -2722,7 +3224,8 @@ def main():
     subparsers = parser.add_subparsers(dest="command", required=True)
     
     # status subcommand
-    subparsers.add_parser("status", help="Analyze broader Daily Regime Gates and authorization.")
+    p_status = subparsers.add_parser("status", help="Analyze broader Daily Regime Gates and authorization.")
+    p_status.add_argument("--net-liq", type=float, dest="net_liq", help="Estimated Portfolio Net Liq value for sizing & drawdown checks")
     
     # update-regime subcommand
     p_regime = subparsers.add_parser("update-regime", help="Recompute Daily Regime Gates from raw market inputs.")
@@ -2734,6 +3237,7 @@ def main():
     p_regime.add_argument("--vix-spot", type=float, dest="vix_spot", help="Current VIX spot level")
     p_regime.add_argument("--hyg", type=float, help="HYG credit high-yield bond daily change percent (e.g. -0.35)")
     p_regime.add_argument("--etf-file", type=str, help="ETF Quotes JSON file to calculate regime gates automatically")
+    p_regime.add_argument("--net-liq", type=float, dest="net_liq", help="Estimated Portfolio Net Liq value for sizing & drawdown checks")
 
     # analyze subcommand
     p_analyze = subparsers.add_parser("analyze", help="Grades dynamic options candidate setups.")
@@ -2840,6 +3344,12 @@ def main():
     p_sync_pnl = subparsers.add_parser("sync-pnl", help="Sync trade history to detect closed positions and move them to closed_positions.json.")
     p_sync_pnl.add_argument("--pnl-file", type=str, default="", help="Path to raw Robinhood P&L trade history JSON file")
 
+    # rankings subcommand
+    p_rankings = subparsers.add_parser("rankings", help="Displays a beautiful ranked report of all historically analyzed ticker setups.")
+    p_rankings.add_argument("--status", type=str, choices=["ALL", "CONFIRMED", "PENDING", "BLOCKED"], default="ALL", help="Filter by signal status (default: ALL)")
+    p_rankings.add_argument("--min-grade", type=int, dest="min_grade", help="Filter by minimum structural grade (0 to 11)")
+    p_rankings.add_argument("--sort", type=str, choices=["grade", "spot", "cushion", "rr", "status"], default="grade", help="Sort the rankings table (default: grade)")
+
     args = parser.parse_args()
     
     # Process spot overrides if they are provided
@@ -2882,6 +3392,8 @@ def main():
         cmd_update_sentiment(args)
     elif args.command == "sync-pnl":
         cmd_sync_pnl(args)
+    elif args.command == "rankings":
+        cmd_rankings(args)
 
 
 if __name__ == "__main__":
