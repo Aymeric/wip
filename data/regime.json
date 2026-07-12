@@ -120,5 +120,9 @@
       "Classification": "BEARISH"
     }
   },
-  "last_updated": "2026-07-10"
+  "last_updated": "2026-07-11",
+  "monthly_pnl_dlr": -759.9599999999999,
+  "monthly_pnl_pct": -1.5199199999999997,
+  "drawdown_gate_status": "PASS",
+  "monthly_cnt": 7
 }

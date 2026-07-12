@@ -19,7 +19,7 @@
       "Sizing Risk Weight (%)": 1.49,
       "Beta Sector Tag": "Biotech/Healthcare",
       "Entry Date": "2026-07-01",
-      "Days Held": 11,
+      "Days Held": 12,
       "Stalling Days": 0,
       "Target Mode": "T1",
       "T2 Target": null
@@ -43,7 +43,7 @@
       "Sizing Risk Weight (%)": 0.95,
       "Beta Sector Tag": "Consumer Cyclical",
       "Entry Date": "2026-06-29",
-      "Days Held": 13,
+      "Days Held": 14,
       "Stalling Days": 0,
       "Target Mode": "T1",
       "T2 Target": null
@@ -67,7 +67,7 @@
       "Sizing Risk Weight (%)": 3.0,
       "Beta Sector Tag": "China/Technology",
       "Entry Date": "2026-05-13",
-      "Days Held": 60,
+      "Days Held": 61,
       "Stalling Days": 2,
       "Target Mode": "T1",
       "T2 Target": null
@@ -91,7 +91,7 @@
       "Sizing Risk Weight (%)": 0.16,
       "Beta Sector Tag": "Technology/Beta",
       "Entry Date": "2026-07-10",
-      "Days Held": 2,
+      "Days Held": 3,
       "Stalling Days": 0,
       "Target Mode": "T1",
       "T2 Target": null

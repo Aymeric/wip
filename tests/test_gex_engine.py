@@ -1319,6 +1319,122 @@ class TestGEXEngine(unittest.TestCase):
             if os.path.exists(analyses_path):
                 os.remove(analyses_path)
 
+    def test_cmd_closed_visualizer(self):
+        """Test closed subcommand visualizer and statistics calculations."""
+        import tempfile
+        from unittest.mock import patch, MagicMock
+        import gex_engine
+
+        with tempfile.NamedTemporaryFile(suffix=".json", delete=False) as tmp_options:
+            options_path = tmp_options.name
+            
+        try:
+            # Seed OPTIONS_FILE to point to appropriate directory for closed_positions.json
+            mock_data = {
+                "closed_options": [
+                    {
+                        "Underlier": "AAPL",
+                        "Strike": "310.00",
+                        "Entry Date": "2026-07-01",
+                        "Close Date": "2026-07-05",
+                        "Purchase Premium": 4.00,
+                        "Close Premium": 6.00,
+                        "Realized P&L ($)": 200.0,
+                        "Realized P&L (%)": 50.0
+                    }
+                ],
+                "closed_stocks": [
+                    {
+                        "Ticker": "AMZN",
+                        "Shares": 10.0,
+                        "Average Buy Price": 180.00,
+                        "Close Price": 200.00,
+                        "Entry Date": "2026-07-01",
+                        "Close Date": "2026-07-05",
+                        "Realized P&L ($)": 200.0,
+                        "Realized P&L (%)": 11.11
+                    }
+                ]
+            }
+            gex_engine.save_json(options_path, {})  # empty active
+            # The closed_positions.json holds closed positions
+            closed_path = os.path.join(os.path.dirname(options_path), "closed_positions.json")
+            gex_engine.save_json(closed_path, mock_data)
+
+            with patch('gex_engine.OPTIONS_FILE', options_path), patch('sys.stdout') as mock_stdout:
+                mock_stdout.isatty = MagicMock(return_value=False)
+                class ClosedArgs:
+                    pass
+                gex_engine.cmd_closed(ClosedArgs())
+                
+                output = "".join(call.args[0] for call in mock_stdout.write.call_args_list if call.args)
+                self.assertIn("GEX Closed Positions History", output)
+                self.assertIn("AAPL", output)
+                self.assertIn("AMZN", output)
+                self.assertIn("Options Stats", output)
+                self.assertIn("Stocks Stats", output)
+                self.assertIn("Total Combined Realized P&L", output)
+        finally:
+            if os.path.exists(options_path):
+                os.remove(options_path)
+            closed_path = os.path.join(os.path.dirname(options_path), "closed_positions.json")
+            if os.path.exists(closed_path):
+                os.remove(closed_path)
+
+    def test_file_auto_discovery_lexicographical_latest(self):
+        """Test that get_monthly_realized_pnl and cmd_sync_pnl auto-discover the latest index files."""
+        import tempfile
+        import shutil
+        from unittest.mock import patch, MagicMock
+        import gex_engine
+
+        # Create nested temp directories mimicking data/downloads/YYYYMMDD
+        temp_dir = tempfile.mkdtemp()
+        try:
+            day1_dir = os.path.join(temp_dir, "20260708")
+            day2_dir = os.path.join(temp_dir, "20260710")
+            os.makedirs(day1_dir)
+            os.makedirs(day2_dir)
+
+            # Write trade files to both dates. The 20260710 must be chosen lexicographically.
+            old_pnl = {
+                "data": {"trades": [{"timestamp": "2026-07-08T00:00:00Z", "symbol": "AMZN", "realized_gain": "100.00"}]}
+            }
+            new_pnl = {
+                "data": {"trades": [{"timestamp": "2026-07-10T00:00:00Z", "symbol": "AMZN", "realized_gain": "500.00"}]}
+            }
+            gex_engine.save_json(os.path.join(day1_dir, "pnl_trade_history.json"), old_pnl)
+            gex_engine.save_json(os.path.join(day2_dir, "pnl_trade_history.json"), new_pnl)
+
+            # Patch downloads directory to our temp folder and test discovery
+            with patch('gex_engine.cmd_portfolio'), patch('sys.stdout'):
+                # 1. Test get_monthly_realized_pnl picks up the 500.00 realized gain from 20260710 (latest)
+                # Instead of 100.00 from 20260708.
+                downloads_dir = "data/downloads"
+                # We patch os.path.exists and walk for data/downloads prefix
+                orig_exists = os.path.exists
+                orig_walk = os.walk
+
+                def mock_exists(path):
+                    if path == "data/downloads":
+                        return True
+                    return orig_exists(path)
+
+                def mock_walk(path, *args, **kwargs):
+                    if path == "data/downloads":
+                        return orig_walk(temp_dir, *args, **kwargs)
+                    return orig_walk(path, *args, **kwargs)
+
+                with patch('os.path.exists', side_effect=mock_exists), \
+                     patch('os.walk', side_effect=mock_walk):
+                    
+                    pnl_val, pct_val, status, cnt = gex_engine.get_monthly_realized_pnl(net_liq=50000.0)
+                    # Verify it chose the one from 20260710 ($500.00 realized gain)
+                    self.assertEqual(pnl_val, 500.00)
+                    self.assertEqual(cnt, 1)
+        finally:
+            shutil.rmtree(temp_dir)
+
 
 if __name__ == '__main__':
     unittest.main()

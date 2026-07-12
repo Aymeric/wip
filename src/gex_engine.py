@@ -314,6 +314,22 @@ def cmd_update_regime(args):
     vix_spot_val = args.vix_spot
     hyg_val = getattr(args, "hyg", None)
     
+    etf_file = getattr(args, "etf_file", None)
+    if not etf_file and spy_val is None:
+        # Try to auto-discover latest ETF quotes file
+        downloads_dir = "data/downloads"
+        etf_candidates = []
+        if os.path.exists(downloads_dir):
+            for root, dirs, files in os.walk(downloads_dir):
+                for filee in files:
+                    if filee == "etf_quotes.json":
+                        etf_candidates.append(os.path.join(root, filee))
+        if etf_candidates:
+            etf_candidates.sort()
+            etf_file = etf_candidates[-1]
+            args.etf_file = etf_file
+            print(f"Auto-discovered latest ETF quotes file: {etf_file}")
+            
     if hasattr(args, "etf_file") and args.etf_file:
         try:
             with open(args.etf_file, "r") as f:
@@ -1405,6 +1421,14 @@ def cmd_analyze(args):
     else:
         status = f"BLOCKED ({', '.join(reasons)})"
         
+    iv30 = cached.get("iv30_val")
+    hv90 = cached.get("hv90_val")
+    rv10 = cached.get("rv10_val")
+    if 'vol_profile' in locals() and vol_profile is not None:
+        iv30 = vol_profile.get("iv30_val")
+        hv90 = vol_profile.get("hv90_val")
+        rv10 = vol_profile.get("rv10_val")
+
     # Update analyses file
     analyses[symbol] = {
         "Ticker": symbol,
@@ -1417,6 +1441,9 @@ def cmd_analyze(args):
         "db_change": round(db_change, 2),
         "COTMP Cushion": cotmp_cushion,
         "Risk/Reward": rr_ratio,
+        "iv30_val": round(iv30, 2) if iv30 is not None else None,
+        "hv90_val": round(hv90, 2) if hv90 is not None else None,
+        "rv10_val": round(rv10, 2) if rv10 is not None else None,
         "Signal Status": status,
         "analyzed_date": datetime.today().strftime('%Y-%m-%d'),
         "spike_crash": bool(spike_crash),
@@ -1608,13 +1635,21 @@ def get_monthly_realized_pnl(net_liq: float) -> Tuple[float, float, str, int]:
     downloads_dir = "data/downloads"
     
     if os.path.exists(downloads_dir):
-        # Scan data/downloads/ to locate any saved files
+        # Scan data/downloads/ to locate any saved files and sort them lexicographically
+        monthly_candidates = []
+        pnl_candidates = []
         for root, dirs, files in os.walk(downloads_dir):
             for filee in files:
                 if filee == "realized_pnl_monthly.json":
-                    monthly_file = os.path.join(root, filee)
-                elif filee == "pnl_trade_history.json" and not pnl_file:
-                    pnl_file = os.path.join(root, filee)
+                    monthly_candidates.append(os.path.join(root, filee))
+                elif filee == "pnl_trade_history.json":
+                    pnl_candidates.append(os.path.join(root, filee))
+        if monthly_candidates:
+            monthly_candidates.sort()
+            monthly_file = monthly_candidates[-1]
+        if pnl_candidates:
+            pnl_candidates.sort()
+            pnl_file = pnl_candidates[-1]
                     
     # Try parsing monthly realized portfolio aggregate file
     if monthly_file and os.path.exists(monthly_file):
@@ -1756,7 +1791,8 @@ def cmd_portfolio(args):
             "pnl_dlr": pl_dollar,
             "pnl_pct": pl_pct,
             "weight": sizing_risk_weight,
-            "rule_state": exit_rule_state
+            "rule_state": exit_rule_state,
+            "sector": details.get("Beta Sector Tag", "Equity")
         })
 
         # Delta calculations
@@ -1831,7 +1867,8 @@ def cmd_portfolio(args):
             "pnl_dlr": pl_dollar,
             "pnl_pct": pl_pct,
             "weight": sizing_risk_weight,
-            "rule_state": exit_rule_state
+            "rule_state": exit_rule_state,
+            "sector": details.get("Beta Sector Tag", "Equity")
         })
 
         # Delta calculations for stocks (1 share = 1.0 delta)
@@ -1839,25 +1876,25 @@ def cmd_portfolio(args):
         total_net_delta_exposure_dlr += shares * spot
 
     print("\n### 📊 Portfolio Allocation & Performance Matrix")
-    print("  " + "-" * 115)
-    print(f"  {'Ticker':<6} | {'Class':<7} | {'Spot':<8} | {'Cost Basis':<11} | {'Current Val':<12} | {'Unrealized P&L':<22} | {'Weight':<7} | {'Rule State'}")
-    print("  " + "-" * 115)
+    print("  " + "-" * 112)
+    print(f"  {'Ticker':<6} | {'Class':<6} | {'Spot':<8} | {'Cost Basis':<10} | {'Current Val':<11} | {'Unrealized P&L':<18} | {'Weight':<6} | {'Rule State'}")
+    print("  " + "-" * 112)
     
     for r in table_rows:
         tk_str = f"{r['ticker']:<6}"
         tk_fmt = format_color(tk_str, "35", bold=True)
         
-        cls_fmt = f"{r['asset_cls']:<7}"
+        cls_fmt = f"{r['asset_cls']:<6}"
         spot_fmt = f"${r['spot']:<7.2f}"
         
-        cb_fmt = f"${r['cost_basis']:<10,.2f}"
-        cv_fmt = f"${r['current_value']:<11,.2f}"
+        cb_fmt = f"${r['cost_basis']:<9,.2f}"
+        cv_fmt = f"${r['current_value']:<10,.2f}"
         
         pnl_str = f"{r['pnl_dlr']:+,.2f} ({r['pnl_pct']:+.2f}%)"
         pnl_color = "32" if r['pnl_dlr'] >= 0 else "31"
-        pnl_fmt = format_color(f"{pnl_str:<22}", pnl_color, bold=True)
+        pnl_fmt = format_color(f"{pnl_str:<18}", pnl_color, bold=True)
         
-        weight_fmt = f"{r['weight']:<6.2f}%"
+        weight_fmt = f"{r['weight']:5.2f}%"
         
         # Color coding rule states in table
         r_state = r['rule_state']
@@ -1877,7 +1914,7 @@ def cmd_portfolio(args):
         
         print(f"  {tk_fmt} | {cls_fmt} | {spot_fmt} | {cb_fmt} | {cv_fmt} | {pnl_fmt} | {weight_fmt} | {r_fmt}")
         
-    print("  " + "-" * 115)
+    print("  " + "-" * 112)
     
     tech_exposure = 0.0
     total_cost_basis = 0.0
@@ -2139,6 +2176,26 @@ def cmd_portfolio(args):
             all_color = "32" if total_realized_all >= 0 else "31"
             print(f"- **Total Combined Realized P&L**: {format_color(f'${total_realized_all:+,.2f}', all_color, bold=True)} | Win Rate {win_rate_all:.1f}% | Combined PF: {pf_all}")
         
+    # Sector Allocation Matrix
+    sector_sums = {}
+    for r in table_rows:
+        sec = r.get("sector", "Equity")
+        sector_sums[sec] = sector_sums.get(sec, 0.0) + r["cost_basis"]
+        
+    print("\n### ⚖️ Portfolio Sector Risk Allocation")
+    print("  " + "-" * 55)
+    print(f"  {'Sector Tag':<28} | {'Cost Basis':<12} | {'Weight %'}")
+    print("  " + "-" * 55)
+    for sec, sec_cb in sorted(sector_sums.items(), key=lambda x: x[1], reverse=True):
+        sec_weight = (sec_cb / net_liq) * 100.0
+        sec_weight_fmt = f"{sec_weight:5.2f}%"
+        sec_color = "32"
+        if ("Technology" in sec or "Beta" in sec) and sec_weight > 15.0:
+            sec_color = "31" # Over Tech limit!
+        sec_weight_fmt = format_color(sec_weight_fmt, sec_color, bold=(sec_color == "31"))
+        print(f"  {sec:<28} | ${sec_cb:<11,.2f} | {sec_weight_fmt}")
+    print("  " + "-" * 55)
+
     print("\n### 📏 Sizing Constraints Checklist")
     # Sizing constraints check
     over_allocated = []
@@ -2428,19 +2485,18 @@ def cmd_sync_pnl(args):
     """Syncs P&L trade history from retrieved file to detect closed positions, and moves closed positions to closed_positions.json."""
     pnl_file = args.pnl_file
     if not pnl_file or not os.path.exists(pnl_file):
-        # Let's search inside data/downloads/ sequentially to locate the latest trade history
-        found = False
+        # Scan data/downloads/ and sort lexicographically to find the latest trade history file
         downloads_dir = "data/downloads"
+        pnl_candidates = []
         if os.path.exists(downloads_dir):
             for root, dirs, files in os.walk(downloads_dir):
                 for filee in files:
                     if filee == "pnl_trade_history.json":
-                        pnl_file = os.path.join(root, filee)
-                        found = True
-                        break
-                if found:
-                    break
-        if not found:
+                        pnl_candidates.append(os.path.join(root, filee))
+        if pnl_candidates:
+            pnl_candidates.sort()
+            pnl_file = pnl_candidates[-1]
+        else:
             # Fallback
             pnl_file = "data/downloads/20260710/pnl_trade_history.json"
             if not os.path.exists(pnl_file):
@@ -3179,6 +3235,46 @@ def cmd_rankings(args):
         print(line)
 
     print("  " + "-" * 125)
+
+    # Volatility and compression metrics print
+    print("\n### ⚡ Implied vs Realized Volatility & Compression Board")
+    print("  " + "-" * 75)
+    print(f"  {'Ticker':<8} | {'IV30':<8} | {'HV90':<8} | {'RV10 (10d)':<12} | {'IV/HV Discount':<16} | {'State / Compression'}")
+    print("  " + "-" * 75)
+    for data in filtered_analyses:
+        ticker = data.get("Ticker", "")
+        iv30_val = data.get("iv30_val")
+        hv90_val = data.get("hv90_val")
+        rv10_val = data.get("rv10_val")
+        
+        iv30_str = f"{iv30_val:.2f}%" if iv30_val is not None and iv30_val > 0.0 else "N/A"
+        hv90_str = f"{hv90_val:.2f}%" if hv90_val is not None and hv90_val > 0.0 else "N/A"
+        rv10_str = f"{rv10_val:.2f}%" if rv10_val is not None and rv10_val > 0.0 else "N/A"
+        
+        discount_str = "N/A"
+        discount_color = "33"
+        if iv30_val and hv90_val and hv90_val > 0.0:
+            diff = iv30_val - hv90_val
+            discount_str = f"{diff:+.2f}%"
+            discount_color = "32" if diff < 0.0 else "31"
+            
+        discount_fmt = format_color(f"{discount_str:<16}", discount_color, bold=(discount_color == "32"))
+        
+        comp_str = "Unknown"
+        comp_color = "33"
+        if rv10_val is not None:
+            if rv10_val <= 35.0:
+                comp_str = "COMPRESSED"
+                comp_color = "32"
+            else:
+                comp_str = "EXPANDED"
+                comp_color = "31"
+                
+        comp_fmt = format_color(comp_str, comp_color, bold=(comp_str == "COMPRESSED"))
+        
+        ticker_fmt = format_color(f"{ticker:<8}", "35", bold=True)
+        print(f"  {ticker_fmt} | {iv30_str:<8} | {hv90_str:<8} | {rv10_str:<12} | {discount_fmt} | {comp_fmt}")
+    print("  " + "-" * 75)
     
     # Summary of databases metrics
     total_scanned = len(filtered_analyses)
@@ -3214,6 +3310,111 @@ def cmd_rankings(args):
             print_color(f"\n🚀 System Authorization is {auth}. GEX setups eligible for manual or agentic execution approval request!", "32", bold=True)
     else:
         print_color("\n💤 No CONFIRMED GEX setups matching current filters or market status.", "33")
+
+
+def cmd_closed(args):
+    """Displays a beautiful detailed report of all closed / archived positions."""
+    closed_file = os.path.join(os.path.dirname(OPTIONS_FILE), "closed_positions.json")
+    closed_data = load_json(closed_file, {"closed_options": [], "closed_stocks": []})
+    
+    closed_options = closed_data.get("closed_options", [])
+    closed_stocks = closed_data.get("closed_stocks", [])
+    
+    if not closed_options and not closed_stocks:
+        print("### 📊 GEX Closed Positions History")
+        print("No closed positions found in the archive.")
+        return
+        
+    print("### 📊 GEX Closed Positions History")
+    print("  " + "-" * 115)
+    print(f"  {'Ticker':<6} | {'Class':<7} | {'Entry Date':<11} | {'Close Date':<11} | {'Days':<4} | {'Cost Basis':<11} | {'Realized P&L ($)':<16} | {'Realized P&L (%)'}")
+    print("  " + "-" * 115)
+    
+    def format_row(item, asset_cls):
+        ticker = item.get("Ticker") or item.get("Underlier", "Unknown").upper()
+        ticker_fmt = format_color(f"{ticker:<6}", "35", bold=True)
+        cls_fmt = f"{asset_cls:<7}"
+        entry_date = item.get("Entry Date", "N/A")
+        close_date = item.get("Close Date", "N/A")
+        
+        # Calculate days held if missing
+        days = item.get("Days Held")
+        if days is None and entry_date != "N/A" and close_date != "N/A":
+            try:
+                days = (datetime.strptime(close_date, "%Y-%m-%d") - datetime.strptime(entry_date, "%Y-%m-%d")).days + 1
+            except Exception:
+                days = "N/A"
+        if days is None:
+            days = "N/A"
+            
+        days_str = f"{days:<4}"
+        
+        cost_basis = item.get("Asset Cost Basis")
+        if cost_basis is None:
+            if asset_cls == "Option":
+                try:
+                    cost_basis = float(item.get("Purchase Premium", 1.0)) * 100.0
+                except Exception:
+                    cost_basis = 0.0
+            else:
+                try:
+                    cost_basis = float(item.get("Shares", 0.0)) * float(item.get("Average Buy Price", 0.0))
+                except Exception:
+                    cost_basis = 0.0
+        cb_str = f"${cost_basis:,.2f}" if cost_basis is not None else f"${0.0:,.2f}"
+        cb_fmt = f"{cb_str:<11}"
+        
+        pnl_dlr = item.get("Realized P&L ($)", 0.0)
+        pnl_pct = item.get("Realized P&L (%)", 0.0)
+        
+        pnl_color = "32" if pnl_dlr >= 0 else "31"
+        pnl_dlr_str = f"${pnl_dlr:+,.2f}"
+        pnl_dlr_fmt = format_color(f"{pnl_dlr_str:<16}", pnl_color, bold=True)
+        pnl_pct_fmt = format_color(f"{pnl_pct:+.2f}%", pnl_color, bold=True)
+        
+        print(f"  {ticker_fmt} | {cls_fmt} | {entry_date:<11} | {close_date:<11} | {days_str} | {cb_fmt} | {pnl_dlr_fmt} | {pnl_pct_fmt}")
+
+    for opt in closed_options:
+        format_row(opt, "Option")
+    for stk in closed_stocks:
+        format_row(stk, "Stock")
+        
+    print("  " + "-" * 115)
+    
+    # Print summarized stats
+    if closed_options:
+        total_closed_opt = len(closed_options)
+        profitable_closed_opt = sum(1 for p in closed_options if p.get("Realized P&L ($)", 0.0) > 0.0)
+        win_rate_opt = (profitable_closed_opt / total_closed_opt) * 100.0 if total_closed_opt > 0 else 0.0
+        total_realized_opt = sum(p.get("Realized P&L ($)", 0.0) for p in closed_options)
+        gross_p_opt = sum(p.get("Realized P&L ($)", 0.0) for p in closed_options if p.get("Realized P&L ($)", 0.0) > 0.0)
+        gross_l_opt = abs(sum(p.get("Realized P&L ($)", 0.0) for p in closed_options if p.get("Realized P&L ($)", 0.0) < 0.0))
+        pf_opt = f"{gross_p_opt / gross_l_opt:.2f}" if gross_l_opt > 0 else f"{gross_p_opt:.2f}" if gross_p_opt > 0 else "N/A"
+        opt_color = "32" if total_realized_opt >= 0 else "31"
+        print(f"- **Options Stats** ({total_closed_opt} trades): Realized Win Rate {win_rate_opt:.1f}% ({profitable_closed_opt}/{total_closed_opt} profitable) | Total Realized P&L: {format_color(f'${total_realized_opt:+,.2f}', opt_color, bold=True)} | PF: {pf_opt}")
+        
+    if closed_stocks:
+        total_closed_stk = len(closed_stocks)
+        profitable_closed_stk = sum(1 for s in closed_stocks if s.get("Realized P&L ($)", 0.0) > 0.0)
+        win_rate_stk = (profitable_closed_stk / total_closed_stk) * 100.0 if total_closed_stk > 0 else 0.0
+        total_realized_stk = sum(s.get("Realized P&L ($)", 0.0) for s in closed_stocks)
+        gross_p_stk = sum(s.get("Realized P&L ($)", 0.0) for s in closed_stocks if s.get("Realized P&L ($)", 0.0) > 0.0)
+        gross_l_stk = abs(sum(s.get("Realized P&L ($)", 0.0) for s in closed_stocks if s.get("Realized P&L ($)", 0.0) < 0.0))
+        pf_stk = f"{gross_p_stk / gross_l_stk:.2f}" if gross_l_stk > 0 else f"{gross_p_stk:.2f}" if gross_p_stk > 0 else "N/A"
+        stk_color = "32" if total_realized_stk >= 0 else "31"
+        print(f"- **Stocks Stats** ({total_closed_stk} trades): Realized Win Rate {win_rate_stk:.1f}% ({profitable_closed_stk}/{total_closed_stk} profitable) | Total Realized P&L: {format_color(f'${total_realized_stk:+,.2f}', stk_color, bold=True)} | PF: {pf_stk}")
+        
+    if closed_options and closed_stocks:
+        all_closed = closed_options + closed_stocks
+        total_closed_all = len(all_closed)
+        profitable_closed_all = sum(1 for p in all_closed if p.get("Realized P&L ($)", 0.0) > 0.0)
+        win_rate_all = (profitable_closed_all / total_closed_all) * 100.0 if total_closed_all > 0 else 0.0
+        total_realized_all = sum(p.get("Realized P&L ($)", 0.0) for p in all_closed)
+        gross_p_all = sum(p.get("Realized P&L ($)", 0.0) for p in all_closed if p.get("Realized P&L ($)", 0.0) > 0.0)
+        gross_l_all = abs(sum(p.get("Realized P&L ($)", 0.0) for p in all_closed if p.get("Realized P&L ($)", 0.0) < 0.0))
+        pf_all = f"{gross_p_all / gross_l_all:.2f}" if gross_l_all > 0 else f"{gross_p_all:.2f}" if gross_p_all > 0 else "N/A"
+        all_color = "32" if total_realized_all >= 0 else "31"
+        print(f"- **Total Combined Realized P&L**: {format_color(f'${total_realized_all:+,.2f}', all_color, bold=True)} | Win Rate {win_rate_all:.1f}% | Combined PF: {pf_all}")
 
 
 def main():
@@ -3350,6 +3551,9 @@ def main():
     p_rankings.add_argument("--min-grade", type=int, dest="min_grade", help="Filter by minimum structural grade (0 to 11)")
     p_rankings.add_argument("--sort", type=str, choices=["grade", "spot", "cushion", "rr", "status"], default="grade", help="Sort the rankings table (default: grade)")
 
+    # closed subcommand
+    subparsers.add_parser("closed", help="Displays a beautiful execution history of all closed options and stocks positions.")
+
     args = parser.parse_args()
     
     # Process spot overrides if they are provided
@@ -3394,6 +3598,8 @@ def main():
         cmd_sync_pnl(args)
     elif args.command == "rankings":
         cmd_rankings(args)
+    elif args.command == "closed":
+        cmd_closed(args)
 
 
 if __name__ == "__main__":
