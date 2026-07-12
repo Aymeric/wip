@@ -1,7 +1,7 @@
 {
   "basket_gate": "FAIL",
   "bull_bear_gate": "PASS",
-  "vix_spot": 14.5,
+  "vix_spot": 15.03,
   "vix_bearish": true,
   "vix_delta_gate": "PASS",
   "system_authorization": "TRACK 1 OK",
@@ -10,29 +10,29 @@
     "SPY": {
       "Ticker": "SPY",
       "ETF Segment / Sector Name": "S&P 500 Broad Market",
-      "Price": 754.93,
-      "Daily Change %": 0.4289,
+      "Price": 754.9,
+      "Daily Change %": 0.4244,
       "Classification": "BULLISH"
     },
     "QQQ": {
       "Ticker": "QQQ",
       "ETF Segment / Sector Name": "Nasdaq 100 Growth Index",
-      "Price": 725.94,
-      "Daily Change %": 0.3678,
+      "Price": 726.29,
+      "Daily Change %": 0.4162,
       "Classification": "BULLISH"
     },
     "IWM": {
       "Ticker": "IWM",
       "ETF Segment / Sector Name": "Russell 2000 Small Caps",
-      "Price": 296.08,
-      "Daily Change %": -0.3903,
+      "Price": 296.09,
+      "Daily Change %": -0.3869,
       "Classification": "BEARISH"
     },
     "DIA": {
       "Ticker": "DIA",
       "ETF Segment / Sector Name": "Dow Jones Industrials Value",
-      "Price": 526.12,
-      "Daily Change %": 0.3682,
+      "Price": 526.26,
+      "Daily Change %": 0.3949,
       "Classification": "BULLISH"
     },
     "XLK": {
@@ -45,15 +45,15 @@
     "XLF": {
       "Ticker": "XLF",
       "ETF Segment / Sector Name": "Financials",
-      "Price": 55.7,
-      "Daily Change %": 0.2881,
+      "Price": 55.75,
+      "Daily Change %": 0.3777,
       "Classification": "BULLISH"
     },
     "XLV": {
       "Ticker": "XLV",
       "ETF Segment / Sector Name": "Health Care",
-      "Price": 160.94,
-      "Daily Change %": -0.7581,
+      "Price": 160.84,
+      "Daily Change %": -0.8201,
       "Classification": "BEARISH"
     },
     "XLY": {
@@ -101,9 +101,9 @@
     "XLE": {
       "Ticker": "XLE",
       "ETF Segment / Sector Name": "Energy",
-      "Price": 54.85,
-      "Daily Change %": 0.0586,
-      "Classification": "FLAT"
+      "Price": 54.99,
+      "Daily Change %": 0.3046,
+      "Classification": "BULLISH"
     },
     "XLC": {
       "Ticker": "XLC",
@@ -115,14 +115,14 @@
     "HYG": {
       "Ticker": "HYG",
       "ETF Segment / Sector Name": "High Yield Corporate Bond ETF",
-      "Price": 79.63,
-      "Daily Change %": -0.1505,
+      "Price": 79.64,
+      "Daily Change %": -0.1327,
       "Classification": "BEARISH"
     }
   },
-  "last_updated": "2026-07-11",
-  "monthly_pnl_dlr": -759.9599999999999,
-  "monthly_pnl_pct": -1.5199199999999997,
+  "last_updated": "2026-07-12",
+  "monthly_pnl_dlr": -740.8,
+  "monthly_pnl_pct": -1.4816,
   "drawdown_gate_status": "PASS",
-  "monthly_cnt": 7
+  "monthly_cnt": 3
 }

@@ -1,0 +1,65 @@
+{
+  "data": {
+    "account_number": "5QR24141",
+    "span": "month",
+    "trades": [
+      {
+        "timestamp": "2026-07-04T03:44:28Z",
+        "symbol": "",
+        "side": "",
+        "quantity": "45",
+        "price": "0",
+        "realized_gain": "-9.45"
+      },
+      {
+        "timestamp": "2026-07-04T00:57:47Z",
+        "symbol": "",
+        "side": "",
+        "quantity": "104",
+        "price": "0",
+        "realized_gain": "-9.36"
+      },
+      {
+        "timestamp": "2026-07-03T20:59:24Z",
+        "symbol": "",
+        "side": "",
+        "quantity": "19",
+        "price": "0",
+        "realized_gain": "-9.31"
+      },
+      {
+        "timestamp": "2026-07-02T14:51:50Z",
+        "symbol": "LITE",
+        "side": "",
+        "quantity": "1",
+        "price": "756.21",
+        "realized_gain": "-243.79"
+      },
+      {
+        "timestamp": "2026-06-24T13:03:31Z",
+        "symbol": "SGOV",
+        "side": "",
+        "quantity": "202.947557",
+        "price": "100.6100802681748960397685398",
+        "realized_gain": "12.99"
+      },
+      {
+        "timestamp": "2026-06-18T20:00:00Z",
+        "symbol": "IWM",
+        "side": "",
+        "quantity": "1",
+        "price": "0",
+        "realized_gain": "-510"
+      },
+      {
+        "timestamp": "2026-06-16T21:45:52Z",
+        "symbol": "",
+        "side": "",
+        "quantity": "28",
+        "price": "1",
+        "realized_gain": "8.96"
+      }
+    ],
+    "next_cursor": ""
+  }
+}

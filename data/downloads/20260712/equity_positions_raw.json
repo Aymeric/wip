@@ -1,0 +1,136 @@
+{
+  "data": {
+    "positions": [
+      {
+        "symbol": "AMZN",
+        "quantity": "50.000000",
+        "intraday_quantity": "0.000000",
+        "average_buy_price": "217.800000",
+        "shares_available_for_sells": "50.000000",
+        "shares_held_for_sells": "0.000000",
+        "shares_held_for_stock_grants": "0.000000",
+        "shares_held_for_options_events": "0.000000",
+        "shares_held_for_asset_transfer": "0.000000",
+        "shares_pending_from_options_events": "0.000000",
+        "type": "long"
+      },
+      {
+        "symbol": "GOOG",
+        "quantity": "20.026411",
+        "intraday_quantity": "0.000000",
+        "average_buy_price": "315.040000",
+        "shares_available_for_sells": "20.026411",
+        "shares_held_for_sells": "0.000000",
+        "shares_held_for_stock_grants": "0.000000",
+        "shares_held_for_options_events": "0.000000",
+        "shares_held_for_asset_transfer": "0.000000",
+        "shares_pending_from_options_events": "0.000000",
+        "type": "long"
+      },
+      {
+        "symbol": "HOOD",
+        "quantity": "10.000000",
+        "intraday_quantity": "0.000000",
+        "average_buy_price": "76.490000",
+        "shares_available_for_sells": "10.000000",
+        "shares_held_for_sells": "0.000000",
+        "shares_held_for_stock_grants": "0.000000",
+        "shares_held_for_options_events": "0.000000",
+        "shares_held_for_asset_transfer": "0.000000",
+        "shares_pending_from_options_events": "0.000000",
+        "type": "long"
+      },
+      {
+        "symbol": "NFLX",
+        "quantity": "30.000000",
+        "intraday_quantity": "0.000000",
+        "average_buy_price": "88.020000",
+        "shares_available_for_sells": "30.000000",
+        "shares_held_for_sells": "0.000000",
+        "shares_held_for_stock_grants": "0.000000",
+        "shares_held_for_options_events": "0.000000",
+        "shares_held_for_asset_transfer": "0.000000",
+        "shares_pending_from_options_events": "0.000000",
+        "type": "long"
+      },
+      {
+        "symbol": "AAPL",
+        "quantity": "10.000000",
+        "intraday_quantity": "0.000000",
+        "average_buy_price": "260.000000",
+        "shares_available_for_sells": "10.000000",
+        "shares_held_for_sells": "0.000000",
+        "shares_held_for_stock_grants": "0.000000",
+        "shares_held_for_options_events": "0.000000",
+        "shares_held_for_asset_transfer": "0.000000",
+        "shares_pending_from_options_events": "0.000000",
+        "type": "long"
+      },
+      {
+        "symbol": "META",
+        "quantity": "7.000000",
+        "intraday_quantity": "0.000000",
+        "average_buy_price": "581.930000",
+        "shares_available_for_sells": "7.000000",
+        "shares_held_for_sells": "0.000000",
+        "shares_held_for_stock_grants": "0.000000",
+        "shares_held_for_options_events": "0.000000",
+        "shares_held_for_asset_transfer": "0.000000",
+        "shares_pending_from_options_events": "0.000000",
+        "type": "long"
+      },
+      {
+        "symbol": "WU",
+        "quantity": "205.880050",
+        "intraday_quantity": "0.000000",
+        "average_buy_price": "8.290000",
+        "shares_available_for_sells": "205.880050",
+        "shares_held_for_sells": "0.000000",
+        "shares_held_for_stock_grants": "0.000000",
+        "shares_held_for_options_events": "0.000000",
+        "shares_held_for_asset_transfer": "0.000000",
+        "shares_pending_from_options_events": "0.000000",
+        "type": "long"
+      },
+      {
+        "symbol": "NOW",
+        "quantity": "30.000000",
+        "intraday_quantity": "0.000000",
+        "average_buy_price": "110.440000",
+        "shares_available_for_sells": "30.000000",
+        "shares_held_for_sells": "0.000000",
+        "shares_held_for_stock_grants": "0.000000",
+        "shares_held_for_options_events": "0.000000",
+        "shares_held_for_asset_transfer": "0.000000",
+        "shares_pending_from_options_events": "0.000000",
+        "type": "long"
+      },
+      {
+        "symbol": "RVI",
+        "quantity": "50.000000",
+        "intraday_quantity": "0.000000",
+        "average_buy_price": "25.000000",
+        "shares_available_for_sells": "25.000000",
+        "shares_held_for_sells": "25.000000",
+        "shares_held_for_stock_grants": "0.000000",
+        "shares_held_for_options_events": "0.000000",
+        "shares_held_for_asset_transfer": "0.000000",
+        "shares_pending_from_options_events": "0.000000",
+        "type": "long"
+      },
+      {
+        "symbol": "MRNA",
+        "quantity": "20.000000",
+        "intraday_quantity": "0.000000",
+        "average_buy_price": "53.300000",
+        "shares_available_for_sells": "20.000000",
+        "shares_held_for_sells": "0.000000",
+        "shares_held_for_stock_grants": "0.000000",
+        "shares_held_for_options_events": "0.000000",
+        "shares_held_for_asset_transfer": "0.000000",
+        "shares_pending_from_options_events": "0.000000",
+        "type": "long"
+      }
+    ]
+  }
+}

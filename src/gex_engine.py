@@ -707,6 +707,111 @@ def cmd_status(args):
     else:
         print_color(f"\n✅ SYSTEM STATUS: AUTHORIZED ({regime['system_authorization']}). New trade entries are permitted.", "32", bold=True)
 
+    # 🔔 Central Command alerts summary
+    options = load_json(OPTIONS_FILE, {"options_positions": {}, "stocks_positions": {}})
+    analyses = load_json(ANALYSES_FILE, {})
+    positions = options.get("options_positions", {})
+    stocks = options.get("stocks_positions", {})
+    
+    pending_exits = []
+    
+    # Check options exits
+    for opt_id, details in positions.items():
+        ticker = details.get("Underlier", "")
+        purchase_premium = float(details.get("Purchase Premium", 1.0))
+        mark_price = float(details.get("Mark Price", 1.0))
+        strike = details.get("Strike")
+        expiration = details.get("Expiration")
+        
+        levels = analyses.get(ticker, {})
+        ptrans = levels.get("pTrans")
+        ntrans = levels.get("nTrans")
+        gex_t1 = levels.get("+GEX")
+        spot = levels.get("Spot")
+        if spot is None:
+            spot = details.get("Underlier Spot") or details.get("Spot")
+        if spot is None:
+            spot = float(strike) if strike else 100.0
+            
+        days_held = details.get("Days Held", 1)
+        entry_date = details.get("Entry Date")
+        if entry_date:
+            try:
+                days_held = max((datetime.today() - datetime.strptime(entry_date, "%Y-%m-%d")).days + 1, 1)
+            except ValueError:
+                pass
+                
+        dte = None
+        if expiration:
+            try:
+                dte = (datetime.strptime(expiration, "%Y-%m-%d") - datetime.today()).days
+            except ValueError:
+                pass
+                
+        stalling_counter = details.get("Stalling Days", 0)
+        target_mode = details.get("Target Mode", "T1")
+        t2_target = details.get("T2 Target")
+        if t2_target is not None:
+            try:
+                t2_target = float(t2_target)
+            except (ValueError, TypeError):
+                t2_target = None
+                
+        exit_rule_state, proposed_action, _, _, _ = compute_exit_rule_state(
+            spot, purchase_premium, mark_price, ptrans, ntrans, gex_t1, days_held, stalling_counter, dte,
+            target_mode=target_mode, t2_target=t2_target
+        )
+        
+        if "STOP" in exit_rule_state or "PROFIT" in exit_rule_state or "EXPIRED" in exit_rule_state or "Exit" in proposed_action or "MET" in exit_rule_state:
+            pending_exits.append(f"{ticker} (Option: {exit_rule_state})")
+            
+    # Check stock exits
+    for ticker, details in stocks.items():
+        shares = float(details.get("Shares", 0.0))
+        avg_price = float(details.get("Average Buy Price", 0.0))
+        
+        levels = analyses.get(ticker, {})
+        ptrans = levels.get("pTrans")
+        ntrans = levels.get("nTrans")
+        gex_t1 = levels.get("+GEX")
+        
+        spot = levels.get("Spot")
+        if spot is None:
+            spot = details.get("Current Price") or details.get("Spot")
+        if spot is None:
+            spot = avg_price
+            
+        exit_rule_state = "HOLD"
+        if ntrans and spot < ntrans:
+            exit_rule_state = "STOP TRIGGERED (Structural Stop)"
+        elif gex_t1 and spot >= gex_t1:
+            exit_rule_state = "PROFIT TAKE (T1 TARGET MET)"
+            
+        if "STOP" in exit_rule_state or "PROFIT" in exit_rule_state:
+            pending_exits.append(f"{ticker} (Stock: {exit_rule_state})")
+            
+    # Check confirmed setups
+    confirmed_setups = []
+    for tkr, data in sorted(analyses.items()):
+        if data.get("Signal Status", "").startswith("CONFIRMED"):
+            confirmed_setups.append(f"{tkr} (Grade {data.get('Grade')}/11, Spot: ${data.get('Spot')})")
+            
+    if pending_exits or confirmed_setups:
+        print("\n### 🔔 Central Command Actionable Alerts Summary")
+        if pending_exits:
+            print_color(f"  ⚠️ {len(pending_exits)} TRIGGERED SYSTEMATIC EXITS DETECTED:", "31", bold=True)
+            for pe in pending_exits:
+                print(f"    - {pe}")
+        if confirmed_setups:
+            if "BLOCK" in regime['system_authorization']:
+                print_color(f"  💤 {len(confirmed_setups)} CONFIRMED SETUPS (Entries currently BLOCKED by daily regime):", "33")
+            else:
+                print_color(f"  🚀 {len(confirmed_setups)} CONFIRMED SETUPS READY FOR ENTRY:", "32", bold=True)
+            for cs in confirmed_setups:
+                print(f"    - {cs}")
+    else:
+        print_color("\n💤 No active portfolio exits or confirmed setups ready for execution today.", "33")
+
 
 def calculate_grade(ticker, spot, ptrans, ntrans, gex, cotmp, extra_rules=None):
     """
@@ -1479,6 +1584,27 @@ def cmd_analyze(args):
     print(f"  3. **COTMP Cushion**: {format_color(f'{cotmp_cushion:.2f}%', cushion_color)} (Status: {format_color('PASS' if cotmp_cushion >= cushion_threshold else 'FAIL', cushion_color, bold=True)})")
     print(f"  4. **Spike-Crash Check**: {format_color('FAIL - Blocked' if spike_crash else 'PASS - No Pattern', sc_color, bold=True)}")
     print(f"  5. **Risk/Reward Ratio**: {format_color(f'{rr_ratio:.2f}:1', rr_color)} (Status: {format_color('PASS' if rr_ratio >= 2.0 else 'FAIL', rr_color, bold=True)})")
+    
+    # Detailed 11-Rule Breakdown for structural GEX evaluation
+    rule_descriptions = [
+        "Total Call GEX is positive (bullish posture)",
+        "Total Call GEX exceeds absolute value of Total Put GEX (net positive positioning)",
+        "Underlier Spot price is above Center of Put Mass (COTMP)",
+        "Largest positive GEX target strike (+GEX / T1 Target) is above current stock Spot price",
+        "Positive transition (pTrans) sits above negative transition (nTrans)",
+        "Stock Spot price sits above pTrans (entry trigger rule)",
+        "Total Open Interest (OI) exceeds 10,000 contracts for structural depth",
+        "30-day option implied volatility (IV30) is below historical 90-day realized volatility (HV90)",
+        "Open Interest depth at the +GEX target strike exceeds all other strikes",
+        "Dealer net gamma positioning at the current Spot is net positive",
+        "Underlier's 10-day realized volatility (RV10) is compressed (<= 35%)"
+    ]
+    print("\n### 📋 Structural GEX 11-Rule Checklist Breakdown")
+    for i, passed in enumerate(rule_checklist):
+        rule_num = i + 1
+        indicator = format_color("  [PASS]", "32", bold=True) if passed else format_color("  [FAIL]", "31", bold=True)
+        print(f"{indicator} Rule {rule_num:02d}: {rule_descriptions[i]}")
+        
     print(f"\n### 🚀 Status & Action")
     print(f"- **Signal Status**: {status_fmt}")
     if status.startswith("CONFIRMED"):
@@ -1487,6 +1613,10 @@ def cmd_analyze(args):
         print_color(f"- **Recommended Play**: Setup valid. Standard watch list entry activated. Look for 5-minute close above pTrans (${ptrans:.2f}) to trigger execution.", "33", bold=True)
     else:
         print_color(f"- **Recommended Play**: NO ENTRY. Setup blocked by system safeguards.", "31", bold=True)
+
+    best_option_cached = None
+    max_contracts_cached = 0
+    cost_per_contract_cached = 0.0
 
     if inst_data is not None and quotes_data is not None:
         target_delta = getattr(args, "target_delta", 0.45)
@@ -1497,6 +1627,7 @@ def cmd_analyze(args):
             target_delta=target_delta, min_dte=min_dte, max_dte=max_dte
         )
         if best_option:
+            best_option_cached = best_option
             print(f"\n### 🎯 Option Selection Recommendation")
             print(f"- **Target Contract**: Call Option strike ${best_option['strike']:.2f} expiring {best_option['expiration_date']} (DTE: {best_option['dte']})")
             print(f"- **Option ID**: {best_option['option_id']}")
@@ -1527,15 +1658,42 @@ def cmd_analyze(args):
             
             max_risk = net_liq * 0.03
             cost_per_contract = best_option['mark'] * 100.0
+            cost_per_contract_cached = cost_per_contract
             if cost_per_contract > 0:
                 max_contracts = int(max_risk // cost_per_contract)
             else:
                 max_contracts = 0
+            max_contracts_cached = max_contracts
                 
             print(f"- **Aggregate Sizing Simulation**:")
             print(f"  - Portfolio Net Liq Reference: ${net_liq:,.2f}")
             print(f"  - Single-Leg Max Sizing Allowed (3.0% Net Liq): ${max_risk:,.2f}")
             print(f"  - Estimated Sizing Recommendation: {format_color(f'{max_contracts} contracts', '32', bold=True)} at ${best_option['mark']:.2f} per premium (Total Premium: ${max_contracts * cost_per_contract:,.2f})")
+
+    # Render Execution Approval Requests for systematic entry setups
+    regime = get_regime_status()
+    auth = regime.get("system_authorization", "BLOCKED")
+    
+    if "BLOCK" not in auth and (status.startswith("CONFIRMED") or status.startswith("PENDING")):
+        print_color("\n" + "=" * 95, "32", bold=True)
+        print_color("🔔                        EXECUTION APPROVAL REQUEST (PROPOSED ENTRY)", "32", bold=True)
+        print_color("=" * 95, "32", bold=True)
+        print_color(f"[ACTION REQUIRED] Confirm GEX underlier entry setup and routing for {symbol}:", "37", bold=True)
+        print(f"\n  Asset: {format_color(symbol, '35', bold=True)} (Underlier Spot: ${spot:.2f})")
+        print(f"  -> STATUS: {status_fmt}")
+        if status.startswith("CONFIRMED"):
+            print(f"  -> PLAY: Underlier Spot is above pTrans (${ptrans:.2f}). Look for bullish Option contract entry targeting ${gex:.2f}.")
+        else:
+            print(f"  -> PLAY: Setup valid but pending trigger. Look for 5-minute close above pTrans (${ptrans:.2f}) to execute.")
+            
+        if best_option_cached:
+            print(f"  -> CONTRACT: Call Strike ${best_option_cached['strike']:.2f} Expiring {best_option_cached['expiration_date']} (DTE: {best_option_cached['dte']})")
+            print(f"  -> SIZING: {max_contracts_cached} contracts at ${best_option_cached['mark']:.2f} per premium (Total Premium: ${max_contracts_cached * cost_per_contract_cached:,.2f})")
+            
+        print_color("\n  -> INSTRUCTIONS: To authorize entry routing, respond with 'YES' in chat to trigger agentic-trader.", "37")
+        print_color("=" * 95 + "\n", "32", bold=True)
+    elif "BLOCK" in auth and (status.startswith("CONFIRMED") or status.startswith("PENDING")):
+        print_color(f"\n⚠️ ENTRY BLOCKED: Broad-market daily regime ({auth}) is currently prohibiting new entries. No action taken.", "31", bold=True)
 
 
 def compute_exit_rule_state(spot, purchase_premium, mark_price, ptrans, ntrans, gex_t1, days_held, stalling_counter, dte, target_mode="T1", t2_target=None):
@@ -1659,9 +1817,24 @@ def get_monthly_realized_pnl(net_liq: float) -> Tuple[float, float, str, int]:
             # Support multiple formats
             res = data.get("realized_pnl", data.get("data", {}))
             if isinstance(res, dict):
-                pnl_val = float(res.get("realized_gain_loss", res.get("total_realized_pnl", 0.0)))
+                pnl_raw = res.get("realized_gain_loss", res.get("total_realized_pnl", res.get("total_returns", 0.0)))
+                try:
+                    pnl_val = float(pnl_raw) if pnl_raw is not None else 0.0
+                except (ValueError, TypeError):
+                    pnl_val = 0.0
                 pct_val = (pnl_val / net_liq) * 100.0 if net_liq > 0 else 0.0
-                cnt = int(res.get("closing_trades_count", res.get("trade_count", 0)))
+                
+                cnt_raw = res.get("closing_trades_count", res.get("trade_count", 0))
+                try:
+                    cnt = int(cnt_raw) if cnt_raw is not None else 0
+                except (ValueError, TypeError):
+                    cnt = 0
+                    
+                if cnt == 0 and "data_points" in res:
+                    try:
+                        cnt = sum(int(dp.get("number_of_trades") or 0) for dp in res["data_points"] if isinstance(dp, dict))
+                    except (ValueError, TypeError):
+                        pass
                 status = "FAIL" if (pnl_val < 0 and abs(pnl_val) >= (net_liq * 0.10)) else "PASS"
                 return pnl_val, pct_val, status, cnt
         except Exception:
@@ -1678,8 +1851,23 @@ def get_monthly_realized_pnl(net_liq: float) -> Tuple[float, float, str, int]:
                 
             total_gain = 0.0
             trade_count = 0
-            # Define current system session date
-            now_dt = datetime.strptime("2026-07-11", "%Y-%m-%d")
+            
+            # Establish the reference date for the 30-day window:
+            # Use today's date, or anchor to the latest trade in the file if today is far in the future (e.g. testing)
+            now_dt = datetime.today()
+            trade_dates = []
+            for t in trades:
+                ts = t.get("timestamp", "")
+                if ts:
+                    try:
+                        trade_dates.append(datetime.strptime(ts[:10], "%Y-%m-%d"))
+                    except Exception:
+                        pass
+            if trade_dates:
+                latest_trade_dt = max(trade_dates)
+                if (now_dt - latest_trade_dt).days > 30:
+                    now_dt = latest_trade_dt
+                    
             for t in trades:
                 ts = t.get("timestamp", "")
                 if not ts:
@@ -1708,6 +1896,8 @@ def cmd_portfolio(args):
     
     positions = options.get("options_positions", {})
     stocks = options.get("stocks_positions", {})
+    
+    pending_exits = []
     
     if not positions and not stocks:
         print("### 🛡️ Active Portfolio Tracker & Exits (Current Positions)")
@@ -2021,6 +2211,19 @@ def cmd_portfolio(args):
         print(f"  - **Time / Momentum Tracking**: Day [{days_held}] of 7 (Status: [{time_status}]{dte_str})")
         print(f"  - **Proposed Action**: [{format_color(proposed_action, color_code, bold=bold)}]")
         
+        # Accumulate pending exits for options
+        if "STOP" in exit_rule_state or "PROFIT" in exit_rule_state or "EXPIRED" in exit_rule_state or "Exit" in proposed_action or "MET" in exit_rule_state:
+            pending_exits.append({
+                "ticker": ticker,
+                "asset_cls": "Option",
+                "desc": f"{opt_type.upper()} Strike ${strike} Exp {expiration}",
+                "rule_state": exit_rule_state,
+                "proposed_action": proposed_action,
+                "current_price": mark_price,
+                "pnl_pct": pl_pct,
+                "pnl_dlr": pl_dollar
+            })
+            
         # Accumulate aggregate metrics
         total_cost_basis += details.get("Asset Cost Basis") or (purchase_premium * 100.0)
         total_current_value += details.get("Current Value") or (mark_price * 100.0)
@@ -2095,6 +2298,19 @@ def cmd_portfolio(args):
         print(f"  - **Distance to GEX nTrans Stop (nTrans at ${ntrans if ntrans else 0.0:.2f})**: {distance_ntrans}")
         print(f"  - **Proposed Action**: [{format_color(proposed_action, color_code, bold=bold)}]")
         
+        # Accumulate pending exits for stocks
+        if "STOP" in exit_rule_state or "PROFIT" in exit_rule_state or "Exit" in proposed_action or "MET" in exit_rule_state:
+            pending_exits.append({
+                "ticker": ticker,
+                "asset_cls": "Stock",
+                "desc": f"{shares:,.2f} shares",
+                "rule_state": exit_rule_state,
+                "proposed_action": proposed_action,
+                "current_price": spot,
+                "pnl_pct": pl_pct,
+                "pnl_dlr": pl_dollar
+            })
+            
         total_cost_basis += cost_basis
         total_current_value += curr_val
         
@@ -2247,6 +2463,23 @@ def cmd_portfolio(args):
     # Save the updated indicators
     options["options_positions"] = positions
     save_json(OPTIONS_FILE, options)
+    
+    # Render Execution Approval Requests for systematic exits
+    if pending_exits:
+        print_color("\n" + "=" * 95, "31", bold=True)
+        print_color("🔔                        EXECUTION APPROVAL REQUEST (PENDING EXITS)", "31", bold=True)
+        print_color("=" * 95, "31", bold=True)
+        print_color("[ACTION REQUIRED] Confirm systematic GEX order routing for the following exits:", "37", bold=True)
+        for idx, item in enumerate(pending_exits, 1):
+            pnl_c = "32" if item["pnl_dlr"] >= 0 else "31"
+            pnl_formatted = format_color(f"{item['pnl_pct']:+.2f}% (${item['pnl_dlr']:+,.2f})", pnl_c, bold=True)
+            print(f"\n  {idx:d}. {format_color(item['ticker'], '35', bold=True)} ({item['asset_cls']}: {item['desc']})")
+            print(f"     -> TRIGGER: {format_color(item['rule_state'], '31', bold=True)}")
+            print(f"     -> ACTION: {format_color(item['proposed_action'], '33', bold=True)}")
+            print(f"     -> CURRENT MARK / PRICE: ${item['current_price']:.2f} (Unrealized P&L: {pnl_formatted})")
+            
+        print_color("\n  -> INSTRUCTIONS: To authorize, respond with 'YES' in chat to execute via agentic-trader.", "37")
+        print_color("=" * 95 + "\n", "31", bold=True)
 
 
 def cmd_add_pos(args):
@@ -2885,9 +3118,28 @@ def cmd_update_candidates(args):
     
     save_json(CANDIDATES_FILE, output_data)
     
-    print(f"Wrote {len(candidate_list)} candidates to {CANDIDATES_FILE}")
+    print(f"\nWrote {len(candidate_list)} candidates to {CANDIDATES_FILE}")
+    print("\n### 🚀 Top Screened GEX Candidates")
+    print("  " + "-" * 95)
+    print(f"  {'Ticker':<8} | {'Price':<8} | {'Daily Change':<12} | {'Implied Vol':<12} | {'Rel Opt Vol':<16} | {'Market Cap'}")
+    print("  " + "-" * 95)
     for c in candidate_list[:10]:
-        print(f"  - {c['symbol']}: price=${c['price']}, change={c['chg_pct']:.2f}%, iv={c['iv']}, rel_opt_vol={c['relative_options_volume']}")
+        ticker = c['symbol']
+        price = f"${c['price']:.2f}"
+        change = f"{c['chg_pct']:+.2f}%"
+        iv = f"{c['iv']*100:.1f}%" if c.get('iv') is not None else "N/A"
+        rel_opt_vol = f"{c['relative_options_volume']:.2f}" if c.get('relative_options_volume') is not None else "N/A"
+        mcap = f"${c['market_cap']/1e9:.2f}B" if c.get('market_cap') is not None else "N/A"
+        
+        # Color coding changes
+        change_color = "32" if c['chg_pct'] > 0.0 else "31"
+        change_fmt = format_color(f"{change:<12}", change_color, bold=True)
+        ticker_fmt = format_color(f"{ticker:<8}", "35", bold=True)
+        
+        print(f"  {ticker_fmt} | {price:<8} | {change_fmt} | {iv:<12} | {rel_opt_vol:<16} | {mcap}")
+    print("  " + "-" * 95)
+    if len(candidate_list) > 10:
+        print(f"  * Showing top 10 sorted by relative options volume out of {len(candidate_list)} candidates total.")
 
 
 def cmd_update_sentiment(args):
@@ -3308,6 +3560,23 @@ def cmd_rankings(args):
             print_color(f"\n⚠️ WARNING: System Authorization is BLOCKED. New entries are legally restricted by GEX regime rules today.", "31", bold=True)
         else:
             print_color(f"\n🚀 System Authorization is {auth}. GEX setups eligible for manual or agentic execution approval request!", "32", bold=True)
+            
+            # Joint entry approval box
+            print_color("\n" + "=" * 95, "32", bold=True)
+            print_color("🔔                        EXECUTION APPROVAL REQUEST (PENDING ENTRIES)", "32", bold=True)
+            print_color("=" * 95, "32", bold=True)
+            print_color("[ACTION REQUIRED] Confirm GEX entry route for the following confirmed setups:", "37", bold=True)
+            for idx, s in enumerate(confirmed_setups, 1):
+                ticker = s.get("Ticker")
+                spot = s.get("Spot")
+                gex = s.get("+GEX")
+                grade = s.get("Grade")
+                print(f"\n  {idx:d}. {format_color(ticker, '35', bold=True)} (Underlier Spot: ${spot:.2f})")
+                print(f"     -> SETUP TARGET: +GEX Wall at ${gex:.2f} (Grade {grade}/11)")
+                print(f"     -> ACTION: Route Call option or stock entry.")
+                
+            print_color("\n  -> INSTRUCTIONS: To authorize routing, respond with 'YES' in chat to execute via agentic-trader.", "37")
+            print_color("=" * 95 + "\n", "32", bold=True)
     else:
         print_color("\n💤 No CONFIRMED GEX setups matching current filters or market status.", "33")
 
