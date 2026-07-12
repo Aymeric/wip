@@ -171,6 +171,51 @@ def format_color(text: str, color_code: str, bold: bool = False) -> str:
     return text
 
 
+def generate_ascii_gex_scale(spot: float, ptrans: Optional[float], ntrans: Optional[float], gex: Optional[float], cotmp: Optional[float]) -> str:
+    """Constructs a visual linear ASCII representation of GEX levels and where SPOT resides."""
+    levels_by_price = {}
+    for price, label in [(cotmp, "COTMP"), (ntrans, "nTrans"), (ptrans, "pTrans"), (gex, "+GEX"), (spot, "*SPOT*")]:
+        if price is None:
+            continue
+        p_round = round(price, 2)
+        levels_by_price.setdefault(p_round, []).append(label)
+        
+    sorted_prices = sorted(levels_by_price.keys())
+    
+    runway_segments = []
+    for i, price in enumerate(sorted_prices):
+        labels = levels_by_price[price]
+        label_strs = []
+        for label in labels:
+            if label == "*SPOT*":
+                label_strs.append(format_color("SPOT", "35", bold=True))
+            elif label == "+GEX":
+                label_strs.append(format_color("+GEX (T1 Target)", "32", bold=True))
+            elif label == "pTrans":
+                label_strs.append("pTrans")
+            elif label == "nTrans":
+                label_strs.append(format_color("nTrans (Stop)", "31"))
+            elif label == "COTMP":
+                label_strs.append(format_color("COTMP (Support)", "31"))
+                
+        label_block = " + ".join(label_strs)
+        formatted_block = f"[{label_block}: ${price:.2f}]"
+        
+        # If it's just a single SPOT label, format it as *SPOT*
+        if len(labels) == 1 and labels[0] == "*SPOT*":
+            formatted_block = format_color(f"*SPOT*(${price:.2f})", "35", bold=True)
+            
+        runway_segments.append(formatted_block)
+        
+        if i < len(sorted_prices) - 1:
+            next_price = sorted_prices[i+1]
+            delta = next_price - price
+            pct_dist = (delta / price) * 100.0 if price > 0 else 0.0
+            runway_segments.append(f" === {pct_dist:+.1f}% ===> ")
+            
+    return "".join(runway_segments)
+
+
 def str2bool(value: Any) -> bool:
     """Parses CLI boolean flags reliably (argparse type=bool treats 'False' as True)."""
     if isinstance(value, bool):
@@ -667,6 +712,36 @@ def cmd_status(args):
         if hyg_pct < -0.3 and equities_bullish:
             print_color("\n⚠️ CREDIT DIVERGENCE DETECTED: HYG daily change of < -0.30% while equities are positive.", "33", bold=True)
             print_color("⚠️ RISK MITIGATION TRIGGERED: Reduce position sizing on new options entries by 50%.", "33", bold=True)
+            
+    # Sector Momentum Rotation Summary
+    if etf_details:
+        spy_change = etf_details.get("SPY", {}).get("Daily Change %")
+        if spy_change is None:
+            spy_change = regime.get("spy_pct", 0.0)
+            
+        leaders_tuples = []
+        laggers_tuples = []
+        for sym, det in etf_details.items():
+            if sym in ("SPY", "HYG"):
+                continue
+            chg = det.get("Daily Change %", 0.0)
+            segment_name = det.get("ETF Segment / Sector Name", sym)
+            clean_name = segment_name.split(" / ")[-1].split(" ETF")[0]
+            if chg > spy_change:
+                leaders_tuples.append((chg, sym, clean_name))
+            else:
+                laggers_tuples.append((chg, sym, clean_name))
+                
+        leaders_tuples.sort(reverse=True)
+        laggers_tuples.sort()
+        
+        leaders_str = ", ".join(f"{format_color(sym, '35', bold=True)} ({chg:+.2f}%)" for chg, sym, name in leaders_tuples) or "None"
+        laggers_str = ", ".join(f"{format_color(sym, '35', bold=True)} ({chg:+.2f}%)" for chg, sym, name in laggers_tuples) or "None"
+        
+        print("\n### 🔄 Sector Momentum & Rotation")
+        print(f"- **Benchmark SPY Change**: {format_color(f'{spy_change:+.2f}%', '32' if spy_change >= 0 else '31', bold=True)}")
+        print(f"- **Leading Sectors (Outperforming SPY)**: {leaders_str}")
+        print(f"- **Lagging Sectors (Underperforming SPY)**: {laggers_str}")
             
     if etf_details:
         print("\n### 📈 Sector & Broad Market ETF Breadth Board")
@@ -1578,6 +1653,11 @@ def cmd_analyze(args):
     print(f"  - nTrans (Negative Transition): ${ntrans:.2f}")
     print(f"  - +GEX (T1 Target): ${gex:.2f}")
     print(f"  - COTMP (Center of Put Mass): ${cotmp:.2f}")
+    
+    scale_str = generate_ascii_gex_scale(spot, ptrans, ntrans, gex, cotmp)
+    print(f"\n### 🛣️ Dealer GEX Structural Runway Map")
+    print(f"  {scale_str}\n")
+    
     print(f"- **Core Filters**:")
     print(f"  1. **Structural Grade**: {format_color(f'{grade}/11', grade_color)} (Status: {format_color('PASS' if grade >= 9 else 'FAIL', grade_color, bold=True)})")
     print(f"  2. **db_change (Delta Balance Change)**: {format_color(f'{db_change:.2f}', db_color)} (Status: {format_color('PASS' if db_change >= db_threshold else 'FAIL', db_color, bold=True)})")
@@ -1669,6 +1749,94 @@ def cmd_analyze(args):
             print(f"  - Portfolio Net Liq Reference: ${net_liq:,.2f}")
             print(f"  - Single-Leg Max Sizing Allowed (3.0% Net Liq): ${max_risk:,.2f}")
             print(f"  - Estimated Sizing Recommendation: {format_color(f'{max_contracts} contracts', '32', bold=True)} at ${best_option['mark']:.2f} per premium (Total Premium: ${max_contracts * cost_per_contract:,.2f})")
+
+            # Render Option Payoff Projection Matrix Table
+            print(f"\n### 📊 Option Payoff Projection Matrix")
+            print("  This matrix simulates target contract value using Delta & Gamma price adjustment")
+            print("  and is adjusted for square-root-of-time extrinsic decay.")
+            print("  " + "-" * 133)
+            print(f"  {'Target Spot':<12} | {'Underlier %':<11} | {'Scenario / Level':<24} | {'Day 0 (Instant)':<17} | {'Day 3 Held':<17} | {'Day 7 Held':<17} | {'Day 14 Held'}")
+            print("  " + "-" * 133)
+            
+            # Scenarios to print
+            scenarios = []
+            if ntrans is not None and ntrans > 0:
+                scenarios.append((ntrans, "nTrans (Structural Stop)"))
+            if ptrans is not None and ptrans > 0:
+                scenarios.append((ptrans, "pTrans (Transition/Entry)"))
+            scenarios.append((spot, "Baseline Spot (Current)"))
+            
+            midway = spot + (gex - spot) / 2.0
+            scenarios.append((midway, "T1 Halfway Level"))
+            
+            if gex is not None and gex > 0:
+                scenarios.append((gex, "+GEX (T1 Target)"))
+                t2_stretch = gex + (gex - spot) * 0.5
+                scenarios.append((t2_stretch, "T2 (Stretch Target)"))
+                
+            # Filter and sort unique target spots
+            unique_scenarios = {}
+            for s_price, s_name in scenarios:
+                s_price = round(s_price, 2)
+                if s_price not in unique_scenarios:
+                    unique_scenarios[s_price] = s_name
+                    
+            import math
+            for s_price in sorted(unique_scenarios.keys()):
+                s_name = unique_scenarios[s_price]
+                pct_chg = ((s_price - spot) / spot) * 100.0 if spot > 0 else 0.0
+                underlier_chg_str = f"{pct_chg:+.2f}%"
+                
+                delta_s = s_price - spot
+                opt_strike = best_option['strike']
+                opt_mark = best_option['mark']
+                opt_delta = best_option['delta'] if best_option['delta'] is not None else 0.45
+                opt_gamma = best_option['gamma'] if best_option['gamma'] is not None else 0.01
+                opt_dte = best_option['dte'] if best_option['dte'] is not None else 30
+                
+                # Instantaneous (Day 0)
+                intrinsic_target = max(0.0, s_price - opt_strike)
+                instant_mark = max(intrinsic_target, opt_mark + (opt_delta * delta_s) + (0.5 * opt_gamma * (delta_s ** 2)))
+                instant_pnl = ((instant_mark - opt_mark) / opt_mark) * 100.0 if opt_mark > 0 else 0.0
+                
+                # Day 3 Held
+                extrinsic_instant = instant_mark - intrinsic_target
+                t_decay_factor_3 = math.sqrt(max(0, opt_dte - 3) / opt_dte) if opt_dte > 0 else 0.0
+                day3_mark = intrinsic_target + extrinsic_instant * t_decay_factor_3
+                day3_pnl = ((day3_mark - opt_mark) / opt_mark) * 100.0 if opt_mark > 0 else 0.0
+                
+                # Day 7 Held
+                t_decay_factor_7 = math.sqrt(max(0, opt_dte - 7) / opt_dte) if opt_dte > 0 else 0.0
+                day7_mark = intrinsic_target + extrinsic_instant * t_decay_factor_7
+                day7_pnl = ((day7_mark - opt_mark) / opt_mark) * 100.0 if opt_mark > 0 else 0.0
+                
+                # Day 14 Held
+                t_decay_factor_14 = math.sqrt(max(0, opt_dte - 14) / opt_dte) if opt_dte > 0 else 0.0
+                day14_mark = intrinsic_target + extrinsic_instant * t_decay_factor_14
+                day14_pnl = ((day14_mark - opt_mark) / opt_mark) * 100.0 if opt_mark > 0 else 0.0
+                
+                s_price_str = f"${s_price:<11.2f}"
+                s_name_str = f"{s_name:<24}"
+                
+                def fmt_pnl_cell(m_val, p_val, width=17):
+                    raw_str = f"${m_val:.2f} ({p_val:+.1f}%)"
+                    raw_padded = raw_str.ljust(width)
+                    p_color = "32" if p_val >= 0 else "31"
+                    p_bold = p_val >= 20.0 or p_val <= -20.0
+                    return format_color(raw_padded, p_color, bold=p_bold)
+                    
+                cell_d0 = fmt_pnl_cell(instant_mark, instant_pnl)
+                cell_d3 = fmt_pnl_cell(day3_mark, day3_pnl)
+                cell_d7 = fmt_pnl_cell(day7_mark, day7_pnl)
+                cell_d14 = fmt_pnl_cell(day14_mark, day14_pnl)
+                
+                spot_col_color = "35" if s_price == spot else "37"
+                spot_fmt_str = format_color(s_price_str, spot_col_color, bold=(s_price == spot))
+                chg_fmt_str = format_color(f"{underlier_chg_str:<11}", "32" if pct_chg > 0 else ("31" if pct_chg < 0 else "37"), bold=(s_price == spot or s_price == gex))
+                
+                print(f"  {spot_fmt_str} | {chg_fmt_str} | {s_name_str} | {cell_d0} | {cell_d3} | {cell_d7} | {cell_d14}")
+                
+            print("  " + "-" * 133)
 
     # Render Execution Approval Requests for systematic entry setups
     regime = get_regime_status()
@@ -1889,6 +2057,37 @@ def get_monthly_realized_pnl(net_liq: float) -> Tuple[float, float, str, int]:
     return 0.0, 0.0, "PASS", 0
 
 
+def get_beta_factor(sector_tag: str) -> float:
+    """Returns typical beta factor for given sector tag relative to SPY."""
+    tag = sector_tag.lower() if sector_tag else "equity"
+    if "health" in tag or "pharm" in tag or "biotech" in tag:
+        return 0.70
+    elif "tech" in tag or "semimod" in tag or "semiconductor" in tag or "beta" in tag:
+        return 1.25
+    elif "finan" in tag or "bank" in tag:
+        return 1.05
+    elif "energy" in tag or "oil" in tag or "resource" in tag:
+        return 0.85
+    elif "staple" in tag or "defensive" in tag:
+        return 0.55
+    elif "utilit" in tag:
+        return 0.35
+    elif "material" in tag:
+        return 0.90
+    elif "industr" in tag:
+        return 1.00
+    elif "cyclical" in tag or "discretion" in tag or "consumer" in tag:
+        return 1.15
+    elif "communic" in tag or "social" in tag:
+        return 1.10
+    elif "estate" in tag or "reit" in tag:
+        return 0.65
+    elif "bond" in tag or "hyg" in tag or "credit" in tag:
+        return 0.40
+    else:
+        return 1.00
+
+
 def cmd_portfolio(args):
     """Tracks position exits, risk sizing weights, and portfolio metrics."""
     options = load_json(OPTIONS_FILE, {"options_positions": {}, "stocks_positions": {}})
@@ -1911,6 +2110,7 @@ def cmd_portfolio(args):
     
     total_net_delta_shares = 0.0
     total_net_delta_exposure_dlr = 0.0
+    total_beta_weighted_delta_exposure_dlr = 0.0
     
     # 1. Option Pre-calculations
     for opt_id, details in positions.items():
@@ -2013,6 +2213,11 @@ def cmd_portfolio(args):
         total_net_delta_shares += delta_shares
         total_net_delta_exposure_dlr += delta_exposure
         
+        # Beta-Weighted calculations for option
+        opt_sector = details.get("Beta Sector Tag", "Equity")
+        opt_beta = get_beta_factor(opt_sector)
+        total_beta_weighted_delta_exposure_dlr += delta_exposure * opt_beta
+        
     # 2. Stock Pre-calculations
     for ticker, details in stocks.items():
         shares = float(details.get("Shares", 0.0))
@@ -2064,6 +2269,11 @@ def cmd_portfolio(args):
         # Delta calculations for stocks (1 share = 1.0 delta)
         total_net_delta_shares += shares
         total_net_delta_exposure_dlr += shares * spot
+        
+        # Beta-Weighted calculations for stock
+        stk_sector = details.get("Beta Sector Tag", "Equity")
+        stk_beta = get_beta_factor(stk_sector)
+        total_beta_weighted_delta_exposure_dlr += (shares * spot) * stk_beta
 
     print("\n### 📊 Portfolio Allocation & Performance Matrix")
     print("  " + "-" * 112)
@@ -2129,6 +2339,7 @@ def cmd_portfolio(args):
         ptrans = levels.get("pTrans")
         ntrans = levels.get("nTrans")
         gex_t1 = levels.get("+GEX")
+        cotmp = levels.get("COTMP")
         spot = args.spot_overrides.get(ticker) if args.spot_overrides else None
         if spot is None:
             spot = levels.get("Spot")
@@ -2210,6 +2421,9 @@ def cmd_portfolio(args):
         dte_str = f", DTE: {dte}" if dte is not None else ""
         print(f"  - **Time / Momentum Tracking**: Day [{days_held}] of 7 (Status: [{time_status}]{dte_str})")
         print(f"  - **Proposed Action**: [{format_color(proposed_action, color_code, bold=bold)}]")
+        if ptrans is not None or ntrans is not None or gex_t1 is not None or cotmp is not None:
+            scale_str = generate_ascii_gex_scale(spot, ptrans, ntrans, gex_t1, cotmp)
+            print(f"  - **GEX Runway Map**: {scale_str}")
         
         # Accumulate pending exits for options
         if "STOP" in exit_rule_state or "PROFIT" in exit_rule_state or "EXPIRED" in exit_rule_state or "Exit" in proposed_action or "MET" in exit_rule_state:
@@ -2238,6 +2452,7 @@ def cmd_portfolio(args):
         ptrans = levels.get("pTrans")
         ntrans = levels.get("nTrans")
         gex_t1 = levels.get("+GEX")
+        cotmp = levels.get("COTMP")
         
         spot = args.spot_overrides.get(ticker) if args.spot_overrides else None
         if spot is None:
@@ -2297,6 +2512,9 @@ def cmd_portfolio(args):
         print(f"  - **Exits Rule State**: [{exit_rule_fmt}]")
         print(f"  - **Distance to GEX nTrans Stop (nTrans at ${ntrans if ntrans else 0.0:.2f})**: {distance_ntrans}")
         print(f"  - **Proposed Action**: [{format_color(proposed_action, color_code, bold=bold)}]")
+        if ptrans is not None or ntrans is not None or gex_t1 is not None or cotmp is not None:
+            scale_str = generate_ascii_gex_scale(spot, ptrans, ntrans, gex_t1, cotmp)
+            print(f"  - **GEX Runway Map**: {scale_str}")
         
         # Accumulate pending exits for stocks
         if "STOP" in exit_rule_state or "PROFIT" in exit_rule_state or "Exit" in proposed_action or "MET" in exit_rule_state:
@@ -2340,6 +2558,22 @@ def cmd_portfolio(args):
     de_fmt = format_color(f"${total_net_delta_exposure_dlr:+,.2f}", delta_exposure_color, bold=True)
     print(f"- **Cumulative Portfolio Net Delta**: {ds_fmt} (Delta-Equivalent directional Exposure: {de_fmt})")
     
+    # Beta-Weighted Delta calculations
+    regime = get_regime_status()
+    spy_price = 550.0
+    etf_details = regime.get("etf_details", {})
+    if "SPY" in etf_details:
+        val = etf_details["SPY"].get("Price", 0.0)
+        if val > 0:
+            spy_price = val
+            
+    beta_weighted_delta_shares = total_beta_weighted_delta_exposure_dlr / spy_price if spy_price > 0 else 0.0
+    beta_shares_color = "32" if beta_weighted_delta_shares >= 0 else "31"
+    beta_exposure_color = "32" if total_beta_weighted_delta_exposure_dlr >= 0 else "31"
+    bds_fmt = format_color(f"{beta_weighted_delta_shares:+,.2f} SPY-equiv shares", beta_shares_color, bold=True)
+    bde_fmt = format_color(f"${total_beta_weighted_delta_exposure_dlr:+,.2f}", beta_exposure_color, bold=True)
+    print(f"- **Beta-Weighted directional Delta (SPY)**: {bds_fmt} (Beta-Equivalent directional Exposure: {bde_fmt} at SPY ${spy_price:.2f})")
+    
     # Live Brokerage 30-day realized statistics
     m_pnl_color = "32" if monthly_pnl_dlr >= 0 else "31"
     gate_color = "32" if drawdown_gate_status == "PASS" else "31"
@@ -2364,8 +2598,22 @@ def cmd_portfolio(args):
             gross_p_opt = sum(p.get("Realized P&L ($)", 0.0) for p in closed_options if p.get("Realized P&L ($)", 0.0) > 0.0)
             gross_l_opt = abs(sum(p.get("Realized P&L ($)", 0.0) for p in closed_options if p.get("Realized P&L ($)", 0.0) < 0.0))
             pf_opt = f"{gross_p_opt / gross_l_opt:.2f}" if gross_l_opt > 0 else f"{gross_p_opt:.2f}" if gross_p_opt > 0 else "N/A"
+            
+            unprofitable_closed_opt = total_closed_opt - profitable_closed_opt
+            avg_win_opt = gross_p_opt / profitable_closed_opt if profitable_closed_opt > 0 else 0.0
+            avg_loss_opt = gross_l_opt / unprofitable_closed_opt if unprofitable_closed_opt > 0 else 0.0
+            r_ratio_opt = avg_win_opt / avg_loss_opt if avg_loss_opt > 0 else 0.0
+            expectancy_opt = total_realized_opt / total_closed_opt if total_closed_opt > 0 else 0.0
+            
+            avg_win_str = f"${avg_win_opt:,.2f}"
+            avg_loss_str = f"${avg_loss_opt:,.2f}"
+            win_loss_fmt = f"{avg_win_str} / {avg_loss_str} (Ratio: {r_ratio_opt:.2f})"
+            exp_color = "32" if expectancy_opt >= 0 else "31"
+            expectancy_fmt = format_color(f"${expectancy_opt:+,.2f}", exp_color, bold=True)
+            
             opt_color = "32" if total_realized_opt >= 0 else "31"
             print(f"- **Options Stats** ({total_closed_opt} trades): Realized Win Rate {win_rate_opt:.1f}% ({profitable_closed_opt}/{total_closed_opt} profitable) | Total Realized P&L: {format_color(f'${total_realized_opt:+,.2f}', opt_color, bold=True)} | PF: {pf_opt}")
+            print(f"  -> Avg Win/Loss: {win_loss_fmt} | Expectancy: {expectancy_fmt} per trade")
             
         # Stocks specific stats
         if closed_stocks:
@@ -2376,8 +2624,22 @@ def cmd_portfolio(args):
             gross_p_stk = sum(s.get("Realized P&L ($)", 0.0) for s in closed_stocks if s.get("Realized P&L ($)", 0.0) > 0.0)
             gross_l_stk = abs(sum(s.get("Realized P&L ($)", 0.0) for s in closed_stocks if s.get("Realized P&L ($)", 0.0) < 0.0))
             pf_stk = f"{gross_p_stk / gross_l_stk:.2f}" if gross_l_stk > 0 else f"{gross_p_stk:.2f}" if gross_p_stk > 0 else "N/A"
+            
+            unprofitable_closed_stk = total_closed_stk - profitable_closed_stk
+            avg_win_stk = gross_p_stk / profitable_closed_stk if profitable_closed_stk > 0 else 0.0
+            avg_loss_stk = gross_l_stk / unprofitable_closed_stk if unprofitable_closed_stk > 0 else 0.0
+            r_ratio_stk = avg_win_stk / avg_loss_stk if avg_loss_stk > 0 else 0.0
+            expectancy_stk = total_realized_stk / total_closed_stk if total_closed_stk > 0 else 0.0
+            
+            avg_win_str = f"${avg_win_stk:,.2f}"
+            avg_loss_str = f"${avg_loss_stk:,.2f}"
+            win_loss_fmt = f"{avg_win_str} / {avg_loss_str} (Ratio: {r_ratio_stk:.2f})"
+            exp_color = "32" if expectancy_stk >= 0 else "31"
+            expectancy_fmt = format_color(f"${expectancy_stk:+,.2f}", exp_color, bold=True)
+            
             stk_color = "32" if total_realized_stk >= 0 else "31"
             print(f"- **Stocks Stats** ({total_closed_stk} trades): Realized Win Rate {win_rate_stk:.1f}% ({profitable_closed_stk}/{total_closed_stk} profitable) | Total Realized P&L: {format_color(f'${total_realized_stk:+,.2f}', stk_color, bold=True)} | PF: {pf_stk}")
+            print(f"  -> Avg Win/Loss: {win_loss_fmt} | Expectancy: {expectancy_fmt} per trade")
             
         # Unified combined stats
         if closed_options and closed_stocks:
@@ -2389,8 +2651,22 @@ def cmd_portfolio(args):
             gross_p_all = sum(p.get("Realized P&L ($)", 0.0) for p in all_closed if p.get("Realized P&L ($)", 0.0) > 0.0)
             gross_l_all = abs(sum(p.get("Realized P&L ($)", 0.0) for p in all_closed if p.get("Realized P&L ($)", 0.0) < 0.0))
             pf_all = f"{gross_p_all / gross_l_all:.2f}" if gross_l_all > 0 else f"{gross_p_all:.2f}" if gross_p_all > 0 else "N/A"
+            
+            unprofitable_closed_all = total_closed_all - profitable_closed_all
+            avg_win_all = gross_p_all / profitable_closed_all if profitable_closed_all > 0 else 0.0
+            avg_loss_all = gross_l_all / unprofitable_closed_all if unprofitable_closed_all > 0 else 0.0
+            r_ratio_all = avg_win_all / avg_loss_all if avg_loss_all > 0 else 0.0
+            expectancy_all = total_realized_all / total_closed_all if total_closed_all > 0 else 0.0
+            
+            avg_win_str = f"${avg_win_all:,.2f}"
+            avg_loss_str = f"${avg_loss_all:,.2f}"
+            win_loss_fmt = f"{avg_win_str} / {avg_loss_str} (Ratio: {r_ratio_all:.2f})"
+            exp_color = "32" if expectancy_all >= 0 else "31"
+            expectancy_fmt = format_color(f"${expectancy_all:+,.2f}", exp_color, bold=True)
+            
             all_color = "32" if total_realized_all >= 0 else "31"
             print(f"- **Total Combined Realized P&L**: {format_color(f'${total_realized_all:+,.2f}', all_color, bold=True)} | Win Rate {win_rate_all:.1f}% | Combined PF: {pf_all}")
+            print(f"  -> Avg Win/Loss: {win_loss_fmt} | Expectancy: {expectancy_fmt} per trade")
         
     # Sector Allocation Matrix
     sector_sums = {}
@@ -3118,11 +3394,14 @@ def cmd_update_candidates(args):
     
     save_json(CANDIDATES_FILE, output_data)
     
+    # Load analyses to check if candidates are already scored
+    analyses = load_json(ANALYSES_FILE, {})
+    
     print(f"\nWrote {len(candidate_list)} candidates to {CANDIDATES_FILE}")
     print("\n### 🚀 Top Screened GEX Candidates")
-    print("  " + "-" * 95)
-    print(f"  {'Ticker':<8} | {'Price':<8} | {'Daily Change':<12} | {'Implied Vol':<12} | {'Rel Opt Vol':<16} | {'Market Cap'}")
-    print("  " + "-" * 95)
+    print("  " + "-" * 125)
+    print(f"  {'Ticker':<8} | {'Price':<8} | {'Daily Change':<12} | {'Implied Vol':<12} | {'Rel Opt Vol':<16} | {'GEX Setup Grade':<16} | {'GEX Status':<16} | {'Market Cap'}")
+    print("  " + "-" * 125)
     for c in candidate_list[:10]:
         ticker = c['symbol']
         price = f"${c['price']:.2f}"
@@ -3131,13 +3410,38 @@ def cmd_update_candidates(args):
         rel_opt_vol = f"{c['relative_options_volume']:.2f}" if c.get('relative_options_volume') is not None else "N/A"
         mcap = f"${c['market_cap']/1e9:.2f}B" if c.get('market_cap') is not None else "N/A"
         
+        # Resolve GEX Grade and GEX Status from analyses if available
+        gex_grade_str = "Unanalyzed"
+        gex_status_str = "N/A"
+        ticker_up = ticker.upper()
+        if ticker_up in analyses:
+            gex_val = analyses[ticker_up]
+            g_val = gex_val.get("Grade", 0)
+            status_val = gex_val.get("Signal Status", "BLOCKED")
+            status_clean = status_val.split(" (")[0]
+            
+            grade_color = "32" if g_val >= 9 else "31"
+            grade_text = f"{g_val}/11".ljust(16)
+            gex_grade_str = format_color(grade_text, grade_color)
+            
+            status_color = "31"
+            if status_clean.startswith("CONFIRMED"):
+                status_color = "32"
+            elif status_clean.startswith("PENDING"):
+                status_color = "33"
+            status_text = status_clean.ljust(16)
+            gex_status_str = format_color(status_text, status_color, bold=True)
+        else:
+            gex_grade_str = f"{gex_grade_str:<16}"
+            gex_status_str = f"{gex_status_str:<16}"
+        
         # Color coding changes
         change_color = "32" if c['chg_pct'] > 0.0 else "31"
         change_fmt = format_color(f"{change:<12}", change_color, bold=True)
         ticker_fmt = format_color(f"{ticker:<8}", "35", bold=True)
         
-        print(f"  {ticker_fmt} | {price:<8} | {change_fmt} | {iv:<12} | {rel_opt_vol:<16} | {mcap}")
-    print("  " + "-" * 95)
+        print(f"  {ticker_fmt} | {price:<8} | {change_fmt} | {iv:<12} | {rel_opt_vol:<16} | {gex_grade_str} | {gex_status_str} | {mcap}")
+    print("  " + "-" * 125)
     if len(candidate_list) > 10:
         print(f"  * Showing top 10 sorted by relative options volume out of {len(candidate_list)} candidates total.")
 
@@ -3659,8 +3963,22 @@ def cmd_closed(args):
         gross_p_opt = sum(p.get("Realized P&L ($)", 0.0) for p in closed_options if p.get("Realized P&L ($)", 0.0) > 0.0)
         gross_l_opt = abs(sum(p.get("Realized P&L ($)", 0.0) for p in closed_options if p.get("Realized P&L ($)", 0.0) < 0.0))
         pf_opt = f"{gross_p_opt / gross_l_opt:.2f}" if gross_l_opt > 0 else f"{gross_p_opt:.2f}" if gross_p_opt > 0 else "N/A"
+        
+        unprofitable_closed_opt = total_closed_opt - profitable_closed_opt
+        avg_win_opt = gross_p_opt / profitable_closed_opt if profitable_closed_opt > 0 else 0.0
+        avg_loss_opt = gross_l_opt / unprofitable_closed_opt if unprofitable_closed_opt > 0 else 0.0
+        r_ratio_opt = avg_win_opt / avg_loss_opt if avg_loss_opt > 0 else 0.0
+        expectancy_opt = total_realized_opt / total_closed_opt if total_closed_opt > 0 else 0.0
+        
+        avg_win_str = f"${avg_win_opt:,.2f}"
+        avg_loss_str = f"${avg_loss_opt:,.2f}"
+        win_loss_fmt = f"{avg_win_str} / {avg_loss_str} (Ratio: {r_ratio_opt:.2f})"
+        exp_color = "32" if expectancy_opt >= 0 else "31"
+        expectancy_fmt = format_color(f"${expectancy_opt:+,.2f}", exp_color, bold=True)
+        
         opt_color = "32" if total_realized_opt >= 0 else "31"
         print(f"- **Options Stats** ({total_closed_opt} trades): Realized Win Rate {win_rate_opt:.1f}% ({profitable_closed_opt}/{total_closed_opt} profitable) | Total Realized P&L: {format_color(f'${total_realized_opt:+,.2f}', opt_color, bold=True)} | PF: {pf_opt}")
+        print(f"  -> Avg Win/Loss: {win_loss_fmt} | Expectancy: {expectancy_fmt} per trade")
         
     if closed_stocks:
         total_closed_stk = len(closed_stocks)
@@ -3670,8 +3988,22 @@ def cmd_closed(args):
         gross_p_stk = sum(s.get("Realized P&L ($)", 0.0) for s in closed_stocks if s.get("Realized P&L ($)", 0.0) > 0.0)
         gross_l_stk = abs(sum(s.get("Realized P&L ($)", 0.0) for s in closed_stocks if s.get("Realized P&L ($)", 0.0) < 0.0))
         pf_stk = f"{gross_p_stk / gross_l_stk:.2f}" if gross_l_stk > 0 else f"{gross_p_stk:.2f}" if gross_p_stk > 0 else "N/A"
+        
+        unprofitable_closed_stk = total_closed_stk - profitable_closed_stk
+        avg_win_stk = gross_p_stk / profitable_closed_stk if profitable_closed_stk > 0 else 0.0
+        avg_loss_stk = gross_l_stk / unprofitable_closed_stk if unprofitable_closed_stk > 0 else 0.0
+        r_ratio_stk = avg_win_stk / avg_loss_stk if avg_loss_stk > 0 else 0.0
+        expectancy_stk = total_realized_stk / total_closed_stk if total_closed_stk > 0 else 0.0
+        
+        avg_win_str = f"${avg_win_stk:,.2f}"
+        avg_loss_str = f"${avg_loss_stk:,.2f}"
+        win_loss_fmt = f"{avg_win_str} / {avg_loss_str} (Ratio: {r_ratio_stk:.2f})"
+        exp_color = "32" if expectancy_stk >= 0 else "31"
+        expectancy_fmt = format_color(f"${expectancy_stk:+,.2f}", exp_color, bold=True)
+        
         stk_color = "32" if total_realized_stk >= 0 else "31"
         print(f"- **Stocks Stats** ({total_closed_stk} trades): Realized Win Rate {win_rate_stk:.1f}% ({profitable_closed_stk}/{total_closed_stk} profitable) | Total Realized P&L: {format_color(f'${total_realized_stk:+,.2f}', stk_color, bold=True)} | PF: {pf_stk}")
+        print(f"  -> Avg Win/Loss: {win_loss_fmt} | Expectancy: {expectancy_fmt} per trade")
         
     if closed_options and closed_stocks:
         all_closed = closed_options + closed_stocks
@@ -3682,8 +4014,106 @@ def cmd_closed(args):
         gross_p_all = sum(p.get("Realized P&L ($)", 0.0) for p in all_closed if p.get("Realized P&L ($)", 0.0) > 0.0)
         gross_l_all = abs(sum(p.get("Realized P&L ($)", 0.0) for p in all_closed if p.get("Realized P&L ($)", 0.0) < 0.0))
         pf_all = f"{gross_p_all / gross_l_all:.2f}" if gross_l_all > 0 else f"{gross_p_all:.2f}" if gross_p_all > 0 else "N/A"
+        
+        unprofitable_closed_all = total_closed_all - profitable_closed_all
+        avg_win_all = gross_p_all / profitable_closed_all if profitable_closed_all > 0 else 0.0
+        avg_loss_all = gross_l_all / unprofitable_closed_all if unprofitable_closed_all > 0 else 0.0
+        r_ratio_all = avg_win_all / avg_loss_all if avg_loss_all > 0 else 0.0
+        expectancy_all = total_realized_all / total_closed_all if total_closed_all > 0 else 0.0
+        
+        avg_win_str = f"${avg_win_all:,.2f}"
+        avg_loss_str = f"${avg_loss_all:,.2f}"
+        win_loss_fmt = f"{avg_win_str} / {avg_loss_str} (Ratio: {r_ratio_all:.2f})"
+        exp_color = "32" if expectancy_all >= 0 else "31"
+        expectancy_fmt = format_color(f"${expectancy_all:+,.2f}", exp_color, bold=True)
+        
         all_color = "32" if total_realized_all >= 0 else "31"
         print(f"- **Total Combined Realized P&L**: {format_color(f'${total_realized_all:+,.2f}', all_color, bold=True)} | Win Rate {win_rate_all:.1f}% | Combined PF: {pf_all}")
+        print(f"  -> Avg Win/Loss: {win_loss_fmt} | Expectancy: {expectancy_fmt} per trade")
+
+
+def cmd_payoff(args):
+    """Runs an offline option payoff simulation scenario grid."""
+    symbol = args.symbol.upper()
+    spot = args.spot
+    strike = args.strike
+    mark = args.mark
+    delta = args.delta
+    gamma = args.gamma
+    dte = args.dte
+    
+    print(f"### 📊 Offline Option Payoff Simulation: {symbol}")
+    print(f"- **Current Spot Price**: ${spot:.2f} | Option Strike: ${strike:.2f} | Current Mark Premium: ${mark:.2f}")
+    if delta is not None:
+        print(f"- **Greeks Table**: Delta: {delta:.4f} | Gamma: {gamma:.4f} | DTE: {dte}")
+    print()
+    
+    spots_list = []
+    if args.target_spots:
+        try:
+            spots_list = sorted([float(s.strip()) for s in args.target_spots.split(",")])
+        except ValueError:
+            print("Error: Could not parse target spots list (should be comma-separated float numbers, e.g. 95,100,105).", file=sys.stderr)
+            sys.exit(1)
+    else:
+        # Generate default grid from -10% to +10%
+        spots_list = [round(spot * (1 + p/100.0), 2) for p in [-10.0, -5.0, -2.0, 0.0, 2.0, 5.0, 10.0]]
+        spots_list = sorted(list(set(spots_list)))
+        
+    print("  " + "-" * 133)
+    print(f"  {'Target Spot':<12} | {'Underlier %':<11} | {'Day 0 (Instant)':<17} | {'Day 3 Held':<17} | {'Day 7 Held':<17} | {'Day 14 Held'}")
+    print("  " + "-" * 133)
+    
+    import math
+    for s_price in spots_list:
+        pct_chg = ((s_price - spot) / spot) * 100.0 if spot > 0 else 0.0
+        underlier_chg_str = f"{pct_chg:+.2f}%"
+        
+        delta_s = s_price - spot
+        
+        # Instantaneous (Day 0)
+        intrinsic_target = max(0.0, s_price - strike)
+        instant_mark = max(intrinsic_target, mark + (delta * delta_s) + (0.5 * gamma * (delta_s ** 2)))
+        instant_pnl = ((instant_mark - mark) / mark) * 100.0 if mark > 0 else 0.0
+        
+        # Day 3 Held
+        extrinsic_instant = instant_mark - intrinsic_target
+        t_decay_factor_3 = math.sqrt(max(0, dte - 3) / dte) if dte > 0 else 0.0
+        day3_mark = intrinsic_target + extrinsic_instant * t_decay_factor_3
+        day3_pnl = ((day3_mark - mark) / mark) * 100.0 if mark > 0 else 0.0
+        
+        # Day 7 Held
+        t_decay_factor_7 = math.sqrt(max(0, dte - 7) / dte) if dte > 0 else 0.0
+        day7_mark = intrinsic_target + extrinsic_instant * t_decay_factor_7
+        day7_pnl = ((day7_mark - mark) / mark) * 100.0 if mark > 0 else 0.0
+        
+        # Day 14 Held
+        t_decay_factor_14 = math.sqrt(max(0, dte - 14) / dte) if dte > 0 else 0.0
+        day14_mark = intrinsic_target + extrinsic_instant * t_decay_factor_14
+        day14_pnl = ((day14_mark - mark) / mark) * 100.0 if mark > 0 else 0.0
+        
+        # Print row
+        s_price_str = f"${s_price:<11.2f}"
+        
+        def fmt_pnl_cell(m_val, p_val, width=17):
+            raw_str = f"${m_val:.2f} ({p_val:+.1f}%)"
+            raw_padded = raw_str.ljust(width)
+            p_color = "32" if p_val >= 0 else "31"
+            p_bold = p_val >= 20.0 or p_val <= -20.0
+            return format_color(raw_padded, p_color, bold=p_bold)
+            
+        cell_d0 = fmt_pnl_cell(instant_mark, instant_pnl)
+        cell_d3 = fmt_pnl_cell(day3_mark, day3_pnl)
+        cell_d7 = fmt_pnl_cell(day7_mark, day7_pnl)
+        cell_d14 = fmt_pnl_cell(day14_mark, day14_pnl)
+        
+        spot_col_color = "35" if abs(s_price - spot) < 0.01 else "37"
+        spot_fmt_str = format_color(s_price_str, spot_col_color, bold=(spot_col_color == "35"))
+        chg_fmt_str = format_color(f"{underlier_chg_str:<11}", "32" if pct_chg > 0 else ("31" if pct_chg < 0 else "37"), bold=(spot_col_color == "35"))
+        
+        print(f"  {spot_fmt_str} | {chg_fmt_str} | {cell_d0} | {cell_d3} | {cell_d7} | {cell_d14}")
+        
+    print("  " + "-" * 133)
 
 
 def main():
@@ -3823,6 +4253,17 @@ def main():
     # closed subcommand
     subparsers.add_parser("closed", help="Displays a beautiful execution history of all closed options and stocks positions.")
 
+    # payoff subcommand
+    p_payoff = subparsers.add_parser("payoff", help="Runs an offline option payoff simulation scenario grid.")
+    p_payoff.add_argument("symbol", type=str, help="Ticker symbol (e.g. NVDA)")
+    p_payoff.add_argument("--spot", type=float, required=True, help="Current underlier spot price")
+    p_payoff.add_argument("--strike", type=float, required=True, help="Option strike price")
+    p_payoff.add_argument("--mark", type=float, required=True, help="Option current Mark contract premium")
+    p_payoff.add_argument("--delta", type=float, default=0.50, help="Option delta (default: 0.50)")
+    p_payoff.add_argument("--gamma", type=float, default=0.01, help="Option gamma (default: 0.01)")
+    p_payoff.add_argument("--dte", type=int, default=30, help="Option days to expiration (default: 30)")
+    p_payoff.add_argument("--target-spots", type=str, dest="target_spots", help="Comma-separated custom underlier spot prices to evaluate")
+
     args = parser.parse_args()
     
     # Process spot overrides if they are provided
@@ -3869,6 +4310,8 @@ def main():
         cmd_rankings(args)
     elif args.command == "closed":
         cmd_closed(args)
+    elif args.command == "payoff":
+        cmd_payoff(args)
 
 
 if __name__ == "__main__":

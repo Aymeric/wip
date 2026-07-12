@@ -1435,6 +1435,60 @@ class TestGEXEngine(unittest.TestCase):
         finally:
             shutil.rmtree(temp_dir)
 
+    def test_get_beta_factor(self):
+        """Test beta factor resolution for various sector tags."""
+        from gex_engine import get_beta_factor
+        self.assertEqual(get_beta_factor("Technology/Beta"), 1.25)
+        self.assertEqual(get_beta_factor("Biotech/Healthcare"), 0.70)
+        self.assertEqual(get_beta_factor("Financials"), 1.05)
+        self.assertEqual(get_beta_factor("Consumer Staples"), 0.55)
+        self.assertEqual(get_beta_factor("random_sector"), 1.00)
+        self.assertEqual(get_beta_factor(None), 1.00)
+
+    def test_cmd_payoff(self):
+        """Test payoff subcommand execution and simulation calculations with outputs."""
+        from unittest.mock import patch, MagicMock
+        import gex_engine
+        
+        with patch('sys.stdout') as mock_stdout:
+            mock_stdout.isatty = MagicMock(return_value=False)
+            
+            class PayoffArgs:
+                symbol = "NVDA"
+                spot = 200.0
+                strike = 200.0
+                mark = 5.0
+                delta = 0.50
+                gamma = 0.02
+                dte = 30
+                target_spots = "190,200,210"
+                
+            gex_engine.cmd_payoff(PayoffArgs())
+            
+            output = "".join(call.args[0] for call in mock_stdout.write.call_args_list if call.args)
+            self.assertIn("Offline Option Payoff Simulation: NVDA", output)
+            self.assertIn("NVDA", output)
+            self.assertIn("Target Spot", output)
+            self.assertIn("$190.00", output)
+            self.assertIn("$200.00", output)
+            self.assertIn("$210.00", output)
+
+    def test_generate_ascii_gex_scale(self):
+        """Test GEX ASCII runway map generation."""
+        from gex_engine import generate_ascii_gex_scale
+        scale = generate_ascii_gex_scale(spot=100.0, ptrans=98.0, ntrans=95.0, gex=110.0, cotmp=94.0)
+        self.assertIn("SPOT", scale)
+        self.assertIn("pTrans", scale)
+        self.assertIn("nTrans", scale)
+        self.assertIn("+GEX", scale)
+        self.assertIn("COTMP", scale)
+        
+        # Test grouped prices (same price)
+        scale_grouped = generate_ascii_gex_scale(spot=100.0, ptrans=98.0, ntrans=95.0, gex=110.0, cotmp=95.0)
+        self.assertIn("nTrans", scale_grouped)
+        self.assertIn("COTMP", scale_grouped)
+        self.assertIn("+", scale_grouped)
+
 
 if __name__ == '__main__':
     unittest.main()

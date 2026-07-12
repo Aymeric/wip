@@ -210,6 +210,12 @@ python3 src/gex_engine.py update-stock <ticker> [--price <price>] [--shares <sha
 python3 src/gex_engine.py close-stock <ticker> [--close-price <close_price>]
 ```
 
+#### Run an offline option payoff simulation scenario grid:
+```bash
+python3 src/gex_engine.py payoff <symbol> --spot <spot_price> --strike <strike_price> --mark <current_mark_premium> [--delta <delta_value>] [--gamma <gamma_value>] [--dte <days_to_expiration>] [--target-spots <comma_separated_prices>]
+```
+*(This allows you to simulate extrinsic time-decay and underlier moves ad-hoc, rendering a beautiful visual scenarios matrix with delta/gamma calculations adjusted for days held).*
+
 #### Display Reddit sentiment analysis dashboard and GEX divergence alerts:
 ```bash
 python3 src/gex_engine.py sentiment
