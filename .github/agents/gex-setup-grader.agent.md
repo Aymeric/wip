@@ -1,6 +1,6 @@
 ---
 name: "gex-setup-grader"
-description: "Pulls options chain and Greeks data, derives pTrans, nTrans, +GEX, and COTMP, runs the 11-Rule checklist, and recommends optimal liquid call options."
+description: "Pulls options chain and Greeks data, derives pTrans, nTrans, +GEX, and COTMP, runs the 11-Rule checklist, and determines GEX setup status."
 argument-hint: "Evaluate target symbol (e.g. BABA, RIOT)..."
 model: "Gemini 3.5 Flash"
 tools: [vscode, execute, read, edit, search, web, browser, 'robinhood-trading/*', todo]
@@ -76,26 +76,7 @@ Grade the Setup’s structural quality on an 11-point system ($\ge 9/11$ require
 
 ---
 
-### Step 4: Isolate Best-In-Class Option Contract (Option Selection Protocol)
-When setup is **CONFIRMED** or **PENDING**, run a mechanical query to find the single best long call contract:
-
-1. **Expiration Target**: Monthly expiration date closest to **30 to 45 calendar days** from today.
-2. **Strike Selection**: Target At-The-Money (ATM) or slightly Out-Of-The-Money (OTM) ($0.0\%$ to $+5.0\%$ above spot). Verify option Delta is within $\pm 0.05$ of **0.45** target (range 0.40–0.50) if Greek quotes exist.
-3. **Strike Bound**: Strike **must be strictly below** $+GEX$ (T1) price target.
-4. **Liquidity Gate**:
-   - Contract Open Interest $\ge 500$ agreements.
-   - Bid-Ask Spread limits:
-     - Premium $\le \$2.00$: Spread $\le \$0.15$ wide.
-     - Premium $\$2.01$ to $\$5.00$: Spread $\le \$0.25$ wide.
-     - Premium $>\$5.00$: Spread $\le 10\%$ of bid.
-5. **Earnings Binary Event Guard / Volatility crush gate**:
-   - Inspect the upcoming earnings release date retrieved from `get_earnings_results` in Step 1.
-   - Calculate the DTE (Days to Expiration) of the target option contract.
-   - **Crucial Rule**: If the company's scheduled or estimated earnings release date occurs **before** the target option's expiration date, the option contract is **BLOCKED BY EARNINGS RISK** to protect the capital from immediate negative post-earnings IV crush (implied volatility plunging, destroying the contract's premium).
-
----
-
-### Step 5: Persist Data, Trigger CLI and Render Setup Report
+### Step 4: Persist Data, Trigger CLI and Render Setup Report
 1. **Save Raw API Payloads**: Copy all raw instrument definitions, quotes, and underlier close files into [data/downloads/](../../data/downloads/) folders by date.
 2. **Verify Setup via CLI Engine**: Execute the grading check or commit findings to [data/ticker_analyses.json](../../data/ticker_analyses.json) using the GEX Engine CLI program:
    `python3 src/gex_engine.py analyze <TICKER> --spot <spot_price> --ptrans <pTrans> --ntrans <nTrans> --gex <gex_price> --cotmp <cotmp> --db-change <db_change> [--target-delta <delta>] [--min-dte <days>]`
@@ -116,7 +97,7 @@ When setup is **CONFIRMED** or **PENDING**, run a mechanical query to find the s
 ### 📅 Earnings Calendar Safety Check:
 - **Upcoming Earnings Date**: [YYYY-MM-DD] ([D] days out)
 - **Proposed Option Expiration**: [YYYY-MM-DD]
-- **Earnings Gate Status**: 🟢 PASS (Earnings event occurs after option expiration) / 🔴 FAIL - BLOCKED BY EARNINGS RISK (Earnings occur before expiration; IV Crush Danger)
+- **Earnings Gate Status**: See Option Selection Report for full earnings crush checks.
 
 ### 🏁 11-Rule Setup Grading Checklist:
 - Rule 1 (Total Call GEX Positive): 🟢 PASS / 🔴 FAIL
@@ -142,9 +123,5 @@ When setup is **CONFIRMED** or **PENDING**, run a mechanical query to find the s
 
 ### 📁 Setup Status: 🟢 CONFIRMED / 🟡 PENDING / 🔴 BLOCKED
 
-### 🚀 Target Option Contract Recommendations (For CONFIRMED / PENDING Setups Only):
-- **Isolated Strike & Expiration**: Call Option [Ticker / Expiration / Strike]
-- **Greek Details**: Delta: $D.DD$, Theta: $T.TT$, IV: $V.V\%$
-- **Market Quote**: Premium Mark: $P.PP (Bid: $B.BB, Ask: $A.AA, Spread Width: $W.WW)
-- **Liquidity Check**: Open Interest: $O$ contracts (Status: 🟢 LIQUIDITY GATE PASSED)
+*Note: Option contract selection recommendations are delegated to the specialized `option-selector` subagent.*
 ```

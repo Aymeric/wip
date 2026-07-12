@@ -4,21 +4,36 @@
     "Sentiment": -0.85,
     "Buzz": "High",
     "Narrative": "Retail capitulation, heavy call selling, volume decay",
-    "last_updated": "2026-07-10T12:00:00Z"
+    "last_updated": "2026-07-12T21:48:56.754677Z",
+    "tone_score": -0.25,
+    "comments_score": -0.25,
+    "position_score": -0.15,
+    "volume_score": -0.1,
+    "meme_score": -0.1
   },
   "OKLO": {
     "Ticker": "OKLO",
     "Sentiment": 0.85,
     "Buzz": "High",
     "Narrative": "Meme breakouts, high volume call buying",
-    "last_updated": "2026-07-10T12:00:00Z"
+    "last_updated": "2026-07-12T21:48:56.910907Z",
+    "tone_score": 0.25,
+    "comments_score": 0.25,
+    "position_score": 0.2,
+    "volume_score": 0.05,
+    "meme_score": 0.1
   },
   "MARA": {
     "Ticker": "MARA",
     "Sentiment": 0.45,
     "Buzz": "Medium",
     "Narrative": "Bitcoin correlation discussion, expecting sector rotation.",
-    "last_updated": "2026-07-10T12:00:00Z"
+    "last_updated": "2026-07-12T21:48:56.859403Z",
+    "tone_score": 0.15,
+    "comments_score": 0.1,
+    "position_score": 0.1,
+    "volume_score": 0.05,
+    "meme_score": 0.05
   },
   "NFLX": {
     "Ticker": "NFLX",
@@ -32,7 +47,12 @@
     "Sentiment": 0.6,
     "Buzz": "Medium",
     "Narrative": "Turnaround hype, retail call buying returning on reversal.",
-    "last_updated": "2026-07-10T12:00:00Z"
+    "last_updated": "2026-07-12T21:48:56.703716Z",
+    "tone_score": 0.2,
+    "comments_score": 0.15,
+    "position_score": 0.1,
+    "volume_score": 0.05,
+    "meme_score": 0.1
   },
   "META": {
     "Ticker": "META",
@@ -46,7 +66,12 @@
     "Sentiment": 0.2,
     "Buzz": "Medium",
     "Narrative": "Bio-tech speculation, clinical expectations, mixed retail opinions",
-    "last_updated": "2026-07-10T06:52:18.320541Z"
+    "last_updated": "2026-07-12T21:48:56.651316Z",
+    "tone_score": 0.1,
+    "comments_score": 0.05,
+    "position_score": 0.05,
+    "volume_score": 0.0,
+    "meme_score": 0.0
   },
   "NOW": {
     "Ticker": "NOW",
@@ -67,6 +92,101 @@
     "Sentiment": 0.45,
     "Buzz": "Medium",
     "Narrative": "Retail excited about recent receptor GEX tech and biotechnology expansion.",
-    "last_updated": "2026-07-10T23:16:49.053445Z"
+    "last_updated": "2026-07-12T21:48:56.806354Z",
+    "tone_score": 0.15,
+    "comments_score": 0.15,
+    "position_score": 0.1,
+    "volume_score": 0.05,
+    "meme_score": 0.0
+  },
+  "SPCX": {
+    "Ticker": "SPCX",
+    "Sentiment": -0.75,
+    "Buzz": "High",
+    "Narrative": "High anxiety ahead of first major lockup unlock which is larger than the IPO float. Extreme bearishness and heavy put buying.",
+    "last_updated": "2026-07-12T20:38:20.326879Z"
+  },
+  "SOFI": {
+    "Ticker": "SOFI",
+    "Sentiment": 0.8,
+    "Buzz": "Medium",
+    "Narrative": "High conviction YOLO calls, retail predicting breakout turnaround ('So Fly') with heavy premium-chasing.",
+    "last_updated": "2026-07-12T20:38:24.447928Z"
+  },
+  "MU": {
+    "Ticker": "MU",
+    "Sentiment": 0.35,
+    "Buzz": "High",
+    "Narrative": "Heavy focus on AI memory supply-demand cycle, debate over valuation trap vs long term secular boom, options flow highly active.",
+    "last_updated": "2026-07-12T20:38:28.647360Z"
+  },
+  "RKLB": {
+    "Ticker": "RKLB",
+    "Sentiment": 0.55,
+    "Buzz": "High",
+    "Narrative": "Excitement and debate over the game-changing B acquisition of Iridium Communications, paving the way for a global satellite network.",
+    "last_updated": "2026-07-12T20:38:32.560471Z"
+  },
+  "ASTS": {
+    "Ticker": "ASTS",
+    "Sentiment": 0.4,
+    "Buzz": "Medium",
+    "Narrative": "Discussion of high-yielding option premium strategies, writing covered calls to harvest high implied volatility.",
+    "last_updated": "2026-07-12T20:38:36.470104Z"
+  },
+  "WDC": {
+    "Ticker": "WDC",
+    "Sentiment": -0.45,
+    "Buzz": "Low",
+    "Narrative": "Heavy bearish put flow on Western Digital, retail tracking institutional/whale block trades with downside bias.",
+    "last_updated": "2026-07-12T20:38:40.155832Z"
+  },
+  "VIK": {
+    "Ticker": "VIK",
+    "Sentiment": 0.3,
+    "Buzz": "Medium",
+    "Narrative": "Steady post-IPO cruising rebound and occupancy strength, retail accumulates commons.",
+    "last_updated": "2026-07-12T21:48:56.962173Z",
+    "tone_score": 0.15,
+    "comments_score": 0.1,
+    "position_score": 0.05,
+    "volume_score": 0.0,
+    "meme_score": 0.0
+  },
+  "ORCL": {
+    "Ticker": "ORCL",
+    "Sentiment": 0.5,
+    "Buzz": "Medium",
+    "Narrative": "AI cloud infrastructure partnerships and backlog strength driving retail share accumulation.",
+    "last_updated": "2026-07-12T21:48:57.011621Z",
+    "tone_score": 0.2,
+    "comments_score": 0.15,
+    "position_score": 0.1,
+    "volume_score": 0.05,
+    "meme_score": 0.0
+  },
+  "SHC": {
+    "Ticker": "SHC",
+    "Sentiment": 0.15,
+    "Buzz": "Low",
+    "Narrative": "Under-the-radar medical sterilization option volume spike, retail interest remains quiet.",
+    "last_updated": "2026-07-12T21:48:57.063108Z",
+    "tone_score": 0.05,
+    "comments_score": 0.05,
+    "position_score": 0.05,
+    "volume_score": 0.0,
+    "meme_score": 0.0
+  },
+  "WDFC": {
+    "Ticker": "WDFC",
+    "Sentiment": 0.55,
+    "Buzz": "Medium",
+    "Narrative": "Explosive earnings blowout and margin expansion, retail chasing momentum but wary of entry near GEX wall of $285.",
+    "last_updated": "2026-07-12T21:48:57.112393Z",
+    "tone_score": 0.2,
+    "comments_score": 0.15,
+    "position_score": 0.1,
+    "volume_score": 0.05,
+    "meme_score": 0.05
   }
 }

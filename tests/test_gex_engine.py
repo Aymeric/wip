@@ -17,6 +17,7 @@ from gex_engine import (
     derive_gex_profile,
     derive_volatility_profile,
     select_best_option,
+    discover_earnings_date,
     RegimeGates,
     OptionPosition,
     StockPosition
@@ -1064,6 +1065,27 @@ class TestGEXEngine(unittest.TestCase):
         with self.assertRaises(ValueError):
             gex_engine.OptionSentiment("AAPL", 0.85, "SuperHigh", "Invalid buzz").validate()
 
+        # 5-factor sentiment validation
+        s_5f = gex_engine.OptionSentiment(
+            "AAPL", 0.85, "High", "High option volume and FOMO",
+            tone_score=0.30, comments_score=0.30, position_score=0.15, volume_score=0.05, meme_score=0.05
+        )
+        self.assertTrue(s_5f.validate())
+
+        # Sum of factors mismatching overall score must raise ValueError
+        with self.assertRaises(ValueError):
+            gex_engine.OptionSentiment(
+                "AAPL", 0.85, "High", "Mismatched sum",
+                tone_score=0.10, comments_score=0.10, position_score=0.10, volume_score=0.10, meme_score=0.10
+            ).validate()
+
+        # Factor score out of range must raise ValueError
+        with self.assertRaises(ValueError):
+            gex_engine.OptionSentiment(
+                "AAPL", 0.50, "High", "Out of range factor",
+                tone_score=0.50, comments_score=0.0, position_score=0.0, volume_score=0.0, meme_score=0.0
+            ).validate()
+
         # 2. Test cmd_update_sentiment and cmd_sentiment via temporary files
         with tempfile.NamedTemporaryFile(suffix=".json", delete=False) as tmp_sent, \
              tempfile.NamedTemporaryFile(suffix=".json", delete=False) as tmp_analyses, \
@@ -1488,6 +1510,78 @@ class TestGEXEngine(unittest.TestCase):
         self.assertIn("nTrans", scale_grouped)
         self.assertIn("COTMP", scale_grouped)
         self.assertIn("+", scale_grouped)
+
+    def test_discover_earnings_date(self):
+        """Test scanning directory for earnings date files."""
+        import tempfile
+        import shutil
+        from unittest.mock import patch
+        import gex_engine
+
+        temp_dir = tempfile.mkdtemp()
+        try:
+            day_dir = os.path.join(temp_dir, "20260710")
+            os.makedirs(day_dir)
+            mock_earnings = {
+                "results": [
+                    {
+                        "report": {
+                            "date": "2026-08-15"
+                        }
+                    }
+                ]
+            }
+            gex_engine.save_json(os.path.join(day_dir, "nvda_earnings_raw.json"), mock_earnings)
+
+            orig_exists = os.path.exists
+            orig_walk = os.walk
+
+            def mock_exists(path):
+                if path == "data/downloads":
+                    return True
+                return orig_exists(path)
+
+            def mock_walk(path, *args, **kwargs):
+                if path == "data/downloads":
+                    return orig_walk(temp_dir, *args, **kwargs)
+                return orig_walk(path, *args, **kwargs)
+
+            with patch('os.path.exists', side_effect=mock_exists), \
+                 patch('os.walk', side_effect=mock_walk):
+                # Discover earnings date dynamically
+                e_date = discover_earnings_date("NVDA")
+                self.assertEqual(e_date, "2026-08-15")
+        finally:
+            shutil.rmtree(temp_dir)
+
+    def test_select_best_option_earnings_blocking(self):
+        """Test that select_best_option flags options expiring after upcoming earnings."""
+        inst_data = {
+            "instruments": [
+                {"id": "call_opt_blocked", "expiration_date": "2026-08-20", "strike_price": "100.0000", "type": "call", "chain_symbol": "TEST"}
+            ]
+        }
+        quotes_data = {
+            "results": [
+                {
+                    "quote": {
+                        "instrument_id": "call_opt_blocked",
+                        "bid_price": "2.40", "ask_price": "2.50", "mark_price": "2.45",
+                        "open_interest": 600, "volume": 12, "delta": "0.45", "gamma": "0.02"
+                    }
+                }
+            ]
+        }
+
+        # Upcoming earnings is 2026-08-15, option expiration is 2026-08-20 -> option expires AFTER earnings -> Blocked by earnings risk
+        best, eligible = select_best_option(inst_data, quotes_data, spot=100.0, gex_target=110.0, today_override="2026-07-09", earnings_date="2026-08-15")
+        self.assertIsNotNone(best)
+        self.assertTrue(best["earnings_blocked"])
+
+        # Upcoming earnings is 2026-08-25, option expiration is 2026-08-20 -> option expires BEFORE earnings -> Not blocked
+        best2, eligible2 = select_best_option(inst_data, quotes_data, spot=100.0, gex_target=110.0, today_override="2026-07-09", earnings_date="2026-08-25")
+        self.assertIsNotNone(best2)
+        self.assertFalse(best2["earnings_blocked"])
 
 
 if __name__ == '__main__':

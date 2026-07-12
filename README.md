@@ -75,9 +75,10 @@ graph TD
     Orchestrator -->|2. Sync Positions & Enforce Trailing Stops| Risk[portfolio-risk-manager.agent.md<br/>Risk & Allocation Stop-Losses]
     Orchestrator -->|3. Generate Candidates| Generator[gex-candidate-generator.agent.md<br/>Scanner & List Filtration]
     Orchestrator -->|4. Scan Social Sentiment Hype| Reddit[reddit-sentiment-analyst.agent.md<br/>Reddit Forum Scraper]
-    Orchestrator -->|5. Grade Underliers & Isolate Calls| Grader[gex-setup-grader.agent.md<br/>Option-Chain GEX Derivation]
-    Orchestrator -->|6. Perform Secure Agentic Bids/Asks| Trader[agentic-trader.agent.md<br/>Agentic Order Placer]
-    Orchestrator -->|7. Intraday Multi-Timeframe Checks| Futures[futures-trading-analyst.agent.md<br/>Futures Strategy Analyst]
+    Orchestrator -->|5. Grade Underliers| Grader[gex-setup-grader.agent.md<br/>Setup Grading Checklist]
+    Orchestrator -->|6. Isolate Option Contracts| Selector[option-selector.agent.md<br/>Option Contract Selection]
+    Orchestrator -->|7. Perform Secure Agentic Bids/Asks| Trader[agentic-trader.agent.md<br/>Agentic Order Placer]
+    Orchestrator -->|8. Intraday Multi-Timeframe Checks| Futures[futures-trading-analyst.agent.md<br/>Futures Strategy Analyst]
     
     Analyst -->|Save gates| RegimeDB[(data/regime.json)]
     Generator -->|Extract pool| CandidatesDB[(data/candidate_stocks.json)]
@@ -100,10 +101,12 @@ graph TD
 5. **Reddit Sentiment Analyst** ([.github/agents/reddit-sentiment-analyst.agent.md](.github/agents/reddit-sentiment-analyst.agent.md))
    - **Role**: Sweeps wallstreetbets, stocks, options, investing, and spacs forums live to calculate sentiment scores ($\pm 1.0$) and discussion volume buzz, projecting retail hype against dealer call walls to generate FOMO/capitulation divergence alerts.
 6. **GEX Setup Grader** ([.github/agents/gex-setup-grader.agent.md](.github/agents/gex-setup-grader.agent.md))
-   - **Role**: Computes mathematical proxies (pTrans, nTrans, +GEX, COTMP, realized/implied volatilities) from safe 40-contract chunk option chains, grades setup profiles out of 11 system rules, and isolates specific highly liquid ATM/OTM target call contracts matching strict bid-ask limits.
-7. **Agentic Trader** ([.github/agents/agentic-trader.agent.md](.github/agents/agentic-trader.agent.md))
+   - **Role**: Computes mathematical proxies (pTrans, nTrans, +GEX, COTMP, realized/implied volatilities) from safe 40-contract chunk option chains, and grades setup profiles out of 11 system rules.
+7. **Option Contract Selector** ([.github/agents/option-selector.agent.md](.github/agents/option-selector.agent.md))
+   - **Role**: Analyzes live options chains and greeks, checks company earnings release date preflights to prevent IV crush, and isolates specific highly liquid ATM/OTM target call contracts matching strict bid-ask limits.
+8. **Agentic Trader** ([.github/agents/agentic-trader.agent.md](.github/agents/agentic-trader.agent.md))
    - **Role**: Validates agentic account permissions, performs asset tradability checks, simulates reviews (dry-runs), places broker limit orders (equities/options), and registers positions securely in the local database.
-8. **Futures Trading Analyst** ([.github/agents/futures-trading-analyst.agent.md](.github/agents/futures-trading-analyst.agent.md))
+9. **Futures Trading Analyst** ([.github/agents/futures-trading-analyst.agent.md](.github/agents/futures-trading-analyst.agent.md))
    - **Role**: Performs pre-market economic macro scans (Tier 1 catalysts), establishes trend biases ($200\text{ SMA}$/$21\text{ EMA}$), identifies Initial Balance / VWAP setups, and computes contract/bracket position sizes.
 
 ---
@@ -125,7 +128,8 @@ This workspace is structured as follows:
    - [.github/agents/portfolio-risk-manager.agent.md](.github/agents/portfolio-risk-manager.agent.md): Syncs option/stock positions live, tracks holdings, enforces strict priority-ordered exits (nTrans support, -10% stop, time stops, stalling indicators), and guards portfolio net collateral allocation limits.
    - [.github/agents/gex-candidate-generator.agent.md](.github/agents/gex-candidate-generator.agent.md): Automates ingestion of saved filters and sequential list retrieval to construct and prioritize candidate databases.
    - [.github/agents/reddit-sentiment-analyst.agent.md](.github/agents/reddit-sentiment-analyst.agent.md): Conducts social polling across r/wallstreetbets, r/options, and r/stocks using `mcp-reddit` to map crowd polarity scores ($\pm 1.0$) against GEX support/barrier walls.
-   - [.github/agents/gex-setup-grader.agent.md](.github/agents/gex-setup-grader.agent.md): Extracts structural GEX proxies (pTrans, nTrans, +GEX, COTMP) from chunked option chain sweeps, runs the 11-rule checklists, and isolates optimal liquid call contracts.
+   - [.github/agents/gex-setup-grader.agent.md](.github/agents/gex-setup-grader.agent.md): Extracts structural GEX proxies (pTrans, nTrans, +GEX, COTMP) from chunked option chain sweeps, and runs the 11-rule checklists.
+   - [.github/agents/option-selector.agent.md](.github/agents/option-selector.agent.md): Queries options chains and Greeks, runs earnings calendar preflights, and isolates optimal Call contracts.
    - [.github/agents/agentic-trader.agent.md](.github/agents/agentic-trader.agent.md): Runs pre-trade clearance checks, reviews option spreads, reviews contract liquidity, simulates dry-runs, and routes secure limit orders.
    - [.github/agents/futures-trading-analyst.agent.md](.github/agents/futures-trading-analyst.agent.md): Evaluates economic catalysts, trends, Initial Balance boundaries, and calculates precise contract-sizing parameters.
 4. **Specialized Copilot Prompt Manifests (Delegation Layer)** (located in the [.github/prompts/](.github/prompts/) directory):
@@ -133,6 +137,7 @@ This workspace is structured as follows:
    - [.github/prompts/portfolio-analysis.prompt.md](.github/prompts/portfolio-analysis.prompt.md): Public entrance for risk/weight audits and trailing stop checks. Delegates directly to the **Portfolio Risk Manager** subagent.
    - [.github/prompts/futures-trading.prompt.md](.github/prompts/futures-trading.prompt.md): Public entrance for economic catalyst analyses and futures bracket parameters. Delegates directly to the **Futures Trading Analyst** subagent.
    - [.github/prompts/reddit-sentiment-analyst.prompt.md](.github/prompts/reddit-sentiment-analyst.prompt.md): Public entrance for live Reddit group scraping and divergence tracking. Delegates directly to the **Reddit Sentiment Analyst** subagent.
+   - [.github/prompts/option-selector.prompt.md](.github/prompts/option-selector.prompt.md): Public entrance for option selection queries. Delegates directly to the **Option Contract Selector** subagent.
 ---
 
 ## 🚀 Getting Started
@@ -221,11 +226,11 @@ python3 src/gex_engine.py payoff <symbol> --spot <spot_price> --strike <strike_p
 python3 src/gex_engine.py sentiment
 ```
 
-#### Register/update Reddit sentiment data for a ticker:
+#### Register/update Reddit sentiment data for a ticker (including 5-factor scoring components):
 ```bash
-python3 src/gex_engine.py update-sentiment <ticker> --score <score> --buzz <buzz> --narrative <narrative>
+python3 src/gex_engine.py update-sentiment <ticker> --score <score> --buzz <buzz> --narrative <narrative> [--tone <tone>] [--comments <comments>] [--position <position>] [--volume-score <volume_score>] [--meme <meme>]
 ```
-*(Options for `--buzz` include `High`, `Medium`, `Low`, or `None`. `--score` must be between `-1.0` (capitulation/panic) and `+1.0` (FOMO/euphoria).)*
+*(Options for `--buzz` include `High`, `Medium`, `Low`, or `None`. `--score` must be between `-1.0` (capitulation/panic) and `+1.0` (FOMO/euphoria). Optional 5-factor inputs include: `--tone` (-0.30 to +0.30), `--comments` (-0.30 to +0.30), `--position` (-0.20 to +0.20), `--volume-score` (-0.10 to +0.10), and `--meme` (-0.10 to +0.10). The sum of these 5-factor components must match the overall sentiment `--score` within ±0.02 when any are provided).*
 
 #### Display a beautiful ranked report of all historically analyzed ticker setups:
 ```bash

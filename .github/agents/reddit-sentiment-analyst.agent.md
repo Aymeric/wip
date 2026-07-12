@@ -27,23 +27,75 @@ Before scanning, determine which tickers to scan in order to optimize API resour
 
 ---
 
-### Step 2: Conduct Reddit Sentiment Scans
-Query popular retail and option forums (wallstreetbets, stocks, options, investing, spacs) using the Reddit MCP tools to gather social intelligence. **IMPORTANT**: Always download the latest information live from Reddit. Never use cached sentiment or make up sentiment scores.
-1. **Retrieve Trending Posts**: Call mcp_reddit-mcp_reddit_get_subreddit_posts with subreddit set to the target community, and sort set to "hot" or "new". Keep batch size reasonable (e.g., 10-15 posts).
-2. **Search and Scan Titles**: Scan post titles, content, and scores to locate discussions mentioning your target tickers. Search with uppercase tickers (e.g., "BABA", "OKLO").
-3. **Dig into High-Conviction Narratives**: For tickers with high relative buzz or interesting debates, fetch details by calling mcp_reddit-mcp_reddit_get_post_comments with the matching post_id.
-4. **Identify Sentiment & Context**: Focus on capturing the core concerns, emotional triggers, trade ideas, and conviction levels (e.g., put/call buying, shorting hype, long-term holdings) expressed by retail investors.
+### Step 2: Conduct Focused Reddit Sentiment Scans
+Query popular retail and option forums (r/wallstreetbets, r/stocks, r/options, r/investing, r/spacs) using the Reddit MCP tools to gather social intelligence. **IMPORTANT**: Always download the latest information live from Reddit. Never use cached sentiment or make up sentiment scores.
+
+To ensure high-precision, low-noise scans, proceed using this improved dual-path workflow:
+1. **Primary Dual-Path Subreddit Search**:
+   - Call `mcp_reddit-mcp_reddit_search_reddit` with `query="<TICKER>"` to find highly relevant and recent posts across all of Reddit.
+   - To focus on top communities of interest, construct search queries with subreddit filters, e.g., `query="<TICKER> subreddit:wallstreetbets"` or `query="<TICKER> (subreddit:wallstreetbets OR subreddit:stocks OR subreddit:options)"`.
+   - Set `limit` to 10-15 posts and `sort` to `relevance` or `comments` or `new` (time-filtered to `week` or `day` to capture active sentiment).
+2. **Secondary Fallback Scan**:
+   - If specialized searches yield zero or sparse results, fall back to capturing general retail forum trends by calling `mcp_reddit-mcp_reddit_get_subreddit_posts` with `subreddit` set to "wallstreetbets", "stocks", or "options", and `sort` set to "hot" or "new".
+   - Locally parse the returned titles/bodies of these trending posts (batch size of 15-20 posts) for any mentions of your target tickers.
+3. **Detailed Comment & Thread Scraping**:
+   - For tickers with high relative buzz, active threads, or interesting debates, download the actual comments and discussions by calling `mcp_reddit-mcp_reddit_get_post_comments` with the selected `post_id` and `sort` set to "top" or "confidence".
+   - Extract the core concerns, emotional triggers, trade ideas, and retail conviction levels (e.g., short-term call buying vs long-term stock holds vs heavy panic/loss-porn comments).
 
 ---
 
-### Step 3: Synthesize Social Sentiments & Metrics
-Quantify and format the reddit sentiment findings for each scanned asset:
-1. **Sentiment Score**: Determine a grade ranging from -1.00 (extreme retail panic, doom, shorting, or capitulation) to +1.00 (irrational exuberance, FOMO, rocket memes, aggressive call chasing), with +0.00 as neutral or completely unmentioned.
-2. **Discussion Buzz/Volume**: Classify as High (dedicated posts, front-page WSB discussion), Medium (frequent organic mentions in daily chat/threads), Low (isolated search hits), or None (zero mentions).
-3. **Retail Narrative & Catalysts**: State the major retail thesis briefly (e.g., "Breakout hype ahead of earnings, rotation to energy").
-4. **Persist Findings to Cache**: Save the metrics to the local database at [data/reddit_sentiment.json](../../data/reddit_sentiment.json) so the GEX engine dashboard can ingest them. Always invoke the GEX engine update command for each ticker:
-   `python3 src/gex_engine.py update-sentiment <TICKER> --score <sentiment_score> --buzz <buzz_volume> --narrative "<narrative>"`
-   or edit the JSON file [data/reddit_sentiment.json](../../data/reddit_sentiment.json) directly.
+### Step 3: Quantify Social Sentiment Using the 5-Factor Scoring System
+To prevent subjective bias and ensure absolute reproducibility, calculate the sentiment score for each scanned asset using are strict 5-factor scoring system. Explicitly output this scoring breakdown for transparency.
+
+Combined Sentiment Score $S = S_{\text{Tone}} + S_{\text{Comments}} + S_{\text{Position}} + S_{\text{Volume}} + S_{\text{Meme}}$ (Bounded exactly between $-1.00$ and $+1.00$):
+
+1. **Post Title & Body Directional Bias ($S_{\text{Tone}}$)** - Range $[-0.30, +0.30]$:
+   - $+0.30$: Overwhelmingly bullish/optimistic (breakouts, target upgrades, heavy long-only DD posts).
+   - $+0.15$: Moderately bullish or positive overall outlook.
+   - $+0.00$: Neutral, balanced, or strictly factual reporting.
+   - $-0.15$: Moderately bearish or cautious/skeptical.
+   - $-0.30$: Overwhelmingly bearish (bankruptcy fears, fraud accusations, trash stock, absolute doom posts).
+2. **Comment Polarity Ratio ($S_{\text{Comments}}$)** - Range $[-0.30, +0.30]$:
+   - $+0.30$: Clear bullish consensus (heavy "buy the dip" or "shorts are trapped" sentiments, no bears).
+   - $+0.15$: Mostly positive comments but with some standard skepticism.
+   - $+0.00$: Balanced split or dead discussion threads.
+   - $-0.15$: Mostly negative/cautionary comments.
+   - $-0.30$: Clear panic/capitulation consensus (heavy loss-porn sharing, "it's over", "I sold at a loss").
+3. **Retail Positioning Conviction ($S_{\text{Position}}$)** - Range $[-0.20, +0.20]$:
+   - $+0.20$: Buying highly leveraged short-term, out-of-the-money (OTM) Calls or YOLO call options.
+   - $+0.10$: Accumulating common shares, buying ITM Calls/LEAPs, or selling Puts.
+   - $+0.00$: No specific options/positioning discuss trends.
+   - $-0.10$: Buying ITM Puts, writing Calls, or trimming common share lines.
+   - $-0.20$: Buying hyper-leveraged OTM weekly Puts, panic selling common, or facing margin call liquidations.
+4. **Upvote & Discussion Intensity ($S_{\text{Volume}}$)** - Range $[-0.10, +0.10]$:
+   - $+0.10$: Massive thread traction (1000+ upvotes or WSB daily chat pinned highlight, high award rate).
+   - $+0.05$: Active discussion on standard posts with moderate upvoting (50-500 upvotes).
+   - $+0.00$: Barely discussed or neutral post engagement metric.
+   - $-0.05$: Post actively downvoted or ignored.
+   - $-0.10$: Active hate-posts getting high upvote scores, highlighting maximum collective retail disgust.
+5. **Meme & Emoji Density ($S_{\text{Meme}}$)** - Range $[-0.10, +0.10]$:
+   - $+0.10$: Heavy saturation of bullish hype symbols/phrases ("moon", "YOLO", 🚀, 💎🙌, 🐂, 🌕).
+   - $+0.05$: Minor or moderate bullish slang/hype references.
+   - $+0.00$: Strictly clinical/formal dictionary used without slang or emojis.
+   - $-0.05$: Minor bearish slang or warnings.
+   - $-0.10$: Saturated panic slang/bear emojis ("it's over", "scam", 📉, 🤡, 🚽, 🐻).
+
+#### Classify Ticker Discussion Buzz/Volume:
+- **High**: Multiple dedicated threads (>3 threads) with high transaction scores/comments (>50 comments).
+- **Medium**: Frequent organic mentions (2-5 mentions) in daily chats or generalized threads.
+- **Low**: Isolated search hits (1 mention) with very low user interaction (<10 comments).
+- **None**: Zero matching search results or forum mentions found.
+
+#### Persist Findings to Cache:
+Save the metrics to the local database at [data/reddit_sentiment.json](../../data/reddit_sentiment.json) so the GEX engine dashboard can ingest them. Always invoke the GEX engine update command for each ticker, providing all 5-factor scoring components:
+`python3 src/gex_engine.py update-sentiment <TICKER> --score <sentiment_score> --buzz <buzz_volume> --narrative "<narrative>" --tone <tone_score> --comments <comments_score> --position <position_score> --volume-score <volume_score> --meme <meme_score>`
+or edit the JSON file [data/reddit_sentiment.json](../../data/reddit_sentiment.json) directly. Note that when writing or running the command:
+1. `--tone` must be between `-0.30` and `+0.30`
+2. `--comments` must be between `-0.30` and `+0.30`
+3. `--position` must be between `-0.20` and `+0.20`
+4. `--volume-score` must be between `-0.10` and `+0.10`
+5. `--meme` must be between `-0.10` and `+0.10`
+6. The sum of these 5 components must match the overall `--score` within $\pm0.02$.
 
 ---
 
@@ -77,6 +129,15 @@ Utilize the output of this CLI engine command to compile your final highly polis
 | Ticker | Asset Type | Reddit Buzz | Sentiment (-1 to +1) | Retail Narrative & Catalysts | GEX Alignment / Threat Level | Action Recommendation |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 | TICKER | [Active Option / Candidate] | High/Med/Low/None | +X.XX | "Bullish breakout hype, earnings run" | Trading at +GEX (Call Wall) - HIGH EXHAUSTION RISK | Avoid straight calls; Trim and take profit |
+
+### Scored Sentiment Breakdowns (5-Factor Valuation):
+- **TICKER**: Sentiment Score: `Sentiment` (Buzz: `Buzz`)
+  - $S_{\text{Tone}} = +X.XX$: [Short description of title/body direction]
+  - $S_{\text{Comments}} = +X.XX$: [Short description of comment polarity split]
+  - $S_{\text{Position}} = +X.XX$: [Short description of option buying/share accumulation conviction]
+  - $S_{\text{Volume}} = +X.XX$: [Short description of user upvotes and interactive engagement]
+  - $S_{\text{Meme}} = +X.XX$: [Short description of rocket/panicked emoji levels]
+  - *Combined Calculation*: $S = S_{\text{Tone}} + S_{\text{Comments}} + S_{\text{Position}} + S_{\text{Volume}} + S_{\text{Meme}} = \mathbf{+X.XX}$
 
 ### Key Social Hype & Divergence Alerts:
 1. **⚠️ FOMO ALERT: [TICKER]**: Retail sentiment is extremely exuberant (+X.XX) on [TICKER], but current price ($X.XX) sits directly at or above the call wall of $Y.YY found in [data/ticker_analyses.json](../../data/ticker_analyses.json). Chasing calls at this level carries a high risk of decay or reversal.

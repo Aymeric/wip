@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-07-12T15:36:29.714385Z",
+  "last_updated": "2026-07-12T21:21:34.233135Z",
   "source_scans": [
     "GEX Momentum Candidates",
     "High options volume and IV",
@@ -22,7 +22,7 @@
     "SLS",
     "WU"
   ],
-  "total": 25,
+  "total": 30,
   "candidates": [
     {
       "symbol": "SHC",
@@ -131,6 +131,15 @@
       "iv": null,
       "relative_options_volume": null,
       "market_cap": 1097144940.0
+    },
+    {
+      "symbol": "NVDA",
+      "source": "watchlists",
+      "price": 210.96,
+      "chg_pct": 4.034,
+      "iv": null,
+      "relative_options_volume": null,
+      "market_cap": 5189257368000.0
     },
     {
       "symbol": "SEI",
@@ -248,6 +257,42 @@
       "iv": null,
       "relative_options_volume": null,
       "market_cap": 1907161295.0
+    },
+    {
+      "symbol": "AMD",
+      "source": "watchlists",
+      "price": 557.99,
+      "chg_pct": 2.061,
+      "iv": null,
+      "relative_options_volume": null,
+      "market_cap": 909858772190.76
+    },
+    {
+      "symbol": "SOFI",
+      "source": "reddit",
+      "price": 18.8,
+      "chg_pct": 0.9667,
+      "iv": null,
+      "relative_options_volume": null,
+      "market_cap": 24115535852.37
+    },
+    {
+      "symbol": "WDC",
+      "source": "reddit",
+      "price": 582.51,
+      "chg_pct": 0.7716,
+      "iv": null,
+      "relative_options_volume": null,
+      "market_cap": 200780782669.46
+    },
+    {
+      "symbol": "COIN",
+      "source": "watchlists",
+      "price": 159.06,
+      "chg_pct": 0.391,
+      "iv": null,
+      "relative_options_volume": null,
+      "market_cap": 41906106660.0
     }
   ]
 }

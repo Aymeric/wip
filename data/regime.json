@@ -121,8 +121,8 @@
     }
   },
   "last_updated": "2026-07-12",
-  "monthly_pnl_dlr": -740.8,
-  "monthly_pnl_pct": -1.4816,
+  "monthly_pnl_dlr": 1202.74,
+  "monthly_pnl_pct": 2.4054800000000003,
   "drawdown_gate_status": "PASS",
-  "monthly_cnt": 3
+  "monthly_cnt": 13
 }

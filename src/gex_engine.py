@@ -125,6 +125,11 @@ class OptionSentiment:
     buzz: str  # 'High', 'Medium', 'Low', 'None'
     narrative: str
     last_updated: Optional[str] = field(default=None)
+    tone_score: float = field(default=0.0)
+    comments_score: float = field(default=0.0)
+    position_score: float = field(default=0.0)
+    volume_score: float = field(default=0.0)
+    meme_score: float = field(default=0.0)
 
     def validate(self) -> bool:
         """Validates sentiment parameters."""
@@ -134,6 +139,25 @@ class OptionSentiment:
             raise ValueError(f"sentiment must be between -1.0 and +1.0: {self.sentiment}")
         if self.buzz not in ("High", "Medium", "Low", "None", "Med"):
             raise ValueError(f"buzz must be High, Medium, Low, or None: {self.buzz}")
+            
+        # Validate 5-factor score subranges
+        if not (-0.301 <= self.tone_score <= 0.301):
+            raise ValueError(f"tone_score must be between -0.30 and +0.30: {self.tone_score}")
+        if not (-0.301 <= self.comments_score <= 0.301):
+            raise ValueError(f"comments_score must be between -0.30 and +0.30: {self.comments_score}")
+        if not (-0.201 <= self.position_score <= 0.201):
+            raise ValueError(f"position_score must be between -0.20 and +0.20: {self.position_score}")
+        if not (-0.101 <= self.volume_score <= 0.101):
+            raise ValueError(f"volume_score must be between -0.10 and +0.10: {self.volume_score}")
+        if not (-0.101 <= self.meme_score <= 0.101):
+            raise ValueError(f"meme_score must be between -0.10 and +0.10: {self.meme_score}")
+            
+        # Verify 5-factor components match the overall score if any are non-zero
+        components_sum = self.tone_score + self.comments_score + self.position_score + self.volume_score + self.meme_score
+        if abs(components_sum) > 0.001:
+            if abs(components_sum - self.sentiment) > 0.021:
+                raise ValueError(f"The sum of the 5-factors ({components_sum:+.2f}) must match the overall sentiment score ({self.sentiment:+.2f}) within ±0.02.")
+                
         return True
 
 
@@ -1233,7 +1257,61 @@ def derive_volatility_profile(hist_data, symbol, iv_sum, iv_count):
     }
 
 
-def select_best_option(inst_data, quotes_data, spot, gex_target, today_override=None, target_delta=0.45, min_dte=30, max_dte=45):
+def discover_earnings_date(symbol: str) -> Optional[str]:
+    """
+    Search recursively inside data/downloads/ to locate any <ticker>_earnings_raw.json file.
+    Parse its content to locate the next scheduled or estimated earnings date.
+    """
+    sym_lower = symbol.lower()
+    downloads_dir = "data/downloads"
+    if not os.path.exists(downloads_dir):
+        return None
+    candidates = []
+    for root, dirs, files in os.walk(downloads_dir):
+        for f in files:
+            if f.lower() == f"{sym_lower}_earnings_raw.json" or f.lower() == f"{sym_lower}_earnings.json":
+                candidates.append(os.path.join(root, f))
+    if not candidates:
+        return None
+    candidates.sort() # get the most recent download folder chronologically
+    latest_file = candidates[-1]
+    try:
+        with open(latest_file, "r") as f:
+            data = json.load(f)
+        
+        def parse_date(val):
+            if isinstance(val, str) and re.match(r"^\d{4}-\d{2}-\d{2}$", val):
+                return val
+            return None
+            
+        def find_date_in_dict(obj):
+            if isinstance(obj, dict):
+                # Check priority keys
+                for key in ["report_date", "date", "expected_report_date", "earnings_date", "estimated_date"]:
+                    if key in obj:
+                        d = parse_date(obj[key])
+                        if d:
+                            return d
+                for val in obj.values():
+                    d = find_date_in_dict(val)
+                    if d:
+                        return d
+            elif isinstance(obj, list):
+                for val in obj:
+                    d = find_date_in_dict(val)
+                    if d:
+                        return d
+            return None
+            
+        result_date = find_date_in_dict(data)
+        if result_date:
+            return result_date
+    except Exception as e:
+        print(f"Warning: Failed to parse discovered earnings file {latest_file}: {e}", file=sys.stderr)
+    return None
+
+
+def select_best_option(inst_data, quotes_data, spot, gex_target, today_override=None, target_delta=0.45, min_dte=30, max_dte=45, earnings_date=None):
     """
     Isolates and recommends the single best call option contract based on
     the 5-step Option Selection Protocol.
@@ -1328,6 +1406,16 @@ def select_best_option(inst_data, quotes_data, spot, gex_target, today_override=
     valid_expirations.sort(key=exp_target_distance)
     chosen_exp, chosen_dte = valid_expirations[0]
 
+    earnings_blocked = False
+    if earnings_date:
+        try:
+            e_dt = datetime.strptime(earnings_date, "%Y-%m-%d").date()
+            exp_dt = datetime.strptime(chosen_exp, "%Y-%m-%d").date()
+            if e_dt <= exp_dt:
+                earnings_blocked = True
+        except ValueError:
+            pass
+
     # Gather contracts for this expiration
     eligible_contracts = []
     for opt_id, inst in inst_map.items():
@@ -1418,7 +1506,8 @@ def select_best_option(inst_data, quotes_data, spot, gex_target, today_override=
                 "pct_above_spot": pct_above_spot,
                 "tier": tier,
                 "dist_to_atm": dist_to_atm,
-                "dist_to_ideal_delta": dist_to_ideal_delta
+                "dist_to_ideal_delta": dist_to_ideal_delta,
+                "earnings_blocked": earnings_blocked
             })
 
     if not eligible_contracts:
@@ -1454,6 +1543,11 @@ def cmd_analyze(args):
             if c["symbol"].upper() == symbol:
                 spot = c["price"]
                 break
+
+    # Discover and resolve upcoming earnings schedule
+    earnings_date = args.earnings_date if getattr(args, "earnings_date", None) else discover_earnings_date(symbol)
+    if not earnings_date and cached.get("earnings_date"):
+        earnings_date = cached.get("earnings_date")
 
     inst_data = None
     quotes_data = None
@@ -1555,8 +1649,41 @@ def cmd_analyze(args):
     # Formula: Reward = (+GEX - Spot), Risk = Spot - pTrans
     reward = gex - spot
     risk = spot - ptrans
-    rr_ratio = round(reward / risk, 2) if risk > 0 else 999.0
+    rr_ratio = round(reward/risk, 2) if risk > 0 else 999.0
+
+    best_option_cached = None
+    proposed_option_expiration = None
+    earnings_gate_status = "N/A (No contract to evaluate against)"
+    days_out_str = "N/A"
     
+    if earnings_date:
+        try:
+            today_dt = datetime.today().date()
+            earnings_dt = datetime.strptime(earnings_date, "%Y-%m-%d").date()
+            days_out = (earnings_dt - today_dt).days
+            days_out_str = f"{days_out:d} days out"
+        except (ValueError, TypeError):
+            pass
+
+    if inst_data is not None and quotes_data is not None:
+        target_delta = getattr(args, "target_delta", 0.45)
+        min_dte = getattr(args, "min_dte", 30)
+        max_dte = getattr(args, "max_dte", 45)
+        best_option, _ = select_best_option(
+            inst_data, quotes_data, spot, gex,
+            target_delta=target_delta, min_dte=min_dte, max_dte=max_dte,
+            earnings_date=earnings_date
+        )
+        if best_option:
+            best_option_cached = best_option
+            proposed_option_expiration = best_option['expiration_date']
+            
+            if earnings_date:
+                if best_option.get("earnings_blocked", False):
+                    earnings_gate_status = "FAIL - BLOCKED BY EARNINGS RISK (Earnings occur before expiration; IV Crush Danger)"
+                else:
+                    earnings_gate_status = "PASS (Earnings event occurs after option expiration)"
+
     # Define Signal Status & Classification
     # Watchdog buffer is 0.5% below pTrans. If Spot reaches watchdog buffer or above setup rules
     watchdog_threshold = ptrans * 0.995
@@ -1590,6 +1717,9 @@ def cmd_analyze(args):
         
     if rr_ratio < 2.0:
         reasons.append(f"Risk/Reward ratio {rr_ratio:.2f} < 2.00")
+
+    if best_option_cached and best_option_cached.get("earnings_blocked", False):
+        reasons.append("Option contract blocked by Earnings IV-Crush Risk")
         
     if not reasons:
         if spot >= ptrans:
@@ -1627,6 +1757,8 @@ def cmd_analyze(args):
         "Signal Status": status,
         "analyzed_date": datetime.today().strftime('%Y-%m-%d'),
         "spike_crash": bool(spike_crash),
+        "earnings_date": earnings_date,
+        "earnings_gate_status": "FAIL" if (best_option_cached and best_option_cached.get("earnings_blocked", False)) else "PASS" if earnings_date else "N/A",
         **rule_overrides
     }
     # Keep count of pegged sessions if db_change is exactly 1.00
@@ -1657,6 +1789,13 @@ def cmd_analyze(args):
     scale_str = generate_ascii_gex_scale(spot, ptrans, ntrans, gex, cotmp)
     print(f"\n### 🛣️ Dealer GEX Structural Runway Map")
     print(f"  {scale_str}\n")
+
+    print(f"### 📅 Earnings Calendar Safety Check:")
+    print(f"- **Upcoming Earnings Date**: {earnings_date or 'N/A'}" + (f" ({days_out_str})" if earnings_date else ""))
+    print(f"- **Proposed Option Expiration**: {proposed_option_expiration or 'N/A'}")
+    eg_color = "32" if "PASS" in earnings_gate_status else ("31" if "FAIL" in earnings_gate_status else "37")
+    eg_fmt = format_color(earnings_gate_status, eg_color, bold=("FAIL" in earnings_gate_status))
+    print(f"- **Earnings Gate Status**: {eg_fmt}\n")
     
     print(f"- **Core Filters**:")
     print(f"  1. **Structural Grade**: {format_color(f'{grade}/11', grade_color)} (Status: {format_color('PASS' if grade >= 9 else 'FAIL', grade_color, bold=True)})")
@@ -1694,155 +1833,154 @@ def cmd_analyze(args):
     else:
         print_color(f"- **Recommended Play**: NO ENTRY. Setup blocked by system safeguards.", "31", bold=True)
 
-    best_option_cached = None
     max_contracts_cached = 0
     cost_per_contract_cached = 0.0
 
-    if inst_data is not None and quotes_data is not None:
-        target_delta = getattr(args, "target_delta", 0.45)
-        min_dte = getattr(args, "min_dte", 30)
-        max_dte = getattr(args, "max_dte", 45)
-        best_option, _ = select_best_option(
-            inst_data, quotes_data, spot, gex,
-            target_delta=target_delta, min_dte=min_dte, max_dte=max_dte
-        )
-        if best_option:
-            best_option_cached = best_option
-            print(f"\n### 🎯 Option Selection Recommendation")
-            print(f"- **Target Contract**: Call Option strike ${best_option['strike']:.2f} expiring {best_option['expiration_date']} (DTE: {best_option['dte']})")
-            print(f"- **Option ID**: {best_option['option_id']}")
-            print(f"- **Greeks & Pricing**:")
-            print(f"  - Mark Price: ${best_option['mark']:.2f} (Ask: ${best_option['ask']:.2f}, Bid: ${best_option['bid']:.2f}, Spread: ${best_option['spread']:.2f})")
-            delta_str = f"{best_option['delta']:.4f}" if best_option['delta'] is not None else "N/A"
-            gamma_str = f"{best_option['gamma']:.4f}" if best_option['gamma'] is not None else "N/A"
-            print(f"  - Delta: {delta_str} | Gamma: {gamma_str} | Implied Vol: {best_option['iv']*100:.1f}%")
-            print(f"  - Liquidity Metrics: Open Interest: {best_option['oi']} | Volume: {best_option['vol']}")
+    if best_option_cached:
+        best_option = best_option_cached
+        eb_status_str = ""
+        if best_option.get("earnings_blocked", False):
+            eb_status_str = format_color(" | 🔴 BLOCKED BY EARNINGS RISK", "31", bold=True)
             
-            # Print spread and liquidity warnings
-            flags = []
-            if not best_option['spread_ok']:
-                flags.append("HIGH-SPREAD RISK")
-            if not best_option['oi_ok']:
-                flags.append("LOW-OI RISK")
-            
-            if flags:
-                flag_str = " | ".join(flags)
-                print(format_color(f"  - ⚠️ WARNING: [{flag_str}] contract has wide bid-ask spread or insufficient open interest.", "33", bold=True))
-            else:
-                print(format_color("  - ✅ LIQUIDITY GATE: PASS", "32"))
+        print(f"\n### 🎯 Option Selection Recommendation")
+        print(f"- **Target Contract**: Call Option strike ${best_option['strike']:.2f} expiring {best_option['expiration_date']} (DTE: {best_option['dte']}){eb_status_str}")
+        print(f"- **Option ID**: {best_option['option_id']}")
+        print(f"- **Greeks & Pricing**:")
+        print(f"  - Mark Price: ${best_option['mark']:.2f} (Ask: ${best_option['ask']:.2f}, Bid: ${best_option['bid']:.2f}, Spread: ${best_option['spread']:.2f})")
+        delta_str = f"{best_option['delta']:.4f}" if best_option['delta'] is not None else "N/A"
+        gamma_str = f"{best_option['gamma']:.4f}" if best_option['gamma'] is not None else "N/A"
+        print(f"  - Delta: {delta_str} | Gamma: {gamma_str} | Implied Vol: {best_option['iv']*100:.1f}%")
+        print(f"  - Liquidity Metrics: Open Interest: {best_option['oi']} | Volume: {best_option['vol']}")
+        
+        # Print spread and liquidity warnings
+        flags = []
+        if not best_option['spread_ok']:
+            flags.append("HIGH-SPREAD RISK")
+        if not best_option['oi_ok']:
+            flags.append("LOW-OI RISK")
+        if best_option.get("earnings_blocked", False):
+            flags.append("EARNINGS IV-CRUSH RISK")
+        
+        if flags:
+            flag_str = " | ".join(flags)
+            print(format_color(f"  - ⚠️ WARNING: [{flag_str}] contract has wide bid-ask spread, insufficient open interest, or upcoming earnings risk.", "33", bold=True))
+        else:
+            print(format_color("  - ✅ LIQUIDITY GATE: PASS", "32"))
 
-            # Sizing / Constraints calculator
-            net_liq = getattr(args, "net_liq", None)
-            if net_liq is None:
-                net_liq = 50000.0
+        # Sizing / Constraints calculator
+        net_liq = getattr(args, "net_liq", None)
+        if net_liq is None:
+            net_liq = 50000.0
+        
+        max_risk = net_liq * 0.03
+        cost_per_contract = best_option['mark'] * 100.0
+        cost_per_contract_cached = cost_per_contract
+        if cost_per_contract > 0:
+            max_contracts = int(max_risk // cost_per_contract)
+        else:
+            max_contracts = 0
+        max_contracts_cached = max_contracts
             
-            max_risk = net_liq * 0.03
-            cost_per_contract = best_option['mark'] * 100.0
-            cost_per_contract_cached = cost_per_contract
-            if cost_per_contract > 0:
-                max_contracts = int(max_risk // cost_per_contract)
-            else:
-                max_contracts = 0
-            max_contracts_cached = max_contracts
-                
-            print(f"- **Aggregate Sizing Simulation**:")
-            print(f"  - Portfolio Net Liq Reference: ${net_liq:,.2f}")
-            print(f"  - Single-Leg Max Sizing Allowed (3.0% Net Liq): ${max_risk:,.2f}")
-            print(f"  - Estimated Sizing Recommendation: {format_color(f'{max_contracts} contracts', '32', bold=True)} at ${best_option['mark']:.2f} per premium (Total Premium: ${max_contracts * cost_per_contract:,.2f})")
+        print(f"- **Aggregate Sizing Simulation**:")
+        print(f"  - Portfolio Net Liq Reference: ${net_liq:,.2f}")
+        print(f"  - Single-Leg Max Sizing Allowed (3.0% Net Liq): ${max_risk:,.2f}")
+        print(f"  - Estimated Sizing Recommendation: {format_color(f'{max_contracts} contracts', '32', bold=True)} at ${best_option['mark']:.2f} per premium (Total Premium: ${max_contracts * cost_per_contract:,.2f})")
 
-            # Render Option Payoff Projection Matrix Table
-            print(f"\n### 📊 Option Payoff Projection Matrix")
-            print("  This matrix simulates target contract value using Delta & Gamma price adjustment")
-            print("  and is adjusted for square-root-of-time extrinsic decay.")
-            print("  " + "-" * 133)
-            print(f"  {'Target Spot':<12} | {'Underlier %':<11} | {'Scenario / Level':<24} | {'Day 0 (Instant)':<17} | {'Day 3 Held':<17} | {'Day 7 Held':<17} | {'Day 14 Held'}")
-            print("  " + "-" * 133)
+        # Render Option Payoff Projection Matrix Table
+        print(f"\n### 📊 Option Payoff Projection Matrix")
+        print("  This matrix simulates target contract value using Delta & Gamma price adjustment")
+        print("  and is adjusted for square-root-of-time extrinsic decay.")
+        print("  " + "-" * 133)
+        print(f"  {'Target Spot':<12} | {'Underlier %':<11} | {'Scenario / Level':<24} | {'Day 0 (Instant)':<17} | {'Day 3 Held':<17} | {'Day 7 Held':<17} | {'Day 14 Held'}")
+        print("  " + "-" * 133)
+        
+        # Scenarios to print
+        scenarios = []
+        if ntrans is not None and ntrans > 0:
+            scenarios.append((ntrans, "nTrans (Structural Stop)"))
+        if ptrans is not None and ptrans > 0:
+            scenarios.append((ptrans, "pTrans (Transition/Entry)"))
+        scenarios.append((spot, "Baseline Spot (Current)"))
+        
+        midway = spot + (gex - spot) / 2.0
+        scenarios.append((midway, "T1 Halfway Level"))
+        
+        if gex is not None and gex > 0:
+            scenarios.append((gex, "+GEX (T1 Target)"))
+            t2_stretch = gex + (gex - spot) * 0.5
+            scenarios.append((t2_stretch, "T2 (Stretch Target)"))
             
-            # Scenarios to print
-            scenarios = []
-            if ntrans is not None and ntrans > 0:
-                scenarios.append((ntrans, "nTrans (Structural Stop)"))
-            if ptrans is not None and ptrans > 0:
-                scenarios.append((ptrans, "pTrans (Transition/Entry)"))
-            scenarios.append((spot, "Baseline Spot (Current)"))
+        # Filter and sort unique target spots
+        unique_scenarios = {}
+        for s_price, s_name in scenarios:
+            s_price = round(s_price, 2)
+            if s_price not in unique_scenarios:
+                unique_scenarios[s_price] = s_name
+                
+        import math
+        for s_price in sorted(unique_scenarios.keys()):
+            s_name = unique_scenarios[s_price]
+            pct_chg = ((s_price - spot) / spot) * 100.0 if spot > 0 else 0.0
+            underlier_chg_str = f"{pct_chg:+.2f}%"
             
-            midway = spot + (gex - spot) / 2.0
-            scenarios.append((midway, "T1 Halfway Level"))
+            delta_s = s_price - spot
+            opt_strike = best_option['strike']
+            opt_mark = best_option['mark']
+            opt_delta = best_option['delta'] if best_option['delta'] is not None else 0.45
+            opt_gamma = best_option['gamma'] if best_option['gamma'] is not None else 0.01
+            opt_dte = best_option['dte'] if best_option['dte'] is not None else 30
             
-            if gex is not None and gex > 0:
-                scenarios.append((gex, "+GEX (T1 Target)"))
-                t2_stretch = gex + (gex - spot) * 0.5
-                scenarios.append((t2_stretch, "T2 (Stretch Target)"))
+            # Instantaneous (Day 0)
+            intrinsic_target = max(0.0, s_price - opt_strike)
+            instant_mark = max(intrinsic_target, opt_mark + (opt_delta * delta_s) + (0.5 * opt_gamma * (delta_s ** 2)))
+            instant_pnl = ((instant_mark - opt_mark) / opt_mark) * 100.0 if opt_mark > 0 else 0.0
+            
+            # Day 3 Held
+            extrinsic_instant = instant_mark - intrinsic_target
+            t_decay_factor_3 = math.sqrt(max(0, opt_dte - 3) / opt_dte) if opt_dte > 0 else 0.0
+            day3_mark = intrinsic_target + extrinsic_instant * t_decay_factor_3
+            day3_pnl = ((day3_mark - opt_mark) / opt_mark) * 100.0 if opt_mark > 0 else 0.0
+            
+            # Day 7 Held
+            t_decay_factor_7 = math.sqrt(max(0, opt_dte - 7) / opt_dte) if opt_dte > 0 else 0.0
+            day7_mark = intrinsic_target + extrinsic_instant * t_decay_factor_7
+            day7_pnl = ((day7_mark - opt_mark) / opt_mark) * 100.0 if opt_mark > 0 else 0.0
+            
+            # Day 14 Held
+            t_decay_factor_14 = math.sqrt(max(0, opt_dte - 14) / opt_dte) if opt_dte > 0 else 0.0
+            day14_mark = intrinsic_target + extrinsic_instant * t_decay_factor_14
+            day14_pnl = ((day14_mark - opt_mark) / opt_mark) * 100.0 if opt_mark > 0 else 0.0
+            
+            s_price_str = f"${s_price:<11.2f}"
+            s_name_str = f"{s_name:<24}"
+            
+            def fmt_pnl_cell(m_val, p_val, width=17):
+                raw_str = f"${m_val:.2f} ({p_val:+.1f}%)"
+                raw_padded = raw_str.ljust(width)
+                p_color = "32" if p_val >= 0 else "31"
+                p_bold = p_val >= 20.0 or p_val <= -20.0
+                return format_color(raw_padded, p_color, bold=p_bold)
                 
-            # Filter and sort unique target spots
-            unique_scenarios = {}
-            for s_price, s_name in scenarios:
-                s_price = round(s_price, 2)
-                if s_price not in unique_scenarios:
-                    unique_scenarios[s_price] = s_name
-                    
-            import math
-            for s_price in sorted(unique_scenarios.keys()):
-                s_name = unique_scenarios[s_price]
-                pct_chg = ((s_price - spot) / spot) * 100.0 if spot > 0 else 0.0
-                underlier_chg_str = f"{pct_chg:+.2f}%"
-                
-                delta_s = s_price - spot
-                opt_strike = best_option['strike']
-                opt_mark = best_option['mark']
-                opt_delta = best_option['delta'] if best_option['delta'] is not None else 0.45
-                opt_gamma = best_option['gamma'] if best_option['gamma'] is not None else 0.01
-                opt_dte = best_option['dte'] if best_option['dte'] is not None else 30
-                
-                # Instantaneous (Day 0)
-                intrinsic_target = max(0.0, s_price - opt_strike)
-                instant_mark = max(intrinsic_target, opt_mark + (opt_delta * delta_s) + (0.5 * opt_gamma * (delta_s ** 2)))
-                instant_pnl = ((instant_mark - opt_mark) / opt_mark) * 100.0 if opt_mark > 0 else 0.0
-                
-                # Day 3 Held
-                extrinsic_instant = instant_mark - intrinsic_target
-                t_decay_factor_3 = math.sqrt(max(0, opt_dte - 3) / opt_dte) if opt_dte > 0 else 0.0
-                day3_mark = intrinsic_target + extrinsic_instant * t_decay_factor_3
-                day3_pnl = ((day3_mark - opt_mark) / opt_mark) * 100.0 if opt_mark > 0 else 0.0
-                
-                # Day 7 Held
-                t_decay_factor_7 = math.sqrt(max(0, opt_dte - 7) / opt_dte) if opt_dte > 0 else 0.0
-                day7_mark = intrinsic_target + extrinsic_instant * t_decay_factor_7
-                day7_pnl = ((day7_mark - opt_mark) / opt_mark) * 100.0 if opt_mark > 0 else 0.0
-                
-                # Day 14 Held
-                t_decay_factor_14 = math.sqrt(max(0, opt_dte - 14) / opt_dte) if opt_dte > 0 else 0.0
-                day14_mark = intrinsic_target + extrinsic_instant * t_decay_factor_14
-                day14_pnl = ((day14_mark - opt_mark) / opt_mark) * 100.0 if opt_mark > 0 else 0.0
-                
-                s_price_str = f"${s_price:<11.2f}"
-                s_name_str = f"{s_name:<24}"
-                
-                def fmt_pnl_cell(m_val, p_val, width=17):
-                    raw_str = f"${m_val:.2f} ({p_val:+.1f}%)"
-                    raw_padded = raw_str.ljust(width)
-                    p_color = "32" if p_val >= 0 else "31"
-                    p_bold = p_val >= 20.0 or p_val <= -20.0
-                    return format_color(raw_padded, p_color, bold=p_bold)
-                    
-                cell_d0 = fmt_pnl_cell(instant_mark, instant_pnl)
-                cell_d3 = fmt_pnl_cell(day3_mark, day3_pnl)
-                cell_d7 = fmt_pnl_cell(day7_mark, day7_pnl)
-                cell_d14 = fmt_pnl_cell(day14_mark, day14_pnl)
-                
-                spot_col_color = "35" if s_price == spot else "37"
-                spot_fmt_str = format_color(s_price_str, spot_col_color, bold=(s_price == spot))
-                chg_fmt_str = format_color(f"{underlier_chg_str:<11}", "32" if pct_chg > 0 else ("31" if pct_chg < 0 else "37"), bold=(s_price == spot or s_price == gex))
-                
-                print(f"  {spot_fmt_str} | {chg_fmt_str} | {s_name_str} | {cell_d0} | {cell_d3} | {cell_d7} | {cell_d14}")
-                
-            print("  " + "-" * 133)
+            cell_d0 = fmt_pnl_cell(instant_mark, instant_pnl)
+            cell_d3 = fmt_pnl_cell(day3_mark, day3_pnl)
+            cell_d7 = fmt_pnl_cell(day7_mark, day7_pnl)
+            cell_d14 = fmt_pnl_cell(day14_mark, day14_pnl)
+            
+            spot_col_color = "35" if s_price == spot else "37"
+            spot_fmt_str = format_color(s_price_str, spot_col_color, bold=(s_price == spot))
+            chg_fmt_str = format_color(f"{underlier_chg_str:<11}", "32" if pct_chg > 0 else ("31" if pct_chg < 0 else "37"), bold=(s_price == spot or s_price == gex))
+            
+            print(f"  {spot_fmt_str} | {chg_fmt_str} | {s_name_str} | {cell_d0} | {cell_d3} | {cell_d7} | {cell_d14}")
+            
+        print("  " + "-" * 133)
 
     # Render Execution Approval Requests for systematic entry setups
     regime = get_regime_status()
     auth = regime.get("system_authorization", "BLOCKED")
     
-    if "BLOCK" not in auth and (status.startswith("CONFIRMED") or status.startswith("PENDING")):
+    if "Option contract blocked by Earnings IV-Crush Risk" in reasons:
+        print_color(f"\n⚠️ ENTRY BLOCKED: Option contract is blocked by Earnings IV-Crush Risk. No entry authorized.", "31", bold=True)
+    elif "BLOCK" not in auth and (status.startswith("CONFIRMED") or status.startswith("PENDING")):
         print_color("\n" + "=" * 95, "32", bold=True)
         print_color("🔔                        EXECUTION APPROVAL REQUEST (PROPOSED ENTRY)", "32", bold=True)
         print_color("=" * 95, "32", bold=True)
@@ -3457,12 +3595,23 @@ def cmd_update_sentiment(args):
         
     utc_time = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
     
+    tone = getattr(args, "tone", 0.0) or 0.0
+    comments = getattr(args, "comments", 0.0) or 0.0
+    position = getattr(args, "position", 0.0) or 0.0
+    volume_score = getattr(args, "volume_score", 0.0) or 0.0
+    meme = getattr(args, "meme", 0.0) or 0.0
+
     sentiment_obj = OptionSentiment(
         ticker=ticker,
         sentiment=args.score,
         buzz=buzz,
         narrative=args.narrative,
-        last_updated=utc_time
+        last_updated=utc_time,
+        tone_score=tone,
+        comments_score=comments,
+        position_score=position,
+        volume_score=volume_score,
+        meme_score=meme
     )
     
     try:
@@ -3476,7 +3625,12 @@ def cmd_update_sentiment(args):
         "Sentiment": sentiment_obj.sentiment,
         "Buzz": sentiment_obj.buzz,
         "Narrative": sentiment_obj.narrative,
-        "last_updated": sentiment_obj.last_updated
+        "last_updated": sentiment_obj.last_updated,
+        "tone_score": sentiment_obj.tone_score,
+        "comments_score": sentiment_obj.comments_score,
+        "position_score": sentiment_obj.position_score,
+        "volume_score": sentiment_obj.volume_score,
+        "meme_score": sentiment_obj.meme_score
     }
     
     save_json(SENTIMENT_FILE, sentiment_db)
@@ -3647,6 +3801,21 @@ def cmd_sentiment(args):
         
         # Print table row
         print(f"| {format_color(ticker_upper, '35', bold=True)} | {asset_type} | {buzz} | {sentiment_fmt} | {narrative} | {threat_level} | {recommendation} |")
+        
+    # Scored Sentiment Breakdowns (5-Factor Valuation)
+    print("\n### Scored Sentiment Breakdowns (5-Factor Valuation):")
+    for ticker, data in sorted(sentiment_db.items()):
+        ticker_upper = ticker.upper()
+        tone_score = data.get("tone_score", 0.0)
+        comments_score = data.get("comments_score", 0.0)
+        position_score = data.get("position_score", 0.0)
+        volume_score = data.get("volume_score", 0.0)
+        meme_score = data.get("meme_score", 0.0)
+        overall_sentiment = data.get("Sentiment", 0.0)
+        buzz_volume = data.get("Buzz", "None")
+        
+        print(f"- {format_color(ticker_upper, '35', bold=True)}: Sentiment Score: {overall_sentiment:+.2f} (Buzz: {buzz_volume})")
+        print(f"  * Tone Bias: {tone_score:+.2f} | Comments Polarity: {comments_score:+.2f} | Positions Conviction: {position_score:+.2f} | Buzz Volume: {volume_score:+.2f} | Meme Intensity: {meme_score:+.2f}")
         
     # Key Social Hype & Divergence Alerts print out
     print("\n### Key Social Hype & Divergence Alerts:")
@@ -4152,6 +4321,7 @@ def main():
     p_analyze.add_argument("--inst-file", type=str, help="Option instruments JSON file for derivation")
     p_analyze.add_argument("--quote-file", type=str, help="Option quotes JSON file for derivation")
     p_analyze.add_argument("--hist-file", type=str, help="Underlier historical daily closes JSON file for volatility derivation")
+    p_analyze.add_argument("--earnings-date", type=str, dest="earnings_date", help="Upcoming quarterly earnings release date (YYYY-MM-DD)")
     p_analyze.add_argument("--net-liq", type=float, dest="net_liq", help="Estimated Portfolio Net Liq value for sizing checks")
     p_analyze.add_argument("--target-delta", type=float, dest="target_delta", default=0.45, help="Option selection target delta (default: 0.45)")
     p_analyze.add_argument("--min-dte", type=int, dest="min_dte", default=30, help="Option selection minimum DTE (default: 30)")
@@ -4239,6 +4409,11 @@ def main():
     p_up_sent.add_argument("--score", type=float, required=True, help="Sentiment score from -1.0 (capitulation) to +1.0 (FOMO)")
     p_up_sent.add_argument("--buzz", type=str, choices=["High", "Medium", "Low", "None", "Med"], required=True, help="Discussion volume / buzz")
     p_up_sent.add_argument("--narrative", type=str, required=True, help="Core narrative thesis / catalysts")
+    p_up_sent.add_argument("--tone", type=float, default=0.0, help="Tone score / Title & Body Directional Bias (-0.30 to +0.30)")
+    p_up_sent.add_argument("--comments", type=float, default=0.0, help="Comments polarity score (-0.30 to +0.30)")
+    p_up_sent.add_argument("--position", type=float, default=0.0, help="Retail positioning conviction score (-0.20 to +0.20)")
+    p_up_sent.add_argument("--volume-score", type=float, default=0.0, help="Upvote & Discussion intensity score (-0.10 to +0.10)")
+    p_up_sent.add_argument("--meme", type=float, default=0.0, help="Hype slang & Meme/Emoji density score (-0.10 to +0.10)")
 
     # sync-pnl subcommand
     p_sync_pnl = subparsers.add_parser("sync-pnl", help="Sync trade history to detect closed positions and move them to closed_positions.json.")
