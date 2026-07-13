@@ -57,10 +57,14 @@ Apply the baseline GEX filtering manually on the raw columns of the returned res
 ---
 
 ### Step 5: Save State, Update Candidate DB, & Watchlist Synchronization
-1. **Save Candidate DB**: Write the final candidate pool to [data/candidate_stocks.json](../../data/candidate_stocks.json) as a **full replacement** — do not merge with any prior contents.
+1. **Fetch Historical Closes (for Technical Indicators)**:
+   - For each prioritized candidate, call `robinhood-trading/get_equity_historicals(symbols=[<TICKER>], interval="day", span="year")` to download the historical closes.
+   - Save the raw JSON payload to `data/downloads/YYYYMMDD/<TICKER>_historicals_raw.json`. This enables the CLI to calculate RSI and MACD.
+2. **Save Candidate DB**: Write the final candidate pool to [data/candidate_stocks.json](../../data/candidate_stocks.json) as a **full replacement** — do not merge with any prior contents.
    Using the virtual environment's Python, invoke:
-   `python3 src/gex_engine.py update-candidates` (which automatically discovers and parses any valid scans saved in the repository under [data/scans/](../../data/scans/)).
-2. **Broker Watchlist Sync (The Mobile Bridge)**:
+   `python3 src/gex_engine.py update-candidates` (which automatically discovers and parses any valid scans saved in the repository under [data/scans/](../../data/scans/) and calculates RSI and MACD for candidates where historical files exist).
+   - Optional CLI filter flags: `--min-rsi <float>`, `--max-rsi <float>`, `--macd-filter <bullish|bearish|none>` to restrict candidates.
+3. **Broker Watchlist Sync (The Mobile Bridge)**:
    - Call `robinhood-trading/get_watchlists` to check for the existence of watchlists named `"GEX_DAILY_CANDIDATES"` and `"GEX_ACTIVE_PORTFOLIO"`. If missing, create them using `robinhood-trading/create_watchlist`.
    - Clear existing stale tickers on `"GEX_DAILY_CANDIDATES"` by calling `robinhood-trading/remove_from_watchlist` in sequence (or as batches).
    - Dynamic Sync: Add all newly generated candidate symbols with `Screen Passed` status to `"GEX_DAILY_CANDIDATES"` using `robinhood-trading/add_to_watchlist`. This ensures that candidates are pushed directly to the user's Robinhood mobile or Legend app for real-time mobile push-alert tracking.
@@ -81,7 +85,9 @@ Apply the baseline GEX filtering manually on the raw columns of the returned res
       "chg_pct": <float>,
       "iv": <float | null>,
       "relative_options_volume": <float | null>,
-      "market_cap": <float | null>
+      "market_cap": <float | null>,
+      "rsi": <float | null>,
+      "macd_hist": <float | null>
     }
   ]
 }

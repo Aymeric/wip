@@ -1,0 +1,17 @@
+{
+  "data": {
+    "account_number": "5QR24141",
+    "span": "week",
+    "trades": [
+      {
+        "timestamp": "2026-07-13T17:43:51Z",
+        "symbol": "BABA",
+        "side": "",
+        "quantity": "1",
+        "price": "180",
+        "realized_gain": "-1320"
+      }
+    ],
+    "next_cursor": ""
+  }
+}

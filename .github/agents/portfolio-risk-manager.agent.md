@@ -36,8 +36,9 @@ Your job is to strictly enforce portfolio tracking mechanics, evaluate existing 
 ---
 
 ### Step 2: Enforce Priority-Ordered Exit Evaluation
-For each active option, inspect underlier spots against historical bounds cached in [data/ticker_analyses.json](../../data/ticker_analyses.json). Evaluate exits in this *strict priority order* so protective stops are never masked:
+For active options and stock positions, inspect underlier spots against structural metrics and user thresholds. Evaluate exits in this *strict priority order* to protect capital:
 
+#### Active Options:
 1. **Stop 1 (Structural Stop)**: Close below $nTrans$ (Secondary Support). Exit at the next session open.
 2. **Stop 2 (Hard Sizing Stop / Max Loss Stop)**: Close $10.00\%$ below entry (or option loss exceeds $-10.00\%$) while the underlier price rests below $pTrans$ (Primary Support).
 3. **Stop 3 (Time Stop)**: If by Day 7 the position has not achieved at least $50.00\%$ progress toward the T1 ($+GEX$) target, exit and free capital.
@@ -45,9 +46,17 @@ For each active option, inspect underlier spots against historical bounds cached
 5. **Underlier Target Met (But Option in Loss)**: If spot exceeds $T1$ but the option premium is in a net loss due to decay or strike/expiration mismatch, close the position immediately to limit further losses.
 6. **Profit Taking (T1 Target Met)**: Exit for $100.00\%+$ gains OR trail stop to entry price and target structural $T2$. Avoid classifying a position as a profit-take if defensive stops are triggered or option value is in a net loss.
 
+#### Active Stocks:
+1. **Stop 1 (Structural Stop)**: Close below $nTrans$ (Secondary Support). Exit at the next session open.
+2. **Stop 2 (Trailing Stop)**: If a stock has `Trailing Stop Pct` set, track the peak `Highest Price` since entry. Trigger exit if spot drops below `Highest Price * (1 - Trailing Stop Pct / 100)`.
+3. **Stop 3 (Stop Loss)**: If a stock has `Stop Loss Pct` set, trigger exit if spot drops below `Average Buy Price * (1 - Stop Loss Pct / 100)`.
+4. **Stop 4 (Profit Target)**: If a stock has `Profit Target Pct` set, trigger exit if spot rises above `Average Buy Price * (1 + Profit Target Pct / 100)`.
+5. **Stop 5 (Standard +GEX Target)**: Trigger exit if spot meets or exceeds $+GEX$ target to lock in gains.
+
 #### Position Watchdog Status:
-- **CONFIRMED**: Spot remains above $pTrans$ but has not reached $T1$. Hold.
+- **CONFIRMED**: Spot remains above $pTrans$ (or supportive bounds) but has not reached $T1$ or profit targets. Hold.
 - **WATCH**: Spot drops below $pTrans$ but stays above $nTrans$. Hold existing, but **add absolutely nothing**.
+- **STOP TRIGGERED / PROFIT TAKE**: Active exit condition met. Execute immediate close out.
 
 ---
 
@@ -99,6 +108,9 @@ Apply the **Portfolio Recommendation Framework**:
 - **Maximum Single Option Limit Check (3.00%)**: [PASS / EXCEEDED]
 - **Beta Technology Sizing Check (15.00%)**: [PASS / EXCEEDED] (Current: $T.TT% Net Liq)
 - **Defensive Hedge Recommendations**: [Recommend broad indices offset / hedges if tech bias is exceeded]
+
+### 📈 Active Positions Technical Alerts:
+- [List any RSI overbought/oversold or MACD bullish/bearish crossover alerts printed by the engine, or state "No active technical alerts."]
 
 ### 💾 Persisted Artifacts:
 - Live position update written directly to [data/active_positions.json](../../data/active_positions.json)

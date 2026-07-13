@@ -1,4 +1,34 @@
 {
-  "closed_options": [],
+  "closed_options": [
+    {
+      "Option ID": "fe2cebde-e0e6-4524-9d7e-cf07d8801ccf",
+      "Underlier": "BABA",
+      "Strike": "145.00",
+      "Expiration": "2026-09-18",
+      "Type": "call",
+      "Purchase Premium": 15.0,
+      "Delta": "0.153932",
+      "Gamma": "0.009613",
+      "Mark Price": 1.8,
+      "Open Interest": 9197,
+      "ImpVol": "0.502244",
+      "Asset Cost Basis": 1500.0,
+      "Current Value": 180.0,
+      "P&L (%)": -88.0,
+      "P&L ($)": -1320.0,
+      "Sizing Risk Weight (%)": 3.0,
+      "Beta Sector Tag": "China/Technology",
+      "Entry Date": "2026-05-13",
+      "Days Held": 62,
+      "Stalling Days": 2,
+      "Target Mode": "T1",
+      "T2 Target": null,
+      "Close Premium": 180.0,
+      "Close Date": "2026-07-13",
+      "Realized P&L ($)": -1320.0,
+      "Realized P&L (%)": 1100.0,
+      "Close Reason": "Detected closed via trade history sync"
+    }
+  ],
   "closed_stocks": []
 }

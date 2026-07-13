@@ -104,6 +104,10 @@ class StockPosition:
     entry_date: Optional[str] = None
     asset_cost_basis: float = 0.0
     current_value: float = 0.0
+    highest_price: Optional[float] = None
+    trailing_stop_pct: Optional[float] = None
+    stop_loss_pct: Optional[float] = None
+    profit_target_pct: Optional[float] = None
 
     def validate(self) -> bool:
         """Validates stock position parameters."""
@@ -115,6 +119,14 @@ class StockPosition:
             raise ValueError(f"average_buy_price must be positive: {self.average_buy_price}")
         if self.current_price < 0:
             raise ValueError(f"current_price cannot be negative: {self.current_price}")
+        if self.highest_price is not None and self.highest_price < 0:
+            raise ValueError(f"highest_price cannot be negative: {self.highest_price}")
+        if self.trailing_stop_pct is not None and self.trailing_stop_pct <= 0:
+            raise ValueError(f"trailing_stop_pct must be positive: {self.trailing_stop_pct}")
+        if self.stop_loss_pct is not None and self.stop_loss_pct <= 0:
+            raise ValueError(f"stop_loss_pct must be positive: {self.stop_loss_pct}")
+        if self.profit_target_pct is not None and self.profit_target_pct <= 0:
+            raise ValueError(f"profit_target_pct must be positive: {self.profit_target_pct}")
         return True
 
 
@@ -1158,6 +1170,195 @@ def derive_gex_profile(inst_data, quotes_data, spot):
         "rule7_derived": rule7_derived,
         "rule9_derived": rule9_derived,
         "rule10_derived": rule10_derived,
+    }
+
+def calculate_rsi(closes: List[float], period: int = 14) -> Optional[float]:
+    """Calculates the Relative Strength Index (RSI) for a list of closes."""
+    if len(closes) < period + 1:
+        return None
+    
+    gains = []
+    losses = []
+    for i in range(1, len(closes)):
+        diff = closes[i] - closes[i-1]
+        if diff >= 0:
+            gains.append(diff)
+            losses.append(0.0)
+        else:
+            gains.append(0.0)
+            losses.append(abs(diff))
+            
+    # First Average Gain/Loss
+    avg_gain = sum(gains[:period]) / period
+    avg_loss = sum(losses[:period]) / period
+    
+    for i in range(period, len(gains)):
+        avg_gain = (avg_gain * (period - 1) + gains[i]) / period
+        avg_loss = (avg_loss * (period - 1) + losses[i]) / period
+        
+    if avg_loss == 0:
+        return 100.0
+    rs = avg_gain / avg_loss
+    return 100.0 - (100.0 / (1.0 + rs))
+
+
+def calculate_macd(closes: List[float], fast_period: int = 12, slow_period: int = 26, signal_period: int = 9) -> Tuple[Optional[float], Optional[float], Optional[float]]:
+    """
+    Calculates the MACD Line, Signal Line, and Histogram for a list of closes.
+    
+    Returns:
+        tuple: (macd_line, signal_line, macd_histogram)
+    """
+    if len(closes) < slow_period + signal_period:
+        return None, None, None
+        
+    def get_ema(values: List[float], p: int) -> List[float]:
+        ema = []
+        k = 2.0 / (p + 1)
+        # Seed EMA with SMA of the first p values
+        sma = sum(values[:p]) / p
+        ema.append(sma)
+        for val in values[p:]:
+            ema.append(val * k + ema[-1] * (1.0 - k))
+        return ema
+
+    ema_fast = get_ema(closes, fast_period)
+    ema_slow = get_ema(closes, slow_period)
+    
+    align_index = slow_period - fast_period
+    aligned_fast = ema_fast[align_index:]
+    
+    macd_line = []
+    for f, s in zip(aligned_fast, ema_slow):
+        macd_line.append(f - s)
+        
+    if len(macd_line) < signal_period:
+        return None, None, None
+        
+    signal_line = get_ema(macd_line, signal_period)
+    
+    return macd_line[-1], signal_line[-1], macd_line[-1] - signal_line[-1]
+
+
+def find_latest_historical_closes(symbol: str) -> List[float]:
+    """
+    Recursively scans the data/downloads/ directory for historical daily closes files
+    matching the symbol (e.g. symbol_historicals_raw.json). Returns a chronological
+    list of close prices.
+    """
+    symbol_upper = symbol.upper()
+    matching_files = []
+    
+    # Recursively scan data/downloads
+    if os.path.exists("data/downloads"):
+        for root, dirs, files in os.walk("data/downloads"):
+            for file in files:
+                if file.endswith(".json") and symbol_upper in file.upper() and "HISTORICAL" in file.upper():
+                    matching_files.append(os.path.join(root, file))
+                    
+    if not matching_files:
+        return []
+        
+    # Sort files by path name descending (lexicographical sorting of YYYYMMDD puts the latest date first)
+    matching_files.sort(reverse=True)
+    
+    for filepath in matching_files:
+        try:
+            with open(filepath, 'r') as f:
+                data = json.load(f)
+            
+            bars = []
+            if isinstance(data, dict):
+                results = data.get("data", {}).get("results", [])
+                if not results:
+                    results = data.get("results", [])
+                if results:
+                    for res in results:
+                        if res.get("symbol", "").upper() == symbol_upper:
+                            bars = res.get("bars", [])
+                            break
+                if not bars:
+                    bars = data.get("bars", [])
+            elif isinstance(data, list):
+                bars = data
+                
+            if not bars:
+                continue
+                
+            # Sort chronologically by begins_at
+            if isinstance(bars[0], dict) and "begins_at" in bars[0]:
+                bars = sorted(bars, key=lambda x: x.get("begins_at", ""))
+                
+            closes = []
+            for bar in bars:
+                if not isinstance(bar, dict):
+                    continue
+                try:
+                    val = float(bar.get("close_price") or bar.get("close", 0.0))
+                    if val > 0.0:
+                        closes.append(val)
+                except (ValueError, TypeError):
+                    continue
+            if len(closes) > 0:
+                return closes
+        except Exception:
+            continue
+            
+    return []
+
+def check_technical_alerts(closes: List[float]) -> Dict[str, Any]:
+    """
+    Analyzes historical close prices for RSI and MACD alerts.
+    
+    Returns:
+        dict: {
+            "rsi": current_rsi (float or None),
+            "macd_hist": current_macd_hist (float or None),
+            "alerts": list of str triggered (e.g. ["RSI_OVERBOUGHT"])
+        }
+    """
+    alerts = []
+    rsi = calculate_rsi(closes)
+    macd_line, sig_line, macd_hist = calculate_macd(closes)
+    
+    if rsi is not None:
+        if rsi >= 70.0:
+            alerts.append("RSI_OVERBOUGHT")
+        elif rsi <= 30.0:
+            alerts.append("RSI_OVERSOLD")
+            
+    # For MACD Crossover, we need the previous day's histogram value as well.
+    # We require at least slow_period + signal_period (26 + 9 = 35) to get previous values.
+    if len(closes) >= 35:
+        def get_ema(values: List[float], p: int) -> List[float]:
+            ema = []
+            k = 2.0 / (p + 1)
+            sma = sum(values[:p]) / p
+            ema.append(sma)
+            for val in values[p:]:
+                ema.append(val * k + ema[-1] * (1.0 - k))
+            return ema
+
+        ema_fast = get_ema(closes, 12)
+        ema_slow = get_ema(closes, 26)
+        aligned_fast = ema_fast[14:]
+        
+        macd_line_list = [f - s for f, s in zip(aligned_fast, ema_slow)]
+        if len(macd_line_list) >= 10:
+            signal_line_list = get_ema(macd_line_list, 9)
+            
+            prev_hist = macd_line_list[-2] - signal_line_list[-2]
+            curr_hist = macd_line_list[-1] - signal_line_list[-1]
+            
+            if prev_hist < 0.0 and curr_hist >= 0.0:
+                alerts.append("MACD_BULLISH_CROSSOVER")
+            elif prev_hist > 0.0 and curr_hist <= 0.0:
+                alerts.append("MACD_BEARISH_CROSSOVER")
+                
+    return {
+        "rsi": rsi,
+        "macd_hist": macd_hist,
+        "alerts": alerts
     }
 
 
@@ -2620,6 +2821,14 @@ def cmd_portfolio(args):
         exit_rule_state = "HOLD"
         proposed_action = "No Action"
         
+        # Update/get Highest Price
+        highest_price = details.get("Highest Price")
+        if highest_price is None:
+            highest_price = details.get("Average Buy Price", spot)
+        highest_price = max(highest_price, spot)
+        details["Highest Price"] = highest_price
+        
+        # 1. Structural Stop
         distance_ntrans = "N/A"
         if ntrans:
             dist = ((spot - ntrans) / ntrans) * 100
@@ -2628,6 +2837,34 @@ def cmd_portfolio(args):
                 exit_rule_state = "STOP TRIGGERED (Structural Stop: Spot < nTrans)"
                 proposed_action = "Immediate Exit (Structural Stop)"
                 
+        # 2. Trailing Stop Pct
+        if exit_rule_state == "HOLD":
+            trail_pct = details.get("Trailing Stop Pct")
+            if trail_pct is not None:
+                trail_price = highest_price * (1.0 - trail_pct / 100.0)
+                if spot < trail_price:
+                    exit_rule_state = f"STOP TRIGGERED (Trailing Stop: Spot < Highest Price - {trail_pct}%)"
+                    proposed_action = f"Immediate Exit (Trailing Stop Triggered: spot ${spot:.2f} < stop price ${trail_price:.2f})"
+                    
+        # 3. Stop Loss Pct
+        if exit_rule_state == "HOLD":
+            stop_pct = details.get("Stop Loss Pct")
+            if stop_pct is not None:
+                stop_price = avg_price * (1.0 - stop_pct / 100.0)
+                if spot < stop_price:
+                    exit_rule_state = f"STOP TRIGGERED (Stop Loss: Spot < Avg Buy Price - {stop_pct}%)"
+                    proposed_action = f"Immediate Exit (Stop Loss Triggered: spot ${spot:.2f} < stop price ${stop_price:.2f})"
+                    
+        # 4. Profit Target Pct
+        if exit_rule_state == "HOLD":
+            target_pct = details.get("Profit Target Pct")
+            if target_pct is not None:
+                target_price = avg_price * (1.0 + target_pct / 100.0)
+                if spot >= target_price:
+                    exit_rule_state = f"PROFIT TAKE (Profit Target: Spot >= Avg Buy Price + {target_pct}%)"
+                    proposed_action = f"Exit position or scale out at profit target (spot ${spot:.2f} >= target price ${target_price:.2f})"
+                    
+        # 5. Standard GEX exits fallback
         if exit_rule_state == "HOLD":
             if gex_t1 and spot >= gex_t1:
                 exit_rule_state = "PROFIT TAKE (T1 TARGET MET)"
@@ -2648,18 +2885,36 @@ def cmd_portfolio(args):
             tech_exposure += sizing_risk_weight
             
         pl_color = "32" if pl_pct >= 0 else "31"
-        status_colors = {
-            "HOLD": ("32", False),
-            "WATCH": ("33", False),
-            "PROFIT TAKE (T1 TARGET MET)": ("32", True),
-            "STOP TRIGGERED (Structural Stop: Spot < nTrans)": ("31", True),
-        }
-        color_code, bold = status_colors.get(exit_rule_state, ("31", True))
+        color_code, bold = ("32", False)
+        if "STOP" in exit_rule_state or "EXPIRED" in exit_rule_state:
+            color_code, bold = "31", True
+        elif "PROFIT" in exit_rule_state or "MET" in exit_rule_state:
+            color_code, bold = "32", True
+        elif "WATCH" in exit_rule_state:
+            color_code, bold = "33", False
         exit_rule_fmt = format_color(exit_rule_state, color_code, bold=bold)
         
         print(f"- **{format_color(ticker, '35', bold=True)}**: Current Spot {format_color(f'${spot:.2f}', '36')} vs Avg Buy Price {format_color(f'${avg_price:.2f}', '33')} (Shares: {shares:,.2f} | Gain/Loss: {format_color(f'{pl_pct:+.2f}%', pl_color, bold=True)} / {format_color(f'${pl_dollar:+.2f}', pl_color, bold=True)})")
         print(f"  - **Exits Rule State**: [{exit_rule_fmt}]")
         print(f"  - **Distance to GEX nTrans Stop (nTrans at ${ntrans if ntrans else 0.0:.2f})**: {distance_ntrans}")
+        
+        # Print configured trailing/stop/profit parameters
+        extra_rules = []
+        if details.get("Trailing Stop Pct") is not None:
+            t_pct = details["Trailing Stop Pct"]
+            trail_price = highest_price * (1.0 - t_pct / 100.0)
+            extra_rules.append(f"Highest: ${highest_price:.2f}, Trail Stop: ${trail_price:.2f} (-{t_pct}%)")
+        if details.get("Stop Loss Pct") is not None:
+            s_pct = details["Stop Loss Pct"]
+            stop_price = avg_price * (1.0 - s_pct / 100.0)
+            extra_rules.append(f"Hard Stop: ${stop_price:.2f} (-{s_pct}%)")
+        if details.get("Profit Target Pct") is not None:
+            p_pct = details["Profit Target Pct"]
+            target_price = avg_price * (1.0 + p_pct / 100.0)
+            extra_rules.append(f"Profit Target: ${target_price:.2f} (+{p_pct}%)")
+        if extra_rules:
+            print(f"  - **Systematic Rules**: {', '.join(extra_rules)}")
+            
         print(f"  - **Proposed Action**: [{format_color(proposed_action, color_code, bold=bold)}]")
         if ptrans is not None or ntrans is not None or gex_t1 is not None or cotmp is not None:
             scale_str = generate_ascii_gex_scale(spot, ptrans, ntrans, gex_t1, cotmp)
@@ -2883,10 +3138,40 @@ def cmd_portfolio(args):
         
     if not sector_cap_ok:
         print_color(f"\n⚠️ SECTOR EXPOSURE ALERT: High-beta tech/beta exposure exceeds 15.0% ({tech_exposure:.2f}%).", "33", bold=True)
-        print_color("⚠️ RECOMMENDED ACTION: Consider implementing broad-market sector hedges using S&P 500 or ETF benchmarks to defend capital variance.", "33", bold=False)
+    # Collect unique active underliers and scan for technical alerts
+    unique_tickers = sorted(list(set(
+        [details.get("Underlier", "") for details in positions.values() if details.get("Underlier")] +
+        [ticker for ticker in stocks.keys() if ticker]
+    )))
     
+    technical_alerts = []
+    for tkr in unique_tickers:
+        closes = find_latest_historical_closes(tkr)
+        if closes:
+            res = check_technical_alerts(closes)
+            if res.get("alerts"):
+                for alert in res["alerts"]:
+                    alert_desc = alert.replace("_", " ")
+                    if "OVERBOUGHT" in alert:
+                        desc = format_color(f"{alert_desc} (RSI: {res['rsi']:.1f})", "31", bold=True)
+                    elif "OVERSOLD" in alert:
+                        desc = format_color(f"{alert_desc} (RSI: {res['rsi']:.1f})", "32", bold=True)
+                    elif "BULLISH" in alert:
+                        desc = format_color(f"{alert_desc} (Hist: {res['macd_hist']:+.4f})", "32", bold=True)
+                    else:
+                        desc = format_color(f"{alert_desc} (Hist: {res['macd_hist']:+.4f})", "31", bold=True)
+                    technical_alerts.append(f"  - {format_color(tkr, '35', bold=True)}: {desc}")
+                    
+    print("\n### 📈 Active Positions Technical Alerts")
+    if technical_alerts:
+        for ta in technical_alerts:
+            print(ta)
+    else:
+        print("  No active technical alerts.")
+
     # Save the updated indicators
     options["options_positions"] = positions
+    options["stocks_positions"] = stocks
     save_json(OPTIONS_FILE, options)
     
     # Render Execution Approval Requests for systematic exits
@@ -2967,6 +3252,10 @@ def cmd_add_stock_pos(args):
         "Shares": args.shares,
         "Average Buy Price": args.average_buy_price,
         "Current Price": args.average_buy_price,
+        "Highest Price": args.average_buy_price,
+        "Trailing Stop Pct": getattr(args, "trail_pct", None),
+        "Stop Loss Pct": getattr(args, "stop_pct", None),
+        "Profit Target Pct": getattr(args, "target_pct", None),
         "Beta Sector Tag": args.sector,
         "Entry Date": datetime.today().strftime('%Y-%m-%d'),
         "Asset Cost Basis": args.shares * args.average_buy_price,
@@ -2994,11 +3283,25 @@ def cmd_update_stock_pos(args):
     target_stock = stocks[ticker]
     if args.price is not None:
         target_stock["Current Price"] = args.price
+        # Update Highest Price automatically when price increases
+        highest_price = target_stock.get("Highest Price")
+        if highest_price is None:
+            highest_price = target_stock.get("Average Buy Price", args.price)
+        target_stock["Highest Price"] = max(highest_price, args.price)
+        
     if args.shares is not None:
         target_stock["Shares"] = args.shares
         target_stock["Asset Cost Basis"] = args.shares * target_stock.get("Average Buy Price", 0.0)
     if args.sector is not None:
         target_stock["Beta Sector Tag"] = args.sector
+    if getattr(args, "trail_pct", None) is not None:
+        target_stock["Trailing Stop Pct"] = args.trail_pct
+    if getattr(args, "stop_pct", None) is not None:
+        target_stock["Stop Loss Pct"] = args.stop_pct
+    if getattr(args, "target_pct", None) is not None:
+        target_stock["Profit Target Pct"] = args.target_pct
+    if getattr(args, "highest_price", None) is not None:
+        target_stock["Highest Price"] = args.highest_price
         
     # Save the updated stocks dict back using stocks_positions
     options["stocks_positions"] = stocks
@@ -3467,6 +3770,37 @@ def cmd_update_candidates(args):
             if market_cap < min_market_cap:
                 continue
                 
+            # Try to calculate RSI and MACD if historical files exist
+            closes = find_latest_historical_closes(ticker)
+            rsi_val = None
+            macd_val = None
+            macd_sig = None
+            macd_hist = None
+            if closes:
+                rsi_val = calculate_rsi(closes)
+                macd_val, macd_sig, macd_hist = calculate_macd(closes)
+                
+            # Apply RSI/MACD filters
+            min_rsi = getattr(args, "min_rsi", None)
+            max_rsi = getattr(args, "max_rsi", None)
+            macd_filter = getattr(args, "macd_filter", "none")
+            
+            if rsi_val is not None:
+                if min_rsi is not None and rsi_val < min_rsi:
+                    continue
+                if max_rsi is not None and rsi_val > max_rsi:
+                    continue
+            elif min_rsi is not None or max_rsi is not None:
+                continue
+                
+            if macd_hist is not None:
+                if macd_filter == "bullish" and macd_hist <= 0.0:
+                    continue
+                elif macd_filter == "bearish" and macd_hist >= 0.0:
+                    continue
+            elif macd_filter != "none":
+                continue
+
             iv = None
             if "Implied volatility" in columns and columns["Implied volatility"] is not None:
                 try:
@@ -3487,6 +3821,10 @@ def cmd_update_candidates(args):
                     candidates[ticker]["iv"] = iv
                 if rel_opt_vol is not None:
                     candidates[ticker]["relative_options_volume"] = rel_opt_vol
+                if rsi_val is not None:
+                    candidates[ticker]["rsi"] = round(rsi_val, 2)
+                if macd_hist is not None:
+                    candidates[ticker]["macd_hist"] = round(macd_hist, 4)
             else:
                 candidates[ticker] = {
                     "symbol": ticker,
@@ -3495,7 +3833,9 @@ def cmd_update_candidates(args):
                     "chg_pct": round(chg_pct, 4),
                     "iv": iv,
                     "relative_options_volume": rel_opt_vol,
-                    "market_cap": market_cap
+                    "market_cap": market_cap,
+                    "rsi": round(rsi_val, 2) if rsi_val is not None else None,
+                    "macd_hist": round(macd_hist, 4) if macd_hist is not None else None
                 }
 
     # Automatically discover and process all offline scans under SCANS_DIR
@@ -3548,13 +3888,15 @@ def cmd_update_candidates(args):
     
     print(f"\nWrote {len(candidate_list)} candidates to {CANDIDATES_FILE}")
     print("\n### 🚀 Top Screened GEX Candidates")
-    print("  " + "-" * 125)
-    print(f"  {'Ticker':<8} | {'Price':<8} | {'Daily Change':<12} | {'Implied Vol':<12} | {'Rel Opt Vol':<16} | {'GEX Setup Grade':<16} | {'GEX Status':<16} | {'Market Cap'}")
-    print("  " + "-" * 125)
+    print("  " + "-" * 138)
+    print(f"  {'Ticker':<8} | {'Price':<6} | {'Daily Change':<12} | {'RSI':<6} | {'MACD Hist':<9} | {'Implied Vol':<12} | {'Rel Opt Vol':<12} | {'GEX Setup Grade':<16} | {'GEX Status':<16} | {'Market Cap'}")
+    print("  " + "-" * 138)
     for c in candidate_list[:10]:
         ticker = c['symbol']
         price = f"${c['price']:.2f}"
         change = f"{c['chg_pct']:+.2f}%"
+        rsi = f"{c['rsi']:.1f}" if c.get('rsi') is not None else "N/A"
+        macd_hist = f"{c['macd_hist']:+.2f}" if c.get('macd_hist') is not None else "N/A"
         iv = f"{c['iv']*100:.1f}%" if c.get('iv') is not None else "N/A"
         rel_opt_vol = f"{c['relative_options_volume']:.2f}" if c.get('relative_options_volume') is not None else "N/A"
         mcap = f"${c['market_cap']/1e9:.2f}B" if c.get('market_cap') is not None else "N/A"
@@ -3589,8 +3931,8 @@ def cmd_update_candidates(args):
         change_fmt = format_color(f"{change:<12}", change_color, bold=True)
         ticker_fmt = format_color(f"{ticker:<8}", "35", bold=True)
         
-        print(f"  {ticker_fmt} | {price:<8} | {change_fmt} | {iv:<12} | {rel_opt_vol:<16} | {gex_grade_str} | {gex_status_str} | {mcap}")
-    print("  " + "-" * 125)
+        print(f"  {ticker_fmt} | {price:<6} | {change_fmt} | {rsi:<6} | {macd_hist:<9} | {iv:<12} | {rel_opt_vol:<12} | {gex_grade_str} | {gex_status_str} | {mcap}")
+    print("  " + "-" * 138)
     if len(candidate_list) > 10:
         print(f"  * Showing top 10 sorted by relative options volume out of {len(candidate_list)} candidates total.")
 
@@ -4390,6 +4732,9 @@ def main():
     p_add_stock.add_argument("shares", type=float, help="Number of shares purchased")
     p_add_stock.add_argument("average_buy_price", type=float, help="Average cost paid per share")
     p_add_stock.add_argument("--sector", type=str, default="Equity", help="Target sector tag (default: Equity)")
+    p_add_stock.add_argument("--trail-pct", type=float, help="Trailing stop percentage (e.g. 5.0 for 5%%)")
+    p_add_stock.add_argument("--stop-pct", type=float, help="Hard stop loss percentage (e.g. 7.0 for 7%%)")
+    p_add_stock.add_argument("--target-pct", type=float, help="Profit target percentage (e.g. 15.0 for 15%%)")
 
     # update-stock subcommand
     p_up_stock = subparsers.add_parser("update-stock", help="Update stock tracking metrics.")
@@ -4397,6 +4742,10 @@ def main():
     p_up_stock.add_argument("--price", type=float, help="New current stock price")
     p_up_stock.add_argument("--shares", type=float, help="New stock shares count")
     p_up_stock.add_argument("--sector", type=str, help="New stock sector tag")
+    p_up_stock.add_argument("--trail-pct", type=float, help="Update trailing stop percentage")
+    p_up_stock.add_argument("--stop-pct", type=float, help="Update stop loss percentage")
+    p_up_stock.add_argument("--target-pct", type=float, help="Update profit target percentage")
+    p_up_stock.add_argument("--highest-price", type=float, dest="highest_price", help="Override highest price tracked")
 
     # close-stock subcommand
     p_close_stock = subparsers.add_parser("close-stock", help="Close a tracked stock position and archive standard P&L.")
@@ -4410,6 +4759,9 @@ def main():
     p_candidates.add_argument("--min-volume", type=float, dest="min_volume", default=MIN_VOLUME, help=f"Minimum average trading volume (default: {MIN_VOLUME})")
     p_candidates.add_argument("--min-change", type=float, dest="min_change", default=MIN_CHG_PCT, help=f"Minimum stock price day change percent (default: {MIN_CHG_PCT})")
     p_candidates.add_argument("--min-market-cap", type=float, dest="min_market_cap", default=MIN_MARKET_CAP, help=f"Minimum market capitalization (default: {MIN_MARKET_CAP})")
+    p_candidates.add_argument("--min-rsi", type=float, help="Filter out candidates with RSI below this threshold (e.g. 30)")
+    p_candidates.add_argument("--max-rsi", type=float, help="Filter out candidates with RSI above this threshold (e.g. 70)")
+    p_candidates.add_argument("--macd-filter", type=str, choices=["bullish", "bearish", "none"], default="none", help="Filter by MACD Histogram status (bullish: >0, bearish: <0)")
     
     # sentiment subcommand
     subparsers.add_parser("sentiment", help="Display Reddit sentiment analysis dashboard and divergence alerts.")

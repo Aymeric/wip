@@ -1612,6 +1612,171 @@ class TestGEXEngine(unittest.TestCase):
         self.assertIsNotNone(best2)
         self.assertFalse(best2["earnings_blocked"])
 
+    def test_technical_indicators_rsi_macd(self):
+        """Test RSI and MACD calculation functions."""
+        from gex_engine import calculate_rsi, calculate_macd
+        # Create a series of 40 closes (constantly increasing)
+        closes = [100.0 + i * 0.5 for i in range(40)]
+        rsi = calculate_rsi(closes)
+        self.assertIsNotNone(rsi)
+        self.assertGreater(rsi, 50.0)
+        
+        macd_line, sig_line, macd_hist = calculate_macd(closes)
+        self.assertIsNotNone(macd_line)
+        self.assertIsNotNone(sig_line)
+        self.assertIsNotNone(macd_hist)
+
+    def test_stock_portfolio_exit_rules(self):
+        """Test trailing stops, stop losses, and profit targets for stocks in portfolio review."""
+        import tempfile
+        from unittest.mock import patch
+        import gex_engine
+        
+        with tempfile.NamedTemporaryFile(suffix=".json", delete=False) as tmp:
+            tmp_path = tmp.name
+        try:
+            with patch('gex_engine.OPTIONS_FILE', tmp_path), \
+                 patch('gex_engine.ANALYSES_FILE', os.path.join(os.path.dirname(tmp_path), "analyses.json")):
+                # Setup active stock positions
+                stocks_data = {
+                    "stocks_positions": {
+                        "AAPL": {
+                            "Ticker": "AAPL",
+                            "Shares": 10.0,
+                            "Average Buy Price": 150.0,
+                            "Current Price": 160.0,
+                            "Highest Price": 170.0,
+                            "Trailing Stop Pct": 10.0, # trail stop trigger at 170 * 0.9 = 153. Current price 160 -> HOLD
+                            "Beta Sector Tag": "Technology/Beta"
+                        },
+                        "MSFT": {
+                            "Ticker": "MSFT",
+                            "Shares": 5.0,
+                            "Average Buy Price": 300.0,
+                            "Current Price": 260.0,
+                            "Highest Price": 300.0,
+                            "Trailing Stop Pct": 10.0, # trail stop trigger at 300 * 0.9 = 270. Current price 260 -> TRIGGERED
+                            "Beta Sector Tag": "Technology/Beta"
+                        },
+                        "GOOG": {
+                            "Ticker": "GOOG",
+                            "Shares": 20.0,
+                            "Average Buy Price": 100.0,
+                            "Current Price": 90.0,
+                            "Stop Loss Pct": 5.0, # stop loss trigger at 100 * 0.95 = 95. Current price 90 -> TRIGGERED
+                            "Beta Sector Tag": "Technology/Beta"
+                        },
+                        "AMZN": {
+                            "Ticker": "AMZN",
+                            "Shares": 10.0,
+                            "Average Buy Price": 120.0,
+                            "Current Price": 140.0,
+                            "Profit Target Pct": 10.0, # profit target trigger at 120 * 1.1 = 132. Current price 140 -> TRIGGERED
+                            "Beta Sector Tag": "Technology/Beta"
+                        }
+                    }
+                }
+                gex_engine.save_json(tmp_path, stocks_data)
+                
+                # Run portfolio review
+                class MockArgs:
+                    net_liq = 50000.0
+                    spot_overrides = {}
+                
+                gex_engine.cmd_portfolio(MockArgs())
+                
+                # Check that highest price for AAPL is updated to max(170, 160) = 170
+                data = gex_engine.load_json(tmp_path, {})
+                stocks = data.get("stocks_positions", {})
+                self.assertEqual(stocks["AAPL"]["Highest Price"], 170.0)
+                self.assertEqual(stocks["MSFT"]["Highest Price"], 300.0)
+                
+        finally:
+            if os.path.exists(tmp_path):
+                os.remove(tmp_path)
+
+    def test_update_candidates_rsi_macd_filtering(self):
+        """Test candidate technical indicators calculation and filtering."""
+        import tempfile
+        import shutil
+        from unittest.mock import patch
+        import gex_engine
+        
+        temp_dir = tempfile.mkdtemp()
+        try:
+            opt_file = os.path.join(temp_dir, "active_positions.json")
+            gex_engine.save_json(opt_file, {"options_positions": {}, "stocks_positions": {}})
+            
+            scans_dir = os.path.join(temp_dir, "scans")
+            os.makedirs(scans_dir, exist_ok=True)
+            mock_scan = {
+                "data": {
+                    "result": {
+                        "scan_title": "Test Scan",
+                        "results": [
+                            {
+                                "ticker": "MSFT",
+                                "columns": {
+                                    "Last": "400.00",
+                                    "Volume": "500000.0",
+                                    "% Change": "0.01",
+                                    "Market cap": "3000000000000.0"
+                                }
+                            }
+                        ]
+                    }
+                }
+            }
+            gex_engine.save_json(os.path.join(scans_dir, "test_scan.json"), mock_scan)
+            
+            downloads_dir = os.path.join(temp_dir, "downloads")
+            os.makedirs(downloads_dir, exist_ok=True)
+            # Create a history with 40 days of closes (continuously going up => RSI around 100, MACD bullish)
+            bars_data = [{"begins_at": f"2026-06-{i:02d}T00:00:00Z", "close_price": str(100.0 + i)} for i in range(1, 41)]
+            gex_engine.save_json(os.path.join(downloads_dir, "msft_historicals_raw.json"), {"bars": bars_data})
+            
+            candidates_file = os.path.join(temp_dir, "candidate_stocks.json")
+            analyses_file = os.path.join(temp_dir, "ticker_analyses.json")
+            gex_engine.save_json(analyses_file, {})
+            
+            with patch('gex_engine.OPTIONS_FILE', opt_file), \
+                 patch('gex_engine.SCANS_DIR', scans_dir), \
+                 patch('gex_engine.CANDIDATES_FILE', candidates_file), \
+                 patch('gex_engine.ANALYSES_FILE', analyses_file), \
+                 patch('gex_engine.persist_new_scans', return_value=[]), \
+                 patch('gex_engine.find_latest_historical_closes') as mock_find:
+                
+                # Mock find to return our closes list
+                closes_list = [100.0 + i for i in range(40)]
+                mock_find.return_value = closes_list
+                
+                # Run candidates update without filters
+                class UpdateArgs:
+                    min_rsi = None
+                    max_rsi = None
+                    macd_filter = "none"
+                    
+                gex_engine.cmd_update_candidates(UpdateArgs())
+                
+                cand_data = gex_engine.load_json(candidates_file, {})
+                cands = cand_data.get("candidates", [])
+                self.assertEqual(len(cands), 1)
+                self.assertIsNotNone(cands[0]["rsi"])
+                self.assertIsNotNone(cands[0]["macd_hist"])
+                
+                # Test filtering (should exclude since RSI is high and max-rsi is set to 30)
+                class UpdateArgsFiltered:
+                    min_rsi = None
+                    max_rsi = 30.0
+                    macd_filter = "none"
+                    
+                gex_engine.cmd_update_candidates(UpdateArgsFiltered())
+                cand_data = gex_engine.load_json(candidates_file, {})
+                self.assertEqual(len(cand_data.get("candidates", [])), 0)
+                
+        finally:
+            shutil.rmtree(temp_dir)
+
 
 if __name__ == '__main__':
     unittest.main()

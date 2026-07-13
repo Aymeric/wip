@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-07-13T00:36:04.791031Z",
+  "last_updated": "2026-07-13T22:22:30.941395Z",
   "source_scans": [
     "GEX Momentum Candidates",
     "High options volume and IV",
@@ -9,7 +9,6 @@
   "excluded_active_positions": [
     "AAPL",
     "AMZN",
-    "BABA",
     "GOOG",
     "HOOD",
     "META",
@@ -19,6 +18,7 @@
     "NOW",
     "RGC",
     "RVI",
+    "SKHY",
     "SLS",
     "WU"
   ],
@@ -31,7 +31,9 @@
       "chg_pct": 0.5128,
       "iv": 0.9310581,
       "relative_options_volume": 7.85905911418196,
-      "market_cap": 564903571.0
+      "market_cap": 564903571.0,
+      "rsi": null,
+      "macd_hist": null
     },
     {
       "symbol": "MAT",
@@ -40,7 +42,9 @@
       "chg_pct": 0.2276,
       "iv": 0.3642646,
       "relative_options_volume": 4.735733628898858,
-      "market_cap": 3828246575.0
+      "market_cap": 3828246575.0,
+      "rsi": 39.71,
+      "macd_hist": -0.034
     },
     {
       "symbol": "SHC",
@@ -49,7 +53,9 @@
       "chg_pct": 0.5438,
       "iv": 0.3927208,
       "relative_options_volume": 4.180894308943089,
-      "market_cap": 4984719055.0
+      "market_cap": 4984719055.0,
+      "rsi": 86.1,
+      "macd_hist": 0.0179
     },
     {
       "symbol": "MARA",
@@ -58,7 +64,9 @@
       "chg_pct": 1.5129,
       "iv": 0.9051008,
       "relative_options_volume": 3.5163497871381955,
-      "market_cap": 4582871446.0
+      "market_cap": 4582871446.0,
+      "rsi": 39.65,
+      "macd_hist": -0.3104
     },
     {
       "symbol": "OKLO",
@@ -67,7 +75,9 @@
       "chg_pct": 0.751,
       "iv": 0.8871929,
       "relative_options_volume": 3.1401495487634317,
-      "market_cap": 8226293865.0
+      "market_cap": 8226293865.0,
+      "rsi": 100.0,
+      "macd_hist": 0.0302
     },
     {
       "symbol": "WDFC",
@@ -76,7 +86,9 @@
       "chg_pct": 15.6796,
       "iv": 0.5353319,
       "relative_options_volume": 3.050261256281706,
-      "market_cap": 3317967579.0
+      "market_cap": 3317967579.0,
+      "rsi": 100.0,
+      "macd_hist": 0.1699
     },
     {
       "symbol": "RXT",
@@ -85,7 +97,9 @@
       "chg_pct": 1.1442,
       "iv": 1.5556174,
       "relative_options_volume": 2.694109823678385,
-      "market_cap": 1638637930.0
+      "market_cap": 1638637930.0,
+      "rsi": null,
+      "macd_hist": null
     },
     {
       "symbol": "DXYZ",
@@ -94,7 +108,9 @@
       "chg_pct": 0.6872,
       "iv": 0.7441732,
       "relative_options_volume": 2.658116292461909,
-      "market_cap": 757376407.0
+      "market_cap": 757376407.0,
+      "rsi": null,
+      "macd_hist": null
     },
     {
       "symbol": "QGEN",
@@ -103,7 +119,9 @@
       "chg_pct": 0.2858,
       "iv": 0.3895846,
       "relative_options_volume": 2.54600143949107,
-      "market_cap": 7837500000.0
+      "market_cap": 7837500000.0,
+      "rsi": null,
+      "macd_hist": null
     },
     {
       "symbol": "ANGX",
@@ -112,7 +130,9 @@
       "chg_pct": 0.7576,
       "iv": 0.3697726,
       "relative_options_volume": 2.3360768593579126,
-      "market_cap": 723636349.0
+      "market_cap": 723636349.0,
+      "rsi": null,
+      "macd_hist": null
     },
     {
       "symbol": "VIK",
@@ -121,7 +141,9 @@
       "chg_pct": 0.5731,
       "iv": 0.3772211,
       "relative_options_volume": 2.2219388401109343,
-      "market_cap": 43710013438.0
+      "market_cap": 43710013438.0,
+      "rsi": 100.0,
+      "macd_hist": 0.0623
     },
     {
       "symbol": "ORCL",
@@ -130,7 +152,9 @@
       "chg_pct": 0.4576,
       "iv": 0.5772339,
       "relative_options_volume": 2.1907979956877446,
-      "market_cap": 404677370790.0
+      "market_cap": 404677370790.0,
+      "rsi": 100.0,
+      "macd_hist": 0.0885
     },
     {
       "symbol": "NTAP",
@@ -139,7 +163,9 @@
       "chg_pct": 0.4542,
       "iv": 0.467076,
       "relative_options_volume": 2.144347937285529,
-      "market_cap": 32405155925.0
+      "market_cap": 32405155925.0,
+      "rsi": 100.0,
+      "macd_hist": 0.1057
     },
     {
       "symbol": "WULF",
@@ -148,7 +174,9 @@
       "chg_pct": 0.2155,
       "iv": 1.046183,
       "relative_options_volume": 2.011011941816008,
-      "market_cap": 11308054958.0
+      "market_cap": 11308054958.0,
+      "rsi": null,
+      "macd_hist": null
     },
     {
       "symbol": "EQPT",
@@ -157,7 +185,9 @@
       "chg_pct": 14.0625,
       "iv": null,
       "relative_options_volume": null,
-      "market_cap": 4180593481.0
+      "market_cap": 4180593481.0,
+      "rsi": 100.0,
+      "macd_hist": 0.0113
     },
     {
       "symbol": "CCC",
@@ -166,7 +196,9 @@
       "chg_pct": 13.0112,
       "iv": null,
       "relative_options_volume": null,
-      "market_cap": 3192956515.0
+      "market_cap": 3192956515.0,
+      "rsi": 100.0,
+      "macd_hist": 0.0037
     },
     {
       "symbol": "KB",
@@ -175,7 +207,9 @@
       "chg_pct": 7.3936,
       "iv": null,
       "relative_options_volume": null,
-      "market_cap": 39457694551.0
+      "market_cap": 39457694551.0,
+      "rsi": 100.0,
+      "macd_hist": 0.0759
     },
     {
       "symbol": "KC",
@@ -184,7 +218,9 @@
       "chg_pct": 6.5903,
       "iv": null,
       "relative_options_volume": null,
-      "market_cap": 3207000349.0
+      "market_cap": 3207000349.0,
+      "rsi": null,
+      "macd_hist": null
     },
     {
       "symbol": "SECZ",
@@ -193,7 +229,9 @@
       "chg_pct": 6.443,
       "iv": null,
       "relative_options_volume": null,
-      "market_cap": 1097144940.0
+      "market_cap": 1097144940.0,
+      "rsi": 100.0,
+      "macd_hist": 0.0048
     },
     {
       "symbol": "HSHP",
@@ -202,7 +240,9 @@
       "chg_pct": 5.2989,
       "iv": null,
       "relative_options_volume": null,
-      "market_cap": 698251357.0
+      "market_cap": 698251357.0,
+      "rsi": null,
+      "macd_hist": null
     },
     {
       "symbol": "IPX",
@@ -211,7 +251,9 @@
       "chg_pct": 4.3368,
       "iv": null,
       "relative_options_volume": null,
-      "market_cap": 809423615.0
+      "market_cap": 809423615.0,
+      "rsi": null,
+      "macd_hist": null
     },
     {
       "symbol": "CCXI",
@@ -220,7 +262,9 @@
       "chg_pct": 4.1898,
       "iv": null,
       "relative_options_volume": null,
-      "market_cap": 854438000.0
+      "market_cap": 854438000.0,
+      "rsi": null,
+      "macd_hist": null
     },
     {
       "symbol": "SEI",
@@ -229,7 +273,9 @@
       "chg_pct": 3.8383,
       "iv": null,
       "relative_options_volume": null,
-      "market_cap": 4061225735.0
+      "market_cap": 4061225735.0,
+      "rsi": 100.0,
+      "macd_hist": 0.0432
     },
     {
       "symbol": "BEKE",
@@ -238,7 +284,9 @@
       "chg_pct": 3.6066,
       "iv": null,
       "relative_options_volume": null,
-      "market_cap": 17114054722.0
+      "market_cap": 17114054722.0,
+      "rsi": 100.0,
+      "macd_hist": 0.0097
     },
     {
       "symbol": "BUD",
@@ -247,7 +295,9 @@
       "chg_pct": 3.4913,
       "iv": null,
       "relative_options_volume": null,
-      "market_cap": 153447526464.0
+      "market_cap": 153447526464.0,
+      "rsi": 100.0,
+      "macd_hist": 0.0504
     },
     {
       "symbol": "DPC",
@@ -256,7 +306,9 @@
       "chg_pct": 3.4568,
       "iv": null,
       "relative_options_volume": null,
-      "market_cap": 6917934740.0
+      "market_cap": 6917934740.0,
+      "rsi": 100.0,
+      "macd_hist": 0.0307
     },
     {
       "symbol": "IMMX",
@@ -265,7 +317,9 @@
       "chg_pct": 3.3363,
       "iv": null,
       "relative_options_volume": null,
-      "market_cap": 783089461.0
+      "market_cap": 783089461.0,
+      "rsi": null,
+      "macd_hist": null
     },
     {
       "symbol": "BZH",
@@ -274,7 +328,9 @@
       "chg_pct": 3.1837,
       "iv": null,
       "relative_options_volume": null,
-      "market_cap": 847621913.0
+      "market_cap": 847621913.0,
+      "rsi": null,
+      "macd_hist": null
     },
     {
       "symbol": "MNSO",
@@ -283,7 +339,9 @@
       "chg_pct": 3.1386,
       "iv": null,
       "relative_options_volume": null,
-      "market_cap": 3557049954.0
+      "market_cap": 3557049954.0,
+      "rsi": 100.0,
+      "macd_hist": 0.0073
     },
     {
       "symbol": "LTH",
@@ -292,7 +350,9 @@
       "chg_pct": 3.1142,
       "iv": null,
       "relative_options_volume": null,
-      "market_cap": 9238013627.0
+      "market_cap": 9238013627.0,
+      "rsi": 100.0,
+      "macd_hist": 0.0262
     },
     {
       "symbol": "DHC",
@@ -301,7 +361,9 @@
       "chg_pct": 3.0905,
       "iv": null,
       "relative_options_volume": null,
-      "market_cap": 2186225541.0
+      "market_cap": 2186225541.0,
+      "rsi": 100.0,
+      "macd_hist": 0.0059
     },
     {
       "symbol": "LHX",
@@ -310,7 +372,9 @@
       "chg_pct": 3.0738,
       "iv": null,
       "relative_options_volume": null,
-      "market_cap": 54666390421.0
+      "market_cap": 54666390421.0,
+      "rsi": 100.0,
+      "macd_hist": 0.1828
     },
     {
       "symbol": "XXI",
@@ -319,7 +383,9 @@
       "chg_pct": 3.0651,
       "iv": null,
       "relative_options_volume": null,
-      "market_cap": 1817273060.0
+      "market_cap": 1817273060.0,
+      "rsi": 100.0,
+      "macd_hist": 0.0034
     },
     {
       "symbol": "SGML",
@@ -328,7 +394,9 @@
       "chg_pct": 3.0457,
       "iv": null,
       "relative_options_volume": null,
-      "market_cap": 1294541236.0
+      "market_cap": 1294541236.0,
+      "rsi": 100.0,
+      "macd_hist": 0.0072
     },
     {
       "symbol": "DLB",
@@ -337,7 +405,9 @@
       "chg_pct": 3.0128,
       "iv": null,
       "relative_options_volume": null,
-      "market_cap": 4718553975.0
+      "market_cap": 4718553975.0,
+      "rsi": 100.0,
+      "macd_hist": 0.0317
     },
     {
       "symbol": "NAD",
@@ -346,7 +416,9 @@
       "chg_pct": 3.005,
       "iv": null,
       "relative_options_volume": null,
-      "market_cap": 2794567252.0
+      "market_cap": 2794567252.0,
+      "rsi": 100.0,
+      "macd_hist": 0.0075
     },
     {
       "symbol": "BOBS",
@@ -355,7 +427,9 @@
       "chg_pct": 3.0007,
       "iv": null,
       "relative_options_volume": null,
-      "market_cap": 1907161295.0
+      "market_cap": 1907161295.0,
+      "rsi": 100.0,
+      "macd_hist": 0.0097
     }
   ]
 }

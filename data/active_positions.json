@@ -19,7 +19,7 @@
       "Sizing Risk Weight (%)": 1.49,
       "Beta Sector Tag": "Biotech/Healthcare",
       "Entry Date": "2026-07-01",
-      "Days Held": 12,
+      "Days Held": 13,
       "Stalling Days": 0,
       "Target Mode": "T1",
       "T2 Target": null
@@ -43,32 +43,8 @@
       "Sizing Risk Weight (%)": 0.95,
       "Beta Sector Tag": "Consumer Cyclical",
       "Entry Date": "2026-06-29",
-      "Days Held": 14,
+      "Days Held": 15,
       "Stalling Days": 0,
-      "Target Mode": "T1",
-      "T2 Target": null
-    },
-    "fe2cebde-e0e6-4524-9d7e-cf07d8801ccf": {
-      "Option ID": "fe2cebde-e0e6-4524-9d7e-cf07d8801ccf",
-      "Underlier": "BABA",
-      "Strike": "145.00",
-      "Expiration": "2026-09-18",
-      "Type": "call",
-      "Purchase Premium": 15.0,
-      "Delta": "0.153932",
-      "Gamma": "0.009613",
-      "Mark Price": 1.8,
-      "Open Interest": 9197,
-      "ImpVol": "0.502244",
-      "Asset Cost Basis": 1500.0,
-      "Current Value": 180.0,
-      "P&L (%)": -88.0,
-      "P&L ($)": -1320.0,
-      "Sizing Risk Weight (%)": 3.0,
-      "Beta Sector Tag": "China/Technology",
-      "Entry Date": "2026-05-13",
-      "Days Held": 61,
-      "Stalling Days": 2,
       "Target Mode": "T1",
       "T2 Target": null
     },
@@ -91,7 +67,7 @@
       "Sizing Risk Weight (%)": 0.16,
       "Beta Sector Tag": "Technology/Beta",
       "Entry Date": "2026-07-10",
-      "Days Held": 3,
+      "Days Held": 4,
       "Stalling Days": 0,
       "Target Mode": "T1",
       "T2 Target": null
@@ -109,7 +85,8 @@
       "Current Value": 12285.0,
       "P&L (%)": 12.81,
       "P&L ($)": 1395.0,
-      "Sizing Risk Weight (%)": 21.78
+      "Sizing Risk Weight (%)": 21.78,
+      "Highest Price": 245.7
     },
     "GOOG": {
       "Ticker": "GOOG",
@@ -122,7 +99,8 @@
       "Current Value": 7110.37722555,
       "P&L (%)": 12.7,
       "P&L ($)": 801.26,
-      "Sizing Risk Weight (%)": 12.62
+      "Sizing Risk Weight (%)": 12.62,
+      "Highest Price": 355.05
     },
     "HOOD": {
       "Ticker": "HOOD",
@@ -135,7 +113,8 @@
       "Current Value": 1115.6999999999998,
       "P&L (%)": 45.86,
       "P&L ($)": 350.8,
-      "Sizing Risk Weight (%)": 1.53
+      "Sizing Risk Weight (%)": 1.53,
+      "Highest Price": 111.57
     },
     "NFLX": {
       "Ticker": "NFLX",
@@ -148,7 +127,8 @@
       "Current Value": 2202.6,
       "P&L (%)": -16.59,
       "P&L ($)": -438.0,
-      "Sizing Risk Weight (%)": 5.28
+      "Sizing Risk Weight (%)": 5.28,
+      "Highest Price": 88.02
     },
     "AAPL": {
       "Ticker": "AAPL",
@@ -161,7 +141,8 @@
       "Current Value": 3149.6,
       "P&L (%)": 21.14,
       "P&L ($)": 549.6,
-      "Sizing Risk Weight (%)": 5.2
+      "Sizing Risk Weight (%)": 5.2,
+      "Highest Price": 314.96
     },
     "META": {
       "Ticker": "META",
@@ -174,7 +155,8 @@
       "Current Value": 4676.0,
       "P&L (%)": 14.79,
       "P&L ($)": 602.49,
-      "Sizing Risk Weight (%)": 8.15
+      "Sizing Risk Weight (%)": 8.15,
+      "Highest Price": 668.0
     },
     "WU": {
       "Ticker": "WU",
@@ -187,7 +169,8 @@
       "Current Value": 1618.2171930000002,
       "P&L (%)": -5.19,
       "P&L ($)": -88.53,
-      "Sizing Risk Weight (%)": 3.41
+      "Sizing Risk Weight (%)": 3.41,
+      "Highest Price": 8.29
     },
     "NOW": {
       "Ticker": "NOW",
@@ -200,7 +183,8 @@
       "Current Value": 3220.8,
       "P&L (%)": -2.79,
       "P&L ($)": -92.4,
-      "Sizing Risk Weight (%)": 6.63
+      "Sizing Risk Weight (%)": 6.63,
+      "Highest Price": 110.44
     },
     "RVI": {
       "Ticker": "RVI",
@@ -213,7 +197,8 @@
       "Current Value": 1553.5,
       "P&L (%)": 24.28,
       "P&L ($)": 303.5,
-      "Sizing Risk Weight (%)": 2.5
+      "Sizing Risk Weight (%)": 2.5,
+      "Highest Price": 31.07
     },
     "MRNA": {
       "Ticker": "MRNA",
@@ -226,7 +211,25 @@
       "Current Value": 1366.0,
       "P&L (%)": 28.14,
       "P&L ($)": 300.0,
-      "Sizing Risk Weight (%)": 2.13
+      "Sizing Risk Weight (%)": 2.13,
+      "Highest Price": 68.3
+    },
+    "SKHY": {
+      "Ticker": "SKHY",
+      "Shares": 10.0,
+      "Average Buy Price": 153.0,
+      "Current Price": 153.0,
+      "Highest Price": 153.0,
+      "Trailing Stop Pct": 5.0,
+      "Stop Loss Pct": 7.0,
+      "Profit Target Pct": 15.0,
+      "Beta Sector Tag": "Technology/Beta",
+      "Entry Date": "2026-07-13",
+      "Asset Cost Basis": 1530.0,
+      "Current Value": 1530.0,
+      "P&L (%)": 0.0,
+      "P&L ($)": 0.0,
+      "Sizing Risk Weight (%)": 3.06
     }
   }
 }

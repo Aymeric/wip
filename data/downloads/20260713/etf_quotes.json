@@ -1,0 +1,118 @@
+{
+  "data": {
+    "results": [
+      {
+        "quote": {
+          "symbol": "SPY",
+          "last_trade_price": "749.100000",
+          "adjusted_previous_close": "754.950000"
+        }
+      },
+      {
+        "quote": {
+          "symbol": "QQQ",
+          "last_trade_price": "711.710000",
+          "adjusted_previous_close": "725.510000"
+        }
+      },
+      {
+        "quote": {
+          "symbol": "IWM",
+          "last_trade_price": "293.460000",
+          "adjusted_previous_close": "295.990000"
+        }
+      },
+      {
+        "quote": {
+          "symbol": "DIA",
+          "last_trade_price": "524.450000",
+          "adjusted_previous_close": "525.780000"
+        }
+      },
+      {
+        "quote": {
+          "symbol": "XLK",
+          "last_trade_price": "181.260000",
+          "adjusted_previous_close": "185.780000"
+        }
+      },
+      {
+        "quote": {
+          "symbol": "XLF",
+          "last_trade_price": "56.050000",
+          "adjusted_previous_close": "55.710000"
+        }
+      },
+      {
+        "quote": {
+          "symbol": "XLV",
+          "last_trade_price": "161.375000",
+          "adjusted_previous_close": "160.840000"
+        }
+      },
+      {
+        "quote": {
+          "symbol": "XLY",
+          "last_trade_price": "116.010000",
+          "adjusted_previous_close": "117.240000"
+        }
+      },
+      {
+        "quote": {
+          "symbol": "XLP",
+          "last_trade_price": "84.585000",
+          "adjusted_previous_close": "84.120000"
+        }
+      },
+      {
+        "quote": {
+          "symbol": "XLI",
+          "last_trade_price": "180.360000",
+          "adjusted_previous_close": "181.920000"
+        }
+      },
+      {
+        "quote": {
+          "symbol": "XLU",
+          "last_trade_price": "45.700000",
+          "adjusted_previous_close": "45.410000"
+        }
+      },
+      {
+        "quote": {
+          "symbol": "XLB",
+          "last_trade_price": "50.580000",
+          "adjusted_previous_close": "50.890000"
+        }
+      },
+      {
+        "quote": {
+          "symbol": "XLRE",
+          "last_trade_price": "44.685000",
+          "adjusted_previous_close": "44.450000"
+        }
+      },
+      {
+        "quote": {
+          "symbol": "XLE",
+          "last_trade_price": "56.750000",
+          "adjusted_previous_close": "55.080000"
+        }
+      },
+      {
+        "quote": {
+          "symbol": "XLC",
+          "last_trade_price": "111.590000",
+          "adjusted_previous_close": "111.640000"
+        }
+      },
+      {
+        "quote": {
+          "symbol": "HYG",
+          "last_trade_price": "79.520000",
+          "adjusted_previous_close": "79.710000"
+        }
+      }
+    ]
+  }
+}
