@@ -1,0 +1,66 @@
+{
+  "data": {
+    "instruments": [
+      {
+        "id": "angx-opt-1",
+        "strike_price": "3.19",
+        "type": "call",
+        "expiration_date": "2026-08-21"
+      },
+      {
+        "id": "angx-opt-2",
+        "strike_price": "3.19",
+        "type": "put",
+        "expiration_date": "2026-08-21"
+      },
+      {
+        "id": "angx-opt-3",
+        "strike_price": "3.59",
+        "type": "call",
+        "expiration_date": "2026-08-21"
+      },
+      {
+        "id": "angx-opt-4",
+        "strike_price": "3.59",
+        "type": "put",
+        "expiration_date": "2026-08-21"
+      },
+      {
+        "id": "angx-opt-5",
+        "strike_price": "3.99",
+        "type": "call",
+        "expiration_date": "2026-08-21"
+      },
+      {
+        "id": "angx-opt-6",
+        "strike_price": "3.99",
+        "type": "put",
+        "expiration_date": "2026-08-21"
+      },
+      {
+        "id": "angx-opt-7",
+        "strike_price": "4.39",
+        "type": "call",
+        "expiration_date": "2026-08-21"
+      },
+      {
+        "id": "angx-opt-8",
+        "strike_price": "4.39",
+        "type": "put",
+        "expiration_date": "2026-08-21"
+      },
+      {
+        "id": "angx-opt-9",
+        "strike_price": "4.79",
+        "type": "call",
+        "expiration_date": "2026-08-21"
+      },
+      {
+        "id": "angx-opt-10",
+        "strike_price": "4.79",
+        "type": "put",
+        "expiration_date": "2026-08-21"
+      }
+    ]
+  }
+}

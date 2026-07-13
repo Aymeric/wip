@@ -1,0 +1,74 @@
+{
+  "results": [
+    {
+      "instrument_id": "angx-opt-1",
+      "open_interest": 800,
+      "gamma": 0.02,
+      "implied_volatility": 0.45,
+      "delta": 0.45
+    },
+    {
+      "instrument_id": "angx-opt-2",
+      "open_interest": 1500,
+      "gamma": 0.02,
+      "implied_volatility": 0.45,
+      "delta": 0.45
+    },
+    {
+      "instrument_id": "angx-opt-3",
+      "open_interest": 800,
+      "gamma": 0.02,
+      "implied_volatility": 0.45,
+      "delta": 0.45
+    },
+    {
+      "instrument_id": "angx-opt-4",
+      "open_interest": 1500,
+      "gamma": 0.02,
+      "implied_volatility": 0.45,
+      "delta": 0.45
+    },
+    {
+      "instrument_id": "angx-opt-5",
+      "open_interest": 2000,
+      "gamma": 0.02,
+      "implied_volatility": 0.45,
+      "delta": 0.45
+    },
+    {
+      "instrument_id": "angx-opt-6",
+      "open_interest": 1500,
+      "gamma": 0.02,
+      "implied_volatility": 0.45,
+      "delta": 0.45
+    },
+    {
+      "instrument_id": "angx-opt-7",
+      "open_interest": 2000,
+      "gamma": 0.02,
+      "implied_volatility": 0.45,
+      "delta": 0.45
+    },
+    {
+      "instrument_id": "angx-opt-8",
+      "open_interest": 800,
+      "gamma": 0.02,
+      "implied_volatility": 0.45,
+      "delta": 0.45
+    },
+    {
+      "instrument_id": "angx-opt-9",
+      "open_interest": 2000,
+      "gamma": 0.02,
+      "implied_volatility": 0.45,
+      "delta": 0.45
+    },
+    {
+      "instrument_id": "angx-opt-10",
+      "open_interest": 800,
+      "gamma": 0.02,
+      "implied_volatility": 0.45,
+      "delta": 0.45
+    }
+  ]
+}

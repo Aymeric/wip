@@ -78,12 +78,12 @@ Format a concise regime summary following the styling instructions (e.g. green m
 ### 🔄 Regime Authorization Summary:
 - **Authorisation Status**: 🟢 ALL TRACKS OK / 🟡 TRACK 1 ONLY / 🔴 NO NEW ENTRIES
 - **Total Gates Passing**: $X/3$
-  - Basket Gate: [PASS / FAIL] (SPY: $+X.XX\%$, QQQ: $+Y.YY\%$)
-  - Bull:Bear Gate: [PASS / FAIL] (Ratio: $A.AA:1$ with $B$ bulls vs $C$ bears)
-  - VIX Delta Gate: [PASS / FAIL] (VIX: $V.VV$ / Proxy UVXY/VXX Change: $-X.XX\%$)
+  - Basket Gate: [🟢 PASS / 🔴 FAIL] (SPY: $+X.XX\%$, QQQ: $+Y.YY\%$)
+  - Bull:Bear Gate: [🟢 PASS / 🔴 FAIL] (Ratio: $A.AA:1$ with $B$ bulls vs $C$ bears)
+  - VIX Delta Gate: [🟢 PASS / 🔴 FAIL] (VIX: $V.VV$ / Proxy UVXY/VXX Change: $-X.XX\%$)
 
 ### ⚠️ Risk Overlay Indicators:
-- **HYG Credit Check**: [OK / DIVERGENCE WARNING - Sizing reduced by 50%] (HYG: $-X.XX\%$)
+- **HYG Credit Check**: [🟢 OK / 🔴 DIVERGENCE WARNING - Sizing reduced by 50%] (HYG: $-X.XX\%$)
 
 ### 💾 Persisted Artifacts:
 - Saved raw quotes to [data/downloads/](../../data/downloads/)

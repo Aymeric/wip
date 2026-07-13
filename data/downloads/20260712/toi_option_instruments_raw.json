@@ -1,0 +1,66 @@
+{
+  "data": {
+    "instruments": [
+      {
+        "id": "toi-opt-1",
+        "strike_price": "4.7",
+        "type": "call",
+        "expiration_date": "2026-08-21"
+      },
+      {
+        "id": "toi-opt-2",
+        "strike_price": "4.7",
+        "type": "put",
+        "expiration_date": "2026-08-21"
+      },
+      {
+        "id": "toi-opt-3",
+        "strike_price": "5.29",
+        "type": "call",
+        "expiration_date": "2026-08-21"
+      },
+      {
+        "id": "toi-opt-4",
+        "strike_price": "5.29",
+        "type": "put",
+        "expiration_date": "2026-08-21"
+      },
+      {
+        "id": "toi-opt-5",
+        "strike_price": "5.88",
+        "type": "call",
+        "expiration_date": "2026-08-21"
+      },
+      {
+        "id": "toi-opt-6",
+        "strike_price": "5.88",
+        "type": "put",
+        "expiration_date": "2026-08-21"
+      },
+      {
+        "id": "toi-opt-7",
+        "strike_price": "6.47",
+        "type": "call",
+        "expiration_date": "2026-08-21"
+      },
+      {
+        "id": "toi-opt-8",
+        "strike_price": "6.47",
+        "type": "put",
+        "expiration_date": "2026-08-21"
+      },
+      {
+        "id": "toi-opt-9",
+        "strike_price": "7.06",
+        "type": "call",
+        "expiration_date": "2026-08-21"
+      },
+      {
+        "id": "toi-opt-10",
+        "strike_price": "7.06",
+        "type": "put",
+        "expiration_date": "2026-08-21"
+      }
+    ]
+  }
+}

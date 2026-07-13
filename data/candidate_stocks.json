@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-07-12T21:21:34.233135Z",
+  "last_updated": "2026-07-13T00:36:04.791031Z",
   "source_scans": [
     "GEX Momentum Candidates",
     "High options volume and IV",
@@ -22,8 +22,26 @@
     "SLS",
     "WU"
   ],
-  "total": 30,
+  "total": 37,
   "candidates": [
+    {
+      "symbol": "TOI",
+      "source": "scanner",
+      "price": 5.88,
+      "chg_pct": 0.5128,
+      "iv": 0.9310581,
+      "relative_options_volume": 7.85905911418196,
+      "market_cap": 564903571.0
+    },
+    {
+      "symbol": "MAT",
+      "source": "scanner",
+      "price": 13.21,
+      "chg_pct": 0.2276,
+      "iv": 0.3642646,
+      "relative_options_volume": 4.735733628898858,
+      "market_cap": 3828246575.0
+    },
     {
       "symbol": "SHC",
       "source": "scanner",
@@ -61,6 +79,42 @@
       "market_cap": 3317967579.0
     },
     {
+      "symbol": "RXT",
+      "source": "scanner",
+      "price": 4.42,
+      "chg_pct": 1.1442,
+      "iv": 1.5556174,
+      "relative_options_volume": 2.694109823678385,
+      "market_cap": 1638637930.0
+    },
+    {
+      "symbol": "DXYZ",
+      "source": "scanner",
+      "price": 27.84,
+      "chg_pct": 0.6872,
+      "iv": 0.7441732,
+      "relative_options_volume": 2.658116292461909,
+      "market_cap": 757376407.0
+    },
+    {
+      "symbol": "QGEN",
+      "source": "scanner",
+      "price": 42.11,
+      "chg_pct": 0.2858,
+      "iv": 0.3895846,
+      "relative_options_volume": 2.54600143949107,
+      "market_cap": 7837500000.0
+    },
+    {
+      "symbol": "ANGX",
+      "source": "scanner",
+      "price": 3.99,
+      "chg_pct": 0.7576,
+      "iv": 0.3697726,
+      "relative_options_volume": 2.3360768593579126,
+      "market_cap": 723636349.0
+    },
+    {
       "symbol": "VIK",
       "source": "scanner",
       "price": 101.79,
@@ -86,6 +140,15 @@
       "iv": 0.467076,
       "relative_options_volume": 2.144347937285529,
       "market_cap": 32405155925.0
+    },
+    {
+      "symbol": "WULF",
+      "source": "scanner",
+      "price": 23.25,
+      "chg_pct": 0.2155,
+      "iv": 1.046183,
+      "relative_options_volume": 2.011011941816008,
+      "market_cap": 11308054958.0
     },
     {
       "symbol": "EQPT",
@@ -133,13 +196,31 @@
       "market_cap": 1097144940.0
     },
     {
-      "symbol": "NVDA",
-      "source": "watchlists",
-      "price": 210.96,
-      "chg_pct": 4.034,
+      "symbol": "HSHP",
+      "source": "scanner",
+      "price": 15.5,
+      "chg_pct": 5.2989,
       "iv": null,
       "relative_options_volume": null,
-      "market_cap": 5189257368000.0
+      "market_cap": 698251357.0
+    },
+    {
+      "symbol": "IPX",
+      "source": "scanner",
+      "price": 24.78,
+      "chg_pct": 4.3368,
+      "iv": null,
+      "relative_options_volume": null,
+      "market_cap": 809423615.0
+    },
+    {
+      "symbol": "CCXI",
+      "source": "scanner",
+      "price": 16.91,
+      "chg_pct": 4.1898,
+      "iv": null,
+      "relative_options_volume": null,
+      "market_cap": 854438000.0
     },
     {
       "symbol": "SEI",
@@ -176,6 +257,24 @@
       "iv": null,
       "relative_options_volume": null,
       "market_cap": 6917934740.0
+    },
+    {
+      "symbol": "IMMX",
+      "source": "scanner",
+      "price": 11.46,
+      "chg_pct": 3.3363,
+      "iv": null,
+      "relative_options_volume": null,
+      "market_cap": 783089461.0
+    },
+    {
+      "symbol": "BZH",
+      "source": "scanner",
+      "price": 32.41,
+      "chg_pct": 3.1837,
+      "iv": null,
+      "relative_options_volume": null,
+      "market_cap": 847621913.0
     },
     {
       "symbol": "MNSO",
@@ -257,42 +356,6 @@
       "iv": null,
       "relative_options_volume": null,
       "market_cap": 1907161295.0
-    },
-    {
-      "symbol": "AMD",
-      "source": "watchlists",
-      "price": 557.99,
-      "chg_pct": 2.061,
-      "iv": null,
-      "relative_options_volume": null,
-      "market_cap": 909858772190.76
-    },
-    {
-      "symbol": "SOFI",
-      "source": "reddit",
-      "price": 18.8,
-      "chg_pct": 0.9667,
-      "iv": null,
-      "relative_options_volume": null,
-      "market_cap": 24115535852.37
-    },
-    {
-      "symbol": "WDC",
-      "source": "reddit",
-      "price": 582.51,
-      "chg_pct": 0.7716,
-      "iv": null,
-      "relative_options_volume": null,
-      "market_cap": 200780782669.46
-    },
-    {
-      "symbol": "COIN",
-      "source": "watchlists",
-      "price": 159.06,
-      "chg_pct": 0.391,
-      "iv": null,
-      "relative_options_volume": null,
-      "market_cap": 41906106660.0
     }
   ]
 }

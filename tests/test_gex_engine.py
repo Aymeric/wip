@@ -1512,10 +1512,11 @@ class TestGEXEngine(unittest.TestCase):
         self.assertIn("+", scale_grouped)
 
     def test_discover_earnings_date(self):
-        """Test scanning directory for earnings date files."""
+        """Test scanning directory for earnings date files with multi-date and ISO timestamp support."""
         import tempfile
         import shutil
         from unittest.mock import patch
+        from datetime import datetime as real_datetime
         import gex_engine
 
         temp_dir = tempfile.mkdtemp()
@@ -1526,7 +1527,17 @@ class TestGEXEngine(unittest.TestCase):
                 "results": [
                     {
                         "report": {
-                            "date": "2026-08-15"
+                            "date": "2026-05-15T00:00:00Z"  # Past date
+                        }
+                    },
+                    {
+                        "report": {
+                            "expected_report_date": "2026-08-15"  # Upcoming target
+                        }
+                    },
+                    {
+                        "report": {
+                            "reported_date": "2026-11-15T15:30:00-04:00"  # Far future date
                         }
                     }
                 ]
@@ -1546,11 +1557,29 @@ class TestGEXEngine(unittest.TestCase):
                     return orig_walk(temp_dir, *args, **kwargs)
                 return orig_walk(path, *args, **kwargs)
 
+            class MockDatetime(real_datetime):
+                @classmethod
+                def today(cls):
+                    return real_datetime(2026, 7, 12, 12, 0, 0)
+
             with patch('os.path.exists', side_effect=mock_exists), \
-                 patch('os.walk', side_effect=mock_walk):
+                 patch('os.walk', side_effect=mock_walk), \
+                 patch('gex_engine.datetime', MockDatetime):
                 # Discover earnings date dynamically
                 e_date = discover_earnings_date("NVDA")
                 self.assertEqual(e_date, "2026-08-15")
+
+                # Test fallback when all dates are in the past
+                mock_past_only = {
+                    "results": [
+                        {"report": {"date": "2026-04-15"}},
+                        {"report": {"date": "2026-01-15"}}
+                    ]
+                }
+                gex_engine.save_json(os.path.join(day_dir, "nvda_earnings_raw.json"), mock_past_only)
+                e_date_past = discover_earnings_date("NVDA")
+                self.assertEqual(e_date_past, "2026-04-15") # Should fallback to the latest past date
+
         finally:
             shutil.rmtree(temp_dir)
 

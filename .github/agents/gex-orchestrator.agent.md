@@ -152,7 +152,7 @@ When building the candidate universe from Robinhood lists:
 
 #### 3d — Run Scans, Search Reddit, and Collect Symbols
 1. Call `robinhood-trading/run_scan` for each relevant saved scan.
-2. Query Reddit: Call `mcp_reddit/mcp_reddit_get_subreddit_posts` on popular retail and options boards (e.g., `wallstreetbets`, `stocks`, `options`) sorted by `"hot"` or `"new"` (limit 15-25 posts per community). Extract mentioned uppercase tickers (2-5 matching letters, e.g., PLTR, SOFI, MU, RKLB). Filter out any tickers already listed as active holdings in [data/active_positions.json](../../data/active_positions.json).
+2. Query Reddit: Call `mcp_reddit/mcp_reddit_get_subreddit_posts` on popular retail and options boards (e.g., `wallstreetbets`, `stocks`, `options`) sorted by `"hot"` or `"new"` (limit 30-50 posts per community). Extract mentioned uppercase tickers (2-5 matching letters, e.g., PLTR, SOFI, MU, RKLB). Filter out any tickers already listed as active holdings in [data/active_positions.json](../../data/active_positions.json).
 3. Query Robinhood Quotes for Reddit Tickers: For the newly extracted trending Reddit tickers, invoke `robinhood-trading/get_equity_quotes` in a batch lookup to retrieve their real-time pricing data, day change percentages, volume, and market capitalization. Only proceed with symbols that are valid tradeable instruments.
 4. Extract the list of ticker symbols and available scan columns (price, % change, IV, relative options volume, market cap, etc.) from the scan results. Multiply the `"% Change"` ratio by 100 to get the correct percentage.
 5. Deduplicate across all scan, list, and Reddit results.
@@ -284,7 +284,7 @@ The `option-selector` agent handles the following protocol rules:
      - For option premiums $>\$2.00$ and $\le \$5.00$: Spread must be $\le \$0.25$ wide.
      - For option premiums $>\$5.00$: Spread must be $\le 10\%$ of the bid price.
 5. **Earnings Binary Event Guard / Volatility Shred Guard**:
-   - Compares the company's upcoming scheduled quarterly earnings date (retrieved via `get_earnings_results`) vs the selected option's expiration date.
+   - Compares the company's upcoming scheduled quarterly earnings date (retrieved via `get_earnings_results` and parsed intelligently to extract the earliest upcoming future event from multi-date ISO list entries) vs the selected option's expiration date.
    - Blocks contract recommendation with `BLOCKED BY EARNINGS RISK` if earnings occur before expiration.
 
 Upon receiving the selected contract from the `option-selector` subagent, output the details verbatim.
@@ -355,11 +355,11 @@ Present the analysis with KaTeX formulas where helpful. Keep the output concise,
 - **Ticker Analyses**: [FRESH (date) / STALE (date) / MISSING]
 
 ### 📊 GEX Regime Check
-- **Basket Gate**: [PASS/FAIL] (SPY: +X.XX%, QQQ: +Y.YY% - Threshold: SPY or QQQ Change > +0.50% to PASS)
-- **Bull:Bear Gate**: [PASS/FAIL] (Ratio: X.XX:X - Threshold: Ratio > 3.00:1 to PASS from [data/regime.json](data/regime.json))
-- **VIX Delta Gate**: [PASS/FAIL] (VIX Spot: X.XX - Threshold: VIX Spot < Prior Close, or daily change of UVXY/VXX < 0.00% to PASS)
-- **System Authorization**: [Track 1 OK / All Tracks OK / BLOCKED]
-- **HYG Overlay / Sector Drifts**: [Warning/Info on credit divergences, e.g. HYG Credit Overlay: +X.XX% - RISK MITIGATION TRIGGERED / PASS]
+- **Basket Gate**: [🟢 PASS / 🔴 FAIL] (SPY: +X.XX%, QQQ: +Y.YY% - Threshold: SPY or QQQ Change > +0.50% to PASS)
+- **Bull:Bear Gate**: [🟢 PASS / 🔴 FAIL] (Ratio: X.XX:X - Threshold: Ratio > 3.00:1 to PASS from [data/regime.json](data/regime.json))
+- **VIX Delta Gate**: [🟢 PASS / 🔴 FAIL] (VIX Spot: 15.03 - Threshold: VIX Spot < Prior Close, or daily change of UVXY/VXX < 0.00% to PASS)
+- **System Authorization**: [🟢 ALL TRACKS OK / 🟡 TRACK 1 OK / 🔴 BLOCKED]
+- **HYG Overlay / Sector Drifts**: [🟢 PASS / 🔴 CREDIT DIVERGENCE (Warning/Info on credit divergences, e.g. HYG Credit Overlay: +X.XX% - RISK MITIGATION TRIGGERED)]
 
 ### 🛡️ Active Portfolio Tracker & Exits (Current Positions)
 

@@ -1,0 +1,66 @@
+{
+  "data": {
+    "instruments": [
+      {
+        "id": "bzh-opt-1",
+        "strike_price": "25.93",
+        "type": "call",
+        "expiration_date": "2026-08-21"
+      },
+      {
+        "id": "bzh-opt-2",
+        "strike_price": "25.93",
+        "type": "put",
+        "expiration_date": "2026-08-21"
+      },
+      {
+        "id": "bzh-opt-3",
+        "strike_price": "29.17",
+        "type": "call",
+        "expiration_date": "2026-08-21"
+      },
+      {
+        "id": "bzh-opt-4",
+        "strike_price": "29.17",
+        "type": "put",
+        "expiration_date": "2026-08-21"
+      },
+      {
+        "id": "bzh-opt-5",
+        "strike_price": "32.41",
+        "type": "call",
+        "expiration_date": "2026-08-21"
+      },
+      {
+        "id": "bzh-opt-6",
+        "strike_price": "32.41",
+        "type": "put",
+        "expiration_date": "2026-08-21"
+      },
+      {
+        "id": "bzh-opt-7",
+        "strike_price": "35.65",
+        "type": "call",
+        "expiration_date": "2026-08-21"
+      },
+      {
+        "id": "bzh-opt-8",
+        "strike_price": "35.65",
+        "type": "put",
+        "expiration_date": "2026-08-21"
+      },
+      {
+        "id": "bzh-opt-9",
+        "strike_price": "38.89",
+        "type": "call",
+        "expiration_date": "2026-08-21"
+      },
+      {
+        "id": "bzh-opt-10",
+        "strike_price": "38.89",
+        "type": "put",
+        "expiration_date": "2026-08-21"
+      }
+    ]
+  }
+}

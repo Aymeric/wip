@@ -1,0 +1,66 @@
+{
+  "data": {
+    "instruments": [
+      {
+        "id": "qgen-opt-1",
+        "strike_price": "33.69",
+        "type": "call",
+        "expiration_date": "2026-08-21"
+      },
+      {
+        "id": "qgen-opt-2",
+        "strike_price": "33.69",
+        "type": "put",
+        "expiration_date": "2026-08-21"
+      },
+      {
+        "id": "qgen-opt-3",
+        "strike_price": "37.9",
+        "type": "call",
+        "expiration_date": "2026-08-21"
+      },
+      {
+        "id": "qgen-opt-4",
+        "strike_price": "37.9",
+        "type": "put",
+        "expiration_date": "2026-08-21"
+      },
+      {
+        "id": "qgen-opt-5",
+        "strike_price": "42.11",
+        "type": "call",
+        "expiration_date": "2026-08-21"
+      },
+      {
+        "id": "qgen-opt-6",
+        "strike_price": "42.11",
+        "type": "put",
+        "expiration_date": "2026-08-21"
+      },
+      {
+        "id": "qgen-opt-7",
+        "strike_price": "46.32",
+        "type": "call",
+        "expiration_date": "2026-08-21"
+      },
+      {
+        "id": "qgen-opt-8",
+        "strike_price": "46.32",
+        "type": "put",
+        "expiration_date": "2026-08-21"
+      },
+      {
+        "id": "qgen-opt-9",
+        "strike_price": "50.53",
+        "type": "call",
+        "expiration_date": "2026-08-21"
+      },
+      {
+        "id": "qgen-opt-10",
+        "strike_price": "50.53",
+        "type": "put",
+        "expiration_date": "2026-08-21"
+      }
+    ]
+  }
+}

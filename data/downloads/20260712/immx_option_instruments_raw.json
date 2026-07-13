@@ -1,0 +1,66 @@
+{
+  "data": {
+    "instruments": [
+      {
+        "id": "immx-opt-1",
+        "strike_price": "9.17",
+        "type": "call",
+        "expiration_date": "2026-08-21"
+      },
+      {
+        "id": "immx-opt-2",
+        "strike_price": "9.17",
+        "type": "put",
+        "expiration_date": "2026-08-21"
+      },
+      {
+        "id": "immx-opt-3",
+        "strike_price": "10.31",
+        "type": "call",
+        "expiration_date": "2026-08-21"
+      },
+      {
+        "id": "immx-opt-4",
+        "strike_price": "10.31",
+        "type": "put",
+        "expiration_date": "2026-08-21"
+      },
+      {
+        "id": "immx-opt-5",
+        "strike_price": "11.46",
+        "type": "call",
+        "expiration_date": "2026-08-21"
+      },
+      {
+        "id": "immx-opt-6",
+        "strike_price": "11.46",
+        "type": "put",
+        "expiration_date": "2026-08-21"
+      },
+      {
+        "id": "immx-opt-7",
+        "strike_price": "12.61",
+        "type": "call",
+        "expiration_date": "2026-08-21"
+      },
+      {
+        "id": "immx-opt-8",
+        "strike_price": "12.61",
+        "type": "put",
+        "expiration_date": "2026-08-21"
+      },
+      {
+        "id": "immx-opt-9",
+        "strike_price": "13.75",
+        "type": "call",
+        "expiration_date": "2026-08-21"
+      },
+      {
+        "id": "immx-opt-10",
+        "strike_price": "13.75",
+        "type": "put",
+        "expiration_date": "2026-08-21"
+      }
+    ]
+  }
+}

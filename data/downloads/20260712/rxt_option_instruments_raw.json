@@ -1,0 +1,66 @@
+{
+  "data": {
+    "instruments": [
+      {
+        "id": "rxt-opt-1",
+        "strike_price": "3.54",
+        "type": "call",
+        "expiration_date": "2026-08-21"
+      },
+      {
+        "id": "rxt-opt-2",
+        "strike_price": "3.54",
+        "type": "put",
+        "expiration_date": "2026-08-21"
+      },
+      {
+        "id": "rxt-opt-3",
+        "strike_price": "3.98",
+        "type": "call",
+        "expiration_date": "2026-08-21"
+      },
+      {
+        "id": "rxt-opt-4",
+        "strike_price": "3.98",
+        "type": "put",
+        "expiration_date": "2026-08-21"
+      },
+      {
+        "id": "rxt-opt-5",
+        "strike_price": "4.42",
+        "type": "call",
+        "expiration_date": "2026-08-21"
+      },
+      {
+        "id": "rxt-opt-6",
+        "strike_price": "4.42",
+        "type": "put",
+        "expiration_date": "2026-08-21"
+      },
+      {
+        "id": "rxt-opt-7",
+        "strike_price": "4.86",
+        "type": "call",
+        "expiration_date": "2026-08-21"
+      },
+      {
+        "id": "rxt-opt-8",
+        "strike_price": "4.86",
+        "type": "put",
+        "expiration_date": "2026-08-21"
+      },
+      {
+        "id": "rxt-opt-9",
+        "strike_price": "5.3",
+        "type": "call",
+        "expiration_date": "2026-08-21"
+      },
+      {
+        "id": "rxt-opt-10",
+        "strike_price": "5.3",
+        "type": "put",
+        "expiration_date": "2026-08-21"
+      }
+    ]
+  }
+}

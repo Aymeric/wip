@@ -1280,32 +1280,43 @@ def discover_earnings_date(symbol: str) -> Optional[str]:
             data = json.load(f)
         
         def parse_date(val):
-            if isinstance(val, str) and re.match(r"^\d{4}-\d{2}-\d{2}$", val):
-                return val
+            if isinstance(val, str):
+                # Try matching prefix YYYY-MM-DD to support full ISO timestamps
+                match = re.match(r"^(\d{4}-\d{2}-\d{2})", val)
+                if match:
+                    return match.group(1)
             return None
             
-        def find_date_in_dict(obj):
+        all_dates = []
+        def collect_dates(obj):
             if isinstance(obj, dict):
                 # Check priority keys
                 for key in ["report_date", "date", "expected_report_date", "earnings_date", "estimated_date"]:
                     if key in obj:
                         d = parse_date(obj[key])
                         if d:
-                            return d
+                            all_dates.append(d)
                 for val in obj.values():
-                    d = find_date_in_dict(val)
-                    if d:
-                        return d
+                    collect_dates(val)
             elif isinstance(obj, list):
                 for val in obj:
-                    d = find_date_in_dict(val)
-                    if d:
-                        return d
+                    collect_dates(val)
+                    
+        collect_dates(data)
+        if not all_dates:
             return None
             
-        result_date = find_date_in_dict(data)
-        if result_date:
-            return result_date
+        # Deduplicate and sort
+        unique_dates = sorted(list(set(all_dates)))
+        
+        # Find next upcoming (>= today)
+        today_str = datetime.today().strftime('%Y-%m-%d')
+        future_dates = [d for d in unique_dates if d >= today_str]
+        if future_dates:
+            return future_dates[0] # Earliest future date
+            
+        # Fallback to the latest past date or maximum date if no future/today dates exist
+        return unique_dates[-1]
     except Exception as e:
         print(f"Warning: Failed to parse discovered earnings file {latest_file}: {e}", file=sys.stderr)
     return None

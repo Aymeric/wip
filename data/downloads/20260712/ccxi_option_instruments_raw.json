@@ -1,0 +1,66 @@
+{
+  "data": {
+    "instruments": [
+      {
+        "id": "ccxi-opt-1",
+        "strike_price": "13.53",
+        "type": "call",
+        "expiration_date": "2026-08-21"
+      },
+      {
+        "id": "ccxi-opt-2",
+        "strike_price": "13.53",
+        "type": "put",
+        "expiration_date": "2026-08-21"
+      },
+      {
+        "id": "ccxi-opt-3",
+        "strike_price": "15.22",
+        "type": "call",
+        "expiration_date": "2026-08-21"
+      },
+      {
+        "id": "ccxi-opt-4",
+        "strike_price": "15.22",
+        "type": "put",
+        "expiration_date": "2026-08-21"
+      },
+      {
+        "id": "ccxi-opt-5",
+        "strike_price": "16.91",
+        "type": "call",
+        "expiration_date": "2026-08-21"
+      },
+      {
+        "id": "ccxi-opt-6",
+        "strike_price": "16.91",
+        "type": "put",
+        "expiration_date": "2026-08-21"
+      },
+      {
+        "id": "ccxi-opt-7",
+        "strike_price": "18.6",
+        "type": "call",
+        "expiration_date": "2026-08-21"
+      },
+      {
+        "id": "ccxi-opt-8",
+        "strike_price": "18.6",
+        "type": "put",
+        "expiration_date": "2026-08-21"
+      },
+      {
+        "id": "ccxi-opt-9",
+        "strike_price": "20.29",
+        "type": "call",
+        "expiration_date": "2026-08-21"
+      },
+      {
+        "id": "ccxi-opt-10",
+        "strike_price": "20.29",
+        "type": "put",
+        "expiration_date": "2026-08-21"
+      }
+    ]
+  }
+}

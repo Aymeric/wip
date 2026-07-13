@@ -1,0 +1,517 @@
+{
+  "data": {
+    "instruments": [
+      {
+        "id": "d45442e5-3f8e-4f05-946d-2583bc28fe3b",
+        "chain_id": "e7521c85-0276-4550-9c9e-77feccda7601",
+        "chain_symbol": "SLS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "1.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "70deecc0-a855-4c6c-baf8-733ace43789a",
+        "chain_id": "e7521c85-0276-4550-9c9e-77feccda7601",
+        "chain_symbol": "SLS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "2.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "1f3ce325-afa9-487f-92b3-7284d8174630",
+        "chain_id": "e7521c85-0276-4550-9c9e-77feccda7601",
+        "chain_symbol": "SLS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "3.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "cfec0c0f-b4ac-4c8e-afa0-4f41f8fd7f06",
+        "chain_id": "e7521c85-0276-4550-9c9e-77feccda7601",
+        "chain_symbol": "SLS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "4.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "e298ae7c-93d9-4636-8dd4-bba336a1e05f",
+        "chain_id": "e7521c85-0276-4550-9c9e-77feccda7601",
+        "chain_symbol": "SLS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "5.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "e30e474d-6ad7-4218-853b-af67fab8106c",
+        "chain_id": "e7521c85-0276-4550-9c9e-77feccda7601",
+        "chain_symbol": "SLS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "6.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "738aa3de-6771-431b-bda7-9d0a5686e74a",
+        "chain_id": "e7521c85-0276-4550-9c9e-77feccda7601",
+        "chain_symbol": "SLS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "7.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "c9b12a82-cf9b-4768-8497-3fdcd345ceac",
+        "chain_id": "e7521c85-0276-4550-9c9e-77feccda7601",
+        "chain_symbol": "SLS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "8.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "988fa744-25e7-4f13-812a-30b536f81f19",
+        "chain_id": "e7521c85-0276-4550-9c9e-77feccda7601",
+        "chain_symbol": "SLS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "9.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "b918a310-e60a-4bfc-b563-b6c0b294cf31",
+        "chain_id": "e7521c85-0276-4550-9c9e-77feccda7601",
+        "chain_symbol": "SLS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "10.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "17a5674b-8675-4b5f-b436-611cb2c573f5",
+        "chain_id": "e7521c85-0276-4550-9c9e-77feccda7601",
+        "chain_symbol": "SLS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "11.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "48f00260-0d8c-4e7a-8bef-1c283d4a88cb",
+        "chain_id": "e7521c85-0276-4550-9c9e-77feccda7601",
+        "chain_symbol": "SLS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "12.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "e0334317-5141-4625-9792-70e3e471cfb5",
+        "chain_id": "e7521c85-0276-4550-9c9e-77feccda7601",
+        "chain_symbol": "SLS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "13.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "aa0f0130-d05c-4404-96b5-03d7bb2116e6",
+        "chain_id": "e7521c85-0276-4550-9c9e-77feccda7601",
+        "chain_symbol": "SLS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "14.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "b20625a9-9af2-4c8a-af8f-4ad5373a8ead",
+        "chain_id": "e7521c85-0276-4550-9c9e-77feccda7601",
+        "chain_symbol": "SLS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "15.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "8c2c014a-bfb6-4f98-aab7-01aa723aa382",
+        "chain_id": "e7521c85-0276-4550-9c9e-77feccda7601",
+        "chain_symbol": "SLS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "16.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "9f5e11ae-03b2-43a4-9321-a0b6a4b5319b",
+        "chain_id": "e7521c85-0276-4550-9c9e-77feccda7601",
+        "chain_symbol": "SLS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "17.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "a57d55eb-37be-419b-b0d9-8f23e859a801",
+        "chain_id": "e7521c85-0276-4550-9c9e-77feccda7601",
+        "chain_symbol": "SLS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "18.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "2c8b016c-ee1c-4265-bc77-601192a76c79",
+        "chain_id": "e7521c85-0276-4550-9c9e-77feccda7601",
+        "chain_symbol": "SLS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "19.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "5ef73b75-0d46-4c6d-8cee-4f3f636960c8",
+        "chain_id": "e7521c85-0276-4550-9c9e-77feccda7601",
+        "chain_symbol": "SLS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "20.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "afd3bc7c-e5ea-43b9-afde-1463a208900c",
+        "chain_id": "e7521c85-0276-4550-9c9e-77feccda7601",
+        "chain_symbol": "SLS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "21.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "534c06be-aad7-425a-ab69-72c7f870e9fe",
+        "chain_id": "e7521c85-0276-4550-9c9e-77feccda7601",
+        "chain_symbol": "SLS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "22.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "488b295f-4c6b-41d5-9c5c-5cd727fc99f8",
+        "chain_id": "e7521c85-0276-4550-9c9e-77feccda7601",
+        "chain_symbol": "SLS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "23.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "fa8a0e5d-abfa-4d04-af71-cc8ea6ae7bc0",
+        "chain_id": "e7521c85-0276-4550-9c9e-77feccda7601",
+        "chain_symbol": "SLS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "24.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "925171a1-f651-46e8-ac90-76d924e6f578",
+        "chain_id": "e7521c85-0276-4550-9c9e-77feccda7601",
+        "chain_symbol": "SLS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "25.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "ef442cfa-1baa-4521-986e-f88e9deca9d9",
+        "chain_id": "e7521c85-0276-4550-9c9e-77feccda7601",
+        "chain_symbol": "SLS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "26.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "e19fecda-fa3d-4900-b9b3-842e849eb27b",
+        "chain_id": "e7521c85-0276-4550-9c9e-77feccda7601",
+        "chain_symbol": "SLS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "27.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "654e807b-99b2-4380-8f13-040646d64fc5",
+        "chain_id": "e7521c85-0276-4550-9c9e-77feccda7601",
+        "chain_symbol": "SLS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "28.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "62e355ee-49cd-441b-bbf2-67798cfb4054",
+        "chain_id": "e7521c85-0276-4550-9c9e-77feccda7601",
+        "chain_symbol": "SLS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "29.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "33630b78-0c5c-4043-8d0b-4f8a33952fd2",
+        "chain_id": "e7521c85-0276-4550-9c9e-77feccda7601",
+        "chain_symbol": "SLS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "30.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      }
+    ]
+  },
+  "guide": "Present chain_symbol, expiration_date, type, strike_price; flag state when not 'active' or tradability when not 'tradable'. Pass id to an order's leg.option_id. Quote sellout_datetime when the user asks \"when will Robinhood force-close this position?\" — it is the authoritative per-contract timestamp covering equity/index, AM/PM settle, and T-1 logic. underlying_type ('equity' or 'index') is informational; mention only when it affects strategy. When next is non-null, extract the cursor query param and call this tool again."
+}
