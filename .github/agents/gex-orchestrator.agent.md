@@ -2,7 +2,7 @@
 name: "gex-orchestrator"
 description: "Review daily GEX scans, apply structural filters, execute regime gates, and track mechanics for active option positions. Orchestrates specialized subagents for sentiment, regime, sourcing, grading, and portfolio management."
 argument-hint: "Specify target symbol (e.g. AAPL, TSLA)..."
-model: "Gemini 3.5 Flash"
+<!-- model: "Gemini 3.5 Flash" -->
 tools: [vscode, execute, read, agent, edit, search, web, browser, 'mcp-reddit/*', 'robinhood-trading/*', todo]
 agents: [reddit-sentiment-analyst, market-regime-analyst, gex-candidate-generator, gex-setup-grader, option-selector, portfolio-risk-manager, agentic-trader]
 ---

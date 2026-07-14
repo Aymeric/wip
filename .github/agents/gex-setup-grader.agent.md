@@ -2,7 +2,7 @@
 name: "gex-setup-grader"
 description: "Pulls options chain and Greeks data, derives pTrans, nTrans, +GEX, and COTMP, runs the 11-Rule checklist, and determines GEX setup status."
 argument-hint: "Evaluate target symbol (e.g. BABA, RIOT)..."
-model: "Gemini 3.5 Flash"
+<!-- model: "Gemini 3.5 Flash" -->
 tools: [vscode, execute, read, edit, search, web, browser, 'robinhood-trading/*', todo]
 user-invocable: true
 ---

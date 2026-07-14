@@ -2,7 +2,7 @@
 name: "GEX Market Regime Analysis"
 description: "Execute the daily Market Regime Gates by checking indices, sector ETF quotes, and VIX metrics. Determines market authorization for model strategies."
 argument-hint: "Evaluate regime gates..."
-model: "Gemini 3.5 Flash"
+<!-- model: "Gemini 3.5 Flash" -->
 tools: [vscode, execute, read, agent, edit, search, web, browser, 'robinhood-trading/*', todo]
 ---
 

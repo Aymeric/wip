@@ -2,7 +2,7 @@
 name: "portfolio-risk-manager"
 description: "Syncs option positions from Robinhood, evaluates exits in strict priority order (stops, stalling, time stops, targets), checks sizing weights, and provides defensive recommendations."
 argument-hint: "Evaluate holdings risks..."
-model: "Gemini 3.5 Flash"
+<!-- model: "Gemini 3.5 Flash" -->
 tools: [vscode, execute, read, edit, search, web, browser, 'robinhood-trading/*', todo]
 user-invocable: true
 ---

@@ -2,7 +2,7 @@
 name: "GEX Setup Candidate Sourcing"
 description: "Derive daily GEX candidates from Robinhood scanners, curated lists, and Reddit trending polls, applying baseline volume/price/market-cap screening buffers."
 argument-hint: "Source candidates..."
-model: "Gemini 3.5 Flash"
+<!-- model: "Gemini 3.5 Flash" -->
 tools: [vscode, execute, read, agent, edit, search, web, browser, 'robinhood-trading/*', 'mcp-reddit/*', todo]
 ---
 

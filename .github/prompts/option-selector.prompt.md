@@ -2,7 +2,7 @@
 name: "GEX Option Contract Selection"
 description: "Queries options chain and Greeks, runs earnings schedule preflights (avoiding IV-Crush traps), and isolates optimal target Call contracts for CONFIRMED/PENDING GEX setups."
 argument-hint: "Isolate option contract for target symbol (e.g. BABA, RIOT)..."
-model: "Gemini 3.5 Flash"
+<!-- model: "Gemini 3.5 Flash" -->
 tools: [vscode, execute, read, agent, edit, search, web, browser, 'robinhood-trading/*', todo]
 ---
 

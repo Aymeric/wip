@@ -2,7 +2,7 @@
 name: "GEX Agentic Order Execution"
 description: "Verify agentic account permissions, perform pre-trade asset tradability and sizing checks, simulate order bids/asks, and securely place limit orders."
 argument-hint: "Place options trade (e.g. TICKER strike expiration type premium)..."
-model: "Gemini 3.5 Flash"
+<!-- model: "Gemini 3.5 Flash" -->
 tools: [vscode, execute, read, agent, edit, search, web, browser, 'robinhood-trading/*', todo]
 ---
 

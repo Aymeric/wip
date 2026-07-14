@@ -1,7 +1,7 @@
 ---
 name: "agentic-trader"
 description: "Verify agentic account permissions, perform pre-trade asset tradability and sizing checks, simulate order bids/asks, and securely place limit orders."
-model: "Gemini 3.5 Flash"
+<!-- model: "Gemini 3.5 Flash" -->
 tools: [vscode, execute, read, edit, search, web, browser, 'robinhood-trading/*', todo]
 ---
 
