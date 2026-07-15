@@ -1,25 +1,25 @@
 {
-  "basket_gate": "FAIL",
+  "basket_gate": "PASS",
   "bull_bear_gate": "FAIL",
-  "vix_spot": 17.16,
+  "vix_spot": 16.5,
   "vix_bearish": true,
   "vix_delta_gate": "PASS",
-  "system_authorization": "BLOCKED",
-  "gates_passed": 1,
+  "system_authorization": "TRACK 1 OK",
+  "gates_passed": 2,
   "etf_details": {
     "SPY": {
       "Ticker": "SPY",
       "ETF Segment / Sector Name": "S&P 500 Broad Market",
-      "Price": 749.1,
-      "Daily Change %": -0.7749,
-      "Classification": "BEARISH"
+      "Price": 0.0,
+      "Daily Change %": 0.26,
+      "Classification": "BULLISH"
     },
     "QQQ": {
       "Ticker": "QQQ",
       "ETF Segment / Sector Name": "Nasdaq 100 Growth Index",
-      "Price": 711.71,
-      "Daily Change %": -1.9021,
-      "Classification": "BEARISH"
+      "Price": 0.0,
+      "Daily Change %": 0.77,
+      "Classification": "BULLISH"
     },
     "IWM": {
       "Ticker": "IWM",
@@ -120,7 +120,7 @@
       "Classification": "BEARISH"
     }
   },
-  "last_updated": "2026-07-13",
+  "last_updated": "2026-07-14",
   "monthly_pnl_dlr": 1202.74,
   "monthly_pnl_pct": 2.4054800000000003,
   "drawdown_gate_status": "PASS",

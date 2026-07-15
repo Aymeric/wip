@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "robinhood-trading": {
+      "type": "http",
+      "url": "https://agent.robinhood.com/mcp/trading"
+    },
+    "mcp-reddit": {
+        "type": "stdio",
+        "command": "npx",
+        "args": [
+            "-y",
+            "mcp-reddit"
+        ]
+    }
+  }
+}

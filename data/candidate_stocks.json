@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-07-13T22:22:30.941395Z",
+  "last_updated": "2026-07-15T04:01:30.278457Z",
   "source_scans": [
     "GEX Momentum Candidates",
     "High options volume and IV",
@@ -22,30 +22,8 @@
     "SLS",
     "WU"
   ],
-  "total": 37,
+  "total": 25,
   "candidates": [
-    {
-      "symbol": "TOI",
-      "source": "scanner",
-      "price": 5.88,
-      "chg_pct": 0.5128,
-      "iv": 0.9310581,
-      "relative_options_volume": 7.85905911418196,
-      "market_cap": 564903571.0,
-      "rsi": null,
-      "macd_hist": null
-    },
-    {
-      "symbol": "MAT",
-      "source": "scanner",
-      "price": 13.21,
-      "chg_pct": 0.2276,
-      "iv": 0.3642646,
-      "relative_options_volume": 4.735733628898858,
-      "market_cap": 3828246575.0,
-      "rsi": 39.71,
-      "macd_hist": -0.034
-    },
     {
       "symbol": "SHC",
       "source": "scanner",
@@ -91,50 +69,6 @@
       "macd_hist": 0.1699
     },
     {
-      "symbol": "RXT",
-      "source": "scanner",
-      "price": 4.42,
-      "chg_pct": 1.1442,
-      "iv": 1.5556174,
-      "relative_options_volume": 2.694109823678385,
-      "market_cap": 1638637930.0,
-      "rsi": null,
-      "macd_hist": null
-    },
-    {
-      "symbol": "DXYZ",
-      "source": "scanner",
-      "price": 27.84,
-      "chg_pct": 0.6872,
-      "iv": 0.7441732,
-      "relative_options_volume": 2.658116292461909,
-      "market_cap": 757376407.0,
-      "rsi": null,
-      "macd_hist": null
-    },
-    {
-      "symbol": "QGEN",
-      "source": "scanner",
-      "price": 42.11,
-      "chg_pct": 0.2858,
-      "iv": 0.3895846,
-      "relative_options_volume": 2.54600143949107,
-      "market_cap": 7837500000.0,
-      "rsi": null,
-      "macd_hist": null
-    },
-    {
-      "symbol": "ANGX",
-      "source": "scanner",
-      "price": 3.99,
-      "chg_pct": 0.7576,
-      "iv": 0.3697726,
-      "relative_options_volume": 2.3360768593579126,
-      "market_cap": 723636349.0,
-      "rsi": null,
-      "macd_hist": null
-    },
-    {
       "symbol": "VIK",
       "source": "scanner",
       "price": 101.79,
@@ -166,17 +100,6 @@
       "market_cap": 32405155925.0,
       "rsi": 100.0,
       "macd_hist": 0.1057
-    },
-    {
-      "symbol": "WULF",
-      "source": "scanner",
-      "price": 23.25,
-      "chg_pct": 0.2155,
-      "iv": 1.046183,
-      "relative_options_volume": 2.011011941816008,
-      "market_cap": 11308054958.0,
-      "rsi": null,
-      "macd_hist": null
     },
     {
       "symbol": "EQPT",
@@ -234,39 +157,6 @@
       "macd_hist": 0.0048
     },
     {
-      "symbol": "HSHP",
-      "source": "scanner",
-      "price": 15.5,
-      "chg_pct": 5.2989,
-      "iv": null,
-      "relative_options_volume": null,
-      "market_cap": 698251357.0,
-      "rsi": null,
-      "macd_hist": null
-    },
-    {
-      "symbol": "IPX",
-      "source": "scanner",
-      "price": 24.78,
-      "chg_pct": 4.3368,
-      "iv": null,
-      "relative_options_volume": null,
-      "market_cap": 809423615.0,
-      "rsi": null,
-      "macd_hist": null
-    },
-    {
-      "symbol": "CCXI",
-      "source": "scanner",
-      "price": 16.91,
-      "chg_pct": 4.1898,
-      "iv": null,
-      "relative_options_volume": null,
-      "market_cap": 854438000.0,
-      "rsi": null,
-      "macd_hist": null
-    },
-    {
       "symbol": "SEI",
       "source": "scanner",
       "price": 70.88,
@@ -309,28 +199,6 @@
       "market_cap": 6917934740.0,
       "rsi": 100.0,
       "macd_hist": 0.0307
-    },
-    {
-      "symbol": "IMMX",
-      "source": "scanner",
-      "price": 11.46,
-      "chg_pct": 3.3363,
-      "iv": null,
-      "relative_options_volume": null,
-      "market_cap": 783089461.0,
-      "rsi": null,
-      "macd_hist": null
-    },
-    {
-      "symbol": "BZH",
-      "source": "scanner",
-      "price": 32.41,
-      "chg_pct": 3.1837,
-      "iv": null,
-      "relative_options_volume": null,
-      "market_cap": 847621913.0,
-      "rsi": null,
-      "macd_hist": null
     },
     {
       "symbol": "MNSO",

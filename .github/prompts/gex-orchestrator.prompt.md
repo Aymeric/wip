@@ -1,5 +1,5 @@
 ---
-name: "GEX Options Trading System"
+name: "GEX Orchestrator"
 description: "Review daily GEX scans, apply structural filters, execute regime gates, and track mechanics for active option positions."
 argument-hint: "Specify target symbol (e.g. AAPL, TSLA)..."
 <!-- model: "Gemini 3.5 Flash" -->
