@@ -2,8 +2,7 @@
 name: "option-selector"
 description: "Queries options chain and Greeks, runs earnings schedule preflights (avoiding IV-Crush traps), and isolates optimal target Call contracts for CONFIRMED/PENDING GEX setups."
 argument-hint: "Isolate option contract for target symbol (e.g. BABA, RIOT)..."
-<!-- model: "Gemini 3.5 Flash" -->
-tools: [vscode, execute, read, edit, search, web, browser, 'robinhood-trading/*', todo]
+tools: [execute, read, edit, search, web, 'robinhood-trading/*', todo]
 user-invocable: true
 ---
 
@@ -16,8 +15,10 @@ Your job is to run the mechanical option selection filters: query live options c
 - Never invent or assume missing values. If a required input is unavailable, report the step as BLOCKED/UNKNOWN and explain why.
 - Strictly chunk options quotes queries into batches of at most **40 IDs** to prevent "Request-URI Too Large" (HTTP 414) errors.
 - Keep the process mechanical and auditable. Formulate all calculations and criteria explicitly.
-- Coordinate directly with the local Python engine in [src/gex_engine.py](../../src/gex_engine.py). If executing checks via the CLI, use:
-  `python3 src/gex_engine.py analyze <TICKER> --spot <spot_price> --ptrans <pTrans> --ntrans <nTrans> --gex <gex_price> --cotmp <cotmp> --db-change <db_change> [--target-delta <delta>] [--min-dte <days>] [--max-dte <days>] [--earnings-date <earnings_date>]`
+- Coordinate directly with the local Python engine in [src/gex_engine.py](../../src/gex_engine.py). If executing checks via the CLI, prefer using the highly optimized offline file inputs to let the engine perform GEX profile derivation, scoring, sorting, sizing simulation, and payoff projections automatically:
+  `python3 src/gex_engine.py analyze <TICKER> --spot <spot_price> --inst-file <inst_file_path> --quote-file <quote_file_path> --hist-file <hist_file_path> --db-change <db_change> [--target-delta <delta>] [--min-dte <days>] [--max-dte <days>] [--earnings-date <earnings_date>] [--net-liq <net_liq>]`
+  Otherwise, fallback to explicit parameter inputs if offline files are unavailable:
+  `python3 src/gex_engine.py analyze <TICKER> --spot <spot_price> --ptrans <pTrans> --ntrans <nTrans> --gex <gex_price> --cotmp <cotmp> --db-change <db_change> [--target-delta <delta>] [--min-dte <days>] [--max-dte <days>] [--earnings-date <earnings_date>] [--net-liq <net_liq>]`
 - Strictly adhere to the output formatting rules. Avoid any plain text filenames or line citation numbers without links. Every file reference or coordinate must be formatted as solid Markdown links, for example: [data/ticker_analyses.json](../../data/ticker_analyses.json). NO BACKTICKS ANYWHERE on file names or paths.
 
 ---
@@ -30,6 +31,11 @@ Your job is to run the mechanical option selection filters: query live options c
    - Isolate the expiration date closest to **30 to 45 calendar days** from today (or the custom target range set by custom `--min-dte` and `--max-dte` CLI arguments). Pre-filter to prioritize standard monthly expirations (typically the third Friday of the month); fallback to weekly expirations only if no monthlies exist in the target window. Exclude short-term weekly expirations under 14 days.
    - **Expiration Tie-Breakers**: If multiple expirations are at an equal distance from the 30-45 DTE window, select the standard monthly expiration date. If both are monthlies or neither is, choose the option expiration displaying higher aggregate open interest at near-the-money strikes.
 4. **Download Instruments**: Call `robinhood-trading/get_option_instruments(chain_symbol=TICKER, expiration_dates=chosen_date)` (paginate via cursor as needed) to fetch all strikes and contract IDs.
+5. **Identify Dated Raw Download Paths**: Determine the current date's download directory within [data/downloads/](../../data/downloads/) (e.g., `data/downloads/YYYYMMDD/` where YYYYMMDD matches the active session date, such as `20260717` for 2026-07-17). Ensure files downloaded during previous steps are organized correctly:
+   - Option Instruments file: `data/downloads/YYYYMMDD/<TICKER>_option_instruments_raw.json`
+   - Option Quotes file: `data/downloads/YYYYMMDD/<TICKER>_option_quotes_raw.json`
+   - Historical prices file: `data/downloads/YYYYMMDD/<TICKER>_historicals_raw.json`
+   These raw file paths can be passed as `--inst-file`, `--quote-file`, and `--hist-file` arguments to the CLI to leverage automated scoring, sorting, and payoff projections.
 
 ---
 
@@ -46,34 +52,34 @@ Your job is to run the mechanical option selection filters: query live options c
 ---
 
 ### Step 3: Retrieve Greeks & Quotes Safely
-1. **Retrieve Greeks Safely**: Chunk all retrieved target option instrument IDs (combining call contracts for our chosen expiration) into batches containing **at most 40 contract IDs** per query to prevent HTTP 414 URI errors.
-2. **Execute Quotes Fetch**: Query detailed quotes from `robinhood-trading/get_option_quotes` sequentially or in parallel batches. Save the raw quotes payload to [data/downloads/](../../data/downloads/).
+1. **Efficiency Check**: Check [data/downloads/](../../data/downloads/) for fresh (downloaded today) options quotes and greeks for the target ticker and expiration before making new API calls.
+2. **Retrieve Greeks Safely**: Chunk all retrieved target option instrument IDs (combining call contracts for our chosen expiration) into batches containing **at most 40 contract IDs** per query to prevent HTTP 414 URI errors.
+3. **Execute Quotes Fetch**: Query detailed quotes from `robinhood-trading/get_option_quotes` sequentially or in parallel batches. Save the raw quotes payload to [data/downloads/](../../data/downloads/).
 
 ---
 
 ### Step 4: Apply Mechanical Tiered Scoring & Sorting Framework
 To ensure complete mathematical alignment with [src/gex_engine.py](../../src/gex_engine.py), evaluate and score every eligible call contract based on liquidity compliance, strike placement, and delta targets:
 
-1. **Liquidity Gate Evaluation**:
+1. **Enforce Financial Constraints**:
+   - **Buying Power Gate**: If a `Buying Power Budget` was provided by the Orchestrator (from the Portfolio Risk Manager), filter out any contract where the **Ask Price x 100** exceeds the budget.
+2. **Liquidity Gate Evaluation**:
    - Compare Open Interest (OI) $\ge 500$ agreements.
    - Bid-Ask Spread validation:
      - Premium Mark $\le \$2.00$: Spread $\le \$0.15$ wide.
      - Premium Mark $\$2.01$ to $\$5.00$: Spread $\le \$0.25$ wide.
      - Premium Mark $>\$5.00$: Spread $\le 10\%$ of bid price (or ask/mark if bid is zero).
    - If both the Open Interest and Spread checks pass, the contract is **Liquidity Passed**. Otherwise, it **Fails**.
-
-2. **Preference Flags**:
+3. **Preference Flags**:
    - **Strike Preferred**: Contract strike is closest to At-The-Money (ATM) or slightly Out-Of-The-Money (OTM), specifically within $0.0\%$ to $+5.0\%$ above the underlier Spot price (i.e., `0.0 <= pct_above_spot <= 5.0`).
    - **Delta Preferred**: Contract Delta is close to the **0.45** target (specifically within the range of $0.40$ to $0.50$ inclusive, calculated as `target_delta - 0.05 <= delta <= target_delta + 0.05`).
-
-3. **Tiered Scoring System**:
+4. **Tiered Scoring System**:
    Assign each Call contract to one of four mutually exclusive Tiers (Lower Tier is superior):
    - **Tier 1 (Optimal Select)**: Liquidity Passed AND (Strike Preferred OR Delta Preferred).
    - **Tier 2 (Liquidity Compliant Only)**: Liquidity Passed but neither preference flag is met.
    - **Tier 3 (Speculative ATM/Delta)**: Liquidity Fails but (Strike Preferred OR Delta Preferred).
    - **Tier 4 (Illiquid Deficit)**: Liquidity Fails and neither preference flag is met.
-
-4. **Multi-Factor Sorting Order**:
+5. **Multi-Factor Sorting Order**:
    - Sort eligible contracts first by **Tier** (increasing/lower is better).
    - Sort second by distance from the ideal parameters:
      - If contract Delta is present, sort by **dist_to_ideal_delta** (absolute difference between contract Delta and the 0.45 target).
@@ -81,10 +87,14 @@ To ensure complete mathematical alignment with [src/gex_engine.py](../../src/gex
    - Sort third by **dist_to_atm** to break any remaining ties.
    - Selecting the top contract after sorting guarantees the absolute best option choice under current market conditions.
 
+*Note: The local CLI engine natively executes this Tiered Scoring and Multi-Factor Sorting process automatically when option chains and quotes are derived via the `--inst-file` and `--quote-file` arguments, guaranteeing absolute mathematical alignment and preventing manual calculation errors.*
+
 ---
 
 ### Step 5: Enforce Strike Boundaries
 - **Strict GEX Target Bound**: The selected option strike **must be strictly below** the `+GEX` (T1 target) price level retrieved from [data/ticker_analyses.json](../../data/ticker_analyses.json). This ensures positive structural drift room exists between the entry strike and the expected overhead resistance. If the top-sorted contract strike violates this bound, discard it and evaluate the next contract in sorted order.
+
+*Note: The CLI engine automatically handles this strike boundary check and discards any contracts violating the `+GEX` target boundary natively during options analysis.*
 
 ---
 
@@ -106,8 +116,22 @@ Present the finalized selection dashboard using the styling guidelines. Keep the
 - **Greeks / Attributes**: Delta: $D.DD$, Theta: $T.TT$, IV: $V.V\%$
 - **Liquidity Check**: Open Interest: $O$ contracts, Volume: $V$ (Status: 🟢 LIQUIDITY GATE PASSED / 🔴 LIQUIDITY FAILS)
 
-#### 🔌 Sizing Approval Information:
-- **Contract Price per Unit (x100)**: $C.CC per contract
-- **Broker Execution Method**: Limit order placed at Premium Mark or mid-price.
-- **Action Directive**: **[EXECUTE LIMIT ORDER / DO NOT EXECUTE / NO ENTRY]** (Include step-by-step reasoning based on safety guards).
+#### 🔌 Sizing Simulation Details:
+- **Portfolio Net Liq Reference**: $N,NNN.NN
+- **Single-Leg Max Sizing Allowed (3% Net Liq)**: $M,MMM.MM
+- **Estimated Sizing Recommendation**: **[K] contracts** at $P.PP per contract (Total Premium: $X,XXX.XX)
+
+#### 📊 Option Payoff Projection Matrix:
+[Paste the complete ASCII Option Payoff Projection Matrix table generated by the CLI here]
+
+#### 🔌 Action Directive:
+- **Action Recommendation**: **[EXECUTE LIMIT ORDER / DO NOT EXECUTE / NO ENTRY]** (Include step-by-step reasoning based on safety guards, buying power, and technical criteria).
 ```
+---
+
+### Step 7: Update Global Workflow State
+Finalize your execution by updating the session state:
+- If contract isolation is successful:
+  `python3 src/gex_engine.py update-workflow --agent "option-selector" --status "SUCCESS" --note "Isolated [Ticker] [Exp] $[Strike] Call"`
+- If option entry is blocked or fails:
+  `python3 src/gex_engine.py update-workflow --agent "option-selector" --status "BLOCKED" --note "Blocked: [Reason, e.g. Earnings IV-Crush Risk]"`

@@ -1,0 +1,21 @@
+{
+  "data_points": [
+    {
+      "end_time": "2026-06-19T03:59:59Z",
+      "number_of_trades": 1,
+      "rate_of_realized_gain": "-1",
+      "realized_gain": "-510",
+      "start_time": "2026-06-18T04:00:00Z"
+    },
+    {
+      "end_time": "2026-07-17T04:05:50Z",
+      "number_of_trades": 0,
+      "rate_of_realized_gain": null,
+      "realized_gain": null,
+      "start_time": "2026-07-17T04:00:00Z"
+    }
+  ],
+  "total_rate_of_return": "-0.0880097781050053",
+  "total_returns": "-2060.8",
+  "window": "month"
+}

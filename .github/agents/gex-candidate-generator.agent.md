@@ -1,9 +1,8 @@
 ---
 name: "gex-candidate-generator"
-description: "Derive daily GEX candidates from Robinhood scanners, curated lists, and Reddit trending polls, applying baseline volume/price/market-cap screening buffers."
+description: "Use when: Sourcing daily options candidate tickers from Robinhood scanners, curated lists (100 most popular, daily movers, IPO access), and Reddit boards, applying baseline filters, fetching underlier historical data/indicators, and syncing candidates back to GEX_DAILY_CANDIDATES watchlist."
 argument-hint: "Source candidates..."
-<!-- model: "Gemini 3.5 Flash" -->
-tools: [vscode, execute, read, edit, search, web, browser, 'robinhood-trading/*', 'mcp-reddit/*', todo]
+tools: [execute, read, edit, search, web, 'robinhood-trading/*', 'mcp-reddit/*', todo]
 user-invocable: false
 ---
 
@@ -53,17 +52,25 @@ Apply the baseline GEX filtering manually on the raw columns of the returned res
 - **Day Change %**: $\ge +0.30\%$ (column `"% Change"` or calculated/retrieved change from equity quotes). **Warning**: The raw value in `"% Change"` is a fraction/ratio (e.g., `0.003` means $+0.30\%$) — multiply by 100 before comparing to percent thresholds.
 - **Market CAP**: $\ge \$1$B (column `"Market cap"` or market cap from equity quotes).
 - **Active Hold Exclusions**: Read [data/active_positions.json](../../data/active_positions.json). Compare symbols and remove any ticker already tracked as an active option or equity holding from the pool (unless the user explicitly requests re-evaluation). Sort the excluded active positions alphabetically.
+- **Technical Alert Check (Overlay)**: For prioritized candidates, use the `robinhood-trading/get_equity_technical_indicators` tool to identify technical alerts (RSI overbought/oversold, MACD crossovers). Flag these alerts in the final report to prioritize tickers showing both technical and gamma alignment.
 
 ---
 
-### Step 5: Save State, Update Candidate DB, & Watchlist Synchronization
-1. **Fetch Historical Closes (for Technical Indicators)**:
-   - For each prioritized candidate, call `robinhood-trading/get_equity_historicals(symbols=[<TICKER>], interval="day", span="year")` to download the historical closes.
-   - Save the raw JSON payload to `data/downloads/YYYYMMDD/<TICKER>_historicals_raw.json`. This enables the CLI to calculate RSI and MACD.
-2. **Save Candidate DB**: Write the final candidate pool to [data/candidate_stocks.json](../../data/candidate_stocks.json) as a **full replacement** — do not merge with any prior contents.
+### Step 5: Save State, Update Candidate DB, & Technical Analysis
+1. **Fetch Underlier Historicals & Technical Indicators**:
+   - **Enforce Offline Metric Calculation**: The Python engine [src/gex_engine.py](../../src/gex_engine.py) relies on daily close data files matching `[<SYMBOL>_historicals_raw.json](../../data/downloads/)` inside the downloads directory to compute offline RSI and MACD metrics.
+   - For each prioritized candidate, call `robinhood-trading/get_equity_historicals` with:
+     - `symbol`: `<TICKER>`
+     - `interval`: `"day"`
+     - `span`: `"year"`
+   - Save the raw JSON price historicals payload to `[data/downloads/YYYYMMDD/<TICKER>_historicals_raw.json](../../data/downloads/)` inside the date-specific subfolder.
+   - **Fetch Technical Indicators**: Also query `robinhood-trading/get_equity_technical_indicators` to retrieve live indicators as a validator.
+     - **RSI Check**: Set `type="rsi"`, `interval="day"`, `period=14`, and `output="latest"`.
+     - **MACD Check**: Set `type="macd"`, `interval="day"`, `fast_period=12`, `slow_period=26`, `signal_period=9`, and `output="latest"`.
+     - Save this raw JSON indicators payload to `[data/downloads/YYYYMMDD/<TICKER>_technical_indicators_raw.json](../../data/downloads/)` inside the date-specific subfolder.
+2. **Save Candidate DB**: Write the final candidate pool to [data/candidate_stocks.json](../../data/candidate_stocks.json) as a **full replacement**.
    Using the virtual environment's Python, invoke:
-   `python3 src/gex_engine.py update-candidates` (which automatically discovers and parses any valid scans saved in the repository under [data/scans/](../../data/scans/) and calculates RSI and MACD for candidates where historical files exist).
-   - Optional CLI filter flags: `--min-rsi <float>`, `--max-rsi <float>`, `--macd-filter <bullish|bearish|none>` to restrict candidates.
+   `python3 src/gex_engine.py update-candidates`
 3. **Broker Watchlist Sync (The Mobile Bridge)**:
    - Call `robinhood-trading/get_watchlists` to check for the existence of watchlists named `"GEX_DAILY_CANDIDATES"` and `"GEX_ACTIVE_PORTFOLIO"`. If missing, create them using `robinhood-trading/create_watchlist`.
    - Clear existing stale tickers on `"GEX_DAILY_CANDIDATES"` by calling `robinhood-trading/remove_from_watchlist` in sequence (or as batches).
@@ -118,3 +125,8 @@ Format the candidate generation results following the visual guidelines:
 - Overwrote active pool inside [data/candidate_stocks.json](../../data/candidate_stocks.json)
 - **Synchronized Broker Watchlists**: Successfully cleared and synchronized candidate list back to your `"GEX_DAILY_CANDIDATES"` watchlist on Robinhood Mobile & Legend software.
 ```
+---
+
+### Step 7: Update Global Workflow State
+Finalize your execution by updating the session state:
+`python3 src/gex_engine.py update-workflow --agent "gex-candidate-generator" --status "SUCCESS" --note "Sourced [N] candidates from [Scans]"`

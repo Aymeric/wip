@@ -1707,8 +1707,8 @@ class TestGEXEngine(unittest.TestCase):
             opt_file = os.path.join(temp_dir, "active_positions.json")
             gex_engine.save_json(opt_file, {"options_positions": {}, "stocks_positions": {}})
             
-            scans_dir = os.path.join(temp_dir, "scans")
-            os.makedirs(scans_dir, exist_ok=True)
+            downloads_dir = os.path.join(temp_dir, "downloads")
+            os.makedirs(downloads_dir, exist_ok=True)
             mock_scan = {
                 "data": {
                     "result": {
@@ -1727,10 +1727,8 @@ class TestGEXEngine(unittest.TestCase):
                     }
                 }
             }
-            gex_engine.save_json(os.path.join(scans_dir, "test_scan.json"), mock_scan)
+            gex_engine.save_json(os.path.join(downloads_dir, "test_scan.json"), mock_scan)
             
-            downloads_dir = os.path.join(temp_dir, "downloads")
-            os.makedirs(downloads_dir, exist_ok=True)
             # Create a history with 40 days of closes (continuously going up => RSI around 100, MACD bullish)
             bars_data = [{"begins_at": f"2026-06-{i:02d}T00:00:00Z", "close_price": str(100.0 + i)} for i in range(1, 41)]
             gex_engine.save_json(os.path.join(downloads_dir, "msft_historicals_raw.json"), {"bars": bars_data})
@@ -1740,7 +1738,7 @@ class TestGEXEngine(unittest.TestCase):
             gex_engine.save_json(analyses_file, {})
             
             with patch('gex_engine.OPTIONS_FILE', opt_file), \
-                 patch('gex_engine.SCANS_DIR', scans_dir), \
+                 patch('gex_engine.DOWNLOADS_DIR', downloads_dir), \
                  patch('gex_engine.CANDIDATES_FILE', candidates_file), \
                  patch('gex_engine.ANALYSES_FILE', analyses_file), \
                  patch('gex_engine.persist_new_scans', return_value=[]), \

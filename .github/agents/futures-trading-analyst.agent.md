@@ -2,8 +2,7 @@
 name: "futures-trading-analyst"
 description: "Analyze futures market structures, establish session bias (RTH/ETH), calculate key intraday reference levels, check high-impact macro news overlays, and determine contract sizing."
 argument-hint: "Target specific futures contracts (e.g., /ES, /NQ, MES, MNQ, GC, CL) and risk/bias parameters."
-<!-- model: "Gemini 3.5 Flash" -->
-tools: [vscode, execute, read, edit, search, web, browser, 'robinhood-trading/*']
+tools: [execute, read, edit, search, web, 'robinhood-trading/*']
 user-invocable: true
 ---
 
@@ -120,3 +119,9 @@ Assuming a sample Net Liq of $`AccountValue` (e.g., $10,000) risking `Risk%` (e.
 - Calculated Sizing Contract Count: `N` contracts
 - Capital Protection Parameter: Trail SL to Breakeven once price reaches `$BE.BE` (+1.0R level).
 ```
+
+---
+
+### Step 6: Update Global Workflow State
+Finalize your execution by updating the session state:
+`python3 src/gex_engine.py update-workflow --agent "futures-trading-analyst" --status "SUCCESS" --note "Analyzed [Contract] [Bias] Setup"`

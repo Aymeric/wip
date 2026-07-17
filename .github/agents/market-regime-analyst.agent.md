@@ -2,8 +2,7 @@
 name: "market-regime-analyst"
 description: "Execute the daily Market Regime Gates by checking indices, sector ETF quotes, and VIX metrics. Determines market authorization for model strategies."
 argument-hint: "Evaluate regime gates..."
-<!-- model: "Gemini 3.5 Flash" -->
-tools: [vscode, execute, read, edit, search, web, browser, 'robinhood-trading/*', todo]
+tools: [execute, read, edit, search, web, 'robinhood-trading/*', todo]
 user-invocable: false
 ---
 
@@ -45,16 +44,19 @@ To calculate the **Bull:Bear Gate** reliably, query the daily percent change of 
 
 ---
 
-### Step 3: Grade Broad Market Regime
-Evaluate the three Daily Regime Gates to determine overall authorization:
+### Step 3: Grade Broad Market Regime & Account Drawdown
+Evaluate the three Daily Regime Gates and check portfolio drawdown health to determine overall authorization:
 
 1. **Basket Gate**: SPY or QQQ must be up more than $+0.5\%$ in the session (showing follow-through).
 2. **Bull:Bear Gate**: Ratio of bullish-to-bearish names among key Sector and Broad-Market ETFs must be $> 3.0:1$.
 3. **VIX Delta Gate**: VIX must be trending down (bearish on volatility = bullish for equities).
+4. **Account Drawdown Gate (System Blocker)**: Verify trailing 30-day realized P&L against Net Liquidation value.
+   - **Efficiency Rule**: Check if a fresh monthly realized P&L report (downloaded today) already exists at [data/downloads/](../../data/downloads/) before calling `get_realized_pnl`.
+   - If realized trailing 30-day drawdown exceeds **$10.00\%$**, flag a strict **MAX LOSS DRAWDOWN BLOCK** in [data/regime.json](../../data/regime.json) and suspend all candidate grading or order routing, overriding any passing regime gates.
 
 #### Track Authorisation Level:
-- **Track 1 (Mechanical P2P)**: Requires at least **2/3 gates** to run.
-- **Track 2 (B Continuation)**: Requires all **3/3 gates** to run.
+- **Track 1 (Mechanical P2P)**: Requires at least **2/3 gates** to run and no active Drawdown Block.
+- **Track 2 (B Continuation)**: Requires all **3/3 gates** to run and no active Drawdown Block.
 
 #### Credit Overlay Check:
 Check HYG and sector ETF positions as credit/rotation overlays. If HYG daily change is $< -0.3\%$ while equities are bullish (SPY/QQQ positive), warn the user to reduce sizing on new entries by $50\%$ due to credit/equity divergence. A daily HYG change between $-0.3\%$ and $0.0\%$ is considered flat (no warning).
@@ -63,8 +65,9 @@ Check HYG and sector ETF positions as credit/rotation overlays. If HYG daily cha
 
 ### Step 4: Persist State & Save Raw Artifacts
 1. **Save Downloaded Raw Data in Repo**: Copy and save any raw API quote payload downloaded during the session (such as index quotes, sector ETF quotes, HYG quotes) into the repository inside a date-specific raw API downloads folder (e.g., [data/downloads/20260710/etf_quotes.json](../../data/downloads/20260710/etf_quotes.json)).
-2. **Persist Regime State**: Use the GEX engine CLI or write/merge the calculated gates, daily change metrics, and authorization status directly into [data/regime.json](../../data/regime.json) as a flat dictionary, ensuring the CLI status and future checks can reference it:
+2. **Persist Regime State**: Use the GEX engine CLI or write/merge the calculated gates, daily change metrics, drawdown status, and authorization status directly into [data/regime.json](../../data/regime.json) as a flat dictionary, ensuring the CLI status and future checks can reference it:
    `python3 src/gex_engine.py update-regime --spy <SPY_pct> --qqq <QQQ_pct> --bulls <bull_count> --bears <bear_count> --vix-bearish <is_vix_bearish_bool> [--vix-spot <vix_price>]`
+   *(Also merge drawdown fields like `drawdown_gate_status`, `monthly_pnl_dlr`, `monthly_pnl_pct`, and `monthly_cnt` directly to the JSON dictionary).*
 
 ---
 
@@ -76,16 +79,23 @@ Format a concise regime summary following the styling instructions (e.g. green m
 ## Market Regime Report - [Current Date]
 
 ### 🔄 Regime Authorization Summary:
-- **Authorisation Status**: 🟢 ALL TRACKS OK / 🟡 TRACK 1 ONLY / 🔴 NO NEW ENTRIES
+- **Authorisation Status**: 🟢 ALL TRACKS OK / 🟡 TRACK 1 ONLY / 🔴 NO NEW ENTRIES (or 🔴 MAX LOSS DRAWDOWN BLOCK)
 - **Total Gates Passing**: $X/3$
   - Basket Gate: [🟢 PASS / 🔴 FAIL] (SPY: $+X.XX\%$, QQQ: $+Y.YY\%$)
   - Bull:Bear Gate: [🟢 PASS / 🔴 FAIL] (Ratio: $A.AA:1$ with $B$ bulls vs $C$ bears)
   - VIX Delta Gate: [🟢 PASS / 🔴 FAIL] (VIX: $V.VV$ / Proxy UVXY/VXX Change: $-X.XX\%$)
+- **Account Drawdown Gate**: [🟢 PASS / 🔴 MAX LOSS DRAWDOWN BLOCK] (Trailing 30-Day P&L: $-X.XX\%$ drawdown)
 
 ### ⚠️ Risk Overlay Indicators:
 - **HYG Credit Check**: [🟢 OK / 🔴 DIVERGENCE WARNING - Sizing reduced by 50%] (HYG: $-X.XX\%$)
 
 ### 💾 Persisted Artifacts:
 - Saved raw quotes to [data/downloads/](../../data/downloads/)
-- Updated active system regime gates in [data/regime.json](../../data/regime.json)
+- Updated active system regime gates and drawdown health in [data/regime.json](../../data/regime.json)
 ```
+
+---
+
+### Step 6: Update Global Workflow State
+Finalize your execution by updating the session state:
+`python3 src/gex_engine.py update-workflow --agent "market-regime-analyst" --status "SUCCESS" --note "Regime: [Status], Bull:Bear: [Ratio]"`

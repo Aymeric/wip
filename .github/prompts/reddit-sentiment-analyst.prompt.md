@@ -2,8 +2,7 @@
 name: "Reddit Sentiment Analysis"
 description: "Scan top Reddit financial subreddits (r/wallstreetbets, r/stocks, r/options) using mcp-reddit to analyze public sentiment against active positions and GEX candidate stocks."
 argument-hint: "Focus on specific tickers (e.g., BABA, OKLO, MARA) or analysis scope..."
-<!-- model: "Gemini 3.5 Flash" -->
-tools: [vscode, execute, read, agent, edit, search, web, browser, 'mcp-reddit/*', todo]
+tools: [agent]
 ---
 
 You are the user-facing interface for GEX Reddit Sentiment and Market Psychology Sweeps.

@@ -178,8 +178,10 @@ REGIME_FILE = "data/regime.json"
 ANALYSES_FILE = "data/ticker_analyses.json"
 OPTIONS_FILE = "data/active_positions.json"
 CANDIDATES_FILE = "data/candidate_stocks.json"
-SCANS_DIR = "data/scans"
+PERFORMANCE_FILE = "data/performance.json"
+DOWNLOADS_DIR = "data/downloads"
 SENTIMENT_FILE = "data/reddit_sentiment.json"
+WORKFLOW_STATE_FILE = "data/workflow_state.json"
 
 # Standard Mechanical Screener Baseline Filter Constants
 MIN_PRICE = 5.0
@@ -357,6 +359,18 @@ def get_regime_status() -> Dict[str, Any]:
     }
 
 
+def get_performance_status() -> Dict[str, Any]:
+    """Retrieves current portfolio performance and drawdown metrics."""
+    perf = load_json(PERFORMANCE_FILE, {})
+    return {
+        "monthly_pnl_dlr": perf.get("monthly_pnl_dlr", 0.0),
+        "monthly_pnl_pct": perf.get("monthly_pnl_pct", 0.0),
+        "drawdown_gate_status": perf.get("drawdown_gate_status", "PASS"),
+        "monthly_cnt": perf.get("monthly_cnt", 0),
+        "last_updated": perf.get("last_updated", "")
+    }
+
+
 def compute_regime_gates(spy_pct: float, qqq_pct: float, bull_count: int, bear_count: int, vix_dealer_delta_bearish: bool) -> Tuple[str, float, str, str, str, int]:
     """Mechanically computes the three Daily Regime Gates and system authorization.
 
@@ -398,10 +412,9 @@ def cmd_update_regime(args):
     etf_file = getattr(args, "etf_file", None)
     if not etf_file and spy_val is None:
         # Try to auto-discover latest ETF quotes file
-        downloads_dir = "data/downloads"
         etf_candidates = []
-        if os.path.exists(downloads_dir):
-            for root, dirs, files in os.walk(downloads_dir):
+        if os.path.exists(DOWNLOADS_DIR):
+            for root, dirs, files in os.walk(DOWNLOADS_DIR):
                 for filee in files:
                     if filee == "etf_quotes.json":
                         etf_candidates.append(os.path.join(root, filee))
@@ -628,17 +641,97 @@ def cmd_update_regime(args):
         "system_authorization": system_auth,
         "gates_passed": gates_passed,
         "etf_details": etf_details,
-        "last_updated": datetime.today().strftime('%Y-%m-%d'),
+        "last_updated": datetime.today().strftime('%Y-%m-%d')
+    }
+    
+    perf_data = {
         "monthly_pnl_dlr": monthly_pnl_dlr,
         "monthly_pnl_pct": monthly_pnl_pct,
         "drawdown_gate_status": drawdown_gate_status,
-        "monthly_cnt": monthly_cnt
+        "monthly_cnt": monthly_cnt,
+        "last_updated": datetime.today().strftime('%Y-%m-%d')
     }
     
     save_json(REGIME_FILE, regime_data)
+    save_json(PERFORMANCE_FILE, perf_data)
     
-    print(f"Regime gates recomputed and saved to {REGIME_FILE} ({gates_passed}/3 gates passed).\n")
+    print(f"Regime gates recomputed and saved to {REGIME_FILE} ({gates_passed}/3 gates passed).")
+    print(f"Portfolio performance metrics saved to {PERFORMANCE_FILE}.\n")
     cmd_status(args)
+
+
+def cmd_workflow(args):
+    """Aggregates all JSON state into a high-level system summary."""
+    regime = get_regime_status()
+    auth = regime.get("system_authorization", "BLOCKED")
+    state = load_json(WORKFLOW_STATE_FILE, {"current_phase": "Phase 0: Initialization", "subagents": {}, "notes": []})
+    
+    print(format_color(f"\n--- 🛰️ SYSTEM WORKFLOW STATUS ---", "36", bold=True))
+    print(f"Current Phase: {format_color(state['current_phase'], '33', bold=True)}")
+    
+    # 1. Regime Status
+    auth_color = "32" if "OK" in auth else "31"
+    print(f"\n[PHASE I] System Authorization: {format_color(auth, auth_color, bold=True)}")
+    print(f"  - Bull:Bear Ratio: {regime.get('bull_bear_ratio')} ({regime.get('bull_count')}B : {regime.get('bear_count')}R)")
+    print(f"  - VIX Delta Gate: {regime.get('vix_delta_gate')} (Spot: {regime.get('vix_spot')})")
+    print(f"  - Basket Gate: {regime.get('basket_gate')} (SPY: {regime.get('spy_pct'):+.2f}%, QQQ: {regime.get('qqq_pct'):+.2f}%)")
+
+    # 2. Portfolio Status
+    pos_data = load_json(OPTIONS_FILE, {"options_positions": {}, "stocks_positions": {}})
+    active_opts = pos_data.get("options_positions", {})
+    active_stocks = pos_data.get("stocks_positions", {})
+    print(f"\n[PHASE I] Active Portfolio: {len(active_opts)} Options | {len(active_stocks)} Stocks")
+    
+    # 3. Discovery Status
+    cand_data = load_json(CANDIDATES_FILE, {"candidates": []})
+    candidates = cand_data.get("candidates", [])
+    print(f"\n[PHASE II] Discovery: {len(candidates)} Candidate Tickers")
+    
+    # 4. Grading Status
+    analyses = load_json(ANALYSES_FILE, {})
+    confirmed = [sym for sym, d in analyses.items() if d.get("Signal Status", "").startswith("CONFIRMED")]
+    pending = [sym for sym, d in analyses.items() if d.get("Signal Status", "").startswith("PENDING")]
+    print(f"\n[PHASE III] Setup Grading: {len(confirmed)} CONFIRMED | {len(pending)} PENDING")
+    
+    if confirmed:
+        print(f"  - Confirmed: {', '.join(confirmed)}")
+
+    # 5. Agent Status
+    if state["subagents"]:
+        print(f"\n[PHASE LOG] Subagent Executions:")
+        for agent, info in state["subagents"].items():
+            s_color = "32" if info["status"] == "SUCCESS" else ("31" if info["status"] == "FAILED" else "33")
+            print(f"  - {agent:<25}: {format_color(info['status'], s_color)}")
+    
+    print(f"\n{format_color('--- END STATUS ---', '36')}\n")
+
+
+def cmd_update_workflow(args):
+    """Updates the workflow state file with current phase and subagent status."""
+    state = load_json(WORKFLOW_STATE_FILE, {
+        "current_phase": "Phase 0: Initialization",
+        "last_updated": None,
+        "subagents": {},
+        "notes": []
+    })
+    
+    if args.phase:
+        state["current_phase"] = args.phase
+    if args.agent and args.status:
+        state["subagents"][args.agent] = {
+            "status": args.status,
+            "timestamp": datetime.now(timezone.utc).isoformat()
+        }
+    if args.note:
+        state["notes"].append({
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "content": args.note
+        })
+        state["notes"] = state["notes"][-10:]
+        
+    state["last_updated"] = datetime.now(timezone.utc).isoformat()
+    save_json(WORKFLOW_STATE_FILE, state)
+    print(f"Workflow state updated: {state['current_phase']}")
 
 
 def cmd_status(args):
@@ -648,6 +741,7 @@ def cmd_status(args):
     today_utc = datetime.now(timezone.utc).strftime('%Y-%m-%d')
     files_to_check = {
         "Daily Regime": (REGIME_FILE, "run 'update-regime' subcommand"),
+        "Portfolio Performance": (PERFORMANCE_FILE, "run 'update-regime' or 'risk' subcommand"),
         "Candidates List": (CANDIDATES_FILE, "run 'update-candidates' subcommand"),
         "Active Options": (OPTIONS_FILE, "update options manually or via sync"),
         "Ticker Analyses": (ANALYSES_FILE, "run 'analyze' subcommand for candidate symbols")
@@ -725,10 +819,11 @@ def cmd_status(args):
     print(f"- **VIX Delta Gate**: {vixgate_status} (VIX Spot: {regime['vix_spot']:.2f})")
     
     # 30-Day Drawdown Gate Check
-    drawdown_gate_status = regime.get("drawdown_gate_status", "PASS")
-    monthly_pnl_dlr = regime.get("monthly_pnl_dlr", 0.0)
-    monthly_pnl_pct = regime.get("monthly_pnl_pct", 0.0)
-    monthly_cnt = regime.get("monthly_cnt", 0)
+    perf = get_performance_status()
+    drawdown_gate_status = perf.get("drawdown_gate_status", "PASS")
+    monthly_pnl_dlr = perf.get("monthly_pnl_dlr", 0.0)
+    monthly_pnl_pct = perf.get("monthly_pnl_pct", 0.0)
+    monthly_cnt = perf.get("monthly_cnt", 0)
     
     drawdown_color = "32" if drawdown_gate_status == "PASS" else "31"
     drawdown_fmt = format_color(drawdown_gate_status, drawdown_color, bold=True)
@@ -1242,16 +1337,16 @@ def calculate_macd(closes: List[float], fast_period: int = 12, slow_period: int 
 
 def find_latest_historical_closes(symbol: str) -> List[float]:
     """
-    Recursively scans the data/downloads/ directory for historical daily closes files
+    Recursively scans the DOWNLOADS_DIR directory for historical daily closes files
     matching the symbol (e.g. symbol_historicals_raw.json). Returns a chronological
     list of close prices.
     """
     symbol_upper = symbol.upper()
     matching_files = []
     
-    # Recursively scan data/downloads
-    if os.path.exists("data/downloads"):
-        for root, dirs, files in os.walk("data/downloads"):
+    # Recursively scan DOWNLOADS_DIR
+    if os.path.exists(DOWNLOADS_DIR):
+        for root, dirs, files in os.walk(DOWNLOADS_DIR):
             for file in files:
                 if file.endswith(".json") and symbol_upper in file.upper() and "HISTORICAL" in file.upper():
                     matching_files.append(os.path.join(root, file))
@@ -1460,15 +1555,14 @@ def derive_volatility_profile(hist_data, symbol, iv_sum, iv_count):
 
 def discover_earnings_date(symbol: str) -> Optional[str]:
     """
-    Search recursively inside data/downloads/ to locate any <ticker>_earnings_raw.json file.
+    Search recursively inside DOWNLOADS_DIR to locate any <ticker>_earnings_raw.json file.
     Parse its content to locate the next scheduled or estimated earnings date.
     """
     sym_lower = symbol.lower()
-    downloads_dir = "data/downloads"
-    if not os.path.exists(downloads_dir):
+    if not os.path.exists(DOWNLOADS_DIR):
         return None
     candidates = []
-    for root, dirs, files in os.walk(downloads_dir):
+    for root, dirs, files in os.walk(DOWNLOADS_DIR):
         for f in files:
             if f.lower() == f"{sym_lower}_earnings_raw.json" or f.lower() == f"{sym_lower}_earnings.json":
                 candidates.append(os.path.join(root, f))
@@ -2302,19 +2396,18 @@ def compute_exit_rule_state(spot, purchase_premium, mark_price, ptrans, ntrans, 
 def get_monthly_realized_pnl(net_liq: float) -> Tuple[float, float, str, int]:
     """
     Computes or retrieves the trailing 30-day realized P&L from raw files.
-    First checks for realized_pnl_monthly.json under data/downloads/, 
+    First checks for realized_pnl_monthly.json under DOWNLOADS_DIR, 
     otherwise falls back to parsing pnl_trade_history.json.
     Returns (realized_pnl_dollar, realized_pnl_pct, status_string, trade_count).
     """
     pnl_file = ""
     monthly_file = ""
-    downloads_dir = "data/downloads"
     
-    if os.path.exists(downloads_dir):
-        # Scan data/downloads/ to locate any saved files and sort them lexicographically
+    if os.path.exists(DOWNLOADS_DIR):
+        # Scan DOWNLOADS_DIR to locate any saved files and sort them lexicographically
         monthly_candidates = []
         pnl_candidates = []
-        for root, dirs, files in os.walk(downloads_dir):
+        for root, dirs, files in os.walk(DOWNLOADS_DIR):
             for filee in files:
                 if filee == "realized_pnl_monthly.json":
                     monthly_candidates.append(os.path.join(root, filee))
@@ -2333,7 +2426,7 @@ def get_monthly_realized_pnl(net_liq: float) -> Tuple[float, float, str, int]:
             with open(monthly_file, 'r') as f:
                 data = json.load(f)
             # Support multiple formats
-            res = data.get("realized_pnl", data.get("data", {}))
+            res = data.get("realized_pnl", data.get("data", data))
             if isinstance(res, dict):
                 pnl_raw = res.get("realized_gain_loss", res.get("total_realized_pnl", res.get("total_returns", 0.0)))
                 try:
@@ -3446,11 +3539,10 @@ def cmd_sync_pnl(args):
     """Syncs P&L trade history from retrieved file to detect closed positions, and moves closed positions to closed_positions.json."""
     pnl_file = args.pnl_file
     if not pnl_file or not os.path.exists(pnl_file):
-        # Scan data/downloads/ and sort lexicographically to find the latest trade history file
-        downloads_dir = "data/downloads"
+        # Scan DOWNLOADS_DIR and sort lexicographically to find the latest trade history file
         pnl_candidates = []
-        if os.path.exists(downloads_dir):
-            for root, dirs, files in os.walk(downloads_dir):
+        if os.path.exists(DOWNLOADS_DIR):
+            for root, dirs, files in os.walk(DOWNLOADS_DIR):
                 for filee in files:
                     if filee == "pnl_trade_history.json":
                         pnl_candidates.append(os.path.join(root, filee))
@@ -3459,7 +3551,7 @@ def cmd_sync_pnl(args):
             pnl_file = pnl_candidates[-1]
         else:
             # Fallback
-            pnl_file = "data/downloads/20260710/pnl_trade_history.json"
+            pnl_file = os.path.join(DOWNLOADS_DIR, "20260710", "pnl_trade_history.json")
             if not os.path.exists(pnl_file):
                 print(f"Error: P&L trade history file {args.pnl_file} not found and no local fallback found.", file=sys.stderr)
                 sys.exit(1)
@@ -3608,6 +3700,198 @@ def cmd_sync_pnl(args):
     print(f"Closed positions saved to {closed_file}. Active positions saved to {OPTIONS_FILE}.")
 
 
+def cmd_sync_positions(args):
+    """Syncs active options and equity positions from raw Robinhood downloads to active_positions.json."""
+    base_dir = args.base_dir
+    if not base_dir or not os.path.exists(base_dir):
+        # Scan DOWNLOADS_DIR for latest directory with positions
+        candidates = []
+        if os.path.exists(DOWNLOADS_DIR):
+            for d in os.listdir(DOWNLOADS_DIR):
+                d_path = os.path.join(DOWNLOADS_DIR, d)
+                if os.path.isdir(d_path):
+                    if any(f in os.listdir(d_path) for f in ["option_positions_raw.json", "equity_positions_raw.json"]):
+                        candidates.append(d_path)
+        if candidates:
+            candidates.sort()
+            base_dir = candidates[-1]
+        else:
+            print("Error: No raw positions files found in data/downloads/.", file=sys.stderr)
+            sys.exit(1)
+
+    print(f"Syncing active positions from: {base_dir}")
+    
+    # 1. Build Instrument Map for Options (Global scan for better coverage)
+    inst_map = {}
+    quote_map = {}
+    print("Building global instrument/quote map from downloads...")
+    if os.path.exists(DOWNLOADS_DIR):
+        for root, dirs, files in os.walk(DOWNLOADS_DIR):
+            for file in files:
+                if file.endswith("option_instruments_raw.json"):
+                    data = load_json(os.path.join(root, file), {})
+                    instruments = data.get("data", {}).get("instruments", []) or data.get("instruments", [])
+                    for inst in instruments:
+                        inst_map[inst["id"]] = {
+                            "strike": float(inst.get("strike_price") or inst.get("strike") or 0.0),
+                            "type": inst.get("type"),
+                            "expiration": inst.get("expiration_date")
+                        }
+                if file.endswith("option_quotes_raw.json"):
+                    data = load_json(os.path.join(root, file), {})
+                    quotes = data.get("data", {}).get("results", []) or data.get("results", []) or data.get("data", [])
+                    for q_item in quotes:
+                        q = q_item.get("quote", q_item)
+                        opt_id = q.get("instrument_id") or q.get("id") or q.get("instrument")
+                        if opt_id:
+                            quote_map[opt_id] = q
+
+    # 2. Load Existing Active Positions
+    options = load_json(OPTIONS_FILE, {"options_positions": {}, "stocks_positions": {}})
+    active_opts = options.get("options_positions", {})
+    active_stocks = options.get("stocks_positions", {})
+
+    # 3. Sync Equities
+    equity_file = os.path.join(base_dir, "equity_positions_raw.json")
+    new_stocks = 0
+    updated_stocks = 0
+    removed_stocks = 0
+    if os.path.exists(equity_file):
+        equity_data = load_json(equity_file, {})
+        raw_stocks = equity_data.get("data", {}).get("positions", []) or equity_data.get("positions", [])
+        
+        # Track which stocks are present in the raw data
+        present_stocks = set()
+        for rs in raw_stocks:
+            ticker = rs.get("symbol", "").upper()
+            if not ticker: continue
+            
+            shares = float(rs.get("quantity", 0.0))
+            avg_price = float(rs.get("average_buy_price", 0.0))
+            
+            if shares <= 0:
+                if ticker in active_stocks:
+                    active_stocks.pop(ticker)
+                    removed_stocks += 1
+                continue
+                
+            present_stocks.add(ticker)
+            if ticker in active_stocks:
+                active_stocks[ticker]["Shares"] = shares
+                active_stocks[ticker]["Average Buy Price"] = avg_price
+                active_stocks[ticker]["Asset Cost Basis"] = shares * avg_price
+                updated_stocks += 1
+            else:
+                active_stocks[ticker] = {
+                    "Ticker": ticker,
+                    "Shares": shares,
+                    "Average Buy Price": avg_price,
+                    "Current Price": avg_price,
+                    "Highest Price": avg_price,
+                    "Beta Sector Tag": "Equity",
+                    "Entry Date": datetime.today().strftime('%Y-%m-%d'),
+                    "Asset Cost Basis": shares * avg_price,
+                    "Current Value": shares * avg_price,
+                    "P&L (%)": 0.0,
+                    "P&L ($)": 0.0,
+                    "Sizing Risk Weight (%)": 0.0
+                }
+                new_stocks += 1
+        
+        # Optional: Remove active stocks NOT in the raw snapshot? 
+        # Conservative: only remove if explicitly 0.0 in snapshot.
+
+    # 4. Sync Options
+    opt_files = ["option_positions_raw.json"]
+    new_opts = 0
+    updated_opts = 0
+    removed_opts = 0
+    for of in opt_files:
+        opt_path = os.path.join(base_dir, of)
+        if os.path.exists(opt_path):
+            opt_data = load_json(opt_path, {})
+            raw_opts = opt_data.get("data", {}).get("positions", []) or opt_data.get("positions", [])
+            for ro in raw_opts:
+                opt_id = ro.get("option_id")
+                if not opt_id: continue
+                
+                underlier = ro.get("chain_symbol", "").upper()
+                qty = float(ro.get("quantity", 0.0))
+                avg_price = float(ro.get("average_price", 0.0)) / 100.0
+                ro_expiration = ro.get("expiration_date")
+                ro_type = ro.get("type")
+                
+                if qty <= 0:
+                    if opt_id in active_opts:
+                        active_opts.pop(opt_id)
+                        removed_opts += 1
+                    continue
+                
+                inst = inst_map.get(opt_id, {})
+                quote = quote_map.get(opt_id, {})
+                
+                strike = inst.get("strike")
+                opt_type = inst.get("type") or ro_type
+                expiration = inst.get("expiration") or ro_expiration
+                
+                mark = float(quote.get("mark_price") or avg_price)
+                delta = float(quote.get("delta") or 0.0)
+                gamma = float(quote.get("gamma") or 0.0)
+                oi = int(quote.get("open_interest") or 0)
+                iv = float(quote.get("implied_volatility") or 0.0)
+
+                if opt_id in active_opts:
+                    # Preserving existing metadata if strike/expiration are missing in sync
+                    if not active_opts[opt_id].get("Strike") or active_opts[opt_id]["Strike"] == "0.00":
+                        if strike: active_opts[opt_id]["Strike"] = f"{strike:.2f}"
+                    if not active_opts[opt_id].get("Expiration") or active_opts[opt_id]["Expiration"] == "1970-01-01":
+                        if expiration: active_opts[opt_id]["Expiration"] = expiration
+                    
+                    active_opts[opt_id]["Purchase Premium"] = avg_price
+                    active_opts[opt_id]["Mark Price"] = mark
+                    active_opts[opt_id]["Delta"] = str(delta)
+                    active_opts[opt_id]["Gamma"] = str(gamma)
+                    active_opts[opt_id]["Open Interest"] = oi
+                    active_opts[opt_id]["ImpVol"] = str(iv)
+                    active_opts[opt_id]["Asset Cost Basis"] = avg_price * 100.0 * qty
+                    active_opts[opt_id]["Current Value"] = mark * 100.0 * qty
+                    updated_opts += 1
+                else:
+                    active_opts[opt_id] = {
+                        "Option ID": opt_id,
+                        "Underlier": underlier,
+                        "Strike": f"{strike:.2f}" if strike else "0.00",
+                        "Expiration": expiration or "1970-01-01",
+                        "Type": opt_type or "call",
+                        "Purchase Premium": avg_price,
+                        "Delta": str(delta),
+                        "Gamma": str(gamma),
+                        "Mark Price": mark,
+                        "Open Interest": oi,
+                        "ImpVol": str(iv),
+                        "Asset Cost Basis": avg_price * 100.0 * qty,
+                        "Current Value": mark * 100.0 * qty,
+                        "P&L (%)": 0.0,
+                        "P&L ($)": 0.0,
+                        "Sizing Risk Weight (%)": 0.0,
+                        "Beta Sector Tag": "Technology/Beta",
+                        "Entry Date": datetime.today().strftime('%Y-%m-%d'),
+                        "Days Held": 1,
+                        "Stalling Days": 0,
+                        "Target Mode": "T1",
+                        "T2 Target": None
+                    }
+                    new_opts += 1
+
+    options["options_positions"] = active_opts
+    options["stocks_positions"] = active_stocks
+    save_json(OPTIONS_FILE, options)
+    
+    print(f"Sync complete. Equities: {new_stocks} new, {updated_stocks} updated, {removed_stocks} removed.")
+    print(f"Options: {new_opts} new, {updated_opts} updated, {removed_opts} removed.")
+    print(f"Active positions updated in {OPTIONS_FILE}.")
+
+
 def slugify(text):
     text = text.lower()
     text = re.sub(r'[^a-z0-9]+', '_', text)
@@ -3616,46 +3900,35 @@ def slugify(text):
 
 def persist_new_scans():
     """
-    Scans the current directory and all subdirectories in data/downloads/
-    for raw Robinhood scan downloads.
-    When a valid scan is found, it copies/persists it to the local scans/ directory
-    for offline analysis, using both a 'latest' filename and a timestamped file.
-    If the source file was in the current workspace root (cwd), it is deleted to
-    keep the root clean; otherwise (e.g. historical downloads under data/downloads),
-    the original raw file is preserved.
+    Scans the current directory for new raw Robinhood scan downloads.
+    When a valid scan is found, it moves it to the DOWNLOADS_DIR directory
+    to keep the root clean.
     """
     cwd = "."
-    os.makedirs(SCANS_DIR, exist_ok=True)
-    os.makedirs(os.path.join(SCANS_DIR, "history"), exist_ok=True)
+    os.makedirs(DOWNLOADS_DIR, exist_ok=True)
     persisted_files = []
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
-    # Gather search locations: list of (filepath, should_delete_after_copy)
+    # Gather search locations from current directory only
     search_paths = []
     
     # 1) Search current directory
     for item in os.listdir(cwd):
-        if item.endswith(".json") and item not in (REGIME_FILE, ANALYSES_FILE, OPTIONS_FILE, CANDIDATES_FILE):
+        # Skip known state files
+        if item.endswith(".json") and item not in (
+            os.path.basename(REGIME_FILE), 
+            os.path.basename(ANALYSES_FILE), 
+            os.path.basename(OPTIONS_FILE), 
+            os.path.basename(CANDIDATES_FILE),
+            os.path.basename(SENTIMENT_FILE),
+            os.path.basename(WORKFLOW_STATE_FILE)
+        ):
             search_paths.append((os.path.join(cwd, item), True))
             
-    # 2) Search data/downloads directory recursively
-    downloads_dir = "data/downloads"
-    if os.path.exists(downloads_dir):
-        for root, dirs, files in os.walk(downloads_dir):
-            for file in files:
-                if file.endswith(".json"):
-                    search_paths.append((os.path.join(root, file), False))
-
-    # Deduplicate search paths by resolving real absolute paths
-    unique_paths = {}
     for filepath, should_delete in search_paths:
-        if os.path.isfile(filepath):
-            abs_path = os.path.abspath(filepath)
-            if abs_path not in unique_paths:
-                unique_paths[abs_path] = (filepath, should_delete)
-
-    for abs_path, (filepath, should_delete) in unique_paths.items():
         try:
+            if not os.path.isfile(filepath):
+                continue
             with open(filepath, "r") as f:
                 data = json.load(f)
             
@@ -3674,27 +3947,20 @@ def persist_new_scans():
                 
                 if scan_title and scan_id:
                     slug_title = slugify(scan_title)
-                    latest_filename = f"{slug_title}.json"
                     timestamped_filename = f"{slug_title}_{timestamp}.json"
                     
-                    latest_path = os.path.join(SCANS_DIR, latest_filename)
-                    timestamped_path = os.path.join(SCANS_DIR, "history", timestamped_filename)
+                    target_path = os.path.join(DOWNLOADS_DIR, timestamped_filename)
                     
-                    # Copy file to persist it locally
-                    shutil.copy2(filepath, latest_path)
-                    shutil.copy2(filepath, timestamped_path)
-                    
-                    print(f"Persisted scan '{scan_title}' locally:")
-                    print(f"  -> {latest_path} (Latest)")
-                    print(f"  -> {timestamped_path} (Timestamped)")
+                    # Move file to downloads
+                    shutil.copy2(filepath, target_path)
+                    print(f"Persisted new scan '{scan_title}' to {target_path}")
                     
                     if should_delete:
                         os.remove(filepath)
                         print(f"  Removed raw temporary file: {filepath}")
                     
-                    persisted_files.append((scan_title, latest_path))
+                    persisted_files.append((scan_title, target_path))
         except Exception:
-            # Ignore non-matching or corrupted JSON files
             continue
             
     return persisted_files
@@ -3838,33 +4104,38 @@ def cmd_update_candidates(args):
                     "macd_hist": round(macd_hist, 4) if macd_hist is not None else None
                 }
 
-    # Automatically discover and process all offline scans under SCANS_DIR
+    # Automatically discover and process all offline scans recursively under SCANS_DIR
     scans_processed = []
-    if os.path.exists(SCANS_DIR):
-        for item in sorted(os.listdir(SCANS_DIR)):
-            if item.endswith(".json"):
-                full_path = os.path.join(SCANS_DIR, item)
-                if os.path.isfile(full_path):
-                    try:
-                        with open(full_path, 'r') as f:
-                            sdata = json.load(f)
-                        scan_result = sdata.get("data", {}).get("result", {})
-                        if not scan_result or not isinstance(scan_result, dict):
-                            scan_result = sdata.get("result", {})
-                        if not scan_result or not isinstance(scan_result, dict):
-                            scan_result = sdata
-                        if isinstance(scan_result, dict) and scan_result.get("scan_title"):
-                            title = scan_result.get("scan_title")
-                            process_scan_file(full_path, title)
-                            scans_processed.append(title)
-                    except Exception:
-                        continue
+    if os.path.exists(DOWNLOADS_DIR):
+        all_scan_files = []
+        for root, dirs, files in os.walk(DOWNLOADS_DIR):
+            for file in files:
+                if file.endswith(".json"):
+                    all_scan_files.append(os.path.join(root, file))
+        
+        # Sort files to ensure newer scans (by folder/filename date) are processed last
+        all_scan_files.sort()
+        
+        for full_path in all_scan_files:
+            try:
+                with open(full_path, 'r') as f:
+                    sdata = json.load(f)
+                scan_result = sdata.get("data", {}).get("result", {})
+                if not scan_result or not isinstance(scan_result, dict):
+                    scan_result = sdata.get("result", {})
+                if not scan_result or not isinstance(scan_result, dict):
+                    scan_result = sdata
+                if isinstance(scan_result, dict) and scan_result.get("scan_title"):
+                    title = scan_result.get("scan_title")
+                    process_scan_file(full_path, title)
+                    if title not in scans_processed:
+                        scans_processed.append(title)
+            except Exception:
+                continue
 
-    # Fallback to defaults if no dynamic scans were processed
+    # Summary of processed scans
     if not scans_processed:
-        process_scan_file(os.path.join(SCANS_DIR, "gex_momentum_candidates.json"), "GEX Momentum Candidates")
-        process_scan_file(os.path.join(SCANS_DIR, "high_options_volume_and_iv.json"), "High options volume and IV")
-        scans_processed = ["GEX Momentum Candidates", "High options volume and IV"]
+        print(format_color("Warning: No valid scan files discovered in DOWNLOADS_DIR recursively.", "33"))
     
     candidate_list = list(candidates.values())
     # Sort candidates by relative options volume if available, or day change % descending
@@ -4782,6 +5053,10 @@ def main():
     p_sync_pnl = subparsers.add_parser("sync-pnl", help="Sync trade history to detect closed positions and move them to closed_positions.json.")
     p_sync_pnl.add_argument("--pnl-file", type=str, default="", help="Path to raw Robinhood P&L trade history JSON file")
 
+    # sync-positions subcommand
+    p_sync_pos = subparsers.add_parser("sync-positions", help="Sync active options and equity positions from raw Robinhood downloads.")
+    p_sync_pos.add_argument("--base-dir", type=str, default="", help="Directory containing raw positions files (e.g. data/downloads/20260709)")
+
     # rankings subcommand
     p_rankings = subparsers.add_parser("rankings", help="Displays a beautiful ranked report of all historically analyzed ticker setups.")
     p_rankings.add_argument("--status", type=str, choices=["ALL", "CONFIRMED", "PENDING", "BLOCKED"], default="ALL", help="Filter by signal status (default: ALL)")
@@ -4790,6 +5065,16 @@ def main():
 
     # closed subcommand
     subparsers.add_parser("closed", help="Displays a beautiful execution history of all closed options and stocks positions.")
+
+    # workflow subcommand
+    subparsers.add_parser("workflow", help="Aggregates all JSON state into a high-level system summary.")
+    
+    # update-workflow subcommand
+    p_up_flow = subparsers.add_parser("update-workflow", help="Update the session workflow state.")
+    p_up_flow.add_argument("--phase", type=str, help="Set current phase (e.g. 'Phase I: Audit')")
+    p_up_flow.add_argument("--agent", type=str, help="Subagent name that just completed")
+    p_up_flow.add_argument("--status", type=str, choices=["SUCCESS", "FAILED", "PARTIAL", "BLOCKED"], help="Status of the subagent")
+    p_up_flow.add_argument("--note", type=str, help="Add a manual progress note")
 
     # payoff subcommand
     p_payoff = subparsers.add_parser("payoff", help="Runs an offline option payoff simulation scenario grid.")
@@ -4818,6 +5103,10 @@ def main():
     
     if args.command == "status":
         cmd_status(args)
+    elif args.command == "workflow":
+        cmd_workflow(args)
+    elif args.command == "update-workflow":
+        cmd_update_workflow(args)
     elif args.command == "update-regime":
         cmd_update_regime(args)
     elif args.command == "analyze":
@@ -4844,6 +5133,8 @@ def main():
         cmd_update_sentiment(args)
     elif args.command == "sync-pnl":
         cmd_sync_pnl(args)
+    elif args.command == "sync-positions":
+        cmd_sync_positions(args)
     elif args.command == "rankings":
         cmd_rankings(args)
     elif args.command == "closed":

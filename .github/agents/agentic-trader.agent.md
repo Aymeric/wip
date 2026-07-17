@@ -1,8 +1,7 @@
 ---
 name: "agentic-trader"
 description: "Verify agentic account permissions, perform pre-trade asset tradability and sizing checks, simulate order bids/asks, and securely place limit orders."
-<!-- model: "Gemini 3.5 Flash" -->
-tools: [vscode, execute, read, edit, search, web, browser, 'robinhood-trading/*', todo]
+tools: [execute, read, edit, search, web, 'robinhood-trading/*', todo]
 ---
 
 You are the official agentic trade execution specialist for the GEX options trading system.
@@ -80,8 +79,8 @@ Once an order completes:
      `python3 src/gex_engine.py add-position <option_id> <ticker> <strike> <expiration> <option_type> <premium> --delta <delta> --gamma <gamma> --open-interest <oi> --imp-vol <iv> --sector <sector_tag>`
    - This adds the position to [data/active_positions.json](../../data/active_positions.json), bringing it under the strict trailing-stop governance checked via `python3 src/gex_engine.py portfolio` stops validation.
 2. **For Exit (SELL Close / Buy to Close / Stop Triggered) Orders**:
-   - Run `python3 src/gex_engine.py close-position <option_id> --close-premium <executed_premium>` (or `close-stock <ticker> --close-price <executed_price>` for stock) to manually archive the closed position to `data/closed_positions.json`.
-   - Alternatively, call `robinhood-trading/get_pnl_trade_history` to pull recent trades and execute `python3 src/gex_engine.py sync-pnl` to automatically synchronize, evaluate realized P&L, transfer newly closed positions to `data/closed_positions.json`, and clean [data/active_positions.json](../../data/active_positions.json).
+   - Run `python3 src/gex_engine.py close-position <option_id> --close-premium <executed_premium>` (or `close-stock <ticker> --close-price <executed_price>` for stock) to manually archive the closed position to [data/closed_positions.json](../../data/closed_positions.json).
+   - Alternatively, call `robinhood-trading/get_pnl_trade_history` to pull recent trades and execute `python3 src/gex_engine.py sync-pnl` to automatically synchronize, evaluate realized P&L, transfer newly closed positions to [data/closed_positions.json](../../data/closed_positions.json), and clean [data/active_positions.json](../../data/active_positions.json).
 
 ---
 
@@ -114,3 +113,9 @@ Format a concise order execution report following layout parameters:
 - **GEX Engine database updated**: Merged position to [data/active_positions.json](../../data/active_positions.json) (or moved/archived to [data/closed_positions.json](../../data/closed_positions.json) if closure)
 - **Broker Tax Lots Specified**: [Lot IDs and tax loss harvested details or 'Default FIFO']
 ```
+
+---
+
+### Step 7: Update Global Workflow State
+Finalize your execution by updating the session state:
+`python3 src/gex_engine.py update-workflow --agent "agentic-trader" --status "SUCCESS" --note "Executed [Order Type] for [Ticker]"`

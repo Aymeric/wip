@@ -395,7 +395,7 @@ The `update-candidates` command runs an end-to-end ingestion and filtering pipel
 
 ```mermaid
 graph TD
-    A[Raw Robinhood Download] -->|Copy & Dedup| B[data/scans/ Directory]
+    A[Raw Robinhood Download] -->|Move & Dedup| B[data/downloads/ Directory]
     B -->|Ingest & Parse| C[Process Scans & Lists]
     R[Reddit Trending Tickers 30-50 posts/board] -.->|Query Quotes| C
     C -->|Price filter: $5.00 - $1,000.00 / Relaxed override: $3.00 - $1,500.00| D[Candidate Eligibility Checks]
@@ -410,7 +410,7 @@ graph TD
 When `update-candidates` is run, the engine:
 1. Searches the current directory and recursive [data/downloads](data/downloads) subdirectory for any new JSON files.
 2. Inspects their schemas to identify native Robinhood scanner data blocks.
-3. Translates, copies, and timestamps them into [data/scans](data/scans) and [data/scans/history](data/scans/history) respectively to establish offline local scan databases. It also dynamically discovers and processes any valid active scan files placed inside [data/scans](data/scans) (such as Top Gainers Today) automatically alongside standard ones.
+3. Translates and timestamps them into [data/downloads](data/downloads) to establish offline local scan databases. It also dynamically discovers and processes any valid active scan files placed inside dated subfolders in [data/downloads](data/downloads) (such as Top Gainers Today) automatically alongside standard ones.
 4. Custom filters and prioritizes the pooled candidate tickers, writing the consolidated output directly to [data/candidate_stocks.json](data/candidate_stocks.json).
 5. Deletes temporary JSON logs from the workspace root to preserve strict repository cleanliness.
 
@@ -612,7 +612,7 @@ python3 src/gex_engine.py analyze AAPL --spot 289.55 --ptrans 285.00 --ntrans 28
 ```bash
 python3 src/gex_engine.py update-candidates
 ```
-*(This scans the repository for raw temporary JSON downloads, formats and saves them inside the scans directory, filters and ranks candidates, and populates the database).*
+*(This scans the repository for raw temporary JSON downloads, formats and saves them inside the downloads directory, filters and ranks candidates, and populates the database).*
 
 #### Run mechanics and trailing stops on active options positions:
 ```bash

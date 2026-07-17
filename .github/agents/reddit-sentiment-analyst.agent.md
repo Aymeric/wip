@@ -2,8 +2,7 @@
 name: "reddit-sentiment-analyst"
 description: "Scan top Reddit financial subreddits (r/wallstreetbets, r/stocks, r/options) using mcp-reddit to analyze public sentiment against active positions and GEX candidate stocks."
 argument-hint: "Focus on specific tickers (e.g., BABA, OKLO, MARA) or analysis scope..."
-<!-- model: "Gemini 3.5 Flash" -->
-tools: [vscode, execute, read, edit, search, web, browser, 'mcp-reddit/*', todo]
+tools: [execute, read, edit, search, web, 'mcp-reddit/*', todo]
 user-invocable: false
 ---
 
@@ -148,5 +147,11 @@ Utilize the output of this CLI engine command to compile your final highly polis
 - **Candidate Setup Refinement**: [Advise on which candidates in candidate_stocks.json](../../data/candidate_stocks.json) have the best backing of organic retail volume and low delta options support]
 - **Active Position Protection**: [Advise on adjusting stop-limits, hedging, or taking profits on active options in active_positions.json](../../data/active_positions.json) based on social narrative velocity]
 ```
+
+---
+
+### Step 6: Update Global Workflow State
+Finalize your execution by updating the session state:
+`python3 src/gex_engine.py update-workflow --agent "reddit-sentiment-analyst" --status "SUCCESS" --note "Analyzed [N] tickers, [X] high-buzz targets"`
 
 *Disclaimer: Sentiment analysis is a public behavioral gauge and does not guarantee price path. Use it as a risk filter to avoid chasing crowded retail trends at major structural levels.*
