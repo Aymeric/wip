@@ -65,7 +65,7 @@ Check HYG and sector ETF positions as credit/rotation overlays. If HYG daily cha
 
 ### Step 4: Persist State & Save Raw Artifacts
 1. **Save Downloaded Raw Data in Repo**: Copy and save any raw API quote payload downloaded during the session (such as index quotes, sector ETF quotes, HYG quotes) into the repository inside a date-specific raw API downloads folder (e.g., [data/downloads/20260710/etf_quotes.json](../../data/downloads/20260710/etf_quotes.json)).
-2. **Persist Regime State**: Use the GEX engine CLI or write/merge the calculated gates, daily change metrics, drawdown status, and authorization status directly into [data/regime.json](../../data/regime.json) as a flat dictionary, ensuring the CLI status and future checks can reference it:
+2. **Persist Regime State via CLI Engine (Mandatory)**: Use the GEX engine CLI to recompute regime gates from raw inputs and persist the state. This ensures all gate logic and authorization transitions are handled by the core engine:
    `python3 src/gex_engine.py update-regime --spy <SPY_pct> --qqq <QQQ_pct> --bulls <bull_count> --bears <bear_count> --vix-bearish <is_vix_bearish_bool> [--vix-spot <vix_price>]`
    *(Also merge drawdown fields like `drawdown_gate_status`, `monthly_pnl_dlr`, `monthly_pnl_pct`, and `monthly_cnt` directly to the JSON dictionary).*
 

@@ -41,10 +41,20 @@ To ensure high-precision, low-noise scans, proceed using this improved dual-path
    - For tickers with high relative buzz, active threads, or interesting debates, download the actual comments and discussions by calling `mcp_reddit-mcp_reddit_get_post_comments` with the selected `post_id` and `sort` set to "top" or "confidence".
    - Extract the core concerns, emotional triggers, trade ideas, and retail conviction levels (e.g., short-term call buying vs long-term stock holds vs heavy panic/loss-porn comments).
 
+#### Advanced Reddit Linguistics: Sarcasm, Irony & Nuanced Sentiment Filters
+Retail forums—especially r/wallstreetbets—are heavily saturated with sarcasm, irony, self-deprecating humor, and highly emotional, non-literal language. To prevent misclassifications (such as marking a highly sarcastic post as bullish, or missing an ironic capitulation warning), apply these linguistic filters:
+- **Sarcasm & Irony Inversion**: If a user is praising a stock with highly exaggerated or mocking claims (e.g., "This company is down 98% this year, such a steal! It's literally a free money glitch 🤡" or "I'm sure my $200 weekly calls expiring tomorrow are going to print, easy generational wealth"), identify the literal phrasing as sarcastic and **invert** the tone to bearish/skeptical.
+- **Classic WSB Slang Decoding**:
+  - *"Literally cannot go tits up"* / *"Risk-free money"* -> Highly ironic. Signals extreme downside speculation, reckless risk-taking, or a bubble-like state. Treat as **extremely high-risk neutral or cautionary** ($S_{\text{Tone}} \le 0.00$, $S_{\text{Position}} \le 0.00$).
+  - *"Loss Porn"* -> Posting large screenshots of losses. When celebrated ironically with "One of us!" or "Highly regarded", it is a clear sign of retail **capitulation** (-0.30 comment polarity, but potentially a contrarian long indicator).
+  - *"Regards / Regarded"* -> Used sarcastically to describe foolish, impulsive, or high-risk trading behaviors. Indicates **extremely speculative retail backing** without solid underlying fundamentals.
+  - *"My wife's boyfriend"* -> Self-deprecating meme framing reckless financial choices. Signals **low-conviction or joke-tier speculative sentiment**.
+- **Double Negatives / Psychological Traps**: Be on the lookout for users using bullish-sounding phrases in a mocking, defeatist context (e.g., "Another amazing day of holding bags, loving this discount!"). Ensure the scoring reflects the actual despair rather than the literal positive words.
+
 ---
 
 ### Step 3: Quantify Social Sentiment Using the 5-Factor Scoring System
-To prevent subjective bias and ensure absolute reproducibility, calculate the sentiment score for each scanned asset using are strict 5-factor scoring system. Explicitly output this scoring breakdown for transparency.
+To prevent subjective bias and ensure absolute reproducibility, calculate the sentiment score for each scanned asset using are strict 5-factor scoring system. Apply the **Sarcasm and Emotional Intensity Calibration rules** to adjust individual factor scores before finalizing.
 
 Combined Sentiment Score $S = S_{\text{Tone}} + S_{\text{Comments}} + S_{\text{Position}} + S_{\text{Volume}} + S_{\text{Meme}}$ (Bounded exactly between $-1.00$ and $+1.00$):
 
@@ -54,25 +64,38 @@ Combined Sentiment Score $S = S_{\text{Tone}} + S_{\text{Comments}} + S_{\text{P
    - $+0.00$: Neutral, balanced, or strictly factual reporting.
    - $-0.15$: Moderately bearish or cautious/skeptical.
    - $-0.30$: Overwhelmingly bearish (bankruptcy fears, fraud accusations, trash stock, absolute doom posts).
+   *Sarcasm Rule*: If the post is sarcastic/mocking, invert the literal direction (e.g., literal +0.30 becomes a calibrated -0.30).
+
 2. **Comment Polarity Ratio ($S_{\text{Comments}}$)** - Range $[-0.30, +0.30]$:
    - $+0.30$: Clear bullish consensus (heavy "buy the dip" or "shorts are trapped" sentiments, no bears).
    - $+0.15$: Mostly positive comments but with some standard skepticism.
    - $+0.00$: Balanced split or dead discussion threads.
    - $-0.15$: Mostly negative/cautionary comments.
    - $-0.30$: Clear panic/capitulation consensus (heavy loss-porn sharing, "it's over", "I sold at a loss").
+   *Emotional Extreme Rule*: If comments exhibit extreme manic euphoria (hyperbolic target prices, chanting) or extreme despair (deleted accounts, panic), force this factor to $+0.30$ or $-0.30$ respectively to capture the absolute psychological boundaries.
+
 3. **Retail Positioning Conviction ($S_{\text{Position}}$)** - Range $[-0.20, +0.20]$:
    - $+0.20$: Buying highly leveraged short-term, out-of-the-money (OTM) Calls or YOLO call options.
    - $+0.10$: Accumulating common shares, buying ITM Calls/LEAPs, or selling Puts.
    - $+0.00$: No specific options/positioning discuss trends.
    - $-0.10$: Buying ITM Puts, writing Calls, or trimming common share lines.
    - $-0.20$: Buying hyper-leveraged OTM weekly Puts, panic selling common, or facing margin call liquidations.
+   *Speculative/Ironic Filter*: If OTM call buying is mentioned in a purely sarcastic or mock-YOLO context (e.g., "putting my student loan into $100 OTM weekly calls because I hate money"), discount the positioning conviction score from +0.20 to +0.00 or +0.10 to represent lack of serious capital/intent.
+
 4. **Upvote & Discussion Intensity ($S_{\text{Volume}}$)** - Range $[-0.10, +0.10]$:
    - $+0.10$: Massive thread traction (1000+ upvotes or WSB daily chat pinned highlight, high award rate).
    - $+0.05$: Active discussion on standard posts with moderate upvoting (50-500 upvotes).
    - $+0.00$: Barely discussed or neutral post engagement metric.
    - $-0.05$: Post actively downvoted or ignored.
    - $-0.10$: Active hate-posts getting high upvote scores, highlighting maximum collective retail disgust.
+
 5. **Meme & Emoji Density ($S_{\text{Meme}}$)** - Range $[-0.10, +0.10]$:
+   - $+0.10$: Heavy saturation of bullish hype symbols/phrases ("moon", "YOLO", 🚀, 💎🙌, 🐂, 🌕).
+   - $+0.05$: Minor or moderate bullish slang/hype references.
+   - $+0.00$: Strictly clinical/formal dictionary used without slang or emojis.
+   - $-0.05$: Minor bearish slang or warnings.
+   - $-0.10$: Saturated panic slang/bear emojis ("it's over", "scam", 📉, 🤡, 🚽, 🐻).
+   *Emoji Nuance Filter*: If bullish emojis are paired with sarcastic text (e.g., "to the moon 🚀🤡 on our way to $0"), calibrate $S_{\text{Meme}}$ as negative (-0.05 or -0.10) to match the ironic subtext.
    - $+0.10$: Heavy saturation of bullish hype symbols/phrases ("moon", "YOLO", 🚀, 💎🙌, 🐂, 🌕).
    - $+0.05$: Minor or moderate bullish slang/hype references.
    - $+0.00$: Strictly clinical/formal dictionary used without slang or emojis.
@@ -85,16 +108,12 @@ Combined Sentiment Score $S = S_{\text{Tone}} + S_{\text{Comments}} + S_{\text{P
 - **Low**: Isolated search hits (1 mention) with very low user interaction (<10 comments).
 - **None**: Zero matching search results or forum mentions found.
 
-#### Persist Findings to Cache:
-Save the metrics to the local database at [data/reddit_sentiment.json](../../data/reddit_sentiment.json) so the GEX engine dashboard can ingest them. Always invoke the GEX engine update command for each ticker, providing all 5-factor scoring components:
+#### Persist Findings via CLI Engine (Mandatory):
+Save the metrics to the local database at [data/reddit_sentiment.json](../../data/reddit_sentiment.json) by invoking the GEX engine update command for each ticker. This ensures all 5-factor scoring components are validated and persisted correctly by the core engine:
+
 `python3 src/gex_engine.py update-sentiment <TICKER> --score <sentiment_score> --buzz <buzz_volume> --narrative "<narrative>" --tone <tone_score> --comments <comments_score> --position <position_score> --volume-score <volume_score> --meme <meme_score>`
-or edit the JSON file [data/reddit_sentiment.json](../../data/reddit_sentiment.json) directly. Note that when writing or running the command:
-1. `--tone` must be between `-0.30` and `+0.30`
-2. `--comments` must be between `-0.30` and `+0.30`
-3. `--position` must be between `-0.20` and `+0.20`
-4. `--volume-score` must be between `-0.10` and `+0.10`
-5. `--meme` must be between `-0.10` and `+0.10`
-6. The sum of these 5 components must match the overall `--score` within $\pm0.02$.
+
+*Note: Always use this CLI command instead of manual JSON edits to ensure data integrity.*
 
 ---
 

@@ -3990,7 +3990,11 @@ def cmd_update_candidates(args):
     if active_positions:
         print(f"Loaded active positions to exclude: {active_positions}")
         
-    candidates = {}
+    # Load existing candidates to preserve those manually added or sourced from Reddit
+    existing_data = load_json(CANDIDATES_FILE, {"candidates": []})
+    candidates = {c["symbol"]: c for c in existing_data.get("candidates", []) if c.get("source") == "reddit"}
+    if candidates:
+        print(f"Preserving {len(candidates)} existing Reddit-sourced candidates.")
     
     min_price = getattr(args, "min_price", MIN_PRICE)
     max_price = getattr(args, "max_price", MAX_PRICE)
@@ -4083,6 +4087,8 @@ def cmd_update_candidates(args):
 
             # Deduplicate or merge
             if ticker in candidates:
+                # If it's already a Reddit candidate, we just update metrics but keep the source as reddit
+                # (or maybe we should mark it as both? For now, we keep the original source if it was reddit)
                 if iv is not None:
                     candidates[ticker]["iv"] = iv
                 if rel_opt_vol is not None:
@@ -4091,6 +4097,10 @@ def cmd_update_candidates(args):
                     candidates[ticker]["rsi"] = round(rsi_val, 2)
                 if macd_hist is not None:
                     candidates[ticker]["macd_hist"] = round(macd_hist, 4)
+                # Ensure latest price/change from scanner is used
+                candidates[ticker]["price"] = round(price, 2)
+                candidates[ticker]["chg_pct"] = round(chg_pct, 4)
+                candidates[ticker]["market_cap"] = market_cap
             else:
                 candidates[ticker] = {
                     "symbol": ticker,

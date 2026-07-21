@@ -1,9 +1,7 @@
 {
-  "last_updated": "2026-07-17T03:56:32.236247Z",
+  "last_updated": "2026-07-21T02:05:10.660994Z",
   "source_scans": [
-    "Daily Gainers 2026-07-16",
     "GEX Momentum Candidates",
-    "High Options Volume/IV 2026-07-16",
     "High options volume and IV",
     "Top Gainers Today"
   ],
@@ -24,13 +22,79 @@
     "SLS",
     "WU"
   ],
-  "total": 86,
+  "total": 153,
   "candidates": [
+    {
+      "symbol": "ACHR",
+      "source": "scanner",
+      "price": 5.39,
+      "chg_pct": 1.5066,
+      "iv": 0.7448703,
+      "relative_options_volume": 5.445203222118773,
+      "market_cap": 3387120062.0,
+      "rsi": null,
+      "macd_hist": null
+    },
+    {
+      "symbol": "PRMB",
+      "source": "scanner",
+      "price": 24.55,
+      "chg_pct": 0.9872,
+      "iv": 0.3690501,
+      "relative_options_volume": 5.183997317997002,
+      "market_cap": 9006397708.0,
+      "rsi": null,
+      "macd_hist": null
+    },
+    {
+      "symbol": "PLOW",
+      "source": "scanner",
+      "price": 47.07,
+      "chg_pct": 1.751,
+      "iv": 0.3993639,
+      "relative_options_volume": 4.964270941439021,
+      "market_cap": 1031846067.0,
+      "rsi": null,
+      "macd_hist": null
+    },
+    {
+      "symbol": "SHOP",
+      "source": "scanner",
+      "price": 124.89,
+      "chg_pct": 0.3294,
+      "iv": 0.6141987,
+      "relative_options_volume": 4.234539743108733,
+      "market_cap": 160338203611.0,
+      "rsi": null,
+      "macd_hist": null
+    },
+    {
+      "symbol": "SHC",
+      "source": "scanner",
+      "price": 18.49,
+      "chg_pct": 0.5438,
+      "iv": 0.3927208,
+      "relative_options_volume": 4.180894308943089,
+      "market_cap": 4984719055.0,
+      "rsi": 86.1,
+      "macd_hist": 0.0179
+    },
+    {
+      "symbol": "TSLA",
+      "source": "scanner",
+      "price": 371.18,
+      "chg_pct": 0.4356,
+      "iv": 0.4769983,
+      "relative_options_volume": 4.140983220746028,
+      "market_cap": 1430329879031.0,
+      "rsi": null,
+      "macd_hist": null
+    },
     {
       "symbol": "MARA",
       "source": "scanner",
-      "price": 13.78,
-      "chg_pct": 14.6007,
+      "price": 13.42,
+      "chg_pct": 1.5129,
       "iv": 0.9051008,
       "relative_options_volume": 3.5163497871381955,
       "market_cap": 4582871446.0,
@@ -38,43 +102,153 @@
       "macd_hist": -0.3104
     },
     {
-      "symbol": "PENG",
+      "symbol": "RUN",
       "source": "scanner",
-      "price": 81.49,
-      "chg_pct": 3.8486,
-      "iv": 1.600234,
-      "relative_options_volume": 3.1676982345410125,
-      "market_cap": 3182122489.0,
+      "price": 12.05,
+      "chg_pct": 0.3331,
+      "iv": 0.7813771,
+      "relative_options_volume": 3.2749251500147096,
+      "market_cap": 2910301301.0,
       "rsi": null,
       "macd_hist": null
     },
     {
-      "symbol": "AM",
+      "symbol": "AVGO",
       "source": "scanner",
-      "price": 23.37,
-      "chg_pct": 2.2757,
-      "iv": 0.233356,
-      "relative_options_volume": 2.634380496261576,
-      "market_cap": 10649051600.0,
+      "price": 392.04,
+      "chg_pct": 0.8619,
+      "iv": 0.5168624145336074,
+      "relative_options_volume": 3.2443657767537455,
+      "market_cap": 1764015585814.0,
+      "rsi": 50.17,
+      "macd_hist": 0.5895
+    },
+    {
+      "symbol": "PENG",
+      "source": "scanner",
+      "price": 88.35,
+      "chg_pct": 12.5908,
+      "iv": 1.600234,
+      "relative_options_volume": 3.1676982345410125,
+      "market_cap": 4021014590.0,
+      "rsi": null,
+      "macd_hist": null
+    },
+    {
+      "symbol": "OKLO",
+      "source": "scanner",
+      "price": 49.64,
+      "chg_pct": 0.751,
+      "iv": 0.8871929,
+      "relative_options_volume": 3.1401495487634317,
+      "market_cap": 8226293865.0,
+      "rsi": 100.0,
+      "macd_hist": 0.0302
+    },
+    {
+      "symbol": "WDFC",
+      "source": "scanner",
+      "price": 276.96,
+      "chg_pct": 15.6796,
+      "iv": 0.5353319,
+      "relative_options_volume": 3.050261256281706,
+      "market_cap": 3317967579.0,
+      "rsi": 100.0,
+      "macd_hist": 0.1699
+    },
+    {
+      "symbol": "GNW",
+      "source": "scanner",
+      "price": 10.15,
+      "chg_pct": 0.495,
+      "iv": 0.405998,
+      "relative_options_volume": 2.895044960547513,
+      "market_cap": 3864563393.0,
+      "rsi": null,
+      "macd_hist": null
+    },
+    {
+      "symbol": "RCL",
+      "source": "scanner",
+      "price": 282.97,
+      "chg_pct": 0.719,
+      "iv": 0.5439675,
+      "relative_options_volume": 2.8714334008003592,
+      "market_cap": 75700714490.0,
+      "rsi": 100.0,
+      "macd_hist": 0.0885
+    },
+    {
+      "symbol": "OLLI",
+      "source": "scanner",
+      "price": 62.26,
+      "chg_pct": 0.6141,
+      "iv": 0.4463409,
+      "relative_options_volume": 2.6783141160537216,
+      "market_cap": 4112637454.0,
+      "rsi": null,
+      "macd_hist": null
+    },
+    {
+      "symbol": "CIFR",
+      "source": "scanner",
+      "price": 20.82,
+      "chg_pct": 1.3632,
+      "iv": 1.1323681,
+      "relative_options_volume": 2.6762117809665296,
+      "market_cap": 7176768161.0,
+      "rsi": null,
+      "macd_hist": null
+    },
+    {
+      "symbol": "BMNR",
+      "source": "scanner",
+      "price": 16.72,
+      "chg_pct": 0.5412,
+      "iv": 0.85999,
+      "relative_options_volume": 2.6287189003606044,
+      "market_cap": 9464622121.0,
+      "rsi": null,
+      "macd_hist": null
+    },
+    {
+      "symbol": "ONON",
+      "source": "scanner",
+      "price": 37.89,
+      "chg_pct": 0.6375,
+      "iv": 0.4426683,
+      "relative_options_volume": 2.5955479216730923,
+      "market_cap": 12399866215.0,
       "rsi": null,
       "macd_hist": null
     },
     {
       "symbol": "ALHC",
       "source": "scanner",
-      "price": 20.33,
-      "chg_pct": 1.4978,
+      "price": 21.55,
+      "chg_pct": 7.5886,
       "iv": 0.6322041,
       "relative_options_volume": 2.58521975695793,
-      "market_cap": 4976083119.0,
+      "market_cap": 4140878474.0,
       "rsi": null,
       "macd_hist": null
     },
     {
+      "symbol": "ANET",
+      "source": "scanner",
+      "price": 182.38,
+      "chg_pct": 0.7346,
+      "iv": 0.7806345175627946,
+      "relative_options_volume": 2.5492306870963386,
+      "market_cap": 209601344649.0,
+      "rsi": 60.2,
+      "macd_hist": 0.8049
+    },
+    {
       "symbol": "BABA",
       "source": "scanner",
-      "price": 110.7,
-      "chg_pct": 1.5783,
+      "price": 110.88,
+      "chg_pct": 1.7434,
       "iv": 0.46836790145041995,
       "relative_options_volume": 2.5290627101732555,
       "market_cap": 234336289640.0,
@@ -82,13 +256,222 @@
       "macd_hist": null
     },
     {
-      "symbol": "ROL",
+      "symbol": "HDB",
       "source": "scanner",
-      "price": 46.47,
-      "chg_pct": 2.2217,
-      "iv": 0.3243098,
-      "relative_options_volume": 2.4919065156655673,
-      "market_cap": 21068849892.0,
+      "price": 23.7,
+      "chg_pct": 0.4237,
+      "iv": 0.3877391,
+      "relative_options_volume": 2.518432860931381,
+      "market_cap": 133787274881.0,
+      "rsi": null,
+      "macd_hist": null
+    },
+    {
+      "symbol": "TEM",
+      "source": "scanner",
+      "price": 48.74,
+      "chg_pct": 0.6817,
+      "iv": 0.7735308,
+      "relative_options_volume": 2.489942741853274,
+      "market_cap": 9421763323.0,
+      "rsi": null,
+      "macd_hist": null
+    },
+    {
+      "symbol": "CLSK",
+      "source": "scanner",
+      "price": 14.56,
+      "chg_pct": 0.9709,
+      "iv": 0.9057418,
+      "relative_options_volume": 2.452800768547211,
+      "market_cap": 3343610136.0,
+      "rsi": null,
+      "macd_hist": null
+    },
+    {
+      "symbol": "MU",
+      "source": "scanner",
+      "price": 886.0,
+      "chg_pct": 2.3733,
+      "iv": 1.01571,
+      "relative_options_volume": 2.428869941228385,
+      "market_cap": 958798315541.0,
+      "rsi": null,
+      "macd_hist": null
+    },
+    {
+      "symbol": "AMD",
+      "source": "scanner",
+      "price": 509.47,
+      "chg_pct": 1.1716,
+      "iv": 0.7656441,
+      "relative_options_volume": 2.391844987494666,
+      "market_cap": 808386572790.0,
+      "rsi": null,
+      "macd_hist": null
+    },
+    {
+      "symbol": "MRVL",
+      "source": "scanner",
+      "price": 197.18,
+      "chg_pct": 1.1491,
+      "iv": 0.95281,
+      "relative_options_volume": 2.383707818089675,
+      "market_cap": 165616968691.0,
+      "rsi": null,
+      "macd_hist": null
+    },
+    {
+      "symbol": "FIG",
+      "source": "scanner",
+      "price": 24.13,
+      "chg_pct": 0.458,
+      "iv": 0.8954329,
+      "relative_options_volume": 2.3204900803060453,
+      "market_cap": 12654618923.0,
+      "rsi": null,
+      "macd_hist": null
+    },
+    {
+      "symbol": "ONDS",
+      "source": "scanner",
+      "price": 6.97,
+      "chg_pct": 1.4556,
+      "iv": 0.9141855,
+      "relative_options_volume": 2.3167249468031996,
+      "market_cap": 3719222626.0,
+      "rsi": null,
+      "macd_hist": null
+    },
+    {
+      "symbol": "GOOGL",
+      "source": "scanner",
+      "price": 353.6,
+      "chg_pct": 0.4574,
+      "iv": 0.3957803,
+      "relative_options_volume": 2.299446532474744,
+      "market_cap": 4227911519048.0,
+      "rsi": null,
+      "macd_hist": null
+    },
+    {
+      "symbol": "VG",
+      "source": "scanner",
+      "price": 12.43,
+      "chg_pct": 0.4039,
+      "iv": 0.6163063,
+      "relative_options_volume": 2.2970387744507956,
+      "market_cap": 28793709567.0,
+      "rsi": null,
+      "macd_hist": null
+    },
+    {
+      "symbol": "VIK",
+      "source": "scanner",
+      "price": 101.79,
+      "chg_pct": 0.5731,
+      "iv": 0.3772211,
+      "relative_options_volume": 2.2219388401109343,
+      "market_cap": 43710013438.0,
+      "rsi": 100.0,
+      "macd_hist": 0.0623
+    },
+    {
+      "symbol": "DAL",
+      "source": "scanner",
+      "price": 87.61,
+      "chg_pct": 0.3666,
+      "iv": 0.4714754396473027,
+      "relative_options_volume": 2.1959112191705,
+      "market_cap": 58229408354.0,
+      "rsi": null,
+      "macd_hist": null
+    },
+    {
+      "symbol": "ORCL",
+      "source": "scanner",
+      "price": 144.88,
+      "chg_pct": 0.4576,
+      "iv": 0.5772339,
+      "relative_options_volume": 2.1907979956877446,
+      "market_cap": 404677370790.0,
+      "rsi": 100.0,
+      "macd_hist": 0.0885
+    },
+    {
+      "symbol": "BE",
+      "source": "scanner",
+      "price": 255.6,
+      "chg_pct": 0.5152,
+      "iv": 1.626558136977101,
+      "relative_options_volume": 2.164214684901305,
+      "market_cap": 76677533496.0,
+      "rsi": 100.0,
+      "macd_hist": 0.0097
+    },
+    {
+      "symbol": "NTAP",
+      "source": "scanner",
+      "price": 172.51,
+      "chg_pct": 0.4542,
+      "iv": 0.467076,
+      "relative_options_volume": 2.144347937285529,
+      "market_cap": 32405155925.0,
+      "rsi": 100.0,
+      "macd_hist": 0.1057
+    },
+    {
+      "symbol": "XRAY",
+      "source": "scanner",
+      "price": 13.84,
+      "chg_pct": 2.8232,
+      "iv": 0.669864,
+      "relative_options_volume": 2.135174273394889,
+      "market_cap": 2814589896.0,
+      "rsi": null,
+      "macd_hist": null
+    },
+    {
+      "symbol": "NBIS",
+      "source": "scanner",
+      "price": 191.79,
+      "chg_pct": 5.0214,
+      "iv": 1.2097147,
+      "relative_options_volume": 2.127671988630705,
+      "market_cap": 45120248054.0,
+      "rsi": null,
+      "macd_hist": null
+    },
+    {
+      "symbol": "ABCL",
+      "source": "scanner",
+      "price": 5.86,
+      "chg_pct": 1.0345,
+      "iv": 1.1196797,
+      "relative_options_volume": 2.0332218689917143,
+      "market_cap": 1974251915.0,
+      "rsi": null,
+      "macd_hist": null
+    },
+    {
+      "symbol": "ZTS",
+      "source": "scanner",
+      "price": 76.51,
+      "chg_pct": 0.4068,
+      "iv": 0.3460662,
+      "relative_options_volume": 2.0264637891467396,
+      "market_cap": 32096104714.0,
+      "rsi": null,
+      "macd_hist": null
+    },
+    {
+      "symbol": "INTC",
+      "source": "scanner",
+      "price": 98.91,
+      "chg_pct": 1.906,
+      "iv": 0.9771609,
+      "relative_options_volume": 2.018187585132923,
+      "market_cap": 477671040000.0,
       "rsi": null,
       "macd_hist": null
     },
@@ -148,6 +531,17 @@
       "macd_hist": null
     },
     {
+      "symbol": "CCC",
+      "source": "scanner",
+      "price": 6.08,
+      "chg_pct": 13.0112,
+      "iv": null,
+      "relative_options_volume": null,
+      "market_cap": 3192956515.0,
+      "rsi": 100.0,
+      "macd_hist": 0.0037
+    },
+    {
       "symbol": "AEHR",
       "source": "scanner",
       "price": 76.32,
@@ -181,6 +575,17 @@
       "macd_hist": null
     },
     {
+      "symbol": "LITE",
+      "source": "scanner",
+      "price": 790.36,
+      "chg_pct": 11.7749,
+      "iv": null,
+      "relative_options_volume": null,
+      "market_cap": 55012380000.0,
+      "rsi": null,
+      "macd_hist": null
+    },
+    {
       "symbol": "ONTO",
       "source": "scanner",
       "price": 325.76,
@@ -188,6 +593,17 @@
       "iv": null,
       "relative_options_volume": null,
       "market_cap": 14497762602.0,
+      "rsi": null,
+      "macd_hist": null
+    },
+    {
+      "symbol": "COHU",
+      "source": "scanner",
+      "price": 58.14,
+      "chg_pct": 11.5503,
+      "iv": null,
+      "relative_options_volume": null,
+      "market_cap": 2458779085.0,
       "rsi": null,
       "macd_hist": null
     },
@@ -210,6 +626,17 @@
       "iv": null,
       "relative_options_volume": null,
       "market_cap": 7705429771.0,
+      "rsi": null,
+      "macd_hist": null
+    },
+    {
+      "symbol": "OPEN",
+      "source": "scanner",
+      "price": 5.33,
+      "chg_pct": 11.3779,
+      "iv": null,
+      "relative_options_volume": null,
+      "market_cap": 4621088467.0,
       "rsi": null,
       "macd_hist": null
     },
@@ -258,6 +685,17 @@
       "macd_hist": null
     },
     {
+      "symbol": "SHAZ",
+      "source": "scanner",
+      "price": 83.83,
+      "chg_pct": 10.0499,
+      "iv": null,
+      "relative_options_volume": null,
+      "market_cap": 1787264076.0,
+      "rsi": null,
+      "macd_hist": null
+    },
+    {
       "symbol": "BTDR",
       "source": "scanner",
       "price": 13.81,
@@ -280,6 +718,17 @@
       "macd_hist": null
     },
     {
+      "symbol": "VECO",
+      "source": "scanner",
+      "price": 59.78,
+      "chg_pct": 9.7485,
+      "iv": null,
+      "relative_options_volume": null,
+      "market_cap": 3323273258.0,
+      "rsi": null,
+      "macd_hist": null
+    },
+    {
       "symbol": "OUST",
       "source": "scanner",
       "price": 47.6,
@@ -287,6 +736,17 @@
       "iv": null,
       "relative_options_volume": null,
       "market_cap": 2919316803.0,
+      "rsi": null,
+      "macd_hist": null
+    },
+    {
+      "symbol": "CNMD",
+      "source": "scanner",
+      "price": 36.8,
+      "chg_pct": 9.5564,
+      "iv": null,
+      "relative_options_volume": null,
+      "market_cap": 1011367826.0,
       "rsi": null,
       "macd_hist": null
     },
@@ -311,6 +771,28 @@
       "market_cap": 36501717611.0,
       "rsi": 100.0,
       "macd_hist": 0.0034
+    },
+    {
+      "symbol": "INBX",
+      "source": "scanner",
+      "price": 106.03,
+      "chg_pct": 9.1967,
+      "iv": null,
+      "relative_options_volume": null,
+      "market_cap": 1424572160.0,
+      "rsi": null,
+      "macd_hist": null
+    },
+    {
+      "symbol": "VICR",
+      "source": "scanner",
+      "price": 287.23,
+      "chg_pct": 9.1465,
+      "iv": null,
+      "relative_options_volume": null,
+      "market_cap": 11995203065.0,
+      "rsi": null,
+      "macd_hist": null
     },
     {
       "symbol": "FORM",
@@ -346,17 +828,6 @@
       "macd_hist": null
     },
     {
-      "symbol": "CIFR",
-      "source": "scanner",
-      "price": 23.75,
-      "chg_pct": 8.6957,
-      "iv": null,
-      "relative_options_volume": null,
-      "market_cap": 8937724954.0,
-      "rsi": null,
-      "macd_hist": null
-    },
-    {
       "symbol": "ALAB",
       "source": "scanner",
       "price": 426.79,
@@ -375,6 +846,28 @@
       "iv": null,
       "relative_options_volume": null,
       "market_cap": 16585150179.0,
+      "rsi": null,
+      "macd_hist": null
+    },
+    {
+      "symbol": "AZZ",
+      "source": "scanner",
+      "price": 155.59,
+      "chg_pct": 8.3526,
+      "iv": null,
+      "relative_options_volume": null,
+      "market_cap": 4323893822.0,
+      "rsi": null,
+      "macd_hist": null
+    },
+    {
+      "symbol": "KLIC",
+      "source": "scanner",
+      "price": 112.9,
+      "chg_pct": 8.3181,
+      "iv": null,
+      "relative_options_volume": null,
+      "market_cap": 5454655769.0,
       "rsi": null,
       "macd_hist": null
     },
@@ -419,6 +912,17 @@
       "iv": null,
       "relative_options_volume": null,
       "market_cap": 8479764285.0,
+      "rsi": null,
+      "macd_hist": null
+    },
+    {
+      "symbol": "SITM",
+      "source": "scanner",
+      "price": 660.59,
+      "chg_pct": 7.9166,
+      "iv": null,
+      "relative_options_volume": null,
+      "market_cap": 18345059390.0,
       "rsi": null,
       "macd_hist": null
     },
@@ -478,6 +982,17 @@
       "macd_hist": null
     },
     {
+      "symbol": "AEIS",
+      "source": "scanner",
+      "price": 315.41,
+      "chg_pct": 7.4138,
+      "iv": null,
+      "relative_options_volume": null,
+      "market_cap": 11745528468.0,
+      "rsi": null,
+      "macd_hist": null
+    },
+    {
       "symbol": "FIGR",
       "source": "scanner",
       "price": 32.92,
@@ -487,6 +1002,17 @@
       "market_cap": 6775635517.0,
       "rsi": null,
       "macd_hist": null
+    },
+    {
+      "symbol": "KB",
+      "source": "scanner",
+      "price": 123.9,
+      "chg_pct": 7.3936,
+      "iv": null,
+      "relative_options_volume": null,
+      "market_cap": 39457694551.0,
+      "rsi": 100.0,
+      "macd_hist": 0.0759
     },
     {
       "symbol": "GH",
@@ -500,6 +1026,50 @@
       "macd_hist": null
     },
     {
+      "symbol": "WDC",
+      "source": "scanner",
+      "price": 590.51,
+      "chg_pct": 7.3069,
+      "iv": null,
+      "relative_options_volume": null,
+      "market_cap": 189678576689.0,
+      "rsi": null,
+      "macd_hist": null
+    },
+    {
+      "symbol": "FDXF",
+      "source": "scanner",
+      "price": 153.7,
+      "chg_pct": 7.2592,
+      "iv": null,
+      "relative_options_volume": null,
+      "market_cap": 21338252584.0,
+      "rsi": null,
+      "macd_hist": null
+    },
+    {
+      "symbol": "CEVA",
+      "source": "scanner",
+      "price": 47.79,
+      "chg_pct": 7.2487,
+      "iv": null,
+      "relative_options_volume": null,
+      "market_cap": 1240020514.0,
+      "rsi": null,
+      "macd_hist": null
+    },
+    {
+      "symbol": "MKSI",
+      "source": "scanner",
+      "price": 374.69,
+      "chg_pct": 7.2398,
+      "iv": null,
+      "relative_options_volume": null,
+      "market_cap": 23599243231.0,
+      "rsi": null,
+      "macd_hist": null
+    },
+    {
       "symbol": "AAOI",
       "source": "scanner",
       "price": 122.67,
@@ -507,6 +1077,17 @@
       "iv": null,
       "relative_options_volume": null,
       "market_cap": 9182982255.0,
+      "rsi": null,
+      "macd_hist": null
+    },
+    {
+      "symbol": "MTSI",
+      "source": "scanner",
+      "price": 327.08,
+      "chg_pct": 7.1585,
+      "iv": null,
+      "relative_options_volume": null,
+      "market_cap": 23287759098.0,
       "rsi": null,
       "macd_hist": null
     },
@@ -533,6 +1114,17 @@
       "macd_hist": null
     },
     {
+      "symbol": "TGB",
+      "source": "scanner",
+      "price": 6.93,
+      "chg_pct": 7.1113,
+      "iv": null,
+      "relative_options_volume": null,
+      "market_cap": 2364332161.0,
+      "rsi": null,
+      "macd_hist": null
+    },
+    {
       "symbol": "WOLF",
       "source": "scanner",
       "price": 38.4,
@@ -540,6 +1132,17 @@
       "iv": null,
       "relative_options_volume": null,
       "market_cap": 1863719541.0,
+      "rsi": null,
+      "macd_hist": null
+    },
+    {
+      "symbol": "LSCC",
+      "source": "scanner",
+      "price": 141.86,
+      "chg_pct": 7.0803,
+      "iv": null,
+      "relative_options_volume": null,
+      "market_cap": 18142580423.0,
       "rsi": null,
       "macd_hist": null
     },
@@ -566,13 +1169,35 @@
       "macd_hist": null
     },
     {
-      "symbol": "MRVL",
+      "symbol": "EXK",
       "source": "scanner",
-      "price": 247.73,
-      "chg_pct": 6.9138,
+      "price": 8.26,
+      "chg_pct": 6.9301,
       "iv": null,
       "relative_options_volume": null,
-      "market_cap": 203163328000.0,
+      "market_cap": 2285651151.0,
+      "rsi": null,
+      "macd_hist": null
+    },
+    {
+      "symbol": "ENVX",
+      "source": "scanner",
+      "price": 5.48,
+      "chg_pct": 6.9268,
+      "iv": null,
+      "relative_options_volume": null,
+      "market_cap": 1116945612.0,
+      "rsi": null,
+      "macd_hist": null
+    },
+    {
+      "symbol": "TBBK",
+      "source": "scanner",
+      "price": 67.39,
+      "chg_pct": 6.9173,
+      "iv": null,
+      "relative_options_volume": null,
+      "market_cap": 2627549445.0,
       "rsi": null,
       "macd_hist": null
     },
@@ -610,6 +1235,28 @@
       "macd_hist": null
     },
     {
+      "symbol": "KMPR",
+      "source": "scanner",
+      "price": 30.3,
+      "chg_pct": 6.8118,
+      "iv": null,
+      "relative_options_volume": null,
+      "market_cap": 1649655980.0,
+      "rsi": null,
+      "macd_hist": null
+    },
+    {
+      "symbol": "AMAT",
+      "source": "scanner",
+      "price": 609.25,
+      "chg_pct": 6.7923,
+      "iv": null,
+      "relative_options_volume": null,
+      "market_cap": 452953854815.0,
+      "rsi": null,
+      "macd_hist": null
+    },
+    {
       "symbol": "KLAC",
       "source": "scanner",
       "price": 236.04,
@@ -617,6 +1264,17 @@
       "iv": null,
       "relative_options_volume": null,
       "market_cap": 288921950947.0,
+      "rsi": null,
+      "macd_hist": null
+    },
+    {
+      "symbol": "STRL",
+      "source": "scanner",
+      "price": 704.93,
+      "chg_pct": 6.6912,
+      "iv": null,
+      "relative_options_volume": null,
+      "market_cap": 20274823526.0,
       "rsi": null,
       "macd_hist": null
     },
@@ -643,37 +1301,37 @@
       "macd_hist": null
     },
     {
-      "symbol": "TS",
+      "symbol": "SECZ",
       "source": "scanner",
-      "price": 59.3,
-      "chg_pct": 6.39,
+      "price": 7.93,
+      "chg_pct": 6.443,
       "iv": null,
       "relative_options_volume": null,
-      "market_cap": 28204058472.0,
-      "rsi": null,
-      "macd_hist": null
-    },
-    {
-      "symbol": "SHAZ",
-      "source": "scanner",
-      "price": 80.38,
-      "chg_pct": 5.5271,
-      "iv": null,
-      "relative_options_volume": null,
-      "market_cap": 1683669867.0,
-      "rsi": null,
-      "macd_hist": null
-    },
-    {
-      "symbol": "ORIC",
-      "source": "scanner",
-      "price": 11.3,
-      "chg_pct": 5.3122,
-      "iv": null,
-      "relative_options_volume": null,
-      "market_cap": 1153185640.0,
+      "market_cap": 1097144940.0,
       "rsi": 100.0,
-      "macd_hist": 0.0034
+      "macd_hist": 0.0048
+    },
+    {
+      "symbol": "PBLS",
+      "source": "scanner",
+      "price": 28.65,
+      "chg_pct": 4.9158,
+      "iv": null,
+      "relative_options_volume": null,
+      "market_cap": 3614332778.0,
+      "rsi": null,
+      "macd_hist": null
+    },
+    {
+      "symbol": "RCUS",
+      "source": "scanner",
+      "price": 29.5,
+      "chg_pct": 4.7213,
+      "iv": null,
+      "relative_options_volume": null,
+      "market_cap": 3442411443.0,
+      "rsi": null,
+      "macd_hist": null
     },
     {
       "symbol": "TEL",
@@ -687,15 +1345,15 @@
       "macd_hist": 0.1296
     },
     {
-      "symbol": "ASX",
+      "symbol": "TPC",
       "source": "scanner",
-      "price": 41.64,
-      "chg_pct": 4.2825,
+      "price": 84.06,
+      "chg_pct": 4.3705,
       "iv": null,
       "relative_options_volume": null,
-      "market_cap": 89313617128.0,
-      "rsi": 46.25,
-      "macd_hist": -0.0519
+      "market_cap": 4136567949.0,
+      "rsi": null,
+      "macd_hist": null
     },
     {
       "symbol": "PACS",
@@ -720,6 +1378,17 @@
       "macd_hist": 0.0432
     },
     {
+      "symbol": "YMM",
+      "source": "scanner",
+      "price": 9.59,
+      "chg_pct": 3.6757,
+      "iv": null,
+      "relative_options_volume": null,
+      "market_cap": 9483155168.0,
+      "rsi": null,
+      "macd_hist": null
+    },
+    {
       "symbol": "BEKE",
       "source": "scanner",
       "price": 15.8,
@@ -731,15 +1400,15 @@
       "macd_hist": 0.0097
     },
     {
-      "symbol": "AMTM",
+      "symbol": "CCK",
       "source": "scanner",
-      "price": 21.62,
-      "chg_pct": 3.5441,
+      "price": 118.62,
+      "chg_pct": 3.5272,
       "iv": null,
       "relative_options_volume": null,
-      "market_cap": 5174619636.0,
-      "rsi": 49.61,
-      "macd_hist": 0.021
+      "market_cap": 13097820978.0,
+      "rsi": null,
+      "macd_hist": null
     },
     {
       "symbol": "BUD",
@@ -764,6 +1433,50 @@
       "macd_hist": 0.0307
     },
     {
+      "symbol": "KYIV",
+      "source": "scanner",
+      "price": 16.1,
+      "chg_pct": 3.404,
+      "iv": null,
+      "relative_options_volume": null,
+      "market_cap": 3617632988.0,
+      "rsi": null,
+      "macd_hist": null
+    },
+    {
+      "symbol": "AMTM",
+      "source": "scanner",
+      "price": 21.58,
+      "chg_pct": 3.3525,
+      "iv": null,
+      "relative_options_volume": null,
+      "market_cap": 5174619636.0,
+      "rsi": 49.61,
+      "macd_hist": 0.021
+    },
+    {
+      "symbol": "GNK",
+      "source": "scanner",
+      "price": 26.0,
+      "chg_pct": 3.3386,
+      "iv": null,
+      "relative_options_volume": null,
+      "market_cap": 1090733586.0,
+      "rsi": null,
+      "macd_hist": null
+    },
+    {
+      "symbol": "FSS",
+      "source": "scanner",
+      "price": 117.97,
+      "chg_pct": 3.3374,
+      "iv": null,
+      "relative_options_volume": null,
+      "market_cap": 7114693117.0,
+      "rsi": null,
+      "macd_hist": null
+    },
+    {
       "symbol": "YSS",
       "source": "scanner",
       "price": 21.7,
@@ -775,13 +1488,13 @@
       "macd_hist": null
     },
     {
-      "symbol": "MUR",
+      "symbol": "AVAH",
       "source": "scanner",
-      "price": 36.63,
-      "chg_pct": 3.2704,
+      "price": 10.01,
+      "chg_pct": 3.2621,
       "iv": null,
       "relative_options_volume": null,
-      "market_cap": 4965629312.0,
+      "market_cap": 2110047917.0,
       "rsi": null,
       "macd_hist": null
     },
@@ -795,6 +1508,17 @@
       "market_cap": 5223467528.0,
       "rsi": 31.42,
       "macd_hist": -0.0411
+    },
+    {
+      "symbol": "JBLU",
+      "source": "scanner",
+      "price": 5.76,
+      "chg_pct": 3.2258,
+      "iv": null,
+      "relative_options_volume": null,
+      "market_cap": 2131668262.0,
+      "rsi": null,
+      "macd_hist": null
     },
     {
       "symbol": "WYFI",
@@ -819,6 +1543,28 @@
       "macd_hist": 0.0073
     },
     {
+      "symbol": "CNK",
+      "source": "scanner",
+      "price": 32.94,
+      "chg_pct": 3.1309,
+      "iv": null,
+      "relative_options_volume": null,
+      "market_cap": 3552683628.0,
+      "rsi": null,
+      "macd_hist": null
+    },
+    {
+      "symbol": "NESR",
+      "source": "scanner",
+      "price": 28.08,
+      "chg_pct": 3.1216,
+      "iv": null,
+      "relative_options_volume": null,
+      "market_cap": 2819689249.0,
+      "rsi": null,
+      "macd_hist": null
+    },
+    {
       "symbol": "LTH",
       "source": "scanner",
       "price": 42.97,
@@ -830,15 +1576,15 @@
       "macd_hist": 0.0262
     },
     {
-      "symbol": "MUX",
+      "symbol": "DHC",
       "source": "scanner",
-      "price": 17.1,
-      "chg_pct": 3.0741,
+      "price": 9.34,
+      "chg_pct": 3.0905,
       "iv": null,
       "relative_options_volume": null,
-      "market_cap": 1050828130.0,
-      "rsi": null,
-      "macd_hist": null
+      "market_cap": 2186225541.0,
+      "rsi": 100.0,
+      "macd_hist": 0.0059
     },
     {
       "symbol": "LHX",
@@ -852,15 +1598,15 @@
       "macd_hist": 0.1828
     },
     {
-      "symbol": "DRS",
+      "symbol": "XXI",
       "source": "scanner",
-      "price": 44.42,
-      "chg_pct": 3.0626,
+      "price": 5.38,
+      "chg_pct": 3.0651,
       "iv": null,
       "relative_options_volume": null,
-      "market_cap": 11694849894.0,
-      "rsi": null,
-      "macd_hist": null
+      "market_cap": 1817273060.0,
+      "rsi": 100.0,
+      "macd_hist": 0.0034
     },
     {
       "symbol": "SGML",
@@ -896,81 +1642,70 @@
       "macd_hist": 0.0075
     },
     {
-      "symbol": "MWH",
+      "symbol": "BOBS",
       "source": "scanner",
-      "price": 29.59,
-      "chg_pct": 2.9426,
+      "price": 15.79,
+      "chg_pct": 3.0007,
       "iv": null,
       "relative_options_volume": null,
-      "market_cap": 6268848680.0,
+      "market_cap": 1907161295.0,
+      "rsi": 100.0,
+      "macd_hist": 0.0097
+    },
+    {
+      "symbol": "WBTN",
+      "source": "scanner",
+      "price": 10.16,
+      "chg_pct": 2.9382,
+      "iv": null,
+      "relative_options_volume": null,
+      "market_cap": 1410498233.0,
       "rsi": null,
       "macd_hist": null
     },
     {
-      "symbol": "MGA",
+      "symbol": "FIVN",
       "source": "scanner",
-      "price": 69.49,
-      "chg_pct": 2.8567,
+      "price": 26.45,
+      "chg_pct": 2.9183,
       "iv": null,
       "relative_options_volume": null,
-      "market_cap": 17853650665.0,
+      "market_cap": 1958506813.0,
       "rsi": null,
       "macd_hist": null
     },
     {
-      "symbol": "MATX",
+      "symbol": "TSLX",
       "source": "scanner",
-      "price": 229.75,
-      "chg_pct": 2.7734,
+      "price": 17.58,
+      "chg_pct": 2.9174,
       "iv": null,
       "relative_options_volume": null,
-      "market_cap": 6321999400.0,
+      "market_cap": 1657141824.0,
       "rsi": null,
       "macd_hist": null
     },
     {
-      "symbol": "AHR",
+      "symbol": "MPLT",
       "source": "scanner",
-      "price": 58.13,
-      "chg_pct": 2.7213,
+      "price": 36.98,
+      "chg_pct": 2.7508,
       "iv": null,
       "relative_options_volume": null,
-      "market_cap": 10443621870.0,
+      "market_cap": 1717240749.0,
       "rsi": null,
       "macd_hist": null
     },
     {
-      "symbol": "ARLO",
+      "symbol": "ASX",
       "source": "scanner",
-      "price": 13.42,
-      "chg_pct": 2.5994,
+      "price": 37.91,
+      "chg_pct": 2.7371,
       "iv": null,
       "relative_options_volume": null,
-      "market_cap": 1394550050.0,
-      "rsi": null,
-      "macd_hist": null
-    },
-    {
-      "symbol": "ROAD",
-      "source": "scanner",
-      "price": 105.05,
-      "chg_pct": 2.5779,
-      "iv": null,
-      "relative_options_volume": null,
-      "market_cap": 5871698303.0,
-      "rsi": null,
-      "macd_hist": null
-    },
-    {
-      "symbol": "VCYT",
-      "source": "scanner",
-      "price": 60.72,
-      "chg_pct": 2.5329,
-      "iv": null,
-      "relative_options_volume": null,
-      "market_cap": 4748460422.0,
-      "rsi": null,
-      "macd_hist": null
+      "market_cap": 84237420763.0,
+      "rsi": 46.25,
+      "macd_hist": -0.0519
     }
   ]
 }

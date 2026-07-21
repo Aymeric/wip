@@ -13,13 +13,13 @@
   },
   "OKLO": {
     "Ticker": "OKLO",
-    "Sentiment": 0.85,
-    "Buzz": "High",
-    "Narrative": "Meme breakouts, high volume call buying",
-    "last_updated": "2026-07-12T21:48:56.910907Z",
+    "Sentiment": 0.75,
+    "Buzz": "Medium",
+    "Narrative": "Small modular reactor hype, 'AI power crunch' play with high speculative conviction.",
+    "last_updated": "2026-07-21T02:12:17.111096Z",
     "tone_score": 0.25,
-    "comments_score": 0.25,
-    "position_score": 0.2,
+    "comments_score": 0.2,
+    "position_score": 0.15,
     "volume_score": 0.05,
     "meme_score": 0.1
   },
@@ -27,13 +27,13 @@
     "Ticker": "MARA",
     "Sentiment": 0.45,
     "Buzz": "Medium",
-    "Narrative": "Bitcoin correlation discussion, expecting sector rotation.",
-    "last_updated": "2026-07-12T21:48:56.859403Z",
+    "Narrative": "Bitcoin miners transitioning to AI power plays; retail chasing momentum.",
+    "last_updated": "2026-07-21T02:12:16.978917Z",
     "tone_score": 0.15,
     "comments_score": 0.1,
-    "position_score": 0.1,
+    "position_score": 0.05,
     "volume_score": 0.05,
-    "meme_score": 0.05
+    "meme_score": 0.1
   },
   "NFLX": {
     "Ticker": "NFLX",
@@ -187,6 +187,54 @@
     "comments_score": 0.15,
     "position_score": 0.1,
     "volume_score": 0.05,
+    "meme_score": 0.05
+  },
+  "AMZN": {
+    "Ticker": "AMZN",
+    "Sentiment": 0.15,
+    "Buzz": "Medium",
+    "Narrative": "Retail maintaining long positions but shifting toward defensive hedging as XLK/XLY face regime-level headwinds. Volumetric apathy increasing as spot approaches +GEX wall.",
+    "last_updated": "2026-07-20T05:55:49.393948Z",
+    "tone_score": 0.05,
+    "comments_score": 0.05,
+    "position_score": 0.1,
+    "volume_score": -0.05,
+    "meme_score": 0.0
+  },
+  "TSLA": {
+    "Ticker": "TSLA",
+    "Sentiment": -0.15,
+    "Buzz": "High",
+    "Narrative": "Pre-earnings jitters, 'Gay Bear Summer' narrative gaining steam as technicals soften.",
+    "last_updated": "2026-07-21T02:12:16.862738Z",
+    "tone_score": -0.1,
+    "comments_score": -0.05,
+    "position_score": -0.05,
+    "volume_score": 0.05,
+    "meme_score": 0.0
+  },
+  "SHOP": {
+    "Ticker": "SHOP",
+    "Sentiment": 0.25,
+    "Buzz": "Medium",
+    "Narrative": "Bullish recovery thesis, 'Full Port' retail positioning surfacing.",
+    "last_updated": "2026-07-21T02:12:16.920996Z",
+    "tone_score": 0.1,
+    "comments_score": 0.05,
+    "position_score": 0.05,
+    "volume_score": 0.02,
+    "meme_score": 0.03
+  },
+  "AVGO": {
+    "Ticker": "AVGO",
+    "Sentiment": 0.65,
+    "Buzz": "High",
+    "Narrative": "AI food chain leader, heavy institutional flow mirrored by retail FOMO.",
+    "last_updated": "2026-07-21T02:12:17.047645Z",
+    "tone_score": 0.2,
+    "comments_score": 0.15,
+    "position_score": 0.15,
+    "volume_score": 0.1,
     "meme_score": 0.05
   }
 }

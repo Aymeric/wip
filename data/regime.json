@@ -1,25 +1,25 @@
 {
   "basket_gate": "FAIL",
-  "bull_bear_gate": "FAIL",
-  "vix_spot": 16.73,
+  "bull_bear_gate": "PASS",
+  "vix_spot": 18.65,
   "vix_bearish": false,
   "vix_delta_gate": "FAIL",
   "system_authorization": "BLOCKED",
-  "gates_passed": 0,
+  "gates_passed": 1,
   "etf_details": {
     "SPY": {
       "Ticker": "SPY",
       "ETF Segment / Sector Name": "S&P 500 Broad Market",
-      "Price": 744.51,
-      "Daily Change %": -0.8272,
-      "Classification": "BEARISH"
+      "Price": 0.0,
+      "Daily Change %": 0.14,
+      "Classification": "BULLISH"
     },
     "QQQ": {
       "Ticker": "QQQ",
       "ETF Segment / Sector Name": "Nasdaq 100 Growth Index",
-      "Price": 696.09,
-      "Daily Change %": -1.3953,
-      "Classification": "BEARISH"
+      "Price": 0.0,
+      "Daily Change %": 0.4,
+      "Classification": "BULLISH"
     },
     "IWM": {
       "Ticker": "IWM",
@@ -115,14 +115,10 @@
     "HYG": {
       "Ticker": "HYG",
       "ETF Segment / Sector Name": "High Yield Corporate Bond ETF",
-      "Price": 79.64,
-      "Daily Change %": -0.2005,
-      "Classification": "BEARISH"
+      "Price": 0.0,
+      "Daily Change %": 0.01,
+      "Classification": "BULLISH"
     }
   },
-  "last_updated": "2026-07-16",
-  "drawdown_gate_status": "PASS",
-  "monthly_pnl_dlr": -2060.8,
-  "monthly_pnl_pct": -4.1,
-  "monthly_cnt": 1
+  "last_updated": "2026-07-20"
 }

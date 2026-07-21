@@ -85,7 +85,7 @@ Grade the Setup’s structural quality on an 11-point system ($\ge 9/11$ require
 
 ### Step 4: Persist Data, Trigger CLI and Render Setup Report
 1. **Save Raw API Payloads**: Copy all raw instrument definitions, quotes, and underlier close files into [data/downloads/](../../data/downloads/) folders by date.
-2. **Verify Setup via CLI Engine**: Execute the grading check or commit findings to [data/ticker_analyses.json](../../data/ticker_analyses.json) using the GEX Engine CLI program:
+2. **Verify Setup via CLI Engine (Mandatory)**: Use the GEX Engine CLI to commit findings to [data/ticker_analyses.json](../../data/ticker_analyses.json). This ensures all 11-Rule calculations and Risk/Reward gates are performed with absolute mathematical precision by the system's core engine:
    `python3 src/gex_engine.py analyze <TICKER> --spot <spot_price> --ptrans <pTrans> --ntrans <nTrans> --gex <gex_price> --cotmp <cotmp> --db-change <db_change> [--target-delta <delta>] [--min-dte <days>]`
 3. **Render grading results**: Output setup grading dashboard:
 

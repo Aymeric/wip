@@ -25,16 +25,17 @@ When requested to run the analysis, utilize this streamlined three-phase workflo
 #### Phase I: System Health & Risk Audit (High Priority)
 1. **Market Regime & Account Drawdown**: Spawn `market-regime-analyst` to verify macro rules (Basket, Bull:Bear, VIX) and enforce the **MAX LOSS DRAWDOWN BLOCK** ($10.00\%$ limit).
 2. **Active Portfolio & Sizing Risk**: Spawn `portfolio-risk-manager` to sync live positions, evaluate the GEX exit hierarchy (Stops 1-5), enforce sector concentration caps ($\le 15.00\%$), and calculate the **Per-Trade Buying Power Budget**.
-   - **Efficiency Rule**: If Phase I returns a `BLOCKED` status or `MAX LOSS DRAWDOWN BLOCK`, the Orchestrator **MUST** skip Phase II and III for new entries and only focus on managing existing exits.
+   - **Analytical Continuity Rule**: Even if Phase I returns a `BLOCKED` status or `MAX LOSS DRAWDOWN BLOCK`, the Orchestrator **MUST** still proceed with Phase II and III to refresh the system's analytical state and keep ticker data from becoming stale. However, the system remains strictly prohibited from initiating new entries in Phase IV while a block is active.
 
 #### Phase II: Discovery & Sentiment Filtering
 1. **Setup Candidate Sourcing**: Spawn `gex-candidate-generator` to run Robinhood scans and lists, applying baseline filters (Price, Volume, Market Cap), checking for **Technical Alerts** (RSI/MACD crossovers via `gex_engine.py`), and synchronizing to mobile watchlists.
 2. **Social Sentiment Scans**: Spawn `reddit-sentiment-analyst` to compute 5-factor scores and flag **FOMO ALERTS** or **CAPITULATION WATCH**.
-   - **Efficiency Rule**: Filter the candidate pool by sentiment *before* proceeding to deep GEX grading to avoid expensive API calls on "unpopular" or "overly crowded" tickers.
+   - **Analytical Rule**: Refresh the candidate pool and sentiment data daily to maintain system situational awareness, regardless of authorization state.
 
 #### Phase III: Setup Engineering & Selection
 1. **Setup Analysis / Grading**: Spawn `gex-setup-grader` to fetch option chains (in 40-ID chunks), derive pTrans/nTrans levels, and execute the 11-Rule checklist.
 2. **Option Selection Protocol**: Spawn `option-selector` to isolate the optimal 30-45 DTE contract, performing earnings preflight checks and enforcing the **Per-Trade Buying Power Budget** received from Phase I.
+   - **Goal**: Maintain fresh `Ticker Analyses` (no older than 1 session) to ensure the system is ready to act immediately once the regime block clears.
 
 #### Phase IV: Interactive Execution (Human-in-the-Loop)
 1. **Agentic Order Routing**: For any **CONFIRMED** setup, present the trade action and secure explicit "YES" approval before spawning `agentic-trader` for watchdog-monitored execution.
@@ -73,7 +74,7 @@ Before reviewing any individual setups, verify if the broader market authorizes 
 4. **Enforce System Blocker**: If the 30-day realized drawdown exceeds **$10.00\%$**, a strict **MAX LOSS DRAWDOWN BLOCK** is active. **ABORT** all Discovery and Setup Engineering phases.
 
 ### Phase 2: Opportunity Discovery & Sentiment Filtering
-If the system is authorized, identify potential candidates and filter them by retail sentiment.
+Perform opportunity discovery and sentiment filtering to keep the system's analytical state fresh (Analyses should not be older than 1 session).
 
 #### 🔄 Subagent Sourcing & Filtering:
 1. **Source Candidates**: Spawn the `gex-candidate-generator` subagent to run Robinhood scanners and public curated lists.

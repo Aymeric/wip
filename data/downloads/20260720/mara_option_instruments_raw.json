@@ -1,0 +1,3406 @@
+{
+  "data": {
+    "instruments": [
+      {
+        "id": "22aac919-8acf-4a88-a5b1-e0dd395a1010",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "1.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "2cbf90bc-3e12-4f48-a824-d7ddd2b323dd",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "1.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "730f5be4-39e4-419f-a822-9a3d35af193b",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-24",
+        "sellout_datetime": "2026-07-24T19:30:00+00:00",
+        "strike_price": "1.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "7a3450d0-f240-432c-aa72-499847ea49ac",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "1.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "d8255a5a-24ae-4513-a06d-daf5eccb3a0d",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-24",
+        "sellout_datetime": "2026-07-24T19:30:00+00:00",
+        "strike_price": "1.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "fe89135b-3801-4e69-8c3c-a0ae67282e27",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "1.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "15f8a8b9-5eec-446e-a07e-220b60c9420d",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-24",
+        "sellout_datetime": "2026-07-24T19:30:00+00:00",
+        "strike_price": "2.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "40500820-283c-4cae-97ac-b03210568394",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "2.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "5c03759a-575c-4d2b-9385-687906ccfeed",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "2.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "67c5139f-9e67-43e3-8f8f-38949e102287",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-24",
+        "sellout_datetime": "2026-07-24T19:30:00+00:00",
+        "strike_price": "2.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "84583295-36b9-4df7-8f7a-e9584c271085",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "2.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "8ed3e5a4-f51c-4164-a8f0-c4ab76261877",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "2.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "56a9a2ab-90e5-4cad-a3ad-8bcb8cfa7d80",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-24",
+        "sellout_datetime": "2026-07-24T19:30:00+00:00",
+        "strike_price": "3.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "5c696f53-6165-4c91-8f80-dbc7765f4d7e",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-31",
+        "sellout_datetime": "2026-07-31T19:30:00+00:00",
+        "strike_price": "3.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "6906dd73-4111-46fc-8aeb-ec7cefee626e",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-24",
+        "sellout_datetime": "2026-07-24T19:30:00+00:00",
+        "strike_price": "3.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "720039ad-738d-4180-9080-90603a976e8f",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "3.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "952a9d29-0647-4132-8efb-42225a14316c",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "3.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "a556acd8-8fd1-421c-b567-53fefc0d433d",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "3.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "f0ae3a39-d6f3-4b29-96b7-89ca3e3bd9ee",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "3.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "fa3e41af-6a93-4b22-813b-02e8ba9fab50",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-31",
+        "sellout_datetime": "2026-07-31T19:30:00+00:00",
+        "strike_price": "3.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "112ae388-8355-4c4b-a390-5067dca07ebc",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "4.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "1d79be16-59f8-4b2b-beb1-25fe17b7b0a3",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "4.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "4e582ecb-77ba-45f0-86f9-9baeb714c84f",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "4.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "611bf642-d141-44cb-a238-2126fb47239a",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-31",
+        "sellout_datetime": "2026-07-31T19:30:00+00:00",
+        "strike_price": "4.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "6354940f-8ce1-488f-8ab1-4389dd84fd58",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-24",
+        "sellout_datetime": "2026-07-24T19:30:00+00:00",
+        "strike_price": "4.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "a1ea0f5d-6b1f-4be0-8dac-cf80a9719751",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-31",
+        "sellout_datetime": "2026-07-31T19:30:00+00:00",
+        "strike_price": "4.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "a3b07bb0-88dd-4eb6-b899-fd20a1d4b1ed",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "4.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "a61c6070-5a1d-4032-9f38-b90019c44bf3",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-24",
+        "sellout_datetime": "2026-07-24T19:30:00+00:00",
+        "strike_price": "4.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "4acf28cb-58b4-486c-9840-d0cada94e2be",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-31",
+        "sellout_datetime": "2026-07-31T19:30:00+00:00",
+        "strike_price": "5.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "5630b413-045e-4482-8d56-1686e2de897a",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "5.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "8f8dc7b2-b8cf-434b-b9d4-34a90289e271",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "5.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "ad1e42f6-3093-408e-a7b9-6612a11fe04f",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-24",
+        "sellout_datetime": "2026-07-24T19:30:00+00:00",
+        "strike_price": "5.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "c222f684-6bb8-4497-9dcf-be9af5d11b67",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-24",
+        "sellout_datetime": "2026-07-24T19:30:00+00:00",
+        "strike_price": "5.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "c650efaf-fbef-454a-9bb9-3bee413738e7",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-31",
+        "sellout_datetime": "2026-07-31T19:30:00+00:00",
+        "strike_price": "5.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "d355f576-3004-46f1-a39a-fd86a692309f",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "5.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "e266bfd7-919b-4e42-8ca5-bc1e2552aae0",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "5.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "36459390-73ea-46b0-aa6a-ca77ff837ecc",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-31",
+        "sellout_datetime": "2026-07-31T19:30:00+00:00",
+        "strike_price": "6.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "5616117e-8923-43a5-9e9d-9aa52e603311",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-24",
+        "sellout_datetime": "2026-07-24T19:30:00+00:00",
+        "strike_price": "6.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "5dfd71c0-1050-4779-aaed-f3c9154ca23a",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-24",
+        "sellout_datetime": "2026-07-24T19:30:00+00:00",
+        "strike_price": "6.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "864142dd-2590-4901-b101-de078d768cac",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "6.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "8751d24c-34de-4df6-8152-0642801974fe",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-31",
+        "sellout_datetime": "2026-07-31T19:30:00+00:00",
+        "strike_price": "6.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "ab9779d3-72c8-4646-acff-4a69a2ae8f74",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "6.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "ca5e84bb-abb5-4831-959c-f1dad5471815",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "6.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "e3913414-929d-4962-88cc-68beae07f66e",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "6.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "04eac453-79c2-4d7b-ac6f-3dbd23890b7a",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "7.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "0b859ae0-aef5-4b72-ac66-4705689630c9",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-24",
+        "sellout_datetime": "2026-07-24T19:30:00+00:00",
+        "strike_price": "7.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "4f95c2a7-f655-4f55-afe7-3d1218b93b36",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-31",
+        "sellout_datetime": "2026-07-31T19:30:00+00:00",
+        "strike_price": "7.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "65f3965a-19bf-4200-962a-c9176435642f",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "7.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "8f5457b1-65fb-4a05-b1d7-7a4bf4a4deba",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "7.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "9d4b4838-3f69-438e-9fdd-11844cbccbf2",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-31",
+        "sellout_datetime": "2026-07-31T19:30:00+00:00",
+        "strike_price": "7.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "b8cc697f-f76c-4d33-9011-98683c931656",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-24",
+        "sellout_datetime": "2026-07-24T19:30:00+00:00",
+        "strike_price": "7.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "cecc53f2-3632-469e-9b62-723dc051f88a",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "7.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "0a806e79-5667-47f7-aa83-61f542b599b5",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-24",
+        "sellout_datetime": "2026-07-24T19:30:00+00:00",
+        "strike_price": "8.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "209753f8-ac52-4d4c-bd64-e9a7110530bc",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-31",
+        "sellout_datetime": "2026-07-31T19:30:00+00:00",
+        "strike_price": "8.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "318ce204-9d9a-4698-ba02-ad34e45ab47b",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "8.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "5b96885a-4277-4688-b958-a4b8bda61fe8",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-31",
+        "sellout_datetime": "2026-07-31T19:30:00+00:00",
+        "strike_price": "8.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "8b8d75ea-c6c2-4423-91fc-f826aa648a3d",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "8.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "97dafd58-7b98-4e5a-8167-23a8bd90aaf3",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "8.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "a75e4d26-88cb-40a5-80b8-9c6d3f08f3b3",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-24",
+        "sellout_datetime": "2026-07-24T19:30:00+00:00",
+        "strike_price": "8.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "ace637f3-3432-4b37-a78d-b689d05dc45f",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "8.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "2d5782c6-2b5e-4d0c-a692-82ed9e13f346",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-24",
+        "sellout_datetime": "2026-07-24T19:30:00+00:00",
+        "strike_price": "8.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "6427e0f7-abcf-4c9d-8274-3136cd6f93df",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-31",
+        "sellout_datetime": "2026-07-31T19:30:00+00:00",
+        "strike_price": "8.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "aa893ec4-24a2-438f-a994-c0814c775a2d",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "8.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "d8600ec5-6486-48aa-a4d0-c3f1c8ed3df6",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "8.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "ed769912-85e3-4921-b02b-53240c695d9e",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-31",
+        "sellout_datetime": "2026-07-31T19:30:00+00:00",
+        "strike_price": "8.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "f2abd4c2-df96-4de7-973e-734c563414fe",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-24",
+        "sellout_datetime": "2026-07-24T19:30:00+00:00",
+        "strike_price": "8.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "0aa6d576-d6df-4230-865c-fe1944b1c947",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "9.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "11df051f-9b88-46ec-b74b-68ce2886d2d7",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "9.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "1bd7cd5c-2a1a-4024-a7c8-8d16307de701",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "9.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "52765384-97b6-4fea-b266-82aaa2c47acc",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-24",
+        "sellout_datetime": "2026-07-24T19:30:00+00:00",
+        "strike_price": "9.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "64b783c9-bf53-4ee4-b47c-6bda5b79937e",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-31",
+        "sellout_datetime": "2026-07-31T19:30:00+00:00",
+        "strike_price": "9.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "817a3270-3e42-4624-a369-5776d00fa183",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-24",
+        "sellout_datetime": "2026-07-24T19:30:00+00:00",
+        "strike_price": "9.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "e5b9714c-57a0-4ffe-81d1-7bd73cb3de38",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "9.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "ed4c4fbb-2222-4b4f-a03c-b7e42127a54d",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-31",
+        "sellout_datetime": "2026-07-31T19:30:00+00:00",
+        "strike_price": "9.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "1e53613d-a845-41c4-bd31-08b4ba8d440e",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "9.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "3d933cbf-d8df-4d41-bb36-dc11a82b16b6",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-24",
+        "sellout_datetime": "2026-07-24T19:30:00+00:00",
+        "strike_price": "9.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "5b73b8ce-1f7b-41d9-8853-58c1da6703ba",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-31",
+        "sellout_datetime": "2026-07-31T19:30:00+00:00",
+        "strike_price": "9.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "5d1616f4-fe11-4767-92e1-792bf5530fa9",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "9.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "8a4d7f5f-b534-440c-bb49-ead1fdf30220",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-24",
+        "sellout_datetime": "2026-07-24T19:30:00+00:00",
+        "strike_price": "9.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "98cca69e-bae3-4ffa-b714-f6c85b6a67f3",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-31",
+        "sellout_datetime": "2026-07-31T19:30:00+00:00",
+        "strike_price": "9.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "07c871f8-113b-49ba-bda3-b295dd2bbc24",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-24",
+        "sellout_datetime": "2026-07-24T19:30:00+00:00",
+        "strike_price": "10.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "36e8ad54-21c4-48dc-8b4c-20fb33d12681",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "10.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "4bcc60eb-95e7-433c-a3f3-c39fb4067126",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "10.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "604500e8-e0ff-40a1-a3ef-56ec471c0964",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-31",
+        "sellout_datetime": "2026-07-31T19:30:00+00:00",
+        "strike_price": "10.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "718372e9-bea6-4837-8c57-98b1584bb7a0",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-31",
+        "sellout_datetime": "2026-07-31T19:30:00+00:00",
+        "strike_price": "10.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "b7b15db1-e28d-4636-9389-aec33c3efe29",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "10.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "d90acc65-11d4-4868-bf9c-499b63c19fbf",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-24",
+        "sellout_datetime": "2026-07-24T19:30:00+00:00",
+        "strike_price": "10.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "e912f8a5-6dbb-454f-8e0d-4d52a71e52cb",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "10.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "07d0ce93-d721-4478-b502-538ca1b563ae",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-31",
+        "sellout_datetime": "2026-07-31T19:30:00+00:00",
+        "strike_price": "10.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "506d69e4-adf3-4c57-8a25-6c215994cfc2",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-24",
+        "sellout_datetime": "2026-07-24T19:30:00+00:00",
+        "strike_price": "10.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "5be0f5f9-6016-4f6f-8489-98768bcbf4ea",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-24",
+        "sellout_datetime": "2026-07-24T19:30:00+00:00",
+        "strike_price": "10.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "74449c16-a7b9-4e9b-a09c-8e71e3ee1e35",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-31",
+        "sellout_datetime": "2026-07-31T19:30:00+00:00",
+        "strike_price": "10.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "8d94253b-ae09-452b-a0cb-7b60f8a32932",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "10.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "d5bae0af-b98e-47d7-99aa-99b8ea0c596c",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "10.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "2161a35b-7104-462b-8877-0c341fd04773",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-31",
+        "sellout_datetime": "2026-07-31T19:30:00+00:00",
+        "strike_price": "11.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "66712df3-d92a-42fe-bfcb-b836dcf79bca",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "11.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "6f15cb3d-8d40-4f43-8c3a-b42d46125009",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-24",
+        "sellout_datetime": "2026-07-24T19:30:00+00:00",
+        "strike_price": "11.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "7113df73-d916-41aa-bf71-8ba47a334ee0",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-24",
+        "sellout_datetime": "2026-07-24T19:30:00+00:00",
+        "strike_price": "11.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "7385fd61-51a3-4092-b31f-14b7067e619e",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-31",
+        "sellout_datetime": "2026-07-31T19:30:00+00:00",
+        "strike_price": "11.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "e1ac8f46-028d-4187-a71c-c55272372c17",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "11.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "faedd600-e6d1-4dcc-a631-00cb5d356027",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "11.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "2a2eddcf-f081-4006-bef9-5f5854df83b7",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-24",
+        "sellout_datetime": "2026-07-24T19:30:00+00:00",
+        "strike_price": "11.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "97bab825-9ca9-4e49-8300-8598cbbb12f8",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-31",
+        "sellout_datetime": "2026-07-31T19:30:00+00:00",
+        "strike_price": "11.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "d97cf302-e05d-4ae8-b829-320a48d8fbfe",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "11.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "041126eb-6354-4417-af7d-26dce1879525",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "12.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "90ba18fe-27b9-4855-a21a-ef6a202a41d1",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "12.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "bc01af2c-5876-4a9c-a650-68674237f5a9",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-31",
+        "sellout_datetime": "2026-07-31T19:30:00+00:00",
+        "strike_price": "12.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "ef26cd46-8cb0-4b53-a46a-e1717926f86e",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-24",
+        "sellout_datetime": "2026-07-24T19:30:00+00:00",
+        "strike_price": "12.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "26308904-3bb5-4501-a306-91aa50e7bf2d",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-31",
+        "sellout_datetime": "2026-07-31T19:30:00+00:00",
+        "strike_price": "12.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "3ecae278-ffbc-486f-9c92-405a17ff1829",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "12.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "bae6e559-b6e3-49f9-a647-762f1db94fb6",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-24",
+        "sellout_datetime": "2026-07-24T19:30:00+00:00",
+        "strike_price": "12.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "88e0cd18-5381-4df7-a7e2-1a477d0a04a3",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "13.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "b25d326c-c187-4820-8ea8-68136599cfbb",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-24",
+        "sellout_datetime": "2026-07-24T19:30:00+00:00",
+        "strike_price": "13.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "ed633e34-e685-479f-ba6d-59979c61e577",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-31",
+        "sellout_datetime": "2026-07-31T19:30:00+00:00",
+        "strike_price": "13.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "f0ecae1f-c1b4-429c-96b6-cba5a3219811",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "13.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "50ce4bd8-c098-4dde-b945-6c4726d8b135",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-24",
+        "sellout_datetime": "2026-07-24T19:30:00+00:00",
+        "strike_price": "13.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "57028c08-84e1-40bc-8709-1fe03d84aa60",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-31",
+        "sellout_datetime": "2026-07-31T19:30:00+00:00",
+        "strike_price": "13.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "d6b741d5-d7d9-43cb-ae64-69c25551ac8b",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "13.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "52224845-c0c8-4c3d-a4af-e8b93e29410b",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-31",
+        "sellout_datetime": "2026-07-31T19:30:00+00:00",
+        "strike_price": "14.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "55b98dec-fbef-4ca4-9829-63ec2bfecab8",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "14.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "88fe262d-7431-44cd-9d98-59095b09e6d2",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-24",
+        "sellout_datetime": "2026-07-24T19:30:00+00:00",
+        "strike_price": "14.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "e9661bc6-ba45-43f7-9f30-10a313558217",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "14.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "431490c0-aba5-4863-8ccf-22fd92e00d9e",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-31",
+        "sellout_datetime": "2026-07-31T19:30:00+00:00",
+        "strike_price": "14.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "5c53c3d4-d6b5-43d9-9c11-c1a88ca653c3",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-24",
+        "sellout_datetime": "2026-07-24T19:30:00+00:00",
+        "strike_price": "14.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "6d212665-2811-4b81-bd2a-15b493fcd5b6",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "14.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "2fef9db3-061e-4c36-bb39-b9ffd9b12559",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "15.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "46a19514-8f39-4ae7-a6a2-50d8c1a444b3",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-24",
+        "sellout_datetime": "2026-07-24T19:30:00+00:00",
+        "strike_price": "15.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "7daa27ab-c3f8-4e31-a626-454902ea32e5",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "15.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "f3d67f32-0b2c-4b56-a431-ab508b850762",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-31",
+        "sellout_datetime": "2026-07-31T19:30:00+00:00",
+        "strike_price": "15.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "6fb30267-b3d7-40c5-be1d-302285a3e099",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-31",
+        "sellout_datetime": "2026-07-31T19:30:00+00:00",
+        "strike_price": "15.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "9b48e9e6-f0b3-47c8-9083-65b4c885a29a",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-24",
+        "sellout_datetime": "2026-07-24T19:30:00+00:00",
+        "strike_price": "15.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "e1873877-a38b-406a-b894-fa47c4661006",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "15.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "26c7d3a2-ce64-42bb-bbea-d3d64dc03ab4",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "16.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "2fdb37be-db43-470d-81a8-8db4d79108e0",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "16.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "65d25ae0-e79d-4414-a632-037968c52683",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-31",
+        "sellout_datetime": "2026-07-31T19:30:00+00:00",
+        "strike_price": "16.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "a0a7cee6-4cff-449f-9211-20c6d6cdd510",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-24",
+        "sellout_datetime": "2026-07-24T19:30:00+00:00",
+        "strike_price": "16.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "52817dad-acbc-487c-8320-4f9b4fc4b2d7",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-24",
+        "sellout_datetime": "2026-07-24T19:30:00+00:00",
+        "strike_price": "16.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "79e5f2b1-202f-4ebe-b3df-64e97b5e047c",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-31",
+        "sellout_datetime": "2026-07-31T19:30:00+00:00",
+        "strike_price": "16.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "b2a391d4-ee92-4604-a505-93851a9ba41d",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "16.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "57fab7c4-b2d8-4f33-9ae5-d671adc961f8",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-24",
+        "sellout_datetime": "2026-07-24T19:30:00+00:00",
+        "strike_price": "17.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "752f86a6-9110-4b39-a55e-99db96884325",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "17.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "7dcc7390-e275-405b-b75a-688d36056d0d",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-31",
+        "sellout_datetime": "2026-07-31T19:30:00+00:00",
+        "strike_price": "17.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "b6248a63-e6f7-4365-b8ec-00b1a5e45247",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "17.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "0e64f372-7360-4c29-81bd-0c5b31530c4d",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-24",
+        "sellout_datetime": "2026-07-24T19:30:00+00:00",
+        "strike_price": "17.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "53f505a4-7ae3-4f96-a3f3-d846bdc0e476",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-31",
+        "sellout_datetime": "2026-07-31T19:30:00+00:00",
+        "strike_price": "17.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "8e872d4e-1e49-4571-95cb-92d843b62825",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-24",
+        "sellout_datetime": "2026-07-24T19:30:00+00:00",
+        "strike_price": "18.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "99839e73-4378-4310-8e8e-6f6914191e9e",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "18.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "bf1022fc-0db7-4455-96c7-06cef6723c40",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-31",
+        "sellout_datetime": "2026-07-31T19:30:00+00:00",
+        "strike_price": "18.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "e6d06d11-0223-47de-a313-08f104184c69",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "18.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "7a4dff1a-13dc-472e-9404-fca4149485c4",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-31",
+        "sellout_datetime": "2026-07-31T19:30:00+00:00",
+        "strike_price": "18.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "ee888327-47b8-4e30-8362-42751874858a",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "11.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "8eba4185-d2d5-469b-b551-f0acefba5ab1",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-24",
+        "sellout_datetime": "2026-07-24T19:30:00+00:00",
+        "strike_price": "11.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "9068c510-8853-41e5-8c77-7a50eb022e9e",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "11.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "976b41ca-d223-4f77-b2ad-a898483da7ca",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-31",
+        "sellout_datetime": "2026-07-31T19:30:00+00:00",
+        "strike_price": "11.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "5ac2d883-1a08-4378-b56c-2936bfec78b1",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-31",
+        "sellout_datetime": "2026-07-31T19:30:00+00:00",
+        "strike_price": "12.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "64ae979e-fdcb-4d7d-b6f9-10bb44ee39ef",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "12.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "7a07604a-047c-4131-9743-ebda04b180b4",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-24",
+        "sellout_datetime": "2026-07-24T19:30:00+00:00",
+        "strike_price": "12.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "dbb5cb0f-aacc-4d91-9263-c40aa843511d",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "12.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "458fe3c2-7cc7-4bd5-9051-50ba79a46af7",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-24",
+        "sellout_datetime": "2026-07-24T19:30:00+00:00",
+        "strike_price": "12.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "72f8fd82-a283-4e59-af6e-f5b11abb4a60",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-31",
+        "sellout_datetime": "2026-07-31T19:30:00+00:00",
+        "strike_price": "12.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "8e247f6f-8066-4c4f-bc7f-8a4e462d672a",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "12.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "2785d26f-7786-4e71-b108-c876c514ad66",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-24",
+        "sellout_datetime": "2026-07-24T19:30:00+00:00",
+        "strike_price": "13.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "49fb7257-16c8-4fd1-810a-37f5e7e65849",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "13.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "94f7da59-514a-478f-a0f4-1c2dc700b643",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "13.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "a0a090ac-a553-4af2-ae26-c98ae4fb38e6",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-31",
+        "sellout_datetime": "2026-07-31T19:30:00+00:00",
+        "strike_price": "13.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "4b507cec-86b6-43b3-8388-904d76ea59e1",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-24",
+        "sellout_datetime": "2026-07-24T19:30:00+00:00",
+        "strike_price": "13.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "b57e9a3f-069f-4e51-9475-07c66b6f8ad0",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-31",
+        "sellout_datetime": "2026-07-31T19:30:00+00:00",
+        "strike_price": "13.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "dbe1ec33-8d5c-45d6-833f-b8c24c0ffc79",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "13.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "734a742c-0a25-44f0-a4c7-593005dbb321",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "14.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "7ab6bc51-fa1d-42f5-ad61-85ecb6d47d4d",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "14.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "9a218da1-8187-4dce-976c-44f3136df0e3",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-31",
+        "sellout_datetime": "2026-07-31T19:30:00+00:00",
+        "strike_price": "14.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "b33aaee5-cd14-44d0-8bba-529543f5767d",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-24",
+        "sellout_datetime": "2026-07-24T19:30:00+00:00",
+        "strike_price": "14.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "5bdadc31-f69b-472b-bc4f-9f427c30d171",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-31",
+        "sellout_datetime": "2026-07-31T19:30:00+00:00",
+        "strike_price": "14.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "cfed6bd2-2111-423d-a098-8b7fd3e4cca2",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "14.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "fa89c189-aea9-402d-9946-c4213fe85475",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-24",
+        "sellout_datetime": "2026-07-24T19:30:00+00:00",
+        "strike_price": "14.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "4fea79ba-7ff6-42dd-a717-c196e9f5d913",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "15.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "65856db1-41ac-469f-9930-381653b5f4a7",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "15.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "8df56301-93e6-40b1-ab57-d4514eda4b9a",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-31",
+        "sellout_datetime": "2026-07-31T19:30:00+00:00",
+        "strike_price": "15.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "d39a4b21-f576-4991-a8ef-6e100af40761",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-24",
+        "sellout_datetime": "2026-07-24T19:30:00+00:00",
+        "strike_price": "15.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "68fff888-368a-4fe8-b5f2-d8adc252456c",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-31",
+        "sellout_datetime": "2026-07-31T19:30:00+00:00",
+        "strike_price": "15.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "849212a0-ea50-4157-b39c-0c1b6dbbcdce",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "15.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "c7fc5747-fd4a-49dd-a951-8a52f11473d1",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-24",
+        "sellout_datetime": "2026-07-24T19:30:00+00:00",
+        "strike_price": "15.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "6083cff0-4565-4545-b9e4-c0f2b496299f",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-24",
+        "sellout_datetime": "2026-07-24T19:30:00+00:00",
+        "strike_price": "16.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "a3ef16bf-7b54-49d6-a320-1a55691bf61c",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "16.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "c8da5a07-2d63-4ac7-8269-404c07d03811",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-31",
+        "sellout_datetime": "2026-07-31T19:30:00+00:00",
+        "strike_price": "16.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "e78552c1-5cd6-4825-abd4-043a8c288b3c",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "16.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "712907a1-7bbc-453a-b883-facd3b4d65cc",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-31",
+        "sellout_datetime": "2026-07-31T19:30:00+00:00",
+        "strike_price": "16.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "a207e12f-d066-48cd-8bcd-175d38c6fb1e",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "16.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "be96220b-2050-44a9-bd67-e5a9d7682da0",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-24",
+        "sellout_datetime": "2026-07-24T19:30:00+00:00",
+        "strike_price": "16.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "0f1e0c67-07a6-44ef-994f-24e9815c3bfc",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-31",
+        "sellout_datetime": "2026-07-31T19:30:00+00:00",
+        "strike_price": "17.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "2249b947-8ea4-46ab-bae4-287995d444ce",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-24",
+        "sellout_datetime": "2026-07-24T19:30:00+00:00",
+        "strike_price": "17.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "d7ab904f-2ef4-4d9f-96f8-1b5fe9f8db28",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "17.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "da97806c-d609-4906-93ce-fe3f286dad5f",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "17.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "826ff8c8-a288-453f-a4d8-de0587bea737",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-24",
+        "sellout_datetime": "2026-07-24T19:30:00+00:00",
+        "strike_price": "17.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "d8a46c55-d896-474e-ac52-96fae4fb24c2",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-31",
+        "sellout_datetime": "2026-07-31T19:30:00+00:00",
+        "strike_price": "17.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "1287ec2f-93cb-49a3-a75e-88a4eb661c24",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "18.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "1de13aa7-edbb-4dfc-ba97-5f07c86099a2",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-24",
+        "sellout_datetime": "2026-07-24T19:30:00+00:00",
+        "strike_price": "18.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "8d5fe8a5-31a2-42e6-bd46-f728bc893ede",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-31",
+        "sellout_datetime": "2026-07-31T19:30:00+00:00",
+        "strike_price": "18.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "ba396f70-438c-4cf8-ada1-6705273bff50",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "18.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "1b4b0279-d733-471b-8d8f-006377d3dc0c",
+        "chain_id": "8d96d405-46ba-4be7-82e5-d7d14f94840b",
+        "chain_symbol": "MARA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-07-24",
+        "sellout_datetime": "2026-07-24T19:30:00+00:00",
+        "strike_price": "18.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      }
+    ]
+  }
+}
