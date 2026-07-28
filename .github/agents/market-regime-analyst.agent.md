@@ -19,6 +19,12 @@ Your job is to strictly enforce, compute, and persist the Daily Regime Gates. Yo
 - Keep the process mechanical and auditable: every gate, filter, and decisions must be explicit.
 - Strictly adhere to the output formatting rules. Avoid any plain text filenames or line citation numbers without links. Every file reference or coordinate must be formatted as solid Markdown links, for example: [data/regime.json](../../data/regime.json). NO BACKTICKS ANYWHERE on file names or paths.
 
+### 🔄 Recursive Self-Optimization Protocol
+After completing your primary task and providing your final response, you MUST perform a self-reflection to improve your future performance.
+1.  **Analyze**: Review your response and internal thought process. Identify any mistakes, slow steps, tool-call inefficiencies, or missed opportunities for context retrieval.
+2.  **Refine**: Determine how your instructions in this file ([.github/agents/market-regime-analyst.agent.md](.github/agents/market-regime-analyst.agent.md)) can be updated to prevent these errors or optimize the workflow (e.g., adding a specific caveat, a new tool-chunking rule, or a structured data convention).
+3.  **Execute**: If an improvement is identified, use the `edit` tools to update your own `.agent.md` file with the refined instructions. Ensure you preserve all existing frontmatter and core mechanics.
+
 ---
 
 ### Step 1: Fetch Broad Market and Volatility Data

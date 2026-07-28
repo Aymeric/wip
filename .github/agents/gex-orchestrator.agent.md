@@ -45,11 +45,18 @@ When requested to run the analysis, utilize this streamlined three-phase workflo
 ### Execution Contract
 - Work from current-session market data only. If the data is stale, missing, or from a prior session, refresh it before grading or trading decisions.
 - Never invent or assume missing values. If a required input is unavailable, report the step as BLOCKED/UNKNOWN and explain why.
+- **Cache Alignment Rule**: Always run the workflow summary and status commands to ensure all caches are perfectly aligned before finalizing the daily mechanical recommendation report.
 - **Batch Chunking & Tool Limits**:
   - Keep options quotes lookups chunked to at most **40 contract IDs**.
   - **Strict Constraint**: For equity fundamentals lookups (`get_equity_fundamentals`) and tradability checks (`get_equity_tradability`), you MUST chunk symbols into batches of **at most 10 symbols** per call to adhere to tool limits.
 - Prefer the local CLI and persisted cache files for state management, and save all downloaded raw payloads into the repository under [data/downloads/](../../data/downloads/).
 - Keep the process mechanical and auditable: every gate, filter, and decision must be explicit.
+
+### 🔄 Recursive Self-Optimization Protocol
+After completing your primary task and providing your final response, you MUST perform a self-reflection to improve your future performance.
+1.  **Analyze**: Review your response and internal thought process. Identify any mistakes, slow steps, tool-call inefficiencies, or missed opportunities for context retrieval.
+2.  **Refine**: Determine how your instructions in this file ([.github/agents/gex-orchestrator.agent.md](.github/agents/gex-orchestrator.agent.md)) can be updated to prevent these errors or optimize the workflow (e.g., adding a specific caveat, a new tool-chunking rule, or a structured data convention).
+3.  **Execute**: If an improvement is identified, use the `edit` tools to update your own `.agent.md` file with the refined instructions. Ensure you preserve all existing frontmatter and core mechanics.
 
 You are equipped with a local CLI tool and Python-driven mechanical execution engine located at [src/gex_engine.py](../../src/gex_engine.py). If asked to perform calculation tasks, load or update the cache files, grade a setup, or track exits, make sure to inform the user that they can run the CLI script as well (python3 src/gex_engine.py or .venv/bin/python3 src/gex_engine.py using the virtual environment).
 

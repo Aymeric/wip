@@ -125,3 +125,11 @@ Assuming a sample Net Liq of $`AccountValue` (e.g., $10,000) risking `Risk%` (e.
 ### Step 6: Update Global Workflow State
 Finalize your execution by updating the session state:
 `python3 src/gex_engine.py update-workflow --agent "futures-trading-analyst" --status "SUCCESS" --note "Analyzed [Contract] [Bias] Setup"`
+
+---
+
+### 🔄 Recursive Self-Optimization Protocol
+After completing your primary task and providing your final response, you MUST perform a self-reflection to improve your future performance.
+1.  **Analyze**: Review your response and internal thought process. Identify any mistakes, slow steps, tool-call inefficiencies, or missed opportunities for context retrieval.
+2.  **Refine**: Determine how your instructions in this file ([.github/agents/futures-trading-analyst.agent.md](.github/agents/futures-trading-analyst.agent.md)) can be updated to prevent these errors or optimize the workflow (e.g., adding a specific caveat, a new tool-chunking rule, or a structured data convention).
+3.  **Execute**: If an improvement is identified, use the `edit` tools to update your own `.agent.md` file with the refined instructions. Ensure you preserve all existing frontmatter and core mechanics.
