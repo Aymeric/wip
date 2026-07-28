@@ -13,7 +13,9 @@ Your job is to run the mechanical option selection filters: query live options c
 ### Execution Contract
 - Work from current-session market data and live option chains. Do not make up option strikes, premiums, or expiration dates.
 - Never invent or assume missing values. If a required input is unavailable, report the step as BLOCKED/UNKNOWN and explain why.
-- Strictly chunk options quotes queries into batches of at most **40 IDs** to prevent "Request-URI Too Large" (HTTP 414) errors.
+- **Batch Chunking & Tool Limits**:
+  - Strictly chunk options quotes queries into batches of at most **40 IDs** to prevent "Request-URI Too Large" (HTTP 414) errors.
+  - **Strict Constraint**: For equity fundamentals lookups (`get_equity_fundamentals`), you MUST chunk symbols into batches of **at most 10 symbols** per call to stay within tool limits.
 - Keep the process mechanical and auditable. Formulate all calculations and criteria explicitly.
 - Coordinate directly with the local Python engine in [src/gex_engine.py](../../src/gex_engine.py). If executing checks via the CLI, prefer using the highly optimized offline file inputs to let the engine perform GEX profile derivation, scoring, sorting, sizing simulation, and payoff projections automatically:
   `python3 src/gex_engine.py analyze <TICKER> --spot <spot_price> --inst-file <inst_file_path> --quote-file <quote_file_path> --hist-file <hist_file_path> --db-change <db_change> [--target-delta <delta>] [--min-dte <days>] [--max-dte <days>] [--earnings-date <earnings_date>] [--net-liq <net_liq>]`

@@ -18,12 +18,29 @@ from gex_engine import (
     derive_volatility_profile,
     select_best_option,
     discover_earnings_date,
+    calculate_bollinger_bands,
+    calculate_atr,
     RegimeGates,
     OptionPosition,
     StockPosition
 )
 
 class TestGEXEngine(unittest.TestCase):
+
+    def test_technical_indicators(self):
+        # Bollinger Bands Test
+        closes = [100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119]
+        mid, upper, lower = calculate_bollinger_bands(closes, period=10)
+        self.assertIsNotNone(mid)
+        self.assertTrue(upper > mid > lower)
+
+        # ATR Test
+        highs = [105] * 20
+        lows = [95] * 20
+        closes = [100] * 20
+        atr = calculate_atr(highs, lows, closes, period=10)
+        self.assertIsNotNone(atr)
+        self.assertGreater(atr, 0)
 
     def test_compute_regime_gates(self):
         # Case 1: All Tracks Passed (All Gates PASS)

@@ -13,7 +13,9 @@ Your job is to run the analytical mechanics: fetch options quotes in safe chunks
 ### Execution Contract
 - Work from current-session market data and live option chains. Do not make up structural boundaries (pTrans, nTrans, etc.).
 - Never invent or assume missing values. If a required input is unavailable, report the step as BLOCKED/UNKNOWN and explain why.
-- Strictly chunk options quotes queries into batches of at most **40 IDs** to prevent "Request-URI Too Large" (HTTP 414) errors.
+- **Batch Chunking & Tool Limits**:
+  - Strictly chunk options quotes queries into batches of at most **40 IDs** to prevent "Request-URI Too Large" (HTTP 414) errors.
+  - **Strict Constraint**: For equity fundamentals lookups (`get_equity_fundamentals`), you MUST chunk symbols into batches of **at most 10 symbols** per call to stay within tool limits.
 - Keep the process mechanical and auditable. Formulate all calculations explicitly.
 - Strictly adhere to the output formatting rules. Avoid any plain text filenames or line citation numbers without links. Every file reference or coordinate must be formatted as solid Markdown links, for example: [data/ticker_analyses.json](../../data/ticker_analyses.json). NO BACKTICKS ANYWHERE on file names or paths.
 
@@ -79,7 +81,7 @@ Grade the Setup’s structural quality on an 11-point system ($\ge 9/11$ require
 3. **Risk/Reward Gate**: Calculate:
    $$\text{Reward} = \text{+GEX} - \text{Spot}$$
    $$\text{Risk} = \text{Spot} - \text{pTrans}$$
-   Ensure $\frac{\text{Reward}}{\text{Risk}} \ge 2.0$.
+   Ensure $\frac{\text{Reward}}{\text{Risk}} \ge 2.5$. Any setup with R/R $\le 2.5$ MUST be flagged as a **FAIL**.
 
 ---
 
@@ -127,7 +129,7 @@ Grade the Setup’s structural quality on an 11-point system ($\ge 9/11$ require
 - **Risk/Reward Check**: [PASS / FAIL]
   $$Reward = T1 - Spot = \$R.RR$$
   $$Risk = Spot - pTrans = \$S.SS$$
-  $$\frac{Reward}{Risk} = R.R \ge 2.0$$
+  $$\frac{Reward}{Risk} = R.R \ge 2.5$$
 
 ### 📁 Setup Status: 🟢 CONFIRMED / 🟡 PENDING / 🔴 BLOCKED
 

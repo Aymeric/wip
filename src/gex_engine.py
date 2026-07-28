@@ -1070,7 +1070,6 @@ def calculate_grade(ticker, spot, ptrans, ntrans, gex, cotmp, extra_rules=None):
     rules[4] = ptrans > ntrans
     
     # Rule 6: Spot sits above positive transition (pTrans) -> Wait, watchdog buffer allows pending.
-    # The rule checklist itself matches: Spot price sits above pTrans.
     rules[5] = spot > ptrans
     
     # Rule 7: Total OI exceeds 10,000 contracts
@@ -1089,6 +1088,17 @@ def calculate_grade(ticker, spot, ptrans, ntrans, gex, cotmp, extra_rules=None):
     rules[10] = extra_rules.get("rv_10_stable", True)
     
     grade = sum(1 for r in rules if r)
+    
+    # Optional Bonus Factor: Reddit Sentiment
+    # If Sentiment is > 0.5 (High conviction), we can consider it a +0.5 boost (visual only or minor logic)
+    sentiment_data = load_json(SENTIMENT_FILE, {})
+    ticker_sentiment = sentiment_data.get(ticker.upper(), {})
+    sentiment_score = ticker_sentiment.get("Sentiment", 0.0)
+    
+    if sentiment_score > 0.5 and grade >= 9:
+        # Boost status to HIGH CONVICTION if grade is already strong
+        pass
+
     return grade, rules
 
 
@@ -1335,6 +1345,116 @@ def calculate_macd(closes: List[float], fast_period: int = 12, slow_period: int 
     return macd_line[-1], signal_line[-1], macd_line[-1] - signal_line[-1]
 
 
+def calculate_bollinger_bands(closes: List[float], period: int = 20, num_std: float = 2.0) -> Tuple[Optional[float], Optional[float], Optional[float]]:
+    """Calculates Middle, Upper, and Lower Bollinger Bands."""
+    if len(closes) < period:
+        return None, None, None
+    
+    import math
+    recent_closes = closes[-period:]
+    middle_band = sum(recent_closes) / period
+    
+    variance = sum((x - middle_band) ** 2 for x in recent_closes) / period
+    std_dev = math.sqrt(variance)
+    
+    upper_band = middle_band + (num_std * std_dev)
+    lower_band = middle_band - (num_std * std_dev)
+    
+    return middle_band, upper_band, lower_band
+
+
+def calculate_atr(highs: List[float], lows: List[float], closes: List[float], period: int = 14) -> Optional[float]:
+    """Calculates the Average True Range (ATR)."""
+    if len(closes) < period + 1:
+        return None
+    
+    true_ranges = []
+    for i in range(1, len(closes)):
+        tr = max(
+            highs[i] - lows[i],
+            abs(highs[i] - closes[i-1]),
+            abs(lows[i] - closes[i-1])
+        )
+        true_ranges.append(tr)
+    
+    # First ATR is simple average of first 'period' True Ranges
+    atr = sum(true_ranges[:period]) / period
+    
+    # Subsequent ATRs use smoothing
+    for i in range(period, len(true_ranges)):
+        atr = (atr * (period - 1) + true_ranges[i]) / period
+        
+    return atr
+
+
+def find_latest_historical_ohlc(symbol: str) -> Tuple[List[float], List[float], List[float], List[float]]:
+    """
+    Recursively scans for historical data and returns (closes, highs, lows, opens).
+    """
+    symbol_upper = symbol.upper()
+    matching_files = []
+    
+    if os.path.exists(DOWNLOADS_DIR):
+        for root, dirs, files in os.walk(DOWNLOADS_DIR):
+            for file in files:
+                if file.endswith(".json") and symbol_upper in file.upper() and "HISTORICAL" in file.upper():
+                    matching_files.append(os.path.join(root, file))
+                    
+    if not matching_files:
+        return [], [], [], []
+        
+    matching_files.sort(reverse=True)
+    
+    for filepath in matching_files:
+        try:
+            with open(filepath, 'r') as f:
+                data = json.load(f)
+            
+            bars = []
+            if isinstance(data, dict):
+                results = data.get("data", {}).get("results", [])
+                if not results:
+                    results = data.get("results", [])
+                if results:
+                    for res in results:
+                        if res.get("symbol", "").upper() == symbol_upper:
+                            bars = res.get("bars", [])
+                            break
+                if not bars:
+                    bars = data.get("bars", [])
+            elif isinstance(data, list):
+                bars = data
+                
+            if not bars:
+                continue
+                
+            if isinstance(bars[0], dict) and "begins_at" in bars[0]:
+                bars = sorted(bars, key=lambda x: x.get("begins_at", ""))
+                
+            closes, highs, lows, opens = [], [], [], []
+            for bar in bars:
+                if not isinstance(bar, dict):
+                    continue
+                try:
+                    c = float(bar.get("close_price") or bar.get("close", 0.0))
+                    h = float(bar.get("high_price") or bar.get("high", 0.0))
+                    l = float(bar.get("low_price") or bar.get("low", 0.0))
+                    o = float(bar.get("open_price") or bar.get("open", 0.0))
+                    if c > 0.0:
+                        closes.append(c)
+                        highs.append(h)
+                        lows.append(l)
+                        opens.append(o)
+                except (ValueError, TypeError):
+                    continue
+            if len(closes) > 0:
+                return closes, highs, lows, opens
+        except Exception:
+            continue
+            
+    return [], [], [], []
+
+
 def find_latest_historical_closes(symbol: str) -> List[float]:
     """
     Recursively scans the DOWNLOADS_DIR directory for historical daily closes files
@@ -1401,20 +1521,27 @@ def find_latest_historical_closes(symbol: str) -> List[float]:
             
     return []
 
-def check_technical_alerts(closes: List[float]) -> Dict[str, Any]:
+def check_technical_alerts(closes: List[float], highs: Optional[List[float]] = None, lows: Optional[List[float]] = None) -> Dict[str, Any]:
     """
-    Analyzes historical close prices for RSI and MACD alerts.
+    Analyzes historical price data for RSI, MACD, Bollinger Bands, and ATR alerts.
     
     Returns:
         dict: {
             "rsi": current_rsi (float or None),
             "macd_hist": current_macd_hist (float or None),
-            "alerts": list of str triggered (e.g. ["RSI_OVERBOUGHT"])
+            "bb": (mid, upper, lower),
+            "atr": current_atr (float or None),
+            "alerts": list of str triggered
         }
     """
     alerts = []
     rsi = calculate_rsi(closes)
     macd_line, sig_line, macd_hist = calculate_macd(closes)
+    mid_bb, upper_bb, lower_bb = calculate_bollinger_bands(closes)
+    
+    atr = None
+    if highs and lows:
+        atr = calculate_atr(highs, lows, closes)
     
     if rsi is not None:
         if rsi >= 70.0:
@@ -1422,8 +1549,12 @@ def check_technical_alerts(closes: List[float]) -> Dict[str, Any]:
         elif rsi <= 30.0:
             alerts.append("RSI_OVERSOLD")
             
-    # For MACD Crossover, we need the previous day's histogram value as well.
-    # We require at least slow_period + signal_period (26 + 9 = 35) to get previous values.
+    if lower_bb and closes[-1] <= lower_bb:
+        alerts.append("BB_LOWER_TOUCH")
+    elif upper_bb and closes[-1] >= upper_bb:
+        alerts.append("BB_UPPER_TOUCH")
+
+    # For MACD Crossover
     if len(closes) >= 35:
         def get_ema(values: List[float], p: int) -> List[float]:
             ema = []
@@ -3239,21 +3370,24 @@ def cmd_portfolio(args):
     
     technical_alerts = []
     for tkr in unique_tickers:
-        closes = find_latest_historical_closes(tkr)
+        closes, highs, lows, opens = find_latest_historical_ohlc(tkr)
         if closes:
-            res = check_technical_alerts(closes)
+            res = check_technical_alerts(closes, highs, lows)
             if res.get("alerts"):
                 for alert in res["alerts"]:
                     alert_desc = alert.replace("_", " ")
-                    if "OVERBOUGHT" in alert:
-                        desc = format_color(f"{alert_desc} (RSI: {res['rsi']:.1f})", "31", bold=True)
-                    elif "OVERSOLD" in alert:
-                        desc = format_color(f"{alert_desc} (RSI: {res['rsi']:.1f})", "32", bold=True)
-                    elif "BULLISH" in alert:
-                        desc = format_color(f"{alert_desc} (Hist: {res['macd_hist']:+.4f})", "32", bold=True)
-                    else:
-                        desc = format_color(f"{alert_desc} (Hist: {res['macd_hist']:+.4f})", "31", bold=True)
-                    technical_alerts.append(f"  - {format_color(tkr, '35', bold=True)}: {desc}")
+                    color = "33"
+                    if "OVERSOLD" in alert or "BULLISH" in alert or "LOWER_TOUCH" in alert:
+                        color = "32"
+                    elif "OVERBOUGHT" in alert or "BEARISH" in alert or "UPPER_TOUCH" in alert:
+                        color = "31"
+                    
+                    val_str = ""
+                    if "RSI" in alert: val_str = f" (RSI: {res['rsi']:.1f})"
+                    elif "MACD" in alert: val_str = f" (Hist: {res['macd_hist']:+.4f})"
+                    elif "BB" in alert: val_str = f" (Spot: ${closes[-1]:.2f})"
+                    
+                    technical_alerts.append(f"  - {format_color(tkr, '35', bold=True)}: {format_color(alert_desc + val_str, color, bold=True)}")
                     
     print("\n### 📈 Active Positions Technical Alerts")
     if technical_alerts:
@@ -3710,7 +3844,8 @@ def cmd_sync_positions(args):
             for d in os.listdir(DOWNLOADS_DIR):
                 d_path = os.path.join(DOWNLOADS_DIR, d)
                 if os.path.isdir(d_path):
-                    if any(f in os.listdir(d_path) for f in ["option_positions_raw.json", "equity_positions_raw.json"]):
+                    files = os.listdir(d_path)
+                    if any(f.startswith("option_positions_raw") or f.startswith("equity_positions_raw") for f in files):
                         candidates.append(d_path)
         if candidates:
             candidates.sort()
@@ -3752,16 +3887,26 @@ def cmd_sync_positions(args):
     active_stocks = options.get("stocks_positions", {})
 
     # 3. Sync Equities
-    equity_file = os.path.join(base_dir, "equity_positions_raw.json")
+    equity_files = [f for f in os.listdir(base_dir) if f.startswith("equity_positions_raw") and f.endswith(".json")]
+    if not equity_files and os.path.exists(os.path.join(base_dir, "equity_positions_raw.json")):
+        equity_files = ["equity_positions_raw.json"]
+    
     new_stocks = 0
     updated_stocks = 0
     removed_stocks = 0
-    if os.path.exists(equity_file):
-        equity_data = load_json(equity_file, {})
-        raw_stocks = equity_data.get("data", {}).get("positions", []) or equity_data.get("positions", [])
+    
+    for ef in equity_files:
+        equity_path = os.path.join(base_dir, ef)
+        equity_data = load_json(equity_path, {})
+        
+        if isinstance(equity_data, list):
+            raw_stocks = equity_data
+        else:
+            raw_stocks = equity_data.get("data", {}).get("positions", []) or \
+                         equity_data.get("positions", []) or \
+                         equity_data.get("results", []) or []
         
         # Track which stocks are present in the raw data
-        present_stocks = set()
         for rs in raw_stocks:
             ticker = rs.get("symbol", "").upper()
             if not ticker: continue
@@ -3775,7 +3920,6 @@ def cmd_sync_positions(args):
                     removed_stocks += 1
                 continue
                 
-            present_stocks.add(ticker)
             if ticker in active_stocks:
                 active_stocks[ticker]["Shares"] = shares
                 active_stocks[ticker]["Average Buy Price"] = avg_price
@@ -3798,90 +3942,97 @@ def cmd_sync_positions(args):
                 }
                 new_stocks += 1
         
-        # Optional: Remove active stocks NOT in the raw snapshot? 
-        # Conservative: only remove if explicitly 0.0 in snapshot.
-
     # 4. Sync Options
-    opt_files = ["option_positions_raw.json"]
+    opt_files = [f for f in os.listdir(base_dir) if f.startswith("option_positions_raw") and f.endswith(".json")]
+    if not opt_files and os.path.exists(os.path.join(base_dir, "option_positions_raw.json")):
+        opt_files = ["option_positions_raw.json"]
+    
     new_opts = 0
     updated_opts = 0
     removed_opts = 0
     for of in opt_files:
         opt_path = os.path.join(base_dir, of)
-        if os.path.exists(opt_path):
-            opt_data = load_json(opt_path, {})
-            raw_opts = opt_data.get("data", {}).get("positions", []) or opt_data.get("positions", [])
-            for ro in raw_opts:
-                opt_id = ro.get("option_id")
-                if not opt_id: continue
+        opt_data = load_json(opt_path, {})
+        
+        if isinstance(opt_data, list):
+            raw_opts = opt_data
+        else:
+            raw_opts = opt_data.get("data", {}).get("positions", []) or \
+                       opt_data.get("positions", []) or \
+                       opt_data.get("results", []) or []
+            
+        for ro in raw_opts:
+            opt_id = ro.get("option_id")
+            if not opt_id:
+                continue
                 
-                underlier = ro.get("chain_symbol", "").upper()
-                qty = float(ro.get("quantity", 0.0))
-                avg_price = float(ro.get("average_price", 0.0)) / 100.0
-                ro_expiration = ro.get("expiration_date")
-                ro_type = ro.get("type")
-                
-                if qty <= 0:
-                    if opt_id in active_opts:
-                        active_opts.pop(opt_id)
-                        removed_opts += 1
-                    continue
-                
-                inst = inst_map.get(opt_id, {})
-                quote = quote_map.get(opt_id, {})
-                
-                strike = inst.get("strike")
-                opt_type = inst.get("type") or ro_type
-                expiration = inst.get("expiration") or ro_expiration
-                
-                mark = float(quote.get("mark_price") or avg_price)
-                delta = float(quote.get("delta") or 0.0)
-                gamma = float(quote.get("gamma") or 0.0)
-                oi = int(quote.get("open_interest") or 0)
-                iv = float(quote.get("implied_volatility") or 0.0)
-
+            underlier = ro.get("chain_symbol", "").upper()
+            qty = float(ro.get("quantity", 0.0))
+            avg_price = float(ro.get("average_price", 0.0)) / 100.0
+            ro_expiration = ro.get("expiration_date")
+            ro_type = ro.get("type")
+            
+            if qty <= 0:
                 if opt_id in active_opts:
-                    # Preserving existing metadata if strike/expiration are missing in sync
-                    if not active_opts[opt_id].get("Strike") or active_opts[opt_id]["Strike"] == "0.00":
-                        if strike: active_opts[opt_id]["Strike"] = f"{strike:.2f}"
-                    if not active_opts[opt_id].get("Expiration") or active_opts[opt_id]["Expiration"] == "1970-01-01":
-                        if expiration: active_opts[opt_id]["Expiration"] = expiration
-                    
-                    active_opts[opt_id]["Purchase Premium"] = avg_price
-                    active_opts[opt_id]["Mark Price"] = mark
-                    active_opts[opt_id]["Delta"] = str(delta)
-                    active_opts[opt_id]["Gamma"] = str(gamma)
-                    active_opts[opt_id]["Open Interest"] = oi
-                    active_opts[opt_id]["ImpVol"] = str(iv)
-                    active_opts[opt_id]["Asset Cost Basis"] = avg_price * 100.0 * qty
-                    active_opts[opt_id]["Current Value"] = mark * 100.0 * qty
-                    updated_opts += 1
-                else:
-                    active_opts[opt_id] = {
-                        "Option ID": opt_id,
-                        "Underlier": underlier,
-                        "Strike": f"{strike:.2f}" if strike else "0.00",
-                        "Expiration": expiration or "1970-01-01",
-                        "Type": opt_type or "call",
-                        "Purchase Premium": avg_price,
-                        "Delta": str(delta),
-                        "Gamma": str(gamma),
-                        "Mark Price": mark,
-                        "Open Interest": oi,
-                        "ImpVol": str(iv),
-                        "Asset Cost Basis": avg_price * 100.0 * qty,
-                        "Current Value": mark * 100.0 * qty,
-                        "P&L (%)": 0.0,
-                        "P&L ($)": 0.0,
-                        "Sizing Risk Weight (%)": 0.0,
-                        "Beta Sector Tag": "Technology/Beta",
-                        "Entry Date": datetime.today().strftime('%Y-%m-%d'),
-                        "Days Held": 1,
-                        "Stalling Days": 0,
-                        "Target Mode": "T1",
-                        "T2 Target": None
-                    }
-                    new_opts += 1
+                    active_opts.pop(opt_id)
+                    removed_opts += 1
+                continue
+            
+            inst = inst_map.get(opt_id, {})
+            quote = quote_map.get(opt_id, {})
+            
+            strike = inst.get("strike")
+            opt_type = inst.get("type") or ro_type
+            expiration = inst.get("expiration") or ro_expiration
+            
+            mark = float(quote.get("mark_price") or avg_price)
+            delta = float(quote.get("delta") or 0.0)
+            gamma = float(quote.get("gamma") or 0.0)
+            oi = int(quote.get("open_interest") or 0)
+            iv = float(quote.get("implied_volatility") or 0.0)
+
+            if opt_id in active_opts:
+                # Preserving existing metadata if strike/expiration are missing in sync
+                if not active_opts[opt_id].get("Strike") or active_opts[opt_id]["Strike"] == "0.00":
+                    if strike: active_opts[opt_id]["Strike"] = f"{strike:.2f}"
+                if not active_opts[opt_id].get("Expiration") or active_opts[opt_id]["Expiration"] == "1970-01-01":
+                    if expiration: active_opts[opt_id]["Expiration"] = expiration
+                
+                active_opts[opt_id]["Purchase Premium"] = avg_price
+                active_opts[opt_id]["Mark Price"] = mark
+                active_opts[opt_id]["Delta"] = str(delta)
+                active_opts[opt_id]["Gamma"] = str(gamma)
+                active_opts[opt_id]["Open Interest"] = oi
+                active_opts[opt_id]["ImpVol"] = str(iv)
+                active_opts[opt_id]["Asset Cost Basis"] = avg_price * 100.0 * qty
+                active_opts[opt_id]["Current Value"] = mark * 100.0 * qty
+                updated_opts += 1
+            else:
+                active_opts[opt_id] = {
+                    "Option ID": opt_id,
+                    "Underlier": underlier,
+                    "Strike": f"{strike:.2f}" if strike else "0.00",
+                    "Expiration": expiration or "1970-01-01",
+                    "Type": opt_type or "call",
+                    "Purchase Premium": avg_price,
+                    "Delta": str(delta),
+                    "Gamma": str(gamma),
+                    "Mark Price": mark,
+                    "Open Interest": oi,
+                    "ImpVol": str(iv),
+                    "Asset Cost Basis": avg_price * 100.0 * qty,
+                    "Current Value": mark * 100.0 * qty,
+                    "P&L (%)": 0.0,
+                    "P&L ($)": 0.0,
+                    "Sizing Risk Weight (%)": 0.0,
+                    "Beta Sector Tag": "Technology/Beta",
+                    "Entry Date": datetime.today().strftime('%Y-%m-%d'),
+                    "Days Held": 1,
+                    "Stalling Days": 0,
+                    "Target Mode": "T1",
+                    "T2 Target": None
+                }
+                new_opts += 1
 
     options["options_positions"] = active_opts
     options["stocks_positions"] = active_stocks
@@ -4919,6 +5070,129 @@ def cmd_payoff(args):
     print("  " + "-" * 133)
 
 
+def cmd_simulate(args):
+    """Simulates price movements for active positions or candidates."""
+    symbol = args.symbol.upper()
+    sim_spot = args.spot
+    
+    analyses = load_json(ANALYSES_FILE, {})
+    options = load_json(OPTIONS_FILE, {"options_positions": {}, "stocks_positions": {}})
+    
+    cached = analyses.get(symbol, {})
+    if not cached:
+        # Check candidates
+        candidates = load_json(CANDIDATES_FILE, {}).get("candidates", [])
+        for c in candidates:
+            if c["symbol"].upper() == symbol:
+                cached = {
+                    "Ticker": symbol,
+                    "Spot": c["price"],
+                    "pTrans": c.get("ptrans", c["price"] * 0.98),
+                    "nTrans": c.get("ntrans", c["price"] * 0.95),
+                    "+GEX": c.get("gex", c["price"] * 1.05),
+                    "COTMP": c.get("cotmp", c["price"] * 0.92),
+                    "db_change": 0.0
+                }
+                break
+                
+    if not cached:
+        print(f"Error: Symbol {symbol} not found in analyses or candidates. Please run 'analyze' first.")
+        sys.exit(1)
+        
+    orig_spot = cached.get("Spot", 0.0)
+    ptrans = cached.get("pTrans", 0.0)
+    ntrans = cached.get("nTrans", 0.0)
+    gex = cached.get("+GEX", 0.0)
+    cotmp = cached.get("COTMP", 0.0)
+    
+    print(format_color(f"### 🧪 Simulation for {symbol}", "36", bold=True))
+    print(f"- **Original Spot**: ${orig_spot:.2f}")
+    print(f"- **Simulated Spot**: {format_color(f'${sim_spot:.2f}', '35', bold=True)}")
+    
+    pct_chg = ((sim_spot - orig_spot) / orig_spot) * 100.0 if orig_spot > 0 else 0.0
+    print(f"- **Price Change**: {format_color(f'{pct_chg:+.2f}%', '32' if pct_chg >= 0 else '31', bold=True)}")
+    
+    # Recalculate Grade
+    grade, rule_checklist = calculate_grade(symbol, sim_spot, ptrans, ntrans, gex, cotmp)
+    grade_color = "32" if grade >= 9 else "31"
+    print(f"- **Simulated Grade**: {format_color(f'{grade}/11', grade_color)}")
+    
+    # Recalculate Exit Rules for active positions
+    pos = options["options_positions"].get(symbol) or options["stocks_positions"].get(symbol)
+    if pos:
+        print(f"\n### 🛡️ Active Position Impact")
+        if "Purchase Premium" in pos: # Option
+            purchase_premium = float(pos["Purchase Premium"])
+            # Estimate new mark price based on delta/gamma
+            try:
+                delta = float(pos.get("Delta", 0.5))
+                gamma = float(pos.get("Gamma", 0.01))
+            except Exception:
+                delta, gamma = 0.5, 0.01
+            delta_s = sim_spot - orig_spot
+            sim_mark = max(0.01, float(pos.get("Mark Price", purchase_premium)) + (delta * delta_s) + (0.5 * gamma * (delta_s**2)))
+            
+            exit_rule, action, time_st, dist_ntrans, dist_max = compute_exit_rule_state(
+                sim_spot, purchase_premium, sim_mark, ptrans, ntrans, gex,
+                pos.get("Days Held", 1), pos.get("Stalling Days", 0), 30 # Mock DTE
+            )
+            
+            pl_pct = ((sim_mark - purchase_premium) / purchase_premium) * 100
+            pl_color = "32" if pl_pct >= 0 else "31"
+            print(f"- **Simulated Mark Price**: ${sim_mark:.2f} ({format_color(f'{pl_pct:+.2f}%', pl_color)})")
+            print(f"- **Simulated Exit Rule**: {format_color(exit_rule, '31' if 'STOP' in exit_rule else '32')}")
+            print(f"- **Proposed Action**: {action}")
+        else: # Stock
+            shares = float(pos.get("Shares", 0.0))
+            avg_price = float(pos.get("Average Buy Price", 0.0))
+            cost_basis = shares * avg_price
+            sim_val = shares * sim_spot
+            sim_pl_dlr = sim_val - cost_basis
+            sim_pl_pct = (sim_pl_dlr / cost_basis) * 100.0 if cost_basis > 0 else 0.0
+            
+            pl_color = "32" if sim_pl_dlr >= 0 else "31"
+            print(f"- **Simulated Position Value**: ${sim_val:,.2f} ({format_color(f'{sim_pl_pct:+.2f}%', pl_color)})")
+            
+    # Visual map
+    print(f"\n### 🛣️ GEX Runway Map (Simulated)")
+    print(f"  {generate_ascii_gex_scale(sim_spot, ptrans, ntrans, gex, cotmp)}\n")
+
+
+def cmd_cleanup_downloads(args):
+    """Removes temporary download folders older than N days."""
+    days = args.days
+    now = datetime.now()
+    removed_count = 0
+    
+    if not os.path.exists(DOWNLOADS_DIR):
+        print("No downloads directory found.")
+        return
+        
+    for item in os.listdir(DOWNLOADS_DIR):
+        item_path = os.path.join(DOWNLOADS_DIR, item)
+        if os.path.isdir(item_path):
+            # Check if directory name is a date YYYYMMDD
+            if re.match(r"^\d{8}$", item):
+                try:
+                    dir_date = datetime.strptime(item, "%Y%m%d")
+                    age_days = (now - dir_date).days
+                    if age_days > days:
+                        print(f"Removing stale download folder: {item} ({age_days} days old)")
+                        shutil.rmtree(item_path)
+                        removed_count += 1
+                except Exception as e:
+                    print(f"Error removing {item}: {e}")
+            elif item == "tmp":
+                # Always clean tmp folders if they exist and are older than 1 day
+                mtime = os.path.getmtime(item_path)
+                if (now - datetime.fromtimestamp(mtime)).days >= 1:
+                    print(f"Removing stale tmp folder: {item}")
+                    shutil.rmtree(item_path)
+                    removed_count += 1
+                    
+    print(f"Cleanup complete. Removed {removed_count} folders.")
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="GEX Options Mechanical Engine - Rule validation CLI and storage keeper"
@@ -5097,6 +5371,15 @@ def main():
     p_payoff.add_argument("--dte", type=int, default=30, help="Option days to expiration (default: 30)")
     p_payoff.add_argument("--target-spots", type=str, dest="target_spots", help="Comma-separated custom underlier spot prices to evaluate")
 
+    # simulate subcommand
+    p_sim = subparsers.add_parser("simulate", help="Simulates price movements for active positions or candidates.")
+    p_sim.add_argument("symbol", help="Ticker symbol")
+    p_sim.add_argument("spot", type=float, help="Simulated spot price")
+    
+    # cleanup-downloads subcommand
+    p_clean = subparsers.add_parser("cleanup-downloads", help="Removes temporary download folders older than N days.")
+    p_clean.add_argument("--days", type=int, default=7, help="Remove folders older than N days (default: 7)")
+
     args = parser.parse_args()
     
     # Process spot overrides if they are provided
@@ -5151,6 +5434,10 @@ def main():
         cmd_closed(args)
     elif args.command == "payoff":
         cmd_payoff(args)
+    elif args.command == "simulate":
+        cmd_simulate(args)
+    elif args.command == "cleanup-downloads":
+        cmd_cleanup_downloads(args)
 
 
 if __name__ == "__main__":

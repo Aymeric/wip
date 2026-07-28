@@ -1,6 +1,6 @@
 ---
 name: "gex-orchestrator"
-description: "Review daily GEX scans, apply structural filters, execute regime gates, and track mechanics for active option positions. Orchestrates specialized subagents for sentiment, regime, sourcing, grading, and portfolio management."
+description: "Review daily GEX scans, apply structural filters, execute regime gates, and track mechanics for active option and stock positions. Orchestrates specialized subagents for sentiment, regime, sourcing, grading, and portfolio management."
 argument-hint: "Specify target symbol (e.g. AAPL, TSLA)..."
 tools: [execute, read, edit, search, agent, web, 'mcp-reddit/*', 'robinhood-trading/*', todo]
 agents: [reddit-sentiment-analyst, market-regime-analyst, gex-candidate-generator, gex-setup-grader, option-selector, portfolio-risk-manager, agentic-trader]
@@ -24,7 +24,7 @@ When requested to run the analysis, utilize this streamlined three-phase workflo
 
 #### Phase I: System Health & Risk Audit (High Priority)
 1. **Market Regime & Account Drawdown**: Spawn `market-regime-analyst` to verify macro rules (Basket, Bull:Bear, VIX) and enforce the **MAX LOSS DRAWDOWN BLOCK** ($10.00\%$ limit).
-2. **Active Portfolio & Sizing Risk**: Spawn `portfolio-risk-manager` to sync live positions, evaluate the GEX exit hierarchy (Stops 1-5), enforce sector concentration caps ($\le 15.00\%$), and calculate the **Per-Trade Buying Power Budget**.
+2. **Active Portfolio & Sizing Risk**: Spawn `portfolio-risk-manager` to sync live option and stock positions, evaluate the GEX exit hierarchy (Stops 1-5), enforce sector concentration caps ($\le 15.00\%$), and calculate the **Per-Trade Buying Power Budget**.
    - **Analytical Continuity Rule**: Even if Phase I returns a `BLOCKED` status or `MAX LOSS DRAWDOWN BLOCK`, the Orchestrator **MUST** still proceed with Phase II and III to refresh the system's analytical state and keep ticker data from becoming stale. However, the system remains strictly prohibited from initiating new entries in Phase IV while a block is active.
 
 #### Phase II: Discovery & Sentiment Filtering
@@ -45,6 +45,9 @@ When requested to run the analysis, utilize this streamlined three-phase workflo
 ### Execution Contract
 - Work from current-session market data only. If the data is stale, missing, or from a prior session, refresh it before grading or trading decisions.
 - Never invent or assume missing values. If a required input is unavailable, report the step as BLOCKED/UNKNOWN and explain why.
+- **Batch Chunking & Tool Limits**:
+  - Keep options quotes lookups chunked to at most **40 contract IDs**.
+  - **Strict Constraint**: For equity fundamentals lookups (`get_equity_fundamentals`) and tradability checks (`get_equity_tradability`), you MUST chunk symbols into batches of **at most 10 symbols** per call to adhere to tool limits.
 - Prefer the local CLI and persisted cache files for state management, and save all downloaded raw payloads into the repository under [data/downloads/](../../data/downloads/).
 - Keep the process mechanical and auditable: every gate, filter, and decision must be explicit.
 
@@ -139,7 +142,7 @@ To ensure institutional-grade clarity, always apply these formatting rules when 
 
 ### Format of Your Analysis Response
 Present the analysis with KaTeX formulas where helpful. Keep the output concise, mechanical, and explicit. If any required data source is missing or stale, include a short data-quality note rather than silently filling gaps.
-
+=
 ```markdown
 ### 📅 Cache Freshness Report
 - **Daily Regime**: [FRESH (date) / STALE (date) / MISSING]

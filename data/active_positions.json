@@ -19,7 +19,7 @@
       "Sizing Risk Weight (%)": 0.32,
       "Beta Sector Tag": "Technology/Beta",
       "Entry Date": "2026-07-16",
-      "Days Held": 5,
+      "Days Held": 12,
       "Stalling Days": 0,
       "Target Mode": "T1",
       "T2 Target": null
@@ -43,7 +43,7 @@
       "Sizing Risk Weight (%)": 1.49,
       "Beta Sector Tag": "Technology/Beta",
       "Entry Date": "2026-07-16",
-      "Days Held": 5,
+      "Days Held": 12,
       "Stalling Days": 0,
       "Target Mode": "T1",
       "T2 Target": null
@@ -67,7 +67,7 @@
       "Sizing Risk Weight (%)": 0.95,
       "Beta Sector Tag": "Technology/Beta",
       "Entry Date": "2026-07-16",
-      "Days Held": 5,
+      "Days Held": 12,
       "Stalling Days": 0,
       "Target Mode": "T1",
       "T2 Target": null
@@ -91,7 +91,7 @@
       "Sizing Risk Weight (%)": 1.85,
       "Beta Sector Tag": "Technology/Beta",
       "Entry Date": "2026-07-16",
-      "Days Held": 5,
+      "Days Held": 12,
       "Stalling Days": 0,
       "Target Mode": "T1",
       "T2 Target": null

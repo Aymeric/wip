@@ -40,7 +40,10 @@ When building the candidate universe from Robinhood lists, enforce these strict 
 ### Step 3: Run the Scan(s), Search Reddit, and Collect Symbols
 1. Call `robinhood-trading/run_scan` for each relevant scan. Extract the list of ticker symbols and available scan columns (price, % change, IV, relative options volume, market cap, etc.) from the scan results.
 2. **Retrieve Trending Reddit Tickers**: Call `mcp_reddit/mcp_reddit_get_subreddit_posts` on popular retail and options boards (e.g., `wallstreetbets`, `stocks`, `options`, `investing`, `spacs`, `pennystocks`) with sort set to `"hot"` or `"new"` (limit 40-60 posts per community to expand downstream coverage). Extract mentioned uppercase tickers (2-5 matching letters, e.g., PLTR, SOFI, MU, RKLB). Filter out any tickers already listed as active holdings in [data/active_positions.json](../../data/active_positions.json).
-3. **Query Robinhood Quotes for Reddit Tickers**: For the newly extracted trending Reddit tickers, invoke `robinhood-trading/get_equity_quotes` in a batch lookup to retrieve their real-time pricing data, day change percentages, volume, and market capitalization. Only proceed with symbols that are valid tradeable instruments.
+3. **Query Robinhood Market Data for Reddit Tickers**: For the newly extracted trending Reddit tickers, invoke a batch lookup to retrieve their real-time pricing data and fundamental capitalization:
+   - Call `robinhood-trading/get_equity_quotes` for price, volume, and day change data.
+   - Call `robinhood-trading/get_equity_fundamentals` to retrieve market capitalization. **Strict Constraint**: You must chunk the symbols into batches of **at most 10 symbols** per `get_equity_fundamentals` call to adhere to tool limits.
+   - Only proceed with symbols that are valid tradeable instruments.
 4. **Combine All Sourced Tickers**: Merge all scanner-sourced, curated list-sourced, and Reddit-sourced symbols into a unified candidates collection. Mark the Reddit-sourced entries with `"source"` set to `"reddit"` so they are properly categorized in downstream grading reports.
 
 ---
@@ -51,7 +54,7 @@ Apply the baseline GEX filtering manually on the raw columns of the returned res
 - **Average Volume**: $\ge 200{,}000$ shares/day (column `"Volume"` or volume from equity quotes).
 - **Day Change %**: $\ge +0.30\%$ (column `"% Change"` or calculated/retrieved change from equity quotes). **Warning**: The raw value in `"% Change"` is a fraction/ratio (e.g., `0.003` means $+0.30\%$) — multiply by 100 before comparing to percent thresholds.
   - **Reddit Bypass Rule**: If the ticker was sourced from Reddit, relax this filter to $\ge -5.00\%$ to allow for contrarian "Capitulation Watch" setups near structural support floors.
-- **Market CAP**: $\ge \$1$B (column `"Market cap"` or market cap from equity quotes).
+- **Market CAP**: $\ge \$1$B (column `"Market cap"` from scan results or `market_cap` from equity fundamentals).
 - **Active Hold Exclusions**: Read [data/active_positions.json](../../data/active_positions.json). Compare symbols and remove any ticker already tracked as an active option or equity holding from the pool (unless the user explicitly requests re-evaluation). Sort the excluded active positions alphabetically.
 - **Technical Alert Check (Overlay)**: For prioritized candidates, use the `robinhood-trading/get_equity_technical_indicators` tool to identify technical alerts (RSI overbought/oversold, MACD crossovers). Flag these alerts in the final report to prioritize tickers showing both technical and gamma alignment.
 
