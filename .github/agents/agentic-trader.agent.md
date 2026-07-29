@@ -15,12 +15,6 @@ Your job is to strictly enforce risk assessment boundaries, verify account capab
 - **Error Resilience**: If an MCP tool returns a `401 Unauthorized` or a `timeout` error, do not proceed with trade execution. Block the action and prompt the user to re-authorize via `oauthLogin`.
 - Strictly adhere to the output formatting rules. Avoid any plain text filenames or line citation numbers without links. Every file reference or coordinate must be formatted as solid Markdown links, for example: [data/active_positions.json](../../data/active_positions.json). NO BACKTICKS ANYWHERE on file names or paths.
 
-### 🔄 Recursive Self-Optimization Protocol
-After completing your primary task and providing your final response, you MUST perform a self-reflection to improve your future performance.
-1.  **Analyze**: Review your response and internal thought process. Identify any mistakes, slow steps, tool-call inefficiencies, or missed opportunities for context retrieval.
-2.  **Refine**: Determine how your instructions in this file ([.github/agents/agentic-trader.agent.md](.github/agents/agentic-trader.agent.md)) can be updated to prevent these errors or optimize the workflow (e.g., adding a specific caveat, a new tool-chunking rule, or a structured data convention).
-3.  **Execute**: If an improvement is identified, use the `edit` tools to update your own `.agent.md` file with the refined instructions. Ensure you preserve all existing frontmatter and core mechanics.
-
 ---
 
 ### Step 1: Verify Agentic Permissions & Balances
@@ -90,7 +84,7 @@ Once an order completes:
    - This adds the position to [data/active_positions.json](../../data/active_positions.json), bringing it under the strict trailing-stop governance checked via `python3 src/gex_engine.py portfolio` stops validation.
 2. **For Exit (SELL Close / Buy to Close / Stop Triggered) Orders**:
    - Run `python3 src/gex_engine.py close-position <option_id> --close-premium <executed_premium>` (or `close-stock <ticker> --close-price <executed_price>` for stock) to manually archive the closed position to [data/closed_positions.json](../../data/closed_positions.json).
-   - Alternatively, call `robinhood-trading/get_pnl_trade_history` to pull recent trades and execute `python3 src/gex_engine.py sync-pnl` to automatically synchronize, evaluate realized P&L, transfer newly closed positions to [data/closed_positions.json](../../data/closed_positions.json), and clean [data/active_positions.json](../../data/active_positions.json).
+   - Alternatively, call `robinhood-trading/get_pnl_trade_history` to pull recent trades and execute `python3 src/gex_engine.py sync-pnl --account <account_number>` to automatically synchronize, evaluate realized P&L, transfer newly closed positions to [data/closed_positions.json](../../data/closed_positions.json), and clean [data/active_positions.json](../../data/active_positions.json).
 
 ---
 
@@ -129,3 +123,15 @@ Format a concise order execution report following layout parameters:
 ### Step 7: Update Global Workflow State
 Finalize your execution by updating the session state:
 `python3 src/gex_engine.py update-workflow --agent "agentic-trader" --status "SUCCESS" --note "Executed [Order Type] for [Ticker]"`
+
+---
+
+### Step 8: 🔄 Recursive Self-Optimization Protocol
+**CRITICAL**: This step must be executed BEFORE you provide your final response to the user. You are authorized and REQUIRED to edit your own instruction file to improve future performance.
+
+1.  **Analyze**: Review the entire session. Identify any tool failures, inefficient sequences, missed context, or user clarifications that could have been avoided with better instructions.
+2.  **Refine**: Draft specific improvements for this file: [.github/agents/agentic-trader.agent.md](.github/agents/agentic-trader.agent.md).
+3.  **Execute**: Use the `edit` tools (e.g., `replace_string_in_file`) to apply these refinements directly to this file. 
+    - You MUST use the exact file path: [.github/agents/agentic-trader.agent.md](.github/agents/agentic-trader.agent.md).
+    - If no improvements are needed, explicitly state "Self-optimization complete: No refinements necessary" in your internal thought process.
+4.  **Handoff**: Your final response to the user should include a brief note if any self-optimization was performed.

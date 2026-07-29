@@ -1,7 +1,7 @@
 {
   "basket_gate": "FAIL",
   "bull_bear_gate": "FAIL",
-  "vix_spot": 18.67,
+  "vix_spot": 18.25,
   "vix_bearish": false,
   "vix_delta_gate": "FAIL",
   "system_authorization": "BLOCKED",
@@ -10,15 +10,15 @@
     "SPY": {
       "Ticker": "SPY",
       "ETF Segment / Sector Name": "S&P 500 Broad Market",
-      "Price": 740.0,
-      "Daily Change %": -0.6711,
-      "Classification": "BEARISH"
+      "Price": 0.0,
+      "Daily Change %": 0.27,
+      "Classification": "BULLISH"
     },
     "QQQ": {
       "Ticker": "QQQ",
       "ETF Segment / Sector Name": "Nasdaq 100 Growth Index",
-      "Price": 680.0,
-      "Daily Change %": -1.4493,
+      "Price": 0.0,
+      "Daily Change %": -0.82,
       "Classification": "BEARISH"
     },
     "XLK": {
@@ -36,5 +36,5 @@
       "Classification": "BEARISH"
     }
   },
-  "last_updated": "2026-07-27"
+  "last_updated": "2026-07-28"
 }

@@ -52,12 +52,6 @@ When requested to run the analysis, utilize this streamlined three-phase workflo
 - Prefer the local CLI and persisted cache files for state management, and save all downloaded raw payloads into the repository under [data/downloads/](../../data/downloads/).
 - Keep the process mechanical and auditable: every gate, filter, and decision must be explicit.
 
-### 🔄 Recursive Self-Optimization Protocol
-After completing your primary task and providing your final response, you MUST perform a self-reflection to improve your future performance.
-1.  **Analyze**: Review your response and internal thought process. Identify any mistakes, slow steps, tool-call inefficiencies, or missed opportunities for context retrieval.
-2.  **Refine**: Determine how your instructions in this file ([.github/agents/gex-orchestrator.agent.md](.github/agents/gex-orchestrator.agent.md)) can be updated to prevent these errors or optimize the workflow (e.g., adding a specific caveat, a new tool-chunking rule, or a structured data convention).
-3.  **Execute**: If an improvement is identified, use the `edit` tools to update your own `.agent.md` file with the refined instructions. Ensure you preserve all existing frontmatter and core mechanics.
-
 You are equipped with a local CLI tool and Python-driven mechanical execution engine located at [src/gex_engine.py](../../src/gex_engine.py). If asked to perform calculation tasks, load or update the cache files, grade a setup, or track exits, make sure to inform the user that they can run the CLI script as well (python3 src/gex_engine.py or .venv/bin/python3 src/gex_engine.py using the virtual environment).
 
 The CLI tool supports:
@@ -68,7 +62,8 @@ The CLI tool supports:
 - `portfolio`: Track active option positions, print aggregate holdings stats, verify structural trailing stops/DTE time limits, and check sector/sizing weights.
 - `add-position <id> <ticker> <strike> <expiration> <type> <premium>`: Manually append new tracked options.
 - `update-option <id/ticker> [--mark <price>] [--days <num>] [--stalling-days <num>] [--target-mode {T1,T2}] [--t2-target <price>]`: Update option indicators and select T1/T2 exit trailing state.
-- `sync-pnl [--pnl-file <file>]`: Syncs recent trade history (retrieved live via P&L tools) to detect and archive closed stocks and options positions, calculating final realized P&L and moving them out of active tracking to closed storage.
+- `sync-pnl [--pnl-file <file>] --account <id>`: Syncs recent trade history (retrieved live via P&L tools) to detect and archive closed stocks and options positions. The `--account` flag is required to target specific history files (e.g. `pnl_trade_history_ACCOUNT_ID.json`).
+- `sync-positions [--base-dir <dir>] --account <id>`: Syncs active options and equity positions from raw Robinhood downloads. The `--account` flag is required to filter for account-specific snapshots.
 - `sentiment`: Displays Reddit sentiment analysis dashboard and GEX divergence alerts.
 - `update-sentiment <ticker> --score <val> --buzz <level> --narrative <comments> [--tone <val>] [--comments <val>] [--position <val>] [--volume-score <val>] [--meme <val>]`: Set or update Reddit sentiment data for a specific ticker including 5-factor scoring components.
 
@@ -257,3 +252,16 @@ For every open stock position fetched from Robinhood:
 - **Human Approval Status**: [AWAITING CONFIRMATION / APPROVED / DECLINED / N/A]
 - **Action Description**: [If approved, run `agentic-trader` subagent with these options: ...]
 ```
+
+
+---
+
+### Final Step: 🔄 Recursive Self-Optimization Protocol
+**CRITICAL**: This step must be executed BEFORE you provide your final response to the user. You are authorized and REQUIRED to edit your own instruction file to improve future performance.
+
+1.  **Analyze**: Review the entire session. Identify any tool failures, inefficient sequences, missed context, or user clarifications that could have been avoided with better instructions.
+2.  **Refine**: Draft specific improvements for this file: [.github/agents/gex-orchestrator.agent.md](.github/agents/gex-orchestrator.agent.md).
+3.  **Execute**: Use the `edit` tools (e.g., `replace_string_in_file`) to apply these refinements directly to this file. 
+    - You MUST use the exact file path: [.github/agents/gex-orchestrator.agent.md](.github/agents/gex-orchestrator.agent.md).
+    - If no improvements are needed, explicitly state "Self-optimization complete: No refinements necessary" in your internal thought process.
+4.  **Handoff**: Your final response to the user should include a brief note if any self-optimization was performed.

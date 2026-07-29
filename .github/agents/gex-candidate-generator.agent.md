@@ -16,12 +16,6 @@ Your job is to derive the daily candidate universe from Robinhood scanners, list
 - Keep the process mechanical and auditable: every exclusion, filter, and count must be explicit.
 - Strictly adhere to the output formatting rules. Avoid any plain text filenames or line citation numbers without links. Every file reference or coordinate must be formatted as solid Markdown links, for example: [data/candidate_stocks.json](../../data/candidate_stocks.json). NO BACKTICKS ANYWHERE on file names or paths.
 
-### 🔄 Recursive Self-Optimization Protocol
-After completing your primary task and providing your final response, you MUST perform a self-reflection to improve your future performance.
-1.  **Analyze**: Review your response and internal thought process. Identify any mistakes, slow steps, tool-call inefficiencies, or missed opportunities for context retrieval.
-2.  **Refine**: Determine how your instructions in this file ([.github/agents/gex-candidate-generator.agent.md](.github/agents/gex-candidate-generator.agent.md)) can be updated to prevent these errors or optimize the workflow (e.g., adding a specific caveat, a new tool-chunking rule, or a structured data convention).
-3.  **Execute**: If an improvement is identified, use the `edit` tools to update your own `.agent.md` file with the refined instructions. Ensure you preserve all existing frontmatter and core mechanics.
-
 ---
 
 ### Step 1: Query or Create Scans
@@ -139,3 +133,15 @@ Format the candidate generation results following the visual guidelines:
 ### Step 7: Update Global Workflow State
 Finalize your execution by updating the session state:
 `python3 src/gex_engine.py update-workflow --agent "gex-candidate-generator" --status "SUCCESS" --note "Sourced [N] candidates from [Scans]"`
+
+---
+
+### Step 8: 🔄 Recursive Self-Optimization Protocol
+**CRITICAL**: This step must be executed BEFORE you provide your final response to the user. You are authorized and REQUIRED to edit your own instruction file to improve future performance.
+
+1.  **Analyze**: Review the entire session. Identify any tool failures, inefficient sequences, missed context, or user clarifications that could have been avoided with better instructions.
+2.  **Refine**: Draft specific improvements for this file: [.github/agents/gex-candidate-generator.agent.md](.github/agents/gex-candidate-generator.agent.md).
+3.  **Execute**: Use the `edit` tools (e.g., `replace_string_in_file`) to apply these refinements directly to this file. 
+    - You MUST use the exact file path: [.github/agents/gex-candidate-generator.agent.md](.github/agents/gex-candidate-generator.agent.md).
+    - If no improvements are needed, explicitly state "Self-optimization complete: No refinements necessary" in your internal thought process.
+4.  **Handoff**: Your final response to the user should include a brief note if any self-optimization was performed.

@@ -2051,10 +2051,18 @@ def cmd_analyze(args):
     db_change = args.db_change if args.db_change is not None else cached.get("db_change")
     spike_crash = args.spike_crash if args.spike_crash is not None else cached.get("spike_crash", False)
     
-    if None in (spot, ptrans, ntrans, gex, cotmp, db_change):
+    if spot is None or ptrans is None or ntrans is None or gex is None or cotmp is None or db_change is None:
         print(f"Error: Missing required metrics for {symbol}. Pass them via command line arguments or ensure they exist in {ANALYSES_FILE}.", file=sys.stderr)
         print("Required fields: --spot, --ptrans, --ntrans, --gex, --cotmp, --db-change", file=sys.stderr)
         sys.exit(1)
+
+    # Cast to float to satisfy type checker after null check
+    spot = float(spot)
+    ptrans = float(ptrans)
+    ntrans = float(ntrans)
+    gex = float(gex)
+    cotmp = float(cotmp)
+    db_change = float(db_change)
         
     # Calculate Grade (rule overrides fall back to cached values, then True)
     rule_overrides = {
@@ -3672,23 +3680,25 @@ def cmd_close_pos(args):
 def cmd_sync_pnl(args):
     """Syncs P&L trade history from retrieved file to detect closed positions, and moves closed positions to closed_positions.json."""
     pnl_file = args.pnl_file
+    account = args.account
     if not pnl_file or not os.path.exists(pnl_file):
         # Scan DOWNLOADS_DIR and sort lexicographically to find the latest trade history file
         pnl_candidates = []
+        target_name = "pnl_trade_history.json"
+        if account:
+            target_name = f"pnl_trade_history_{account}_raw.json"
+            
         if os.path.exists(DOWNLOADS_DIR):
             for root, dirs, files in os.walk(DOWNLOADS_DIR):
                 for filee in files:
-                    if filee == "pnl_trade_history.json":
+                    if filee == target_name:
                         pnl_candidates.append(os.path.join(root, filee))
         if pnl_candidates:
             pnl_candidates.sort()
             pnl_file = pnl_candidates[-1]
         else:
-            # Fallback
-            pnl_file = os.path.join(DOWNLOADS_DIR, "20260710", "pnl_trade_history.json")
-            if not os.path.exists(pnl_file):
-                print(f"Error: P&L trade history file {args.pnl_file} not found and no local fallback found.", file=sys.stderr)
-                sys.exit(1)
+            print(f"Error: P&L trade history file {args.pnl_file or target_name} not found in {DOWNLOADS_DIR}.", file=sys.stderr)
+            sys.exit(1)
 
     print(f"Loading P&L trade history from: {pnl_file}")
     pnl_data = load_json(pnl_file, {})
@@ -3768,6 +3778,8 @@ def cmd_sync_pnl(args):
                 details["Realized P&L ($)"] = round(realized_dollar, 2)
                 details["Realized P&L (%)"] = round(realized_pct, 2)
                 details["Close Reason"] = "Detected closed via trade history sync"
+                if account:
+                    details["Account"] = account
                 
                 closed_data.setdefault("closed_stocks", []).append(details)
                 stocks_to_remove.append(ticker)
@@ -3811,6 +3823,8 @@ def cmd_sync_pnl(args):
                 details["Realized P&L ($)"] = round(realized_dollar, 2)
                 details["Realized P&L (%)"] = round(realized_pct, 2)
                 details["Close Reason"] = "Detected closed via trade history sync"
+                if account:
+                    details["Account"] = account
 
                 closed_data.setdefault("closed_options", []).append(details)
                 options_to_remove.append(opt_id)
@@ -3837,6 +3851,7 @@ def cmd_sync_pnl(args):
 def cmd_sync_positions(args):
     """Syncs active options and equity positions from raw Robinhood downloads to active_positions.json."""
     base_dir = args.base_dir
+    account = args.account
     if not base_dir or not os.path.exists(base_dir):
         # Scan DOWNLOADS_DIR for latest directory with positions
         candidates = []
@@ -3845,13 +3860,17 @@ def cmd_sync_positions(args):
                 d_path = os.path.join(DOWNLOADS_DIR, d)
                 if os.path.isdir(d_path):
                     files = os.listdir(d_path)
-                    if any(f.startswith("option_positions_raw") or f.startswith("equity_positions_raw") for f in files):
-                        candidates.append(d_path)
+                    if account:
+                        if any(f.startswith(f"option_positions_{account}_raw") or f.startswith(f"equity_positions_{account}_raw") for f in files):
+                            candidates.append(d_path)
+                    else:
+                        if any(f.startswith("option_positions_raw") or f.startswith("equity_positions_raw") for f in files):
+                            candidates.append(d_path)
         if candidates:
             candidates.sort()
             base_dir = candidates[-1]
         else:
-            print("Error: No raw positions files found in data/downloads/.", file=sys.stderr)
+            print(f"Error: No raw positions files found for account '{account or 'any'}' in data/downloads/.", file=sys.stderr)
             sys.exit(1)
 
     print(f"Syncing active positions from: {base_dir}")
@@ -3887,9 +3906,15 @@ def cmd_sync_positions(args):
     active_stocks = options.get("stocks_positions", {})
 
     # 3. Sync Equities
-    equity_files = [f for f in os.listdir(base_dir) if f.startswith("equity_positions_raw") and f.endswith(".json")]
-    if not equity_files and os.path.exists(os.path.join(base_dir, "equity_positions_raw.json")):
-        equity_files = ["equity_positions_raw.json"]
+    if account:
+        equity_files = [f for f in os.listdir(base_dir) if f.startswith(f"equity_positions_{account}_raw") and f.endswith(".json")]
+    else:
+        equity_files = [f for f in os.listdir(base_dir) if f.startswith("equity_positions_raw") and f.endswith(".json")]
+    
+    if not equity_files:
+        simple_name = f"equity_positions_{account}_raw.json" if account else "equity_positions_raw.json"
+        if os.path.exists(os.path.join(base_dir, simple_name)):
+            equity_files = [simple_name]
     
     new_stocks = 0
     updated_stocks = 0
@@ -3924,6 +3949,8 @@ def cmd_sync_positions(args):
                 active_stocks[ticker]["Shares"] = shares
                 active_stocks[ticker]["Average Buy Price"] = avg_price
                 active_stocks[ticker]["Asset Cost Basis"] = shares * avg_price
+                if account:
+                    active_stocks[ticker]["Account"] = account
                 updated_stocks += 1
             else:
                 active_stocks[ticker] = {
@@ -3940,12 +3967,20 @@ def cmd_sync_positions(args):
                     "P&L ($)": 0.0,
                     "Sizing Risk Weight (%)": 0.0
                 }
+                if account:
+                    active_stocks[ticker]["Account"] = account
                 new_stocks += 1
         
     # 4. Sync Options
-    opt_files = [f for f in os.listdir(base_dir) if f.startswith("option_positions_raw") and f.endswith(".json")]
-    if not opt_files and os.path.exists(os.path.join(base_dir, "option_positions_raw.json")):
-        opt_files = ["option_positions_raw.json"]
+    if account:
+        opt_files = [f for f in os.listdir(base_dir) if f.startswith(f"option_positions_{account}_raw") and f.endswith(".json")]
+    else:
+        opt_files = [f for f in os.listdir(base_dir) if f.startswith("option_positions_raw") and f.endswith(".json")]
+        
+    if not opt_files:
+        simple_name = f"option_positions_{account}_raw.json" if account else "option_positions_raw.json"
+        if os.path.exists(os.path.join(base_dir, simple_name)):
+            opt_files = [simple_name]
     
     new_opts = 0
     updated_opts = 0
@@ -4006,6 +4041,8 @@ def cmd_sync_positions(args):
                 active_opts[opt_id]["ImpVol"] = str(iv)
                 active_opts[opt_id]["Asset Cost Basis"] = avg_price * 100.0 * qty
                 active_opts[opt_id]["Current Value"] = mark * 100.0 * qty
+                if account:
+                    active_opts[opt_id]["Account"] = account
                 updated_opts += 1
             else:
                 active_opts[opt_id] = {
@@ -4032,6 +4069,8 @@ def cmd_sync_positions(args):
                     "Target Mode": "T1",
                     "T2 Target": None
                 }
+                if account:
+                    active_opts[opt_id]["Account"] = account
                 new_opts += 1
 
     options["options_positions"] = active_opts
@@ -5336,10 +5375,12 @@ def main():
     # sync-pnl subcommand
     p_sync_pnl = subparsers.add_parser("sync-pnl", help="Sync trade history to detect closed positions and move them to closed_positions.json.")
     p_sync_pnl.add_argument("--pnl-file", type=str, default="", help="Path to raw Robinhood P&L trade history JSON file")
+    p_sync_pnl.add_argument("--account", type=str, default="", help="Optional account number to filter files")
 
     # sync-positions subcommand
     p_sync_pos = subparsers.add_parser("sync-positions", help="Sync active options and equity positions from raw Robinhood downloads.")
-    p_sync_pos.add_argument("--base-dir", type=str, default="", help="Directory containing raw positions files (e.g. data/downloads/20260709)")
+    p_sync_pos.add_argument("--base-dir", type=str, default="", help="Directory containing raw positions files (e.g. data/downloads/YYYYMMDD)")
+    p_sync_pos.add_argument("--account", type=str, default="", help="Optional account number to filter files")
 
     # rankings subcommand
     p_rankings = subparsers.add_parser("rankings", help="Displays a beautiful ranked report of all historically analyzed ticker setups.")

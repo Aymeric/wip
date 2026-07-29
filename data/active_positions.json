@@ -19,10 +19,11 @@
       "Sizing Risk Weight (%)": 0.32,
       "Beta Sector Tag": "Technology/Beta",
       "Entry Date": "2026-07-16",
-      "Days Held": 12,
+      "Days Held": 13,
       "Stalling Days": 0,
       "Target Mode": "T1",
-      "T2 Target": null
+      "T2 Target": null,
+      "Account": "5QR24141"
     },
     "67c51ad2-f526-462e-8c15-c85a68866a9f": {
       "Option ID": "67c51ad2-f526-462e-8c15-c85a68866a9f",
@@ -43,10 +44,11 @@
       "Sizing Risk Weight (%)": 1.49,
       "Beta Sector Tag": "Technology/Beta",
       "Entry Date": "2026-07-16",
-      "Days Held": 12,
+      "Days Held": 13,
       "Stalling Days": 0,
       "Target Mode": "T1",
-      "T2 Target": null
+      "T2 Target": null,
+      "Account": "5QR24141"
     },
     "79cd3800-e848-4d58-8997-308576acad72": {
       "Option ID": "79cd3800-e848-4d58-8997-308576acad72",
@@ -67,10 +69,11 @@
       "Sizing Risk Weight (%)": 0.95,
       "Beta Sector Tag": "Technology/Beta",
       "Entry Date": "2026-07-16",
-      "Days Held": 12,
+      "Days Held": 13,
       "Stalling Days": 0,
       "Target Mode": "T1",
-      "T2 Target": null
+      "T2 Target": null,
+      "Account": "5QR24141"
     },
     "0ea8d08c-8caa-404c-9c7a-bbff002fb180": {
       "Option ID": "0ea8d08c-8caa-404c-9c7a-bbff002fb180",
@@ -91,10 +94,11 @@
       "Sizing Risk Weight (%)": 1.85,
       "Beta Sector Tag": "Technology/Beta",
       "Entry Date": "2026-07-16",
-      "Days Held": 12,
+      "Days Held": 13,
       "Stalling Days": 0,
       "Target Mode": "T1",
-      "T2 Target": null
+      "T2 Target": null,
+      "Account": "5QR24141"
     }
   },
   "stocks_positions": {
@@ -110,21 +114,8 @@
       "P&L (%)": 12.81,
       "P&L ($)": 1395.0,
       "Sizing Risk Weight (%)": 21.78,
-      "Highest Price": 245.7
-    },
-    "GOOG": {
-      "Ticker": "GOOG",
-      "Shares": 20.026411,
-      "Average Buy Price": 315.04,
-      "Current Price": 355.05,
-      "Beta Sector Tag": "Technology/Beta",
-      "Entry Date": "2026-06-01",
-      "Asset Cost Basis": 6309.120521440001,
-      "Current Value": 7110.37722555,
-      "P&L (%)": 12.7,
-      "P&L ($)": 801.26,
-      "Sizing Risk Weight (%)": 12.62,
-      "Highest Price": 355.05
+      "Highest Price": 245.7,
+      "Account": "5QR24141"
     },
     "HOOD": {
       "Ticker": "HOOD",
@@ -138,7 +129,8 @@
       "P&L (%)": 45.86,
       "P&L ($)": 350.8,
       "Sizing Risk Weight (%)": 1.53,
-      "Highest Price": 111.57
+      "Highest Price": 111.57,
+      "Account": "5QR24141"
     },
     "NFLX": {
       "Ticker": "NFLX",
@@ -152,7 +144,8 @@
       "P&L (%)": -16.59,
       "P&L ($)": -438.0,
       "Sizing Risk Weight (%)": 5.28,
-      "Highest Price": 88.02
+      "Highest Price": 88.02,
+      "Account": "5QR24141"
     },
     "AAPL": {
       "Ticker": "AAPL",
@@ -166,7 +159,8 @@
       "P&L (%)": 21.14,
       "P&L ($)": 549.6,
       "Sizing Risk Weight (%)": 5.2,
-      "Highest Price": 314.96
+      "Highest Price": 314.96,
+      "Account": "5QR24141"
     },
     "META": {
       "Ticker": "META",
@@ -180,7 +174,8 @@
       "P&L (%)": 14.79,
       "P&L ($)": 602.49,
       "Sizing Risk Weight (%)": 8.15,
-      "Highest Price": 668.0
+      "Highest Price": 668.0,
+      "Account": "5QR24141"
     },
     "WU": {
       "Ticker": "WU",
@@ -194,7 +189,8 @@
       "P&L (%)": -5.19,
       "P&L ($)": -88.53,
       "Sizing Risk Weight (%)": 3.41,
-      "Highest Price": 8.29
+      "Highest Price": 8.29,
+      "Account": "5QR24141"
     },
     "NOW": {
       "Ticker": "NOW",
@@ -208,7 +204,8 @@
       "P&L (%)": -2.79,
       "P&L ($)": -92.4,
       "Sizing Risk Weight (%)": 6.63,
-      "Highest Price": 110.44
+      "Highest Price": 110.44,
+      "Account": "5QR24141"
     },
     "RVI": {
       "Ticker": "RVI",
@@ -222,7 +219,8 @@
       "P&L (%)": 24.28,
       "P&L ($)": 303.5,
       "Sizing Risk Weight (%)": 2.5,
-      "Highest Price": 31.07
+      "Highest Price": 31.07,
+      "Account": "5QR24141"
     },
     "MRNA": {
       "Ticker": "MRNA",
@@ -236,7 +234,8 @@
       "P&L (%)": 28.14,
       "P&L ($)": 300.0,
       "Sizing Risk Weight (%)": 2.13,
-      "Highest Price": 68.3
+      "Highest Price": 68.3,
+      "Account": "5QR24141"
     },
     "SKHY": {
       "Ticker": "SKHY",
@@ -253,7 +252,23 @@
       "Current Value": 1530.0,
       "P&L (%)": 0.0,
       "P&L ($)": 0.0,
-      "Sizing Risk Weight (%)": 3.06
+      "Sizing Risk Weight (%)": 3.06,
+      "Account": "5QR24141"
+    },
+    "GOOG": {
+      "Ticker": "GOOG",
+      "Shares": 20.026411,
+      "Average Buy Price": 315.04,
+      "Current Price": 355.05,
+      "Highest Price": 355.05,
+      "Beta Sector Tag": "Equity",
+      "Entry Date": "2026-07-28",
+      "Asset Cost Basis": 6309.120521440001,
+      "Current Value": 7110.37722555,
+      "P&L (%)": 12.7,
+      "P&L ($)": 801.26,
+      "Sizing Risk Weight (%)": 12.62,
+      "Account": "5QR24141"
     }
   }
 }

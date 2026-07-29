@@ -19,12 +19,6 @@ Your job is to strictly enforce, compute, and persist the Daily Regime Gates. Yo
 - Keep the process mechanical and auditable: every gate, filter, and decisions must be explicit.
 - Strictly adhere to the output formatting rules. Avoid any plain text filenames or line citation numbers without links. Every file reference or coordinate must be formatted as solid Markdown links, for example: [data/regime.json](../../data/regime.json). NO BACKTICKS ANYWHERE on file names or paths.
 
-### 🔄 Recursive Self-Optimization Protocol
-After completing your primary task and providing your final response, you MUST perform a self-reflection to improve your future performance.
-1.  **Analyze**: Review your response and internal thought process. Identify any mistakes, slow steps, tool-call inefficiencies, or missed opportunities for context retrieval.
-2.  **Refine**: Determine how your instructions in this file ([.github/agents/market-regime-analyst.agent.md](.github/agents/market-regime-analyst.agent.md)) can be updated to prevent these errors or optimize the workflow (e.g., adding a specific caveat, a new tool-chunking rule, or a structured data convention).
-3.  **Execute**: If an improvement is identified, use the `edit` tools to update your own `.agent.md` file with the refined instructions. Ensure you preserve all existing frontmatter and core mechanics.
-
 ---
 
 ### Step 1: Fetch Broad Market and Volatility Data
@@ -73,7 +67,7 @@ Check HYG and sector ETF positions as credit/rotation overlays. If HYG daily cha
 ---
 
 ### Step 4: Persist State & Save Raw Artifacts
-1. **Save Downloaded Raw Data in Repo**: Copy and save any raw API quote payload downloaded during the session (such as index quotes, sector ETF quotes, HYG quotes) into the repository inside a date-specific raw API downloads folder (e.g., [data/downloads/20260710/etf_quotes.json](../../data/downloads/20260710/etf_quotes.json)).
+1. **Save Downloaded Raw Data in Repo**: Copy and save any raw API quote payload downloaded during the session (such as index quotes, sector ETF quotes, HYG quotes) into the repository inside a date-specific raw API downloads folder (e.g., `data/downloads/YYYYMMDD/etf_quotes.json`).
 2. **Persist Regime State via CLI Engine (Mandatory)**: Use the GEX engine CLI to recompute regime gates from raw inputs and persist the state. This ensures all gate logic and authorization transitions are handled by the core engine:
    `python3 src/gex_engine.py update-regime --spy <SPY_pct> --qqq <QQQ_pct> --bulls <bull_count> --bears <bear_count> --vix-bearish <is_vix_bearish_bool> [--vix-spot <vix_price>]`
    *(Also merge drawdown fields like `drawdown_gate_status`, `monthly_pnl_dlr`, `monthly_pnl_pct`, and `monthly_cnt` directly to the JSON dictionary).*
@@ -108,3 +102,15 @@ Format a concise regime summary following the styling instructions (e.g. green m
 ### Step 6: Update Global Workflow State
 Finalize your execution by updating the session state:
 `python3 src/gex_engine.py update-workflow --agent "market-regime-analyst" --status "SUCCESS" --note "Regime: [Status], Bull:Bear: [Ratio]"`
+
+---
+
+### Step 7: 🔄 Recursive Self-Optimization Protocol
+**CRITICAL**: This step must be executed BEFORE you provide your final response to the user. You are authorized and REQUIRED to edit your own instruction file to improve future performance.
+
+1.  **Analyze**: Review the entire session. Identify any tool failures, inefficient sequences, missed context, or user clarifications that could have been avoided with better instructions.
+2.  **Refine**: Draft specific improvements for this file: [.github/agents/market-regime-analyst.agent.md](.github/agents/market-regime-analyst.agent.md).
+3.  **Execute**: Use the `edit` tools (e.g., `replace_string_in_file`) to apply these refinements directly to this file. 
+    - You MUST use the exact file path: [.github/agents/market-regime-analyst.agent.md](.github/agents/market-regime-analyst.agent.md).
+    - If no improvements are needed, explicitly state "Self-optimization complete: No refinements necessary" in your internal thought process.
+4.  **Handoff**: Your final response to the user should include a brief note if any self-optimization was performed.

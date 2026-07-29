@@ -86,5 +86,26 @@
       "Realized P&L (%)": 0.0
     }
   ],
-  "closed_stocks": []
+  "closed_stocks": [
+    {
+      "Ticker": "GOOG",
+      "Shares": 20.026411,
+      "Average Buy Price": 315.04,
+      "Current Price": 355.05,
+      "Beta Sector Tag": "Technology/Beta",
+      "Entry Date": "2026-06-01",
+      "Asset Cost Basis": 6309.120521440001,
+      "Current Value": 7110.37722555,
+      "P&L (%)": 12.7,
+      "P&L ($)": 801.26,
+      "Sizing Risk Weight (%)": 12.62,
+      "Highest Price": 355.05,
+      "Account": "5QR24141",
+      "Close Price": 0.0,
+      "Close Date": "2026-07-24",
+      "Realized P&L ($)": -750.0,
+      "Realized P&L (%)": -11.89,
+      "Close Reason": "Detected closed via trade history sync"
+    }
+  ]
 }
