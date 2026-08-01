@@ -53,7 +53,7 @@ Using your chunk-merged options quotes dataset and underlier data, execute this 
 6. **Volatility Computations**:
    - Compute annualized realized volatility from underlier daily log returns over the last 10 session bars (RV10) and over the full 90-day window (HV90 proxy):
      $$\text{Annualized Vol} = \text{standard\_deviation}(\text{log\_returns}) \times \sqrt{252} \times 100$$
-   - IV30 proxy: Average implied volatility of contract strikes within $\pm 15\%$ of current Spot from our sampled expiration.
+   - IV30 proxy: Average implied volatility of contract strikes within +/- 15% of current Spot from our sampled expiration.
 
 ---
 
@@ -70,14 +70,14 @@ Grade the Setup’s structural quality on an 11-point system ($\ge 9/11$ require
 - **Rule 8**: IV30 proxy is less than HV90 proxy (non-inflated options premium).
 - **Rule 9**: Open Interest depth at the +GEX target strike exceeds Open Interest depth at any other strike.
 - **Rule 10**: Dealer net gamma positioning at current Spot is net positive ($\ge 0$).
-- **Rule 11**: Realized volatility RV10 is stable or compressed ($\text{RV} \le 35\%$).
+- **Rule 11**: Realized volatility RV10 is stable or compressed (RV <= 35%).
 
 #### Dynamic Filters & Risk/Reward:
 1. **db_change (Delta Balance Change)**: Must satisfy $\ge 0.50$ change from the prior session.
-   - *Exception*: Grade 11 DEEP names (Grade 11 with COTMP Cushion between $1.0\%$ and $2.0\%$) require $\ge 0.30$.
+   - *Exception*: Grade 11 DEEP names (Grade 11 with COTMP Cushion between 1.0% and 2.0%) require >= 0.30.
    - *Exception*: Names pegged at $1.00$ for $\ge 2$ consecutive days are exempt (threshold $= 0.00$).
    - Set to `0.0` on the first session's snapshot with an explicit delta warning.
-2. **COTMP Cushion**: Spot must be $\ge 2.0\%$ above COTMP. (Grade 11 DEEP or high $db\_change \ge 0.50$ can accept $1.0\%$).
+2. **COTMP Cushion**: Spot must be >= 2.0% above COTMP. (Grade 11 DEEP or high `db_change >= 0.50` can accept 1.0%).
 3. **Risk/Reward Gate**: Calculate:
    $$\text{Reward} = \text{+GEX} - \text{Spot}$$
    $$\text{Risk} = \text{Spot} - \text{pTrans}$$
@@ -100,7 +100,7 @@ Grade the Setup’s structural quality on an 11-point system ($\ge 9/11$ require
 - **Primary Support (pTrans)**: $S.SS
 - **Secondary Support (nTrans)**: $N.NN
 - **Call Wall Target (T1 / +GEX)**: $T.TT
-- **Center of Put Mass (COTMP)**: $C.CC (Cushion: $+K.KK\%$)
+- **Center of Put Mass (COTMP)**: $C.CC (Cushion: +K.KK%)
 - **Delta Balance Change (db_change)**: $+D.DD (%)
 - **Technical Alerts Overlay**: [e.g. RSI Oversold (28.5), MACD Bullish Crossover] (Retrieved from [data/candidate_stocks.json](../../data/candidate_stocks.json) or derived from historicals)
 
@@ -117,15 +117,15 @@ Grade the Setup’s structural quality on an 11-point system ($\ge 9/11$ require
 - Rule 5 (pTrans > nTrans): 🟢 PASS / 🔴 FAIL
 - Rule 6 (Spot > pTrans Support): 🟢 PASS / 🔴 FAIL
 - Rule 7 (OI Count Depth): 🟢 PASS / 🔴 FAIL (Sampled Expiration OI: $M$ contracts)
-- Rule 8 (IV30 < HV90 Vol): 🟢 PASS / 🔴 FAIL (IV30: $I.I\%$, HV90: $H.H\%$)
+- Rule 8 (IV30 < HV90 Vol): 🟢 PASS / 🔴 FAIL (IV30: I.I%, HV90: H.H%)
 - Rule 9 Max Strike call OI: 🟢 PASS / 🔴 FAIL
 - Rule 10 Spot Net dealer Gamma: 🟢 PASS / 🔴 FAIL
-- Rule 11 Realized RV10 Compression: 🟢 PASS / 🔴 FAIL (RV10: $R.R\%$)
+- Rule 11 Realized RV10 Compression: 🟢 PASS / 🔴 FAIL (RV10: R.R%)
 - **FINAL STRUCTURAL SETUP GRADE**: **$G/11$**
 
 ### 🎯 Dynamic Entry Filters:
 - **db_change Check**: [PASS / FAIL] (Threshold: $d.dd$, Actual: $D.DD$)
-- **COTMP Cushion Check**: [PASS / FAIL] (Threshold: $c.cc\%$, Actual: $K.KK\%$)
+- **COTMP Cushion Check**: [PASS / FAIL] (Threshold: c.cc%, Actual: K.KK%)
 - **Risk/Reward Check**: [PASS / FAIL]
   $$Reward = T1 - Spot = \$R.RR$$
   $$Risk = Spot - pTrans = \$S.SS$$

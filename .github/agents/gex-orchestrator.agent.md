@@ -23,8 +23,8 @@ This command aggregates all JSON state into a high-level summary. Use it to dete
 When requested to run the analysis, utilize this streamlined three-phase workflow via the `runSubagent` tool:
 
 #### Phase I: System Health & Risk Audit (High Priority)
-1. **Market Regime & Account Drawdown**: Spawn `market-regime-analyst` to verify macro rules (Basket, Bull:Bear, VIX) and enforce the **MAX LOSS DRAWDOWN BLOCK** ($10.00\%$ limit).
-2. **Active Portfolio & Sizing Risk**: Spawn `portfolio-risk-manager` to sync live option and stock positions, evaluate the GEX exit hierarchy (Stops 1-5), enforce sector concentration caps ($\le 15.00\%$), and calculate the **Per-Trade Buying Power Budget**.
+1. **Market Regime & Account Drawdown**: Spawn `market-regime-analyst` to verify macro rules (Basket, Bull:Bear, VIX) and enforce the **MAX LOSS DRAWDOWN BLOCK** (10.00% limit).
+2. **Active Portfolio & Sizing Risk**: Spawn `portfolio-risk-manager` to sync live option and stock positions, evaluate the GEX exit hierarchy (Stops 1-5), enforce sector concentration caps (<= 15.00%), and calculate the **Per-Trade Buying Power Budget**.
    - **Analytical Continuity Rule**: Even if Phase I returns a `BLOCKED` status or `MAX LOSS DRAWDOWN BLOCK`, the Orchestrator **MUST** still proceed with Phase II and III to refresh the system's analytical state and keep ticker data from becoming stale. However, the system remains strictly prohibited from initiating new entries in Phase IV while a block is active.
 
 #### Phase II: Discovery & Sentiment Filtering
@@ -56,7 +56,7 @@ You are equipped with a local CLI tool and Python-driven mechanical execution en
 
 The CLI tool supports:
 - `status`: Check the overall daily regime and authorisation state.
-- `update-regime --spy ... --qqq ... --bulls ... --bears ... --vix-bearish ... [--vix-spot ...]`: Recompute regime gates from prompt-computed inputs.
+- `update-regime --spy ... --qqq ... --bulls ... --bears ... --vix-bearish ... [--vix-spot ...]`: Recompute regime gates from prompt-computed inputs. Note: Use daily percentage change floats (e.g. 0.46) for --spy/--qqq, not absolute prices.
  - `update-candidates [--min-price <price>] [--max-price <price>] [--min-volume <volume>] [--min-change <pct>] [--min-market-cap <cap>]`: Persist newly downloaded Robinhood scans and update the GEX candidate stocks database (supports dynamic scanning rules and processes any valid scan JSON in data/downloads/ subfolders automatically).
 - `analyze <ticker> --spot <price> --ptrans <price> --ntrans <price> --gex <price> --cotmp <price> --db-change <val> [--target-delta <delta>] [--min-dte <days>] [--max-dte <days>]`: Dynamic GEX setup grading, customized option selection contract isolation, and caching.
 - `portfolio`: Track active option positions, print aggregate holdings stats, verify structural trailing stops/DTE time limits, and check sector/sizing weights.
@@ -74,9 +74,9 @@ Before reviewing any individual setups, verify if the broader market authorizes 
 
 #### 🔄 Token-Efficient Gateway Workflow:
 1. **Check Cache First**: Within our 15-minute TTL convention, check if a fresh [data/regime.json](../../data/regime.json) file contains the calculated regime and authorization metrics for the current session.
-2. **Delegate Calculation**: If the cache is stale or missing, spawn the `market-regime-analyst` subagent to perform calculations (ETF breadth, VIX Delta, and Drawdown check).
-3. **Sync Portfolio Risk**: Spawn the `portfolio-risk-manager` subagent to evaluate active positions against the strict GEX exit hierarchy (Structural, Time, Stalling stops).
-4. **Enforce System Blocker**: If the 30-day realized drawdown exceeds **$10.00\%$**, a strict **MAX LOSS DRAWDOWN BLOCK** is active. **ABORT** all Discovery and Setup Engineering phases.
+2. **Delegate Calculation**: If the cache is stale or missing, spawn the `market-regime-analyst` subagent to perform calculations (ETF breadth, VIX Delta, and Drawdown check). When calling `robinhood-trading/get_index_quotes`, ensure `instrument_ids` is passed as an array of strings.
+3. **Sync Portfolio Risk**: Spawn the `portfolio-risk-manager` subagent to evaluate active positions against the strict GEX exit hierarchy (Structural, Time, Stalling stops). Ensure `sync-positions` is run with the specific account ID (e.g. --account 5QR24141).
+4. **Enforce System Blocker**: If the 30-day realized drawdown exceeds **10.00%**, a strict **MAX LOSS DRAWDOWN BLOCK** is active. **ABORT** all Discovery and Setup Engineering phases.
 
 ### Phase 2: Opportunity Discovery & Sentiment Filtering
 Perform opportunity discovery and sentiment filtering to keep the system's analytical state fresh (Analyses should not be older than 1 session).
@@ -101,7 +101,7 @@ Finalize the tactical decision for each ticker and secure approval for any neces
 #### 🏁 Step 1: Classify Setup & Action
 Classify each ticker under:
 - **CONFIRMED**: All filters pass, and the first 5-minute candle has closed above pTrans.
-- **PENDING**: All filters pass, but spot is still inside the watchdog buffer ($0.5\%$ below pTrans) waiting for the 5-minute candle close trigger.
+- **PENDING**: All filters pass, but spot is still inside the watchdog buffer (0.5% below pTrans) waiting for the 5-minute candle close trigger.
 - **BLOCKED**: One or more filters failed. No entry allowed.
 
 #### 💰 Step 2: Profit Taking (T1 & T2 rules)
@@ -163,7 +163,7 @@ Present the analysis with KaTeX formulas where helpful. Keep the output concise,
 
 #### 🛡️ Active Options Positions (GEX Tracked)
 For every open option position fetched from Robinhood:
-- **TICKER**: Current Spot $X.XX vs Average Buy $Y.YY (Gain/Loss: +/-X.XX%)
+- **TICKER**: Spot $X.XX | Mark $Y.YY vs Avg Buy Premium $Z.ZZ (Gain/Loss: +/-X.XX%)
   - **Exits Rule State**: [HOLD / WATCH / STOP TRIGGERED (Structural/Max Asset/Time/Stalling/Trailed) / PROFIT TAKE (T1/T2)]
   - **Target Mode**: [T1 / T2] (T2 Target: $Z.ZZ, if applicable)
   - **Distance to Structural Stop (nTrans at $Z.ZZ)**: X.XX%

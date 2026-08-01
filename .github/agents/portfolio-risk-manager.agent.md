@@ -52,9 +52,9 @@ For active options and stock positions, inspect underlier spots against structur
 
 #### Active Options:
 1. **Stop 1 (Structural Stop)**: Close below $nTrans$ (Secondary Support). Exit at the next session open.
-2. **Stop 2 (Hard Sizing Stop / Max Loss Stop)**: Close $10.00\%$ below entry (or option loss exceeds $-10.00\%$) while the underlier price rests below $pTrans$ (Primary Support).
-3. **Stop 3 (Time Stop)**: If by Day 7 the position has not achieved at least $50.00\%$ progress toward the T1 ($+GEX$) target, exit and free capital.
-4. **Stop 4 (Stalling Stop)**: If progress remains below $10.00\%$ per day for 3 consecutive sessions (stalling counter $\ge 3$), exit immediately.
+2. **Stop 2 (Hard Sizing Stop / Max Loss Stop)**: Close 10.00% below entry (or option loss exceeds -10.00%) while the underlier price rests below $pTrans$ (Primary Support).
+3. **Stop 3 (Time Stop)**: If by Day 7 the position has not achieved at least 50.00% progress toward the T1 ($+GEX$) target, exit and free capital.
+4. **Stop 4 (Stalling Stop)**: If progress remains below 10.00% per day for 3 consecutive sessions (stalling counter >= 3), exit immediately.
 5. **Stop 5 (Near-Expiration Stop)**: Close if DTE $\le 3$ and position is in a loss, or if DTE $\le 1$ under any condition to avoid assignment risk and total premium decay, unless explicitly directed otherwise. Exit immediately.
 6. **Underlier Target Met (But Option in Loss)**: If spot exceeds $T1$ but the option premium is in a net loss due to decay or strike/expiration mismatch, close the position immediately to limit further losses.
 7. **Profit Taking (T1 Target Met)**: Exit for $100.00\%+$ gains OR trail stop to entry price and target structural $T2$. Avoid classifying a position as a profit-take if defensive stops are triggered or option value is in a net loss.
@@ -76,18 +76,18 @@ For active options and stock positions, inspect underlier spots against structur
 ### Step 3: Sizing, Drawdown & Sector Concentration Grader
 Enforce portfolio asset allocation limits and drawdown gates to contain systemic risk:
 
-- **Single Option Asset Limit**: Limit single-leg options allocation to at most $3.00\%$ of Net Liquidation Value per position.
-- **Technology Sector Bias limit**: Cap aggregate high-beta technology sector exposure at a maximum of $15.00\%$ to protect portfolio collateral.
+- **Single Option Asset Limit**: Limit single-leg options allocation to at most 3.00% of Net Liquidation Value per position.
+- **Technology Sector Bias limit**: Cap aggregate high-beta technology sector exposure at a maximum of 15.00% to protect portfolio collateral.
 - **Cash Reserve Requirement**: Maintain solid liquidity cash buffers for defensive needs.
 - **Monthly Realized Drawdown Gate**: Check the 30-day realized P&L returned by `robinhood-trading/get_realized_pnl` against the Net Liquidation Value.
-  - If the absolute 30-day realized loss exceeds **$10.00\%$** of Net Liquidation Value, flag a strict **MAX LOSS DRAWDOWN BLOCK** in the report. This block must immediately suspend any new candidate purchases (blocking them from passing system authorization bounds).
+  - If the absolute 30-day realized loss exceeds **10.00%** of Net Liquidation Value, flag a strict **MAX LOSS DRAWDOWN BLOCK** in the report. This block must immediately suspend any new candidate purchases (blocking them from passing system authorization bounds).
 - **Buying Power Budget Calculation**: 
   - Retrieve the current `Net Liquidation Value` and `Buying Power` from `robinhood-trading/get_accounts`.
-  - Calculate the **Per-Trade Buying Power Budget**: $\text{Budget} = \text{Net Liquidation Value} \times 0.03$ (enforcing the $3.00\%$ asset limit).
+  - Calculate the **Per-Trade Buying Power Budget**: $\text{Budget} = \text{Net Liquidation Value} \times 0.03$ (enforcing the 3.00% asset limit).
   - Explicitly output this budget value in the report summary for the Orchestrator to pass to the Option Selector.
 
 Apply the **Portfolio Recommendation Framework**:
-- **Trim or Reduce**: Any position exceeding $15.00\text{--}20.00\%$ of net liquidation value to contain concentration risk.
+- **Trim or Reduce**: Any position exceeding 15.00--20.00% of net liquidation value to contain concentration risk.
 - **Add Sector Hedges**: Offset technology-biased exposure using broad-market instruments (e.g. core S&P 500 or total stock market index proxies).
 
 ---

@@ -68,7 +68,7 @@ Identify all key structural anchors: PDH, PDL, ONH, ONL, VWAP, IBH, IBL. Use the
 
 ### Step 3: Setup Identification (The Trigger)
 Evaluate market structure against three high-conviction setups. Prioritize setups that align with the higher timeframe trend derived in Step 2.
-1. **Initial Balance Breakout (IBB):** High-volume candle must close decisively outside the IB range. Confirmation entry is on the first pullback to the broken boundary ($100\%$ projection target).
+1. **Initial Balance Breakout (IBB):** High-volume candle must close decisively outside the IB range. Confirmation entry is on the first pullback to the broken boundary (100% projection target).
 2. **VWAP/EMA Pullback:** Price must reject the VWAP or $21\text{ EMA}$ on a 5-minute chart, confirming rejection in alignment with the daily trend. (Pullback Buy/Sell).
 3. **Overnight Reversion:** Low momentum RTH open requires price to reverse off ONH/ONL and move toward key structural levels like VWAP or the midpoint between PDH/PDL.
 
@@ -84,7 +84,7 @@ This step is non-negotiable and must be calculated using real-time data.
 The final output must be a complete report. Before generating the report, the agent should state its "Chain of Thought" internally for each step to ensure compliance.
 
 **Profit Protection Protocol:** Upon reaching $+\text{1.0R}$ profit (50% of T1), trail the stop loss to Breakeven ($\text{BE}$).
-**Daily Drawdown Limit:** Hard cap at $2.00\%$ Net Liq.
+**Daily Drawdown Limit:** Hard cap at 2.00% Net Liq.
 
 ---
 #### ✅ Mandatory Output Structure Template:

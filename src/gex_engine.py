@@ -2702,8 +2702,21 @@ def cmd_portfolio(args):
         strike = details.get("Strike")
         expiration = details.get("Expiration")
         
+        # Derivation of contracts count for scaling
+        cost_basis = details.get("Asset Cost Basis") or (purchase_premium * 100.0)
+        contracts_count = 1.0
+        if "Quantity" in details:
+            try:
+                contracts_count = float(details["Quantity"])
+            except (ValueError, TypeError):
+                pass
+        elif purchase_premium > 0:
+            contracts_count = round(cost_basis / (purchase_premium * 100.0), 2)
+            if contracts_count <= 0:
+                contracts_count = 1.0
+
         # Calculate P&L
-        pl_dollar = (mark_price - purchase_premium) * 100
+        pl_dollar = (mark_price - purchase_premium) * 100 * contracts_count
         pl_pct = ((mark_price - purchase_premium) / purchase_premium) * 100 if purchase_premium else 0.0
         
         # Fetch levels from analyses if available
@@ -2750,8 +2763,7 @@ def cmd_portfolio(args):
             target_mode=target_mode, t2_target=t2_target
         )
         
-        cost_basis = details.get("Asset Cost Basis") or (purchase_premium * 100.0)
-        current_value = mark_price * 100.0
+        current_value = mark_price * 100.0 * contracts_count
         sizing_risk_weight = (cost_basis / net_liq) * 100
         
         table_rows.append({
@@ -2778,17 +2790,6 @@ def cmd_portfolio(args):
             delta_val = -delta_val
         elif opt_type == "call" and delta_val < 0:
             delta_val = -delta_val
-            
-        contracts_count = 1.0
-        if "Quantity" in details:
-            try:
-                contracts_count = float(details["Quantity"])
-            except (ValueError, TypeError):
-                pass
-        elif purchase_premium > 0:
-            contracts_count = round(cost_basis / (purchase_premium * 100.0), 2)
-            if contracts_count <= 0:
-                contracts_count = 1.0
                 
         delta_shares = delta_val * 100.0 * contracts_count
         delta_exposure = delta_shares * spot
@@ -2912,8 +2913,20 @@ def cmd_portfolio(args):
         expiration = details.get("Expiration")
         opt_type = details.get("Type")
         
+        cost_basis = details.get("Asset Cost Basis") or (purchase_premium * 100.0)
+        contracts_count = 1.0
+        if "Quantity" in details:
+            try:
+                contracts_count = float(details["Quantity"])
+            except (ValueError, TypeError):
+                pass
+        elif purchase_premium > 0:
+            contracts_count = round(cost_basis / (purchase_premium * 100.0), 2)
+            if contracts_count <= 0:
+                contracts_count = 1.0
+
         # Calculate P&L
-        pl_dollar = (mark_price - purchase_premium) * 100
+        pl_dollar = (mark_price - purchase_premium) * 100 * contracts_count
         pl_pct = ((mark_price - purchase_premium) / purchase_premium) * 100
         
         # Fetch levels from analyses if available
@@ -2966,10 +2979,10 @@ def cmd_portfolio(args):
         )
             
         # Update metrics in position state
-        details["Current Value"] = mark_price * 100
+        details["Current Value"] = mark_price * 100 * contracts_count
         details["P&L ($)"] = round(pl_dollar, 2)
         details["P&L (%)"] = round(pl_pct, 2)
-        sizing_risk_weight = ((details["Asset Cost Basis"] if "Asset Cost Basis" in details else (purchase_premium * 100)) / net_liq) * 100
+        sizing_risk_weight = (cost_basis / net_liq) * 100
         details["Sizing Risk Weight (%)"] = round(sizing_risk_weight, 2)
         
         details_sector_tag = details.get("Beta Sector Tag", "Equity")

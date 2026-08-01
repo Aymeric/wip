@@ -40,8 +40,8 @@ To calculate the **Bull:Bear Gate** reliably, query the daily percent change of 
 - **Calculate Gate Daily**: For each of the 15 ETFs, compute its daily change percentage using the retrieved quote details:
   - Compare `venue_last_non_reg_trade_time` vs `venue_last_trade_time`. Because Robinhood timestamps can have >6-digit fractional seconds, performing a simple lexicographic string comparison (e.g., `non_reg_time > reg_time`) is used to determine which is more recent. Prefer `last_non_reg_trade_price` as the current spot price if its timestamp string is more recent; otherwise use `last_trade_price`.
   - Calculate change percentage relative to the `adjusted_previous_close` field.
-  - A symbol is **bullish** if its daily change is $> +0.1\%$.
-  - A symbol is **bearish** if its daily change is $< -0.1\%$.
+  - A symbol is **bullish** if its daily change is > +0.1%.
+  - A symbol is **bearish** if its daily change is < -0.1%.
   - Otherwise, it is **flat** (excluded from the ratio calculation).
 - **Gate Evaluation**: Compute the ratio of bullish to bearish names ($bull\_count / bear\_count$). The Bull:Bear Gate **PASSES** if this ratio is $> 3.0:1$. If there are 0 bearish ETFs, the ratio defaults to `999.0` and passes.
 
@@ -50,19 +50,19 @@ To calculate the **Bull:Bear Gate** reliably, query the daily percent change of 
 ### Step 3: Grade Broad Market Regime & Account Drawdown
 Evaluate the three Daily Regime Gates and check portfolio drawdown health to determine overall authorization:
 
-1. **Basket Gate**: SPY or QQQ must be up **greater than or equal to $+0.50\%$** in the session (showing follow-through). Any value $\ge +0.50\%$ is a **PASS**.
+1. **Basket Gate**: SPY or QQQ must be up **greater than or equal to +0.50%** in the session (showing follow-through). Any value >= +0.50% is a **PASS**.
 2. **Bull:Bear Gate**: Ratio of bullish-to-bearish names among key Sector and Broad-Market ETFs must be $> 3.0:1$.
 3. **VIX Delta Gate**: VIX must be trending down (bearish on volatility = bullish for equities).
 4. **Account Drawdown Gate (System Blocker)**: Verify trailing 30-day realized P&L against Net Liquidation value.
    - **Efficiency Rule**: Check if a fresh monthly realized P&L report (downloaded today) already exists at [data/downloads/](../../data/downloads/) before calling `robinhood-trading/get_realized_pnl`.
-   - If realized trailing 30-day drawdown exceeds **$10.00\%$**, flag a strict **MAX LOSS DRAWDOWN BLOCK** in [data/regime.json](../../data/regime.json) and suspend all candidate grading or order routing, overriding any passing regime gates.
+  - If realized trailing 30-day drawdown exceeds **10.00%**, flag a strict **MAX LOSS DRAWDOWN BLOCK** in [data/regime.json](../../data/regime.json) and suspend all candidate grading or order routing, overriding any passing regime gates.
 
 #### Track Authorisation Level:
 - **Track 1 (Mechanical P2P)**: Requires at least **2/3 gates** to run and no active Drawdown Block.
 - **Track 2 (B Continuation)**: Requires all **3/3 gates** to run and no active Drawdown Block.
 
 #### Credit Overlay Check:
-Check HYG and sector ETF positions as credit/rotation overlays. If HYG daily change is $< -0.3\%$ while equities are bullish (SPY/QQQ positive), warn the user to reduce sizing on new entries by $50\%$ due to credit/equity divergence. A daily HYG change between $-0.3\%$ and $0.0\%$ is considered flat (no warning).
+Check HYG and sector ETF positions as credit/rotation overlays. If HYG daily change is < -0.3% while equities are bullish (SPY/QQQ positive), warn the user to reduce sizing on new entries by 50% due to credit/equity divergence. A daily HYG change between -0.3% and 0.0% is considered flat (no warning).
 
 ---
 
@@ -84,13 +84,13 @@ Format a concise regime summary following the styling instructions (e.g. green m
 ### 🔄 Regime Authorization Summary:
 - **Authorisation Status**: 🟢 ALL TRACKS OK / 🟡 TRACK 1 ONLY / 🔴 NO NEW ENTRIES (or 🔴 MAX LOSS DRAWDOWN BLOCK)
 - **Total Gates Passing**: $X/3$
-  - Basket Gate: [🟢 PASS / 🔴 FAIL] (SPY: $+X.XX\%$, QQQ: $+Y.YY\%$)
+  - Basket Gate: [🟢 PASS / 🔴 FAIL] (SPY: +X.XX%, QQQ: +Y.YY%)
   - Bull:Bear Gate: [🟢 PASS / 🔴 FAIL] (Ratio: $A.AA:1$ with $B$ bulls vs $C$ bears)
-  - VIX Delta Gate: [🟢 PASS / 🔴 FAIL] (VIX: $V.VV$ / Proxy UVXY/VXX Change: $-X.XX\%$)
-- **Account Drawdown Gate**: [🟢 PASS / 🔴 MAX LOSS DRAWDOWN BLOCK] (Trailing 30-Day P&L: $-X.XX\%$ drawdown)
+  - VIX Delta Gate: [🟢 PASS / 🔴 FAIL] (VIX: $V.VV$ / Proxy UVXY/VXX Change: -X.XX%)
+- **Account Drawdown Gate**: [🟢 PASS / 🔴 MAX LOSS DRAWDOWN BLOCK] (Trailing 30-Day P&L: -X.XX% drawdown)
 
 ### ⚠️ Risk Overlay Indicators:
-- **HYG Credit Check**: [🟢 OK / 🔴 DIVERGENCE WARNING - Sizing reduced by 50%] (HYG: $-X.XX\%$)
+- **HYG Credit Check**: [🟢 OK / 🔴 DIVERGENCE WARNING - Sizing reduced by 50%] (HYG: -X.XX%)
 
 ### 💾 Persisted Artifacts:
 - Saved raw quotes to [data/downloads/](../../data/downloads/)

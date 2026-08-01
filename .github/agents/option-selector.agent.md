@@ -70,10 +70,10 @@ To ensure complete mathematical alignment with [src/gex_engine.py](../../src/gex
    - Bid-Ask Spread validation:
      - Premium Mark $\le \$2.00$: Spread $\le \$0.15$ wide.
      - Premium Mark $\$2.01$ to $\$5.00$: Spread $\le \$0.25$ wide.
-     - Premium Mark $>\$5.00$: Spread $\le 10\%$ of bid price (or ask/mark if bid is zero).
+   - Premium Mark >$5.00: Spread <= 10% of bid price (or ask/mark if bid is zero).
    - If both the Open Interest and Spread checks pass, the contract is **Liquidity Passed**. Otherwise, it **Fails**.
 3. **Preference Flags**:
-   - **Strike Preferred**: Contract strike is closest to At-The-Money (ATM) or slightly Out-Of-The-Money (OTM), specifically within $0.0\%$ to $+5.0\%$ above the underlier Spot price (i.e., `0.0 <= pct_above_spot <= 5.0`).
+   - **Strike Preferred**: Contract strike is closest to At-The-Money (ATM) or slightly Out-Of-The-Money (OTM), specifically within 0.0% to +5.0% above the underlier Spot price (i.e., `0.0 <= pct_above_spot <= 5.0`).
    - **Delta Preferred**: Contract Delta is close to the **0.45** target (specifically within the range of $0.40$ to $0.50$ inclusive, calculated as `target_delta - 0.05 <= delta <= target_delta + 0.05`).
 4. **Tiered Scoring System**:
    Assign each Call contract to one of four mutually exclusive Tiers (Lower Tier is superior):
@@ -115,7 +115,7 @@ Present the finalized selection dashboard using the styling guidelines. Keep the
 
 - **Isolated Best-In-Class Contract**: [TICKER] [Expiration Date] $S.SS Call (Tier [T] Contract) — **[STATUS: ALLOWED / BLOCKED / FAILS]**
 - **Premium Mark**: $P.PP (Bid: $B.BB, Ask: $A.AA, Spread Width: $W.WW)
-- **Greeks / Attributes**: Delta: $D.DD$, Theta: $T.TT$, IV: $V.V\%$
+- **Greeks / Attributes**: Delta: $D.DD$, Theta: $T.TT$, IV: V.V%
 - **Liquidity Check**: Open Interest: $O$ contracts, Volume: $V$ (Status: 🟢 LIQUIDITY GATE PASSED / 🔴 LIQUIDITY FAILS)
 
 #### 🔌 Sizing Simulation Details:

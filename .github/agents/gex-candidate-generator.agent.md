@@ -52,8 +52,8 @@ When building the candidate universe from Robinhood lists, enforce these strict 
 Apply the baseline GEX filtering manually on the raw columns of the returned results and deduplicate:
 - **Price Range**: $\$5.00$ to $\$1{,}000.00$ (column `"Last"` or price from equity quotes).
 - **Average Volume**: $\ge 200{,}000$ shares/day (column `"Volume"` or volume from equity quotes).
-- **Day Change %**: $\ge +0.30\%$ (column `"% Change"` or calculated/retrieved change from equity quotes). **Warning**: The raw value in `"% Change"` is a fraction/ratio (e.g., `0.003` means $+0.30\%$) — multiply by 100 before comparing to percent thresholds.
-  - **Reddit Bypass Rule**: If the ticker was sourced from Reddit, relax this filter to $\ge -5.00\%$ to allow for contrarian "Capitulation Watch" setups near structural support floors.
+- **Day Change %**: >= +0.30% (column `"% Change"` or calculated/retrieved change from equity quotes). **Warning**: The raw value in `"% Change"` is a fraction/ratio (e.g., `0.003` means +0.30%) — multiply by 100 before comparing to percent thresholds.
+  - **Reddit Bypass Rule**: If the ticker was sourced from Reddit, relax this filter to >= -5.00% to allow for contrarian "Capitulation Watch" setups near structural support floors.
 - **Market CAP**: $\ge \$1$B (column `"Market cap"` from scan results or `market_cap` from equity fundamentals).
 - **Active Hold Exclusions**: Read [data/active_positions.json](../../data/active_positions.json). Compare symbols and remove any ticker already tracked as an active option or equity holding from the pool (unless the user explicitly requests re-evaluation). Sort the excluded active positions alphabetically.
 - **Technical Alert Check (Overlay)**: For prioritized candidates, use the `robinhood-trading/get_equity_technical_indicators` tool to identify technical alerts (RSI overbought/oversold, MACD crossovers). Flag these alerts in the final report to prioritize tickers showing both technical and gamma alignment.

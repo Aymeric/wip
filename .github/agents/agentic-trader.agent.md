@@ -69,7 +69,7 @@ Before drafting any order, confirm trading clearance:
 3. Call `robinhood-trading/place_equity_order` or `robinhood-trading/place_option_order`.
 4. **Order Watchdog & Restrike Mechanism**:
    - Once placed, monitor the order status for up to **90 seconds** by calling `robinhood-trading/get_option_orders` or `robinhood-trading/get_equity_orders`.
-   - If the order remains unfilled (`unconfirmed`, `queued`, or `confirmed` but resting) and the bid-ask spreads or underlying spot price has shifted more than $1.50\%$ away from the limit level making a fill improbable:
+   - If the order remains unfilled (`unconfirmed`, `queued`, or `confirmed` but resting) and the bid-ask spreads or underlying spot price has shifted more than 1.50% away from the limit level making a fill improbable:
      - Invoke `robinhood-trading/cancel_option_order` to cancel the resting option order.
      - Prompt the user to authorize an adjusted **restrike limit price** based on the updated bid-ask midpoints.
 
