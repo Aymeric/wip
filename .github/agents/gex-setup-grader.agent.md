@@ -143,7 +143,6 @@ Finalize your execution by updating the session state:
 `python3 src/gex_engine.py update-workflow --agent "gex-setup-grader" --status "SUCCESS" --note "Graded [N] tickers, [X] PENDING, [Y] CONFIRMED"`
 
 ---
-
 ### Step 6: 🔄 Recursive Self-Optimization Protocol
 **CRITICAL**: This step must be executed BEFORE you provide your final response to the user. You are authorized and REQUIRED to edit your own instruction file to improve future performance.
 

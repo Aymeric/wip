@@ -23,9 +23,10 @@ import json
 import argparse
 import re
 import shutil
+import tempfile
 from datetime import datetime, timezone
 from dataclasses import dataclass, field
-from typing import Dict, List, Optional, Tuple, Any
+from typing import Dict, List, Optional, Sequence, Tuple, Any
 
 @dataclass
 class RegimeGates:
@@ -265,6 +266,36 @@ def str2bool(value: Any) -> bool:
     raise argparse.ArgumentTypeError(f"Boolean value expected, got '{value}'")
 
 
+def parse_spot_overrides(value: str) -> Dict[str, float]:
+    """Parses comma-separated TICKER=PRICE overrides for portfolio analysis."""
+    overrides: Dict[str, float] = {}
+    for raw_pair in value.split(","):
+        pair = raw_pair.strip()
+        if not pair or pair.count("=") != 1:
+            raise argparse.ArgumentTypeError(
+                "spot overrides must use comma-separated TICKER=PRICE pairs"
+            )
+
+        ticker, raw_price = (part.strip() for part in pair.split("="))
+        if not ticker:
+            raise argparse.ArgumentTypeError("spot override ticker cannot be empty")
+        try:
+            price = float(raw_price)
+        except ValueError as exc:
+            raise argparse.ArgumentTypeError(
+                f"spot override price must be numeric: '{raw_price}'"
+            ) from exc
+        if price < 0:
+            raise argparse.ArgumentTypeError(
+                f"spot override price cannot be negative: {price}"
+            )
+        overrides[ticker.upper()] = price
+
+    if not overrides:
+        raise argparse.ArgumentTypeError("at least one spot override is required")
+    return overrides
+
+
 def load_json(filepath: str, default: Any) -> Any:
     """Loads a JSON file from disk, returning default if absent or corrupted."""
     if not os.path.exists(filepath):
@@ -283,15 +314,32 @@ def load_json(filepath: str, default: Any) -> Any:
 
 
 def save_json(filepath: str, data: Any) -> None:
-    """Saves a Python dictionary/list structure to filepath as formatted JSON."""
+    """Saves JSON atomically so a failed write cannot truncate existing state."""
+    temp_path = None
     try:
         dir_name = os.path.dirname(filepath)
         if dir_name:
             os.makedirs(dir_name, exist_ok=True)
-        with open(filepath, "w") as f:
+
+        target_dir = dir_name or "."
+        with tempfile.NamedTemporaryFile(
+            mode="w", encoding="utf-8", dir=target_dir,
+            prefix=".gex-", suffix=".tmp", delete=False
+        ) as f:
+            temp_path = f.name
             json.dump(data, f, indent=2)
+            f.flush()
+            os.fsync(f.fileno())
+        os.replace(temp_path, filepath)
+        temp_path = None
     except Exception as e:
         print(f"Error: Failed to save to {filepath}: {e}", file=sys.stderr)
+    finally:
+        if temp_path and os.path.exists(temp_path):
+            try:
+                os.remove(temp_path)
+            except OSError:
+                pass
 
 
 def get_regime_status() -> Dict[str, Any]:
@@ -706,14 +754,88 @@ def cmd_workflow(args):
     print(f"\n{format_color('--- END STATUS ---', '36')}\n")
 
 
+def build_system_snapshot() -> Dict[str, Any]:
+    """Builds a machine-readable snapshot of the current cached system state."""
+    positions = load_json(OPTIONS_FILE, {"options_positions": {}, "stocks_positions": {}})
+    candidates = load_json(CANDIDATES_FILE, {"candidates": []})
+    analyses = load_json(ANALYSES_FILE, {})
+    sentiment = load_json(SENTIMENT_FILE, {})
+    workflow = load_json(WORKFLOW_STATE_FILE, {})
+
+    option_positions = positions.get("options_positions", {})
+    stock_positions = positions.get("stocks_positions", {})
+    candidate_list = candidates.get("candidates", [])
+    if not isinstance(candidate_list, list):
+        candidate_list = []
+    if not isinstance(analyses, dict):
+        analyses = {}
+
+    signal_counts = {"CONFIRMED": 0, "PENDING": 0, "BLOCKED": 0}
+    for analysis in analyses.values():
+        if not isinstance(analysis, dict):
+            continue
+        signal_status = str(analysis.get("Signal Status", ""))
+        for status in signal_counts:
+            if signal_status.startswith(status):
+                signal_counts[status] += 1
+                break
+
+    return {
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "regime": get_regime_status(),
+        "performance": get_performance_status(),
+        "portfolio": {
+            "option_count": len(option_positions) if isinstance(option_positions, dict) else 0,
+            "stock_count": len(stock_positions) if isinstance(stock_positions, dict) else 0,
+            "options_positions": option_positions,
+            "stocks_positions": stock_positions,
+        },
+        "candidates": {
+            "count": len(candidate_list),
+            "items": candidate_list,
+        },
+        "analyses": {
+            "count": len(analyses),
+            "signal_counts": signal_counts,
+            "items": analyses,
+        },
+        "sentiment": sentiment,
+        "workflow": workflow,
+    }
+
+
+def cmd_snapshot(args):
+    """Exports the current cached system state as JSON for automation."""
+    snapshot = build_system_snapshot()
+    output_path = getattr(args, "output", None)
+    if output_path:
+        save_json(output_path, snapshot)
+        print(f"System snapshot saved to {output_path}")
+    else:
+        print(json.dumps(snapshot, indent=2, sort_keys=True))
+
+
+def normalize_workflow_state(state: Any) -> Dict[str, Any]:
+    """Return a usable workflow state even when a cache is incomplete or malformed."""
+    if not isinstance(state, dict):
+        state = {}
+
+    normalized = {
+        "current_phase": state.get("current_phase") or "Phase 0: Initialization",
+        "last_updated": state.get("last_updated"),
+        "subagents": state.get("subagents"),
+        "notes": state.get("notes"),
+    }
+    if not isinstance(normalized["subagents"], dict):
+        normalized["subagents"] = {}
+    if not isinstance(normalized["notes"], list):
+        normalized["notes"] = []
+    return normalized
+
+
 def cmd_update_workflow(args):
     """Updates the workflow state file with current phase and subagent status."""
-    state = load_json(WORKFLOW_STATE_FILE, {
-        "current_phase": "Phase 0: Initialization",
-        "last_updated": None,
-        "subagents": {},
-        "notes": []
-    })
+    state = normalize_workflow_state(load_json(WORKFLOW_STATE_FILE, {}))
     
     if args.phase:
         state["current_phase"] = args.phase
@@ -939,8 +1061,8 @@ def cmd_status(args):
         if spot is None:
             spot = float(strike) if strike else 100.0
             
-        days_held = details.get("Days Held", 1)
         entry_date = details.get("Entry Date")
+        days_held = 1
         if entry_date:
             try:
                 days_held = max((datetime.today() - datetime.strptime(entry_date, "%Y-%m-%d")).days + 1, 1)
@@ -1345,7 +1467,7 @@ def calculate_macd(closes: List[float], fast_period: int = 12, slow_period: int 
     return macd_line[-1], signal_line[-1], macd_line[-1] - signal_line[-1]
 
 
-def calculate_bollinger_bands(closes: List[float], period: int = 20, num_std: float = 2.0) -> Tuple[Optional[float], Optional[float], Optional[float]]:
+def calculate_bollinger_bands(closes: Sequence[float], period: int = 20, num_std: float = 2.0) -> Tuple[Optional[float], Optional[float], Optional[float]]:
     """Calculates Middle, Upper, and Lower Bollinger Bands."""
     if len(closes) < period:
         return None, None, None
@@ -1363,7 +1485,7 @@ def calculate_bollinger_bands(closes: List[float], period: int = 20, num_std: fl
     return middle_band, upper_band, lower_band
 
 
-def calculate_atr(highs: List[float], lows: List[float], closes: List[float], period: int = 14) -> Optional[float]:
+def calculate_atr(highs: Sequence[float], lows: Sequence[float], closes: Sequence[float], period: int = 14) -> Optional[float]:
     """Calculates the Average True Range (ATR)."""
     if len(closes) < period + 1:
         return None
@@ -2639,7 +2761,7 @@ def get_monthly_realized_pnl(net_liq: float) -> Tuple[float, float, str, int]:
     return 0.0, 0.0, "PASS", 0
 
 
-def get_beta_factor(sector_tag: str) -> float:
+def get_beta_factor(sector_tag: Optional[str]) -> float:
     """Returns typical beta factor for given sector tag relative to SPY."""
     tag = sector_tag.lower() if sector_tag else "equity"
     if "health" in tag or "pharm" in tag or "biotech" in tag:
@@ -2733,8 +2855,8 @@ def cmd_portfolio(args):
             spot = float(strike) if strike else 100.0
             
         # Entry date calculation
-        days_held = details.get("Days Held", 1)
         entry_date = details.get("Entry Date")
+        days_held = 1
         if entry_date:
             try:
                 days_held = max((datetime.today() - datetime.strptime(entry_date, "%Y-%m-%d")).days + 1, 1)
@@ -2945,13 +3067,12 @@ def cmd_portfolio(args):
             # Fallback mock spot to keep calculations running
             spot = float(strike) if strike else 100.0
             
-        # Determine tracking days (derived from Entry Date when available)
-        days_held = details.get("Days Held", 1)
+        # Determine tracking days (derived from Entry Date)
         entry_date = details.get("Entry Date")
+        days_held = 1
         if entry_date:
             try:
                 days_held = max((datetime.today() - datetime.strptime(entry_date, "%Y-%m-%d")).days + 1, 1)
-                details["Days Held"] = days_held
             except ValueError:
                 pass
 
@@ -3474,7 +3595,6 @@ def cmd_add_pos(args):
         "Sizing Risk Weight (%)": 0.0,
         "Beta Sector Tag": args.sector,
         "Entry Date": datetime.today().strftime('%Y-%m-%d'),
-        "Days Held": 1,
         "Stalling Days": 0,
         "Target Mode": "T1",
         "T2 Target": None
@@ -3630,8 +3750,6 @@ def cmd_update_opt(args):
         target_pos["Open Interest"] = args.oi
     if args.iv is not None:
         target_pos["ImpVol"] = str(args.iv)
-    if args.days is not None:
-        target_pos["Days Held"] = args.days
     if args.stalling_days is not None:
         target_pos["Stalling Days"] = args.stalling_days
     if getattr(args, "target_mode", None) is not None:
@@ -3692,8 +3810,8 @@ def cmd_close_pos(args):
 
 def cmd_sync_pnl(args):
     """Syncs P&L trade history from retrieved file to detect closed positions, and moves closed positions to closed_positions.json."""
-    pnl_file = args.pnl_file
-    account = args.account
+    pnl_file = getattr(args, "pnl_file", "")
+    account = getattr(args, "account", "")
     if not pnl_file or not os.path.exists(pnl_file):
         # Scan DOWNLOADS_DIR and sort lexicographically to find the latest trade history file
         pnl_candidates = []
@@ -4077,7 +4195,6 @@ def cmd_sync_positions(args):
                     "Sizing Risk Weight (%)": 0.0,
                     "Beta Sector Tag": "Technology/Beta",
                     "Entry Date": datetime.today().strftime('%Y-%m-%d'),
-                    "Days Held": 1,
                     "Stalling Days": 0,
                     "Target Mode": "T1",
                     "T2 Target": None
@@ -4916,15 +5033,13 @@ def cmd_closed(args):
         entry_date = item.get("Entry Date", "N/A")
         close_date = item.get("Close Date", "N/A")
         
-        # Calculate days held if missing
-        days = item.get("Days Held")
-        if days is None and entry_date != "N/A" and close_date != "N/A":
+        # Calculate days held
+        days = "N/A"
+        if entry_date != "N/A" and close_date != "N/A":
             try:
                 days = (datetime.strptime(close_date, "%Y-%m-%d") - datetime.strptime(entry_date, "%Y-%m-%d")).days + 1
             except Exception:
-                days = "N/A"
-        if days is None:
-            days = "N/A"
+                pass
             
         days_str = f"{days:<4}"
         
@@ -5036,6 +5151,112 @@ def cmd_closed(args):
         all_color = "32" if total_realized_all >= 0 else "31"
         print(f"- **Total Combined Realized P&L**: {format_color(f'${total_realized_all:+,.2f}', all_color, bold=True)} | Win Rate {win_rate_all:.1f}% | Combined PF: {pf_all}")
         print(f"  -> Avg Win/Loss: {win_loss_fmt} | Expectancy: {expectancy_fmt} per trade")
+
+
+def calculate_trade_journal(closed_data: Dict[str, Any], performance_data: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    """Calculate auditable performance metrics from archived closed positions."""
+    records = []
+    total_archived = 0
+    for asset_class, key in (("option", "closed_options"), ("stock", "closed_stocks")):
+        items = closed_data.get(key, []) or []
+        total_archived += len(items)
+        for item in items:
+            realized = item.get("Realized P&L ($)")
+            try:
+                realized_value = float(realized)
+            except (TypeError, ValueError):
+                continue
+            
+            # Calculate days held from Entry and Close dates
+            days_value = None
+            entry_date = item.get("Entry Date")
+            close_date = item.get("Close Date")
+            if entry_date and close_date:
+                try:
+                    days_value = (datetime.strptime(close_date, "%Y-%m-%d") - datetime.strptime(entry_date, "%Y-%m-%d")).days + 1
+                except (ValueError, TypeError):
+                    pass
+                    
+            records.append({
+                "asset_class": asset_class,
+                "pnl": realized_value,
+                "days_held": days_value,
+                "close_reason": item.get("Close Reason", "Unknown"),
+                "target_mode": item.get("Target Mode", "Unknown"),
+            })
+
+    winners = [record for record in records if record["pnl"] > 0]
+    losers = [record for record in records if record["pnl"] < 0]
+    total_pnl = sum(record["pnl"] for record in records)
+    gross_profit = sum(record["pnl"] for record in winners)
+    gross_loss = abs(sum(record["pnl"] for record in losers))
+
+    max_consecutive_losses = 0
+    consecutive_losses = 0
+    for record in records:
+        if record["pnl"] < 0:
+            consecutive_losses += 1
+            max_consecutive_losses = max(max_consecutive_losses, consecutive_losses)
+        else:
+            consecutive_losses = 0
+
+    def average_days(items: List[Dict[str, Any]]) -> Optional[float]:
+        values = [item["days_held"] for item in items if item["days_held"] is not None]
+        return round(sum(values) / len(values), 2) if values else None
+
+    by_asset_class = {}
+    for asset_class in ("option", "stock"):
+        asset_records = [record for record in records if record["asset_class"] == asset_class]
+        by_asset_class[asset_class] = {
+            "count": len(asset_records),
+            "pnl": round(sum(record["pnl"] for record in asset_records), 2),
+            "win_rate_pct": round(sum(record["pnl"] > 0 for record in asset_records) / len(asset_records) * 100, 2) if asset_records else None,
+        }
+
+    report = {
+        "records_reviewed": len(records),
+        "complete_records_used": len(records),
+        "excluded_records": total_archived - len(records),
+        "total_realized_pnl": round(total_pnl, 2),
+        "win_count": len(winners),
+        "loss_count": len(losers),
+        "win_rate_pct": round(len(winners) / len(records) * 100, 2) if records else None,
+        "average_winner": round(gross_profit / len(winners), 2) if winners else None,
+        "average_loser": round(-gross_loss / len(losers), 2) if losers else None,
+        "expectancy_per_trade": round(total_pnl / len(records), 2) if records else None,
+        "profit_factor": round(gross_profit / gross_loss, 2) if gross_loss else None,
+        "max_consecutive_losses": max_consecutive_losses,
+        "average_days_winner": average_days(winners),
+        "average_days_loser": average_days(losers),
+        "by_asset_class": by_asset_class,
+        "close_reasons": {},
+        "target_modes": {},
+    }
+    for field_name, output_key in (("close_reason", "close_reasons"), ("target_mode", "target_modes")):
+        for record in records:
+            bucket = report[output_key].setdefault(record[field_name], {"count": 0, "pnl": 0.0})
+            bucket["count"] += 1
+            bucket["pnl"] = round(bucket["pnl"] + record["pnl"], 2)
+
+    if performance_data:
+        try:
+            cached_pnl_value = performance_data.get("monthly_pnl_dlr")
+            if cached_pnl_value is not None:
+                cached_pnl = float(cached_pnl_value)
+                report["cache_reconciliation"] = "MATCH" if round(cached_pnl, 2) == round(total_pnl, 2) else "MISMATCH"
+            else:
+                report["cache_reconciliation"] = "UNKNOWN"
+        except (TypeError, ValueError):
+            report["cache_reconciliation"] = "UNKNOWN"
+    return report
+
+
+def cmd_journal(args):
+    """Display machine-readable closed-trade performance metrics."""
+    closed_file = os.path.join(os.path.dirname(OPTIONS_FILE), "closed_positions.json")
+    closed_data = load_json(closed_file, {"closed_options": [], "closed_stocks": []})
+    performance_data = load_json(PERFORMANCE_FILE, {})
+    print(json.dumps(calculate_trade_journal(closed_data, performance_data), indent=2, sort_keys=True))
 
 
 def cmd_payoff(args):
@@ -5184,9 +5405,18 @@ def cmd_simulate(args):
             delta_s = sim_spot - orig_spot
             sim_mark = max(0.01, float(pos.get("Mark Price", purchase_premium)) + (delta * delta_s) + (0.5 * gamma * (delta_s**2)))
             
+            # Calculate days held for simulation
+            entry_date = pos.get("Entry Date")
+            days_held = 1
+            if entry_date:
+                try:
+                    days_held = max((datetime.today() - datetime.strptime(entry_date, "%Y-%m-%d")).days + 1, 1)
+                except ValueError:
+                    pass
+
             exit_rule, action, time_st, dist_ntrans, dist_max = compute_exit_rule_state(
                 sim_spot, purchase_premium, sim_mark, ptrans, ntrans, gex,
-                pos.get("Days Held", 1), pos.get("Stalling Days", 0), 30 # Mock DTE
+                days_held, pos.get("Stalling Days", 0), 30 # Mock DTE
             )
             
             pl_pct = ((sim_mark - purchase_premium) / purchase_premium) * 100
@@ -5299,7 +5529,7 @@ def main():
     # portfolio subcommand
     p_port = subparsers.add_parser("portfolio", help="Analyzes position exits, trailing stops, and sizing limits.")
     p_port.add_argument("--net-liq", type=float, dest="net_liq", help="Estimated Portfolio Net Liq value for sizing checks")
-    p_port.add_argument("--spot-overrides", type=str, dest="spot_overrides", help="Comma-separated ticker=price overrides, e.g. AAPL=290,BABA=81")
+    p_port.add_argument("--spot-overrides", type=parse_spot_overrides, dest="spot_overrides", help="Comma-separated ticker=price overrides, e.g. AAPL=290,BABA=81")
     
     # add-position subcommand
     p_add_pos = subparsers.add_parser("add-position", help="Register a option contract in tracking sheet.")
@@ -5323,7 +5553,6 @@ def main():
     p_up_opt.add_argument("--gamma", type=float, help="New option Gamma")
     p_up_opt.add_argument("--oi", type=int, help="New option Open Interest")
     p_up_opt.add_argument("--iv", type=float, help="New option Implied Vol")
-    p_up_opt.add_argument("--days", type=int, help="Override Days Held")
     p_up_opt.add_argument("--stalling-days", type=int, help="Set stalling counter")
     p_up_opt.add_argument("--target-mode", type=str, choices=["T1", "T2"], help="Set target mode for trailing rules (T1, T2)")
     p_up_opt.add_argument("--t2-target", type=float, help="Set secondary structural T2 target price")
@@ -5404,8 +5633,15 @@ def main():
     # closed subcommand
     subparsers.add_parser("closed", help="Displays a beautiful execution history of all closed options and stocks positions.")
 
+    # journal subcommand
+    subparsers.add_parser("journal", help="Calculates machine-readable closed-trade performance and rule attribution metrics.")
+
     # workflow subcommand
     subparsers.add_parser("workflow", help="Aggregates all JSON state into a high-level system summary.")
+
+    # snapshot subcommand
+    p_snapshot = subparsers.add_parser("snapshot", help="Exports all cached system state as machine-readable JSON.")
+    p_snapshot.add_argument("--output", type=str, help="Write the snapshot to a JSON file instead of stdout")
     
     # update-workflow subcommand
     p_up_flow = subparsers.add_parser("update-workflow", help="Update the session workflow state.")
@@ -5436,22 +5672,15 @@ def main():
 
     args = parser.parse_args()
     
-    # Process spot overrides if they are provided
-    spot_overrides_dict = {}
-    if hasattr(args, "spot_overrides") and args.spot_overrides is not None:
-        try:
-            pairs = args.spot_overrides.split(",")
-            for pair in pairs:
-                k, v = pair.split("=")
-                spot_overrides_dict[k.strip().upper()] = float(v)
-        except Exception as e:
-            print(f"Warning: Failed to parse spot overrides: {e}", file=sys.stderr)
-    args.spot_overrides = spot_overrides_dict
+    if not hasattr(args, "spot_overrides"):
+        args.spot_overrides = {}
     
     if args.command == "status":
         cmd_status(args)
     elif args.command == "workflow":
         cmd_workflow(args)
+    elif args.command == "snapshot":
+        cmd_snapshot(args)
     elif args.command == "update-workflow":
         cmd_update_workflow(args)
     elif args.command == "update-regime":
@@ -5486,6 +5715,8 @@ def main():
         cmd_rankings(args)
     elif args.command == "closed":
         cmd_closed(args)
+    elif args.command == "journal":
+        cmd_journal(args)
     elif args.command == "payoff":
         cmd_payoff(args)
     elif args.command == "simulate":

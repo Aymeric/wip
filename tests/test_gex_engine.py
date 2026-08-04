@@ -20,6 +20,8 @@ from gex_engine import (
     discover_earnings_date,
     calculate_bollinger_bands,
     calculate_atr,
+    calculate_trade_journal,
+    parse_spot_overrides,
     RegimeGates,
     OptionPosition,
     StockPosition
@@ -27,11 +29,41 @@ from gex_engine import (
 
 class TestGEXEngine(unittest.TestCase):
 
+    def test_parse_spot_overrides_normalizes_tickers(self):
+        self.assertEqual(
+            parse_spot_overrides(" aapl=290, BABA = 81.5 "),
+            {"AAPL": 290.0, "BABA": 81.5},
+        )
+
+    def test_parse_spot_overrides_rejects_invalid_input(self):
+        from argparse import ArgumentTypeError
+
+        for value in ("AAPL", "AAPL=not-a-price", "AAPL=-1", ""):
+            with self.subTest(value=value):
+                with self.assertRaises(ArgumentTypeError):
+                    parse_spot_overrides(value)
+
+    def test_calculate_trade_journal_metrics(self):
+        report = calculate_trade_journal({
+            "closed_options": [
+                {"Realized P&L ($)": 100.0, "Days Held": 3, "Close Reason": "Target", "Target Mode": "T1"},
+                {"Realized P&L ($)": -40.0, "Days Held": 5, "Close Reason": "Stop", "Target Mode": "T1"},
+            ],
+            "closed_stocks": [],
+        }, {"monthly_pnl_dlr": 60.0})
+
+        self.assertEqual(report["expectancy_per_trade"], 30.0)
+        self.assertEqual(report["profit_factor"], 2.5)
+        self.assertEqual(report["max_consecutive_losses"], 1)
+        self.assertEqual(report["cache_reconciliation"], "MATCH")
+        self.assertEqual(report["close_reasons"]["Target"]["count"], 1)
+
     def test_technical_indicators(self):
         # Bollinger Bands Test
         closes = [100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119]
         mid, upper, lower = calculate_bollinger_bands(closes, period=10)
         self.assertIsNotNone(mid)
+        assert mid is not None and upper is not None and lower is not None
         self.assertTrue(upper > mid > lower)
 
         # ATR Test
@@ -40,7 +72,22 @@ class TestGEXEngine(unittest.TestCase):
         closes = [100] * 20
         atr = calculate_atr(highs, lows, closes, period=10)
         self.assertIsNotNone(atr)
+        assert atr is not None
         self.assertGreater(atr, 0)
+
+    def test_save_json_preserves_existing_file_on_serialization_failure(self):
+        import tempfile
+        import gex_engine
+
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as tmp:
+            tmp_path = tmp.name
+            tmp.write('{"state": "original"}')
+        try:
+            gex_engine.save_json(tmp_path, {"state": object()})
+            self.assertEqual(gex_engine.load_json(tmp_path, {}), {"state": "original"})
+        finally:
+            if os.path.exists(tmp_path):
+                os.remove(tmp_path)
 
     def test_compute_regime_gates(self):
         # Case 1: All Tracks Passed (All Gates PASS)
@@ -450,6 +497,93 @@ class TestGEXEngine(unittest.TestCase):
                 self.assertIn("AAPL", saved_data["excluded_active_positions"])
                 self.assertIn("MSFT", saved_data["excluded_active_positions"])
                 self.assertEqual(saved_data["excluded_active_positions"], ["AAPL", "MSFT"])
+
+    def test_build_system_snapshot_aggregates_cached_state(self):
+        from unittest.mock import patch
+        import tempfile
+        import gex_engine
+
+        cached_state = {
+            gex_engine.OPTIONS_FILE: {
+                "options_positions": {"option-1": {"Underlier": "AAPL"}},
+                "stocks_positions": {"MSFT": {"Ticker": "MSFT"}},
+            },
+            gex_engine.CANDIDATES_FILE: {"candidates": ["NVDA", "AMD"]},
+            gex_engine.ANALYSES_FILE: {
+                "NVDA": {"Signal Status": "CONFIRMED (11/11)"},
+                "AMD": {"Signal Status": "PENDING"},
+                "TSLA": {"Signal Status": "BLOCKED"},
+            },
+            gex_engine.SENTIMENT_FILE: {"NVDA": {"sentiment": 0.4}},
+            gex_engine.WORKFLOW_STATE_FILE: {"current_phase": "Phase II"},
+        }
+
+        def load_cached(path, default):
+            return cached_state.get(path, default)
+
+        with patch("gex_engine.load_json", side_effect=load_cached), \
+             patch("gex_engine.get_regime_status", return_value={"system_authorization": "TRACK 1 OK"}), \
+             patch("gex_engine.get_performance_status", return_value={"drawdown_gate_status": "PASS"}):
+            snapshot = gex_engine.build_system_snapshot()
+
+        self.assertEqual(snapshot["portfolio"]["option_count"], 1)
+        self.assertEqual(snapshot["portfolio"]["stock_count"], 1)
+        self.assertEqual(snapshot["candidates"]["count"], 2)
+        self.assertEqual(snapshot["analyses"]["signal_counts"], {"CONFIRMED": 1, "PENDING": 1, "BLOCKED": 1})
+        self.assertIn("generated_at", snapshot)
+
+        with tempfile.NamedTemporaryFile(suffix=".json", delete=False) as tmp:
+            output_path = tmp.name
+        try:
+            with patch("gex_engine.build_system_snapshot", return_value=snapshot):
+                gex_engine.cmd_snapshot(type("Args", (), {"output": output_path})())
+            self.assertEqual(gex_engine.load_json(output_path, {}), snapshot)
+        finally:
+            if os.path.exists(output_path):
+                os.remove(output_path)
+
+    def test_update_workflow_recovers_from_incomplete_state(self):
+        from types import SimpleNamespace
+        from unittest.mock import patch
+        import gex_engine
+
+        args = SimpleNamespace(
+            phase="Phase II: Discovery",
+            agent="Candidate-Generator",
+            status="SUCCESS",
+            note="Candidate pool refreshed",
+        )
+        malformed_state = {"current_phase": "", "subagents": [], "notes": {}}
+
+        with patch("gex_engine.load_json", return_value=malformed_state), \
+             patch("gex_engine.save_json") as mock_save:
+            gex_engine.cmd_update_workflow(args)
+
+        saved_state = mock_save.call_args[0][1]
+        self.assertEqual(saved_state["current_phase"], "Phase II: Discovery")
+        self.assertEqual(saved_state["subagents"]["Candidate-Generator"]["status"], "SUCCESS")
+        self.assertEqual(len(saved_state["notes"]), 1)
+
+    def test_update_workflow_retains_only_latest_ten_notes(self):
+        from types import SimpleNamespace
+        from unittest.mock import patch
+        import gex_engine
+
+        args = SimpleNamespace(phase=None, agent=None, status=None, note="new note")
+        existing_state = {
+            "current_phase": "Phase I: Audit",
+            "subagents": {},
+            "notes": [{"content": f"note {index}"} for index in range(10)],
+        }
+
+        with patch("gex_engine.load_json", return_value=existing_state), \
+             patch("gex_engine.save_json") as mock_save:
+            gex_engine.cmd_update_workflow(args)
+
+        notes = mock_save.call_args[0][1]["notes"]
+        self.assertEqual(len(notes), 10)
+        self.assertEqual(notes[0]["content"], "note 1")
+        self.assertEqual(notes[-1]["content"], "new note")
 
     def test_portfolio_concentration_alerts_options_and_stocks(self):
         # Verify that both option underliers and stock tickers trigger high concentration warnings
@@ -1636,6 +1770,7 @@ class TestGEXEngine(unittest.TestCase):
         closes = [100.0 + i * 0.5 for i in range(40)]
         rsi = calculate_rsi(closes)
         self.assertIsNotNone(rsi)
+        assert rsi is not None
         self.assertGreater(rsi, 50.0)
         
         macd_line, sig_line, macd_hist = calculate_macd(closes)

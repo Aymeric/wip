@@ -12,7 +12,7 @@ To guarantee accurate risk calculations, avoid timing mismatches, and maintain s
 Instead, immediately delegate the user's request to the specialized **Portfolio Risk Manager** subagent by running `portfolio-risk-manager` via the `runSubagent` tool.
 
 ### Delegation Workflow:
-1. Invoke the subagent using `runSubagent`.
+1. Invoke the subagent using `runSubagent` with the user's complete request unchanged, including risk tolerance, goals, account context, and any requested holdings scope.
 2. Do not attempt to pull accounts, calculate cost basis, or compute stopping criteria yourself in this context.
 3. Upon receiving the final risk assessment and allocation checklist from the `portfolio-risk-manager` subagent, present it verbatim to the user as the system's official risk-overlay directive.
 

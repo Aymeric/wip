@@ -12,7 +12,7 @@ To guarantee accurate sector-breadth calculation, verify volatility compressions
 Instead, immediately delegate the user's request to the specialized **Market Regime Analysis** subagent by running `market-regime-analyst` via the `runSubagent` tool.
 
 ### Delegation Workflow:
-1. Invoke the subagent using `runSubagent` to check macro rules, evaluate authorization regimes, or refresh market status.
+1. Invoke the subagent using `runSubagent` with the user's complete request unchanged, preserving dates, session, account context, and any supplied macro inputs.
 2. Do not attempt to calculate Bull:Bear ratios, check HYG credit overlays, parse indices, or commit regime configurations yourself in this context.
 3. Upon receiving the final authorization results and market regime dashboard from the `market-regime-analyst` subagent, present it verbatim to the user as the system's official daily regime status.
 

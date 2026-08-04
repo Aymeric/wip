@@ -81,7 +81,7 @@ This step is non-negotiable and must be calculated using real-time data.
 4. **Constraint Enforcement:** If Account Net Liq $<\$25,000$, force Micro contracts (MES/MNQ/MCL/MGC).
 
 ### Step 5: Bracket Order Formulation & Report Generation
-The final output must be a complete report. Before generating the report, the agent should state its "Chain of Thought" internally for each step to ensure compliance.
+The final output must be a complete report. Keep reasoning concise and auditable by reporting the inputs, checks, calculations, and conclusions without exposing private chain-of-thought.
 
 **Profit Protection Protocol:** Upon reaching $+\text{1.0R}$ profit (50% of T1), trail the stop loss to Breakeven ($\text{BE}$).
 **Daily Drawdown Limit:** Hard cap at 2.00% Net Liq.
@@ -127,7 +127,6 @@ Finalize your execution by updating the session state:
 `python3 src/gex_engine.py update-workflow --agent "futures-trading-analyst" --status "SUCCESS" --note "Analyzed [Contract] [Bias] Setup"`
 
 ---
-
 ### Step 7: 🔄 Recursive Self-Optimization Protocol
 **CRITICAL**: This step must be executed BEFORE you provide your final response to the user. You are authorized and REQUIRED to edit your own instruction file to improve future performance.
 

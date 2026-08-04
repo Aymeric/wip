@@ -12,7 +12,7 @@ To guarantee complete candidate identification, prevent timing mismatches, and m
 Instead, immediately delegate the user's request to the specialized **Setup Candidate Sourcing** subagent by running `gex-candidate-generator` via the `runSubagent` tool.
 
 ### Delegation Workflow:
-1. Invoke the subagent using `runSubagent`, passing any user overrides or target candidate configurations.
+1. Invoke the subagent using `runSubagent`, passing the user's complete request unchanged, including any overrides, target candidate configurations, date, and filter thresholds.
 2. Do not attempt to query lists sequentially, run manual scanners, parse Reddit hype, or filter local active holdings yourself in this context.
 3. Upon receiving the completed candidate stock pool and synchronization updates from the `gex-candidate-generator` subagent, present it verbatim to the user as the system's official candidate generation report.
 

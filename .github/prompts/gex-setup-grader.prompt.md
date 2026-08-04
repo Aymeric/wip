@@ -12,7 +12,7 @@ To guarantee accurate option-chain analysis, precise mathematical boundary deriv
 Instead, immediately delegate the user's request to the specialized **Setup Analysis** subagent by running `gex-setup-grader` via the `runSubagent` tool.
 
 ### Delegation Workflow:
-1. Invoke the subagent using `runSubagent`, passing specific underlier targets.
+1. Invoke the subagent using `runSubagent`, passing the user's complete request unchanged, including underlier targets, spot prices, thresholds, and any supplied raw-data context.
 2. Do not attempt to partition option quotes, calculate COTMP metrics, or score rule parameters yourself in this context.
 3. Upon receiving the completed options candidate grades and setup authorization details from the `gex-setup-grader` subagent, present it verbatim to the user as the system's official setup analysis report.
 

@@ -12,7 +12,7 @@ To optimize Reddit live quota searches, prevent emotional narrative errors, and 
 Instead, immediately delegate the user's request to the specialized **Reddit Sentiment Analyst** subagent by running `reddit-sentiment-analyst` via the `runSubagent` tool.
 
 ### Delegation Workflow:
-1. Invoke the subagent using `runSubagent`, passing any user overrides or target tickers.
+1. Invoke the subagent using `runSubagent`, passing the user's complete request unchanged, including target tickers, subreddits, date window, and any user overrides.
 2. Do not call raw Reddit scraping tools or calculate psychology polarity yourself in this context.
 3. Upon receiving the completed sentiment score dashboard and FOMO warning flags from the `reddit-sentiment-analyst` subagent, present it verbatim to the user as the system's official psychology guide.
 

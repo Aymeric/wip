@@ -12,7 +12,7 @@ To guarantee accurate option-chain analysis, correct contract filtering, and str
 Instead, immediately delegate the user's request to the specialized **Option Selection Protocol** subagent by running `option-selector` via the `runSubagent` tool.
 
 ### Delegation Workflow:
-1. Invoke the subagent using `runSubagent`, passing the target ticker, spot price, target delta limits, or desired minimum/maximum DTE ranges.
+1. Invoke the subagent using `runSubagent`, passing the user's complete request unchanged, including the target ticker, spot price, target delta limits, DTE range, earnings constraints, and budget.
 2. Do not attempt to calculate spread widths, parse open interest fields, or perform manual earnings vs DTE calendar checks yourself in this context.
 3. Upon receiving the contract recommendation report from the `option-selector` subagent, present it verbatim to the user as the system's official option selection recommendation.
 

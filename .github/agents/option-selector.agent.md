@@ -139,7 +139,6 @@ Finalize your execution by updating the session state:
   `python3 src/gex_engine.py update-workflow --agent "option-selector" --status "BLOCKED" --note "Blocked: [Reason, e.g. Earnings IV-Crush Risk]"`
 
 ---
-
 ### Step 8: 🔄 Recursive Self-Optimization Protocol
 **CRITICAL**: This step must be executed BEFORE you provide your final response to the user. You are authorized and REQUIRED to edit your own instruction file to improve future performance.
 
