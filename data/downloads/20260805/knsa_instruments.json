@@ -1,0 +1,1808 @@
+{
+  "data": {
+    "instruments": [
+      {
+        "id": "19093b94-12ce-417d-accc-c13078d4c65d",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-12-18",
+        "sellout_datetime": "2026-12-18T20:30:00+00:00",
+        "strike_price": "20.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "3d7bea41-a004-454c-9944-2a5ea6f1b48b",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-11-20",
+        "sellout_datetime": "2026-11-20T20:30:00+00:00",
+        "strike_price": "20.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "5b517c9e-0558-49e2-b707-2f452e9354c5",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-12-18",
+        "sellout_datetime": "2026-12-18T20:30:00+00:00",
+        "strike_price": "20.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "73d532bb-1624-41f6-b23c-536d94f6a7f1",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-11-20",
+        "sellout_datetime": "2026-11-20T20:30:00+00:00",
+        "strike_price": "20.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "22cf9d10-81d8-42fb-8eb2-637e653fef36",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-12-18",
+        "sellout_datetime": "2026-12-18T20:30:00+00:00",
+        "strike_price": "22.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "3d3fb4eb-a49b-42a4-b32e-a81e4fbc4491",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-11-20",
+        "sellout_datetime": "2026-11-20T20:30:00+00:00",
+        "strike_price": "22.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "80bac513-ffcb-49bd-9013-7504272bdfc6",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-12-18",
+        "sellout_datetime": "2026-12-18T20:30:00+00:00",
+        "strike_price": "22.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "b3e9b4e0-917e-45de-966b-0398abc97c02",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-16",
+        "sellout_datetime": "2026-10-16T19:30:00+00:00",
+        "strike_price": "22.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "d447aa0c-44a2-40ef-90ba-bed92950d92f",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-11-20",
+        "sellout_datetime": "2026-11-20T20:30:00+00:00",
+        "strike_price": "22.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "d5183c50-9768-429c-8770-b9b438d71d23",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-16",
+        "sellout_datetime": "2026-10-16T19:30:00+00:00",
+        "strike_price": "22.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "1f487bb6-9b33-4acc-b6d5-7a3d9c3fbd8f",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-12-18",
+        "sellout_datetime": "2026-12-18T20:30:00+00:00",
+        "strike_price": "25.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "24d89bbd-2d48-4e27-9980-9b5dc2bc3fde",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-16",
+        "sellout_datetime": "2026-10-16T19:30:00+00:00",
+        "strike_price": "25.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "27fa7455-2c34-41ab-8653-830a1c78c98f",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-11-20",
+        "sellout_datetime": "2026-11-20T20:30:00+00:00",
+        "strike_price": "25.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "3e17d251-05a6-49fb-9f7c-434d8f601ee4",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-12-18",
+        "sellout_datetime": "2026-12-18T20:30:00+00:00",
+        "strike_price": "25.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "6069a8eb-410b-4e4b-bb0a-f799848c5c53",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-11-20",
+        "sellout_datetime": "2026-11-20T20:30:00+00:00",
+        "strike_price": "25.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "fa9cf401-ac1c-4aa7-a8cc-7f4cd830bbfc",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-16",
+        "sellout_datetime": "2026-10-16T19:30:00+00:00",
+        "strike_price": "25.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "027710c7-ac80-4a07-ac62-4499a79a7403",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-11-20",
+        "sellout_datetime": "2026-11-20T20:30:00+00:00",
+        "strike_price": "30.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "163215c5-c64a-4db2-9a73-012d66ce8e54",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-12-18",
+        "sellout_datetime": "2026-12-18T20:30:00+00:00",
+        "strike_price": "30.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "16c50cf8-bc5f-4d36-90f4-624c080af4ea",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-11-20",
+        "sellout_datetime": "2026-11-20T20:30:00+00:00",
+        "strike_price": "30.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "22637045-96ac-40ff-8f44-0641fd8806f0",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-16",
+        "sellout_datetime": "2026-10-16T19:30:00+00:00",
+        "strike_price": "30.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "79eb7865-8731-4655-9641-57c78cdf99a7",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-12-18",
+        "sellout_datetime": "2026-12-18T20:30:00+00:00",
+        "strike_price": "30.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "827d8a34-5a88-4a99-a305-e6e8136b7a11",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "30.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "8ccac40d-7c2c-4393-b052-caead9cecab2",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "30.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "e4c0426d-29e0-4c1d-9801-11fa20beedd1",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "30.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "e99aec35-5517-4b19-8789-ecf5cd45c33a",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "30.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "f737cf68-39c3-4bc8-8931-b5dfa7721c29",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-16",
+        "sellout_datetime": "2026-10-16T19:30:00+00:00",
+        "strike_price": "30.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "006d8abd-c502-46a8-9d66-a8301ae18b04",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "35.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "060dd24b-11c9-4ac0-91d7-d1c0fd29c03b",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "35.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "15995308-27f6-4f5d-8766-7c7b95023593",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-11-20",
+        "sellout_datetime": "2026-11-20T20:30:00+00:00",
+        "strike_price": "35.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "3c3d758b-ab3f-4a90-a196-fbe666b9c703",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "35.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "6add405d-7fa9-4e54-a536-156f67abaaea",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-12-18",
+        "sellout_datetime": "2026-12-18T20:30:00+00:00",
+        "strike_price": "35.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "78c902cc-d7e0-4d55-8dd1-c6cf81e3d062",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-16",
+        "sellout_datetime": "2026-10-16T19:30:00+00:00",
+        "strike_price": "35.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "87f81740-2cca-41a8-87fc-b89aa8a323b8",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-12-18",
+        "sellout_datetime": "2026-12-18T20:30:00+00:00",
+        "strike_price": "35.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "b2e2a541-a70c-44a9-a611-d149f4c93727",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "35.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "c2385e4c-39fd-4017-86d7-0be2ecc9e42a",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "35.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "c5f75f8f-ec86-403c-9f88-bce69565037b",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "35.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "cdffe594-131c-458e-953c-60351c8eb303",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-11-20",
+        "sellout_datetime": "2026-11-20T20:30:00+00:00",
+        "strike_price": "35.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "fedcea91-d68d-4ff8-bf6b-75bb971df7ed",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-16",
+        "sellout_datetime": "2026-10-16T19:30:00+00:00",
+        "strike_price": "35.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "0aeba8cf-7362-4232-a4fa-ad6f48e44c22",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-12-18",
+        "sellout_datetime": "2026-12-18T20:30:00+00:00",
+        "strike_price": "40.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "652e827f-8b8c-4d7e-897a-a4f63ff15eb0",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-11-20",
+        "sellout_datetime": "2026-11-20T20:30:00+00:00",
+        "strike_price": "40.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "65bc0377-be0f-4e4a-b15d-3707c01775d5",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-16",
+        "sellout_datetime": "2026-10-16T19:30:00+00:00",
+        "strike_price": "40.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "92c145aa-74e8-486c-9133-27902816862a",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "40.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "9f9253ed-5938-4489-b6c6-beb92183558e",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "40.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "a471ed59-51a4-4ef1-b5b3-4a7f898aff9e",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-12-18",
+        "sellout_datetime": "2026-12-18T20:30:00+00:00",
+        "strike_price": "40.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "bbe8ad50-7e76-479f-b5ca-f34f67253373",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "40.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "c70085d2-aa35-4802-806d-26bafd3900a7",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "40.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "d4a2d520-33f8-4375-bca6-542b6b5d3423",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "40.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "dfb4f7d9-eb4a-45f0-9589-7da85c877e34",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-16",
+        "sellout_datetime": "2026-10-16T19:30:00+00:00",
+        "strike_price": "40.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "eb828be9-f27d-405d-a0b7-f9b8644d99cb",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "40.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "f68281a5-4543-4caa-800e-d993bdff222d",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-11-20",
+        "sellout_datetime": "2026-11-20T20:30:00+00:00",
+        "strike_price": "40.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "0d854191-2e76-4fff-8055-6f494cf28f1e",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-11-20",
+        "sellout_datetime": "2026-11-20T20:30:00+00:00",
+        "strike_price": "45.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "394f05cc-6e06-45e4-bf26-16e62156fe14",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "45.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "43c8729b-7e9a-44da-8f2e-92aa1ce9aa44",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-16",
+        "sellout_datetime": "2026-10-16T19:30:00+00:00",
+        "strike_price": "45.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "4e727699-5836-40f6-bb71-562025e04acf",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-16",
+        "sellout_datetime": "2026-10-16T19:30:00+00:00",
+        "strike_price": "45.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "5f424684-f723-4844-81a3-1387e0f4ef92",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "45.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "63878cbf-0d9f-407e-a0f3-45663d10f791",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-12-18",
+        "sellout_datetime": "2026-12-18T20:30:00+00:00",
+        "strike_price": "45.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "76612095-696c-4768-8118-fb1770474531",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "45.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "7c8fd7e2-ea77-48b9-8b3f-4cafb91c2887",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "45.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "7f2f5002-3109-4f14-b8c0-720d833b6f28",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "45.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "9fcceb9f-07bd-4942-b3d4-8af0622d86e2",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-11-20",
+        "sellout_datetime": "2026-11-20T20:30:00+00:00",
+        "strike_price": "45.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "acad0920-f282-4a30-b3d7-7a5d22540141",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "45.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "b1724342-5ce2-498e-882c-8d76ef908db3",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-12-18",
+        "sellout_datetime": "2026-12-18T20:30:00+00:00",
+        "strike_price": "45.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "3bd0b48d-c9cd-4b55-815a-293346cd9eec",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "50.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "3d0ba1b7-d1a5-4572-84bb-0327668c39b3",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-16",
+        "sellout_datetime": "2026-10-16T19:30:00+00:00",
+        "strike_price": "50.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "4225dcbe-95fd-4291-98dc-7c3479c2c81f",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-12-18",
+        "sellout_datetime": "2026-12-18T20:30:00+00:00",
+        "strike_price": "50.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "427b0707-36b1-4219-aeb4-c5801d3c4175",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-11-20",
+        "sellout_datetime": "2026-11-20T20:30:00+00:00",
+        "strike_price": "50.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "49016528-4ea4-4901-820b-19ccfde28399",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-12-18",
+        "sellout_datetime": "2026-12-18T20:30:00+00:00",
+        "strike_price": "50.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "4a85f331-c8d6-4fec-a622-898f951d1d8c",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-11-20",
+        "sellout_datetime": "2026-11-20T20:30:00+00:00",
+        "strike_price": "50.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "4ea01c6c-62e0-4c77-a2b4-35f573ccc734",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "50.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "4f2fcba4-0789-4c8a-9a59-a31cd2cc502f",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "50.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "59c5c815-b164-474d-a5dc-23c1575b99f5",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "50.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "86243541-e3fc-4a42-88ce-622884432083",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "50.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "c7348a97-238b-441b-9a8e-093c526eddc9",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "50.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "ce426330-9a69-4f53-b8fd-9d3458afc30b",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-16",
+        "sellout_datetime": "2026-10-16T19:30:00+00:00",
+        "strike_price": "50.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "1a781824-c9a5-4def-b8f6-17fc1ed2e6db",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-12-18",
+        "sellout_datetime": "2026-12-18T20:30:00+00:00",
+        "strike_price": "55.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "1b15d33e-9f4e-4e15-b59a-22d955257885",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "55.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "3e69ffa9-c6a1-4729-99b2-3742589925d1",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "55.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "50dcef8c-c6cd-442b-890c-2d28c8061a4e",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "55.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "73e12930-34d5-4c17-912f-62ebffaf7a40",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "55.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "77753e1a-c0ea-438a-b9fd-8729d0448833",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "55.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "82fdbc35-a79a-4e32-bff5-6ac9f7889662",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-16",
+        "sellout_datetime": "2026-10-16T19:30:00+00:00",
+        "strike_price": "55.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "865ddf2a-3530-4d34-a130-22babb0245e1",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-11-20",
+        "sellout_datetime": "2026-11-20T20:30:00+00:00",
+        "strike_price": "55.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "904dc1c6-5a86-4c6c-aebc-667aacc7fc77",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-12-18",
+        "sellout_datetime": "2026-12-18T20:30:00+00:00",
+        "strike_price": "55.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "c0cf2704-8a4f-4d3e-92b8-c46a082de655",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-11-20",
+        "sellout_datetime": "2026-11-20T20:30:00+00:00",
+        "strike_price": "55.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "ebf35dc2-7bd2-419a-9fe9-75055542577a",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-16",
+        "sellout_datetime": "2026-10-16T19:30:00+00:00",
+        "strike_price": "55.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "effaafe7-e8ed-445d-9cf5-5bbdef8c3546",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "55.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "0a02774a-6a87-4731-82db-a08895f263fc",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-16",
+        "sellout_datetime": "2026-10-16T19:30:00+00:00",
+        "strike_price": "60.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "13407c0c-c011-4884-88ba-3194e76de351",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "60.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "3374c329-0072-4801-b6e6-1729e09fe40a",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "60.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "5f6dd68e-69f3-480b-a078-ee63ee10cc30",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-12-18",
+        "sellout_datetime": "2026-12-18T20:30:00+00:00",
+        "strike_price": "60.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "6771dbc4-0b21-4586-86f0-8f40a615d6ce",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "60.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "8bcc58ce-6fd1-43f4-afd4-57c6cdec8f79",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "60.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "970153d3-7c55-4776-ad89-799235ef79c2",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-16",
+        "sellout_datetime": "2026-10-16T19:30:00+00:00",
+        "strike_price": "60.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "b04539d9-a9b1-4044-b9ef-2d28da970ced",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-11-20",
+        "sellout_datetime": "2026-11-20T20:30:00+00:00",
+        "strike_price": "60.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "d2678f73-8f54-4438-99f2-eb48edc34cff",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "60.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "d30a4f8f-4542-4ad8-bc1d-e0d21b5a9733",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "60.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "df47e783-79a6-46e8-9b3a-57821fb95541",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-12-18",
+        "sellout_datetime": "2026-12-18T20:30:00+00:00",
+        "strike_price": "60.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "ebf685fc-909c-4c38-bf2f-775ea26992b0",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-11-20",
+        "sellout_datetime": "2026-11-20T20:30:00+00:00",
+        "strike_price": "60.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "265461d1-6812-46d3-b04c-54c79ac20b59",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-08-21",
+        "sellout_datetime": "2026-08-21T19:30:00+00:00",
+        "strike_price": "65.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "30fce3c0-657e-438d-968d-45d3a16e5f38",
+        "chain_id": "f1475ff4-dff6-4dbe-b1ff-b3450803ff87",
+        "chain_symbol": "KNSA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-11-20",
+        "sellout_datetime": "2026-11-20T20:30:00+00:00",
+        "strike_price": "65.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      }
+    ],
+    "next": "http://edge-internal.brokeback-shard-router.region.rh/options/instruments/?chain_id=f1475ff4-dff6-4dbe-b1ff-b3450803ff87&cursor=bz0yJnA9NjAuMDAwMA%3D%3D&state=active"
+  },
+  "guide": "Present chain_symbol, expiration_date, type, strike_price; flag state when not 'active' or tradability when not 'tradable'. Pass id to an order's leg.option_id. Quote sellout_datetime when the user asks \"when will Robinhood force-close this position?\" — it is the authoritative per-contract timestamp covering equity/index, AM/PM settle, and T-1 logic. underlying_type ('equity' or 'index') is informational; mention only when it affects strategy. When next is non-null, extract the cursor query param and call this tool again."
+}

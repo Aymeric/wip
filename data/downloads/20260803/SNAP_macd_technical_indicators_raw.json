@@ -1,0 +1,25 @@
+{
+  "data": {
+    "symbol": "SNAP",
+    "interval": "day",
+    "bounds": "regular",
+    "indicators": [
+      {
+        "type": "macd",
+        "params": {
+          "fast_period": 12,
+          "signal_period": 9,
+          "slow_period": 26
+        },
+        "series": [
+          {
+            "begins_at": "2026-07-31T00:00:00Z",
+            "histogram": 0.04671120640576333,
+            "macd": -0.07593283892907898,
+            "signal": -0.12264404533484231
+          }
+        ]
+      }
+    ]
+  }
+}

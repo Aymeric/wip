@@ -1,0 +1,34 @@
+{
+  "symbol": "RKLB",
+  "interval": "day",
+  "indicators": [
+    {
+      "type": "rsi",
+      "params": {
+        "period": 14
+      },
+      "series": [
+        {
+          "begins_at": "2026-08-03T00:00:00Z",
+          "value": 37.72553760978468
+        }
+      ]
+    },
+    {
+      "type": "macd",
+      "params": {
+        "fast_period": 12,
+        "signal_period": 9,
+        "slow_period": 26
+      },
+      "series": [
+        {
+          "begins_at": "2026-08-03T00:00:00Z",
+          "histogram": 0.5792404232653343,
+          "macd": -8.351885429223557,
+          "signal": -8.931125852488892
+        }
+      ]
+    }
+  ]
+}

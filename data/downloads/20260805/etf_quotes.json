@@ -1,0 +1,102 @@
+{
+  "data": {
+    "results": [
+      {
+        "symbol": "SPY",
+        "last_trade_price": 769.74,
+        "adjusted_previous_close": 769.79,
+        "venue_last_trade_time": "2026-08-05T19:59:59.993919465Z"
+      },
+      {
+        "symbol": "QQQ",
+        "last_trade_price": 717.28,
+        "adjusted_previous_close": 717.30,
+        "venue_last_trade_time": "2026-08-05T19:59:59.900727329Z"
+      },
+      {
+        "symbol": "IWM",
+        "last_trade_price": 299.76,
+        "adjusted_previous_close": 299.77,
+        "venue_last_trade_time": "2026-08-05T19:59:59.997306944Z"
+      },
+      {
+        "symbol": "DIA",
+        "last_trade_price": 542.785,
+        "adjusted_previous_close": 542.81,
+        "venue_last_trade_time": "2026-08-05T19:59:59.593421694Z"
+      },
+      {
+        "symbol": "XLK",
+        "last_trade_price": 185.88,
+        "adjusted_previous_close": 185.91,
+        "venue_last_trade_time": "2026-08-05T19:59:59.99902471Z"
+      },
+      {
+        "symbol": "XLF",
+        "last_trade_price": 58.015,
+        "adjusted_previous_close": 58.00,
+        "venue_last_trade_time": "2026-08-05T19:59:57.85344996Z"
+      },
+      {
+        "symbol": "XLV",
+        "last_trade_price": 164.16,
+        "adjusted_previous_close": 164.16,
+        "venue_last_trade_time": "2026-08-05T19:59:59.513357675Z"
+      },
+      {
+        "symbol": "XLY",
+        "last_trade_price": 118.62,
+        "adjusted_previous_close": 118.64,
+        "venue_last_trade_time": "2026-08-05T19:59:59.999418489Z"
+      },
+      {
+        "symbol": "XLP",
+        "last_trade_price": 85.32,
+        "adjusted_previous_close": 85.33,
+        "venue_last_trade_time": "2026-08-05T19:59:59.207895285Z"
+      },
+      {
+        "symbol": "XLI",
+        "last_trade_price": 186.34,
+        "adjusted_previous_close": 186.35,
+        "venue_last_trade_time": "2026-08-05T19:59:59.557073928Z"
+      },
+      {
+        "symbol": "XLU",
+        "last_trade_price": 43.6499,
+        "adjusted_previous_close": 43.66,
+        "venue_last_trade_time": "2026-08-05T19:59:58.109240054Z"
+      },
+      {
+        "symbol": "XLB",
+        "last_trade_price": 52.63,
+        "adjusted_previous_close": 52.64,
+        "venue_last_trade_time": "2026-08-05T19:59:59.872007948Z"
+      },
+      {
+        "symbol": "XLRE",
+        "last_trade_price": 45.195,
+        "adjusted_previous_close": 45.20,
+        "venue_last_trade_time": "2026-08-05T19:59:56.909113413Z"
+      },
+      {
+        "symbol": "XLE",
+        "last_trade_price": 57.29,
+        "adjusted_previous_close": 57.31,
+        "venue_last_trade_time": "2026-08-05T19:59:59.846482184Z"
+      },
+      {
+        "symbol": "XLC",
+        "last_trade_price": 110.86,
+        "adjusted_previous_close": 110.87,
+        "venue_last_trade_time": "2026-08-05T19:59:58.454211494Z"
+      },
+      {
+        "symbol": "HYG",
+        "last_trade_price": 79.505,
+        "adjusted_previous_close": 79.52,
+        "venue_last_trade_time": "2026-08-05T19:59:58.409219778Z"
+      }
+    ]
+  }
+}

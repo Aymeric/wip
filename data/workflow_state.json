@@ -1,10 +1,10 @@
 {
-  "current_phase": "Phase I: Audit",
-  "last_updated": "2026-08-04T02:23:00.448954+00:00",
+  "current_phase": "Phase IV: Execution",
+  "last_updated": "2026-08-06T03:31:06.751987+00:00",
   "subagents": {
     "gex-orchestrator": {
       "status": "SUCCESS",
-      "timestamp": "2026-08-04T02:23:00.448833+00:00"
+      "timestamp": "2026-08-06T03:31:06.751854+00:00"
     },
     "portfolio-risk-manager": {
       "status": "SUCCESS",
@@ -21,48 +21,52 @@
     "agentic-trader": {
       "status": "BLOCKED",
       "timestamp": "2026-07-28T04:40:34.627059+00:00"
+    },
+    "gex-candidate-generator": {
+      "status": "PARTIAL",
+      "timestamp": "2026-08-06T02:05:35.916394+00:00"
     }
   },
   "notes": [
     {
-      "timestamp": "2026-07-28T17:53:51.457381+00:00",
-      "content": "Grading candidates and refreshing analyses"
+      "timestamp": "2026-08-04T04:59:26.268142+00:00",
+      "content": "Sourced 67 current-session candidates from GEX Momentum Candidates and High options volume and IV; Reddit unavailable: Reddit connection not established. Broker watchlist synchronization pending explicit confirmation; GEX_DAILY_CANDIDATES currently has 30 items."
     },
     {
-      "timestamp": "2026-07-30T05:13:47.413330+00:00",
-      "content": "Phase I complete. Regime BLOCKED. Proceeding to refreshing analytical state."
+      "timestamp": "2026-08-04T05:00:00.205250+00:00",
+      "content": "Sourced 67 current-session candidates from GEX Momentum Candidates, High options volume and IV, and Upcoming Earnings GEX; Reddit unavailable: Reddit connection not established. Broker watchlist synchronization pending explicit confirmation; GEX_DAILY_CANDIDATES currently has 30 items."
     },
     {
-      "timestamp": "2026-07-30T05:13:52.072798+00:00",
-      "content": "Phase II complete. Candidates sourced and sentiment analyzed."
+      "timestamp": "2026-08-04T05:00:08.263565+00:00",
+      "content": "Sourced 84 current-session candidates from GEX Momentum Candidates, High options volume and IV, and Upcoming Earnings GEX; Reddit unavailable: Reddit connection not established. Broker watchlist synchronization pending explicit confirmation; GEX_DAILY_CANDIDATES currently has 30 items."
     },
     {
-      "timestamp": "2026-07-30T05:13:57.149263+00:00",
-      "content": "Phase III complete. All candidate and active ticker data refreshed."
+      "timestamp": "2026-08-06T02:05:35.916517+00:00",
+      "content": "Sourced 72 current-session candidates from GEX Momentum Candidates 3, High options volume and IV 3, Upcoming Earnings GEX 2, 100 most popular, Daily movers, Popular recurring investments, and IPO Access; Reddit unavailable: Reddit connection not established. Please check your configuration (REDDIT_CLIENT_ID, REDDIT_CLIENT_SECRET). Broker GEX_DAILY_CANDIDATES sync not performed because explicit confirmation was unavailable; current item count 30."
     },
     {
-      "timestamp": "2026-07-30T05:46:18.535416+00:00",
-      "content": "Starting daily session execution"
+      "timestamp": "2026-08-06T02:28:31.332224+00:00",
+      "content": "Starting daily session - READ-ONLY CACHE MODE"
     },
     {
-      "timestamp": "2026-07-30T05:46:28.544356+00:00",
-      "content": "Starting daily session and audit phase"
+      "timestamp": "2026-08-06T02:35:16.477280+00:00",
+      "content": "Phase I: Audit completed. Regime: TRACK 1 OK. Alerts: Systematic Time Stop triggered for RGC and SLS. 72 fresh candidates sourced."
     },
     {
-      "timestamp": "2026-07-31T04:29:59.064678+00:00",
-      "content": "Initiating daily session for 2026-07-30. Spawning Phase I subagents."
+      "timestamp": "2026-08-06T02:52:18.551165+00:00",
+      "content": "Starting daily session for 2026-08-05. Account \u2022\u2022\u2022\u20229961 selected."
     },
     {
-      "timestamp": "2026-07-31T04:31:25.019327+00:00",
-      "content": "Daily analysis refreshed. Exits triggered for RGC and SLS. WDS blocked on R/R."
+      "timestamp": "2026-08-06T03:15:42.282182+00:00",
+      "content": "Analysed SITM, MTRN; Blocked on R/R. Pending exits for RGC, SLS."
     },
     {
-      "timestamp": "2026-08-01T19:37:25.949339+00:00",
-      "content": "Resuming daily session; authorization TRACK 1 OK; 2 pending setups and no confirmed entries"
+      "timestamp": "2026-08-06T03:26:12.598187+00:00",
+      "content": "2026-08-05 session: account-scoped cache synced for 5QR24141; regime BLOCKED, RGC/SLS time-stop exits pending approval, no new entries"
     },
     {
-      "timestamp": "2026-08-04T02:23:00.448952+00:00",
-      "content": "Starting daily session"
+      "timestamp": "2026-08-06T03:31:06.751985+00:00",
+      "content": "2026-08-05 audit: authorization BLOCKED; live account verification unavailable; cache-only diagnostics; no new entries or routed orders"
     }
   ]
 }

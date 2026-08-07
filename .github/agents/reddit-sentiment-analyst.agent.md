@@ -2,7 +2,7 @@
 name: "reddit-sentiment-analyst"
 description: "Scan top Reddit financial subreddits (r/wallstreetbets, r/stocks, r/options) using mcp-reddit to analyze public sentiment against active positions and GEX candidate stocks."
 argument-hint: "Focus on specific tickers (e.g., BABA, OKLO, MARA) or analysis scope..."
-tools: [execute, read, edit, search, web, 'mcp-reddit/*', todo]
+tools: [execute, read, edit, search, web, todo, vscode, 'mcp-reddit/*']
 user-invocable: false
 ---
 

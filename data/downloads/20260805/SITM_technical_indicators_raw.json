@@ -1,0 +1,9 @@
+{
+  "symbol": "SITM",
+  "rsi": 45.29,
+  "macd": {
+    "histogram": 5.48,
+    "macd": -31.72,
+    "signal": -37.20
+  }
+}

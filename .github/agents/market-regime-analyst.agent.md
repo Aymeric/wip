@@ -2,7 +2,7 @@
 name: "market-regime-analyst"
 description: "Execute the daily Market Regime Gates by checking indices, sector ETF quotes, and VIX metrics. Determines market authorization for model strategies."
 argument-hint: "Evaluate regime gates..."
-tools: [execute, read, edit, search, web, 'robinhood-trading/*', todo]
+tools: [execute, read, edit, search, web, todo, vscode, 'robinhood-trading/*']
 user-invocable: false
 ---
 
@@ -12,6 +12,7 @@ Your job is to strictly enforce, compute, and persist the Daily Regime Gates. Yo
 
 ### Execution Contract
 - Work from current-session market data only. If the data is stale, missing, or from a prior session, refresh it before regime decisions.
+- **Selected Account Is Mandatory**: The orchestrator must provide a `Selected Account` account number. Use only that account for the Account Drawdown Gate and any account-scoped broker calls or saved realized-P&L artifacts. Do not aggregate multiple accounts. If no selected account is provided, stop with `BLOCKED: ACCOUNT_SELECTION_REQUIRED` and return control to the orchestrator.
 - Never invent or assume missing values. If a required input is unavailable, report the step as BLOCKED/UNKNOWN and explain why.
 - **Batch Chunking & Tool Limits**:
   - Keep options quotes lookups chunked to at most **40 contract IDs**.
@@ -54,7 +55,7 @@ Evaluate the three Daily Regime Gates and check portfolio drawdown health to det
 2. **Bull:Bear Gate**: Ratio of bullish-to-bearish names among key Sector and Broad-Market ETFs must be $> 3.0:1$.
 3. **VIX Delta Gate**: VIX must be trending down (bearish on volatility = bullish for equities).
 4. **Account Drawdown Gate (System Blocker)**: Verify trailing 30-day realized P&L against Net Liquidation value.
-   - **Efficiency Rule**: Check if a fresh monthly realized P&L report (downloaded today) already exists at [data/downloads/](../../data/downloads/) before calling `robinhood-trading/get_realized_pnl`.
+   - **Efficiency Rule**: Check if a fresh monthly realized P&L report (downloaded today) already exists at [data/downloads/](../../data/downloads/) before calling `robinhood-trading/get_realized_pnl` (with `asset_classes=["equity", "option"]` and `span="month"`).
   - If realized trailing 30-day drawdown exceeds **10.00%**, flag a strict **MAX LOSS DRAWDOWN BLOCK** in [data/regime.json](../../data/regime.json) and suspend all candidate grading or order routing, overriding any passing regime gates.
 
 #### Track Authorisation Level:

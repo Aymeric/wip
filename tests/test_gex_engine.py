@@ -702,6 +702,83 @@ class TestGEXEngine(unittest.TestCase):
             if os.path.exists(closed_path):
                 os.remove(closed_path)
 
+    def test_sync_positions_prefers_newest_snapshot_over_folder_name(self):
+        import tempfile
+        import shutil
+        from unittest.mock import patch
+        import gex_engine
+
+        temp_dir = tempfile.mkdtemp()
+        try:
+            downloads_dir = os.path.join(temp_dir, "downloads")
+            dated_dir = os.path.join(downloads_dir, "20260728")
+            os.makedirs(dated_dir)
+            active_file = os.path.join(temp_dir, "active_positions.json")
+            gex_engine.save_json(active_file, {"options_positions": {}, "stocks_positions": {}})
+
+            stale_payload = {"positions": [{"symbol": "OLD", "quantity": "1", "average_buy_price": "10"}]}
+            current_payload = {"positions": [{"symbol": "NEW", "quantity": "2", "average_buy_price": "20"}]}
+            stale_file = os.path.join(dated_dir, "equity_positions_ACC.json")
+            current_file = os.path.join(downloads_dir, "equity_positions_ACC.json")
+            gex_engine.save_json(stale_file, stale_payload)
+            gex_engine.save_json(current_file, current_payload)
+            os.utime(stale_file, (100.0, 100.0))
+            os.utime(current_file, (200.0, 200.0))
+
+            with patch('gex_engine.DOWNLOADS_DIR', downloads_dir), patch('gex_engine.OPTIONS_FILE', active_file):
+                class SyncArgs:
+                    base_dir = ""
+                    account = "ACC"
+
+                gex_engine.cmd_sync_positions(SyncArgs())
+
+            positions = gex_engine.load_json(active_file, {})["stocks_positions"]
+            self.assertIn("NEW", positions)
+            self.assertNotIn("OLD", positions)
+        finally:
+            shutil.rmtree(temp_dir)
+
+    def test_sync_positions_removes_cached_positions_absent_from_snapshot(self):
+        import tempfile
+        import shutil
+        from unittest.mock import patch
+        import gex_engine
+
+        temp_dir = tempfile.mkdtemp()
+        try:
+            downloads_dir = os.path.join(temp_dir, "downloads")
+            os.makedirs(downloads_dir)
+            active_file = os.path.join(temp_dir, "active_positions.json")
+            gex_engine.save_json(active_file, {
+                "options_positions": {
+                    "old-option": {"Option ID": "old-option", "Account": "ACC"},
+                    "kept-option": {"Option ID": "kept-option", "Account": "ACC"},
+                },
+                "stocks_positions": {
+                    "OLD": {"Ticker": "OLD", "Account": "ACC"},
+                    "KEPT": {"Ticker": "KEPT", "Account": "ACC"},
+                },
+            })
+            gex_engine.save_json(os.path.join(downloads_dir, "equity_positions_ACC.json"), {
+                "positions": [{"symbol": "KEPT", "quantity": "1", "average_buy_price": "10"}]
+            })
+            gex_engine.save_json(os.path.join(downloads_dir, "option_positions_ACC.json"), {
+                "positions": [{"option_id": "kept-option", "chain_symbol": "KEPT", "quantity": "1", "average_price": "100"}]
+            })
+
+            with patch('gex_engine.DOWNLOADS_DIR', downloads_dir), patch('gex_engine.OPTIONS_FILE', active_file):
+                class SyncArgs:
+                    base_dir = ""
+                    account = "ACC"
+
+                gex_engine.cmd_sync_positions(SyncArgs())
+
+            synced = gex_engine.load_json(active_file, {})
+            self.assertEqual(set(synced["stocks_positions"]), {"KEPT"})
+            self.assertEqual(set(synced["options_positions"]), {"kept-option"})
+        finally:
+            shutil.rmtree(temp_dir)
+
     def test_select_best_option(self):
         # Setup mock option files with different maturities and liquidity
         inst_data = {
@@ -1913,6 +1990,8 @@ class TestGEXEngine(unittest.TestCase):
                 self.assertEqual(len(cands), 1)
                 self.assertIsNotNone(cands[0]["rsi"])
                 self.assertIsNotNone(cands[0]["macd_hist"])
+                self.assertIn("score", cands[0])
+                self.assertGreater(cands[0]["score"], 0.0)
                 
                 # Test filtering (should exclude since RSI is high and max-rsi is set to 30)
                 class UpdateArgsFiltered:
@@ -1924,6 +2003,49 @@ class TestGEXEngine(unittest.TestCase):
                 cand_data = gex_engine.load_json(candidates_file, {})
                 self.assertEqual(len(cand_data.get("candidates", [])), 0)
                 
+        finally:
+            shutil.rmtree(temp_dir)
+
+    def test_update_candidates_reads_cached_technical_indicators(self):
+        import tempfile
+        import shutil
+        from unittest.mock import patch
+        import gex_engine
+
+        temp_dir = tempfile.mkdtemp()
+        try:
+            downloads_dir = os.path.join(temp_dir, "downloads")
+            os.makedirs(downloads_dir, exist_ok=True)
+            active_file = os.path.join(temp_dir, "active_positions.json")
+            gex_engine.save_json(active_file, {"options_positions": {}, "stocks_positions": {}})
+            gex_engine.save_json(os.path.join(downloads_dir, "test_scan.json"), {
+                "data": {"result": {"scan_title": "Test Scan", "results": [{
+                    "ticker": "AMRC",
+                    "columns": {"Last": "20", "Volume": "500000", "% Change": "0.01", "Market cap": "3000000000"}
+                }]}}
+            })
+            gex_engine.save_json(os.path.join(downloads_dir, "amrc_technical_indicators_raw.json"), {
+                "data": {"indicators": [
+                    {"type": "rsi", "series": [{"value": 39.0083}]},
+                    {"type": "macd", "series": [{"histogram": -0.1624}]},
+                ]}
+            })
+            candidates_file = os.path.join(temp_dir, "candidate_stocks.json")
+            with patch('gex_engine.OPTIONS_FILE', active_file), \
+                 patch('gex_engine.DOWNLOADS_DIR', downloads_dir), \
+                 patch('gex_engine.CANDIDATES_FILE', candidates_file), \
+                 patch('gex_engine.ANALYSES_FILE', os.path.join(temp_dir, "ticker_analyses.json")), \
+                 patch('gex_engine.persist_new_scans', return_value=[]):
+                class UpdateArgs:
+                    min_rsi = None
+                    max_rsi = None
+                    macd_filter = "none"
+
+                gex_engine.cmd_update_candidates(UpdateArgs())
+                candidate = gex_engine.load_json(candidates_file, {})["candidates"][0]
+                self.assertEqual(candidate["rsi"], 39.01)
+                self.assertEqual(candidate["macd_hist"], -0.1624)
+                self.assertIn("score", candidate)
         finally:
             shutil.rmtree(temp_dir)
 

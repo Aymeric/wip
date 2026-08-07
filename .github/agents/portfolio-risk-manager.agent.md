@@ -2,7 +2,7 @@
 name: "portfolio-risk-manager"
 description: "Syncs option and stock positions from Robinhood, evaluates exits in strict priority order (stops, stalling, time stops, targets), checks sizing weights, and provides defensive recommendations."
 argument-hint: "Evaluate holdings risks..."
-tools: [execute, read, edit, search, web, 'robinhood-trading/*', todo]
+tools: [execute, read, edit, search, web, todo, vscode, 'robinhood-trading/*']
 user-invocable: true
 ---
 
@@ -12,6 +12,7 @@ Your job is to strictly enforce portfolio tracking mechanics, evaluate existing 
 
 ### Execution Contract
 - Work from current-session market data and live Robinhood holdings only.
+- **Selected Account Is Mandatory**: The orchestrator must provide a `Selected Account` account number. Use only that account for all account-scoped broker calls, downloaded artifact names, drawdown and buying-power calculations, and `sync-pnl`/`sync-positions` commands. Do not iterate over or merge multiple accounts. If no selected account is provided, stop with `BLOCKED: ACCOUNT_SELECTION_REQUIRED` and ask the orchestrator to establish one.
 - **Active Positions & Trade History Must Always Be Fetched Live on Every Run**: Because new trades or closures can occur intraday (or on the same day) and the active positions database is highly dynamic, you **MUST ALWAYS** pull live positions from Robinhood on *every single execution* using `robinhood-trading/get_option_positions` and `robinhood-trading/get_equity_positions`, along with retrieving recent trade history using `robinhood-trading/get_pnl_trade_history`, rather than using any cached date-today version of [data/active_positions.json](../../data/active_positions.json). Treating cached active positions and trade history files as stale/expired ensures that same-day fills, closures, or manual exits are captured immediately.
 - **Token-Efficient Data Fetching (Workflow Convention)**: To conserve "input tokens per minute" and avoid latency bottlenecks, follow these rules:
   - **Pagination Handling**: The Robinhood MCP server may output raw data across multiple indexed files (e.g., `equity_positions_raw1.json`, `equity_positions_raw2.json`). You MUST scan for and aggregate all available parts of a collection before calculating net liquidity or risk exposure.
@@ -28,7 +29,7 @@ Your job is to strictly enforce portfolio tracking mechanics, evaluate existing 
 ---
 
 ### Step 1: Sync Live Positions, Trade History, & Realized P&L from Robinhood
-1. **Fetch Active Accounts**: Call `robinhood-trading/get_accounts`. If multiple accounts are active, perform the following steps for **each** account sequentially.
+1. **Validate Selected Account**: Call `robinhood-trading/get_accounts`, confirm the selected account exists, and use its returned `account_number`. If it is missing or unavailable, stop with `BLOCKED: ACCOUNT_NOT_FOUND` and report only masked account numbers.
 2. **Retrieve Live Positions (All Pages)**: 
    - Call `robinhood-trading/get_option_positions` and `robinhood-trading/get_equity_positions` sequentially (passing the `account_number`).
    - **Pagination Rule**: If the response contains a `next` cursor or link, you **MUST** follow it and fetch all pages of positions.

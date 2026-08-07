@@ -1,0 +1,34 @@
+{
+  "symbol": "DIS",
+  "interval": "day",
+  "indicators": [
+    {
+      "type": "rsi",
+      "params": {
+        "period": 14
+      },
+      "series": [
+        {
+          "begins_at": "2026-08-03T00:00:00Z",
+          "value": 46.34470499501767
+        }
+      ]
+    },
+    {
+      "type": "macd",
+      "params": {
+        "fast_period": 12,
+        "signal_period": 9,
+        "slow_period": 26
+      },
+      "series": [
+        {
+          "begins_at": "2026-08-03T00:00:00Z",
+          "histogram": 0.19151259382891517,
+          "macd": -0.6780556822680666,
+          "signal": -0.8695682760969817
+        }
+      ]
+    }
+  ]
+}

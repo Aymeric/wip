@@ -2,7 +2,7 @@
 name: "GEX Setup Analysis"
 description: "Pulls options chain and Greeks data, derives pTrans, nTrans, +GEX, and COTMP, runs the 11-Rule checklist, and determines GEX setup status."
 argument-hint: "Evaluate target symbol (e.g. BABA, RIOT)..."
-tools: [agent]
+tools: [agent, execute, read, edit, search, web, 'robinhood-trading/*', todo]
 ---
 
 You are the user-facing interface for GEX Setup Analysis.

@@ -1643,6 +1643,51 @@ def find_latest_historical_closes(symbol: str) -> List[float]:
             
     return []
 
+def find_latest_technical_indicators(symbol: str) -> Tuple[Optional[float], Optional[float]]:
+    """Reads the latest RSI and MACD histogram from cached indicator downloads."""
+    symbol_upper = symbol.upper()
+    matching_files = []
+    if os.path.exists(DOWNLOADS_DIR):
+        for root, dirs, files in os.walk(DOWNLOADS_DIR):
+            for file in files:
+                if file.endswith(".json") and symbol_upper in file.upper() and "TECHNICAL" in file.upper():
+                    matching_files.append(os.path.join(root, file))
+
+    for filepath in sorted(matching_files, reverse=True):
+        try:
+            with open(filepath, "r") as f:
+                data = json.load(f)
+            indicators = data.get("data", {}).get("indicators", []) if isinstance(data, dict) else []
+            values: Dict[str, Optional[float]] = {"rsi": None, "macd_hist": None}
+            for indicator in indicators:
+                indicator_type = indicator.get("type")
+                series = indicator.get("series", [])
+                if indicator_type == "rsi" and series:
+                    values["rsi"] = float(series[-1].get("value"))
+                elif indicator_type == "macd" and series:
+                    values["macd_hist"] = float(series[-1].get("histogram"))
+            if values["rsi"] is not None or values["macd_hist"] is not None:
+                return values["rsi"], values["macd_hist"]
+        except (OSError, TypeError, ValueError, json.JSONDecodeError):
+            continue
+
+    return None, None
+
+
+def calculate_candidate_score(candidate: Dict[str, Any]) -> float:
+    """Calculates a 0-100 screen score from the metrics available for a candidate."""
+    weighted_metrics = [
+        (candidate.get("relative_options_volume"), 30.0, 10.0),
+        (candidate.get("chg_pct"), 25.0, 5.0),
+        (candidate.get("iv"), 15.0, 1.0),
+        (candidate.get("rsi"), 20.0, 100.0),
+        (1.0 if (candidate.get("macd_hist") or 0.0) > 0.0 else 0.0 if candidate.get("macd_hist") is not None else None, 10.0, 1.0),
+    ]
+    available = [(min(max(float(value) / cap, 0.0), 1.0) * weight, weight) for value, weight, cap in weighted_metrics if value is not None]
+    if not available:
+        return 0.0
+    return round(sum(value for value, _ in available) / sum(weight for _, weight in available) * 100.0, 2)
+
 def check_technical_alerts(closes: List[float], highs: Optional[List[float]] = None, lows: Optional[List[float]] = None) -> Dict[str, Any]:
     """
     Analyzes historical price data for RSI, MACD, Bollinger Bands, and ATR alerts.
@@ -3815,19 +3860,20 @@ def cmd_sync_pnl(args):
     if not pnl_file or not os.path.exists(pnl_file):
         # Scan DOWNLOADS_DIR and sort lexicographically to find the latest trade history file
         pnl_candidates = []
-        target_name = "pnl_trade_history.json"
-        if account:
-            target_name = f"pnl_trade_history_{account}_raw.json"
-            
         if os.path.exists(DOWNLOADS_DIR):
             for root, dirs, files in os.walk(DOWNLOADS_DIR):
                 for filee in files:
-                    if filee == target_name:
-                        pnl_candidates.append(os.path.join(root, filee))
+                    if account:
+                        if filee == f"pnl_trade_history_{account}_raw.json" or filee == f"pnl_trade_history_{account}.json":
+                            pnl_candidates.append(os.path.join(root, filee))
+                    else:
+                        if filee == "pnl_trade_history.json" or filee == "pnl_trade_history_raw.json":
+                            pnl_candidates.append(os.path.join(root, filee))
         if pnl_candidates:
             pnl_candidates.sort()
             pnl_file = pnl_candidates[-1]
         else:
+            target_name = f"pnl_trade_history_{account}.json" if account else "pnl_trade_history.json"
             print(f"Error: P&L trade history file {args.pnl_file or target_name} not found in {DOWNLOADS_DIR}.", file=sys.stderr)
             sys.exit(1)
 
@@ -3987,21 +4033,52 @@ def cmd_sync_positions(args):
         # Scan DOWNLOADS_DIR for latest directory with positions
         candidates = []
         if os.path.exists(DOWNLOADS_DIR):
+            # Also check the root DOWNLOADS_DIR itself
+            root_files = os.listdir(DOWNLOADS_DIR)
+            has_matching_root = False
+            if account:
+                if any((f.startswith(f"option_positions_{account}") or f.startswith(f"equity_positions_{account}")) and f.endswith(".json") for f in root_files):
+                    has_matching_root = True
+            else:
+                if any((f.startswith("option_positions") or f.startswith("equity_positions")) and f.endswith(".json") for f in root_files):
+                    has_matching_root = True
+            
+            if has_matching_root:
+                matching_root_files = [
+                    os.path.join(DOWNLOADS_DIR, f)
+                    for f in root_files
+                    if (not account or f.startswith(f"option_positions_{account}") or f.startswith(f"equity_positions_{account}"))
+                    and f.endswith(".json")
+                ]
+                candidates.append((max(os.path.getmtime(f) for f in matching_root_files), DOWNLOADS_DIR))
+
             for d in os.listdir(DOWNLOADS_DIR):
                 d_path = os.path.join(DOWNLOADS_DIR, d)
-                if os.path.isdir(d_path):
+                if os.path.isdir(d_path) and d != "downloads": # Avoid infinite recursion if DOWNLOADS_DIR is relative
                     files = os.listdir(d_path)
                     if account:
-                        if any(f.startswith(f"option_positions_{account}_raw") or f.startswith(f"equity_positions_{account}_raw") for f in files):
-                            candidates.append(d_path)
+                        if any((f.startswith(f"option_positions_{account}") or f.startswith(f"equity_positions_{account}")) and f.endswith(".json") for f in files):
+                            matching_files = [
+                                os.path.join(d_path, f)
+                                for f in files
+                                if (f.startswith(f"option_positions_{account}") or f.startswith(f"equity_positions_{account}"))
+                                and f.endswith(".json")
+                            ]
+                            candidates.append((max(os.path.getmtime(f) for f in matching_files), d_path))
                     else:
-                        if any(f.startswith("option_positions_raw") or f.startswith("equity_positions_raw") for f in files):
-                            candidates.append(d_path)
+                        if any((f.startswith("option_positions") or f.startswith("equity_positions")) and f.endswith(".json") for f in files):
+                            matching_files = [
+                                os.path.join(d_path, f)
+                                for f in files
+                                if (f.startswith("option_positions") or f.startswith("equity_positions"))
+                                and f.endswith(".json")
+                            ]
+                            candidates.append((max(os.path.getmtime(f) for f in matching_files), d_path))
         if candidates:
-            candidates.sort()
-            base_dir = candidates[-1]
+            # Folder names can lag the broker snapshot date, so select by file mtime.
+            base_dir = max(candidates, key=lambda candidate: (candidate[0], candidate[1]))[1]
         else:
-            print(f"Error: No raw positions files found for account '{account or 'any'}' in data/downloads/.", file=sys.stderr)
+            print(f"Error: No positions files found for account '{account or 'any'}' in data/downloads/.", file=sys.stderr)
             sys.exit(1)
 
     print(f"Syncing active positions from: {base_dir}")
@@ -4038,18 +4115,19 @@ def cmd_sync_positions(args):
 
     # 3. Sync Equities
     if account:
-        equity_files = [f for f in os.listdir(base_dir) if f.startswith(f"equity_positions_{account}_raw") and f.endswith(".json")]
+        equity_files = [f for f in os.listdir(base_dir) if f.startswith(f"equity_positions_{account}") and f.endswith(".json")]
     else:
-        equity_files = [f for f in os.listdir(base_dir) if f.startswith("equity_positions_raw") and f.endswith(".json")]
+        equity_files = [f for f in os.listdir(base_dir) if f.startswith("equity_positions") and f.endswith(".json")]
     
     if not equity_files:
-        simple_name = f"equity_positions_{account}_raw.json" if account else "equity_positions_raw.json"
+        simple_name = f"equity_positions_{account}.json" if account else "equity_positions.json"
         if os.path.exists(os.path.join(base_dir, simple_name)):
             equity_files = [simple_name]
     
     new_stocks = 0
     updated_stocks = 0
     removed_stocks = 0
+    seen_stock_tickers = set()
     
     for ef in equity_files:
         equity_path = os.path.join(base_dir, ef)
@@ -4066,6 +4144,7 @@ def cmd_sync_positions(args):
         for rs in raw_stocks:
             ticker = rs.get("symbol", "").upper()
             if not ticker: continue
+            seen_stock_tickers.add(ticker)
             
             shares = float(rs.get("quantity", 0.0))
             avg_price = float(rs.get("average_buy_price", 0.0))
@@ -4101,21 +4180,31 @@ def cmd_sync_positions(args):
                 if account:
                     active_stocks[ticker]["Account"] = account
                 new_stocks += 1
+
+    # A closed equity position may disappear from the broker payload entirely,
+    # so reconcile cached records against the complete snapshot, not only rows
+    # with an explicit zero quantity.
+    for ticker, details in list(active_stocks.items()):
+        belongs_to_account = not account or details.get("Account") in (None, "", account)
+        if belongs_to_account and ticker not in seen_stock_tickers:
+            active_stocks.pop(ticker)
+            removed_stocks += 1
         
     # 4. Sync Options
     if account:
-        opt_files = [f for f in os.listdir(base_dir) if f.startswith(f"option_positions_{account}_raw") and f.endswith(".json")]
+        opt_files = [f for f in os.listdir(base_dir) if f.startswith(f"option_positions_{account}") and f.endswith(".json")]
     else:
-        opt_files = [f for f in os.listdir(base_dir) if f.startswith("option_positions_raw") and f.endswith(".json")]
+        opt_files = [f for f in os.listdir(base_dir) if f.startswith("option_positions") and f.endswith(".json")]
         
     if not opt_files:
-        simple_name = f"option_positions_{account}_raw.json" if account else "option_positions_raw.json"
+        simple_name = f"option_positions_{account}.json" if account else "option_positions.json"
         if os.path.exists(os.path.join(base_dir, simple_name)):
             opt_files = [simple_name]
     
     new_opts = 0
     updated_opts = 0
     removed_opts = 0
+    seen_option_ids = set()
     for of in opt_files:
         opt_path = os.path.join(base_dir, of)
         opt_data = load_json(opt_path, {})
@@ -4131,6 +4220,7 @@ def cmd_sync_positions(args):
             opt_id = ro.get("option_id")
             if not opt_id:
                 continue
+            seen_option_ids.add(opt_id)
                 
             underlier = ro.get("chain_symbol", "").upper()
             qty = float(ro.get("quantity", 0.0))
@@ -4202,6 +4292,14 @@ def cmd_sync_positions(args):
                 if account:
                     active_opts[opt_id]["Account"] = account
                 new_opts += 1
+
+    # Broker snapshots omit closed options instead of returning a zero-quantity
+    # row, so remove cached options absent from the selected account snapshot.
+    for opt_id, details in list(active_opts.items()):
+        belongs_to_account = not account or details.get("Account") in (None, "", account)
+        if belongs_to_account and opt_id not in seen_option_ids:
+            active_opts.pop(opt_id)
+            removed_opts += 1
 
     options["options_positions"] = active_opts
     options["stocks_positions"] = active_stocks
@@ -4360,15 +4458,15 @@ def cmd_update_candidates(args):
             if market_cap < min_market_cap:
                 continue
                 
-            # Try to calculate RSI and MACD if historical files exist
+            # Prefer cached broker indicators, with local history calculations as fallback.
             closes = find_latest_historical_closes(ticker)
-            rsi_val = None
-            macd_val = None
-            macd_sig = None
-            macd_hist = None
-            if closes:
-                rsi_val = calculate_rsi(closes)
-                macd_val, macd_sig, macd_hist = calculate_macd(closes)
+            rsi_val, macd_hist = find_latest_technical_indicators(ticker)
+            if closes and (rsi_val is None or macd_hist is None):
+                if rsi_val is None:
+                    rsi_val = calculate_rsi(closes)
+                _, _, calculated_macd_hist = calculate_macd(closes)
+                if macd_hist is None:
+                    macd_hist = calculated_macd_hist
                 
             # Apply RSI/MACD filters
             min_rsi = getattr(args, "min_rsi", None)
@@ -4468,8 +4566,10 @@ def cmd_update_candidates(args):
         print(format_color("Warning: No valid scan files discovered in DOWNLOADS_DIR recursively.", "33"))
     
     candidate_list = list(candidates.values())
-    # Sort candidates by relative options volume if available, or day change % descending
-    candidate_list.sort(key=lambda x: (x["relative_options_volume"] if x["relative_options_volume"] is not None else -1, x["chg_pct"]), reverse=True)
+    candidate_list = list(candidates.values())
+    for candidate in candidate_list:
+        candidate["score"] = calculate_candidate_score(candidate)
+    candidate_list.sort(key=lambda x: (x["score"], x["relative_options_volume"] or -1, x["chg_pct"]), reverse=True)
     
     utc_time = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
     

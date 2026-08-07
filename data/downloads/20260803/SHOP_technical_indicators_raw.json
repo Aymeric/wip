@@ -1,0 +1,34 @@
+{
+  "symbol": "SHOP",
+  "interval": "day",
+  "indicators": [
+    {
+      "type": "rsi",
+      "params": {
+        "period": 14
+      },
+      "series": [
+        {
+          "begins_at": "2026-08-03T00:00:00Z",
+          "value": 46.71453158369662
+        }
+      ]
+    },
+    {
+      "type": "macd",
+      "params": {
+        "fast_period": 12,
+        "signal_period": 9,
+        "slow_period": 26
+      },
+      "series": [
+        {
+          "begins_at": "2026-08-03T00:00:00Z",
+          "histogram": -0.7710558429120864,
+          "macd": 1.1918731446810398,
+          "signal": 1.9629289875931262
+        }
+      ]
+    }
+  ]
+}

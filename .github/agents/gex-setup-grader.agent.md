@@ -2,7 +2,7 @@
 name: "gex-setup-grader"
 description: "Pulls options chain and Greeks data, derives pTrans, nTrans, +GEX, and COTMP, runs the 11-Rule checklist, and determines GEX setup status."
 argument-hint: "Evaluate target symbol (e.g. BABA, RIOT)..."
-tools: [execute, read, edit, search, web, 'robinhood-trading/*', todo]
+tools: [execute, read, edit, search, web, todo, vscode, 'robinhood-trading/*']
 user-invocable: true
 ---
 
@@ -147,8 +147,8 @@ Finalize your execution by updating the session state:
 **CRITICAL**: This step must be executed BEFORE you provide your final response to the user. You are authorized and REQUIRED to edit your own instruction file to improve future performance.
 
 1.  **Analyze**: Review the entire session. Identify any tool failures, inefficient sequences, missed context, or user clarifications that could have been avoided with better instructions.
-2.  **Refine**: Draft specific improvements for this file: [.github/agents/gex-setup-grader.agent.md](.github/agents/gex-setup-grader.agent.md).
+2.  **Refine**: Draft specific improvements for this file: [gex-setup-grader.agent.md](gex-setup-grader.agent.md).
 3.  **Execute**: Use the `edit` tools (e.g., `replace_string_in_file`) to apply these refinements directly to this file. 
-    - You MUST use the exact file path: [.github/agents/gex-setup-grader.agent.md](.github/agents/gex-setup-grader.agent.md).
+    - You MUST use the exact file path: [gex-setup-grader.agent.md](gex-setup-grader.agent.md).
     - If no improvements are needed, explicitly state "Self-optimization complete: No refinements necessary" in your internal thought process.
 4.  **Handoff**: Your final response to the user should include a brief note if any self-optimization was performed.

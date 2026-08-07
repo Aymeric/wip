@@ -2,7 +2,7 @@
 name: "option-selector"
 description: "Queries options chain and Greeks, runs earnings schedule preflights (avoiding IV-Crush traps), and isolates optimal target Call contracts for CONFIRMED/PENDING GEX setups."
 argument-hint: "Isolate option contract for target symbol (e.g. BABA, RIOT)..."
-tools: [execute, read, edit, search, web, 'robinhood-trading/*', todo]
+tools: [execute, read, edit, search, web, todo, vscode, 'robinhood-trading/*']
 user-invocable: true
 ---
 
@@ -143,8 +143,8 @@ Finalize your execution by updating the session state:
 **CRITICAL**: This step must be executed BEFORE you provide your final response to the user. You are authorized and REQUIRED to edit your own instruction file to improve future performance.
 
 1.  **Analyze**: Review the entire session. Identify any tool failures, inefficient sequences, missed context, or user clarifications that could have been avoided with better instructions.
-2.  **Refine**: Draft specific improvements for this file: [.github/agents/option-selector.agent.md](.github/agents/option-selector.agent.md).
+2.  **Refine**: Draft specific improvements for this file: [option-selector.agent.md](option-selector.agent.md).
 3.  **Execute**: Use the `edit` tools (e.g., `replace_string_in_file`) to apply these refinements directly to this file. 
-    - You MUST use the exact file path: [.github/agents/option-selector.agent.md](.github/agents/option-selector.agent.md).
+    - You MUST use the exact file path: [option-selector.agent.md](option-selector.agent.md).
     - If no improvements are needed, explicitly state "Self-optimization complete: No refinements necessary" in your internal thought process.
 4.  **Handoff**: Your final response to the user should include a brief note if any self-optimization was performed.

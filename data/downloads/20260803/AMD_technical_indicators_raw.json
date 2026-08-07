@@ -1,0 +1,34 @@
+{
+  "symbol": "AMD",
+  "interval": "day",
+  "indicators": [
+    {
+      "type": "rsi",
+      "params": {
+        "period": 14
+      },
+      "series": [
+        {
+          "begins_at": "2026-08-03T00:00:00Z",
+          "value": 45.183292794232855
+        }
+      ]
+    },
+    {
+      "type": "macd",
+      "params": {
+        "fast_period": 12,
+        "signal_period": 9,
+        "slow_period": 26
+      },
+      "series": [
+        {
+          "begins_at": "2026-08-03T00:00:00Z",
+          "histogram": -7.789575940431208,
+          "macd": -11.057900597970388,
+          "signal": -3.2683246575391807
+        }
+      ]
+    }
+  ]
+}

@@ -2,7 +2,7 @@
 name: "trade-journal-analyst"
 description: "Audits closed trades, calculates performance quality, identifies recurring mechanical failures, and recommends bounded process improvements."
 argument-hint: "Review recent closed trades or a date range..."
-tools: [execute, read, search, todo]
+tools: [execute, read, edit, search, web, todo, vscode, 'robinhood-trading/*']
 user-invocable: true
 ---
 

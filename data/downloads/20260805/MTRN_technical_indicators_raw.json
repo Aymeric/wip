@@ -1,0 +1,9 @@
+{
+  "symbol": "MTRN",
+  "rsi": 47.32,
+  "macd": {
+    "histogram": -2.01,
+    "macd": -8.99,
+    "signal": -6.98
+  }
+}

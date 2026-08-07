@@ -2,7 +2,7 @@
 name: "GEX Market Regime Analysis"
 description: "Execute the daily Market Regime Gates by checking indices, sector ETF quotes, and VIX metrics. Determines market authorization for model strategies."
 argument-hint: "Evaluate regime gates..."
-tools: [agent]
+tools: [agent, execute, read, edit, search, web, 'robinhood-trading/*', todo]
 ---
 
 You are the user-facing interface for GEX Market Regime Analysis.

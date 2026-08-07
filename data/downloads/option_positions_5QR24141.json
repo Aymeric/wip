@@ -1,0 +1,31 @@
+{
+  "positions": [
+    {
+      "average_price": "475.0000",
+      "chain_id": "21b6d389-dc88-40d2-8524-e43d5d6035f6",
+      "chain_symbol": "NKE",
+      "expiration_date": "2026-10-16",
+      "option_id": "79cd3800-e848-4d58-8997-308576acad72",
+      "quantity": "1.0000",
+      "type": "long"
+    },
+    {
+      "average_price": "850.0000",
+      "chain_id": "b82496ae-28c7-4837-a0a5-33b73e93aca8",
+      "chain_symbol": "AMZN",
+      "expiration_date": "2026-09-04",
+      "option_id": "16522997-007f-44f1-b53b-f2238ec616d7",
+      "quantity": "1.0000",
+      "type": "long"
+    },
+    {
+      "average_price": "170.0000",
+      "chain_id": "fe82c70b-1c53-4028-9ac2-e19170c207c9",
+      "chain_symbol": "WU",
+      "expiration_date": "2028-01-21",
+      "option_id": "8b3ae25a-f1fa-4758-bc66-4cfb6af2a74b",
+      "quantity": "1.0000",
+      "type": "long"
+    }
+  ]
+}

@@ -2,7 +2,7 @@
 name: "GEX Orchestrator"
 description: "Review daily GEX scans, apply structural filters, execute regime gates, and track mechanics for active option positions."
 argument-hint: "Specify target symbol (e.g. AAPL, TSLA)..."
-tools: [agent]
+tools: [agent, execute, read, edit, search, web, vscode, todo, 'mcp-reddit/*', 'robinhood-trading/*']
 ---
 
 You are the user-facing entry-point for the GEX Options Trading System.

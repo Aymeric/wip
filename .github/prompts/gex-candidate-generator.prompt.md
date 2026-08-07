@@ -2,7 +2,7 @@
 name: "GEX Setup Candidate Sourcing"
 description: "Derive daily GEX candidates from Robinhood scanners, curated lists, and Reddit trending polls, applying baseline volume/price/market-cap screening buffers."
 argument-hint: "Source candidates..."
-tools: [agent]
+tools: [agent, execute, read, edit, search, web, 'robinhood-trading/*', 'mcp-reddit/*', todo]
 ---
 
 You are the user-facing interface for GEX Setup Candidate Sourcing.
