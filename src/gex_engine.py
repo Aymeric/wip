@@ -4389,25 +4389,6 @@ def cmd_update_candidates(args):
     # First persist any new scan downloads
     persist_new_scans()
     
-    # Load active positions to exclude (both options and stocks)
-    options = load_json(OPTIONS_FILE, {"options_positions": {}, "stocks_positions": {}})
-    positions = options.get("options_positions", {})
-    stocks = options.get("stocks_positions", {})
-    
-    active_positions_set = set()
-    if positions:
-        for details in positions.values():
-            underlier = details.get("Underlier")
-            if underlier:
-                active_positions_set.add(underlier.upper())
-    if stocks:
-        for ticker in stocks.keys():
-            active_positions_set.add(ticker.upper())
-            
-    active_positions = sorted(list(active_positions_set))
-    if active_positions:
-        print(f"Loaded active positions to exclude: {active_positions}")
-        
     # Load existing candidates to preserve those manually added or sourced from Reddit
     existing_data = load_json(CANDIDATES_FILE, {"candidates": []})
     candidates = {c["symbol"]: c for c in existing_data.get("candidates", []) if c.get("source") == "reddit"}
@@ -4436,7 +4417,7 @@ def cmd_update_candidates(args):
         
         for item in results:
             ticker = item.get("ticker", "").upper()
-            if not ticker or ticker in active_positions:
+            if not ticker:
                 continue
             columns = item.get("columns", {})
             
@@ -4577,7 +4558,7 @@ def cmd_update_candidates(args):
         "last_updated": utc_time,
         "source_scans": sorted(list(set(scans_processed))),
         "user_additions": [],
-        "excluded_active_positions": active_positions,
+        "excluded_symbols": [],
         "total": len(candidate_list),
         "candidates": candidate_list
     }

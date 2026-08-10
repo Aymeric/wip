@@ -1,72 +1,84 @@
 {
-  "current_phase": "Phase IV: Execution",
-  "last_updated": "2026-08-06T03:31:06.751987+00:00",
+  "current_phase": "Phase I: Audit",
+  "last_updated": "2026-08-10T02:35:33.676114+00:00",
   "subagents": {
     "gex-orchestrator": {
-      "status": "SUCCESS",
-      "timestamp": "2026-08-06T03:31:06.751854+00:00"
+      "status": "BLOCKED",
+      "timestamp": "2026-08-10T02:35:33.676000+00:00"
     },
     "portfolio-risk-manager": {
-      "status": "SUCCESS",
-      "timestamp": "2026-07-17T04:31:54.335578+00:00"
+      "status": "BLOCKED",
+      "timestamp": "2026-08-10T02:34:40.835960+00:00"
     },
     "market-regime-analyst": {
       "status": "SUCCESS",
-      "timestamp": "2026-07-17T04:41:36.972385+00:00"
+      "timestamp": "2026-08-10T02:30:46.766914+00:00"
     },
     "reddit-sentiment-analyst": {
-      "status": "SUCCESS",
-      "timestamp": "2026-07-20T05:55:58.157918+00:00"
+      "status": "BLOCKED",
+      "timestamp": "2026-08-10T02:34:43.256019+00:00"
     },
     "agentic-trader": {
       "status": "BLOCKED",
-      "timestamp": "2026-07-28T04:40:34.627059+00:00"
+      "timestamp": "2026-08-10T02:03:30.083344+00:00"
     },
     "gex-candidate-generator": {
-      "status": "PARTIAL",
-      "timestamp": "2026-08-06T02:05:35.916394+00:00"
+      "status": "SUCCESS",
+      "timestamp": "2026-08-10T02:34:42.054051+00:00"
+    },
+    "gex-setup-grader": {
+      "status": "BLOCKED",
+      "timestamp": "2026-08-10T02:34:44.530465+00:00"
+    },
+    "option-selector": {
+      "status": "BLOCKED",
+      "timestamp": "2026-08-10T02:34:45.752994+00:00"
+    },
+    "trade-journal-analyst": {
+      "status": "BLOCKED",
+      "timestamp": "2026-08-09T03:50:27.050162+00:00"
     }
   },
   "notes": [
     {
-      "timestamp": "2026-08-04T04:59:26.268142+00:00",
-      "content": "Sourced 67 current-session candidates from GEX Momentum Candidates and High options volume and IV; Reddit unavailable: Reddit connection not established. Broker watchlist synchronization pending explicit confirmation; GEX_DAILY_CANDIDATES currently has 30 items."
+      "timestamp": "2026-08-10T02:31:17.937614+00:00",
+      "content": "DOCS lacks current-session option instruments, option quotes, GEX levels, and db_change; no current actionable setup."
     },
     {
-      "timestamp": "2026-08-04T05:00:00.205250+00:00",
-      "content": "Sourced 67 current-session candidates from GEX Momentum Candidates, High options volume and IV, and Upcoming Earnings GEX; Reddit unavailable: Reddit connection not established. Broker watchlist synchronization pending explicit confirmation; GEX_DAILY_CANDIDATES currently has 30 items."
+      "timestamp": "2026-08-10T02:31:19.143403+00:00",
+      "content": "No graded CONFIRMED/PENDING setup and no validated 30-45 DTE contract; selection and execution remain blocked."
     },
     {
-      "timestamp": "2026-08-04T05:00:08.263565+00:00",
-      "content": "Sourced 84 current-session candidates from GEX Momentum Candidates, High options volume and IV, and Upcoming Earnings GEX; Reddit unavailable: Reddit connection not established. Broker watchlist synchronization pending explicit confirmation; GEX_DAILY_CANDIDATES currently has 30 items."
+      "timestamp": "2026-08-10T02:31:22.809343+00:00",
+      "content": "Daily analytical run complete; regime override confirmed but no current-session eligible setup or exact contract. No execution approval requested."
     },
     {
-      "timestamp": "2026-08-06T02:05:35.916517+00:00",
-      "content": "Sourced 72 current-session candidates from GEX Momentum Candidates 3, High options volume and IV 3, Upcoming Earnings GEX 2, 100 most popular, Daily movers, Popular recurring investments, and IPO Access; Reddit unavailable: Reddit connection not established. Please check your configuration (REDDIT_CLIENT_ID, REDDIT_CLIENT_SECRET). Broker GEX_DAILY_CANDIDATES sync not performed because explicit confirmation was unavailable; current item count 30."
+      "timestamp": "2026-08-10T02:33:43.702628+00:00",
+      "content": "Starting daily session for selected accounts 5QR24141 and 970049961"
     },
     {
-      "timestamp": "2026-08-06T02:28:31.332224+00:00",
-      "content": "Starting daily session - READ-ONLY CACHE MODE"
+      "timestamp": "2026-08-10T02:34:40.836107+00:00",
+      "content": "Position cache refreshed from account snapshots; P&L sync blocked because raw trade-history payloads are missing for 5QR24141 and 970049961"
     },
     {
-      "timestamp": "2026-08-06T02:35:16.477280+00:00",
-      "content": "Phase I: Audit completed. Regime: TRACK 1 OK. Alerts: Systematic Time Stop triggered for RGC and SLS. 72 fresh candidates sourced."
+      "timestamp": "2026-08-10T02:34:42.054191+00:00",
+      "content": "Candidate pool refreshed from downloads; 334 rows retained, but historical carryovers are non-actionable and latest 2026-08-07 source is sparse"
     },
     {
-      "timestamp": "2026-08-06T02:52:18.551165+00:00",
-      "content": "Starting daily session for 2026-08-05. Account \u2022\u2022\u2022\u20229961 selected."
+      "timestamp": "2026-08-10T02:34:43.256152+00:00",
+      "content": "Cached sentiment dashboard read successfully, but no current-session live sentiment payload is available"
     },
     {
-      "timestamp": "2026-08-06T03:15:42.282182+00:00",
-      "content": "Analysed SITM, MTRN; Blocked on R/R. Pending exits for RGC, SLS."
+      "timestamp": "2026-08-10T02:34:44.530600+00:00",
+      "content": "Ticker analyses are stale at 2026-08-05; no current-session GEX levels or first-candle confirmations available"
     },
     {
-      "timestamp": "2026-08-06T03:26:12.598187+00:00",
-      "content": "2026-08-05 session: account-scoped cache synced for 5QR24141; regime BLOCKED, RGC/SLS time-stop exits pending approval, no new entries"
+      "timestamp": "2026-08-10T02:34:45.753141+00:00",
+      "content": "No current-session CONFIRMED or PENDING setup is eligible for contract selection; regime remains blocked"
     },
     {
-      "timestamp": "2026-08-06T03:31:06.751985+00:00",
-      "content": "2026-08-05 audit: authorization BLOCKED; live account verification unavailable; cache-only diagnostics; no new entries or routed orders"
+      "timestamp": "2026-08-10T02:35:33.676112+00:00",
+      "content": "Market Regime Override: confirmed via vscode_askQuestions; mandatory blocks remain missing account-scoped P&L payloads and stale ticker analyses"
     }
   ]
 }

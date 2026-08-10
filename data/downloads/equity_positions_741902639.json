@@ -1,0 +1,28 @@
+{
+  "positions": [
+    {
+      "symbol": "BAC",
+      "quantity": "295.739017",
+      "average_buy_price": "5.200000",
+      "type": "long"
+    },
+    {
+      "symbol": "VOO",
+      "quantity": "4.058878",
+      "average_buy_price": "546.470000",
+      "type": "long"
+    },
+    {
+      "symbol": "ARKQ",
+      "quantity": "10.026370",
+      "average_buy_price": "75.610000",
+      "type": "long"
+    },
+    {
+      "symbol": "ARKK",
+      "quantity": "15.000000",
+      "average_buy_price": "128.530000",
+      "type": "long"
+    }
+  ]
+}

@@ -994,7 +994,7 @@ The cache file [data/candidate_stocks.json](data/candidate_stocks.json) persists
     "High options volume and IV"
   ],
   "user_additions": [],
-  "excluded_active_positions": [
+  "excluded_symbols": [
     "BABA",
     "NKE",
     "SLS"
@@ -1021,7 +1021,7 @@ The cache file [data/candidate_stocks.json](data/candidate_stocks.json) persists
 | `last_updated` | String | Full ISO UTC timestamp storing when the dynamic list was updated. |
 | `source_scans` | Array of Strings | Recognized screener datasets parsed and processed by the system. |
 | `user_additions` | Array of Strings | Underlier tickers manually added for GEX analysis tracking by the user. |
-| `excluded_active_positions` | Array of Strings | Underliers currently holding active portfolio contracts, dynamically omitted to avoid concentration. |
+| `excluded_symbols` | Array of Strings | Underlier tickers manually excluded from the candidate list. |
 | `total` | Int | Counter tracking the overall count of qualified swing candidates. |
 | `symbol` | String | Capitalized ticker symbol of the equity security. |
 | `source` | String | Ingestion channel identifiers (such as `"scanner"`). |

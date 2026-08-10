@@ -16,6 +16,7 @@ Your job is to derive the daily candidate universe from Robinhood scanners, list
 - If a source connector fails (for example, Reddit credentials are unavailable), record the source as unavailable, set its contribution to zero, and do not reuse cached source data.
 - **Reddit authentication failure:** If any Reddit MCP call returns `Error: Reddit connection not established. Please check your configuration (REDDIT_CLIENT_ID, REDDIT_CLIENT_SECRET).`, do not retry Reddit MCP or call another Reddit MCP endpoint. Mark Reddit unavailable, set Reddit contribution to zero, continue with non-Reddit sources, and report the exact blocker.
 - Keep the process mechanical and auditable: every exclusion, filter, and count must be explicit.
+- Use `vscode_askQuestions` for every question, clarification, choice, or confirmation directed to the human. Never request or infer an answer through ordinary chat text. Use fixed options with `allowFreeformInput: false` whenever the valid answers are known; a skipped, empty, or ambiguous response never authorizes a broker write.
 - Strictly adhere to the output formatting rules. Avoid any plain text filenames or line citation numbers without links. Every file reference or coordinate must be formatted as solid Markdown links, for example: [data/candidate_stocks.json](../../data/candidate_stocks.json). NO BACKTICKS ANYWHERE on file names or paths.
 
 <!--
@@ -65,14 +66,14 @@ When building the candidate universe from Robinhood lists, enforce these strict 
 
 ---
 
-### Step 4: Local Screening and Active Exclusions
+### Step 4: Local Screening
 Apply the baseline GEX filtering manually on the raw columns of the returned results and deduplicate:
 - **Price Range**: $\$5.00$ to $\$1{,}000.00$ (column `"Last"` or price from equity quotes).
 - **Average Volume**: $\ge 200{,}000$ shares/day (column `"Volume"` or volume from equity quotes).
 - **Day Change %**: >= +0.30% (column `"% Change"` or calculated/retrieved change from equity quotes). **Warning**: The raw value in `"% Change"` is a fraction/ratio (e.g., `0.003` means +0.30%) — multiply by 100 before comparing to percent thresholds.
   - **Reddit Bypass Rule**: If the ticker was sourced from Reddit, relax this filter to >= -5.00% to allow for contrarian "Capitulation Watch" setups near structural support floors.
 - **Market CAP**: $\ge \$1$B (column `"Market cap"` from scan results or `market_cap` from equity fundamentals).
-- **Active Hold Exclusions**: Read [data/active_positions.json](../../data/active_positions.json). Compare symbols and remove any ticker already tracked as an active option or equity holding from the pool (unless the user explicitly requests re-evaluation). Sort the excluded active positions alphabetically.
+- **Active Positions**: Do not remove active option or equity underliers from the candidate pool. Active positions must remain eligible for candidate scoring and downstream GEX re-evaluation. Track them separately in reporting when useful, but never omit them solely because they are already held.
 - **Technical Alert Check (Overlay)**: For prioritized candidates, use the `robinhood-trading/get_equity_technical_indicators` tool to identify technical alerts (RSI overbought/oversold, MACD crossovers). Flag these alerts in the final report to prioritize tickers showing both technical and gamma alignment.
 
 ---
@@ -94,10 +95,10 @@ Apply the baseline GEX filtering manually on the raw columns of the returned res
   - The CLI recursively discovers historical downloads and therefore is not a current-session source of truth. After running it, immediately replace any mixed-date result with a deterministic reconciliation built only from current-session scan/list/Reddit payloads and current active positions; never report stale candidates as current. Validate the final JSON before reporting.
 3. **Broker Watchlist Sync (The Mobile Bridge)**:
    - Call `robinhood-trading/get_watchlists` to check for the existence of watchlists named `"GEX_DAILY_CANDIDATES"` and `"GEX_ACTIVE_PORTFOLIO"`. If missing, create them using `robinhood-trading/create_watchlist`.
-  - Before clearing or adding items, request explicit confirmation immediately before the destructive/account write. If confirmation is unavailable, leave the broker list unchanged and report the pending synchronization with its current item count.
+  - Immediately before any create, remove, or add operation, call `vscode_askQuestions` with one single-select question and `allowFreeformInput: false`. State the watchlist name and exact counts to create, remove, and add; offer exactly `Approve watchlist synchronization` and `Keep watchlist unchanged`, with the unchanged option recommended. One approval may cover only the exact operation set described in that question.
   - Clear existing stale tickers on `"GEX_DAILY_CANDIDATES"` by calling `robinhood-trading/remove_from_watchlist` in sequence (or as batches) only after confirmation.
    - Dynamic Sync: Add all newly generated candidate symbols with `Screen Passed` status to `"GEX_DAILY_CANDIDATES"` using `robinhood-trading/add_to_watchlist`. This ensures that candidates are pushed directly to the user's Robinhood mobile or Legend app for real-time mobile push-alert tracking.
-  - If explicit confirmation is unavailable, do not call any remove, add, or create watchlist operation. Preserve the current broker list, record its current item count, and mark the workflow `PARTIAL` with the confirmation blocker.
+  - Unless `Approve watchlist synchronization` is selected, do not call any remove, add, or create watchlist operation. Preserve the current broker list, record its current item count, and mark the workflow `PARTIAL` with the confirmation blocker.
 
 #### Structure:
 ```json
@@ -105,7 +106,7 @@ Apply the baseline GEX filtering manually on the raw columns of the returned res
   "last_updated": "<ISO-8601 timestamp>",
   "source_scans": ["<scan name 1>", "<scan name 2>"],
   "user_additions": ["<ticker>"],
-  "excluded_active_positions": ["<ticker>"], 
+  "excluded_symbols": [],
   "total": <integer>,
   "candidates": [
     {

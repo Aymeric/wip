@@ -103,6 +103,26 @@
       "Realized P&L ($)": -750.0,
       "Realized P&L (%)": -11.89,
       "Close Reason": "Detected closed via trade history sync"
+    },
+    {
+      "Ticker": "AMZN",
+      "Shares": 50.0,
+      "Average Buy Price": 217.8,
+      "Current Price": 245.7,
+      "Beta Sector Tag": "Technology/Beta",
+      "Entry Date": "2026-06-01",
+      "Asset Cost Basis": 10890.0,
+      "Current Value": 41.2549956,
+      "P&L (%)": 14.66,
+      "P&L ($)": 5.28,
+      "Sizing Risk Weight (%)": 0.07,
+      "Highest Price": 245.7,
+      "Account": "5QR24141",
+      "Close Price": 1610.0,
+      "Close Date": "2026-07-31",
+      "Realized P&L ($)": 685.0,
+      "Realized P&L (%)": 6.29,
+      "Close Reason": "Detected closed via trade history sync"
     }
   ]
 }

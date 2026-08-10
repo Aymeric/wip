@@ -440,8 +440,8 @@ class TestGEXEngine(unittest.TestCase):
         self.assertEqual(exit_rule, "PROFIT TAKE (T2 TARGET MET)")
         self.assertTrue("lock in full T2" in action)
 
-    def test_active_positions_exclusion_empty(self):
-        # Verify that if positions are empty, active_positions list is empty and does not use hardcoded defaults
+    def test_active_positions_are_not_excluded_when_empty(self):
+        # Verify that the compatibility field stays empty when no positions are present
         from unittest.mock import patch
         import gex_engine
         
@@ -463,10 +463,10 @@ class TestGEXEngine(unittest.TestCase):
                 gex_engine.cmd_update_candidates(DummyArgs())
                 self.assertTrue(mock_save.called)
                 saved_data = mock_save.call_args[0][1]
-                self.assertEqual(saved_data["excluded_active_positions"], [])
+                self.assertEqual(saved_data["excluded_symbols"], [])
 
-    def test_active_positions_exclusion_with_options_and_stocks(self):
-        # Verify that both option underliers and stock tickers are excluded from candidates
+    def test_active_positions_are_retained_in_candidates(self):
+        # Verify that active option underliers and stock tickers remain eligible candidates
         from unittest.mock import patch
         import gex_engine
         
@@ -494,9 +494,7 @@ class TestGEXEngine(unittest.TestCase):
                 gex_engine.cmd_update_candidates(DummyArgs())
                 self.assertTrue(mock_save.called)
                 saved_data = mock_save.call_args[0][1]
-                self.assertIn("AAPL", saved_data["excluded_active_positions"])
-                self.assertIn("MSFT", saved_data["excluded_active_positions"])
-                self.assertEqual(saved_data["excluded_active_positions"], ["AAPL", "MSFT"])
+                self.assertEqual(saved_data["excluded_symbols"], [])
 
     def test_build_system_snapshot_aggregates_cached_state(self):
         from unittest.mock import patch

@@ -1,31 +1,18 @@
 {
-  "last_updated": "2026-08-06T03:07:53.068605Z",
+  "last_updated": "2026-08-10T02:34:19.143649Z",
   "source_scans": [
     "Daily Gainers 2026-07-16",
     "GEX Momentum Candidates",
+    "GEX Momentum Candidates 3",
     "High Options Volume/IV 2026-07-16",
     "High options volume and IV",
+    "High options volume and IV 3",
     "Top Gainers Today",
     "Upcoming Earnings GEX"
   ],
   "user_additions": [],
-  "excluded_active_positions": [
-    "AAPL",
-    "AMZN",
-    "GOOG",
-    "HOOD",
-    "META",
-    "MRNA",
-    "NFLX",
-    "NKE",
-    "NOW",
-    "RGC",
-    "RVI",
-    "SKHY",
-    "SLS",
-    "WU"
-  ],
-  "total": 328,
+  "excluded_symbols": [],
+  "total": 334,
   "candidates": [
     {
       "symbol": "LASR",
@@ -2212,6 +2199,18 @@
       "score": 74.18
     },
     {
+      "symbol": "DOCS",
+      "source": "scanner",
+      "price": 35.0,
+      "chg_pct": 69.4095,
+      "iv": 1.241017535925136,
+      "relative_options_volume": 3.9208765956578895,
+      "market_cap": 3943964060.0,
+      "rsi": null,
+      "macd_hist": null,
+      "score": 73.95
+    },
+    {
       "symbol": "GRMN",
       "source": "scanner",
       "price": 263.0,
@@ -2536,6 +2535,18 @@
       "score": 64.85
     },
     {
+      "symbol": "WU",
+      "source": "scanner",
+      "price": 7.97,
+      "chg_pct": 3.2383,
+      "iv": null,
+      "relative_options_volume": null,
+      "market_cap": 2483859076.0,
+      "rsi": null,
+      "macd_hist": null,
+      "score": 64.77
+    },
+    {
       "symbol": "KYMR",
       "source": "scanner",
       "price": 103.54,
@@ -2716,6 +2727,18 @@
       "score": 60.34
     },
     {
+      "symbol": "SKHY",
+      "source": "scanner",
+      "price": 155.71,
+      "chg_pct": 3.0101,
+      "iv": null,
+      "relative_options_volume": null,
+      "market_cap": 850645543922.0,
+      "rsi": null,
+      "macd_hist": null,
+      "score": 60.2
+    },
+    {
       "symbol": "VOYG",
       "source": "scanner",
       "price": 32.24,
@@ -2762,6 +2785,18 @@
       "rsi": null,
       "macd_hist": null,
       "score": 58.76
+    },
+    {
+      "symbol": "RGC",
+      "source": "scanner",
+      "price": 6.79,
+      "chg_pct": 4.6225,
+      "iv": null,
+      "relative_options_volume": null,
+      "market_cap": 2942209002.0,
+      "rsi": 45.16,
+      "macd_hist": -0.0192,
+      "score": 58.44
     },
     {
       "symbol": "TSLX",
@@ -2882,6 +2917,18 @@
       "rsi": null,
       "macd_hist": null,
       "score": 52.91
+    },
+    {
+      "symbol": "META",
+      "source": "scanner",
+      "price": 639.01,
+      "chg_pct": 1.1924,
+      "iv": 0.4584175,
+      "relative_options_volume": 3.3155094890545787,
+      "market_cap": 1530973863107.0,
+      "rsi": 100.0,
+      "macd_hist": 0.3912,
+      "score": 52.78
     },
     {
       "symbol": "PACS",
@@ -3074,18 +3121,6 @@
       "rsi": null,
       "macd_hist": null,
       "score": 43.66
-    },
-    {
-      "symbol": "DOCS",
-      "source": "scanner",
-      "price": 21.82,
-      "chg_pct": 0.747,
-      "iv": 1.241017535925136,
-      "relative_options_volume": 3.9208765956578895,
-      "market_cap": 3812680930.0,
-      "rsi": null,
-      "macd_hist": null,
-      "score": 43.57
     },
     {
       "symbol": "INTC",
@@ -3592,6 +3627,18 @@
       "score": 30.29
     },
     {
+      "symbol": "HOOD",
+      "source": "scanner",
+      "price": 91.15,
+      "chg_pct": 0.8966,
+      "iv": 0.6721840735549851,
+      "relative_options_volume": 2.143562902011469,
+      "market_cap": 77824561550.0,
+      "rsi": null,
+      "macd_hist": null,
+      "score": 29.99
+    },
+    {
       "symbol": "TSLA",
       "source": "scanner",
       "price": 323.41,
@@ -3686,6 +3733,18 @@
       "rsi": null,
       "macd_hist": null,
       "score": 25.19
+    },
+    {
+      "symbol": "AAPL",
+      "source": "scanner",
+      "price": 338.12,
+      "chg_pct": 0.3591,
+      "iv": 0.2855723,
+      "relative_options_volume": 3.8429688487868536,
+      "market_cap": 4891183295120.0,
+      "rsi": null,
+      "macd_hist": null,
+      "score": 25.15
     },
     {
       "symbol": "GNW",

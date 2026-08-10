@@ -1,0 +1,364 @@
+{
+  "positions": [
+    {
+      "symbol": "V",
+      "quantity": "0.037942",
+      "average_buy_price": "333.930000",
+      "type": "long"
+    },
+    {
+      "symbol": "NOW",
+      "quantity": "0.080044",
+      "average_buy_price": "114.310000",
+      "type": "long"
+    },
+    {
+      "symbol": "CDNS",
+      "quantity": "0.038035",
+      "average_buy_price": "312.610000",
+      "type": "long"
+    },
+    {
+      "symbol": "ABBV",
+      "quantity": "0.083123",
+      "average_buy_price": "216.910000",
+      "type": "long"
+    },
+    {
+      "symbol": "CRWD",
+      "quantity": "0.086917",
+      "average_buy_price": "96.530000",
+      "type": "long"
+    },
+    {
+      "symbol": "FEZ",
+      "quantity": "0.316972",
+      "average_buy_price": "61.330000",
+      "type": "long"
+    },
+    {
+      "symbol": "IVV",
+      "quantity": "0.779463",
+      "average_buy_price": "681.340000",
+      "type": "long"
+    },
+    {
+      "symbol": "AVGO",
+      "quantity": "0.077256",
+      "average_buy_price": "321.140000",
+      "type": "long"
+    },
+    {
+      "symbol": "DXJ",
+      "quantity": "0.253760",
+      "average_buy_price": "128.430000",
+      "type": "long"
+    },
+    {
+      "symbol": "SGOV",
+      "quantity": "3.302189",
+      "average_buy_price": "100.420000",
+      "type": "long"
+    },
+    {
+      "symbol": "PLTR",
+      "quantity": "0.098659",
+      "average_buy_price": "128.120000",
+      "type": "long"
+    },
+    {
+      "symbol": "VST",
+      "quantity": "0.092808",
+      "average_buy_price": "157.850000",
+      "type": "long"
+    },
+    {
+      "symbol": "NVDA",
+      "quantity": "0.376183",
+      "average_buy_price": "185.040000",
+      "type": "long"
+    },
+    {
+      "symbol": "NTRA",
+      "quantity": "0.043993",
+      "average_buy_price": "170.940000",
+      "type": "long"
+    },
+    {
+      "symbol": "GAP",
+      "quantity": "0.546814",
+      "average_buy_price": "22.550000",
+      "type": "long"
+    },
+    {
+      "symbol": "NTNX",
+      "quantity": "0.278354",
+      "average_buy_price": "53.240000",
+      "type": "long"
+    },
+    {
+      "symbol": "MSFT",
+      "quantity": "0.123303",
+      "average_buy_price": "406.480000",
+      "type": "long"
+    },
+    {
+      "symbol": "XAR",
+      "quantity": "0.151971",
+      "average_buy_price": "242.610000",
+      "type": "long"
+    },
+    {
+      "symbol": "GOOG",
+      "quantity": "0.116475",
+      "average_buy_price": "262.030000",
+      "type": "long"
+    },
+    {
+      "symbol": "JNJ",
+      "quantity": "0.051859",
+      "average_buy_price": "191.870000",
+      "type": "long"
+    },
+    {
+      "symbol": "AAPL",
+      "quantity": "0.159003",
+      "average_buy_price": "258.360000",
+      "type": "long"
+    },
+    {
+      "symbol": "LRCX",
+      "quantity": "0.053220",
+      "average_buy_price": "327.700000",
+      "type": "long"
+    },
+    {
+      "symbol": "AMZN",
+      "quantity": "0.167908",
+      "average_buy_price": "214.280000",
+      "type": "long"
+    },
+    {
+      "symbol": "LLY",
+      "quantity": "0.025425",
+      "average_buy_price": "843.260000",
+      "type": "long"
+    },
+    {
+      "symbol": "REMX",
+      "quantity": "0.275209",
+      "average_buy_price": "74.670000",
+      "type": "long"
+    },
+    {
+      "symbol": "NBIX",
+      "quantity": "0.101219",
+      "average_buy_price": "141.280000",
+      "type": "long"
+    },
+    {
+      "symbol": "META",
+      "quantity": "0.021264",
+      "average_buy_price": "672.970000",
+      "type": "long"
+    },
+    {
+      "symbol": "CVX",
+      "quantity": "0.097201",
+      "average_buy_price": "171.290000",
+      "type": "long"
+    },
+    {
+      "symbol": "MRK",
+      "quantity": "0.114827",
+      "average_buy_price": "111.470000",
+      "type": "long"
+    },
+    {
+      "symbol": "CGNX",
+      "quantity": "0.318240",
+      "average_buy_price": "42.860000",
+      "type": "long"
+    },
+    {
+      "symbol": "COST",
+      "quantity": "0.018834",
+      "average_buy_price": "996.070000",
+      "type": "long"
+    },
+    {
+      "symbol": "IWM",
+      "quantity": "0.220461",
+      "average_buy_price": "268.300000",
+      "type": "long"
+    },
+    {
+      "symbol": "FLS",
+      "quantity": "0.223456",
+      "average_buy_price": "82.390000",
+      "type": "long"
+    },
+    {
+      "symbol": "EMXC",
+      "quantity": "0.263071",
+      "average_buy_price": "85.380000",
+      "type": "long"
+    },
+    {
+      "symbol": "LIN",
+      "quantity": "0.030409",
+      "average_buy_price": "485.380000",
+      "type": "long"
+    },
+    {
+      "symbol": "MRVL",
+      "quantity": "0.088494",
+      "average_buy_price": "109.720000",
+      "type": "long"
+    },
+    {
+      "symbol": "NET",
+      "quantity": "0.066769",
+      "average_buy_price": "201.590000",
+      "type": "long"
+    },
+    {
+      "symbol": "AA",
+      "quantity": "0.286917",
+      "average_buy_price": "68.140000",
+      "type": "long"
+    },
+    {
+      "symbol": "COHR",
+      "quantity": "0.049062",
+      "average_buy_price": "268.230000",
+      "type": "long"
+    },
+    {
+      "symbol": "EUAD",
+      "quantity": "0.495032",
+      "average_buy_price": "44.300000",
+      "type": "long"
+    },
+    {
+      "symbol": "CRDO",
+      "quantity": "0.094181",
+      "average_buy_price": "152.260000",
+      "type": "long"
+    },
+    {
+      "symbol": "FCX",
+      "quantity": "0.347334",
+      "average_buy_price": "63.020000",
+      "type": "long"
+    },
+    {
+      "symbol": "NEE",
+      "quantity": "0.138365",
+      "average_buy_price": "93.300000",
+      "type": "long"
+    },
+    {
+      "symbol": "VRSN",
+      "quantity": "0.047223",
+      "average_buy_price": "274.870000",
+      "type": "long"
+    },
+    {
+      "symbol": "CSX",
+      "quantity": "0.223669",
+      "average_buy_price": "45.420000",
+      "type": "long"
+    },
+    {
+      "symbol": "CLF",
+      "quantity": "1.917437",
+      "average_buy_price": "10.470000",
+      "type": "long"
+    },
+    {
+      "symbol": "ETN",
+      "quantity": "0.047474",
+      "average_buy_price": "400.850000",
+      "type": "long"
+    },
+    {
+      "symbol": "FANG",
+      "quantity": "0.085504",
+      "average_buy_price": "190.990000",
+      "type": "long"
+    },
+    {
+      "symbol": "QCOM",
+      "quantity": "0.085926",
+      "average_buy_price": "203.200000",
+      "type": "long"
+    },
+    {
+      "symbol": "MOD",
+      "quantity": "0.062749",
+      "average_buy_price": "253.870000",
+      "type": "long"
+    },
+    {
+      "symbol": "ASHR",
+      "quantity": "1.238215",
+      "average_buy_price": "35.340000",
+      "type": "long"
+    },
+    {
+      "symbol": "ECL",
+      "quantity": "0.074728",
+      "average_buy_price": "257.600000",
+      "type": "long"
+    },
+    {
+      "symbol": "FLNC",
+      "quantity": "0.893226",
+      "average_buy_price": "23.490000",
+      "type": "long"
+    },
+    {
+      "symbol": "AMBA",
+      "quantity": "0.195231",
+      "average_buy_price": "67.100000",
+      "type": "long"
+    },
+    {
+      "symbol": "CL",
+      "quantity": "0.147015",
+      "average_buy_price": "89.510000",
+      "type": "long"
+    },
+    {
+      "symbol": "ENTG",
+      "quantity": "0.067786",
+      "average_buy_price": "145.750000",
+      "type": "long"
+    },
+    {
+      "symbol": "SHOP",
+      "quantity": "0.108788",
+      "average_buy_price": "122.810000",
+      "type": "long"
+    },
+    {
+      "symbol": "AMD",
+      "quantity": "0.032096",
+      "average_buy_price": "511.590000",
+      "type": "long"
+    },
+    {
+      "symbol": "MU",
+      "quantity": "0.010157",
+      "average_buy_price": "974.700000",
+      "type": "long"
+    },
+    {
+      "symbol": "CIEN",
+      "quantity": "0.044206",
+      "average_buy_price": "396.550000",
+      "type": "long"
+    }
+  ]
+}
