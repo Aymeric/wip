@@ -1,0 +1,1195 @@
+{
+  "data": {
+    "instruments": [
+      {
+        "id": "30ad3453-0bd1-40e6-b6db-74c289233127",
+        "chain_id": "21b6d389-dc88-40d2-8524-e43d5d6035f6",
+        "chain_symbol": "NKE",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "22.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "99ae1a83-ee0d-404f-972f-55a3ac8b2959",
+        "chain_id": "21b6d389-dc88-40d2-8524-e43d5d6035f6",
+        "chain_symbol": "NKE",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "22.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "60bb7247-0b79-46c9-a536-8414ef668a77",
+        "chain_id": "21b6d389-dc88-40d2-8524-e43d5d6035f6",
+        "chain_symbol": "NKE",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "25.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "db5bf2bf-28db-4325-bd67-8865c45f49fa",
+        "chain_id": "21b6d389-dc88-40d2-8524-e43d5d6035f6",
+        "chain_symbol": "NKE",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "25.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "d7b1a7a9-4db6-4da9-981c-09bb6adb8712",
+        "chain_id": "21b6d389-dc88-40d2-8524-e43d5d6035f6",
+        "chain_symbol": "NKE",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "27.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "db321a6a-3d2e-44ae-8c53-315fe37f801c",
+        "chain_id": "21b6d389-dc88-40d2-8524-e43d5d6035f6",
+        "chain_symbol": "NKE",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "27.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "2cc3a72b-5ce9-43e8-b40b-11008e551f07",
+        "chain_id": "21b6d389-dc88-40d2-8524-e43d5d6035f6",
+        "chain_symbol": "NKE",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "30.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "727abf61-292e-4367-839d-f50c484e1b3c",
+        "chain_id": "21b6d389-dc88-40d2-8524-e43d5d6035f6",
+        "chain_symbol": "NKE",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "30.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "09cee2d1-ce4f-4559-8623-cfe8b171f19c",
+        "chain_id": "21b6d389-dc88-40d2-8524-e43d5d6035f6",
+        "chain_symbol": "NKE",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "32.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "3e30453f-92a1-4270-af9b-4b534299c070",
+        "chain_id": "21b6d389-dc88-40d2-8524-e43d5d6035f6",
+        "chain_symbol": "NKE",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "32.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "3ed4da37-412e-4353-a966-73b555895e78",
+        "chain_id": "21b6d389-dc88-40d2-8524-e43d5d6035f6",
+        "chain_symbol": "NKE",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "35.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "47817d9b-5958-456c-8ea6-66a295650326",
+        "chain_id": "21b6d389-dc88-40d2-8524-e43d5d6035f6",
+        "chain_symbol": "NKE",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "35.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "659ce276-8e06-40d4-b63c-19cee98e05c7",
+        "chain_id": "21b6d389-dc88-40d2-8524-e43d5d6035f6",
+        "chain_symbol": "NKE",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "37.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "d0a7eed0-ee34-4399-ae87-9991b1abb223",
+        "chain_id": "21b6d389-dc88-40d2-8524-e43d5d6035f6",
+        "chain_symbol": "NKE",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "37.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "5a2be596-9ad9-460e-80a8-5ead5e4a7338",
+        "chain_id": "21b6d389-dc88-40d2-8524-e43d5d6035f6",
+        "chain_symbol": "NKE",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "40.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "8341708f-9ad0-44e1-a280-d56c60b8d264",
+        "chain_id": "21b6d389-dc88-40d2-8524-e43d5d6035f6",
+        "chain_symbol": "NKE",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "40.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "49ace3f0-2390-4676-bb3d-8479556b3127",
+        "chain_id": "21b6d389-dc88-40d2-8524-e43d5d6035f6",
+        "chain_symbol": "NKE",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "42.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "6e6ff66a-3749-4561-bd07-bd57b8b3da4f",
+        "chain_id": "21b6d389-dc88-40d2-8524-e43d5d6035f6",
+        "chain_symbol": "NKE",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "42.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "bc6e6c9c-9074-4af8-8658-fac0e58d63f0",
+        "chain_id": "21b6d389-dc88-40d2-8524-e43d5d6035f6",
+        "chain_symbol": "NKE",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "45.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "c82dc2a6-6771-4085-9732-a7f4411cbca5",
+        "chain_id": "21b6d389-dc88-40d2-8524-e43d5d6035f6",
+        "chain_symbol": "NKE",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "45.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "82bd6faf-b908-4905-a0f8-b2530262c0b0",
+        "chain_id": "21b6d389-dc88-40d2-8524-e43d5d6035f6",
+        "chain_symbol": "NKE",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "47.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "c093c6c9-4e88-43d0-9dca-ad53a9f43a5c",
+        "chain_id": "21b6d389-dc88-40d2-8524-e43d5d6035f6",
+        "chain_symbol": "NKE",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "47.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "496c03bd-0845-4183-a3cc-4b4614000a94",
+        "chain_id": "21b6d389-dc88-40d2-8524-e43d5d6035f6",
+        "chain_symbol": "NKE",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "50.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "62318370-0da6-40e7-9e0c-1602edadb077",
+        "chain_id": "21b6d389-dc88-40d2-8524-e43d5d6035f6",
+        "chain_symbol": "NKE",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "50.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "3ce36ef0-f006-441a-9bb4-5f27eb9e3aaf",
+        "chain_id": "21b6d389-dc88-40d2-8524-e43d5d6035f6",
+        "chain_symbol": "NKE",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "52.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "a2defe6e-9731-4fd3-9bf5-517fec2080cc",
+        "chain_id": "21b6d389-dc88-40d2-8524-e43d5d6035f6",
+        "chain_symbol": "NKE",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "52.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "4ea11e84-72c0-4d4c-ba05-18c8a8721954",
+        "chain_id": "21b6d389-dc88-40d2-8524-e43d5d6035f6",
+        "chain_symbol": "NKE",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "55.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "9d43fca3-8b4f-4527-9358-b465e05be57d",
+        "chain_id": "21b6d389-dc88-40d2-8524-e43d5d6035f6",
+        "chain_symbol": "NKE",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "55.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "bd46e4f2-a215-4a8f-bb12-7e2fc695aa79",
+        "chain_id": "21b6d389-dc88-40d2-8524-e43d5d6035f6",
+        "chain_symbol": "NKE",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "57.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "ddf492d3-43c2-49f3-a324-c185d3ee5e62",
+        "chain_id": "21b6d389-dc88-40d2-8524-e43d5d6035f6",
+        "chain_symbol": "NKE",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "57.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "09ed99d3-09a5-43bc-b25a-3e976e65b4bf",
+        "chain_id": "21b6d389-dc88-40d2-8524-e43d5d6035f6",
+        "chain_symbol": "NKE",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "60.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "a88b4b3b-deb7-4672-9f56-7749e96e8e58",
+        "chain_id": "21b6d389-dc88-40d2-8524-e43d5d6035f6",
+        "chain_symbol": "NKE",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "60.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "2184c4a7-06a7-4a99-9540-f8f6f18e6069",
+        "chain_id": "21b6d389-dc88-40d2-8524-e43d5d6035f6",
+        "chain_symbol": "NKE",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "62.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "4d089da7-418d-4ca4-a2a1-982736ca1823",
+        "chain_id": "21b6d389-dc88-40d2-8524-e43d5d6035f6",
+        "chain_symbol": "NKE",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "62.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "183dfdcc-450c-47bf-9765-4f1810e75fbb",
+        "chain_id": "21b6d389-dc88-40d2-8524-e43d5d6035f6",
+        "chain_symbol": "NKE",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "65.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "242c6ee1-b2da-4867-a929-ab334db3f77f",
+        "chain_id": "21b6d389-dc88-40d2-8524-e43d5d6035f6",
+        "chain_symbol": "NKE",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "65.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "4207d1ba-c486-41aa-85ac-c81efa0b52d1",
+        "chain_id": "21b6d389-dc88-40d2-8524-e43d5d6035f6",
+        "chain_symbol": "NKE",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "67.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "e3a56dcb-af24-4bd5-aec3-5a6b5bc50550",
+        "chain_id": "21b6d389-dc88-40d2-8524-e43d5d6035f6",
+        "chain_symbol": "NKE",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "67.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "3c208671-02b7-423d-b190-eed689604240",
+        "chain_id": "21b6d389-dc88-40d2-8524-e43d5d6035f6",
+        "chain_symbol": "NKE",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "70.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "92393442-2206-4648-8eb3-6da8cf24cf80",
+        "chain_id": "21b6d389-dc88-40d2-8524-e43d5d6035f6",
+        "chain_symbol": "NKE",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "70.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "cb12602b-4f32-4974-8a80-9a191d62594d",
+        "chain_id": "21b6d389-dc88-40d2-8524-e43d5d6035f6",
+        "chain_symbol": "NKE",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "72.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "d42a390e-48c1-4115-9aa1-5e9ce328efed",
+        "chain_id": "21b6d389-dc88-40d2-8524-e43d5d6035f6",
+        "chain_symbol": "NKE",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "72.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "1506d244-67ae-4844-9520-5a10240e25d5",
+        "chain_id": "21b6d389-dc88-40d2-8524-e43d5d6035f6",
+        "chain_symbol": "NKE",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "75.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "1d1bd413-081f-49e4-b5f0-68d718e7f2af",
+        "chain_id": "21b6d389-dc88-40d2-8524-e43d5d6035f6",
+        "chain_symbol": "NKE",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "75.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "3d2c3f43-3e2c-4bcb-b7e7-e9098e534a19",
+        "chain_id": "21b6d389-dc88-40d2-8524-e43d5d6035f6",
+        "chain_symbol": "NKE",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "77.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "d1a6efcd-f1e5-499e-9aa7-581fb44349e0",
+        "chain_id": "21b6d389-dc88-40d2-8524-e43d5d6035f6",
+        "chain_symbol": "NKE",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "77.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "8253f59b-1891-44ad-b5cd-54b0c9c8322c",
+        "chain_id": "21b6d389-dc88-40d2-8524-e43d5d6035f6",
+        "chain_symbol": "NKE",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "80.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "d672c5f9-b37e-424f-b59d-100a9df5b757",
+        "chain_id": "21b6d389-dc88-40d2-8524-e43d5d6035f6",
+        "chain_symbol": "NKE",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "80.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "31b1d07d-e5be-4eab-8214-aadff50d6d1f",
+        "chain_id": "21b6d389-dc88-40d2-8524-e43d5d6035f6",
+        "chain_symbol": "NKE",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "82.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "893c748a-5c61-47d2-82fd-d50ed3709368",
+        "chain_id": "21b6d389-dc88-40d2-8524-e43d5d6035f6",
+        "chain_symbol": "NKE",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "82.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "21274a83-972e-4492-bff7-5f63e5fa788f",
+        "chain_id": "21b6d389-dc88-40d2-8524-e43d5d6035f6",
+        "chain_symbol": "NKE",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "85.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "b609df8c-152f-484b-b447-1a18a25657d4",
+        "chain_id": "21b6d389-dc88-40d2-8524-e43d5d6035f6",
+        "chain_symbol": "NKE",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "85.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "6cb4a8d5-6523-40bd-a0f6-832ad24b4512",
+        "chain_id": "21b6d389-dc88-40d2-8524-e43d5d6035f6",
+        "chain_symbol": "NKE",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "87.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "e6ae458e-330b-45e2-aa01-0aea2fdb59ec",
+        "chain_id": "21b6d389-dc88-40d2-8524-e43d5d6035f6",
+        "chain_symbol": "NKE",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "87.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "11379dc9-f93d-4f8d-84bb-cab27f83b01f",
+        "chain_id": "21b6d389-dc88-40d2-8524-e43d5d6035f6",
+        "chain_symbol": "NKE",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "90.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "d59e5ff0-008a-486a-953e-057dbebc0a68",
+        "chain_id": "21b6d389-dc88-40d2-8524-e43d5d6035f6",
+        "chain_symbol": "NKE",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "90.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "7d2fb7b4-6bc8-4c33-840c-ac72eded8d6d",
+        "chain_id": "21b6d389-dc88-40d2-8524-e43d5d6035f6",
+        "chain_symbol": "NKE",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "95.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "cf671c96-4a8d-4d8a-9cdc-75082dd4ffe9",
+        "chain_id": "21b6d389-dc88-40d2-8524-e43d5d6035f6",
+        "chain_symbol": "NKE",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "95.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "0c8145cd-652e-48d4-a912-a788a307c80d",
+        "chain_id": "21b6d389-dc88-40d2-8524-e43d5d6035f6",
+        "chain_symbol": "NKE",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "100.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "f59faf3f-1f71-4ebb-95d1-92224aec44a0",
+        "chain_id": "21b6d389-dc88-40d2-8524-e43d5d6035f6",
+        "chain_symbol": "NKE",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "100.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "4d9529e7-0e3f-4620-a4f7-2bfc7dfcaf8f",
+        "chain_id": "21b6d389-dc88-40d2-8524-e43d5d6035f6",
+        "chain_symbol": "NKE",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "105.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "c129ac1d-cf0a-4ac4-b9a3-ca39387b1ce8",
+        "chain_id": "21b6d389-dc88-40d2-8524-e43d5d6035f6",
+        "chain_symbol": "NKE",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "105.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "26650333-44fa-4966-81b2-d0b57145fa76",
+        "chain_id": "21b6d389-dc88-40d2-8524-e43d5d6035f6",
+        "chain_symbol": "NKE",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "110.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "b31d798e-62a2-46b0-8d82-7e69135757d5",
+        "chain_id": "21b6d389-dc88-40d2-8524-e43d5d6035f6",
+        "chain_symbol": "NKE",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "110.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "29e55d64-dc12-487f-9249-bc9837083170",
+        "chain_id": "21b6d389-dc88-40d2-8524-e43d5d6035f6",
+        "chain_symbol": "NKE",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "115.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "58ece8bb-1797-4e1d-aef1-2ff91464440f",
+        "chain_id": "21b6d389-dc88-40d2-8524-e43d5d6035f6",
+        "chain_symbol": "NKE",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "115.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      }
+    ]
+  },
+  "guide": "Present chain_symbol, expiration_date, type, strike_price; flag state when not 'active' or tradability when not 'tradable'. Pass id to an order's leg.option_id. Quote sellout_datetime when the user asks \"when will Robinhood force-close this position?\" — it is the authoritative per-contract timestamp covering equity/index, AM/PM settle, and T-1 logic. underlying_type ('equity' or 'index') is informational; mention only when it affects strategy. When next is non-null, extract the cursor query param and call this tool again."
+}

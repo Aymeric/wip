@@ -1,16 +1,74 @@
 {
   "data": {
-    "account_number": "101241412",
+    "account_number": "5QR24141",
     "span": "month",
     "trades": [
-      {"timestamp": "2026-08-04T16:54:59Z", "symbol": "RGC", "quantity": "1", "price": "30", "realized_gain": "-50"},
-      {"timestamp": "2026-08-04T16:50:10Z", "symbol": "RGC", "quantity": "1", "price": "35", "realized_gain": "-45"},
-      {"timestamp": "2026-08-04T16:16:42Z", "symbol": "SLS", "quantity": "1", "price": "430", "realized_gain": "-314"},
-      {"timestamp": "2026-07-31T13:59:21Z", "symbol": "AMZN", "quantity": "1", "price": "1610", "realized_gain": "685"},
-      {"timestamp": "2026-07-24T20:00:00Z", "symbol": "GOOG", "quantity": "1", "price": "0", "realized_gain": "-750"},
-      {"timestamp": "2026-07-19T22:47:12Z", "symbol": "", "quantity": "87", "price": "0", "realized_gain": "-8.70"},
-      {"timestamp": "2026-07-14T21:43:20Z", "symbol": "", "quantity": "277", "price": "0", "realized_gain": "-47.09"},
-      {"timestamp": "2026-07-13T17:43:51Z", "symbol": "BABA", "quantity": "1", "price": "180", "realized_gain": "-1320"}
-    ]
-  }
+      {
+        "timestamp": "2026-08-04T16:54:59Z",
+        "symbol": "RGC",
+        "side": "",
+        "quantity": "1",
+        "price": "30",
+        "realized_gain": "-50"
+      },
+      {
+        "timestamp": "2026-08-04T16:50:10Z",
+        "symbol": "RGC",
+        "side": "",
+        "quantity": "1",
+        "price": "35",
+        "realized_gain": "-45"
+      },
+      {
+        "timestamp": "2026-08-04T16:16:42Z",
+        "symbol": "SLS",
+        "side": "",
+        "quantity": "1",
+        "price": "430",
+        "realized_gain": "-314"
+      },
+      {
+        "timestamp": "2026-07-31T13:59:21Z",
+        "symbol": "AMZN",
+        "side": "",
+        "quantity": "1",
+        "price": "1610",
+        "realized_gain": "685"
+      },
+      {
+        "timestamp": "2026-07-24T20:00:00Z",
+        "symbol": "GOOG",
+        "side": "",
+        "quantity": "1",
+        "price": "0",
+        "realized_gain": "-750"
+      },
+      {
+        "timestamp": "2026-07-19T22:47:12Z",
+        "symbol": "",
+        "side": "",
+        "quantity": "87",
+        "price": "0",
+        "realized_gain": "-8.7"
+      },
+      {
+        "timestamp": "2026-07-14T21:43:20Z",
+        "symbol": "",
+        "side": "",
+        "quantity": "277",
+        "price": "0",
+        "realized_gain": "-47.09"
+      },
+      {
+        "timestamp": "2026-07-13T17:43:51Z",
+        "symbol": "BABA",
+        "side": "",
+        "quantity": "1",
+        "price": "180",
+        "realized_gain": "-1320"
+      }
+    ],
+    "next_cursor": ""
+  },
+  "guide": "trades are returned most-recent-first. Each entry is a closed/realizing trade with the realized gain/loss on it. price is the execution (close) price. The window is a preset span (not an arbitrary date range); default is the last week. Paginate with cursor: pass next_cursor from the previous response; an empty next_cursor means there are no more trades. An empty trades list means there were no realized trades in the window - a valid result, not an error. To filter more than one symbol, call once per symbol. Treat figures as informational, not a tax or performance document."
 }

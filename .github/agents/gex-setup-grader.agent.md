@@ -16,6 +16,8 @@ Your job is to run the analytical mechanics: fetch options quotes in safe chunks
 - Work from current-session market data and live option chains. Do not make up structural boundaries (pTrans, nTrans, etc.).
 - Establish the **Effective Session Date** as the latest completed regular US equity trading session represented by authoritative live market data. On weekends and market holidays, use the prior completed session; never use the wall-clock calendar date or file modification time as freshness evidence.
 - Evaluate cached setup freshness per ticker using its own `analyzed_date`. A cached record from any other session is historical input only: it cannot retain `CONFIRMED` or `PENDING`, cannot be refreshed by changing Spot alone, and must be fully re-derived from a current-session option chain before receiving a current classification.
+- **Stale-Store Recovery:** If the target set contains historical-stale or missing records, perform the current-session download and grading pass for every target in that set during this run. A report of stale records without a refresh attempt is incomplete. Before returning, provide one outcome per target: current-session analysis, or `UNKNOWN/BLOCKED` with the failed download dependency and evidence.
+- **Automatic refresh completion:** The orchestrator invokes this agent as part of the same run's mandatory refresh controller. Do not stop after identifying stale records, and do not tell the caller to run a later command. For every target, persist current-session underlier historicals, option instruments, and option quotes before `analyze`; retry each missing or invalid dependency once; then return either a current-session analysis or an explicit `UNKNOWN/BLOCKED` outcome with `blocked_reason`, `blocked_date`, and evidence.
 - Never invent or assume missing values. If a required input is unavailable, report the step as BLOCKED/UNKNOWN and explain why.
 - **Batch Chunking & Tool Limits**:
   - Strictly chunk options quotes queries into batches of at most **40 IDs** to prevent "Request-URI Too Large" (HTTP 414) errors.
@@ -33,13 +35,14 @@ To conserve token usage and prevent hitting rate/size limits:
 ---
 
 ### Step 1: Identify Targets & Retrieve Option/Greeks Datasets
-1. **Target Pool**: Identify candidates in [data/candidate_stocks.json](../../data/candidate_stocks.json) AND every active position underlier in [data/active_positions.json](../../data/active_positions.json). Active underliers are mandatory targets even when they are not present in the candidate pool or have no current candidate row; position-level structural stops and targets require a fresh GEX profile.
+1. **Target Pool**: Identify candidates in [data/candidate_stocks.json](../../data/candidate_stocks.json) AND every active position underlier in the selected account's [data/active_positions_ACCOUNT_NUMBER.json](../../data/active_positions_ACCOUNT_NUMBER.json). Active underliers are mandatory targets even when they are not present in the candidate pool or have no current candidate row; position-level structural stops and targets require a fresh GEX profile.
 2. **Efficiency Check**: Before fetching live data, check if instrument definitions and greeks from the Effective Session Date already exist in [data/downloads/](../../data/downloads/) for the target ticker and expiration and remain within the 15-minute reuse TTL.
-3. **Retrieve Option Contract Metadata**: Call `robinhood-trading/get_option_chains(underlying_symbol=TICKER)` and pick the expiration closest to 30 to 45 calendar days out.
-4. **Download Instruments**: Call `robinhood-trading/get_option_instruments(chain_symbol=TICKER, expiration_dates=chosen_date)` (paginate via cursor as needed) to fetch all strikes and contract IDs.
-5. **Retrieve Greeks Safely**: Chunk all retrieved instrument IDs into batches containing **at most 40 contract IDs** per query to prevent HTTP 414 URI errors. Retrieve detailed quotes via sequence or parallel queries to `robinhood-trading/get_option_quotes`.
-6. **Fetch Technical Indicators**: Call `robinhood-trading/get_equity_technical_indicators` for both **RSI** and **MACD** (using `interval="day"` and `output="latest"`) to verify momentum alignment.
-7. **Fetch Forward Earnings Dates (Mandatory Safety Preflight)**: Call `robinhood-trading/get_earnings_results` (passing the underlier `symbol`) to retrieve the scheduled or estimated dates for the coming quarters. Save this raw payload to a file inside the date-specific downloads directory (e.g. [data/downloads/YYYYMMDD/TICKER_earnings_raw.json](../../data/downloads/)).
+3. **Fetch Live Underlier Quote**: For every target, call `robinhood-trading/get_equity_quotes` before using Spot or deriving GEX levels. Prefer `last_non_reg_trade_price` only when its timestamp is newer than `last_trade_price`; otherwise use `last_trade_price`. Persist the complete response to a dated file such as [data/downloads/YYYYMMDD/TICKER_underlier_quote_raw.json](../../data/downloads/), and validate the quote timestamp, previous-close date, active quote state, and non-empty price. Retry once when the response is missing, malformed, stale, or incomplete. If it remains unresolved, return `UNKNOWN/BLOCKED` with the exact dependency and do not grade from cached Spot.
+4. **Retrieve Option Contract Metadata**: Call `robinhood-trading/get_option_chains(underlying_symbol=TICKER)` and pick the expiration closest to 30 to 45 calendar days out.
+5. **Download Instruments**: Call `robinhood-trading/get_option_instruments(chain_symbol=TICKER, expiration_dates=chosen_date)` (paginate via cursor as needed) to fetch all strikes and contract IDs.
+6. **Retrieve Greeks Safely**: Chunk all retrieved instrument IDs into batches containing **at most 40 contract IDs** per query to prevent HTTP 414 URI errors. Retrieve detailed quotes via sequence or parallel queries to `robinhood-trading/get_option_quotes`.
+7. **Fetch Technical Indicators**: Call `robinhood-trading/get_equity_technical_indicators` for both **RSI** and **MACD** (using `interval="day"` and `output="latest"`) to verify momentum alignment.
+8. **Fetch Forward Earnings Dates (Mandatory Safety Preflight)**: Call `robinhood-trading/get_earnings_results` (passing the underlier `symbol`) to retrieve the scheduled or estimated dates for the coming quarters. Save this raw payload to a file inside the date-specific downloads directory (e.g. [data/downloads/YYYYMMDD/TICKER_earnings_raw.json](../../data/downloads/)).
 
 ---
 
@@ -91,8 +94,9 @@ Grade the Setup’s structural quality on an 11-point system ($\ge 9/11$ require
 
 ### Step 4: Persist Data, Trigger CLI and Render Setup Report
 1. **Save Raw API Payloads**: Copy all raw instrument definitions, quotes, and underlier close files into [data/downloads/](../../data/downloads/) folders by date.
+   - Save the complete current-session payloads before invoking the CLI for each ticker. If any required payload is missing, empty, malformed, or from an older session, retry that download once; do not invoke `analyze` with stale substitutes.
 2. **Verify Setup via CLI Engine (Mandatory)**: Use the GEX Engine CLI to commit findings to [data/ticker_analyses.json](../../data/ticker_analyses.json). This ensures all 11-Rule calculations and Risk/Reward gates are performed with absolute mathematical precision by the system's core engine:
-   `python3 src/gex_engine.py analyze <TICKER> --spot <spot_price> --ptrans <pTrans> --ntrans <nTrans> --gex <gex_price> --cotmp <cotmp> --db-change <db_change> [--target-delta <delta>] [--min-dte <days>]`
+   `python3 src/gex_engine.py analyze <TICKER> --effective-session-date <Effective Session Date> --spot <spot_price> --ptrans <pTrans> --ntrans <nTrans> --gex <gex_price> --cotmp <cotmp> --db-change <db_change> [--target-delta <delta>] [--min-dte <days>]`
 3. **Verify Persisted Session Metadata**: After the CLI write, read the ticker's persisted `analyzed_date` and require it to equal the Effective Session Date. If the CLI stamped a weekend, holiday, or other wall-clock date, correct only that ticker's `analyzed_date` to the Effective Session Date supported by the raw payloads. If the raw payload session cannot be proven, mark the result `BLOCKED: SESSION_DATE_UNVERIFIED` instead of persisting or reporting `CONFIRMED`/`PENDING`.
 4. **Render grading results**: Output setup grading dashboard and include the Effective Session Date and persisted `analyzed_date`.
 
@@ -148,12 +152,12 @@ Finalize your execution by updating the session state:
 `python3 src/gex_engine.py update-workflow --agent "gex-setup-grader" --status "SUCCESS" --note "Graded [N] tickers, [X] PENDING, [Y] CONFIRMED"`
 
 ---
-### Step 6: 🔄 Recursive Self-Optimization Protocol
-**CRITICAL**: This step must be executed BEFORE you provide your final response to the user. You are authorized and REQUIRED to edit your own instruction file to improve future performance.
+### Maintainer Feedback
+**Configuration boundary**: Do not edit agent, prompt, or instruction files during a trading run. Record workflow outcomes with the CLI and report improvement ideas for a maintainer instead.
 
 1.  **Analyze**: Review the entire session. Identify any tool failures, inefficient sequences, missed context, or user clarifications that could have been avoided with better instructions.
 2.  **Refine**: Draft specific improvements for this file: [gex-setup-grader.agent.md](gex-setup-grader.agent.md).
-3.  **Execute**: Use the `edit` tools (e.g., `replace_string_in_file`) to apply these refinements directly to this file. 
+3.  **Execute**: Do not apply configuration changes during the run; record proposed refinements for a maintainer.
     - You MUST use the exact file path: [gex-setup-grader.agent.md](gex-setup-grader.agent.md).
-    - If no improvements are needed, explicitly state "Self-optimization complete: No refinements necessary" in your internal thought process.
-4.  **Handoff**: Your final response to the user should include a brief note if any self-optimization was performed.
+   - Do not modify this agent file during execution.
+4.  **Handoff**: Include workflow status, blockers, and any proposed refinement in the final report.

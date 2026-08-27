@@ -174,15 +174,46 @@ class OptionSentiment:
         return True
 
 
-# Define file paths relative to active workspace (current directory)
-REGIME_FILE = "data/regime.json"
-ANALYSES_FILE = "data/ticker_analyses.json"
-OPTIONS_FILE = "data/active_positions.json"
-CANDIDATES_FILE = "data/candidate_stocks.json"
-PERFORMANCE_FILE = "data/performance.json"
-DOWNLOADS_DIR = "data/downloads"
-SENTIMENT_FILE = "data/reddit_sentiment.json"
-WORKFLOW_STATE_FILE = "data/workflow_state.json"
+# Resolve cache paths from the repository, so CLI behavior is independent of the caller's cwd.
+REPOSITORY_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+REGIME_FILE = os.path.join(REPOSITORY_ROOT, "data/regime.json")
+ANALYSES_FILE = os.path.join(REPOSITORY_ROOT, "data/ticker_analyses.json")
+OPTIONS_FILE = os.path.join(REPOSITORY_ROOT, "data/active_positions.json")
+CANDIDATES_FILE = os.path.join(REPOSITORY_ROOT, "data/candidate_stocks.json")
+PERFORMANCE_FILE = os.path.join(REPOSITORY_ROOT, "data/performance.json")
+DOWNLOADS_DIR = os.path.join(REPOSITORY_ROOT, "data/downloads")
+SENTIMENT_FILE = os.path.join(REPOSITORY_ROOT, "data/reddit_sentiment.json")
+WORKFLOW_STATE_FILE = os.path.join(REPOSITORY_ROOT, "data/workflow_state.json")
+
+
+def account_performance_file(account: str = "") -> str:
+    """Return the account-scoped performance cache path."""
+    if not account:
+        return PERFORMANCE_FILE
+    normalized_account = re.sub(r"[^A-Za-z0-9_-]", "", str(account))
+    if not normalized_account:
+        return PERFORMANCE_FILE
+    return os.path.join(REPOSITORY_ROOT, f"data/performance_{normalized_account}.json")
+
+
+def account_positions_file(account: str = "") -> str:
+    """Return the active-position cache path, scoped when an account is supplied."""
+    if not account:
+        return OPTIONS_FILE
+    normalized_account = re.sub(r"[^A-Za-z0-9_-]", "", str(account))
+    if not normalized_account:
+        raise ValueError("account must contain at least one alphanumeric character")
+    return os.path.join(REPOSITORY_ROOT, f"data/active_positions_{normalized_account}.json")
+
+
+def account_closed_positions_file(account: str = "") -> str:
+    """Return the closed-position cache path, scoped when an account is supplied."""
+    if not account:
+        return os.path.join(os.path.dirname(OPTIONS_FILE), "closed_positions.json")
+    normalized_account = re.sub(r"[^A-Za-z0-9_-]", "", str(account))
+    if not normalized_account:
+        raise ValueError("account must contain at least one alphanumeric character")
+    return os.path.join(REPOSITORY_ROOT, f"data/closed_positions_{normalized_account}.json")
 
 # Standard Mechanical Screener Baseline Filter Constants
 MIN_PRICE = 5.0
@@ -296,6 +327,16 @@ def parse_spot_overrides(value: str) -> Dict[str, float]:
     return overrides
 
 
+def parse_effective_session_date(value: str) -> str:
+    """Validate the market session date used for persisted ticker analyses."""
+    try:
+        return datetime.strptime(value, "%Y-%m-%d").date().isoformat()
+    except (TypeError, ValueError) as exc:
+        raise argparse.ArgumentTypeError(
+            "effective session date must use YYYY-MM-DD"
+        ) from exc
+
+
 def load_json(filepath: str, default: Any) -> Any:
     """Loads a JSON file from disk, returning default if absent or corrupted."""
     if not os.path.exists(filepath):
@@ -407,9 +448,10 @@ def get_regime_status() -> Dict[str, Any]:
     }
 
 
-def get_performance_status() -> Dict[str, Any]:
+def get_performance_status(account: str = "") -> Dict[str, Any]:
     """Retrieves current portfolio performance and drawdown metrics."""
-    perf = load_json(PERFORMANCE_FILE, {})
+    perf_file = account_performance_file(account)
+    perf = load_json(perf_file, {})
     return {
         "monthly_pnl_dlr": perf.get("monthly_pnl_dlr", 0.0),
         "monthly_pnl_pct": perf.get("monthly_pnl_pct", 0.0),
@@ -640,14 +682,6 @@ def cmd_update_regime(args):
         spy_val, qqq_val, bulls_val, bears_val, vix_bearish_val
     )
     
-    # 3. Monthly Drawdown Gate Check
-    net_liq_val = getattr(args, "net_liq", None)
-    if net_liq_val is None:
-        net_liq_val = 50000.0
-    monthly_pnl_dlr, monthly_pnl_pct, drawdown_gate_status, monthly_cnt = get_monthly_realized_pnl(net_liq_val)
-    if drawdown_gate_status == "FAIL":
-        system_auth = "MAX LOSS DRAWDOWN BLOCK"
-    
     etf_details = cached_regime.get("etf_details", {})
     if hasattr(args, "etf_file") and args.etf_file and "found_symbols" in locals():
         etf_details = detailed_etfs
@@ -692,20 +726,34 @@ def cmd_update_regime(args):
         "last_updated": datetime.today().strftime('%Y-%m-%d')
     }
     
-    perf_data = {
+    save_json(REGIME_FILE, regime_data)
+    print(f"Regime gates recomputed and saved to {REGIME_FILE} ({gates_passed}/3 gates passed).")
+    print("Account drawdown was not evaluated; run update-performance for each selected account.\n")
+    cmd_status(args)
+
+
+def cmd_update_performance(args):
+    """Computes and persists realized drawdown for one account."""
+    if args.net_liq is None or args.net_liq <= 0:
+        print("Error: --net-liq must be a positive account net liquidation value.", file=sys.stderr)
+        sys.exit(1)
+
+    monthly_pnl_dlr, monthly_pnl_pct, drawdown_gate_status, monthly_cnt = get_monthly_realized_pnl(
+        args.net_liq,
+        monthly_file=getattr(args, "monthly_file", None),
+        pnl_file=getattr(args, "pnl_file", None),
+    )
+    performance_path = account_performance_file(args.account)
+    performance_data = {
+        "account": args.account,
         "monthly_pnl_dlr": monthly_pnl_dlr,
         "monthly_pnl_pct": monthly_pnl_pct,
         "drawdown_gate_status": drawdown_gate_status,
         "monthly_cnt": monthly_cnt,
         "last_updated": datetime.today().strftime('%Y-%m-%d')
     }
-    
-    save_json(REGIME_FILE, regime_data)
-    save_json(PERFORMANCE_FILE, perf_data)
-    
-    print(f"Regime gates recomputed and saved to {REGIME_FILE} ({gates_passed}/3 gates passed).")
-    print(f"Portfolio performance metrics saved to {PERFORMANCE_FILE}.\n")
-    cmd_status(args)
+    save_json(performance_path, performance_data)
+    print(f"Account performance metrics saved to {performance_path}.")
 
 
 def cmd_workflow(args):
@@ -725,7 +773,8 @@ def cmd_workflow(args):
     print(f"  - Basket Gate: {regime.get('basket_gate')} (SPY: {regime.get('spy_pct'):+.2f}%, QQQ: {regime.get('qqq_pct'):+.2f}%)")
 
     # 2. Portfolio Status
-    pos_data = load_json(OPTIONS_FILE, {"options_positions": {}, "stocks_positions": {}})
+    options_file = account_positions_file(getattr(args, "account", ""))
+    pos_data = load_json(options_file, {"options_positions": {}, "stocks_positions": {}})
     active_opts = pos_data.get("options_positions", {})
     active_stocks = pos_data.get("stocks_positions", {})
     print(f"\n[PHASE I] Active Portfolio: {len(active_opts)} Options | {len(active_stocks)} Stocks")
@@ -856,23 +905,108 @@ def cmd_update_workflow(args):
     print(f"Workflow state updated: {state['current_phase']}")
 
 
+def get_ticker_analysis_freshness(account: str = "", effective_dates: Optional[Sequence[str]] = None) -> Dict[str, Any]:
+    """Summarize ticker analysis freshness per in-scope ticker.
+
+    ticker_analyses.json is a symbol-keyed historical map, so its file mtime
+    cannot establish session freshness.
+    """
+    if effective_dates is None:
+        effective_dates = (
+            datetime.today().strftime('%Y-%m-%d'),
+            datetime.now(timezone.utc).strftime('%Y-%m-%d'),
+        )
+    valid_dates = set(effective_dates)
+
+    analyses = load_json(ANALYSES_FILE, {})
+    if not isinstance(analyses, dict):
+        analyses = {}
+
+    candidates_data = load_json(CANDIDATES_FILE, {})
+    candidate_symbols = {
+        str(candidate.get("symbol", "")).upper()
+        for candidate in candidates_data.get("candidates", [])
+        if isinstance(candidate, dict) and candidate.get("symbol")
+    }
+    options_file = account_positions_file(account)
+    positions = load_json(options_file, {})
+    active_symbols = {
+        str(details.get("Underlier", "")).upper()
+        for details in positions.get("options_positions", {}).values()
+        if isinstance(details, dict) and details.get("Underlier")
+    }
+    active_symbols.update(
+        str(ticker).upper()
+        for ticker in positions.get("stocks_positions", {})
+        if ticker
+    )
+
+    in_scope = candidate_symbols | active_symbols
+    if not in_scope:
+        in_scope = {str(symbol).upper() for symbol in analyses}
+
+    current = []
+    stale = []
+    missing = []
+    for symbol in sorted(in_scope):
+        record = analyses.get(symbol, {})
+        if not isinstance(record, dict) or not record:
+            missing.append(symbol)
+            continue
+        analyzed_date = str(record.get("analyzed_date", ""))
+        if analyzed_date in valid_dates:
+            current.append(symbol)
+        else:
+            stale.append({
+                "symbol": symbol,
+                "analyzed_date": analyzed_date or "UNKNOWN",
+                "signal_status": record.get("Signal Status", "UNKNOWN"),
+            })
+
+    return {
+        "effective_dates": sorted(valid_dates),
+        "in_scope": sorted(in_scope),
+        "current": current,
+        "stale": stale,
+        "missing": missing,
+    }
+
+
 def cmd_status(args):
     """View the current Daily Regime Gates."""
     # 📅 Cache Freshness validation preflight health check
     today_local = datetime.today().strftime('%Y-%m-%d')
     today_utc = datetime.now(timezone.utc).strftime('%Y-%m-%d')
+    
+    account = getattr(args, "account", "")
+    options_file = account_positions_file(account)
+    performance_file = account_performance_file(account)
+    
     files_to_check = {
         "Daily Regime": (REGIME_FILE, "run 'update-regime' subcommand"),
-        "Portfolio Performance": (PERFORMANCE_FILE, "run 'update-regime' or 'risk' subcommand"),
+        "Portfolio Performance": (performance_file, "run 'update-regime' or 'risk' subcommand"),
         "Candidates List": (CANDIDATES_FILE, "run 'update-candidates' subcommand"),
-        "Active Options": (OPTIONS_FILE, "update options manually or via sync"),
-        "Ticker Analyses": (ANALYSES_FILE, "run 'analyze' subcommand for candidate symbols")
+        "Active Options": (options_file, "update options manually or via sync"),
+        "Ticker Analyses": (ANALYSES_FILE, "run the full current-session ticker refresh workflow")
     }
     
     print("### 📅 Cache Freshness Report")
     for label, (filepath, action) in files_to_check.items():
         if not os.path.exists(filepath):
             print(f"- **{label}**: {format_color('MISSING', '31', bold=True)} -> *Action: {action}*")
+        elif label == "Ticker Analyses":
+            freshness = get_ticker_analysis_freshness(account, (today_local, today_utc))
+            current_count = len(freshness["current"])
+            stale_count = len(freshness["stale"])
+            missing_count = len(freshness["missing"])
+            if current_count and not stale_count and not missing_count:
+                status = format_color(f"FRESH ({current_count} current-session)", "32")
+            else:
+                status = format_color(
+                    f"STALE ({current_count} current, {stale_count} historical-stale, {missing_count} missing)",
+                    "33",
+                )
+            print(f"- **{label}**: {status} -> *Action: {action}*")
         else:
             file_date = ""
             try:
@@ -1036,10 +1170,14 @@ def cmd_status(args):
         print_color(f"\n✅ SYSTEM STATUS: AUTHORIZED ({regime['system_authorization']}). New trade entries are permitted.", "32", bold=True)
 
     # 🔔 Central Command alerts summary
-    options = load_json(OPTIONS_FILE, {"options_positions": {}, "stocks_positions": {}})
+    account = getattr(args, "account", "")
+    options_file = account_positions_file(account)
+    options = load_json(options_file, {"options_positions": {}, "stocks_positions": {}})
     analyses = load_json(ANALYSES_FILE, {})
     positions = options.get("options_positions", {})
     stocks = options.get("stocks_positions", {})
+    
+    perf = get_performance_status(account)
     
     pending_exits = []
     
@@ -2367,7 +2505,7 @@ def cmd_analyze(args):
         "hv90_val": round(hv90, 2) if hv90 is not None else None,
         "rv10_val": round(rv10, 2) if rv10 is not None else None,
         "Signal Status": status,
-        "analyzed_date": datetime.today().strftime('%Y-%m-%d'),
+        "analyzed_date": args.effective_session_date,
         "spike_crash": bool(spike_crash),
         "earnings_date": earnings_date,
         "earnings_gate_status": "FAIL" if (best_option_cached and best_option_cached.get("earnings_blocked", False)) else "PASS" if earnings_date else "N/A",
@@ -2699,17 +2837,17 @@ def compute_exit_rule_state(spot, purchase_premium, mark_price, ptrans, ntrans, 
     return exit_rule_state, proposed_action, time_status, distance_ntrans, distance_max_stop
 
 
-def get_monthly_realized_pnl(net_liq: float) -> Tuple[float, float, str, int]:
+def get_monthly_realized_pnl(net_liq: float, monthly_file: Optional[str] = None, pnl_file: Optional[str] = None) -> Tuple[float, float, str, int]:
     """
     Computes or retrieves the trailing 30-day realized P&L from raw files.
     First checks for realized_pnl_monthly.json under DOWNLOADS_DIR, 
     otherwise falls back to parsing pnl_trade_history.json.
     Returns (realized_pnl_dollar, realized_pnl_pct, status_string, trade_count).
     """
-    pnl_file = ""
-    monthly_file = ""
+    pnl_file = pnl_file or ""
+    monthly_file = monthly_file or ""
     
-    if os.path.exists(DOWNLOADS_DIR):
+    if not monthly_file and not pnl_file and os.path.exists(DOWNLOADS_DIR):
         # Scan DOWNLOADS_DIR to locate any saved files and sort them lexicographically
         monthly_candidates = []
         pnl_candidates = []
@@ -2839,11 +2977,25 @@ def get_beta_factor(sector_tag: Optional[str]) -> float:
 
 def cmd_portfolio(args):
     """Tracks position exits, risk sizing weights, and portfolio metrics."""
-    options = load_json(OPTIONS_FILE, {"options_positions": {}, "stocks_positions": {}})
+    options_file = account_positions_file(getattr(args, "account", ""))
+    options = load_json(options_file, {"options_positions": {}, "stocks_positions": {}})
     analyses = load_json(ANALYSES_FILE, {})
+    account = getattr(args, "account", "")
     
     positions = options.get("options_positions", {})
     stocks = options.get("stocks_positions", {})
+
+    if account:
+        positions = {
+            position_id: details
+            for position_id, details in positions.items()
+            if not details.get("Account") or details.get("Account") == account
+        }
+        stocks = {
+            ticker: details
+            for ticker, details in stocks.items()
+            if not details.get("Account") or details.get("Account") == account
+        }
     
     pending_exits = []
     
@@ -3358,7 +3510,11 @@ def cmd_portfolio(args):
     cash_buffer_status = format_color("PASS", "32", bold=True) if cash_buffer_pct >= 20.0 else format_color("WARNING (Low liquid buffer <20%)", "31", bold=True)
     
     # 3. Trailing 30-Day Realized Drawdown Gate
-    monthly_pnl_dlr, monthly_pnl_pct, drawdown_gate_status, monthly_cnt = get_monthly_realized_pnl(net_liq)
+    performance_file = account_performance_file(account) if account else None
+    monthly_pnl_dlr, monthly_pnl_pct, drawdown_gate_status, monthly_cnt = get_monthly_realized_pnl(
+        net_liq,
+        monthly_file=performance_file,
+    )
     
     print("\n### 📈 Aggregate Portfolio Summary")
     print(f"- **Total Portfolio Net Liquidation (Net Liq)**: ${net_liq:,.2f}")
@@ -3397,7 +3553,7 @@ def cmd_portfolio(args):
     print(f"- **Monthly Drawdown Gate**: {gate_fmt} " + (f"({format_color('BREACH ACTIVE: Prohibiting new entries', '31', bold=True)})" if drawdown_gate_status == "FAIL" else "(Drawdown within safe parameters)"))
     print(f"- **Cash Buffer / Liquid Reserves**: ${cash_buffer:,.2f} ({cash_buffer_pct:.2f}% of Net Liq) | Status: {cash_buffer_status}")
     
-    closed_file = os.path.join(os.path.dirname(OPTIONS_FILE), "closed_positions.json")
+    closed_file = account_closed_positions_file(getattr(args, "account", ""))
     closed_data = load_json(closed_file, {})
     closed_options = closed_data.get("closed_options", options.get("closed_options", []))
     closed_stocks = closed_data.get("closed_stocks", options.get("closed_stocks", []))
@@ -3586,7 +3742,7 @@ def cmd_portfolio(args):
     # Save the updated indicators
     options["options_positions"] = positions
     options["stocks_positions"] = stocks
-    save_json(OPTIONS_FILE, options)
+    save_json(options_file, options)
     
     # Render Execution Approval Requests for systematic exits
     if pending_exits:
@@ -3608,7 +3764,8 @@ def cmd_portfolio(args):
 
 def cmd_add_pos(args):
     """Add new options position manually."""
-    options = load_json(OPTIONS_FILE, {"options_positions": {}})
+    options_file = account_positions_file(getattr(args, "account", ""))
+    options = load_json(options_file, {"options_positions": {}})
     positions = options.get("options_positions", {})
     
     if args.option_id in positions:
@@ -3646,13 +3803,14 @@ def cmd_add_pos(args):
     }
     
     options["options_positions"] = positions
-    save_json(OPTIONS_FILE, options)
-    print(f"Successfully added options position for {args.underlier.upper()} in {OPTIONS_FILE}.")
+    save_json(options_file, options)
+    print(f"Successfully added options position for {args.underlier.upper()} in {options_file}.")
 
 
 def cmd_add_stock_pos(args):
     """Add new stock position manually."""
-    options = load_json(OPTIONS_FILE, {"options_positions": {}, "stocks_positions": {}})
+    options_file = account_positions_file(getattr(args, "account", ""))
+    options = load_json(options_file, {"options_positions": {}, "stocks_positions": {}})
     stocks = options.setdefault("stocks_positions", {})
     ticker = args.ticker.upper()
     
@@ -3679,13 +3837,14 @@ def cmd_add_stock_pos(args):
     }
     
     options["stocks_positions"] = stocks
-    save_json(OPTIONS_FILE, options)
-    print(f"Successfully added stock position for {ticker} in {OPTIONS_FILE}.")
+    save_json(options_file, options)
+    print(f"Successfully added stock position for {ticker} in {options_file}.")
 
 
 def cmd_update_stock_pos(args):
     """Update stock position shares or price."""
-    options = load_json(OPTIONS_FILE, {"options_positions": {}, "stocks_positions": {}})
+    options_file = account_positions_file(getattr(args, "account", ""))
+    options = load_json(options_file, {"options_positions": {}, "stocks_positions": {}})
     stocks = options.get("stocks_positions", {})
     ticker = args.ticker.upper()
     
@@ -3718,13 +3877,14 @@ def cmd_update_stock_pos(args):
         
     # Save the updated stocks dict back using stocks_positions
     options["stocks_positions"] = stocks
-    save_json(OPTIONS_FILE, options)
-    print(f"Successfully updated metrics for stock {ticker} in {OPTIONS_FILE}.")
+    save_json(options_file, options)
+    print(f"Successfully updated metrics for stock {ticker} in {options_file}.")
 
 
 def cmd_close_stock_pos(args):
     """Close a stock position and archive standard P&L."""
-    options = load_json(OPTIONS_FILE, {"options_positions": {}, "stocks_positions": {}})
+    options_file = account_positions_file(getattr(args, "account", ""))
+    options = load_json(options_file, {"options_positions": {}, "stocks_positions": {}})
     stocks = options.get("stocks_positions", {})
     ticker = args.ticker.upper()
     
@@ -3732,7 +3892,7 @@ def cmd_close_stock_pos(args):
         print(f"Error: Stock position for {ticker} not found in portfolio.", file=sys.stderr)
         sys.exit(1)
         
-    closed_file = os.path.join(os.path.dirname(OPTIONS_FILE), "closed_positions.json")
+    closed_file = account_closed_positions_file(getattr(args, "account", ""))
     closed_data = load_json(closed_file, {"closed_options": [], "closed_stocks": []})
     closed = closed_data.setdefault("closed_stocks", [])
     
@@ -3765,14 +3925,15 @@ def cmd_close_stock_pos(args):
           + format_color(f"Realized P&L {realized_pct:+.2f}% (${realized_dollar:+.2f})", pl_color, bold=True))
           
     options["stocks_positions"] = stocks
-    save_json(OPTIONS_FILE, options)
+    save_json(options_file, options)
     save_json(closed_file, closed_data)
     print(f"Archived stock position for {ticker} to closed_stocks in {closed_file}.")
 
 
 def cmd_update_opt(args):
     """Update options evaluation price/mark and momentum tracking."""
-    options = load_json(OPTIONS_FILE, {"options_positions": {}})
+    options_file = account_positions_file(getattr(args, "account", ""))
+    options = load_json(options_file, {"options_positions": {}})
     positions = options.get("options_positions", {})
     
     target_pos = None
@@ -3802,13 +3963,14 @@ def cmd_update_opt(args):
     if getattr(args, "t2_target", None) is not None:
         target_pos["T2 Target"] = args.t2_target
         
-    save_json(OPTIONS_FILE, options)
-    print(f"Successfully updated metrics for option {args.option_id} in {OPTIONS_FILE}.")
+    save_json(options_file, options)
+    print(f"Successfully updated metrics for option {args.option_id} in {options_file}.")
 
 
 def cmd_close_pos(args):
     """Close a tracked options position and archive its realized P&L."""
-    options = load_json(OPTIONS_FILE, {"options_positions": {}})
+    options_file = account_positions_file(getattr(args, "account", ""))
+    options = load_json(options_file, {"options_positions": {}})
     positions = options.get("options_positions", {})
     
     matches = [
@@ -3819,7 +3981,7 @@ def cmd_close_pos(args):
         print(f"Error: Option position with ID or Ticker {args.option_id} not found in portfolio.", file=sys.stderr)
         sys.exit(1)
         
-    closed_file = os.path.join(os.path.dirname(OPTIONS_FILE), "closed_positions.json")
+    closed_file = account_closed_positions_file(getattr(args, "account", ""))
     closed_data = load_json(closed_file, {"closed_options": [], "closed_stocks": []})
     closed = closed_data.setdefault("closed_options", [])
     
@@ -3848,7 +4010,7 @@ def cmd_close_pos(args):
               + format_color(f"Realized P&L {realized_pct:+.2f}% (${realized_dollar:+.2f})", pl_color, bold=True))
         
     options["options_positions"] = positions
-    save_json(OPTIONS_FILE, options)
+    save_json(options_file, options)
     save_json(closed_file, closed_data)
     print(f"Archived {len(matches)} position(s) to closed_options in {closed_file}.")
 
@@ -3857,6 +4019,7 @@ def cmd_sync_pnl(args):
     """Syncs P&L trade history from retrieved file to detect closed positions, and moves closed positions to closed_positions.json."""
     pnl_file = getattr(args, "pnl_file", "")
     account = getattr(args, "account", "")
+    options_file = account_positions_file(account)
     if not pnl_file or not os.path.exists(pnl_file):
         # Scan DOWNLOADS_DIR and sort lexicographically to find the latest trade history file
         pnl_candidates = []
@@ -3886,12 +4049,12 @@ def cmd_sync_pnl(args):
     print(f"Found {len(trades)} trades in trade history.")
 
     # Load active options and stocks
-    options = load_json(OPTIONS_FILE, {"options_positions": {}, "stocks_positions": {}})
+    options = load_json(options_file, {"options_positions": {}, "stocks_positions": {}})
     positions = options.get("options_positions", {})
     stocks = options.get("stocks_positions", {})
 
     # Define the separate closed positions file path
-    closed_file = os.path.join(os.path.dirname(OPTIONS_FILE), "closed_positions.json")
+    closed_file = account_closed_positions_file(account)
     closed_data = load_json(closed_file, {"closed_options": [], "closed_stocks": []})
 
     # For safety/migration: if active_positions.json has existing closed items, migrate them!
@@ -3911,7 +4074,7 @@ def cmd_sync_pnl(args):
                 migrated_stk += 1
 
     if migrated_opt or migrated_stk:
-        print(f"Migrated {migrated_opt} options and {migrated_stk} stocks from {OPTIONS_FILE} to {closed_file}.")
+        print(f"Migrated {migrated_opt} options and {migrated_stk} stocks from {options_file} to {closed_file}.")
 
     newly_closed_stocks = 0
     newly_closed_options = 0
@@ -3923,49 +4086,70 @@ def cmd_sync_pnl(args):
         sorted_trades.append((ts, t))
     sorted_trades.sort(key=lambda x: x[0])
 
-    # 1. Detect Closed Stocks
+    def trade_quantity(trade: Dict[str, Any]) -> Optional[float]:
+        """Return a positive realized quantity, or None when the broker omitted it."""
+        raw_quantity = trade.get("quantity", trade.get("Quantity"))
+        if raw_quantity is None:
+            return None
+        try:
+            quantity = abs(float(raw_quantity))
+        except (TypeError, ValueError):
+            return None
+        return quantity if quantity > 0 else None
+
+    def matching_realized_trades(ticker: str, entry_date: Optional[str], required_quantity: float) -> Optional[List[Tuple[str, Dict[str, Any]]]]:
+        """Find enough post-entry realized quantity to close one active position."""
+        matches: List[Tuple[str, Dict[str, Any]]] = []
+        realized_quantity = 0.0
+        for ts, trade in sorted_trades:
+            if trade.get("symbol", "").upper() != ticker.upper():
+                continue
+            if entry_date and ts < entry_date:
+                continue
+            quantity = trade_quantity(trade)
+            if quantity is None:
+                continue
+            matches.append((ts, trade))
+            realized_quantity += quantity
+            if realized_quantity + 1e-9 >= required_quantity:
+                return matches
+        return None
+
+    # 1. Detect Closed Stocks. A realized event can represent a partial close;
+    # never archive an active lot until its realized quantity covers the lot.
     stocks_to_remove = []
     for ticker, details in stocks.items():
         entry_date_str = details.get("Entry Date")
-        # Find matching close trade in trade history
-        for ts, t in sorted_trades:
-            trade_symbol = t.get("symbol", "").upper()
-            if trade_symbol == ticker:
-                # Check if trade timestamp is on or after the entry date
-                if entry_date_str:
-                    if ts < entry_date_str:
-                        continue
-                
-                # Match found! Use trade history to close the position
-                shares = float(details.get("Shares", 0.0))
-                avg_price = float(details.get("Average Buy Price", 0.0))
-                
-                try:
-                    close_price = float(t.get("price", avg_price))
-                    realized_dollar = float(t.get("realized_gain", 0.0))
-                except (ValueError, TypeError):
-                    close_price = avg_price
-                    realized_dollar = 0.0
+        shares = float(details.get("Shares", 0.0))
+        matches = matching_realized_trades(ticker, entry_date_str, shares)
+        if not matches:
+            continue
 
-                cost_basis = shares * avg_price
-                realized_pct = (realized_dollar / cost_basis) * 100.0 if cost_basis > 0 else 0.0
+        ts, t = matches[-1]
+        avg_price = float(details.get("Average Buy Price", 0.0))
+        try:
+            close_price = float(t.get("price", avg_price))
+        except (ValueError, TypeError):
+            close_price = avg_price
+        realized_dollar = sum(float(item.get("realized_gain", 0.0)) for _, item in matches)
 
-                details["Close Price"] = close_price
-                details["Close Date"] = ts[:10] if ts else datetime.today().strftime('%Y-%m-%d')
-                details["Realized P&L ($)"] = round(realized_dollar, 2)
-                details["Realized P&L (%)"] = round(realized_pct, 2)
-                details["Close Reason"] = "Detected closed via trade history sync"
-                if account:
-                    details["Account"] = account
-                
-                closed_data.setdefault("closed_stocks", []).append(details)
-                stocks_to_remove.append(ticker)
-                newly_closed_stocks += 1
-                
-                pl_color = "32" if realized_dollar >= 0 else "31"
-                print(f"Detected Closed Stock {format_color(ticker, '35', bold=True)}: "
-                      + format_color(f"Realized P&L {realized_pct:+.2f}% (${realized_dollar:+.2f})", pl_color, bold=True))
-                break
+        cost_basis = shares * avg_price
+        realized_pct = (realized_dollar / cost_basis) * 100.0 if cost_basis > 0 else 0.0
+        details["Close Price"] = close_price
+        details["Close Date"] = ts[:10] if ts else datetime.today().strftime('%Y-%m-%d')
+        details["Realized P&L ($)"] = round(realized_dollar, 2)
+        details["Realized P&L (%)"] = round(realized_pct, 2)
+        details["Close Reason"] = "Detected closed via trade history quantity reconciliation"
+        if account:
+            details["Account"] = account
+
+        closed_data.setdefault("closed_stocks", []).append(details)
+        stocks_to_remove.append(ticker)
+        newly_closed_stocks += 1
+
+        pl_color = "32" if realized_dollar >= 0 else "31"
+        print(f"Detected Closed Stock {format_color(ticker, '35', bold=True)}: "
+              + format_color(f"Realized P&L {realized_pct:+.2f}% (${realized_dollar:+.2f})", pl_color, bold=True))
 
     for ticker in stocks_to_remove:
         stocks.pop(ticker)
@@ -3975,42 +4159,38 @@ def cmd_sync_pnl(args):
     for opt_id, details in positions.items():
         underlier = details.get("Underlier", "").upper()
         entry_date_str = details.get("Entry Date")
-        
-        for ts, t in sorted_trades:
-            trade_symbol = t.get("symbol", "").upper()
-            
-            if trade_symbol == underlier:
-                if entry_date_str and ts < entry_date_str:
-                    continue
-                
-                purchase_premium = float(details.get("Purchase Premium", 1.0))
-                try:
-                    close_premium = float(t.get("price", purchase_premium))
-                    realized_dollar = float(t.get("realized_gain", 0.0))
-                except (ValueError, TypeError):
-                    close_premium = purchase_premium
-                    realized_dollar = 0.0
+        quantity = float(details.get("Quantity", details.get("quantity", 1.0)))
+        matches = matching_realized_trades(underlier, entry_date_str, quantity)
+        if not matches:
+            continue
 
-                realized_pct = ((close_premium - purchase_premium) / purchase_premium) * 100.0 if purchase_premium else 0.0
-                if realized_dollar and not realized_pct:
-                    realized_pct = (realized_dollar / (purchase_premium * 100.0)) * 100.0
+        ts, t = matches[-1]
+        purchase_premium = float(details.get("Purchase Premium", 1.0))
+        try:
+            close_premium = float(t.get("price", purchase_premium))
+        except (ValueError, TypeError):
+            close_premium = purchase_premium
+        realized_dollar = sum(float(item.get("realized_gain", 0.0)) for _, item in matches)
 
-                details["Close Premium"] = close_premium
-                details["Close Date"] = ts[:10] if ts else datetime.today().strftime('%Y-%m-%d')
-                details["Realized P&L ($)"] = round(realized_dollar, 2)
-                details["Realized P&L (%)"] = round(realized_pct, 2)
-                details["Close Reason"] = "Detected closed via trade history sync"
-                if account:
-                    details["Account"] = account
+        realized_pct = ((close_premium - purchase_premium) / purchase_premium) * 100.0 if purchase_premium else 0.0
+        if realized_dollar and not realized_pct:
+            realized_pct = (realized_dollar / (purchase_premium * 100.0)) * 100.0
 
-                closed_data.setdefault("closed_options", []).append(details)
-                options_to_remove.append(opt_id)
-                newly_closed_options += 1
+        details["Close Premium"] = close_premium
+        details["Close Date"] = ts[:10] if ts else datetime.today().strftime('%Y-%m-%d')
+        details["Realized P&L ($)"] = round(realized_dollar, 2)
+        details["Realized P&L (%)"] = round(realized_pct, 2)
+        details["Close Reason"] = "Detected closed via trade history quantity reconciliation"
+        if account:
+            details["Account"] = account
 
-                pl_color = "32" if realized_dollar >= 0 else "31"
-                print(f"Detected Closed Option {format_color(underlier, '35', bold=True)} {details.get('Strike')} {details.get('Type')}: "
-                      + format_color(f"Realized P&L {realized_pct:+.2f}% (${realized_dollar:+.2f})", pl_color, bold=True))
-                break
+        closed_data.setdefault("closed_options", []).append(details)
+        options_to_remove.append(opt_id)
+        newly_closed_options += 1
+
+        pl_color = "32" if realized_dollar >= 0 else "31"
+        print(f"Detected Closed Option {format_color(underlier, '35', bold=True)} {details.get('Strike')} {details.get('Type')}: "
+              + format_color(f"Realized P&L {realized_pct:+.2f}% (${realized_dollar:+.2f})", pl_color, bold=True))
 
     for opt_id in options_to_remove:
         positions.pop(opt_id)
@@ -4018,17 +4198,18 @@ def cmd_sync_pnl(args):
     # Save active and closed files
     options["stocks_positions"] = stocks
     options["options_positions"] = positions
-    save_json(OPTIONS_FILE, options)
+    save_json(options_file, options)
     save_json(closed_file, closed_data)
 
     print(f"Sync complete. Newly closed: {newly_closed_stocks} stocks, {newly_closed_options} options.")
-    print(f"Closed positions saved to {closed_file}. Active positions saved to {OPTIONS_FILE}.")
+    print(f"Closed positions saved to {closed_file}. Active positions saved to {options_file}.")
 
 
 def cmd_sync_positions(args):
     """Syncs active options and equity positions from raw Robinhood downloads to active_positions.json."""
     base_dir = args.base_dir
     account = args.account
+    options_file = account_positions_file(account)
     if not base_dir or not os.path.exists(base_dir):
         # Scan DOWNLOADS_DIR for latest directory with positions
         candidates = []
@@ -4109,7 +4290,7 @@ def cmd_sync_positions(args):
                             quote_map[opt_id] = q
 
     # 2. Load Existing Active Positions
-    options = load_json(OPTIONS_FILE, {"options_positions": {}, "stocks_positions": {}})
+    options = load_json(options_file, {"options_positions": {}, "stocks_positions": {}})
     active_opts = options.get("options_positions", {})
     active_stocks = options.get("stocks_positions", {})
 
@@ -4303,11 +4484,11 @@ def cmd_sync_positions(args):
 
     options["options_positions"] = active_opts
     options["stocks_positions"] = active_stocks
-    save_json(OPTIONS_FILE, options)
+    save_json(options_file, options)
     
     print(f"Sync complete. Equities: {new_stocks} new, {updated_stocks} updated, {removed_stocks} removed.")
     print(f"Options: {new_opts} new, {updated_opts} updated, {removed_opts} removed.")
-    print(f"Active positions updated in {OPTIONS_FILE}.")
+    print(f"Active positions updated in {options_file}.")
 
 
 def slugify(text):
@@ -4676,7 +4857,8 @@ def cmd_sentiment(args):
     """Displays Reddit sentiment analysis dashboard and divergence alerts."""
     sentiment_db = load_json(SENTIMENT_FILE, {})
     analyses = load_json(ANALYSES_FILE, {})
-    options = load_json(OPTIONS_FILE, {"options_positions": {}, "stocks_positions": {}})
+    options_file = account_positions_file(getattr(args, "account", ""))
+    options = load_json(options_file, {"options_positions": {}, "stocks_positions": {}})
     candidates_data = load_json(CANDIDATES_FILE, {"candidates": []})
     
     positions = options.get("options_positions", {})
@@ -5091,7 +5273,7 @@ def cmd_rankings(args):
 
 def cmd_closed(args):
     """Displays a beautiful detailed report of all closed / archived positions."""
-    closed_file = os.path.join(os.path.dirname(OPTIONS_FILE), "closed_positions.json")
+    closed_file = account_closed_positions_file(getattr(args, "account", ""))
     closed_data = load_json(closed_file, {"closed_options": [], "closed_stocks": []})
     
     closed_options = closed_data.get("closed_options", [])
@@ -5334,9 +5516,11 @@ def calculate_trade_journal(closed_data: Dict[str, Any], performance_data: Optio
 
 def cmd_journal(args):
     """Display machine-readable closed-trade performance metrics."""
-    closed_file = os.path.join(os.path.dirname(OPTIONS_FILE), "closed_positions.json")
+    account = getattr(args, "account", "")
+    closed_file = account_closed_positions_file(account)
     closed_data = load_json(closed_file, {"closed_options": [], "closed_stocks": []})
-    performance_data = load_json(PERFORMANCE_FILE, {})
+    performance_file = account_performance_file(account) if account else PERFORMANCE_FILE
+    performance_data = load_json(performance_file, {})
     print(json.dumps(calculate_trade_journal(closed_data, performance_data), indent=2, sort_keys=True))
 
 
@@ -5430,7 +5614,8 @@ def cmd_simulate(args):
     sim_spot = args.spot
     
     analyses = load_json(ANALYSES_FILE, {})
-    options = load_json(OPTIONS_FILE, {"options_positions": {}, "stocks_positions": {}})
+    options_file = account_positions_file(getattr(args, "account", ""))
+    options = load_json(options_file, {"options_positions": {}, "stocks_positions": {}})
     
     cached = analyses.get(symbol, {})
     if not cached:
@@ -5566,6 +5751,7 @@ def main():
     # status subcommand
     p_status = subparsers.add_parser("status", help="Analyze broader Daily Regime Gates and authorization.")
     p_status.add_argument("--net-liq", type=float, dest="net_liq", help="Estimated Portfolio Net Liq value for sizing & drawdown checks")
+    p_status.add_argument("--account", type=str, default="", help="Optional account number used to scope position and performance caches")
     
     # update-regime subcommand
     p_regime = subparsers.add_parser("update-regime", help="Recompute Daily Regime Gates from raw market inputs.")
@@ -5577,11 +5763,23 @@ def main():
     p_regime.add_argument("--vix-spot", type=float, dest="vix_spot", help="Current VIX spot level")
     p_regime.add_argument("--hyg", type=float, help="HYG credit high-yield bond daily change percent (e.g. -0.35)")
     p_regime.add_argument("--etf-file", type=str, help="ETF Quotes JSON file to calculate regime gates automatically")
-    p_regime.add_argument("--net-liq", type=float, dest="net_liq", help="Estimated Portfolio Net Liq value for sizing & drawdown checks")
+
+    # update-performance subcommand
+    p_performance = subparsers.add_parser("update-performance", help="Compute account-scoped realized P&L and drawdown metrics.")
+    p_performance.add_argument("--account", type=str, required=True, help="Account number for the performance cache")
+    p_performance.add_argument("--net-liq", type=float, dest="net_liq", required=True, help="Live account Net Liq value")
+    p_performance.add_argument("--monthly-file", type=str, help="Validated account-scoped realized P&L JSON file")
+    p_performance.add_argument("--pnl-file", type=str, help="Validated account-scoped trade history JSON file")
 
     # analyze subcommand
     p_analyze = subparsers.add_parser("analyze", help="Grades dynamic options candidate setups.")
     p_analyze.add_argument("symbol", type=str, help="Ticker symbol (e.g. AAPL, AMD)")
+    p_analyze.add_argument(
+        "--effective-session-date",
+        type=parse_effective_session_date,
+        required=True,
+        help="Authoritative latest completed market session date (YYYY-MM-DD)",
+    )
     p_analyze.add_argument("--spot", type=float, help="Current spot price")
     p_analyze.add_argument("--ptrans", type=float, help="Positive transition level")
     p_analyze.add_argument("--ntrans", type=float, help="Negative transition level")
@@ -5609,6 +5807,7 @@ def main():
     
     # portfolio subcommand
     p_port = subparsers.add_parser("portfolio", help="Analyzes position exits, trailing stops, and sizing limits.")
+    p_port.add_argument("--account", type=str, default="", help="Optional account number used to scope tagged positions and performance")
     p_port.add_argument("--net-liq", type=float, dest="net_liq", help="Estimated Portfolio Net Liq value for sizing checks")
     p_port.add_argument("--spot-overrides", type=parse_spot_overrides, dest="spot_overrides", help="Comma-separated ticker=price overrides, e.g. AAPL=290,BABA=81")
     
@@ -5625,6 +5824,7 @@ def main():
     p_add_pos.add_argument("--open-interest", type=int, default=1000, help="Total open interest")
     p_add_pos.add_argument("--imp-vol", type=float, default=0.35, help="Implied volatility (e.g. 0.42)")
     p_add_pos.add_argument("--sector", type=str, default="Technology/Beta", help="Target sector classification (e.g. Technology/Beta, Consumer Cyclical)")
+    p_add_pos.add_argument("--account", type=str, default="", help="Account number used to scope the position cache")
     
     # update-option subcommand
     p_up_opt = subparsers.add_parser("update-option", help="Updates pricing metrics or momentum trackers for options tracking")
@@ -5637,11 +5837,13 @@ def main():
     p_up_opt.add_argument("--stalling-days", type=int, help="Set stalling counter")
     p_up_opt.add_argument("--target-mode", type=str, choices=["T1", "T2"], help="Set target mode for trailing rules (T1, T2)")
     p_up_opt.add_argument("--t2-target", type=float, help="Set secondary structural T2 target price")
+    p_up_opt.add_argument("--account", type=str, default="", help="Account number used to scope the position cache")
     
     # close-position subcommand
     p_close_pos = subparsers.add_parser("close-position", help="Close a tracked option position and archive realized P&L.")
     p_close_pos.add_argument("option_id", type=str, help="Option ID or Ticker underlier name")
     p_close_pos.add_argument("--close-premium", type=float, dest="close_premium", help="Exit premium received (defaults to last Mark Price)")
+    p_close_pos.add_argument("--account", type=str, default="", help="Account number used to scope position caches")
     
     # add-stock subcommand
     p_add_stock = subparsers.add_parser("add-stock", help="Register a stock position in tracking sheet.")
@@ -5652,6 +5854,7 @@ def main():
     p_add_stock.add_argument("--trail-pct", type=float, help="Trailing stop percentage (e.g. 5.0 for 5%%)")
     p_add_stock.add_argument("--stop-pct", type=float, help="Hard stop loss percentage (e.g. 7.0 for 7%%)")
     p_add_stock.add_argument("--target-pct", type=float, help="Profit target percentage (e.g. 15.0 for 15%%)")
+    p_add_stock.add_argument("--account", type=str, default="", help="Account number used to scope the position cache")
 
     # update-stock subcommand
     p_up_stock = subparsers.add_parser("update-stock", help="Update stock tracking metrics.")
@@ -5663,11 +5866,13 @@ def main():
     p_up_stock.add_argument("--stop-pct", type=float, help="Update stop loss percentage")
     p_up_stock.add_argument("--target-pct", type=float, help="Update profit target percentage")
     p_up_stock.add_argument("--highest-price", type=float, dest="highest_price", help="Override highest price tracked")
+    p_up_stock.add_argument("--account", type=str, default="", help="Account number used to scope the position cache")
 
     # close-stock subcommand
     p_close_stock = subparsers.add_parser("close-stock", help="Close a tracked stock position and archive standard P&L.")
     p_close_stock.add_argument("ticker", type=str, help="Stock ticker symbol")
     p_close_stock.add_argument("--close-price", type=float, dest="close_price", help="Exit price received per share (defaults to last current price)")
+    p_close_stock.add_argument("--account", type=str, default="", help="Account number used to scope position caches")
 
     # update-candidates subcommand
     p_candidates = subparsers.add_parser("update-candidates", help="Persist downloaded scans and update candidate_stocks.json.")
@@ -5681,7 +5886,8 @@ def main():
     p_candidates.add_argument("--macd-filter", type=str, choices=["bullish", "bearish", "none"], default="none", help="Filter by MACD Histogram status (bullish: >0, bearish: <0)")
     
     # sentiment subcommand
-    subparsers.add_parser("sentiment", help="Display Reddit sentiment analysis dashboard and divergence alerts.")
+    p_sent = subparsers.add_parser("sentiment", help="Display Reddit sentiment analysis dashboard and divergence alerts.")
+    p_sent.add_argument("--account", type=str, default="", help="Optional account number used to scope the position cache")
 
     # update-sentiment subcommand
     p_up_sent = subparsers.add_parser("update-sentiment", help="Register/update Reddit sentiment data for a ticker.")
@@ -5712,16 +5918,20 @@ def main():
     p_rankings.add_argument("--sort", type=str, choices=["grade", "spot", "cushion", "rr", "status"], default="grade", help="Sort the rankings table (default: grade)")
 
     # closed subcommand
-    subparsers.add_parser("closed", help="Displays a beautiful execution history of all closed options and stocks positions.")
+    p_closed = subparsers.add_parser("closed", help="Displays a beautiful execution history of all closed options and stocks positions.")
+    p_closed.add_argument("--account", type=str, default="", help="Account number used to scope the closed-position cache")
 
     # journal subcommand
-    subparsers.add_parser("journal", help="Calculates machine-readable closed-trade performance and rule attribution metrics.")
+    p_journal = subparsers.add_parser("journal", help="Calculates machine-readable closed-trade performance and rule attribution metrics.")
+    p_journal.add_argument("--account", type=str, default="", help="Account number used to scope position and performance caches")
 
     # workflow subcommand
-    subparsers.add_parser("workflow", help="Aggregates all JSON state into a high-level system summary.")
+    p_workflow = subparsers.add_parser("workflow", help="Aggregates all JSON state into a high-level system summary.")
+    p_workflow.add_argument("--account", type=str, default="", help="Optional account number used to scope position and performance caches")
 
     # snapshot subcommand
     p_snapshot = subparsers.add_parser("snapshot", help="Exports all cached system state as machine-readable JSON.")
+    p_snapshot.add_argument("--account", type=str, default="", help="Optional account number used to scope position and performance caches")
     p_snapshot.add_argument("--output", type=str, help="Write the snapshot to a JSON file instead of stdout")
     
     # update-workflow subcommand
@@ -5746,6 +5956,7 @@ def main():
     p_sim = subparsers.add_parser("simulate", help="Simulates price movements for active positions or candidates.")
     p_sim.add_argument("symbol", help="Ticker symbol")
     p_sim.add_argument("spot", type=float, help="Simulated spot price")
+    p_sim.add_argument("--account", type=str, default="", help="Optional account number used to scope the position cache")
     
     # cleanup-downloads subcommand
     p_clean = subparsers.add_parser("cleanup-downloads", help="Removes temporary download folders older than N days.")
@@ -5766,6 +5977,8 @@ def main():
         cmd_update_workflow(args)
     elif args.command == "update-regime":
         cmd_update_regime(args)
+    elif args.command == "update-performance":
+        cmd_update_performance(args)
     elif args.command == "analyze":
         cmd_analyze(args)
     elif args.command == "portfolio":

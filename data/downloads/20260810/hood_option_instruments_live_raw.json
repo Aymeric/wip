@@ -1,0 +1,1771 @@
+{
+  "data": {
+    "instruments": [
+      {
+        "id": "84c60187-9d1c-42c8-a01d-9445f81cdf32",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "5.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "ce324cfc-991f-4651-aea2-4e1a061d4df6",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "5.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "39c7d9c4-bc19-4ff1-aef2-ccdd8c9a480c",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "10.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "ea018a7b-75d9-4e6c-bbf8-ad6cba3297ac",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "10.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "321dcc93-b0a3-4c05-8ce8-87aebd592fd2",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "15.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "a35d8e97-0d3a-4786-ba51-d4ef5fc4b793",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "15.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "6e883c3d-cc6b-49c5-a8c1-23f15a4b0947",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "20.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "b4537eeb-4d92-4716-844f-ca81069a2d3d",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "20.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "926c4692-0c3e-4e28-a954-4d1bfc457500",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "25.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "ecee2b95-3d52-481a-9660-7e38ae220491",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "25.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "8f57e154-1f99-46a9-b31f-46897e2c9f4c",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "30.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "a36223a3-03c7-45dd-8210-4b9568a8722f",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "30.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "25a5db5b-6996-410e-8542-a24e36ad351b",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "35.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "d1502ea4-6185-4522-8aca-c1fd6bdd3549",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "35.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "a1cfdf27-7771-41ee-9d76-28a0a5b2b2e8",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "40.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "f7c99483-422f-4aaf-a2cb-876f34659df4",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "40.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "9cc17f5f-8393-43de-b66e-0bda2fb31923",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "45.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "a3a6b9f8-88e0-4d80-82d3-9b2d368e5d84",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "45.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "407d9708-2d77-43ab-a486-6a25d0272118",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "50.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "93e72c26-a8e6-4fc9-b0d5-52cb01ffbadd",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "50.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "16d28951-a660-4983-b127-b397dcb4baf2",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "55.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "45b36f2f-31ff-49be-ad4a-3261e120957a",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "55.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "0b226871-ee50-41b8-8f60-43cad5b45781",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "60.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "40b6606e-b569-462a-8acb-57a2d470a36a",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "60.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "5984c6e9-8959-4e71-bd31-e631cbe93eb2",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "65.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "9c596471-9069-4f0f-9679-f148d7777168",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "65.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "05edc258-e565-4d93-bd01-7449dce3b6f1",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "70.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "f893dd62-0b72-446b-b502-7d43e20712b7",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "70.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "7cde6fd8-85b5-4937-9efc-53240194be00",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "75.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "93dba901-b8ba-42a0-a432-66d419a4a352",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "75.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "1ed8bbe9-7357-4f26-928e-83c71e7400de",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "80.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "a499d748-cd7a-45e1-b45b-1fc4f59716a1",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "80.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "75a83d47-89d3-46a9-b543-85f6fa00429c",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "85.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "a0bbba53-afcb-4a66-9999-e687a1039c2e",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "85.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "07ca53c3-a18e-4896-bdf6-c52fc91e179d",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "90.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "b92c183c-25da-415a-8b93-a3f56615f68e",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "90.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "2f7ee754-19f5-4322-9dc8-78ae7a42d84a",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "95.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "31860489-29c9-4b8f-b987-da1fd679305e",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "95.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "00c9308a-9364-4aab-b21e-5ac2be4a04c9",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "100.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "3b7e3da4-32c8-4e14-ba8c-6b0791a94784",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "100.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "9551a944-b222-4827-b979-c2334e4ac167",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "105.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "fdc421e5-f0d6-4681-910b-7f434eb0f696",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "105.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "16a3fb43-f426-4a48-b1ea-a96192ad7c53",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "110.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "8afb9a8d-94fa-450d-98f1-9d7eb5eacf01",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "110.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "6432e53a-3eb5-494b-9602-5b17659f0908",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "115.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "b6431a66-150d-4a62-ab35-94d7cb48bd07",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "115.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "588e2c71-f07f-44ce-8d34-c5722436e6b8",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "120.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "cb0d0410-6149-40ea-8e8a-888892c38032",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "120.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "10d1fe55-9c41-4071-94dc-90306ebe8d57",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "125.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "8d427c13-53df-4c99-9838-f7ccd983c675",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "125.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "16dfc69e-08a4-49ec-87b7-d44238e8b90a",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "130.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "7ae021c4-aff7-470a-a6f9-3d43a8066d2f",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "130.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "b3ada07d-29cd-43cd-adce-2bcd98789f89",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "135.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "d3cd36b4-d25b-495b-9f9e-1d2c84f7f7ba",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "135.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "24960063-83f4-41cd-9dbb-2a3353b0e319",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "140.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "e8071c9f-3226-40f1-aec0-0422b58960ad",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "140.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "2e7ca1b0-e2ca-48b6-8074-0a93b168f216",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "145.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "9cf34282-4880-4bdc-ab08-c58463c29790",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "145.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "9fbfce21-251a-4f01-b21a-40460a3e29e9",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "150.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "cf3708be-edd0-42d1-b2db-7ca46c156b1e",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "150.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "0c9ec899-ac12-4594-87fe-85a86e70807d",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "155.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "92d47957-cd4d-4a32-953e-a90d73579fd8",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "155.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "04ee86ca-30a2-4dd5-aecd-a929cca40316",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "160.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "bbea7027-2821-4a27-ae5b-0fad85b296ed",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "160.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "bb980a46-ef63-4b98-a6cf-1a9ca28ed78e",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "165.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "d4a2718e-38db-417d-b2d6-15ccdeb61fb9",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "165.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "5497cf47-8bc1-41a1-bdcc-0e2e3e1680b2",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "170.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "7147755c-575f-4472-b47f-97ad3f8a7838",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "170.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "d0d10004-b522-4ac7-8b72-9912e31231c0",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "175.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "edaa56af-30d0-4854-95cc-907652f9f8de",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "175.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "765a0065-6213-446e-9423-f11bf9b1aacc",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "180.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "9ff73908-4186-4d29-9158-5d6124a4536d",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "180.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "2e9b61f9-dfd0-46c6-84f7-fd090f3a22c3",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "185.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "8b0de2ba-383b-4da8-bffc-75cdc68b1f90",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "185.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "40f59a16-054f-4619-8822-e8214540ce81",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "190.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "fac332b9-d8c9-40f9-ac69-fa3428b22e2f",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "190.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "110141ae-8585-49cc-bd2e-6e45ef2bdcbd",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "195.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "d9f6ba48-7f13-4b6c-83eb-400007eac123",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "195.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "a6e35ad8-867d-4226-8c2a-ae16f1e3bc24",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "200.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "c816f1bc-3f3d-417d-8b08-6c9cdb3d2c2d",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "200.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "9949e3c4-ca01-47c7-8e11-5fe6a3cf25e4",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "210.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "9f9cdb28-1fab-4aa7-b63b-a290721b679a",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "210.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "04ef2509-57df-4a1c-9d7b-be73227104e4",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "220.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "3ae4ca20-6afd-4420-ac01-529d0b36629c",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "220.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "25856a7a-c3ed-4c07-9d14-66c9831e9ad3",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "230.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "4bb0a9ac-a8e7-4fb5-afeb-315eedc27dba",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "230.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "38ed884b-6e77-450e-bf68-1c8d28221d0f",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "240.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "5186a3ea-082d-4873-8589-bcb6ad7ac136",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "240.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "d708a42a-a92f-4a8b-975a-283dd7dd8ddf",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "250.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "d8b63d47-f5c2-4068-9028-196ec86bea7b",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "250.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "510661b4-af51-4d19-b7a9-9e58c5320f3e",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "260.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "6949beba-3614-4b1d-a7ad-d2e27f200c4a",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "260.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "8dd8fe05-bfd9-44c0-93f3-4baabd7c98dd",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "270.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "91a68ebe-16cd-4b37-858d-433e85dcdd2d",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "270.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "2d3f5510-3378-4f4b-bebb-f410c8679245",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "280.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "678666d7-3772-47a3-895a-133bed05aec2",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "280.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "83e250e8-6d44-4c1a-a654-17caba164981",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "290.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "b43f0cc9-aa3c-46c6-bfd3-32443ef4c9df",
+        "chain_id": "769007c0-78c3-42ba-b275-e20da201a4cc",
+        "chain_symbol": "HOOD",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "290.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      }
+    ]
+  },
+  "guide": "Present chain_symbol, expiration_date, type, strike_price; flag state when not 'active' or tradability when not 'tradable'. Pass id to an order's leg.option_id. Quote sellout_datetime when the user asks \"when will Robinhood force-close this position?\" — it is the authoritative per-contract timestamp covering equity/index, AM/PM settle, and T-1 logic. underlying_type ('equity' or 'index') is informational; mention only when it affects strategy. When next is non-null, extract the cursor query param and call this tool again."
+}

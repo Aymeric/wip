@@ -15,7 +15,7 @@ Instead, immediately delegate the user's request to the specialized **Portfolio 
 
 ### Delegation Workflow:
 1. Invoke the subagent using `runSubagent` with the user's complete request unchanged, including risk tolerance, goals, account context, and any requested holdings scope.
-2. Do not attempt to pull accounts, calculate cost basis, or compute stopping criteria yourself in this context.
+2. Do not attempt to pull accounts, calculate cost basis, or compute stopping criteria yourself in this context. The delegated agent must use the selected account's [data/active_positions_ACCOUNT_NUMBER.json](../../data/active_positions_ACCOUNT_NUMBER.json) and [data/closed_positions_ACCOUNT_NUMBER.json](../../data/closed_positions_ACCOUNT_NUMBER.json), never shared unsuffixed position caches. It must first persist and validate complete live position snapshots, reconcile the account cache against live quantities, fetch current quotes for every holding, and obtain current-session GEX levels for every active underlier. It must pass the authoritative selected-account net-liq into `portfolio --account ACCOUNT_NUMBER --net-liq NET_LIQ`; CLI defaults, cached spot, strike-as-spot, and stale GEX levels are forbidden. Any unresolved ticker must be reported individually as `UNKNOWN/BLOCKED` with the exact dependency.
 3. Upon receiving the final risk assessment and allocation checklist from the `portfolio-risk-manager` subagent, present it verbatim to the user as the system's official risk-overlay directive.
 
 ---

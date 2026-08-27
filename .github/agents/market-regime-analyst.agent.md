@@ -40,6 +40,8 @@ To calculate the **Bull:Bear Gate** reliably, query the daily percent change of 
 - **ETF Reference Pool**: Call `robinhood-trading/get_equity_quotes` in a single batch call for the following 15 symbols:
   - Broad Market/Styles: `SPY`, `QQQ`, `IWM`, `DIA`
   - Core Sectors: `XLK`, `XLF`, `XLV`, `XLY`, `XLP`, `XLI`, `XLU`, `XLB`, `XLRE`, `XLE`, `XLC`
+- **Retrieval Contract**: The call is mandatory even when [data/regime.json](../../data/regime.json) exists or contains prior breadth. Persist the complete successful response, unchanged, as [data/downloads/YYYYMMDD/etf_quotes.json](../../data/downloads/). After saving it, verify that all 15 reference symbols are present and each has a positive current price, a positive `adjusted_previous_close`, and a usable current-price timestamp. If the call fails, is empty, malformed, stale, or incomplete, retry the same call exactly once. Do not calculate the Bull:Bear Gate from cached regime classifications, a prior-session ETF file, or partial results.
+- **Failure Evidence**: If both attempts fail, report `UNKNOWN/BLOCKED` with the exact tool name, attempt number, requested symbols, missing symbols or invalid fields, and returned error/timeout evidence. Preserve the prior regime cache unchanged. A successful complete response must never be reported as “current breadth inputs were not retrieved.”
 - **Calculate Gate Daily**: For each of the 15 ETFs, compute its daily change percentage using the retrieved quote details:
   - Compare `venue_last_non_reg_trade_time` vs `venue_last_trade_time`. Because Robinhood timestamps can have >6-digit fractional seconds, performing a simple lexicographic string comparison (e.g., `non_reg_time > reg_time`) is used to determine which is more recent. Prefer `last_non_reg_trade_price` as the current spot price if its timestamp string is more recent; otherwise use `last_trade_price`.
   - Calculate change percentage relative to the `adjusted_previous_close` field.
@@ -58,10 +60,10 @@ Evaluate the three Daily Regime Gates and check portfolio drawdown health to det
 3. **VIX Delta Gate**: VIX must be trending down (bearish on volatility = bullish for equities).
 4. **Account Drawdown Gate (System Blocker)**: Verify trailing 30-day realized P&L against Net Liquidation value.
    - **Efficiency Rule**: Check if a fresh monthly realized P&L report (downloaded today) already exists at [data/downloads/](../../data/downloads/) before calling `robinhood-trading/get_realized_pnl`.
-   - When a live call is required, use exactly this request shape, replacing only `ACCOUNT_NUMBER`:
+   - When a live call is required, use the selected account's mapped `rhs_account_number` for the P&L MCP request. Use exactly this request shape, replacing only `RHS_ACCOUNT_NUMBER`:
      ```json
      {
-       "account_number": "ACCOUNT_NUMBER",
+       "account_number": "RHS_ACCOUNT_NUMBER",
        "span": "month",
        "asset_classes": ["equity", "option"],
        "display_currency": "USD",
@@ -69,7 +71,7 @@ Evaluate the three Daily Regime Gates and check portfolio drawdown health to det
      }
      ```
    - **Asset Class Is Required**: Never omit `asset_classes`, pass it as `null`, or rename it to `asset_class`. The broker backend rejects an unspecified asset class even though the tool schema describes this field as optional. If the call returns `InvalidArgument: un-specified asset class`, retry once with the exact payload above.
-  - If realized trailing 30-day drawdown exceeds **10.00%**, flag a strict **MAX LOSS DRAWDOWN BLOCK** in [data/regime.json](../../data/regime.json) and suspend all candidate grading or order routing, overriding any passing regime gates.
+  - If an account's realized trailing 30-day drawdown exceeds **10.00%**, persist a strict **MAX LOSS DRAWDOWN BLOCK** in that account's `data/performance_<account>.json` and suspend that account's candidate grading or order routing, overriding any passing shared regime gates.
 
 #### Track Authorisation Level:
 - **Track 1 (Mechanical P2P)**: Requires at least **2/3 gates** to run and no active Drawdown Block.
@@ -89,9 +91,12 @@ Check HYG and sector ETF positions as credit/rotation overlays. If HYG daily cha
 
 ### Step 4: Persist State & Save Raw Artifacts
 1. **Save Downloaded Raw Data in Repo**: Copy and save any raw API quote payload downloaded during the session (such as index quotes, sector ETF quotes, HYG quotes) into the repository inside a date-specific raw API downloads folder (e.g., `data/downloads/YYYYMMDD/etf_quotes.json`).
-2. **Persist Regime State via CLI Engine (Mandatory)**: Use the GEX engine CLI to recompute regime gates from raw inputs and persist the state. This ensures all gate logic and authorization transitions are handled by the core engine:
-   `python3 src/gex_engine.py update-regime --spy <SPY_pct> --qqq <QQQ_pct> --bulls <bull_count> --bears <bear_count> --vix-bearish <is_vix_bearish_bool> [--vix-spot <vix_price>]`
-   *(Also merge drawdown fields like `drawdown_gate_status`, `monthly_pnl_dlr`, `monthly_pnl_pct`, and `monthly_cnt` directly to the JSON dictionary).*
+  - For the Bull:Bear Gate, the artifact is mandatory: [data/downloads/YYYYMMDD/etf_quotes.json](../../data/downloads/). The final report must state the artifact path, retrieval timestamp, 15/15 symbol completeness result, and the calculated bull and bear counts. If it is absent, the gate status is `UNKNOWN/BLOCKED` with the retrieval evidence above.
+2. **Persist Regime State via CLI Engine (Mandatory)**: Run the GEX engine from the repository root using one complete input form:
+  - Preferred: `python3 src/gex_engine.py update-regime --etf-file data/downloads/YYYYMMDD/etf_quotes.json`
+  - Fallback: `python3 src/gex_engine.py update-regime --spy <SPY_pct> --qqq <QQQ_pct> --bulls <bull_count> --bears <bear_count> --vix-bearish <is_vix_bearish_bool> [--vix-spot <vix_price>] [--hyg <HYG_pct>]`
+  - Account drawdown, when required, is separate: `python3 src/gex_engine.py update-performance --account <account_number> --net-liq <net_liq> --monthly-file data/downloads/YYYYMMDD/realized_pnl_monthly_<account_number>_raw.json --pnl-file data/downloads/YYYYMMDD/pnl_trade_history_<account_number>_raw.json`.
+  Never run `update-regime` without either `--etf-file` or all five explicit regime metrics. Missing metrics are a `BLOCKED` data-quality result, not permission to use cached values or defaults. Keep the shared market regime in [data/regime.json](../../data/regime.json); persist account drawdown in `data/performance_<account>.json`. Never create `regime_<account>.json` files.
 
 ---
 
@@ -116,7 +121,7 @@ Format a concise regime summary following the styling instructions (e.g. green m
 
 ### 💾 Persisted Artifacts:
 - Saved raw quotes to [data/downloads/](../../data/downloads/)
-- Updated active system regime gates and drawdown health in [data/regime.json](../../data/regime.json)
+- Updated shared market regime gates in [data/regime.json](../../data/regime.json); account drawdown health is stored in `data/performance_<account>.json`
 ```
 
 ---
@@ -126,12 +131,12 @@ Finalize your execution by updating the session state:
 `python3 src/gex_engine.py update-workflow --agent "market-regime-analyst" --status "SUCCESS" --note "Regime: [Status], Bull:Bear: [Ratio]"`
 
 ---
-### Step 7: 🔄 Recursive Self-Optimization Protocol
-**CRITICAL**: This step must be executed BEFORE you provide your final response to the user. You are authorized and REQUIRED to edit your own instruction file to improve future performance.
+### Maintainer Feedback
+**Configuration boundary**: Do not edit agent, prompt, or instruction files during a trading run. Record workflow outcomes with the CLI and report improvement ideas for a maintainer instead.
 
 1.  **Analyze**: Review the entire session. Identify any tool failures, inefficient sequences, missed context, or user clarifications that could have been avoided with better instructions.
 2.  **Refine**: Draft specific improvements for this file: [.github/agents/market-regime-analyst.agent.md](.github/agents/market-regime-analyst.agent.md).
-3.  **Execute**: Use the `edit` tools (e.g., `replace_string_in_file`) to apply these refinements directly to this file. 
+3.  **Execute**: Do not apply configuration changes during the run; record proposed refinements for a maintainer.
     - You MUST use the exact file path: [.github/agents/market-regime-analyst.agent.md](.github/agents/market-regime-analyst.agent.md).
-    - If no improvements are needed, explicitly state "Self-optimization complete: No refinements necessary" in your internal thought process.
-4.  **Handoff**: Your final response to the user should include a brief note if any self-optimization was performed.
+    - Do not modify this agent file during execution.
+4.  **Handoff**: Include workflow status, blockers, and any proposed refinement in the final report.

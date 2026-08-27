@@ -22,16 +22,17 @@ Your job is to run the mechanical option selection filters: query live options c
   - **Strict Constraint**: For equity fundamentals lookups (`get_equity_fundamentals`), you MUST chunk symbols into batches of **at most 10 symbols** per call to stay within tool limits.
 - Keep the process mechanical and auditable. Formulate all calculations and criteria explicitly.
 - Coordinate directly with the local Python engine in [src/gex_engine.py](../../src/gex_engine.py). If executing checks via the CLI, prefer using the highly optimized offline file inputs to let the engine perform GEX profile derivation, scoring, sorting, sizing simulation, and payoff projections automatically:
-  `python3 src/gex_engine.py analyze <TICKER> --spot <spot_price> --inst-file <inst_file_path> --quote-file <quote_file_path> --hist-file <hist_file_path> --db-change <db_change> [--target-delta <delta>] [--min-dte <days>] [--max-dte <days>] [--earnings-date <earnings_date>] [--net-liq <net_liq>]`
+   `python3 src/gex_engine.py analyze <TICKER> --effective-session-date <Effective Session Date> --spot <spot_price> --inst-file <inst_file_path> --quote-file <quote_file_path> --hist-file <hist_file_path> --db-change <db_change> [--target-delta <delta>] [--min-dte <days>] [--max-dte <days>] [--earnings-date <earnings_date>] [--net-liq <net_liq>]`
   Otherwise, fallback to explicit parameter inputs if offline files are unavailable:
-  `python3 src/gex_engine.py analyze <TICKER> --spot <spot_price> --ptrans <pTrans> --ntrans <nTrans> --gex <gex_price> --cotmp <cotmp> --db-change <db_change> [--target-delta <delta>] [--min-dte <days>] [--max-dte <days>] [--earnings-date <earnings_date>] [--net-liq <net_liq>]`
+   `python3 src/gex_engine.py analyze <TICKER> --effective-session-date <Effective Session Date> --spot <spot_price> --ptrans <pTrans> --ntrans <nTrans> --gex <gex_price> --cotmp <cotmp> --db-change <db_change> [--target-delta <delta>] [--min-dte <days>] [--max-dte <days>] [--earnings-date <earnings_date>] [--net-liq <net_liq>]`
 - Strictly adhere to the output formatting rules. Avoid any plain text filenames or line citation numbers without links. Every file reference or coordinate must be formatted as solid Markdown links, for example: [data/ticker_analyses.json](../../data/ticker_analyses.json). NO BACKTICKS ANYWHERE on file names or paths.
 
 ---
 
 ### Step 1: Identify Underlier Target & Spot/GEX Levels
 1. **Target Identification**: Identify the target ticker underlier from the user's query or the orchestrator's handoff.
-2. **Retrieve GEX Profile & Spot**: Check the underlier's record in [data/ticker_analyses.json](../../data/ticker_analyses.json) and compare its `analyzed_date` with the Effective Session Date before reading `Spot`, pTrans, nTrans, or `+GEX`. If the dates differ or `analyzed_date` is missing, do not select a contract and return `BLOCKED: STALE_GEX_ANALYSIS` for re-grading. A live spot quote alone does not refresh structural GEX levels.
+2. **Retrieve Live Spot**: Call `robinhood-trading/get_equity_quotes` for the target before reading any cached Spot. Prefer `last_non_reg_trade_price` only when its timestamp is newer than `last_trade_price`; otherwise use `last_trade_price`. Persist or reference the complete current-session raw quote payload and validate its timestamp, previous-close date, state, and non-empty price. Retry once on missing, malformed, stale, or incomplete data; return `BLOCKED: LIVE_UNDERLIER_QUOTE_REQUIRED` if the quote remains unavailable.
+3. **Retrieve GEX Profile & Spot**: Check the underlier's record in [data/ticker_analyses.json](../../data/ticker_analyses.json) and compare its `analyzed_date` with the Effective Session Date before reading pTrans, nTrans, or `+GEX`. If the dates differ or `analyzed_date` is missing, do not select a contract and return `BLOCKED: STALE_GEX_ANALYSIS` for re-grading. The live quote does not refresh structural GEX levels, but it is required to confirm the current Spot used by the selector.
 3. **Fetch Expiration Target**:
    - Call `robinhood-trading/get_option_chains(underlying_symbol=TICKER)` to retrieve chains.
    - Isolate the expiration date closest to **30 to 45 calendar days** from today (or the custom target range set by custom `--min-dte` and `--max-dte` CLI arguments). Pre-filter to prioritize standard monthly expirations (typically the third Friday of the month); fallback to weekly expirations only if no monthlies exist in the target window. Exclude short-term weekly expirations under 14 days.
@@ -143,12 +144,12 @@ Finalize your execution by updating the session state:
   `python3 src/gex_engine.py update-workflow --agent "option-selector" --status "BLOCKED" --note "Blocked: [Reason, e.g. Earnings IV-Crush Risk]"`
 
 ---
-### Step 8: 🔄 Recursive Self-Optimization Protocol
-**CRITICAL**: This step must be executed BEFORE you provide your final response to the user. You are authorized and REQUIRED to edit your own instruction file to improve future performance.
+### Maintainer Feedback
+**Configuration boundary**: Do not edit agent, prompt, or instruction files during a trading run. Record workflow outcomes with the CLI and report improvement ideas for a maintainer instead.
 
 1.  **Analyze**: Review the entire session. Identify any tool failures, inefficient sequences, missed context, or user clarifications that could have been avoided with better instructions.
 2.  **Refine**: Draft specific improvements for this file: [option-selector.agent.md](option-selector.agent.md).
-3.  **Execute**: Use the `edit` tools (e.g., `replace_string_in_file`) to apply these refinements directly to this file. 
+3.  **Execute**: Do not apply configuration changes during the run; record proposed refinements for a maintainer.
     - You MUST use the exact file path: [option-selector.agent.md](option-selector.agent.md).
-    - If no improvements are needed, explicitly state "Self-optimization complete: No refinements necessary" in your internal thought process.
-4.  **Handoff**: Your final response to the user should include a brief note if any self-optimization was performed.
+   - Do not modify this agent file during execution.
+4.  **Handoff**: Include workflow status, blockers, and any proposed refinement in the final report.

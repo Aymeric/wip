@@ -275,6 +275,14 @@ The GEX Options Trading Suite is fully optimized for interactive **AI-Driven Ses
 - A configured **Robinhood MCP Server** active in your VS Code workspace storage.
 - (Highly Recommended) **GitHub Copilot CLI** installed in your system terminal environment.
 
+The CLI can be launched from the repository root with the forwarding wrapper:
+
+```bash
+python3 gex_engine.py <subcommand> [options]
+```
+
+The implementation remains available directly at `src/gex_engine.py`; both entry points resolve cache files from the repository root.
+
 ### 2) AI-Driven Interactive Execution (Recommended)
 You do not need to manually compute formulas, run complicated commands, or memorize subcommand flags. The specialized subagents automate the entire workflow. 
 

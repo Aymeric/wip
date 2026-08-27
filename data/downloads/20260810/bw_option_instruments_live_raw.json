@@ -1,0 +1,655 @@
+{
+  "data": {
+    "instruments": [
+      {
+        "id": "3502743b-5535-4880-94a5-a627d1fd8807",
+        "chain_id": "41975a9a-0d51-41cd-9f2a-ed4fdd5c69db",
+        "chain_symbol": "BW",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "3.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "8ce6f1bd-c998-40dc-9a77-7c1f05f050d1",
+        "chain_id": "41975a9a-0d51-41cd-9f2a-ed4fdd5c69db",
+        "chain_symbol": "BW",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "3.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "5e81ec2b-8147-43ae-8a17-9cd92f67eef3",
+        "chain_id": "41975a9a-0d51-41cd-9f2a-ed4fdd5c69db",
+        "chain_symbol": "BW",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "4.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "9ccf932f-bba1-4a56-8766-29bd28fa7a6e",
+        "chain_id": "41975a9a-0d51-41cd-9f2a-ed4fdd5c69db",
+        "chain_symbol": "BW",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "4.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "af778408-d156-4d7c-a87b-28b2123794fc",
+        "chain_id": "41975a9a-0d51-41cd-9f2a-ed4fdd5c69db",
+        "chain_symbol": "BW",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "5.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "e4b6ca4a-a081-4132-bf7c-c075cf25fafc",
+        "chain_id": "41975a9a-0d51-41cd-9f2a-ed4fdd5c69db",
+        "chain_symbol": "BW",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "5.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "25f26011-e7c4-4d92-835c-2a319c94fa72",
+        "chain_id": "41975a9a-0d51-41cd-9f2a-ed4fdd5c69db",
+        "chain_symbol": "BW",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "6.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "a013f72b-31c3-411d-87c7-15f395d1b6c2",
+        "chain_id": "41975a9a-0d51-41cd-9f2a-ed4fdd5c69db",
+        "chain_symbol": "BW",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "6.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "2401fc1e-d025-4865-9b38-eb6a0f92a26a",
+        "chain_id": "41975a9a-0d51-41cd-9f2a-ed4fdd5c69db",
+        "chain_symbol": "BW",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "7.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "262e7a19-6561-451f-9ad9-116fb9812c54",
+        "chain_id": "41975a9a-0d51-41cd-9f2a-ed4fdd5c69db",
+        "chain_symbol": "BW",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "7.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "1818febe-074a-4466-ad0d-cdc27722bce9",
+        "chain_id": "41975a9a-0d51-41cd-9f2a-ed4fdd5c69db",
+        "chain_symbol": "BW",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "8.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "5eb93d78-a8c2-4618-993c-932853477743",
+        "chain_id": "41975a9a-0d51-41cd-9f2a-ed4fdd5c69db",
+        "chain_symbol": "BW",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "8.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "0392cb38-b768-420e-a02c-b3fe4efba0e6",
+        "chain_id": "41975a9a-0d51-41cd-9f2a-ed4fdd5c69db",
+        "chain_symbol": "BW",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "9.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "93012ff1-b41b-4116-b571-628550eb473e",
+        "chain_id": "41975a9a-0d51-41cd-9f2a-ed4fdd5c69db",
+        "chain_symbol": "BW",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "9.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "8aa25733-0b32-4b0e-ad3f-50f423d9486a",
+        "chain_id": "41975a9a-0d51-41cd-9f2a-ed4fdd5c69db",
+        "chain_symbol": "BW",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "10.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "ce41ed72-6559-4838-8eeb-e11545b1306b",
+        "chain_id": "41975a9a-0d51-41cd-9f2a-ed4fdd5c69db",
+        "chain_symbol": "BW",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "10.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "889c640e-a06f-4073-a027-95c03bd496dc",
+        "chain_id": "41975a9a-0d51-41cd-9f2a-ed4fdd5c69db",
+        "chain_symbol": "BW",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "11.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "f2c581fe-e84c-4d5d-a0be-7572b508e13e",
+        "chain_id": "41975a9a-0d51-41cd-9f2a-ed4fdd5c69db",
+        "chain_symbol": "BW",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "11.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "14d89031-589c-4758-b773-eb2d078612c0",
+        "chain_id": "41975a9a-0d51-41cd-9f2a-ed4fdd5c69db",
+        "chain_symbol": "BW",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "12.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "5274e15e-6e2b-46c0-a5f1-d82ee5a48dac",
+        "chain_id": "41975a9a-0d51-41cd-9f2a-ed4fdd5c69db",
+        "chain_symbol": "BW",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "12.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "0bca192f-0881-44d2-a1bd-7e9522c46861",
+        "chain_id": "41975a9a-0d51-41cd-9f2a-ed4fdd5c69db",
+        "chain_symbol": "BW",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "13.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "667be84f-aab6-4bbb-ac32-ccb9091b9220",
+        "chain_id": "41975a9a-0d51-41cd-9f2a-ed4fdd5c69db",
+        "chain_symbol": "BW",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "13.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "2a558995-dfaa-489e-8120-35eb099f7798",
+        "chain_id": "41975a9a-0d51-41cd-9f2a-ed4fdd5c69db",
+        "chain_symbol": "BW",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "14.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "9935ae32-c646-48b5-96a0-59c5f7e8e785",
+        "chain_id": "41975a9a-0d51-41cd-9f2a-ed4fdd5c69db",
+        "chain_symbol": "BW",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "14.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "534cb693-a76d-408e-b992-8d4c56d450e4",
+        "chain_id": "41975a9a-0d51-41cd-9f2a-ed4fdd5c69db",
+        "chain_symbol": "BW",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "15.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "6b7d9967-8211-4d0b-b171-16f9df69f87a",
+        "chain_id": "41975a9a-0d51-41cd-9f2a-ed4fdd5c69db",
+        "chain_symbol": "BW",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "15.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "c6898772-f1b6-4047-8169-55d1957d70f1",
+        "chain_id": "41975a9a-0d51-41cd-9f2a-ed4fdd5c69db",
+        "chain_symbol": "BW",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "16.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "f1254d88-5227-4bd4-8eed-2ec87ea15cb1",
+        "chain_id": "41975a9a-0d51-41cd-9f2a-ed4fdd5c69db",
+        "chain_symbol": "BW",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "16.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "07add784-907c-4e99-9061-624ff1a4809a",
+        "chain_id": "41975a9a-0d51-41cd-9f2a-ed4fdd5c69db",
+        "chain_symbol": "BW",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "17.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "667ef610-99e4-4077-aba3-48a5df755120",
+        "chain_id": "41975a9a-0d51-41cd-9f2a-ed4fdd5c69db",
+        "chain_symbol": "BW",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "17.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "72b737b9-0f70-4c20-bcfb-54f9e0e25b1b",
+        "chain_id": "41975a9a-0d51-41cd-9f2a-ed4fdd5c69db",
+        "chain_symbol": "BW",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "18.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "e5c51a57-5fa0-464c-a496-2c7018b712fc",
+        "chain_id": "41975a9a-0d51-41cd-9f2a-ed4fdd5c69db",
+        "chain_symbol": "BW",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "18.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "a83f721d-0e4f-4812-8e0e-9b7138c58ef2",
+        "chain_id": "41975a9a-0d51-41cd-9f2a-ed4fdd5c69db",
+        "chain_symbol": "BW",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "19.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "fb4fd64a-7c00-4282-a1d0-840804e88fdc",
+        "chain_id": "41975a9a-0d51-41cd-9f2a-ed4fdd5c69db",
+        "chain_symbol": "BW",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "19.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "33759e3e-6e0f-40e9-9c8a-8da309e29d42",
+        "chain_id": "41975a9a-0d51-41cd-9f2a-ed4fdd5c69db",
+        "chain_symbol": "BW",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "20.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "9df6a5e1-8a70-49c9-9ad2-9bcdff9c9c58",
+        "chain_id": "41975a9a-0d51-41cd-9f2a-ed4fdd5c69db",
+        "chain_symbol": "BW",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "20.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      }
+    ]
+  },
+  "guide": "Present chain_symbol, expiration_date, type, strike_price; flag state when not 'active' or tradability when not 'tradable'. Pass id to an order's leg.option_id. Quote sellout_datetime when the user asks \"when will Robinhood force-close this position?\" — it is the authoritative per-contract timestamp covering equity/index, AM/PM settle, and T-1 logic. underlying_type ('equity' or 'index') is informational; mention only when it affects strategy. When next is non-null, extract the cursor query param and call this tool again."
+}

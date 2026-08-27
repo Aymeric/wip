@@ -19,5 +19,7 @@ Instead, immediately delegate the user's request to the specialized **Agentic Or
 3. Do not attempt to calculate cash margins, parse tradability, structure bids/asks, or finalize order streams yourself in this context.
 4. Upon receiving the completed safety preflight and transaction receipt from the `agentic-trader` subagent, present it verbatim to the user as the system's official order execution report.
 
+The delegated agent must pass the selected `--account ACCOUNT_NUMBER` to every position mutation or synchronization CLI command. Active positions belong in [data/active_positions_ACCOUNT_NUMBER.json](../../data/active_positions_ACCOUNT_NUMBER.json), and closed positions belong in [data/closed_positions_ACCOUNT_NUMBER.json](../../data/closed_positions_ACCOUNT_NUMBER.json); do not write shared unsuffixed position files.
+
 ---
 # Delegation Complete

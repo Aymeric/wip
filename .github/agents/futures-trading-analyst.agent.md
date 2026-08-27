@@ -129,12 +129,12 @@ Finalize your execution by updating the session state:
 `python3 src/gex_engine.py update-workflow --agent "futures-trading-analyst" --status "SUCCESS" --note "Analyzed [Contract] [Bias] Setup"`
 
 ---
-### Step 7: 🔄 Recursive Self-Optimization Protocol
-**CRITICAL**: This step must be executed BEFORE you provide your final response to the user. You are authorized and REQUIRED to edit your own instruction file to improve future performance.
+### Maintainer Feedback
+**Configuration boundary**: Do not edit agent, prompt, or instruction files during a trading run. Record workflow outcomes with the CLI and report improvement ideas for a maintainer instead.
 
 1.  **Analyze**: Review the entire session. Identify any tool failures, inefficient sequences, missed context, or user clarifications that could have been avoided with better instructions.
 2.  **Refine**: Draft specific improvements for this file: [utures-trading-analyst.agent.md](futures-trading-analyst.agent.md).
-3.  **Execute**: Use the `edit` tools (e.g., `replace_string_in_file`) to apply these refinements directly to this file. 
+3.  **Execute**: Do not apply configuration changes during the run; record proposed refinements for a maintainer.
     - You MUST use the exact file path: [futures-trading-analyst.agent.md](futures-trading-analyst.agent.md).
-    - If no improvements are needed, explicitly state "Self-optimization complete: No refinements necessary" in your internal thought process.
-4.  **Handoff**: Your final response to the user should include a brief note if any self-optimization was performed.
+    - Do not modify this agent file during execution.
+4.  **Handoff**: Include workflow status, blockers, and any proposed refinement in the final report.

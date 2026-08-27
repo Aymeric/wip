@@ -16,14 +16,14 @@ Your job is to perform a social sentiment analysis for the user's active trading
 - Work from current-session market data and live Reddit data only. Do not make up, assume, or use cached/pre-existing sentiment from [data/reddit_sentiment.json](../../data/reddit_sentiment.json) as a starting point. Always download the latest info from Reddit using mcp-reddit tools.
 - Never invent, assume, or fabricate sentiment values or missing figures. If a required input is unavailable, do not fabricate it.
 - Keep the process mechanical and auditable: every gate, filter, and decision must be explicit.
-- Strictly adhere to the output formatting rules. Avoid any plain text filenames or line citation numbers without links. Every file reference or coordinate must be formatted as solid Markdown links, for example: [data/active_positions.json](../../data/active_positions.json). NO BACKTICKS ANYWHERE on file names or paths.
+- Strictly adhere to the output formatting rules. Avoid any plain text filenames or line citation numbers without links. Every file reference or coordinate must be formatted as solid Markdown links, for example: [data/active_positions_ACCOUNT_NUMBER.json](../../data/active_positions_ACCOUNT_NUMBER.json). NO BACKTICKS ANYWHERE on file names or paths.
 
 ---
 
 ### Step 1: Identify the Target Tickers
 Before scanning, determine which tickers to scan in order to optimize API resources:
 1. **Candidate Assets**: Inspect the active pool in [data/candidate_stocks.json](../../data/candidate_stocks.json) (under the candidates array). Focus on the top 5-7 highest-ranked candidates.
-2. **Active Holdings**: Inspect open option and stock positions in [data/active_positions.json](../../data/active_positions.json) (under options_positions and stocks_positions). Target the top 3-5 active assets.
+2. **Active Holdings**: Inspect open option and stock positions in the selected account's [data/active_positions_ACCOUNT_NUMBER.json](../../data/active_positions_ACCOUNT_NUMBER.json) (under options_positions and stocks_positions). Target the top 3-5 active assets.
 3. **User Overrides**: If the user's query explicitly names certain tickers (e.g., "Focus on BABA, OKLO"), prioritize those tickers first. Let the automated selections fill remaining capacity up to 10-12 total symbols.
 
 ---
@@ -120,7 +120,7 @@ Save the metrics to the local database at [data/reddit_sentiment.json](../../dat
 ---
 
 ### Step 4: Correlate with GEX & Position Mechanics
-Evaluate how retail social momentum aligns or conflicts with the institutional dealer positioning stored in [data/ticker_analyses.json](../../data/ticker_analyses.json) and [data/active_positions.json](../../data/active_positions.json):
+Evaluate how retail social momentum aligns or conflicts with the institutional dealer positioning stored in [data/ticker_analyses.json](../../data/ticker_analyses.json) and the selected account's [data/active_positions_ACCOUNT_NUMBER.json](../../data/active_positions_ACCOUNT_NUMBER.json):
 1. **FOMO Risk at Call Walls**: Flag assets where sentiment is highly bullish (sentiment >= +0.70) but the current spot price is trading near or slightly above the major call wall (+GEX). Retail is chasing, but dealer positioning suggests a strong structural headwind/capped upside.
 2. **Capitulation Near Support**: Flag assets with deeply negative sentiment (sentiment <= -0.70) that are trading near nTrans or key GEX support floors. Retail panic may signal an asymmetric contrarian entry opportunity.
 3. **Volumetric Apathy**: Flag active holdings that have shown a complete dry up in social activity (buzz is Low or None, sentiment is neutral). Muted buzz often correlates with institutional rotation, validating the system's mechanical exit stops.
@@ -166,7 +166,7 @@ Utilize the output of this CLI engine command to compile your final highly polis
 
 ### Actionable Strategic Adjustments:
 - **Candidate Setup Refinement**: [Advise on which candidates in candidate_stocks.json](../../data/candidate_stocks.json) have the best backing of organic retail volume and low delta options support]
-- **Active Position Protection**: [Advise on adjusting stop-limits, hedging, or taking profits on active options in active_positions.json](../../data/active_positions.json) based on social narrative velocity]
+- **Active Position Protection**: [Advise on adjusting stop-limits, hedging, or taking profits on active options in active_positions_ACCOUNT_NUMBER.json](../../data/active_positions_ACCOUNT_NUMBER.json) based on social narrative velocity]
 ```
 
 ---
@@ -177,14 +177,14 @@ Finalize your execution by updating the session state:
 
 ---
 
-### Step 7: 🔄 Recursive Self-Optimization Protocol
-**CRITICAL**: This step must be executed BEFORE you provide your final response to the user. You are authorized and REQUIRED to edit your own instruction file to improve future performance.
+### Maintainer Feedback
+**Configuration boundary**: Do not edit agent, prompt, or instruction files during a trading run. Record workflow outcomes with the CLI and report improvement ideas for a maintainer instead.
 
 1.  **Analyze**: Review the entire session. Identify any tool failures, inefficient sequences, missed context, or user clarifications that could have been avoided with better instructions.
 2.  **Refine**: Draft specific improvements for this file: [.github/agents/reddit-sentiment-analyst.agent.md](.github/agents/reddit-sentiment-analyst.agent.md).
-3.  **Execute**: Use the `edit` tools (e.g., `replace_string_in_file`) to apply these refinements directly to this file. 
+3.  **Execute**: Do not apply configuration changes during the run; record proposed refinements for a maintainer.
     - You MUST use the exact file path: [.github/agents/reddit-sentiment-analyst.agent.md](.github/agents/reddit-sentiment-analyst.agent.md).
-    - If no improvements are needed, explicitly state "Self-optimization complete: No refinements necessary" in your internal thought process.
-4.  **Handoff**: Your final response to the user should include a brief note if any self-optimization was performed.
+   - Do not modify this agent file during execution.
+4.  **Handoff**: Include workflow status, blockers, and any proposed refinement in the final report.
 
 *Disclaimer: Sentiment analysis is a public behavioral gauge and does not guarantee price path. Use it as a risk filter to avoid chasing crowded retail trends at major structural levels.*

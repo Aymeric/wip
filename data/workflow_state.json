@@ -1,22 +1,22 @@
 {
   "current_phase": "Phase I: Audit",
-  "last_updated": "2026-08-10T02:35:33.676114+00:00",
+  "last_updated": "2026-08-27T23:30:38.920359+00:00",
   "subagents": {
     "gex-orchestrator": {
-      "status": "BLOCKED",
-      "timestamp": "2026-08-10T02:35:33.676000+00:00"
+      "status": "SUCCESS",
+      "timestamp": "2026-08-27T23:30:38.920114+00:00"
     },
     "portfolio-risk-manager": {
-      "status": "BLOCKED",
-      "timestamp": "2026-08-10T02:34:40.835960+00:00"
+      "status": "PARTIAL",
+      "timestamp": "2026-08-11T02:53:15.204537+00:00"
     },
     "market-regime-analyst": {
       "status": "SUCCESS",
       "timestamp": "2026-08-10T02:30:46.766914+00:00"
     },
     "reddit-sentiment-analyst": {
-      "status": "BLOCKED",
-      "timestamp": "2026-08-10T02:34:43.256019+00:00"
+      "status": "PARTIAL",
+      "timestamp": "2026-08-11T02:53:11.128224+00:00"
     },
     "agentic-trader": {
       "status": "BLOCKED",
@@ -24,15 +24,15 @@
     },
     "gex-candidate-generator": {
       "status": "SUCCESS",
-      "timestamp": "2026-08-10T02:34:42.054051+00:00"
+      "timestamp": "2026-08-11T02:52:29.519607+00:00"
     },
     "gex-setup-grader": {
       "status": "BLOCKED",
-      "timestamp": "2026-08-10T02:34:44.530465+00:00"
+      "timestamp": "2026-08-11T02:53:12.599851+00:00"
     },
     "option-selector": {
       "status": "BLOCKED",
-      "timestamp": "2026-08-10T02:34:45.752994+00:00"
+      "timestamp": "2026-08-11T02:53:13.872129+00:00"
     },
     "trade-journal-analyst": {
       "status": "BLOCKED",
@@ -41,44 +41,44 @@
   },
   "notes": [
     {
-      "timestamp": "2026-08-10T02:31:17.937614+00:00",
-      "content": "DOCS lacks current-session option instruments, option quotes, GEX levels, and db_change; no current actionable setup."
+      "timestamp": "2026-08-13T23:58:16.838934+00:00",
+      "content": "2026-08-13 Refresh: Regime SUCCESS (2/3), Portfolio Synced (12 equities), 448 candidates Quote Refresh PARTIAL (200/448), Option tools BLOCKED by user permission."
     },
     {
-      "timestamp": "2026-08-10T02:31:19.143403+00:00",
-      "content": "No graded CONFIRMED/PENDING setup and no validated 30-45 DTE contract; selection and execution remain blocked."
+      "timestamp": "2026-08-13T23:59:24.754696+00:00",
+      "content": "Fixed CLI identifier bug: All update-option commands now correctly use --account 5QR24141. Active positions marks refreshed."
     },
     {
-      "timestamp": "2026-08-10T02:31:22.809343+00:00",
-      "content": "Daily analytical run complete; regime override confirmed but no current-session eligible setup or exact contract. No execution approval requested."
+      "timestamp": "2026-08-14T00:03:32.142384+00:00",
+      "content": "Starting daily session for accounts 5QR24141, 970049961"
     },
     {
-      "timestamp": "2026-08-10T02:33:43.702628+00:00",
-      "content": "Starting daily session for selected accounts 5QR24141 and 970049961"
+      "timestamp": "2026-08-14T00:03:34.779722+00:00",
+      "content": "Starting Phase I for account 5QR24141"
     },
     {
-      "timestamp": "2026-08-10T02:34:40.836107+00:00",
-      "content": "Position cache refreshed from account snapshots; P&L sync blocked because raw trade-history payloads are missing for 5QR24141 and 970049961"
+      "timestamp": "2026-08-14T00:03:51.422378+00:00",
+      "content": "Starting Phase I for account 970049961"
     },
     {
-      "timestamp": "2026-08-10T02:34:42.054191+00:00",
-      "content": "Candidate pool refreshed from downloads; 334 rows retained, but historical carryovers are non-actionable and latest 2026-08-07 source is sparse"
+      "timestamp": "2026-08-14T00:04:03.119400+00:00",
+      "content": "Starting Phase II Discovery and Sentiment"
     },
     {
-      "timestamp": "2026-08-10T02:34:43.256152+00:00",
-      "content": "Cached sentiment dashboard read successfully, but no current-session live sentiment payload is available"
+      "timestamp": "2026-08-14T00:04:16.065989+00:00",
+      "content": "Starting Phase III Setup Engineering and Grading"
     },
     {
-      "timestamp": "2026-08-10T02:34:44.530600+00:00",
-      "content": "Ticker analyses are stale at 2026-08-05; no current-session GEX levels or first-candle confirmations available"
+      "timestamp": "2026-08-14T00:04:29.271744+00:00",
+      "content": "Finalizing Phase IV and presenting report"
     },
     {
-      "timestamp": "2026-08-10T02:34:45.753141+00:00",
-      "content": "No current-session CONFIRMED or PENDING setup is eligible for contract selection; regime remains blocked"
+      "timestamp": "2026-08-27T23:24:19.197268+00:00",
+      "content": "Authorized accounts 970049961 and 5QR24141, updated regime to 2026-08-27 (TRACK 1 OK)"
     },
     {
-      "timestamp": "2026-08-10T02:35:33.676112+00:00",
-      "content": "Market Regime Override: confirmed via vscode_askQuestions; mandatory blocks remain missing account-scoped P&L payloads and stale ticker analyses"
+      "timestamp": "2026-08-27T23:30:38.920357+00:00",
+      "content": "Market Regime Override: confirmed via vscode_askQuestions"
     }
   ]
 }

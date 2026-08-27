@@ -1,0 +1,1195 @@
+{
+  "data": {
+    "instruments": [
+      {
+        "id": "d631b104-456a-430f-9319-f7776f076f5c",
+        "chain_id": "311fc631-5785-4091-b5a9-d5aa43b14e54",
+        "chain_symbol": "NBIS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "23.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "75e674bc-2741-484e-8987-723f135af52d",
+        "chain_id": "311fc631-5785-4091-b5a9-d5aa43b14e54",
+        "chain_symbol": "NBIS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "25.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "3e5c3364-55cd-4580-be8b-f9c76f59842e",
+        "chain_id": "311fc631-5785-4091-b5a9-d5aa43b14e54",
+        "chain_symbol": "NBIS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "28.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "3dd047fe-7ffa-4df2-874e-7a914efa86d8",
+        "chain_id": "311fc631-5785-4091-b5a9-d5aa43b14e54",
+        "chain_symbol": "NBIS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "30.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "bb8521b6-866c-4159-bc14-8012c86c7c38",
+        "chain_id": "311fc631-5785-4091-b5a9-d5aa43b14e54",
+        "chain_symbol": "NBIS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "33.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "ef15e904-f135-464a-8a88-ce6f0337f3f0",
+        "chain_id": "311fc631-5785-4091-b5a9-d5aa43b14e54",
+        "chain_symbol": "NBIS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "35.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "293bd492-26e0-4e4d-8cbf-33b30a5380f9",
+        "chain_id": "311fc631-5785-4091-b5a9-d5aa43b14e54",
+        "chain_symbol": "NBIS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "38.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "ba6d8188-f154-4613-9dc0-5a4dd29ace28",
+        "chain_id": "311fc631-5785-4091-b5a9-d5aa43b14e54",
+        "chain_symbol": "NBIS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "40.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "e5a16d68-84dd-4c75-8b6a-81ac09075f0b",
+        "chain_id": "311fc631-5785-4091-b5a9-d5aa43b14e54",
+        "chain_symbol": "NBIS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "43.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "a9b9d04a-c7c5-4f22-bbec-7673e94d7f39",
+        "chain_id": "311fc631-5785-4091-b5a9-d5aa43b14e54",
+        "chain_symbol": "NBIS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "45.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "ebf3f1ce-1fe6-43ca-8aa3-18e3855a8963",
+        "chain_id": "311fc631-5785-4091-b5a9-d5aa43b14e54",
+        "chain_symbol": "NBIS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "47.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "89aab836-1bed-4c02-b3fa-861946e3f506",
+        "chain_id": "311fc631-5785-4091-b5a9-d5aa43b14e54",
+        "chain_symbol": "NBIS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "50.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "3e951848-8d6b-4e09-b5e2-feffec77aff4",
+        "chain_id": "311fc631-5785-4091-b5a9-d5aa43b14e54",
+        "chain_symbol": "NBIS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "55.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "b850eaba-49c1-4815-aaf3-dc6480ca6cee",
+        "chain_id": "311fc631-5785-4091-b5a9-d5aa43b14e54",
+        "chain_symbol": "NBIS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "60.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "4d998fde-8b72-4c8f-b5fc-9c82fa814fe4",
+        "chain_id": "311fc631-5785-4091-b5a9-d5aa43b14e54",
+        "chain_symbol": "NBIS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "65.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "7df442d7-894c-4056-9a1d-86d3b8532ee3",
+        "chain_id": "311fc631-5785-4091-b5a9-d5aa43b14e54",
+        "chain_symbol": "NBIS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "70.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "222f5e6c-9d8b-46cf-8994-54aaf12f25c5",
+        "chain_id": "311fc631-5785-4091-b5a9-d5aa43b14e54",
+        "chain_symbol": "NBIS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "75.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "1350e005-f2e9-429f-95e8-4cedee0e4455",
+        "chain_id": "311fc631-5785-4091-b5a9-d5aa43b14e54",
+        "chain_symbol": "NBIS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "80.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "51b7f3bf-e7f4-49b4-ab8e-ea2e385c2260",
+        "chain_id": "311fc631-5785-4091-b5a9-d5aa43b14e54",
+        "chain_symbol": "NBIS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "85.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "d5140db3-909d-495e-88c0-1562df5dd058",
+        "chain_id": "311fc631-5785-4091-b5a9-d5aa43b14e54",
+        "chain_symbol": "NBIS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "90.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "4b4672e3-a97e-431b-91c6-43e454edd30d",
+        "chain_id": "311fc631-5785-4091-b5a9-d5aa43b14e54",
+        "chain_symbol": "NBIS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "95.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "1f573a44-449d-4b04-8c22-0bec67fb6e34",
+        "chain_id": "311fc631-5785-4091-b5a9-d5aa43b14e54",
+        "chain_symbol": "NBIS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "100.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "b851af10-b50d-4626-b90c-27b26c18aad2",
+        "chain_id": "311fc631-5785-4091-b5a9-d5aa43b14e54",
+        "chain_symbol": "NBIS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "105.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "477b31c8-a264-43ed-86d2-b55dcfc99c5a",
+        "chain_id": "311fc631-5785-4091-b5a9-d5aa43b14e54",
+        "chain_symbol": "NBIS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "110.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "28936022-a806-4df3-bd71-4aac3f09a16a",
+        "chain_id": "311fc631-5785-4091-b5a9-d5aa43b14e54",
+        "chain_symbol": "NBIS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "115.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "783bfe8f-b6c5-466d-8b60-7091cdd05a19",
+        "chain_id": "311fc631-5785-4091-b5a9-d5aa43b14e54",
+        "chain_symbol": "NBIS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "120.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "43a577ad-d95e-4d13-9fb3-5e0b3493b8d9",
+        "chain_id": "311fc631-5785-4091-b5a9-d5aa43b14e54",
+        "chain_symbol": "NBIS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "125.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "312813e3-66ae-4742-a561-7dee7654827d",
+        "chain_id": "311fc631-5785-4091-b5a9-d5aa43b14e54",
+        "chain_symbol": "NBIS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "130.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "70f4da62-c1f0-4203-b98b-261fb5dc9cf9",
+        "chain_id": "311fc631-5785-4091-b5a9-d5aa43b14e54",
+        "chain_symbol": "NBIS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "135.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "ef800e69-b01b-4d34-8960-f863568b443b",
+        "chain_id": "311fc631-5785-4091-b5a9-d5aa43b14e54",
+        "chain_symbol": "NBIS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "140.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "d2925101-ff81-4fda-90d3-da683b6b8ea6",
+        "chain_id": "311fc631-5785-4091-b5a9-d5aa43b14e54",
+        "chain_symbol": "NBIS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "145.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "acc015ac-5c6b-42b4-9666-2f7a914db546",
+        "chain_id": "311fc631-5785-4091-b5a9-d5aa43b14e54",
+        "chain_symbol": "NBIS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "150.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "d8e0de08-5b51-469d-879a-47eb541df414",
+        "chain_id": "311fc631-5785-4091-b5a9-d5aa43b14e54",
+        "chain_symbol": "NBIS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "155.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "e0eb00d5-c349-4348-a27a-0215c89048fc",
+        "chain_id": "311fc631-5785-4091-b5a9-d5aa43b14e54",
+        "chain_symbol": "NBIS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "160.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "bf0b5901-22f1-4ceb-8926-ee8aeb75ccb3",
+        "chain_id": "311fc631-5785-4091-b5a9-d5aa43b14e54",
+        "chain_symbol": "NBIS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "165.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "25e15ade-9a35-4426-bc9d-902de3c616a2",
+        "chain_id": "311fc631-5785-4091-b5a9-d5aa43b14e54",
+        "chain_symbol": "NBIS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "170.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "3b04a3ce-073d-4e4d-83f6-02c6a3ea8210",
+        "chain_id": "311fc631-5785-4091-b5a9-d5aa43b14e54",
+        "chain_symbol": "NBIS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "175.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "f367c1df-e511-4882-8d67-9d06caa397c1",
+        "chain_id": "311fc631-5785-4091-b5a9-d5aa43b14e54",
+        "chain_symbol": "NBIS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "180.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "8e2b610d-7521-42d8-b697-d0a2e1957837",
+        "chain_id": "311fc631-5785-4091-b5a9-d5aa43b14e54",
+        "chain_symbol": "NBIS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "185.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "afce3669-3306-400b-9c86-5509144d444a",
+        "chain_id": "311fc631-5785-4091-b5a9-d5aa43b14e54",
+        "chain_symbol": "NBIS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "190.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "3758e193-937c-4237-902c-fd681709bf57",
+        "chain_id": "311fc631-5785-4091-b5a9-d5aa43b14e54",
+        "chain_symbol": "NBIS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "195.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "1c6281d0-ff53-4b78-87ae-631595a33f85",
+        "chain_id": "311fc631-5785-4091-b5a9-d5aa43b14e54",
+        "chain_symbol": "NBIS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "200.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "4a0f3416-bf4b-48fb-b153-a25405c6bbee",
+        "chain_id": "311fc631-5785-4091-b5a9-d5aa43b14e54",
+        "chain_symbol": "NBIS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "210.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "40d25925-7a9c-40f4-85bf-152cd4edfe8a",
+        "chain_id": "311fc631-5785-4091-b5a9-d5aa43b14e54",
+        "chain_symbol": "NBIS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "220.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "0046deaa-8da2-46de-ba61-b536d44ebf33",
+        "chain_id": "311fc631-5785-4091-b5a9-d5aa43b14e54",
+        "chain_symbol": "NBIS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "230.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "3cce15cf-7531-4271-a89c-f5160c0a8d3e",
+        "chain_id": "311fc631-5785-4091-b5a9-d5aa43b14e54",
+        "chain_symbol": "NBIS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "240.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "1cd2dd8d-786a-4fea-b50a-59eab7cbd413",
+        "chain_id": "311fc631-5785-4091-b5a9-d5aa43b14e54",
+        "chain_symbol": "NBIS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "250.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "47eec9da-d3b4-47c5-bf3a-ce160f5adc53",
+        "chain_id": "311fc631-5785-4091-b5a9-d5aa43b14e54",
+        "chain_symbol": "NBIS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "260.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "3d777289-1718-4f97-b720-4404b2d3b115",
+        "chain_id": "311fc631-5785-4091-b5a9-d5aa43b14e54",
+        "chain_symbol": "NBIS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "270.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "577bcd08-4c00-425c-abe9-c9cb0019e24e",
+        "chain_id": "311fc631-5785-4091-b5a9-d5aa43b14e54",
+        "chain_symbol": "NBIS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "280.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "2d6582ad-f2d7-4f15-93ad-cca1817b4193",
+        "chain_id": "311fc631-5785-4091-b5a9-d5aa43b14e54",
+        "chain_symbol": "NBIS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "290.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "74390014-b4da-4c39-8bf3-6fb5d1279e5c",
+        "chain_id": "311fc631-5785-4091-b5a9-d5aa43b14e54",
+        "chain_symbol": "NBIS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "300.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "65b0d95b-9d3d-4c2a-81b7-c9cb600a08c0",
+        "chain_id": "311fc631-5785-4091-b5a9-d5aa43b14e54",
+        "chain_symbol": "NBIS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "310.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "976f4f8e-cc8f-4a7e-9870-f477c0566860",
+        "chain_id": "311fc631-5785-4091-b5a9-d5aa43b14e54",
+        "chain_symbol": "NBIS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "320.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "2ef5ed9f-0ec7-443e-9294-b0bc7c4f73b2",
+        "chain_id": "311fc631-5785-4091-b5a9-d5aa43b14e54",
+        "chain_symbol": "NBIS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "330.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "bdccf4d2-53f2-4c2c-9b91-199b30802b94",
+        "chain_id": "311fc631-5785-4091-b5a9-d5aa43b14e54",
+        "chain_symbol": "NBIS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "340.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "5dd425bd-a8ec-4902-93ae-2f473e1bd338",
+        "chain_id": "311fc631-5785-4091-b5a9-d5aa43b14e54",
+        "chain_symbol": "NBIS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "350.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "f5eb524f-23bd-4f5b-b809-cf8fe2fb9e66",
+        "chain_id": "311fc631-5785-4091-b5a9-d5aa43b14e54",
+        "chain_symbol": "NBIS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "360.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "51e6480c-dfcd-4563-82c1-4605c203b9c7",
+        "chain_id": "311fc631-5785-4091-b5a9-d5aa43b14e54",
+        "chain_symbol": "NBIS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "370.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "1a6c64f2-9306-4c8a-a5a0-3eece2935a23",
+        "chain_id": "311fc631-5785-4091-b5a9-d5aa43b14e54",
+        "chain_symbol": "NBIS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "380.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "7b433623-4d0c-4790-87e9-cad79012af95",
+        "chain_id": "311fc631-5785-4091-b5a9-d5aa43b14e54",
+        "chain_symbol": "NBIS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "390.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "c744d68c-90bf-4487-b7bb-b0b463cbfd81",
+        "chain_id": "311fc631-5785-4091-b5a9-d5aa43b14e54",
+        "chain_symbol": "NBIS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "400.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "891e61ce-ec8a-4491-9bbc-4200b588c513",
+        "chain_id": "311fc631-5785-4091-b5a9-d5aa43b14e54",
+        "chain_symbol": "NBIS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "410.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "f3f1546a-e395-49a1-9766-77b73d1f8e6b",
+        "chain_id": "311fc631-5785-4091-b5a9-d5aa43b14e54",
+        "chain_symbol": "NBIS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "420.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "2bf2654d-5d48-40c7-99d1-f5f6166045f5",
+        "chain_id": "311fc631-5785-4091-b5a9-d5aa43b14e54",
+        "chain_symbol": "NBIS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "430.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "b1630703-e9ad-4287-9792-441c651527ef",
+        "chain_id": "311fc631-5785-4091-b5a9-d5aa43b14e54",
+        "chain_symbol": "NBIS",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "440.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      }
+    ]
+  },
+  "guide": "Present chain_symbol, expiration_date, type, strike_price; flag state when not 'active' or tradability when not 'tradable'. Pass id to an order's leg.option_id. Quote sellout_datetime when the user asks \"when will Robinhood force-close this position?\" — it is the authoritative per-contract timestamp covering equity/index, AM/PM settle, and T-1 logic. underlying_type ('equity' or 'index') is informational; mention only when it affects strategy. When next is non-null, extract the cursor query param and call this tool again."
+}

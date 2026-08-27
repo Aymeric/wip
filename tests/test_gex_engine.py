@@ -6,6 +6,7 @@ Unit Tests for GEX Options Mechanical Trading Engine
 import unittest
 import sys
 import os
+import subprocess
 
 # Ensure the src directory is in the path to import gex_engine correctly
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
@@ -22,12 +23,47 @@ from gex_engine import (
     calculate_atr,
     calculate_trade_journal,
     parse_spot_overrides,
+    parse_effective_session_date,
     RegimeGates,
     OptionPosition,
     StockPosition
 )
 
 class TestGEXEngine(unittest.TestCase):
+
+    def test_repository_root_launcher_forwards_cli_arguments(self):
+        repository_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+        result = subprocess.run(
+            [sys.executable, "gex_engine.py", "--help"],
+            cwd=repository_root,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("update-regime", result.stdout)
+
+    def test_portfolio_accepts_account_argument(self):
+        repository_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+        result = subprocess.run(
+            [sys.executable, "gex_engine.py", "portfolio", "--account", "970049961"],
+            cwd=repository_root,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertNotIn("unrecognized arguments", result.stderr)
+
+    def test_default_cache_paths_are_repository_anchored(self):
+        import gex_engine
+
+        repository_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+        self.assertEqual(gex_engine.REPOSITORY_ROOT, repository_root)
+        self.assertEqual(gex_engine.REGIME_FILE, os.path.join(repository_root, "data", "regime.json"))
+        self.assertEqual(gex_engine.DOWNLOADS_DIR, os.path.join(repository_root, "data", "downloads"))
 
     def test_parse_spot_overrides_normalizes_tickers(self):
         self.assertEqual(
@@ -42,6 +78,13 @@ class TestGEXEngine(unittest.TestCase):
             with self.subTest(value=value):
                 with self.assertRaises(ArgumentTypeError):
                     parse_spot_overrides(value)
+
+    def test_effective_session_date_requires_iso_date(self):
+        self.assertEqual(parse_effective_session_date("2026-08-11"), "2026-08-11")
+        from argparse import ArgumentTypeError
+
+        with self.assertRaises(ArgumentTypeError):
+            parse_effective_session_date("2026-08-12T00:00:00")
 
     def test_calculate_trade_journal_metrics(self):
         report = calculate_trade_journal({
@@ -265,6 +308,46 @@ class TestGEXEngine(unittest.TestCase):
         finally:
             if os.path.exists(tmp_path):
                 os.remove(tmp_path)
+
+    def test_regime_update_does_not_write_performance_cache(self):
+        import tempfile
+        from unittest.mock import patch
+        with tempfile.NamedTemporaryFile(suffix=".json", delete=False) as regime_tmp, \
+             tempfile.NamedTemporaryFile(suffix=".json", delete=False) as performance_tmp:
+            regime_path = regime_tmp.name
+            performance_path = performance_tmp.name
+        try:
+            import gex_engine
+            with patch("gex_engine.REGIME_FILE", regime_path), patch("gex_engine.PERFORMANCE_FILE", performance_path):
+                class DummyArgs:
+                    spy = 0.6
+                    qqq = 0.1
+                    bulls = 4
+                    bears = 1
+                    vix_bearish = True
+                    vix_spot = 15.0
+                    etf_file = None
+
+                gex_engine.cmd_update_regime(DummyArgs())
+                self.assertEqual(gex_engine.load_json(performance_path, {}), {})
+                self.assertEqual(gex_engine.load_json(regime_path, {})["system_authorization"], "ALL TRACKS OK")
+        finally:
+            for path in (regime_path, performance_path):
+                if os.path.exists(path):
+                    os.remove(path)
+
+    def test_account_performance_path_is_scoped(self):
+        import gex_engine
+
+        self.assertTrue(gex_engine.account_performance_file("5QR24141").endswith("performance_5QR24141.json"))
+
+    def test_account_position_paths_are_scoped(self):
+        import gex_engine
+
+        self.assertTrue(gex_engine.account_positions_file("5QR24141").endswith("active_positions_5QR24141.json"))
+        self.assertTrue(gex_engine.account_closed_positions_file("5QR24141").endswith("closed_positions_5QR24141.json"))
+        self.assertTrue(gex_engine.account_positions_file().endswith("active_positions.json"))
+        self.assertTrue(gex_engine.account_closed_positions_file().endswith("closed_positions.json"))
 
     def test_hyg_credit_divergence_integration(self):
         import tempfile
@@ -540,6 +623,31 @@ class TestGEXEngine(unittest.TestCase):
             if os.path.exists(output_path):
                 os.remove(output_path)
 
+    def test_ticker_analysis_freshness_is_evaluated_per_symbol(self):
+        from unittest.mock import patch
+        import gex_engine
+
+        cached_state = {
+            gex_engine.ANALYSES_FILE: {
+                "AAPL": {"analyzed_date": "2026-08-10", "Signal Status": "PENDING"},
+                "MSFT": {"analyzed_date": "2026-08-05", "Signal Status": "CONFIRMED"},
+            },
+            gex_engine.CANDIDATES_FILE: {
+                "candidates": [{"symbol": "AAPL"}, {"symbol": "MSFT"}, {"symbol": "NVDA"}],
+            },
+            gex_engine.OPTIONS_FILE: {"options_positions": {}, "stocks_positions": {}},
+        }
+
+        def load_cached(path, default):
+            return cached_state.get(path, default)
+
+        with patch("gex_engine.load_json", side_effect=load_cached):
+            freshness = gex_engine.get_ticker_analysis_freshness(("2026-08-10",))
+
+        self.assertEqual(freshness["current"], ["AAPL"])
+        self.assertEqual(freshness["stale"][0]["symbol"], "MSFT")
+        self.assertEqual(freshness["missing"], ["NVDA"])
+
     def test_update_workflow_recovers_from_incomplete_state(self):
         from types import SimpleNamespace
         from unittest.mock import patch
@@ -711,7 +819,7 @@ class TestGEXEngine(unittest.TestCase):
             downloads_dir = os.path.join(temp_dir, "downloads")
             dated_dir = os.path.join(downloads_dir, "20260728")
             os.makedirs(dated_dir)
-            active_file = os.path.join(temp_dir, "active_positions.json")
+            active_file = os.path.join(temp_dir, "active_positions_ACC.json")
             gex_engine.save_json(active_file, {"options_positions": {}, "stocks_positions": {}})
 
             stale_payload = {"positions": [{"symbol": "OLD", "quantity": "1", "average_buy_price": "10"}]}
@@ -723,7 +831,7 @@ class TestGEXEngine(unittest.TestCase):
             os.utime(stale_file, (100.0, 100.0))
             os.utime(current_file, (200.0, 200.0))
 
-            with patch('gex_engine.DOWNLOADS_DIR', downloads_dir), patch('gex_engine.OPTIONS_FILE', active_file):
+            with patch('gex_engine.DOWNLOADS_DIR', downloads_dir), patch('gex_engine.account_positions_file', return_value=active_file):
                 class SyncArgs:
                     base_dir = ""
                     account = "ACC"
@@ -746,7 +854,7 @@ class TestGEXEngine(unittest.TestCase):
         try:
             downloads_dir = os.path.join(temp_dir, "downloads")
             os.makedirs(downloads_dir)
-            active_file = os.path.join(temp_dir, "active_positions.json")
+            active_file = os.path.join(temp_dir, "active_positions_ACC.json")
             gex_engine.save_json(active_file, {
                 "options_positions": {
                     "old-option": {"Option ID": "old-option", "Account": "ACC"},
@@ -764,7 +872,7 @@ class TestGEXEngine(unittest.TestCase):
                 "positions": [{"option_id": "kept-option", "chain_symbol": "KEPT", "quantity": "1", "average_price": "100"}]
             })
 
-            with patch('gex_engine.DOWNLOADS_DIR', downloads_dir), patch('gex_engine.OPTIONS_FILE', active_file):
+            with patch('gex_engine.DOWNLOADS_DIR', downloads_dir), patch('gex_engine.account_positions_file', return_value=active_file):
                 class SyncArgs:
                     base_dir = ""
                     account = "ACC"
@@ -1493,6 +1601,44 @@ class TestGEXEngine(unittest.TestCase):
             if os.path.exists(closed_path):
                 os.remove(closed_path)
 
+    def test_sync_pnl_keeps_partial_close_active(self):
+        """A realized partial close must not archive the remaining live lot."""
+        import tempfile
+        from unittest.mock import patch
+        import gex_engine
+
+        with tempfile.NamedTemporaryFile(suffix=".json", delete=False) as pnl_handle, \
+             tempfile.NamedTemporaryFile(suffix=".json", delete=False) as options_handle:
+            pnl_path = pnl_handle.name
+            options_path = options_handle.name
+        closed_path = os.path.join(os.path.dirname(options_path), "closed_positions_5QR24141.json")
+        try:
+            gex_engine.save_json(pnl_path, {"data": {"trades": [{
+                "timestamp": "2026-08-04T16:00:00Z", "symbol": "AMZN",
+                "quantity": "1", "price": "1610", "realized_gain": "685"
+            }]}})
+            gex_engine.save_json(options_path, {"options_positions": {}, "stocks_positions": {
+                "AMZN": {"Ticker": "AMZN", "Shares": 50.0,
+                          "Average Buy Price": 217.80, "Entry Date": "2026-07-01"}
+            }})
+
+            class SyncArgs:
+                pnl_file = pnl_path
+                account = "5QR24141"
+
+            with patch("gex_engine.account_positions_file", return_value=options_path), \
+                 patch("gex_engine.account_closed_positions_file", return_value=closed_path):
+                gex_engine.cmd_sync_pnl(SyncArgs())
+
+            active = gex_engine.load_json(options_path, {})
+            self.assertIn("AMZN", active["stocks_positions"])
+            closed = gex_engine.load_json(closed_path, {})
+            self.assertEqual(closed.get("closed_stocks", []), [])
+        finally:
+            for path in (pnl_path, options_path, closed_path):
+                if os.path.exists(path):
+                    os.remove(path)
+
     def test_rankings_command(self):
         """Test GEX ticker setup rankings and report command."""
         import tempfile
@@ -1658,18 +1804,18 @@ class TestGEXEngine(unittest.TestCase):
             with patch('gex_engine.cmd_portfolio'), patch('sys.stdout'):
                 # 1. Test get_monthly_realized_pnl picks up the 500.00 realized gain from 20260710 (latest)
                 # Instead of 100.00 from 20260708.
-                downloads_dir = "data/downloads"
-                # We patch os.path.exists and walk for data/downloads prefix
+                downloads_dir = gex_engine.DOWNLOADS_DIR
+                # We patch os.path.exists and walk for the engine's downloads prefix
                 orig_exists = os.path.exists
                 orig_walk = os.walk
 
                 def mock_exists(path):
-                    if path == "data/downloads":
+                    if path == downloads_dir:
                         return True
                     return orig_exists(path)
 
                 def mock_walk(path, *args, **kwargs):
-                    if path == "data/downloads":
+                    if path == downloads_dir:
                         return orig_walk(temp_dir, *args, **kwargs)
                     return orig_walk(path, *args, **kwargs)
 
@@ -1770,16 +1916,17 @@ class TestGEXEngine(unittest.TestCase):
             }
             gex_engine.save_json(os.path.join(day_dir, "nvda_earnings_raw.json"), mock_earnings)
 
+            downloads_dir = gex_engine.DOWNLOADS_DIR
             orig_exists = os.path.exists
             orig_walk = os.walk
 
             def mock_exists(path):
-                if path == "data/downloads":
+                if path == downloads_dir:
                     return True
                 return orig_exists(path)
 
             def mock_walk(path, *args, **kwargs):
-                if path == "data/downloads":
+                if path == downloads_dir:
                     return orig_walk(temp_dir, *args, **kwargs)
                 return orig_walk(path, *args, **kwargs)
 

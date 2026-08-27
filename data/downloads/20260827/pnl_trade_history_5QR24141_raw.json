@@ -1,0 +1,55 @@
+{
+  "account_number": "101241412",
+  "next_cursor": "",
+  "span": "month",
+  "trades": [
+    {
+      "price": "380",
+      "quantity": "1",
+      "realized_gain": "-120",
+      "side": "",
+      "symbol": "NVDA",
+      "timestamp": "2026-08-27T18:10:58Z"
+    },
+    {
+      "price": "160",
+      "quantity": "10",
+      "realized_gain": "1066.96",
+      "side": "sell",
+      "symbol": "MRNA",
+      "timestamp": "2026-08-19T14:32:54Z"
+    },
+    {
+      "price": "30",
+      "quantity": "1",
+      "realized_gain": "-50",
+      "side": "",
+      "symbol": "RGC",
+      "timestamp": "2026-08-04T16:54:59Z"
+    },
+    {
+      "price": "35",
+      "quantity": "1",
+      "realized_gain": "-45",
+      "side": "",
+      "symbol": "RGC",
+      "timestamp": "2026-08-04T16:50:10Z"
+    },
+    {
+      "price": "430",
+      "quantity": "1",
+      "realized_gain": "-314",
+      "side": "",
+      "symbol": "SLS",
+      "timestamp": "2026-08-04T16:16:42Z"
+    },
+    {
+      "price": "1610",
+      "quantity": "1",
+      "realized_gain": "685",
+      "side": "",
+      "symbol": "AMZN",
+      "timestamp": "2026-07-31T13:59:21Z"
+    }
+  ]
+}

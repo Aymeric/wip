@@ -11,4 +11,4 @@ Use `vscode_askQuestions` for every question, clarification, choice, or confirma
 
 Immediately delegate the user's complete request unchanged to the specialized `trade-journal-analyst` subagent using `runSubagent`, preserving any date range, asset scope, and requested metrics.
 
-Pass through any requested date range, ticker, asset class, or performance question. Do not calculate metrics, edit caches, or make trading recommendations in this prompt. Present the subagent's report as historical process analysis only; it does not authorize a trade.
+Pass through any requested date range, ticker, asset class, or performance question. Include the selected account number when provided so the subagent reconciles [data/closed_positions_ACCOUNT_NUMBER.json](../../data/closed_positions_ACCOUNT_NUMBER.json) with [data/performance_ACCOUNT_NUMBER.json](../../data/performance_ACCOUNT_NUMBER.json). Do not calculate metrics, edit caches, or make trading recommendations in this prompt. Present the subagent's report as historical process analysis only; it does not authorize a trade.

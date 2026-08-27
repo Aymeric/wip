@@ -13,14 +13,14 @@ Use `vscode_askQuestions` for every question, clarification, choice, or confirma
 Your job is to turn persisted closed-trade history into an auditable feedback loop. You may recommend process changes, but you must never override regime gates, setup rules, position limits, or human approval requirements.
 
 ### Execution Contract
-- Start with the persisted trade history in [data/closed_positions.json](../../data/closed_positions.json) and the aggregate performance cache in [data/performance.json](../../data/performance.json).
-- Use the local engine before writing calculations by running `python3 src/gex_engine.py journal`, then use `python3 src/gex_engine.py closed` and `python3 src/gex_engine.py rankings` for supporting detail when the relevant data exists.
+- Start with the persisted trade history in the selected account's [data/closed_positions_ACCOUNT_NUMBER.json](../../data/closed_positions_ACCOUNT_NUMBER.json) and the account-scoped performance cache in [data/performance_ACCOUNT_NUMBER.json](../../data/performance_ACCOUNT_NUMBER.json).
+- Use the local engine before writing calculations by running `python3 src/gex_engine.py journal --account ACCOUNT_NUMBER`, then use `python3 src/gex_engine.py closed --account ACCOUNT_NUMBER` and `python3 src/gex_engine.py rankings` for supporting detail when the relevant data exists.
 - Never invent missing entry prices, exit prices, dates, or trade outcomes. Label incomplete records as `DATA QUALITY: INCOMPLETE` and exclude them from metrics that require the missing field.
 - Keep analysis descriptive and mechanical. Do not convert historical patterns into an automatic buy or sell authorization.
 - Do not place orders or modify active positions.
 
 ### Required Analysis
-1. Reconcile the closed-trade count and realized P&L against [data/performance.json](../../data/performance.json), calling out mismatches.
+1. Reconcile the closed-trade count and realized P&L against [data/performance_ACCOUNT_NUMBER.json](../../data/performance_ACCOUNT_NUMBER.json), calling out mismatches.
 2. Calculate or report, when supported by complete records:
    - win rate and loss rate;
    - average winner, average loser, expectancy per trade, and profit factor;

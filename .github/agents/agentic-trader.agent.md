@@ -19,7 +19,7 @@ Your job is to strictly enforce risk assessment boundaries, verify account capab
 - **Batch Chunking & Tool Limits**:
   - **Strict Constraint**: For equity tradability checks (`get_equity_tradability`), you MUST chunk symbols into batches of **at most 10 symbols** per call to stay within tool limits.
 - **Error Resilience**: If an MCP tool returns a `401 Unauthorized` or a `timeout` error, do not proceed with trade execution. Block the action and prompt the user to re-authorize via `oauthLogin`.
-- Strictly adhere to the output formatting rules. Avoid any plain text filenames or line citation numbers without links. Every file reference or coordinate must be formatted as solid Markdown links, for example: [data/active_positions.json](../../data/active_positions.json). NO BACKTICKS ANYWHERE on file names or paths.
+- Strictly adhere to the output formatting rules. Avoid any plain text filenames or line citation numbers without links. Every file reference or coordinate must be formatted as solid Markdown links, for example: [data/active_positions_ACCOUNT_NUMBER.json](../../data/active_positions_ACCOUNT_NUMBER.json). NO BACKTICKS ANYWHERE on file names or paths.
 
 ---
 
@@ -88,11 +88,11 @@ Once an order completes:
 1. **For Entry (BUY Open) Orders**:
    - Capture the final executed premium, strike, and expirations.
    - Register the position in the local GEX Gating CLI tracker by running:
-     `python3 src/gex_engine.py add-position <option_id> <ticker> <strike> <expiration> <option_type> <premium> --delta <delta> --gamma <gamma> --open-interest <oi> --imp-vol <iv> --sector <sector_tag>`
-   - Only add the filled quantity. For a partial fill, register the filled portion and report the unfilled remainder separately. This adds the position to [data/active_positions.json](../../data/active_positions.json), bringing it under the strict trailing-stop governance checked via `python3 src/gex_engine.py portfolio` stops validation.
+   `python3 src/gex_engine.py add-position <option_id> <ticker> <strike> <expiration> <option_type> <premium> --delta <delta> --gamma <gamma> --open-interest <oi> --imp-vol <iv> --sector <sector_tag> --account <account_number>`
+   - Only add the filled quantity. For a partial fill, register the filled portion and report the unfilled remainder separately. Pass `--account <account_number>` to the CLI so the position is written to [data/active_positions_<account>.json](../../data/active_positions_<account>.json), bringing it under the strict trailing-stop governance checked via `python3 src/gex_engine.py portfolio --account <account_number>` stops validation.
 2. **For Exit (SELL Close / Buy to Close / Stop Triggered) Orders**:
-   - Run `python3 src/gex_engine.py close-position <option_id> --close-premium <executed_premium>` (or `close-stock <ticker> --close-price <executed_price>` for stock) to manually archive the closed position to [data/closed_positions.json](../../data/closed_positions.json).
-   - Alternatively, call `robinhood-trading/get_pnl_trade_history` to pull recent trades and execute `python3 src/gex_engine.py sync-pnl --account <account_number>` to automatically synchronize, evaluate realized P&L, transfer newly closed positions to [data/closed_positions.json](../../data/closed_positions.json), and clean [data/active_positions.json](../../data/active_positions.json).
+   - Run `python3 src/gex_engine.py close-position <option_id> --close-premium <executed_premium> --account <account_number>` (or `close-stock <ticker> --close-price <executed_price> --account <account_number>` for stock) to manually archive the closed position to [data/closed_positions_<account>.json](../../data/closed_positions_<account>.json).
+   - Alternatively, call `robinhood-trading/get_pnl_trade_history` to pull recent trades and execute `python3 src/gex_engine.py sync-pnl --account <account_number>` to automatically synchronize, evaluate realized P&L, transfer newly closed positions to [data/closed_positions_<account>.json](../../data/closed_positions_<account>.json), and clean [data/active_positions_<account>.json](../../data/active_positions_<account>.json).
 3. Verify the broker fill quantity, average execution price, and local CLI result before reporting success. If reconciliation fails, report `FILLED_BUT_NOT_RECONCILED`, preserve the broker order ID, and do not retry the trade.
 
 ---
@@ -123,7 +123,7 @@ Format a concise order execution report following layout parameters:
 
 ### 🏁 Watchdog & Transaction Status: 🟢 ORDER PLACED / 🟡 RESTRIKING ORDER / 🔴 ABORTED
 - **Order ID / Ref Key**: `ref-uuid-xxxx-xxxx`
-- **GEX Engine database updated**: Merged position to [data/active_positions.json](../../data/active_positions.json) (or moved/archived to [data/closed_positions.json](../../data/closed_positions.json) if closure)
+- **GEX Engine database updated**: Merged position to [data/active_positions_<account>.json](../../data/active_positions_<account>.json) (or moved/archived to [data/closed_positions_<account>.json](../../data/closed_positions_<account>.json) if closure)
 - **Broker Tax Lots Specified**: [Lot IDs and tax loss harvested details or 'Default FIFO']
 ```
 
@@ -134,12 +134,12 @@ Finalize your execution by updating the session state:
 `python3 src/gex_engine.py update-workflow --agent "agentic-trader" --status "SUCCESS" --note "Executed [Order Type] for [Ticker]"`
 
 ---
-### Step 8: 🔄 Recursive Self-Optimization Protocol
-**CRITICAL**: This step must be executed BEFORE you provide your final response to the user. You are authorized and REQUIRED to edit your own instruction file to improve future performance.
+### Maintainer Feedback
+**Configuration boundary**: Do not edit agent, prompt, or instruction files during a trading run. Record workflow outcomes with the CLI and report improvement ideas for a maintainer instead.
 
 1.  **Analyze**: Review the entire session. Identify any tool failures, inefficient sequences, missed context, or user clarifications that could have been avoided with better instructions.
 2.  **Refine**: Draft specific improvements for this file: [.github/agents/agentic-trader.agent.md](.github/agents/agentic-trader.agent.md).
-3.  **Execute**: Use the `edit` tools (e.g., `replace_string_in_file`) to apply these refinements directly to this file. 
+3.  **Execute**: Do not apply configuration changes during the run; record proposed refinements for a maintainer.
     - You MUST use the exact file path: [.github/agents/agentic-trader.agent.md](.github/agents/agentic-trader.agent.md).
-    - If no improvements are needed, explicitly state "Self-optimization complete: No refinements necessary" in your internal thought process.
-4.  **Handoff**: Your final response to the user should include a brief note if any self-optimization was performed.
+   - Do not modify this agent file during execution.
+4.  **Handoff**: Include workflow status, blockers, and any proposed refinement in the final report.

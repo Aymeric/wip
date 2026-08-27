@@ -1,0 +1,34 @@
+{
+  "closed_options": [
+    {
+      "Option ID": "a047efdc-2fdd-457f-b903-6587cd42cd9f",
+      "Underlier": "NVDA",
+      "Strike": "0.00",
+      "Expiration": "2026-08-28",
+      "Type": "long",
+      "Purchase Premium": 5.0,
+      "Delta": "0.0",
+      "Gamma": "0.0",
+      "Mark Price": 8.25,
+      "Open Interest": 0,
+      "ImpVol": "0.0",
+      "Asset Cost Basis": 500.0,
+      "Current Value": 825.0,
+      "P&L (%)": 65.0,
+      "P&L ($)": 325.0,
+      "Sizing Risk Weight (%)": 1.0,
+      "Beta Sector Tag": "Technology/Beta",
+      "Entry Date": "2026-08-13",
+      "Stalling Days": 0,
+      "Target Mode": "T1",
+      "T2 Target": null,
+      "Account": "5QR24141",
+      "Close Premium": 380.0,
+      "Close Date": "2026-08-27",
+      "Realized P&L ($)": -120.0,
+      "Realized P&L (%)": 7500.0,
+      "Close Reason": "Detected closed via trade history quantity reconciliation"
+    }
+  ],
+  "closed_stocks": []
+}

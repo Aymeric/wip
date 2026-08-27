@@ -1,0 +1,11 @@
+{
+  "data": {
+    "account_number": "970049961",
+    "window": "month",
+    "display_currency": "USD",
+    "data_points": [],
+    "total_returns": "0",
+    "total_rate_of_return": "0"
+  },
+  "guide": "This is realized profit & loss only - gains/losses from positions closed within the window; it excludes unrealized profit and loss on open positions. A window with no closing trades returns empty data_points with zero totals - that is a valid result (no realized trades in this window). Treat figures as informational, not a tax document or tax/performance advice."
+}
