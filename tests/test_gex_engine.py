@@ -236,6 +236,15 @@ class TestGEXEngine(unittest.TestCase):
         )
         self.assertTrue("Time Stop" in exit_rule)
 
+        # Case 5b: LEAP / Long-DTE Option (> 90 DTE) is exempt from Day 7 velocity time stop
+        exit_rule_leap, action_leap, time_st_leap, _, _ = compute_exit_rule_state(
+            spot=286.0, purchase_premium=4.75, mark_price=5.0,
+            ptrans=285.0, ntrans=282.0, gex_t1=310.0,
+            days_held=28, stalling_counter=0, dte=499
+        )
+        self.assertEqual(exit_rule_leap, "HOLD")
+        self.assertEqual(time_st_leap, "ON TRACK (LEAP/Long-DTE Exempt)")
+
         # Case 6: Momentum Stalling Stop Triggered
         # Stalling days >= 3
         exit_rule, action, time_st, dist_ntrans, dist_max = compute_exit_rule_state(
@@ -885,6 +894,54 @@ class TestGEXEngine(unittest.TestCase):
         finally:
             shutil.rmtree(temp_dir)
 
+    def test_sync_positions_account_scoped_quotes_and_instruments_precedence(self):
+        import tempfile
+        import shutil
+        from unittest.mock import patch
+        import gex_engine
+
+        temp_dir = tempfile.mkdtemp()
+        try:
+            downloads_dir = os.path.join(temp_dir, "downloads")
+            old_dir = os.path.join(downloads_dir, "20260710")
+            new_dir = os.path.join(downloads_dir, "20260908")
+            os.makedirs(old_dir)
+            os.makedirs(new_dir)
+
+            active_file = os.path.join(temp_dir, "active_positions_ACC.json")
+            gex_engine.save_json(active_file, {"options_positions": {}, "stocks_positions": {}})
+
+            # Old quote file has stale mark price
+            gex_engine.save_json(os.path.join(old_dir, "option_quotes_raw.json"), {
+                "results": [{"quote": {"instrument_id": "opt-1", "mark_price": "5.10"}}]
+            })
+            # Current session has account-scoped files
+            gex_engine.save_json(os.path.join(new_dir, "option_instruments_ACC_raw.json"), {
+                "data": {"instruments": [{"id": "opt-1", "strike_price": "40.0000", "type": "call", "expiration_date": "2026-10-16"}]}
+            })
+            gex_engine.save_json(os.path.join(new_dir, "option_quotes_ACC_raw.json"), {
+                "data": {"results": [{"quote": {"instrument_id": "opt-1", "mark_price": "1.530000"}}]}
+            })
+            gex_engine.save_json(os.path.join(new_dir, "option_positions_ACC_raw.json"), {
+                "positions": [{"option_id": "opt-1", "chain_symbol": "NKE", "quantity": "1", "average_price": "475"}]
+            })
+
+            with patch('gex_engine.DOWNLOADS_DIR', downloads_dir), patch('gex_engine.account_positions_file', return_value=active_file):
+                class SyncArgs:
+                    base_dir = new_dir
+                    account = "ACC"
+
+                gex_engine.cmd_sync_positions(SyncArgs())
+
+            synced = gex_engine.load_json(active_file, {})["options_positions"]
+            self.assertIn("opt-1", synced)
+            self.assertEqual(synced["opt-1"]["Mark Price"], 1.53)
+            self.assertEqual(synced["opt-1"]["Strike"], "40.00")
+            self.assertAlmostEqual(synced["opt-1"]["P&L (%)"], -67.79, places=2)
+            self.assertAlmostEqual(synced["opt-1"]["P&L ($)"], -322.0, places=1)
+        finally:
+            shutil.rmtree(temp_dir)
+
     def test_select_best_option(self):
         # Setup mock option files with different maturities and liquidity
         inst_data = {
@@ -1148,7 +1205,7 @@ class TestGEXEngine(unittest.TestCase):
         )
         self.assertEqual(grade_r3, 10)
         self.assertFalse(checklist_r3[2])  # Rule 3 should fail
-        
+
         # Rule 4: +GEX > Spot (fails when gex <= spot)
         grade_r4, checklist_r4 = calculate_grade(
             ticker="TEST", spot=110.0, ptrans=108.0, ntrans=105.0,
@@ -1164,6 +1221,97 @@ class TestGEXEngine(unittest.TestCase):
         )
         self.assertEqual(grade_r6, 10)
         self.assertFalse(checklist_r6[5])  # Rule 6 should fail
+
+    def test_find_latest_option_files_and_spot_discovery(self):
+        import tempfile
+        import shutil
+        from unittest.mock import patch
+        import gex_engine
+
+        temp_dir = tempfile.mkdtemp()
+        try:
+            downloads_dir = os.path.join(temp_dir, "downloads", "20260827")
+            os.makedirs(downloads_dir)
+
+            inst_file = os.path.join(downloads_dir, "testsym_option_instruments_raw.json")
+            quote_file = os.path.join(downloads_dir, "testsym_option_quotes_raw.json")
+            underlier_file = os.path.join(downloads_dir, "testsym_underlier_quote_raw.json")
+            hist_file = os.path.join(downloads_dir, "testsym_underlier_historicals_raw.json")
+
+            gex_engine.save_json(inst_file, {"instruments": []})
+            gex_engine.save_json(quote_file, {"results": []})
+            gex_engine.save_json(underlier_file, {"results": [{"symbol": "TESTSYM", "last_trade_price": "145.50"}]})
+            gex_engine.save_json(hist_file, {"results": [{"symbol": "TESTSYM", "bars": []}]})
+
+            with patch("gex_engine.DOWNLOADS_DIR", os.path.join(temp_dir, "downloads")):
+                found = gex_engine.find_latest_option_files("TESTSYM")
+                self.assertEqual(found["inst_file"], inst_file)
+                self.assertEqual(found["quote_file"], quote_file)
+                self.assertEqual(found["underlier_quote_file"], underlier_file)
+                self.assertEqual(found["hist_file"], hist_file)
+
+                spot = gex_engine.find_latest_underlier_spot("TESTSYM")
+                self.assertEqual(spot, 145.50)
+        finally:
+            shutil.rmtree(temp_dir)
+
+    def test_cmd_update_candidates_with_exclude_active_flag(self):
+        import tempfile
+        import shutil
+        from unittest.mock import patch
+        import gex_engine
+
+        temp_dir = tempfile.mkdtemp()
+        try:
+            downloads_dir = os.path.join(temp_dir, "downloads")
+            os.makedirs(downloads_dir)
+            data_dir = os.path.join(temp_dir, "data")
+            os.makedirs(data_dir)
+
+            candidates_path = os.path.join(data_dir, "candidate_stocks.json")
+            active_path = os.path.join(data_dir, "active_positions_TEST.json")
+
+            gex_engine.save_json(active_path, {
+                "options_positions": {"opt_1": {"Underlier": "HOLDING1"}},
+                "stocks_positions": {"HOLDING2": {}}
+            })
+
+            scan_path = os.path.join(downloads_dir, "test_scan.json")
+            gex_engine.save_json(scan_path, {
+                "data": {
+                    "result": {
+                        "scan_id": "test-id",
+                        "scan_title": "Test Momentum Scan",
+                        "results": [
+                            {"ticker": "CAND1", "columns": {"Last": "50.0", "Volume": "500000", "% Change": "0.05", "Market cap": "2000000000"}},
+                            {"ticker": "HOLDING1", "columns": {"Last": "80.0", "Volume": "600000", "% Change": "0.04", "Market cap": "5000000000"}},
+                        ]
+                    }
+                }
+            })
+
+            class Args:
+                min_price = 5.0
+                max_price = 1000.0
+                min_volume = 200000
+                min_change = 0.3
+                min_market_cap = 1000000000
+                exclude_active = True
+                top = 5
+                date = None
+
+            with patch("gex_engine.DOWNLOADS_DIR", downloads_dir), \
+                 patch("gex_engine.CANDIDATES_FILE", candidates_path), \
+                 patch("gex_engine.REPOSITORY_ROOT", temp_dir):
+                gex_engine.cmd_update_candidates(Args())
+
+            saved = gex_engine.load_json(candidates_path, {})
+            symbols = [c["symbol"] for c in saved.get("candidates", [])]
+            self.assertIn("CAND1", symbols)
+            self.assertNotIn("HOLDING1", symbols)
+            self.assertIn("HOLDING1", saved.get("excluded_symbols", []))
+        finally:
+            shutil.rmtree(temp_dir)
 
     def test_dte_and_expiration_validation(self):
         """Test DTE (days to expiration) boundary handling."""

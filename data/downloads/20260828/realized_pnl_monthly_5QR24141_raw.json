@@ -1,0 +1,40 @@
+{
+  "data": {
+    "account_number": "101241412",
+    "window": "month",
+    "display_currency": "USD",
+    "total_returns": "1222.96",
+    "total_rate_of_return": "0.4273036016268116",
+    "data_points": [
+      {
+        "start_time": "2026-07-31T04:00:00Z",
+        "end_time": "2026-08-01T03:59:59Z",
+        "realized_gain": "685",
+        "rate_of_realized_gain": "0.7405405405405405",
+        "number_of_trades": 1
+      },
+      {
+        "start_time": "2026-08-04T04:00:00Z",
+        "end_time": "2026-08-05T03:59:59Z",
+        "realized_gain": "-409",
+        "rate_of_realized_gain": "-0.4524336283185841",
+        "number_of_trades": 3
+      },
+      {
+        "start_time": "2026-08-19T04:00:00Z",
+        "end_time": "2026-08-20T03:59:59Z",
+        "realized_gain": "1066.96",
+        "rate_of_realized_gain": "2.0016509079993997",
+        "number_of_trades": 1
+      },
+      {
+        "start_time": "2026-08-27T04:00:00Z",
+        "end_time": "2026-08-28T03:59:59Z",
+        "realized_gain": "-120",
+        "rate_of_realized_gain": "-0.24",
+        "number_of_trades": 1
+      }
+    ]
+  },
+  "guide": "Realized profit and loss only; totals exclude unrealized P&L."
+}

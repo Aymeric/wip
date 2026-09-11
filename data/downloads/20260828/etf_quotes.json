@@ -1,0 +1,382 @@
+{
+  "data": {
+    "results": [
+      {
+        "quote": {
+          "symbol": "SPY",
+          "last_trade_price": "769.390000",
+          "venue_last_trade_time": "2026-08-28T19:59:59.93459653Z",
+          "last_non_reg_trade_price": "766.480000",
+          "venue_last_non_reg_trade_time": "2026-08-31T01:06:32.267Z",
+          "adjusted_previous_close": "769.350000",
+          "previous_close": "769.350000",
+          "previous_close_date": "2026-08-28",
+          "bid_price": "766.490000",
+          "venue_bid_time": "2026-08-31T01:06:36.78188184Z",
+          "ask_price": "766.560000",
+          "venue_ask_time": "2026-08-31T01:06:36.78188184Z",
+          "has_traded": true,
+          "state": "active"
+        },
+        "close": {
+          "symbol": "SPY",
+          "date": "2026-08-28",
+          "price": "769.35",
+          "interpolated": false,
+          "source": "sip-list-exchange-close"
+        }
+      },
+      {
+        "quote": {
+          "symbol": "QQQ",
+          "last_trade_price": "716.440000",
+          "venue_last_trade_time": "2026-08-28T19:59:59.999916448Z",
+          "last_non_reg_trade_price": "712.460000",
+          "venue_last_non_reg_trade_time": "2026-08-31T01:06:33.118Z",
+          "adjusted_previous_close": "716.430000",
+          "previous_close": "716.430000",
+          "previous_close_date": "2026-08-28",
+          "bid_price": "712.610000",
+          "venue_bid_time": "2026-08-31T01:06:36.909Z",
+          "ask_price": "712.680000",
+          "venue_ask_time": "2026-08-31T01:06:36.909Z",
+          "has_traded": true,
+          "state": "active"
+        },
+        "close": {
+          "symbol": "QQQ",
+          "date": "2026-08-28",
+          "price": "716.43",
+          "interpolated": false,
+          "source": "sip-list-exchange-close"
+        }
+      },
+      {
+        "quote": {
+          "symbol": "DIA",
+          "last_trade_price": "535.035000",
+          "venue_last_trade_time": "2026-08-28T19:59:59.997987069Z",
+          "last_non_reg_trade_price": "533.820000",
+          "venue_last_non_reg_trade_time": "2026-08-31T01:01:25.999Z",
+          "adjusted_previous_close": "535.060000",
+          "previous_close": "535.060000",
+          "previous_close_date": "2026-08-28",
+          "bid_price": "533.800000",
+          "venue_bid_time": "2026-08-31T01:06:36.079341693Z",
+          "ask_price": "533.870000",
+          "venue_ask_time": "2026-08-31T01:06:36.079341693Z",
+          "has_traded": true,
+          "state": "active"
+        },
+        "close": {
+          "symbol": "DIA",
+          "date": "2026-08-28",
+          "price": "535.06",
+          "interpolated": false,
+          "source": "sip-list-exchange-close"
+        }
+      },
+      {
+        "quote": {
+          "symbol": "IWM",
+          "last_trade_price": "295.750000",
+          "venue_last_trade_time": "2026-08-28T19:59:59.902171144Z",
+          "last_non_reg_trade_price": "294.790000",
+          "venue_last_non_reg_trade_time": "2026-08-31T01:06:24.82Z",
+          "adjusted_previous_close": "295.750000",
+          "previous_close": "295.750000",
+          "previous_close_date": "2026-08-28",
+          "bid_price": "294.800000",
+          "venue_bid_time": "2026-08-31T01:06:37.702779455Z",
+          "ask_price": "294.860000",
+          "venue_ask_time": "2026-08-31T01:06:37.702779455Z",
+          "has_traded": true,
+          "state": "active"
+        },
+        "close": {
+          "symbol": "IWM",
+          "date": "2026-08-28",
+          "price": "295.75",
+          "interpolated": false,
+          "source": "sip-list-exchange-close"
+        }
+      },
+      {
+        "quote": {
+          "symbol": "XLK",
+          "last_trade_price": "185.680000",
+          "venue_last_trade_time": "2026-08-28T19:59:59.769738366Z",
+          "last_non_reg_trade_price": "184.700000",
+          "venue_last_non_reg_trade_time": "2026-08-31T01:06:02.547Z",
+          "adjusted_previous_close": "185.690000",
+          "previous_close": "185.690000",
+          "previous_close_date": "2026-08-28",
+          "bid_price": "184.490000",
+          "venue_bid_time": "2026-08-31T01:06:36.793495881Z",
+          "ask_price": "185.040000",
+          "venue_ask_time": "2026-08-31T01:06:36.793495881Z",
+          "has_traded": true,
+          "state": "active"
+        },
+        "close": {
+          "symbol": "XLK",
+          "date": "2026-08-28",
+          "price": "185.69",
+          "interpolated": false,
+          "source": "sip-list-exchange-close"
+        }
+      },
+      {
+        "quote": {
+          "symbol": "XLF",
+          "last_trade_price": "58.095000",
+          "venue_last_trade_time": "2026-08-28T19:59:58.010363338Z",
+          "last_non_reg_trade_price": "58.040000",
+          "venue_last_non_reg_trade_time": "2026-08-31T01:04:58.971Z",
+          "adjusted_previous_close": "58.100000",
+          "previous_close": "58.100000",
+          "previous_close_date": "2026-08-28",
+          "bid_price": "58.000000",
+          "venue_bid_time": "2026-08-31T00:49:35.89253Z",
+          "ask_price": "58.060000",
+          "venue_ask_time": "2026-08-31T00:49:35.89253Z",
+          "has_traded": true,
+          "state": "active"
+        },
+        "close": {
+          "symbol": "XLF",
+          "date": "2026-08-28",
+          "price": "58.1",
+          "interpolated": false,
+          "source": "sip-list-exchange-close"
+        }
+      },
+      {
+        "quote": {
+          "symbol": "XLU",
+          "last_trade_price": "42.710000",
+          "venue_last_trade_time": "2026-08-28T19:59:58.770651683Z",
+          "last_non_reg_trade_price": "42.760000",
+          "venue_last_non_reg_trade_time": "2026-08-31T00:58:26.848Z",
+          "adjusted_previous_close": "42.730000",
+          "previous_close": "42.730000",
+          "previous_close_date": "2026-08-28",
+          "bid_price": "42.720000",
+          "venue_bid_time": "2026-08-31T01:06:23.476182638Z",
+          "ask_price": "42.870000",
+          "venue_ask_time": "2026-08-31T01:06:23.476182638Z",
+          "has_traded": true,
+          "state": "active"
+        },
+        "close": {
+          "symbol": "XLU",
+          "date": "2026-08-28",
+          "price": "42.73",
+          "interpolated": false,
+          "source": "sip-list-exchange-close"
+        }
+      },
+      {
+        "quote": {
+          "symbol": "XLE",
+          "last_trade_price": "62.650000",
+          "venue_last_trade_time": "2026-08-28T19:59:58.976152274Z",
+          "last_non_reg_trade_price": "63.220000",
+          "venue_last_non_reg_trade_time": "2026-08-31T01:06:34.385Z",
+          "adjusted_previous_close": "62.680000",
+          "previous_close": "62.680000",
+          "previous_close_date": "2026-08-28",
+          "bid_price": "63.210000",
+          "venue_bid_time": "2026-08-31T01:06:34.915907744Z",
+          "ask_price": "63.370000",
+          "venue_ask_time": "2026-08-31T01:06:34.915907744Z",
+          "has_traded": true,
+          "state": "active"
+        },
+        "close": {
+          "symbol": "XLE",
+          "date": "2026-08-28",
+          "price": "62.68",
+          "interpolated": false,
+          "source": "sip-list-exchange-close"
+        }
+      },
+      {
+        "quote": {
+          "symbol": "XLP",
+          "last_trade_price": "85.425000",
+          "venue_last_trade_time": "2026-08-28T19:59:59.540597867Z",
+          "last_non_reg_trade_price": "85.590000",
+          "venue_last_non_reg_trade_time": "2026-08-31T00:27:56.561Z",
+          "adjusted_previous_close": "85.450000",
+          "previous_close": "85.450000",
+          "previous_close_date": "2026-08-28",
+          "bid_price": "85.410000",
+          "venue_bid_time": "2026-08-31T01:06:27.589Z",
+          "ask_price": "85.650000",
+          "venue_ask_time": "2026-08-31T01:06:27.589Z",
+          "has_traded": true,
+          "state": "active"
+        },
+        "close": {
+          "symbol": "XLP",
+          "date": "2026-08-28",
+          "price": "85.45",
+          "interpolated": false,
+          "source": "sip-list-exchange-close"
+        }
+      },
+      {
+        "quote": {
+          "symbol": "XLY",
+          "last_trade_price": "117.210000",
+          "venue_last_trade_time": "2026-08-28T19:59:59.999053757Z",
+          "last_non_reg_trade_price": "116.240000",
+          "venue_last_non_reg_trade_time": "2026-08-31T00:48:27.905Z",
+          "adjusted_previous_close": "117.210000",
+          "previous_close": "117.210000",
+          "previous_close_date": "2026-08-28",
+          "bid_price": "116.200000",
+          "venue_bid_time": "2026-08-31T01:06:37.131830815Z",
+          "ask_price": "117.040000",
+          "venue_ask_time": "2026-08-31T01:06:37.131830815Z",
+          "has_traded": true,
+          "state": "active"
+        },
+        "close": {
+          "symbol": "XLY",
+          "date": "2026-08-28",
+          "price": "117.21",
+          "interpolated": false,
+          "source": "sip-list-exchange-close"
+        }
+      },
+      {
+        "quote": {
+          "symbol": "XLV",
+          "last_trade_price": "171.155000",
+          "venue_last_trade_time": "2026-08-28T19:59:59.94352562Z",
+          "last_non_reg_trade_price": "171.190000",
+          "venue_last_non_reg_trade_time": "2026-08-31T01:04:24.285Z",
+          "adjusted_previous_close": "171.160000",
+          "previous_close": "171.160000",
+          "previous_close_date": "2026-08-28",
+          "bid_price": "171.110000",
+          "venue_bid_time": "2026-08-31T01:04:24.094507433Z",
+          "ask_price": "171.200000",
+          "venue_ask_time": "2026-08-31T01:04:24.094507433Z",
+          "has_traded": true,
+          "state": "active"
+        },
+        "close": {
+          "symbol": "XLV",
+          "date": "2026-08-28",
+          "price": "171.16",
+          "interpolated": false,
+          "source": "sip-list-exchange-close"
+        }
+      },
+      {
+        "quote": {
+          "symbol": "XLB",
+          "last_trade_price": "53.165000",
+          "venue_last_trade_time": "2026-08-28T19:59:55.350619148Z",
+          "last_non_reg_trade_price": "53.190000",
+          "venue_last_non_reg_trade_time": "2026-08-31T00:34:42.397Z",
+          "adjusted_previous_close": "53.180000",
+          "previous_close": "53.180000",
+          "previous_close_date": "2026-08-28",
+          "bid_price": "53.210000",
+          "venue_bid_time": "2026-08-31T01:06:37.026167722Z",
+          "ask_price": "53.610000",
+          "venue_ask_time": "2026-08-31T01:06:37.026167722Z",
+          "has_traded": true,
+          "state": "active"
+        },
+        "close": {
+          "symbol": "XLB",
+          "date": "2026-08-28",
+          "price": "53.18",
+          "interpolated": false,
+          "source": "sip-list-exchange-close"
+        }
+      },
+      {
+        "quote": {
+          "symbol": "XLI",
+          "last_trade_price": "177.100000",
+          "venue_last_trade_time": "2026-08-28T19:59:59.40439116Z",
+          "last_non_reg_trade_price": "176.999700",
+          "venue_last_non_reg_trade_time": "2026-08-28T23:58:15.650471529Z",
+          "adjusted_previous_close": "177.140000",
+          "previous_close": "177.140000",
+          "previous_close_date": "2026-08-28",
+          "bid_price": "176.290000",
+          "venue_bid_time": "2026-08-31T01:06:36.221084393Z",
+          "ask_price": "177.950000",
+          "venue_ask_time": "2026-08-31T01:06:36.221084393Z",
+          "has_traded": true,
+          "state": "active"
+        },
+        "close": {
+          "symbol": "XLI",
+          "date": "2026-08-28",
+          "price": "177.14",
+          "interpolated": false,
+          "source": "sip-list-exchange-close"
+        }
+      },
+      {
+        "quote": {
+          "symbol": "XLRE",
+          "last_trade_price": "44.460000",
+          "venue_last_trade_time": "2026-08-28T19:59:59.769316274Z",
+          "last_non_reg_trade_price": "44.220000",
+          "venue_last_non_reg_trade_time": "2026-08-31T00:28:36.952Z",
+          "adjusted_previous_close": "44.480000",
+          "previous_close": "44.480000",
+          "previous_close_date": "2026-08-28",
+          "bid_price": "44.260000",
+          "venue_bid_time": "2026-08-31T01:06:37.553979022Z",
+          "ask_price": "44.810000",
+          "venue_ask_time": "2026-08-31T01:06:37.553979022Z",
+          "has_traded": true,
+          "state": "active"
+        },
+        "close": {
+          "symbol": "XLRE",
+          "date": "2026-08-28",
+          "price": "44.48",
+          "interpolated": false,
+          "source": "sip-list-exchange-close"
+        }
+      },
+      {
+        "quote": {
+          "symbol": "XLC",
+          "last_trade_price": "112.975000",
+          "venue_last_trade_time": "2026-08-28T19:59:58.142700819Z",
+          "last_non_reg_trade_price": "112.520000",
+          "venue_last_non_reg_trade_time": "2026-08-28T20:30:22.312920793Z",
+          "adjusted_previous_close": "112.990000",
+          "previous_close": "112.990000",
+          "previous_close_date": "2026-08-28",
+          "bid_price": "112.000000",
+          "venue_bid_time": "2026-08-31T01:06:02.795315855Z",
+          "ask_price": "113.560000",
+          "venue_ask_time": "2026-08-31T01:06:02.795315855Z",
+          "has_traded": true,
+          "state": "active"
+        },
+        "close": {
+          "symbol": "XLC",
+          "date": "2026-08-28",
+          "price": "112.99",
+          "interpolated": false,
+          "source": "sip-list-exchange-close"
+        }
+      }
+    ]
+  },
+  "guide": "Each entry in results pairs the live quote with the official prior-session close for the same symbol. Current price: pick whichever of quote.last_trade_price / quote.last_non_reg_trade_price has the more recent timestamp, then verify that timestamp is recent before calling it \"current\" — otherwise phrase as \"as of <time>\". Daily change uses quote.adjusted_previous_close. \"Yesterday's close\" uses results[].close.price (official settled close); when a result is missing close — either closes_error is set tool-wide, or this symbol had no close in an otherwise-successful batch — fall back to quote.previous_close and tell the user the official close lookup is unavailable. Drop bid/ask when zero. Surface has_traded=false or any non-'active' state before quoting a price."
+}

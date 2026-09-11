@@ -1,0 +1,25 @@
+{
+  "scan_id": "36394e13-dd75-4789-a4af-5ba89eaa08b2",
+  "scan_title": "GEX Momentum Candidates 3",
+  "total_items": 1,
+  "results": [
+    {
+      "ticker": "ACVA",
+      "instrument_id": "e96fca9e-c849-4832-bbef-7c827f09aacf",
+      "instrument_type": "EQUITY",
+      "columns": {
+        "% Change": "0.42936288088642666",
+        "Asset type": "STOCK",
+        "Average volume": "4.261113115844999e+06",
+        "Close": "7.22",
+        "Last": "10.32",
+        "Market cap": "1.251484812e+09",
+        "Name": "ACV Auctions",
+        "Net change": "3.1000000000000005",
+        "Relative volume": "1",
+        "Symbol": "ACVA",
+        "Volume": "1.9621073197755e+07"
+      }
+    }
+  ]
+}

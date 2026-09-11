@@ -1,0 +1,97 @@
+{
+  "data": {
+    "results": [
+      {
+        "quote": {
+          "symbol": "SAIL",
+          "price": 18.59,
+          "prev_close": 17.79
+        }
+      },
+      {
+        "quote": {
+          "symbol": "ORCL",
+          "price": 164.0,
+          "prev_close": 162.52
+        }
+      },
+      {
+        "quote": {
+          "symbol": "ASO",
+          "price": 45.89,
+          "prev_close": 44.71
+        }
+      },
+      {
+        "quote": {
+          "symbol": "SIG",
+          "price": 83.89,
+          "prev_close": 82.67
+        }
+      },
+      {
+        "quote": {
+          "symbol": "M",
+          "price": 22.66,
+          "prev_close": 22.45
+        }
+      },
+      {
+        "quote": {
+          "symbol": "AVAV",
+          "price": 150.78,
+          "prev_close": 148.78
+        }
+      },
+      {
+        "quote": {
+          "symbol": "SUNB",
+          "price": 70.18,
+          "prev_close": 69.32
+        }
+      },
+      {
+        "quote": {
+          "symbol": "DSGX",
+          "price": 76.36,
+          "prev_close": 75.56
+        }
+      },
+      {
+        "quote": {
+          "symbol": "FPS",
+          "price": 32.62,
+          "prev_close": 32.31
+        }
+      },
+      {
+        "quote": {
+          "symbol": "COO",
+          "price": 68.1,
+          "prev_close": 67.69
+        }
+      },
+      {
+        "quote": {
+          "symbol": "GME",
+          "price": 18.99,
+          "prev_close": 18.89
+        }
+      },
+      {
+        "quote": {
+          "symbol": "CNM",
+          "price": 44.26,
+          "prev_close": 44.06
+        }
+      },
+      {
+        "quote": {
+          "symbol": "RH",
+          "price": 143.0,
+          "prev_close": 142.45
+        }
+      }
+    ]
+  }
+}

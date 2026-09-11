@@ -1,0 +1,231 @@
+{
+  "symbol": "CPRT",
+  "interval": "day",
+  "bounds": "regular",
+  "bars": [
+    {
+      "begins_at": "2026-08-03T00:00:00Z",
+      "open_price": "29.600000",
+      "close_price": "29.350000",
+      "high_price": "30.070000",
+      "low_price": "29.055000",
+      "volume": 10743065
+    },
+    {
+      "begins_at": "2026-08-04T00:00:00Z",
+      "open_price": "29.045000",
+      "close_price": "29.400000",
+      "high_price": "29.470000",
+      "low_price": "28.830000",
+      "volume": 9411233
+    },
+    {
+      "begins_at": "2026-08-05T00:00:00Z",
+      "open_price": "29.710000",
+      "close_price": "28.910000",
+      "high_price": "29.710000",
+      "low_price": "28.565000",
+      "volume": 9990833
+    },
+    {
+      "begins_at": "2026-08-06T00:00:00Z",
+      "open_price": "28.870000",
+      "close_price": "29.010000",
+      "high_price": "29.080000",
+      "low_price": "28.550500",
+      "volume": 7006311
+    },
+    {
+      "begins_at": "2026-08-07T00:00:00Z",
+      "open_price": "28.705000",
+      "close_price": "29.660000",
+      "high_price": "29.855000",
+      "low_price": "28.700000",
+      "volume": 7803115
+    },
+    {
+      "begins_at": "2026-08-10T00:00:00Z",
+      "open_price": "29.355000",
+      "close_price": "29.590000",
+      "high_price": "29.669000",
+      "low_price": "28.935000",
+      "volume": 8886312
+    },
+    {
+      "begins_at": "2026-08-11T00:00:00Z",
+      "open_price": "29.300000",
+      "close_price": "29.400000",
+      "high_price": "29.655000",
+      "low_price": "29.190000",
+      "volume": 8285120
+    },
+    {
+      "begins_at": "2026-08-12T00:00:00Z",
+      "open_price": "29.075000",
+      "close_price": "28.990000",
+      "high_price": "29.200000",
+      "low_price": "28.675000",
+      "volume": 8444251
+    },
+    {
+      "begins_at": "2026-08-13T00:00:00Z",
+      "open_price": "29.180000",
+      "close_price": "29.390000",
+      "high_price": "29.685000",
+      "low_price": "28.850000",
+      "volume": 8140206
+    },
+    {
+      "begins_at": "2026-08-14T00:00:00Z",
+      "open_price": "29.700000",
+      "close_price": "31.610000",
+      "high_price": "31.735000",
+      "low_price": "29.600000",
+      "volume": 17358448
+    },
+    {
+      "begins_at": "2026-08-17T00:00:00Z",
+      "open_price": "31.330000",
+      "close_price": "31.700000",
+      "high_price": "32.150000",
+      "low_price": "31.280000",
+      "volume": 19659248
+    },
+    {
+      "begins_at": "2026-08-18T00:00:00Z",
+      "open_price": "32.015000",
+      "close_price": "31.510000",
+      "high_price": "33.550000",
+      "low_price": "30.900000",
+      "volume": 17667629
+    },
+    {
+      "begins_at": "2026-08-19T00:00:00Z",
+      "open_price": "31.640000",
+      "close_price": "33.850000",
+      "high_price": "33.880000",
+      "low_price": "31.550000",
+      "volume": 13729467
+    },
+    {
+      "begins_at": "2026-08-20T00:00:00Z",
+      "open_price": "33.490000",
+      "close_price": "34.330000",
+      "high_price": "34.625000",
+      "low_price": "33.420000",
+      "volume": 10797337
+    },
+    {
+      "begins_at": "2026-08-21T00:00:00Z",
+      "open_price": "34.480000",
+      "close_price": "33.800000",
+      "high_price": "34.600000",
+      "low_price": "33.775000",
+      "volume": 11080417
+    },
+    {
+      "begins_at": "2026-08-24T00:00:00Z",
+      "open_price": "34.040000",
+      "close_price": "33.260000",
+      "high_price": "34.080000",
+      "low_price": "33.145000",
+      "volume": 8497617
+    },
+    {
+      "begins_at": "2026-08-25T00:00:00Z",
+      "open_price": "32.800000",
+      "close_price": "33.330000",
+      "high_price": "33.500000",
+      "low_price": "32.219500",
+      "volume": 9982002
+    },
+    {
+      "begins_at": "2026-08-26T00:00:00Z",
+      "open_price": "33.000000",
+      "close_price": "32.670000",
+      "high_price": "33.420000",
+      "low_price": "32.650000",
+      "volume": 5403602
+    },
+    {
+      "begins_at": "2026-08-27T00:00:00Z",
+      "open_price": "32.430000",
+      "close_price": "32.760000",
+      "high_price": "32.960000",
+      "low_price": "32.390000",
+      "volume": 7717621
+    },
+    {
+      "begins_at": "2026-08-28T00:00:00Z",
+      "open_price": "32.855000",
+      "close_price": "32.990000",
+      "high_price": "33.245000",
+      "low_price": "32.840000",
+      "volume": 6773345
+    },
+    {
+      "begins_at": "2026-08-31T00:00:00Z",
+      "open_price": "32.960000",
+      "close_price": "32.990000",
+      "high_price": "33.475000",
+      "low_price": "32.760000",
+      "volume": 9723403
+    },
+    {
+      "begins_at": "2026-09-01T00:00:00Z",
+      "open_price": "32.740000",
+      "close_price": "32.465000",
+      "high_price": "32.860000",
+      "low_price": "32.265000",
+      "volume": 5553198
+    },
+    {
+      "begins_at": "2026-09-02T00:00:00Z",
+      "open_price": "32.375000",
+      "close_price": "32.160000",
+      "high_price": "32.485000",
+      "low_price": "31.894000",
+      "volume": 6512861
+    },
+    {
+      "begins_at": "2026-09-03T00:00:00Z",
+      "open_price": "33.520000",
+      "close_price": "33.580000",
+      "high_price": "34.435000",
+      "low_price": "32.935000",
+      "volume": 8397227
+    },
+    {
+      "begins_at": "2026-09-04T00:00:00Z",
+      "open_price": "33.330000",
+      "close_price": "33.720000",
+      "high_price": "33.910000",
+      "low_price": "33.010000",
+      "volume": 6589887
+    },
+    {
+      "begins_at": "2026-09-08T00:00:00Z",
+      "open_price": "33.170000",
+      "close_price": "32.600000",
+      "high_price": "33.525400",
+      "low_price": "32.400000",
+      "volume": 7172471
+    },
+    {
+      "begins_at": "2026-09-09T00:00:00Z",
+      "open_price": "32.360000",
+      "close_price": "32.030000",
+      "high_price": "32.500000",
+      "low_price": "31.740000",
+      "volume": 7691064
+    },
+    {
+      "begins_at": "2026-09-10T00:00:00Z",
+      "open_price": "32.030000",
+      "close_price": "32.030000",
+      "high_price": "32.030000",
+      "low_price": "32.030000",
+      "volume": 0
+    }
+  ]
+}

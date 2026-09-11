@@ -1,0 +1,1015 @@
+{
+  "data": {
+    "instruments": [
+      {
+        "id": "29ceffc8-9ea8-4d6e-bfaa-d4585afa22da",
+        "chain_id": "49cbdfd7-550d-405b-9021-e7a9fd689f82",
+        "chain_symbol": "ACVA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "2.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "5404a241-8d5a-4e8e-8e91-ea58863afaf6",
+        "chain_id": "49cbdfd7-550d-405b-9021-e7a9fd689f82",
+        "chain_symbol": "ACVA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-16",
+        "sellout_datetime": "2026-10-16T19:30:00+00:00",
+        "strike_price": "2.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "5d2e6434-fcf9-4e29-8dee-b1b8ed425e78",
+        "chain_id": "49cbdfd7-550d-405b-9021-e7a9fd689f82",
+        "chain_symbol": "ACVA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "2.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "614426f6-fcbe-4a93-bf69-77b2c5c2d425",
+        "chain_id": "49cbdfd7-550d-405b-9021-e7a9fd689f82",
+        "chain_symbol": "ACVA",
+        "underlying_type": "equity",
+        "expiration_date": "2027-02-19",
+        "sellout_datetime": "2027-02-19T20:30:00+00:00",
+        "strike_price": "2.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "67ae5642-eaa6-4f63-9713-e05aeb047210",
+        "chain_id": "49cbdfd7-550d-405b-9021-e7a9fd689f82",
+        "chain_symbol": "ACVA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-11-20",
+        "sellout_datetime": "2026-11-20T20:30:00+00:00",
+        "strike_price": "2.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "72d0f179-ab81-4945-acc2-1e568219a902",
+        "chain_id": "49cbdfd7-550d-405b-9021-e7a9fd689f82",
+        "chain_symbol": "ACVA",
+        "underlying_type": "equity",
+        "expiration_date": "2027-12-17",
+        "sellout_datetime": "2027-12-17T20:30:00+00:00",
+        "strike_price": "2.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "735319c3-de8f-4448-ac85-9ab969d2393b",
+        "chain_id": "49cbdfd7-550d-405b-9021-e7a9fd689f82",
+        "chain_symbol": "ACVA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-11-20",
+        "sellout_datetime": "2026-11-20T20:30:00+00:00",
+        "strike_price": "2.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "9a75134e-820d-44de-a620-3edaeb619715",
+        "chain_id": "49cbdfd7-550d-405b-9021-e7a9fd689f82",
+        "chain_symbol": "ACVA",
+        "underlying_type": "equity",
+        "expiration_date": "2027-12-17",
+        "sellout_datetime": "2027-12-17T20:30:00+00:00",
+        "strike_price": "2.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "9d04872d-b509-4d5a-9b94-487a6a114d6e",
+        "chain_id": "49cbdfd7-550d-405b-9021-e7a9fd689f82",
+        "chain_symbol": "ACVA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-16",
+        "sellout_datetime": "2026-10-16T19:30:00+00:00",
+        "strike_price": "2.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "d9df91ca-3105-4108-a926-503480679c2a",
+        "chain_id": "49cbdfd7-550d-405b-9021-e7a9fd689f82",
+        "chain_symbol": "ACVA",
+        "underlying_type": "equity",
+        "expiration_date": "2027-02-19",
+        "sellout_datetime": "2027-02-19T20:30:00+00:00",
+        "strike_price": "2.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "34fe6d2a-acc2-4771-aaa8-4ebabd24a5b6",
+        "chain_id": "49cbdfd7-550d-405b-9021-e7a9fd689f82",
+        "chain_symbol": "ACVA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-16",
+        "sellout_datetime": "2026-10-16T19:30:00+00:00",
+        "strike_price": "5.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "363a209d-5e14-4f0c-a599-229685bd81f0",
+        "chain_id": "49cbdfd7-550d-405b-9021-e7a9fd689f82",
+        "chain_symbol": "ACVA",
+        "underlying_type": "equity",
+        "expiration_date": "2027-02-19",
+        "sellout_datetime": "2027-02-19T20:30:00+00:00",
+        "strike_price": "5.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "3c879cf7-eb4f-469d-9656-eb1d9b7382f1",
+        "chain_id": "49cbdfd7-550d-405b-9021-e7a9fd689f82",
+        "chain_symbol": "ACVA",
+        "underlying_type": "equity",
+        "expiration_date": "2027-12-17",
+        "sellout_datetime": "2027-12-17T20:30:00+00:00",
+        "strike_price": "5.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "4561dc12-b306-4ed2-9245-c0f2b89b1b9b",
+        "chain_id": "49cbdfd7-550d-405b-9021-e7a9fd689f82",
+        "chain_symbol": "ACVA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-11-20",
+        "sellout_datetime": "2026-11-20T20:30:00+00:00",
+        "strike_price": "5.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "61093057-aa90-4038-8e34-c7fc0c1f6903",
+        "chain_id": "49cbdfd7-550d-405b-9021-e7a9fd689f82",
+        "chain_symbol": "ACVA",
+        "underlying_type": "equity",
+        "expiration_date": "2027-02-19",
+        "sellout_datetime": "2027-02-19T20:30:00+00:00",
+        "strike_price": "5.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "a1363540-40db-4a1a-a328-40c8a66795a9",
+        "chain_id": "49cbdfd7-550d-405b-9021-e7a9fd689f82",
+        "chain_symbol": "ACVA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "5.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "bf0d4abf-28dc-4087-8112-de2d58607090",
+        "chain_id": "49cbdfd7-550d-405b-9021-e7a9fd689f82",
+        "chain_symbol": "ACVA",
+        "underlying_type": "equity",
+        "expiration_date": "2027-12-17",
+        "sellout_datetime": "2027-12-17T20:30:00+00:00",
+        "strike_price": "5.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "c5dd0200-d436-47b6-b0e4-e4de1065b610",
+        "chain_id": "49cbdfd7-550d-405b-9021-e7a9fd689f82",
+        "chain_symbol": "ACVA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-11-20",
+        "sellout_datetime": "2026-11-20T20:30:00+00:00",
+        "strike_price": "5.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "cf66e0f9-94ff-4613-ad13-3aed1ca868b8",
+        "chain_id": "49cbdfd7-550d-405b-9021-e7a9fd689f82",
+        "chain_symbol": "ACVA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "5.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "e4b64d9b-d0b7-4cd9-97a7-52a0be3b3911",
+        "chain_id": "49cbdfd7-550d-405b-9021-e7a9fd689f82",
+        "chain_symbol": "ACVA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-16",
+        "sellout_datetime": "2026-10-16T19:30:00+00:00",
+        "strike_price": "5.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "0612998a-5a70-46e8-846b-9f8474d609ef",
+        "chain_id": "49cbdfd7-550d-405b-9021-e7a9fd689f82",
+        "chain_symbol": "ACVA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-11-20",
+        "sellout_datetime": "2026-11-20T20:30:00+00:00",
+        "strike_price": "7.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "103cb3ac-7fd0-4291-9fc8-0abf029bef4e",
+        "chain_id": "49cbdfd7-550d-405b-9021-e7a9fd689f82",
+        "chain_symbol": "ACVA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-16",
+        "sellout_datetime": "2026-10-16T19:30:00+00:00",
+        "strike_price": "7.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "1978aefb-407a-4d18-bf82-3dd8fd0210bc",
+        "chain_id": "49cbdfd7-550d-405b-9021-e7a9fd689f82",
+        "chain_symbol": "ACVA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-11-20",
+        "sellout_datetime": "2026-11-20T20:30:00+00:00",
+        "strike_price": "7.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "20356405-4a5c-4663-a63b-1c6e8c0ea67d",
+        "chain_id": "49cbdfd7-550d-405b-9021-e7a9fd689f82",
+        "chain_symbol": "ACVA",
+        "underlying_type": "equity",
+        "expiration_date": "2027-12-17",
+        "sellout_datetime": "2027-12-17T20:30:00+00:00",
+        "strike_price": "7.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "2f1a9109-3260-47d4-946d-40d4859d5430",
+        "chain_id": "49cbdfd7-550d-405b-9021-e7a9fd689f82",
+        "chain_symbol": "ACVA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-16",
+        "sellout_datetime": "2026-10-16T19:30:00+00:00",
+        "strike_price": "7.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "6cef930f-5ca5-4c78-9c66-6091efe6a7d7",
+        "chain_id": "49cbdfd7-550d-405b-9021-e7a9fd689f82",
+        "chain_symbol": "ACVA",
+        "underlying_type": "equity",
+        "expiration_date": "2027-02-19",
+        "sellout_datetime": "2027-02-19T20:30:00+00:00",
+        "strike_price": "7.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "718f418b-054c-4012-be24-dbe6c4dfc3a6",
+        "chain_id": "49cbdfd7-550d-405b-9021-e7a9fd689f82",
+        "chain_symbol": "ACVA",
+        "underlying_type": "equity",
+        "expiration_date": "2027-02-19",
+        "sellout_datetime": "2027-02-19T20:30:00+00:00",
+        "strike_price": "7.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "c0065145-7b45-49c7-9a3f-a390bd1b9fff",
+        "chain_id": "49cbdfd7-550d-405b-9021-e7a9fd689f82",
+        "chain_symbol": "ACVA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "7.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "dc25602d-46dc-4be8-ad56-4d3fa45f5f7f",
+        "chain_id": "49cbdfd7-550d-405b-9021-e7a9fd689f82",
+        "chain_symbol": "ACVA",
+        "underlying_type": "equity",
+        "expiration_date": "2027-12-17",
+        "sellout_datetime": "2027-12-17T20:30:00+00:00",
+        "strike_price": "7.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "e5a0315e-23af-40ec-aef2-755be51039e2",
+        "chain_id": "49cbdfd7-550d-405b-9021-e7a9fd689f82",
+        "chain_symbol": "ACVA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "7.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "0736e6b2-8e9a-4421-85db-91c95e3106a7",
+        "chain_id": "49cbdfd7-550d-405b-9021-e7a9fd689f82",
+        "chain_symbol": "ACVA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-16",
+        "sellout_datetime": "2026-10-16T19:30:00+00:00",
+        "strike_price": "10.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "4666cdeb-79f5-4f47-917f-4ad3460c93e3",
+        "chain_id": "49cbdfd7-550d-405b-9021-e7a9fd689f82",
+        "chain_symbol": "ACVA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-16",
+        "sellout_datetime": "2026-10-16T19:30:00+00:00",
+        "strike_price": "10.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "6879ca5f-6a03-4aea-b298-08ff3f144a47",
+        "chain_id": "49cbdfd7-550d-405b-9021-e7a9fd689f82",
+        "chain_symbol": "ACVA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "10.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "6e037163-315d-4c73-98c5-1b3be8c42aab",
+        "chain_id": "49cbdfd7-550d-405b-9021-e7a9fd689f82",
+        "chain_symbol": "ACVA",
+        "underlying_type": "equity",
+        "expiration_date": "2027-02-19",
+        "sellout_datetime": "2027-02-19T20:30:00+00:00",
+        "strike_price": "10.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "810d97f8-cf3f-4fae-90ee-4103f070bce2",
+        "chain_id": "49cbdfd7-550d-405b-9021-e7a9fd689f82",
+        "chain_symbol": "ACVA",
+        "underlying_type": "equity",
+        "expiration_date": "2027-12-17",
+        "sellout_datetime": "2027-12-17T20:30:00+00:00",
+        "strike_price": "10.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "a49aa7f2-85eb-4715-be9e-c698340df4dd",
+        "chain_id": "49cbdfd7-550d-405b-9021-e7a9fd689f82",
+        "chain_symbol": "ACVA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-11-20",
+        "sellout_datetime": "2026-11-20T20:30:00+00:00",
+        "strike_price": "10.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "af6acd35-f662-4343-8ce2-8e515e1c0cf9",
+        "chain_id": "49cbdfd7-550d-405b-9021-e7a9fd689f82",
+        "chain_symbol": "ACVA",
+        "underlying_type": "equity",
+        "expiration_date": "2027-12-17",
+        "sellout_datetime": "2027-12-17T20:30:00+00:00",
+        "strike_price": "10.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "bc4fcdff-0891-4316-a9b8-4d420ea2ff06",
+        "chain_id": "49cbdfd7-550d-405b-9021-e7a9fd689f82",
+        "chain_symbol": "ACVA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-11-20",
+        "sellout_datetime": "2026-11-20T20:30:00+00:00",
+        "strike_price": "10.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "bef780cc-9d11-4338-97bd-ca44e130ba7e",
+        "chain_id": "49cbdfd7-550d-405b-9021-e7a9fd689f82",
+        "chain_symbol": "ACVA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "10.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "c4e82267-dd34-450a-9ed7-d3dec03200b4",
+        "chain_id": "49cbdfd7-550d-405b-9021-e7a9fd689f82",
+        "chain_symbol": "ACVA",
+        "underlying_type": "equity",
+        "expiration_date": "2027-02-19",
+        "sellout_datetime": "2027-02-19T20:30:00+00:00",
+        "strike_price": "10.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "17a1bed0-0c48-4a90-89a3-ea3acc3d7c30",
+        "chain_id": "49cbdfd7-550d-405b-9021-e7a9fd689f82",
+        "chain_symbol": "ACVA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "12.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "2adf950d-5e11-42ea-ac39-adc4e72d3d66",
+        "chain_id": "49cbdfd7-550d-405b-9021-e7a9fd689f82",
+        "chain_symbol": "ACVA",
+        "underlying_type": "equity",
+        "expiration_date": "2027-12-17",
+        "sellout_datetime": "2027-12-17T20:30:00+00:00",
+        "strike_price": "12.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "32a10e5b-4e25-477c-8c57-88f8655a0122",
+        "chain_id": "49cbdfd7-550d-405b-9021-e7a9fd689f82",
+        "chain_symbol": "ACVA",
+        "underlying_type": "equity",
+        "expiration_date": "2027-02-19",
+        "sellout_datetime": "2027-02-19T20:30:00+00:00",
+        "strike_price": "12.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "3a3b8dfb-37fe-4d3c-8af6-b9eb61fe6af8",
+        "chain_id": "49cbdfd7-550d-405b-9021-e7a9fd689f82",
+        "chain_symbol": "ACVA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-16",
+        "sellout_datetime": "2026-10-16T19:30:00+00:00",
+        "strike_price": "12.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "3b141d93-30d8-47e4-ae98-4225133fbf23",
+        "chain_id": "49cbdfd7-550d-405b-9021-e7a9fd689f82",
+        "chain_symbol": "ACVA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-11-20",
+        "sellout_datetime": "2026-11-20T20:30:00+00:00",
+        "strike_price": "12.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "9dca5d9d-48db-41e9-9ff8-d01b63d70bae",
+        "chain_id": "49cbdfd7-550d-405b-9021-e7a9fd689f82",
+        "chain_symbol": "ACVA",
+        "underlying_type": "equity",
+        "expiration_date": "2027-02-19",
+        "sellout_datetime": "2027-02-19T20:30:00+00:00",
+        "strike_price": "12.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "dabcae99-d148-4cb4-9b18-51c2bb5c5f7d",
+        "chain_id": "49cbdfd7-550d-405b-9021-e7a9fd689f82",
+        "chain_symbol": "ACVA",
+        "underlying_type": "equity",
+        "expiration_date": "2027-12-17",
+        "sellout_datetime": "2027-12-17T20:30:00+00:00",
+        "strike_price": "12.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "e9c4f3a1-df1f-4c13-ac8a-69c2d7953bde",
+        "chain_id": "49cbdfd7-550d-405b-9021-e7a9fd689f82",
+        "chain_symbol": "ACVA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "12.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "f06b34d5-6778-429e-a948-ac33741ee063",
+        "chain_id": "49cbdfd7-550d-405b-9021-e7a9fd689f82",
+        "chain_symbol": "ACVA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-16",
+        "sellout_datetime": "2026-10-16T19:30:00+00:00",
+        "strike_price": "12.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "fa86bf68-214b-4825-ac9c-de6d291b401c",
+        "chain_id": "49cbdfd7-550d-405b-9021-e7a9fd689f82",
+        "chain_symbol": "ACVA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-11-20",
+        "sellout_datetime": "2026-11-20T20:30:00+00:00",
+        "strike_price": "12.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "240755b2-f64d-45c2-848b-465676f97773",
+        "chain_id": "49cbdfd7-550d-405b-9021-e7a9fd689f82",
+        "chain_symbol": "ACVA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-16",
+        "sellout_datetime": "2026-10-16T19:30:00+00:00",
+        "strike_price": "15.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "2567a88d-5387-4f45-9922-dbabdba4b3d1",
+        "chain_id": "49cbdfd7-550d-405b-9021-e7a9fd689f82",
+        "chain_symbol": "ACVA",
+        "underlying_type": "equity",
+        "expiration_date": "2027-02-19",
+        "sellout_datetime": "2027-02-19T20:30:00+00:00",
+        "strike_price": "15.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "3e9e50d3-71ec-4f56-bb2a-e17ab20e6df2",
+        "chain_id": "49cbdfd7-550d-405b-9021-e7a9fd689f82",
+        "chain_symbol": "ACVA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-11-20",
+        "sellout_datetime": "2026-11-20T20:30:00+00:00",
+        "strike_price": "15.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "6534ead7-8082-4370-96e8-7a651e7d4505",
+        "chain_id": "49cbdfd7-550d-405b-9021-e7a9fd689f82",
+        "chain_symbol": "ACVA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-11-20",
+        "sellout_datetime": "2026-11-20T20:30:00+00:00",
+        "strike_price": "15.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "f230f0d5-d241-4d30-880e-4d5ef444719c",
+        "chain_id": "49cbdfd7-550d-405b-9021-e7a9fd689f82",
+        "chain_symbol": "ACVA",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-16",
+        "sellout_datetime": "2026-10-16T19:30:00+00:00",
+        "strike_price": "15.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "f381b2cb-7be2-4b95-a34d-3bc279d2bd42",
+        "chain_id": "49cbdfd7-550d-405b-9021-e7a9fd689f82",
+        "chain_symbol": "ACVA",
+        "underlying_type": "equity",
+        "expiration_date": "2027-02-19",
+        "sellout_datetime": "2027-02-19T20:30:00+00:00",
+        "strike_price": "15.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      }
+    ]
+  },
+  "guide": "Present chain_symbol, expiration_date, type, strike_price; flag state when not 'active' or tradability when not 'tradable'. Pass id to an order's leg.option_id. Quote sellout_datetime when the user asks \"when will Robinhood force-close this position?\" — it is the authoritative per-contract timestamp covering equity/index, AM/PM settle, and T-1 logic. underlying_type ('equity' or 'index') is informational; mention only when it affects strategy. When next is non-null, extract the cursor query param and call this tool again."
+}

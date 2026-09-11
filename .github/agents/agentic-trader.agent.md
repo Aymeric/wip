@@ -45,9 +45,8 @@ Before drafting any order, confirm trading clearance:
 #### For Options:
 1. Identify if the account has option levels enabled (`option_level_2` or `option_level_3`). If-empty, stop and instruct on options elevation.
 2. Isolate the exact contract identification:
-   - Call `robinhood-trading/get_option_chains` with the underlying symbol.
-   - Choose the expiration (closest to 30-45 calendar days out, avoiding short weekly decays).
-   - Call `robinhood-trading/get_option_instruments` to locate the target strike and option type (`call` or `put`).
+   - Call `robinhood-trading/get_option_instruments(chain_symbol=UNDERLYING)` to inspect available contracts and expirations (closest to 30-45 calendar days out, avoiding short weekly decays).
+   - Filter or query with `expiration_dates` to locate the target strike and option type (`call` or `put`).
    - Settle on the unique `option_id` string.
 
 ---

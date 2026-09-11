@@ -521,6 +521,7 @@ If a defensive or trailing stop is triggered, any subsequent profit-taking evalu
 3. **Time-Halted Progress Stop (7-Day Limit)**
   - **Condition**: By Day 7, the stock's spot progress relative to its positive breakout level is under 50%:
      $$\text{Progress \%} = \frac{\text{Spot} - \text{pTrans}}{\text{+GEX} - \text{pTrans}} \times 100 < 50.0\%$$
+   - **Exemption**: LEAPs and long-dated options ($\text{DTE} > 90$) are automatically exempt from this 7-day velocity time stop due to minimal theta decay and longer investment horizons.
    - **Priority**: **Tier 3**.
    - **Action**: Close out position immediately. Avoids tying up portfolio capital in stale, grinding consolidations.
 

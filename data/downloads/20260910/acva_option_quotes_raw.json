@@ -1,0 +1,198 @@
+{
+  "data": {
+    "results": [
+      {
+        "quote": {
+          "instrument_id": "5404a241-8d5a-4e8e-8e91-ea58863afaf6",
+          "ask_price": "5.500000",
+          "bid_price": "4.300000",
+          "mark_price": "4.900000",
+          "previous_close_price": "4.700000",
+          "previous_close_date": "2026-09-09",
+          "implied_volatility": "2.694502",
+          "delta": "0.953971",
+          "gamma": "0.015844",
+          "open_interest": 2,
+          "volume": 0,
+          "updated_at": "2026-09-10T19:59:02.194465416Z"
+        }
+      },
+      {
+        "quote": {
+          "instrument_id": "e4b64d9b-d0b7-4cd9-97a7-52a0be3b3911",
+          "ask_price": "3.000000",
+          "bid_price": "2.000000",
+          "mark_price": "2.500000",
+          "previous_close_price": "2.280000",
+          "previous_close_date": "2026-09-09",
+          "implied_volatility": "1.341924",
+          "delta": "0.863340",
+          "gamma": "0.072164",
+          "open_interest": 5,
+          "volume": 0,
+          "updated_at": "2026-09-10T19:59:02.194065423Z"
+        }
+      },
+      {
+        "quote": {
+          "instrument_id": "2f1a9109-3260-47d4-946d-40d4859d5430",
+          "ask_price": "0.950000",
+          "bid_price": "0.500000",
+          "mark_price": "0.725000",
+          "previous_close_price": "0.700000",
+          "previous_close_date": "2026-09-09",
+          "implied_volatility": "0.927523",
+          "delta": "0.511678",
+          "gamma": "0.190157",
+          "open_interest": 2079,
+          "volume": 11,
+          "updated_at": "2026-09-10T19:59:52.350689554Z"
+        }
+      },
+      {
+        "quote": {
+          "instrument_id": "0736e6b2-8e9a-4421-85db-91c95e3106a7",
+          "ask_price": "0.550000",
+          "bid_price": "0.100000",
+          "mark_price": "0.325000",
+          "previous_close_price": "0.150000",
+          "previous_close_date": "2026-09-09",
+          "implied_volatility": "1.181588",
+          "delta": "0.246958",
+          "gamma": "0.118178",
+          "open_interest": 4579,
+          "volume": 0,
+          "updated_at": "2026-09-10T19:59:31.240451931Z"
+        }
+      },
+      {
+        "quote": {
+          "instrument_id": "3a3b8dfb-37fe-4d3c-8af6-b9eb61fe6af8",
+          "ask_price": "0.750000",
+          "bid_price": "0.000000",
+          "mark_price": "0.375000",
+          "previous_close_price": "0.010000",
+          "previous_close_date": "2026-09-09",
+          "implied_volatility": "0.776872",
+          "delta": "0.017088",
+          "gamma": "0.024108",
+          "open_interest": 0,
+          "volume": 0,
+          "updated_at": "2026-09-10T19:59:02.235463502Z"
+        }
+      },
+      {
+        "quote": {
+          "instrument_id": "240755b2-f64d-45c2-848b-465676f97773",
+          "ask_price": "0.250000",
+          "bid_price": "0.000000",
+          "mark_price": "0.125000",
+          "previous_close_price": "0.010000",
+          "previous_close_date": "2026-09-09",
+          "implied_volatility": "0.987574",
+          "delta": "0.014004",
+          "gamma": "0.015987",
+          "open_interest": 0,
+          "volume": 0,
+          "updated_at": "2026-09-10T19:59:33.865590288Z"
+        }
+      },
+      {
+        "quote": {
+          "instrument_id": "9d04872d-b509-4d5a-9b94-487a6a114d6e",
+          "ask_price": "0.050000",
+          "bid_price": "0.000000",
+          "mark_price": "0.025000",
+          "previous_close_price": "0.010000",
+          "previous_close_date": "2026-09-09",
+          "implied_volatility": "1.551285",
+          "delta": "-0.007415",
+          "gamma": "0.005846",
+          "open_interest": 0,
+          "volume": 0,
+          "updated_at": "2026-09-10T13:30:03.096169899Z"
+        }
+      },
+      {
+        "quote": {
+          "instrument_id": "34fe6d2a-acc2-4771-aaa8-4ebabd24a5b6",
+          "ask_price": "0.850000",
+          "bid_price": "0.000000",
+          "mark_price": "0.425000",
+          "previous_close_price": "0.010000",
+          "previous_close_date": "2026-09-09",
+          "implied_volatility": "0.599548",
+          "delta": "-0.018962",
+          "gamma": "0.034143",
+          "open_interest": 32,
+          "volume": 0,
+          "updated_at": "2026-09-10T19:59:31.296400411Z"
+        }
+      },
+      {
+        "quote": {
+          "instrument_id": "103cb3ac-7fd0-4291-9fc8-0abf029bef4e",
+          "ask_price": "1.100000",
+          "bid_price": "0.700000",
+          "mark_price": "0.900000",
+          "previous_close_price": "0.830000",
+          "previous_close_date": "2026-09-09",
+          "implied_volatility": "0.840798",
+          "delta": "-0.499400",
+          "gamma": "0.210188",
+          "open_interest": 116,
+          "volume": 0,
+          "updated_at": "2026-09-10T19:59:41.670927651Z"
+        }
+      },
+      {
+        "quote": {
+          "instrument_id": "4666cdeb-79f5-4f47-917f-4ad3460c93e3",
+          "ask_price": "3.400000",
+          "bid_price": "2.200000",
+          "mark_price": "2.800000",
+          "previous_close_price": "3.000000",
+          "previous_close_date": "2026-09-09",
+          "implied_volatility": "0.717416",
+          "delta": "-0.888047",
+          "gamma": "0.062777",
+          "open_interest": 0,
+          "volume": 0,
+          "updated_at": "2026-09-10T19:59:02.443444317Z"
+        }
+      },
+      {
+        "quote": {
+          "instrument_id": "f06b34d5-6778-429e-a948-ac33741ee063",
+          "ask_price": "5.800000",
+          "bid_price": "4.600000",
+          "mark_price": "5.200000",
+          "previous_close_price": "5.450000",
+          "previous_close_date": "2026-09-09",
+          "implied_volatility": "0.000671",
+          "delta": "-1.000000",
+          "gamma": "0.000000",
+          "open_interest": 0,
+          "volume": 0,
+          "updated_at": "2026-09-10T19:59:02.194065423Z"
+        }
+      },
+      {
+        "quote": {
+          "instrument_id": "f230f0d5-d241-4d30-880e-4d5ef444719c",
+          "ask_price": "8.400000",
+          "bid_price": "7.100000",
+          "mark_price": "7.750000",
+          "previous_close_price": "7.850000",
+          "previous_close_date": "2026-09-09",
+          "implied_volatility": "0.000671",
+          "delta": "-1.000000",
+          "gamma": "0.000000",
+          "open_interest": 0,
+          "volume": 0,
+          "updated_at": "2026-09-10T19:59:04.86388931Z"
+        }
+      }
+    ]
+  }
+}

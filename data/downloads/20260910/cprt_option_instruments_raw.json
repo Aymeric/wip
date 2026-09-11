@@ -1,0 +1,1808 @@
+{
+  "data": {
+    "instruments": [
+      {
+        "id": "034db42e-7f4e-4895-922a-a7203a870b54",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2027-02-19",
+        "sellout_datetime": "2027-02-19T20:30:00+00:00",
+        "strike_price": "15.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "59704535-a5b4-4c7d-8845-4643e34624f7",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2028-01-21",
+        "sellout_datetime": "2028-01-21T20:30:00+00:00",
+        "strike_price": "15.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "64ecf644-cb10-4363-85e4-1c0c1aa83145",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "15.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "69737965-3f12-427d-bc64-7577c98470aa",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2027-03-19",
+        "sellout_datetime": "2027-03-19T19:30:00+00:00",
+        "strike_price": "15.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "746cdf1e-5732-492d-913a-e9d14cca3680",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2027-02-19",
+        "sellout_datetime": "2027-02-19T20:30:00+00:00",
+        "strike_price": "15.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "757fa05b-8bef-4a97-969c-41802d62622e",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2028-01-21",
+        "sellout_datetime": "2028-01-21T20:30:00+00:00",
+        "strike_price": "15.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "8e445b33-00b0-48f7-9d55-a4280652ac73",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2027-03-19",
+        "sellout_datetime": "2027-03-19T19:30:00+00:00",
+        "strike_price": "15.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "a5d358ce-36fc-47fc-a5c9-ff92c7b12b4d",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2027-06-17",
+        "sellout_datetime": "2027-06-17T19:30:00+00:00",
+        "strike_price": "15.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "abea5004-6b95-4397-8af6-c8c038955299",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "15.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "b1355df9-9178-4445-a0f6-097c8d212a61",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "15.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "c56367d5-33a1-4e46-b261-7b8de426cf2b",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2026-12-18",
+        "sellout_datetime": "2026-12-18T20:30:00+00:00",
+        "strike_price": "15.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "c60d5def-3770-4f4e-9a88-c35ff7f1fe5f",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2026-12-18",
+        "sellout_datetime": "2026-12-18T20:30:00+00:00",
+        "strike_price": "15.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "d4acaaf1-17cb-47f5-a3b5-6ec731293b10",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "15.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "fed0f6aa-ded0-4a6c-bc29-7869ca0c3be3",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2027-06-17",
+        "sellout_datetime": "2027-06-17T19:30:00+00:00",
+        "strike_price": "15.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "053bfa59-f278-46f9-8d58-3e699eae2c36",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2026-12-18",
+        "sellout_datetime": "2026-12-18T20:30:00+00:00",
+        "strike_price": "17.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "1b9f976f-433c-4bb5-9086-f74d5f6608f1",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2027-06-17",
+        "sellout_datetime": "2027-06-17T19:30:00+00:00",
+        "strike_price": "17.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "1c6ab67e-330e-48b7-abb1-8efd73de3123",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2026-12-18",
+        "sellout_datetime": "2026-12-18T20:30:00+00:00",
+        "strike_price": "17.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "1d9cfa31-c942-475c-8045-baf9f1cd1930",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2027-09-17",
+        "sellout_datetime": "2027-09-17T19:30:00+00:00",
+        "strike_price": "17.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "217bd71a-8539-4b39-9947-5710706b9331",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2027-06-17",
+        "sellout_datetime": "2027-06-17T19:30:00+00:00",
+        "strike_price": "17.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "33e65d2c-81d3-4dc2-b275-8805fc322300",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "17.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "4ab9c8be-eb01-43e1-b903-89418ed032fa",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2028-01-21",
+        "sellout_datetime": "2028-01-21T20:30:00+00:00",
+        "strike_price": "17.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "4d0ba9b5-0987-45f6-a882-6e28c22411d5",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2027-02-19",
+        "sellout_datetime": "2027-02-19T20:30:00+00:00",
+        "strike_price": "17.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "739325a9-8680-4db6-98f1-558bc04126b1",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2026-11-20",
+        "sellout_datetime": "2026-11-20T20:30:00+00:00",
+        "strike_price": "17.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "7ae20d5c-28c6-4fda-ba99-b59c100b4a51",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2027-03-19",
+        "sellout_datetime": "2027-03-19T19:30:00+00:00",
+        "strike_price": "17.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "872644fa-7668-4be7-8cf7-b92e8943c51a",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2028-01-21",
+        "sellout_datetime": "2028-01-21T20:30:00+00:00",
+        "strike_price": "17.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "917ad38c-91d9-43b7-91f6-6a33f18d08f9",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2027-09-17",
+        "sellout_datetime": "2027-09-17T19:30:00+00:00",
+        "strike_price": "17.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "9a14ce9c-0aee-47bd-9391-d5a0fefee4d2",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2026-11-20",
+        "sellout_datetime": "2026-11-20T20:30:00+00:00",
+        "strike_price": "17.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "bf05ab16-d0bb-4d6d-b159-81f601dd9234",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2027-03-19",
+        "sellout_datetime": "2027-03-19T19:30:00+00:00",
+        "strike_price": "17.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "d6638799-d7f7-45b3-9a54-e6621cb82495",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "17.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "e7a50e36-9e55-439b-99f1-3848ad6922cf",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "17.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "ec1012b5-c0ea-4b04-9ae0-120ebe577728",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "17.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "eddd3172-cf39-4e74-be11-c986025f5ee0",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2027-02-19",
+        "sellout_datetime": "2027-02-19T20:30:00+00:00",
+        "strike_price": "17.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "f372a54a-0863-42d9-9a8b-dffabfaf2227",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-16",
+        "sellout_datetime": "2026-10-16T19:30:00+00:00",
+        "strike_price": "17.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "faae0221-0629-41dc-88ad-c3b81426650c",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-16",
+        "sellout_datetime": "2026-10-16T19:30:00+00:00",
+        "strike_price": "17.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "04349b7f-ad7b-4d2a-b29e-1942ba992634",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2027-09-17",
+        "sellout_datetime": "2027-09-17T19:30:00+00:00",
+        "strike_price": "20.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "0746f4c4-335d-4aa6-bbe2-f74ebc268cbb",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2027-02-19",
+        "sellout_datetime": "2027-02-19T20:30:00+00:00",
+        "strike_price": "20.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "17ae776b-1abf-4bc6-beec-1a6780842d35",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "20.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "1a38c889-8f83-4ac9-868a-ca75494441a6",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2027-09-17",
+        "sellout_datetime": "2027-09-17T19:30:00+00:00",
+        "strike_price": "20.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "3d1301d4-100d-4ef8-9a78-3ffd0e4f6e00",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "20.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "4c259a05-9e17-4bc8-9d57-4e62a91969df",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2027-06-17",
+        "sellout_datetime": "2027-06-17T19:30:00+00:00",
+        "strike_price": "20.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "649d1676-81bf-4f49-91f2-8a5a7a880b3c",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2026-11-20",
+        "sellout_datetime": "2026-11-20T20:30:00+00:00",
+        "strike_price": "20.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "69a601cb-9fdb-46f4-ac44-611b13acb43e",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2028-01-21",
+        "sellout_datetime": "2028-01-21T20:30:00+00:00",
+        "strike_price": "20.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "78656b89-c70c-43f8-82d4-4c324262e063",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2026-12-18",
+        "sellout_datetime": "2026-12-18T20:30:00+00:00",
+        "strike_price": "20.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "7ad97ce8-e544-491c-8d1a-dd742cb1d8b4",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2027-06-17",
+        "sellout_datetime": "2027-06-17T19:30:00+00:00",
+        "strike_price": "20.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "954c9731-ac64-4b74-bc15-1cab84fa4240",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-16",
+        "sellout_datetime": "2026-10-16T19:30:00+00:00",
+        "strike_price": "20.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "9b51d0f2-2b70-4fbd-8971-21696d870df0",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2027-03-19",
+        "sellout_datetime": "2027-03-19T19:30:00+00:00",
+        "strike_price": "20.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "b04a988a-515f-4520-b1fb-2f739d99c613",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2026-12-18",
+        "sellout_datetime": "2026-12-18T20:30:00+00:00",
+        "strike_price": "20.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "b9f54ff7-3827-48ae-bb4f-b6d53187222f",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2028-01-21",
+        "sellout_datetime": "2028-01-21T20:30:00+00:00",
+        "strike_price": "20.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "bc7dc510-ce77-442f-b959-2248254b66c5",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2027-02-19",
+        "sellout_datetime": "2027-02-19T20:30:00+00:00",
+        "strike_price": "20.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "ce4e25ba-42ca-4bcc-903c-40b1c79d2ccf",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2026-11-20",
+        "sellout_datetime": "2026-11-20T20:30:00+00:00",
+        "strike_price": "20.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "d58ea37d-36c3-41d0-b159-ff48486de916",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "20.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "e159dfc1-0f4a-4aa9-a212-c1becd0edc2a",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2027-03-19",
+        "sellout_datetime": "2027-03-19T19:30:00+00:00",
+        "strike_price": "20.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "eb781b89-9843-4f05-97c8-98013cc42381",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "20.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "f2564e5d-4617-4b02-832d-af532ef9ca71",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-16",
+        "sellout_datetime": "2026-10-16T19:30:00+00:00",
+        "strike_price": "20.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "0efd75d0-23cf-4c46-84eb-a49baebef1dc",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2028-01-21",
+        "sellout_datetime": "2028-01-21T20:30:00+00:00",
+        "strike_price": "22.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "1d2f895d-ee5a-41d6-ba38-08080c679dc1",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2027-03-19",
+        "sellout_datetime": "2027-03-19T19:30:00+00:00",
+        "strike_price": "22.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "1d500cad-bb32-456d-a63b-e000787d512f",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2027-03-19",
+        "sellout_datetime": "2027-03-19T19:30:00+00:00",
+        "strike_price": "22.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "1db5111d-9135-4d32-8dca-13b072539824",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "22.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "1dbef13f-46fc-4f82-be92-6b579258b1e5",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2027-06-17",
+        "sellout_datetime": "2027-06-17T19:30:00+00:00",
+        "strike_price": "22.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "325454c6-c5f2-4733-bff8-0d06262545cc",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2026-11-20",
+        "sellout_datetime": "2026-11-20T20:30:00+00:00",
+        "strike_price": "22.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "3473170f-6259-4655-abb9-f40ff50b9978",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2027-09-17",
+        "sellout_datetime": "2027-09-17T19:30:00+00:00",
+        "strike_price": "22.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "3cbe57b6-4a2c-431a-8bf1-20ec1c74dd5b",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "22.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "3f31f0b1-ee9b-482a-9e96-9250cbe6904d",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "22.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "58292ec3-ecaa-4cb5-84b7-e166adf67ec1",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-16",
+        "sellout_datetime": "2026-10-16T19:30:00+00:00",
+        "strike_price": "22.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "5918661e-e71c-4d69-a3b9-f7abb8356571",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2026-11-20",
+        "sellout_datetime": "2026-11-20T20:30:00+00:00",
+        "strike_price": "22.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "5dd3c7f5-238f-4be7-ad33-4a726c0201d6",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2028-01-21",
+        "sellout_datetime": "2028-01-21T20:30:00+00:00",
+        "strike_price": "22.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "675b4a71-428f-4cb9-9961-eb40608d2f55",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2027-02-19",
+        "sellout_datetime": "2027-02-19T20:30:00+00:00",
+        "strike_price": "22.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "735e9ce9-505f-4533-914f-be51769ff447",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2027-09-17",
+        "sellout_datetime": "2027-09-17T19:30:00+00:00",
+        "strike_price": "22.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "83f9a818-6ec9-4282-b562-36480d7de75c",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2026-12-18",
+        "sellout_datetime": "2026-12-18T20:30:00+00:00",
+        "strike_price": "22.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "92fe2eda-e8cd-45d5-9ff5-df09d5119028",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-16",
+        "sellout_datetime": "2026-10-16T19:30:00+00:00",
+        "strike_price": "22.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "ad09fb39-3b64-482e-9270-d22e172b2d5c",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2027-06-17",
+        "sellout_datetime": "2027-06-17T19:30:00+00:00",
+        "strike_price": "22.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "e604153d-1689-4b35-862b-931495b55678",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2026-12-18",
+        "sellout_datetime": "2026-12-18T20:30:00+00:00",
+        "strike_price": "22.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "e949cf83-4575-42ce-b68b-f9c22addc631",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "22.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "fb0b6898-4245-4bc4-960c-b5d2c964a235",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2027-02-19",
+        "sellout_datetime": "2027-02-19T20:30:00+00:00",
+        "strike_price": "22.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "0883671b-b082-4eec-8a86-8f639cd9cdf4",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2028-01-21",
+        "sellout_datetime": "2028-01-21T20:30:00+00:00",
+        "strike_price": "25.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "1e805d3d-1f93-486f-8552-7ed5edecb289",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2026-11-20",
+        "sellout_datetime": "2026-11-20T20:30:00+00:00",
+        "strike_price": "25.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "336fb9f3-edb8-4d43-8d33-992f79627e08",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2027-09-17",
+        "sellout_datetime": "2027-09-17T19:30:00+00:00",
+        "strike_price": "25.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "46ce5b99-3008-4d6c-9024-ba6803cb170b",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2027-03-19",
+        "sellout_datetime": "2027-03-19T19:30:00+00:00",
+        "strike_price": "25.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "4807ecb4-2206-4860-bcd7-7816715a82a6",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2027-06-17",
+        "sellout_datetime": "2027-06-17T19:30:00+00:00",
+        "strike_price": "25.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "50b3de13-6f82-4796-8147-339b13192355",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2028-01-21",
+        "sellout_datetime": "2028-01-21T20:30:00+00:00",
+        "strike_price": "25.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "6a44dcd5-d1d8-4cff-a7f4-930d63333f9d",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "25.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "6e08d21b-251b-45df-a0eb-e665eacbae33",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2026-12-18",
+        "sellout_datetime": "2026-12-18T20:30:00+00:00",
+        "strike_price": "25.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "8a4b37fd-1769-4984-9100-ad6549035024",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "25.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "8af24452-74a8-49ee-a402-cb994daed6be",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "25.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "9b45c09d-14e7-4c07-8540-cab99eca5d54",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2027-06-17",
+        "sellout_datetime": "2027-06-17T19:30:00+00:00",
+        "strike_price": "25.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "9eccb6af-9ddc-4ba1-8a25-c28962c0fbf5",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2027-02-19",
+        "sellout_datetime": "2027-02-19T20:30:00+00:00",
+        "strike_price": "25.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "af3ab276-998f-4aa2-ab9a-4c7bddf1b702",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2027-09-17",
+        "sellout_datetime": "2027-09-17T19:30:00+00:00",
+        "strike_price": "25.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "bccbcbbf-e86d-46c5-b183-2926c7ecd267",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2026-11-20",
+        "sellout_datetime": "2026-11-20T20:30:00+00:00",
+        "strike_price": "25.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "c44adebf-539e-4e72-99fe-f519c859fdf3",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2026-12-18",
+        "sellout_datetime": "2026-12-18T20:30:00+00:00",
+        "strike_price": "25.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "c63aa931-80fe-46d7-89b0-c863de26afb6",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-16",
+        "sellout_datetime": "2026-10-16T19:30:00+00:00",
+        "strike_price": "25.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "d056c3aa-9953-4370-8375-f1ddd37ad0c7",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2027-02-19",
+        "sellout_datetime": "2027-02-19T20:30:00+00:00",
+        "strike_price": "25.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "e3193fa5-a578-427b-85a5-647245ecc35e",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "25.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "f4c712e4-ea32-41ad-8818-beb46058f19c",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2027-03-19",
+        "sellout_datetime": "2027-03-19T19:30:00+00:00",
+        "strike_price": "25.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "f7c2beee-70d3-47a1-8aba-e06ac87c1b2f",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-16",
+        "sellout_datetime": "2026-10-16T19:30:00+00:00",
+        "strike_price": "25.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "0fa8fdb7-9d93-4869-8777-560f5e48c236",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2027-06-17",
+        "sellout_datetime": "2027-06-17T19:30:00+00:00",
+        "strike_price": "27.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "276d02b4-ff3a-4eef-8ba0-77f9466469d4",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2027-06-17",
+        "sellout_datetime": "2027-06-17T19:30:00+00:00",
+        "strike_price": "27.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "2b6a8158-e09d-4692-b603-6239dbdd3b98",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2027-09-17",
+        "sellout_datetime": "2027-09-17T19:30:00+00:00",
+        "strike_price": "27.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "2f348a18-d2d1-4d9c-b4dd-773b772e1558",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2026-09-18",
+        "sellout_datetime": "2026-09-18T19:30:00+00:00",
+        "strike_price": "27.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "3a1466dd-6089-4eac-b54f-486a90f0117c",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2027-03-19",
+        "sellout_datetime": "2027-03-19T19:30:00+00:00",
+        "strike_price": "27.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "57387e86-cec5-4611-bf8c-c8dd64eb90a6",
+        "chain_id": "ab1c58c2-f73a-42c4-9cbb-95be8da5a49c",
+        "chain_symbol": "CPRT",
+        "underlying_type": "equity",
+        "expiration_date": "2027-01-15",
+        "sellout_datetime": "2027-01-15T20:30:00+00:00",
+        "strike_price": "27.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.10",
+          "below_tick": "0.05",
+          "cutoff_price": "3.00"
+        }
+      }
+    ],
+    "next": "http://edge-internal.brokeback-shard-router.region.rh/options/instruments/?chain_symbol=CPRT&cursor=bz02JnA9MjUuMDAwMA%3D%3D&state=active"
+  },
+  "guide": "Present chain_symbol, expiration_date, type, strike_price; flag state when not 'active' or tradability when not 'tradable'. Pass id to an order's leg.option_id. Quote sellout_datetime when the user asks \"when will Robinhood force-close this position?\" — it is the authoritative per-contract timestamp covering equity/index, AM/PM settle, and T-1 logic. underlying_type ('equity' or 'index') is informational; mention only when it affects strategy. When next is non-null, extract the cursor query param and call this tool again."
+}

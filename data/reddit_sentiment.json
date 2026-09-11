@@ -236,5 +236,17 @@
     "position_score": 0.15,
     "volume_score": 0.1,
     "meme_score": 0.05
+  },
+  "ACVA": {
+    "Ticker": "ACVA",
+    "Sentiment": 0.35,
+    "Buzz": "Medium",
+    "Narrative": "Automotive wholesale digital marketplace momentum following breakout volume surge.",
+    "last_updated": "2026-09-11T02:12:07.668783Z",
+    "tone_score": 0.0,
+    "comments_score": 0.0,
+    "position_score": 0.0,
+    "volume_score": 0.0,
+    "meme_score": 0.0
   }
 }

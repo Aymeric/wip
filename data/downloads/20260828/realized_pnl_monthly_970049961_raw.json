@@ -1,0 +1,11 @@
+{
+  "data": {
+    "account_number": "970049961",
+    "window": "month",
+    "display_currency": "USD",
+    "total_returns": "0",
+    "total_rate_of_return": "0",
+    "data_points": []
+  },
+  "guide": "Realized profit and loss only; totals exclude unrealized P&L."
+}

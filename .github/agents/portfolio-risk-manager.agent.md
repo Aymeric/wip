@@ -69,7 +69,7 @@ For active options and stock positions, inspect underlier spots against structur
 #### Active Options:
 1. **Stop 1 (Structural Stop)**: Close below $nTrans$ (Secondary Support). Exit at the next session open.
 2. **Stop 2 (Hard Sizing Stop / Max Loss Stop)**: Close 10.00% below entry (or option loss exceeds -10.00%) while the underlier price rests below $pTrans$ (Primary Support).
-3. **Stop 3 (Time Stop)**: If by Day 7 the position has not achieved at least 50.00% progress toward the T1 ($+GEX$) target, exit and free capital.
+3. **Stop 3 (Time Stop)**: If by Day 7 the position has not achieved at least 50.00% progress toward the T1 ($+GEX$) target, exit and free capital. Note: LEAPs / long-dated options with $\text{DTE} > 90$ are exempt from this 7-day velocity time stop due to minimal theta decay.
 4. **Stop 4 (Stalling Stop)**: If progress remains below 10.00% per day for 3 consecutive sessions (stalling counter >= 3), exit immediately.
 5. **Stop 5 (Near-Expiration Stop)**: Close if DTE $\le 3$ and position is in a loss, or if DTE $\le 1$ under any condition to avoid assignment risk and total premium decay, unless explicitly directed otherwise. Exit immediately.
 6. **Underlier Target Met (But Option in Loss)**: If spot exceeds $T1$ but the option premium is in a net loss due to decay or strike/expiration mismatch, close the position immediately to limit further losses.
