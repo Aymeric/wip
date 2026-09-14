@@ -1,124 +1,117 @@
 {
   "basket_gate": "FAIL",
-  "bull_bear_gate": "PASS",
-  "vix_spot": 17.84,
-  "vix_bearish": true,
-  "vix_delta_gate": "PASS",
-  "system_authorization": "TRACK 1 OK",
-  "gates_passed": 2,
+  "bull_bear_gate": "FAIL",
+  "vix_spot": 15.84,
+  "vix_bearish": false,
+  "vix_delta_gate": "FAIL",
+  "system_authorization": "BLOCKED",
+  "gates_passed": 0,
   "etf_details": {
     "SPY": {
       "Ticker": "SPY",
       "ETF Segment / Sector Name": "S&P 500 Broad Market",
-      "Price": 758.99,
-      "Daily Change %": 0.1531,
-      "Classification": "BULLISH"
+      "Price": 760.39,
+      "Daily Change %": -0.5103,
+      "Classification": "BEARISH"
     },
     "QQQ": {
       "Ticker": "QQQ",
       "ETF Segment / Sector Name": "Nasdaq 100 Growth Index",
-      "Price": 708.12,
-      "Daily Change %": -0.0804,
-      "Classification": "FLAT"
+      "Price": 705.58,
+      "Daily Change %": -1.3009,
+      "Classification": "BEARISH"
     },
     "IWM": {
       "Ticker": "IWM",
       "ETF Segment / Sector Name": "Russell 2000 Small Caps",
-      "Price": 288.07,
-      "Daily Change %": 0.1286,
-      "Classification": "BULLISH"
+      "Price": 288.43,
+      "Daily Change %": -0.1592,
+      "Classification": "BEARISH"
     },
     "DIA": {
       "Ticker": "DIA",
       "ETF Segment / Sector Name": "Dow Jones Industrials Value",
-      "Price": 522.11,
-      "Daily Change %": 0.2612,
-      "Classification": "BULLISH"
+      "Price": 525.28,
+      "Daily Change %": -0.097,
+      "Classification": "FLAT"
     },
     "XLK": {
       "Ticker": "XLK",
       "ETF Segment / Sector Name": "Technology",
-      "Price": 185.22,
-      "Daily Change %": 0.0,
-      "Classification": "FLAT"
+      "Price": 184.65,
+      "Daily Change %": -1.6092,
+      "Classification": "BEARISH"
     },
     "XLF": {
       "Ticker": "XLF",
       "ETF Segment / Sector Name": "Financials",
-      "Price": 56.93,
-      "Daily Change %": 0.1055,
+      "Price": 57.43,
+      "Daily Change %": 0.3144,
       "Classification": "BULLISH"
     },
     "XLV": {
       "Ticker": "XLV",
       "ETF Segment / Sector Name": "Health Care",
-      "Price": 166.48,
-      "Daily Change %": 0.495,
+      "Price": 165.67,
+      "Daily Change %": 0.1875,
       "Classification": "BULLISH"
     },
     "XLY": {
       "Ticker": "XLY",
       "ETF Segment / Sector Name": "Consumer Discretionary",
-      "Price": 111.98,
-      "Daily Change %": 0.0222,
+      "Price": 112.9,
+      "Daily Change %": -0.0531,
       "Classification": "FLAT"
     },
     "XLP": {
       "Ticker": "XLP",
       "ETF Segment / Sector Name": "Consumer Staples",
-      "Price": 83.26,
-      "Daily Change %": 0.2046,
+      "Price": 83.49,
+      "Daily Change %": 0.1319,
       "Classification": "BULLISH"
     },
     "XLI": {
       "Ticker": "XLI",
       "ETF Segment / Sector Name": "Industrials",
-      "Price": 170.61,
-      "Daily Change %": 0.0352,
-      "Classification": "FLAT"
+      "Price": 172.0,
+      "Daily Change %": -0.2147,
+      "Classification": "BEARISH"
     },
     "XLU": {
       "Ticker": "XLU",
       "ETF Segment / Sector Name": "Utilities",
-      "Price": 42.69,
-      "Daily Change %": 0.3998,
-      "Classification": "BULLISH"
+      "Price": 42.4,
+      "Daily Change %": 0.0236,
+      "Classification": "FLAT"
     },
     "XLB": {
       "Ticker": "XLB",
       "ETF Segment / Sector Name": "Materials",
-      "Price": 50.75,
-      "Daily Change %": -0.0195,
+      "Price": 50.97,
+      "Daily Change %": 0.0393,
       "Classification": "FLAT"
     },
     "XLRE": {
       "Ticker": "XLRE",
       "ETF Segment / Sector Name": "Real Estate",
-      "Price": 43.17,
-      "Daily Change %": 0.2787,
+      "Price": 43.46,
+      "Daily Change %": 0.1006,
       "Classification": "BULLISH"
     },
     "XLE": {
       "Ticker": "XLE",
       "ETF Segment / Sector Name": "Energy",
-      "Price": 65.33,
-      "Daily Change %": 0.616,
+      "Price": 66.0,
+      "Daily Change %": 1.3202,
       "Classification": "BULLISH"
     },
     "XLC": {
       "Ticker": "XLC",
       "ETF Segment / Sector Name": "Communication Services",
-      "Price": 111.22,
-      "Daily Change %": -0.2511,
-      "Classification": "BEARISH"
-    },
-    "HYG": {
-      "Ticker": "HYG",
-      "ETF Segment / Sector Name": "High Yield Corporate Bond ETF",
-      "Price": 78.62,
+      "Price": 112.6,
       "Daily Change %": 0.0,
       "Classification": "FLAT"
     }
   },
-  "last_updated": "2026-09-10"
+  "last_updated": "2026-09-13"
 }
