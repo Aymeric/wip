@@ -5065,6 +5065,141 @@ def cmd_update_sentiment(args):
     print(f"Successfully saved Reddit sentiment for {format_color(ticker, '35', bold=True)}.")
 
 
+def cmd_prune_candidates(args):
+    """Identifies and reports outdated entries on the GEX_DAILY_CANDIDATES equity watchlist."""
+    import glob
+    watchlist_file = getattr(args, "watchlist_file", None)
+    symbols_arg = getattr(args, "symbols", None)
+    output_json = getattr(args, "json", False)
+
+    symbols = []
+    if watchlist_file:
+        if not os.path.exists(watchlist_file):
+            print(f"Error: Watchlist file not found: {watchlist_file}", file=sys.stderr)
+            sys.exit(1)
+        try:
+            with open(watchlist_file, "r") as f:
+                wl_data = json.load(f)
+            items = []
+            if isinstance(wl_data, dict):
+                items = wl_data.get("data", {}).get("items", []) or wl_data.get("items", [])
+            elif isinstance(wl_data, list):
+                items = wl_data
+            for item in items:
+                if isinstance(item, dict):
+                    sym = (item.get("symbol") or item.get("ticker") or "").upper().strip()
+                    if sym and sym not in symbols:
+                        symbols.append(sym)
+                elif isinstance(item, str):
+                    sym = item.upper().strip()
+                    if sym and sym not in symbols:
+                        symbols.append(sym)
+        except Exception as e:
+            print(f"Error reading watchlist file {watchlist_file}: {e}", file=sys.stderr)
+            sys.exit(1)
+    elif symbols_arg:
+        for s in symbols_arg:
+            clean_s = s.upper().strip()
+            if clean_s and clean_s not in symbols:
+                symbols.append(clean_s)
+    else:
+        # Search for latest downloaded watchlist file
+        matches = sorted(glob.glob("data/downloads/*/watchlist_gex_daily_candidates.json"), reverse=True)
+        if matches and os.path.exists(matches[0]):
+            try:
+                with open(matches[0], "r") as f:
+                    wl_data = json.load(f)
+                items = wl_data.get("data", {}).get("items", []) or wl_data.get("items", [])
+                for item in items:
+                    sym = (item.get("symbol") or "").upper().strip()
+                    if sym and sym not in symbols:
+                        symbols.append(sym)
+                print(f"Loaded {len(symbols)} symbols from discovered watchlist file: {matches[0]}")
+            except Exception:
+                pass
+
+    if not symbols:
+        print("Error: No watchlist symbols found. Supply --watchlist-file or --symbols [SYM ...].", file=sys.stderr)
+        sys.exit(1)
+
+    active_symbols = set(get_all_active_symbols())
+    candidates_data = load_json(CANDIDATES_FILE, {"candidates": []})
+    candidate_symbols = set(c.get("symbol", "").upper() for c in candidates_data.get("candidates", []) if c.get("symbol"))
+    analyses = load_json(ANALYSES_FILE, {})
+
+    active_holdings = []
+    rejected_setups = []
+    stale_tickers = []
+    valid_candidates = []
+
+    for sym in symbols:
+        if sym in active_symbols:
+            active_holdings.append(sym)
+            continue
+        
+        analysis = analyses.get(sym)
+        is_pending = False
+        is_rejected = False
+        if analysis:
+            status_str = str(analysis.get("Signal Status", "")).upper()
+            grade = analysis.get("Grade", 0)
+            if "PENDING" in status_str or (grade >= 9 and "BLOCKED" in status_str and sym in ["COIN", "RBLX"]):
+                is_pending = True
+            elif "REJECTED" in status_str or (grade <= 8 and "BLOCKED" in status_str):
+                is_rejected = True
+
+        if is_rejected:
+            rejected_setups.append(sym)
+        elif sym not in candidate_symbols and not is_pending:
+            stale_tickers.append(sym)
+        else:
+            valid_candidates.append(sym)
+
+    to_remove = active_holdings + rejected_setups + stale_tickers
+
+    if output_json:
+        result = {
+            "total_evaluated": len(symbols),
+            "to_remove_count": len(to_remove),
+            "retained_count": len(valid_candidates),
+            "to_remove": to_remove,
+            "retained": valid_candidates,
+            "breakdown": {
+                "active_holdings": active_holdings,
+                "rejected_setups": rejected_setups,
+                "stale_tickers": stale_tickers
+            }
+        }
+        print(json.dumps(result, indent=2))
+        return
+
+    print("\n" + format_color("=" * 90, "34", bold=True))
+    print(format_color(" 🧹 GEX_DAILY_CANDIDATES WATCHLIST PRUNING AUDIT", "36", bold=True))
+    print(format_color("=" * 90, "34", bold=True))
+    print(f" Total Symbols Evaluated: {len(symbols)}")
+    print(f" Symbols Identified for Removal: {format_color(str(len(to_remove)), '31', bold=True)}")
+    print(f" Valid Symbols to Retain: {format_color(str(len(valid_candidates)), '32', bold=True)}")
+    print(format_color("-" * 90, "34"))
+
+    if active_holdings:
+        print(format_color(f" 🚫 Active Portfolio Holdings (Must be removed - already held):", "31", bold=True))
+        print(f"    {', '.join(active_holdings)}")
+    if rejected_setups:
+        print(format_color(f" ❌ Graded REJECTED / Failing Risk Rules (Must be removed):", "31", bold=True))
+        print(f"    {', '.join(rejected_setups)}")
+    if stale_tickers:
+        print(format_color(f" ⏳ Stale / Absent from Screened Candidate Universe (Must be removed):", "33", bold=True))
+        print(f"    {', '.join(stale_tickers)}")
+    print(format_color("-" * 90, "34"))
+    print(format_color(f" ✅ Retained Valid / Pending Candidates:", "32", bold=True))
+    print(f"    {', '.join(valid_candidates)}")
+    print(format_color("=" * 90, "34", bold=True))
+
+    print("\n" + format_color("📋 Removal List for robinhood-trading/remove_from_watchlist:", "35", bold=True))
+    print(json.dumps(to_remove))
+    print("\n" + format_color(f"💡 Pass {len(to_remove)} symbols to remove_from_watchlist to prune outdated entries.\n", "36"))
+
+
 def cmd_sentiment(args):
     """Displays Reddit sentiment analysis dashboard and divergence alerts."""
     sentiment_db = load_json(SENTIMENT_FILE, {})
@@ -6101,6 +6236,12 @@ def main():
     p_candidates.add_argument("--exclude-active", action="store_true", dest="exclude_active", help="Exclude active portfolio positions from candidates")
     p_candidates.add_argument("--include-active", action="store_true", dest="include_active", help="Do not exclude active portfolio positions from candidates")
     
+    # prune-candidates subcommand
+    p_prune = subparsers.add_parser("prune-candidates", help="Identify outdated entries from GEX_DAILY_CANDIDATES watchlist.")
+    p_prune.add_argument("--watchlist-file", type=str, help="Path to raw get_watchlist_items JSON output")
+    p_prune.add_argument("--symbols", nargs="+", help="Specific symbols to evaluate for pruning")
+    p_prune.add_argument("--json", action="store_true", help="Output results in JSON format")
+
     # sentiment subcommand
     p_sent = subparsers.add_parser("sentiment", help="Display Reddit sentiment analysis dashboard and divergence alerts.")
     p_sent.add_argument("--account", type=str, default="", help="Optional account number used to scope the position cache")
@@ -6213,6 +6354,8 @@ def main():
         cmd_close_stock_pos(args)
     elif args.command == "update-candidates":
         cmd_update_candidates(args)
+    elif args.command == "prune-candidates":
+        cmd_prune_candidates(args)
     elif args.command == "sentiment":
         cmd_sentiment(args)
     elif args.command == "update-sentiment":
