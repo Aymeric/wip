@@ -26,3 +26,8 @@ Output exact details:
 - Delta, Theta, and IV
 - Recommended Quantity & Total Capital Outlay
 - Downside Stop ($pTrans$) and Upside Target ($+GEX$)
+- Options Watchlist Sync Status
+
+### Step 3: Options Watchlist Sync
+- Add the isolated option candidate contract ID to the user's dedicated Robinhood **"options watchlist"** via `robinhood-trading/add_option_to_watchlist` with `option_ids: [CONTRACT_ID]` and `position_type: "long"`.
+- **Separation Rule**: Pending stock candidates are added to equity watchlists via `add_to_watchlist(symbols=...)`, whereas option candidates are added to the "options watchlist" via `add_option_to_watchlist(option_ids=...)`.

@@ -1,6 +1,6 @@
 ---
 name: "GEX Setup Candidate Sourcing"
-description: "Derive daily GEX candidates from Robinhood scanners, curated lists, and Reddit trending polls, applying baseline volume/price/market-cap screening buffers."
+description: "Derive daily GEX candidates from Robinhood scanners, curated lists, and Reddit trending polls, applying baseline volume/price/market-cap screening buffers, and syncing stock candidates to GEX_DAILY_CANDIDATES watchlist."
 argument-hint: "Source candidates..."
 tools: [agent, execute, read, edit, search, web, vscode, 'robinhood-trading/*', 'mcp-reddit/*', todo]
 ---
@@ -16,7 +16,7 @@ Instead, immediately delegate the user's request to the specialized **Setup Cand
 ### Delegation Workflow:
 1. Invoke the subagent using `runSubagent`, passing the user's complete request unchanged, including any overrides, target candidate configurations, date, and filter thresholds.
 2. Do not attempt to query lists sequentially, run manual scanners, parse Reddit hype, or filter local active holdings yourself in this context.
-3. Upon receiving the completed candidate stock pool and synchronization updates from the `gex-candidate-generator` subagent, present it verbatim to the user as the system's official candidate generation report.
+3. Upon receiving the completed candidate stock pool and synchronization updates (syncing stock candidates / pending stock candidates to `"GEX_DAILY_CANDIDATES"` and noting that option candidates are handled separately on the "options watchlist") from the `gex-candidate-generator` subagent, present it verbatim to the user as the system's official candidate generation report.
 
 ---
 # Delegation Complete

@@ -62,14 +62,15 @@ Interpret each request as one of these modes:
 4. **Closed-Trade Quality Audit**: Run `trade-journal-analyst` to reconcile performance and extract process improvements.
 
 ### Phase II: Discovery & Sentiment Filtering
-1. **Setup Candidate Sourcing**: Run `gex-candidate-generator` to execute Robinhood scans, apply baseline filters, check RSI/MACD crossovers, and update `data/candidate_stocks.json`.
+1. **Setup Candidate Sourcing**: Run `gex-candidate-generator` to execute Robinhood scans, apply baseline filters, check RSI/MACD crossovers, update `data/candidate_stocks.json`, and sync screened stock candidates to the Robinhood equity watchlist `GEX_DAILY_CANDIDATES`.
 2. **Social Sentiment Scans**: Run `reddit-sentiment-analyst` to compute 5-factor sentiment scores on WSB/options/stocks.
 
 ### Phase III: Setup Engineering & Selection
-1. **Setup Analysis & Grading**: Run `gex-setup-grader` to download option chains (chunked to 40 contract IDs), derive pTrans/nTrans levels, and apply the 11-Rule checklist.
-2. **Option Selection**: Run `option-selector` to isolate optimal 30-45 DTE contracts within the Per-Trade Buying Power Budget.
+1. **Setup Analysis & Grading**: Run `gex-setup-grader` to download option chains (chunked to 40 contract IDs), derive pTrans/nTrans levels, apply the 11-Rule checklist, and add pending stock candidates (`PENDING` status) to the equity watchlist `GEX_DAILY_CANDIDATES` via `add_to_watchlist`.
+2. **Option Selection & Options Watchlist Sync**: Run `option-selector` to isolate optimal 30-45 DTE contracts within the Per-Trade Buying Power Budget, and add isolated option candidates to the dedicated Robinhood **"options watchlist"** via `add_option_to_watchlist`.
 
 ### Phase IV: Order Execution Handoff
 - Present confirmed setups and contract recommendations.
+- Display Watchlist actions: Pending stock candidates on the equity watchlist (`GEX_DAILY_CANDIDATES`), option candidates on the dedicated **"options watchlist"**.
 - Prompt user for execution approval via `ask_question`.
 - If approved, invoke `agentic-trader` for pre-trade clearance, simulation, and limit order submission.

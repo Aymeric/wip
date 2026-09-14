@@ -61,6 +61,6 @@ Filter the raw aggregated ticker pool against:
     python3 src/gex_engine.py update-candidates --scan-files data/downloads/YYYYMMDD/...
     ```
 2. Check `data/candidate_stocks.json` to verify candidate pool integrity.
-3. **Stock Watchlist Sync**: Sync verified stock candidates (underlier symbols) to the Robinhood equity watchlist `GEX_DAILY_CANDIDATES` via `robinhood-trading/add_to_watchlist` with `symbols`.
+3. **Stock Watchlist Sync**: Sync verified stock candidates and pending stock candidates (underlier symbols) to the Robinhood equity watchlist `GEX_DAILY_CANDIDATES` via `robinhood-trading/add_to_watchlist` with `symbols`.
 
-> **Note**: Option contract candidates are synced separately by the **option-selector** agent after contract selection. Use `robinhood-trading/add_option_to_watchlist` (with `option_ids`) to add selected contracts to the dedicated Robinhood **options watchlist**. Do not mix equity and option watchlist tools.
+> **Note**: Option contract candidates are synced separately by the **option-selector** agent after contract selection. Use `robinhood-trading/add_option_to_watchlist` (with `option_ids` and `position_type: "long"`) to add selected contracts to the dedicated Robinhood **"options watchlist"**. Do not mix equity and option watchlist tools.

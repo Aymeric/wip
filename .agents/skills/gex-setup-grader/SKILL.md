@@ -64,12 +64,16 @@ Evaluate the candidate against the 11 mechanical rules:
 
 ---
 
-## Step 4: Classification & State Persistence
+## Step 4: Classification, Watchlist Sync & State Persistence
 
 Assign one of three classifications:
 - **`CONFIRMED`**: Passes all 11 rules. Eligible for contract selection and execution.
 - **`PENDING`**: High-quality structural setup, but currently slightly extended from support (buffer $>5\%$) or awaiting confirmation.
 - **`REJECTED`**: Fails one or more non-negotiable risk rules (e.g. Spot below $pTrans$, upcoming earnings, or $\text{R:R} < 2:1$).
+
+### Watchlist Actions:
+- **Pending Stock Candidates**: Add any symbol graded `PENDING` to the Robinhood equity watchlist (`GEX_DAILY_CANDIDATES`) via `robinhood-trading/add_to_watchlist(symbols=[TICKER])` so the trader can monitor price action and entry pullbacks toward $pTrans$.
+- **Option Candidates Separation**: Note that option contract candidates are handled separately by the **option-selector** agent and added to the dedicated Robinhood **"options watchlist"** via `robinhood-trading/add_option_to_watchlist(option_ids=[...], position_type="long")`.
 
 Save findings to `data/ticker_analyses.json`:
 ```bash

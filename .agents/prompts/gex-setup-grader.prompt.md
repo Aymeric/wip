@@ -11,4 +11,4 @@ Activate the **gex-setup-grader** skill to:
 1. Fetch underlying quotes and full option instruments/quotes (strictly chunked into batches of at most 40 contract IDs).
 2. Calculate dealer gamma levels: Spot, $pTrans$ (primary support), $nTrans$ (secondary support), $+GEX$ (call wall), $-GEX$ (put wall), and COTMP.
 3. Apply the 11-Rule Setup Checklist (including Support Buffer 0.5-5%, Upside Headroom $\ge 5\%$, Risk/Reward $\ge 2:1$, no earnings within 14 days).
-4. Assign `CONFIRMED`, `PENDING`, or `REJECTED` classification and update `data/ticker_analyses.json`.
+4. Assign `CONFIRMED`, `PENDING`, or `REJECTED` classification, add `PENDING` stock candidates to the equity watchlist `GEX_DAILY_CANDIDATES`, and update `data/ticker_analyses.json` (option candidates are added separately to the "options watchlist" by the option selector).

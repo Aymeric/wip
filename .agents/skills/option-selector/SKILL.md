@@ -56,3 +56,6 @@ For each `CONFIRMED` setup, filter the option chain against these quantitative c
    - **Recommended Sizing**: Number of contracts and total cash outlay
    - **Downside Risk Benchmark**: $pTrans$ stop level and implied dollar risk
    - **Upside Target**: $+GEX$ Call Wall and target option value
+4. **Options Watchlist Sync**:
+   - Add isolated option candidates (contract UUIDs) to the user's dedicated Robinhood **"options watchlist"** via `robinhood-trading/add_option_to_watchlist` with `option_ids: [CONTRACT_UUID]` and `position_type: "long"`.
+   - **Separation Rule**: Pending stock candidates are synced to equity watchlists via `add_to_watchlist(symbols=...)`, whereas option candidates are synced to the dedicated "options watchlist" via `add_option_to_watchlist(option_ids=...)`.

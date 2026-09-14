@@ -37,4 +37,5 @@ Your job is to derive the daily candidate universe from Robinhood scanners, cura
   ```bash
   python3 src/gex_engine.py update-candidates --scan-files ...
   ```
-- Sync candidates to Robinhood watchlist `GEX_DAILY_CANDIDATES`.
+- **Stock Watchlist Sync**: Sync verified stock candidates and pending stock candidates to the Robinhood equity watchlist `GEX_DAILY_CANDIDATES` via `robinhood-trading/add_to_watchlist` (`symbols`).
+- **Options Watchlist Distinction**: Option contract candidates are managed separately by `option-selector` and added to the dedicated Robinhood **"options watchlist"** via `robinhood-trading/add_option_to_watchlist`.

@@ -73,6 +73,11 @@ graph TD
    - Always run the deterministic Python engine: `python3 src/gex_engine.py <subcommand>`.
    - Track workflow state using `python3 src/gex_engine.py workflow` and `update-workflow`.
 
+6. **Watchlist Separation & Synchronization**:
+   - **Pending Stock Candidates**: Add screened and pending stock candidates (underliers) to the equity watchlist (`GEX_DAILY_CANDIDATES`) via `robinhood-trading/add_to_watchlist` using `symbols`.
+   - **Option Candidates**: Add isolated option contract candidates separately to the dedicated Robinhood **"options watchlist"** via `robinhood-trading/add_option_to_watchlist` using `option_ids`.
+   - Never mix equity and options watchlist tools.
+
 ---
 
 ## 3. Skills Catalog in `.agents/skills/`

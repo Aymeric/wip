@@ -1,50 +1,30 @@
 {
-  "last_updated": "2026-09-14T01:32:06.459117Z",
+  "last_updated": "2026-09-14T03:33:53.243968Z",
   "source_scans": [
     "GEX Momentum Candidates",
+    "High options volume and IV",
     "High options volume and IV 3",
     "Top Gainers Today",
+    "Upcoming Earnings GEX",
     "Upcoming Earnings GEX 2"
   ],
   "user_additions": [],
-  "excluded_symbols": [],
-  "total": 15,
+  "excluded_symbols": [
+    "AAPL"
+  ],
+  "total": 20,
   "candidates": [
     {
-      "symbol": "RUM",
+      "symbol": "TNET",
       "source": "scanner",
-      "price": 8.34,
-      "chg_pct": 16.318,
-      "iv": null,
-      "relative_options_volume": 1.0,
-      "market_cap": 3559917191.0,
+      "price": 66.69,
+      "chg_pct": 1.0301,
+      "iv": 0.4899623,
+      "relative_options_volume": 8.093502735012144,
+      "market_cap": 3030171755.0,
       "rsi": null,
       "macd_hist": null,
-      "score": 50.91
-    },
-    {
-      "symbol": "SRRK",
-      "source": "scanner",
-      "price": 61.97,
-      "chg_pct": 11.839,
-      "iv": null,
-      "relative_options_volume": 1.0,
-      "market_cap": 6739597505.0,
-      "rsi": null,
-      "macd_hist": null,
-      "score": 50.91
-    },
-    {
-      "symbol": "BWIN",
-      "source": "scanner",
-      "price": 32.01,
-      "chg_pct": 7.9595,
-      "iv": null,
-      "relative_options_volume": 1.0,
-      "market_cap": 4142389668.0,
-      "rsi": null,
-      "macd_hist": null,
-      "score": 50.91
+      "score": 52.54
     },
     {
       "symbol": "TLX",
@@ -59,6 +39,18 @@
       "score": 50.91
     },
     {
+      "symbol": "IE",
+      "source": "scanner",
+      "price": 10.75,
+      "chg_pct": 3.3567,
+      "iv": 0.8444909871814836,
+      "relative_options_volume": 1.0,
+      "market_cap": 1659738693.0,
+      "rsi": 53.47,
+      "macd_hist": null,
+      "score": 47.94
+    },
+    {
       "symbol": "VOR",
       "source": "scanner",
       "price": 23.3,
@@ -69,6 +61,42 @@
       "rsi": null,
       "macd_hist": null,
       "score": 46.22
+    },
+    {
+      "symbol": "BWIN",
+      "source": "scanner",
+      "price": 32.01,
+      "chg_pct": 7.9595,
+      "iv": 0.5477105926159651,
+      "relative_options_volume": 1.0,
+      "market_cap": 4142389668.0,
+      "rsi": 49.37,
+      "macd_hist": -0.3559,
+      "score": 46.09
+    },
+    {
+      "symbol": "SRRK",
+      "source": "scanner",
+      "price": 61.97,
+      "chg_pct": 11.839,
+      "iv": null,
+      "relative_options_volume": 1.0,
+      "market_cap": 6739597505.0,
+      "rsi": 51.21,
+      "macd_hist": -0.3963,
+      "score": 44.99
+    },
+    {
+      "symbol": "RUM",
+      "source": "scanner",
+      "price": 8.34,
+      "chg_pct": 16.318,
+      "iv": null,
+      "relative_options_volume": 1.0,
+      "market_cap": 3559917191.0,
+      "rsi": 40.55,
+      "macd_hist": -0.2918,
+      "score": 42.48
     },
     {
       "symbol": "ERAS",
@@ -93,18 +121,6 @@
       "rsi": null,
       "macd_hist": null,
       "score": 41.63
-    },
-    {
-      "symbol": "IE",
-      "source": "scanner",
-      "price": 10.75,
-      "chg_pct": 3.3567,
-      "iv": null,
-      "relative_options_volume": 1.0,
-      "market_cap": 1659738693.0,
-      "rsi": 53.47,
-      "macd_hist": null,
-      "score": 40.64
     },
     {
       "symbol": "ANGX",
@@ -162,9 +178,9 @@
       "iv": null,
       "relative_options_volume": 1.0,
       "market_cap": 1797073473.0,
-      "rsi": null,
-      "macd_hist": null,
-      "score": 33.88
+      "rsi": 53.77,
+      "macd_hist": -0.0562,
+      "score": 34.58
     },
     {
       "symbol": "BAM",
@@ -189,6 +205,54 @@
       "rsi": null,
       "macd_hist": null,
       "score": 29.72
+    },
+    {
+      "symbol": "ADBE",
+      "source": "scanner",
+      "price": 255.67,
+      "chg_pct": 1.3638,
+      "iv": 0.4118402688332369,
+      "relative_options_volume": 2.2923835333819262,
+      "market_cap": 100261425000.0,
+      "rsi": null,
+      "macd_hist": null,
+      "score": 28.39
+    },
+    {
+      "symbol": "LUMN",
+      "source": "scanner",
+      "price": 6.98,
+      "chg_pct": 0.6412,
+      "iv": 0.6532911,
+      "relative_options_volume": 2.0620806417868134,
+      "market_cap": 7158231103.0,
+      "rsi": null,
+      "macd_hist": null,
+      "score": 27.42
+    },
+    {
+      "symbol": "AOS",
+      "source": "scanner",
+      "price": 57.97,
+      "chg_pct": 1.0106,
+      "iv": 0.2920643959993314,
+      "relative_options_volume": 3.218575994440641,
+      "market_cap": 7799793004.0,
+      "rsi": null,
+      "macd_hist": null,
+      "score": 27.27
+    },
+    {
+      "symbol": "UGI",
+      "source": "scanner",
+      "price": 38.3,
+      "chg_pct": 0.8099,
+      "iv": 0.2328091,
+      "relative_options_volume": 2.3835773013388946,
+      "market_cap": 8148663796.0,
+      "rsi": null,
+      "macd_hist": null,
+      "score": 20.99
     }
   ]
 }

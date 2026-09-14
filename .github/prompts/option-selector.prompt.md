@@ -1,6 +1,6 @@
 ---
 name: "GEX Option Contract Selection"
-description: "Queries options chain and Greeks, runs earnings schedule preflights (avoiding IV-Crush traps), and isolates optimal target Call contracts for CONFIRMED/PENDING GEX setups."
+description: "Queries options chain and Greeks, runs earnings schedule preflights (avoiding IV-Crush traps), isolates optimal target Call contracts for CONFIRMED/PENDING GEX setups, and syncs contracts to dedicated Options Watchlist."
 argument-hint: "Isolate option contract for target symbol (e.g. BABA, RIOT)..."
 tools: [agent, execute, read, edit, search, web, vscode, 'robinhood-trading/*', todo]
 ---
@@ -16,7 +16,7 @@ Instead, immediately delegate the user's request to the specialized **Option Sel
 ### Delegation Workflow:
 1. Invoke the subagent using `runSubagent`, passing the user's complete request unchanged, including the target ticker, spot price, target delta limits, DTE range, earnings constraints, and budget.
 2. Do not attempt to calculate spread widths, parse open interest fields, or perform manual earnings vs DTE calendar checks yourself in this context.
-3. Upon receiving the contract recommendation report from the `option-selector` subagent, present it verbatim to the user as the system's official option selection recommendation.
+3. Upon receiving the contract recommendation report and options watchlist synchronization status from the `option-selector` subagent, present it verbatim to the user as the system's official option selection recommendation.
 
 ---
 # Delegation Complete

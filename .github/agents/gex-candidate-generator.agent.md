@@ -89,7 +89,8 @@ Apply the baseline GEX filtering manually on the raw columns of the returned res
    - Call `robinhood-trading/get_watchlists` to check for the existence of watchlists named `"GEX_DAILY_CANDIDATES"` and `"GEX_ACTIVE_PORTFOLIO"`. If missing, create them using `robinhood-trading/create_watchlist`.
   - Before clearing or adding items, request explicit confirmation immediately before the destructive/account write. If confirmation is unavailable, leave the broker list unchanged and report the pending synchronization with its current item count.
   - Clear existing stale tickers on `"GEX_DAILY_CANDIDATES"` by calling `robinhood-trading/remove_from_watchlist` in sequence (or as batches) only after confirmation.
-   - Dynamic Sync: Add all newly generated candidate symbols with `Screen Passed` status to `"GEX_DAILY_CANDIDATES"` using `robinhood-trading/add_to_watchlist`. This ensures that candidates are pushed directly to the user's Robinhood mobile or Legend app for real-time mobile push-alert tracking.
+   - Dynamic Sync: Add all newly generated candidate symbols with `Screen Passed` status and pending stock candidates to `"GEX_DAILY_CANDIDATES"` using `robinhood-trading/add_to_watchlist` with `symbols`. This ensures that candidates are pushed directly to the user's Robinhood mobile or Legend app for real-time mobile push-alert tracking.
+   - **Options Watchlist Separation**: Note that option contract candidates are handled separately by the `option-selector` subagent and added to the dedicated Robinhood **"options watchlist"** via `robinhood-trading/add_option_to_watchlist(option_ids=...)`. Do not mix equity and option watchlist tools.
 
 #### Structure:
 ```json

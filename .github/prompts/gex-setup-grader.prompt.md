@@ -1,6 +1,6 @@
 ---
 name: "GEX Setup Analysis"
-description: "Pulls options chain and Greeks data, derives pTrans, nTrans, +GEX, and COTMP, runs the 11-Rule checklist, and determines GEX setup status."
+description: "Pulls options chain and Greeks data, derives pTrans, nTrans, +GEX, and COTMP, runs the 11-Rule checklist, determines GEX setup status, and syncs pending stock candidates to GEX_DAILY_CANDIDATES watchlist."
 argument-hint: "Evaluate target symbol (e.g. BABA, RIOT)..."
 tools: [agent, execute, read, edit, search, web, vscode, 'robinhood-trading/*', todo]
 ---
@@ -16,7 +16,7 @@ Instead, immediately delegate the user's request to the specialized **Setup Anal
 ### Delegation Workflow:
 1. Invoke the subagent using `runSubagent`, passing the user's complete request unchanged, including underlier targets, spot prices, thresholds, and any supplied raw-data context.
 2. Do not attempt to partition option quotes, calculate COTMP metrics, or score rule parameters yourself in this context.
-3. Upon receiving the completed options candidate grades and setup authorization details from the `gex-setup-grader` subagent, present it verbatim to the user as the system's official setup analysis report.
+3. Upon receiving the completed options candidate grades, pending stock candidate watchlist updates (`GEX_DAILY_CANDIDATES`), and setup authorization details from the `gex-setup-grader` subagent, present it verbatim to the user as the system's official setup analysis report.
 
 ---
 # Delegation Complete

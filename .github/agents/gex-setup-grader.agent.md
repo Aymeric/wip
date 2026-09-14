@@ -92,13 +92,15 @@ Grade the Setup’s structural quality on an 11-point system ($\ge 9/11$ require
 
 ---
 
-### Step 4: Persist Data, Trigger CLI and Render Setup Report
+### Step 4: Persist Data, Trigger CLI, Watchlist Sync and Render Setup Report
 1. **Save Raw API Payloads**: Copy all raw instrument definitions, quotes, and underlier close files into [data/downloads/](../../data/downloads/) folders by date.
    - Save the complete current-session payloads before invoking the CLI for each ticker. If any required payload is missing, empty, malformed, or from an older session, retry that download once; do not invoke `analyze` with stale substitutes.
 2. **Verify Setup via CLI Engine (Mandatory)**: Use the GEX Engine CLI to commit findings to [data/ticker_analyses.json](../../data/ticker_analyses.json). This ensures all 11-Rule calculations and Risk/Reward gates are performed with absolute mathematical precision by the system's core engine:
    `python3 src/gex_engine.py analyze <TICKER> --effective-session-date <Effective Session Date> --spot <spot_price> --ptrans <pTrans> --ntrans <nTrans> --gex <gex_price> --cotmp <cotmp> --db-change <db_change> [--target-delta <delta>] [--min-dte <days>]`
-3. **Verify Persisted Session Metadata**: After the CLI write, read the ticker's persisted `analyzed_date` and require it to equal the Effective Session Date. If the CLI stamped a weekend, holiday, or other wall-clock date, correct only that ticker's `analyzed_date` to the Effective Session Date supported by the raw payloads. If the raw payload session cannot be proven, mark the result `BLOCKED: SESSION_DATE_UNVERIFIED` instead of persisting or reporting `CONFIRMED`/`PENDING`.
-4. **Render grading results**: Output setup grading dashboard and include the Effective Session Date and persisted `analyzed_date`.
+3. **Pending Stock Watchlist Sync**: If a ticker is classified as `PENDING` (e.g. awaiting pullback to $pTrans$ support or confirmation), add the pending stock candidate symbol to the Robinhood equity watchlist `"GEX_DAILY_CANDIDATES"` via `robinhood-trading/add_to_watchlist(symbols=[TICKER])` to allow active tracking.
+4. **Options Watchlist Distinction**: Option contract candidates are managed separately by the `option-selector` subagent and added to the dedicated Robinhood **"options watchlist"** via `robinhood-trading/add_option_to_watchlist(option_ids=[...])`.
+5. **Verify Persisted Session Metadata**: After the CLI write, read the ticker's persisted `analyzed_date` and require it to equal the Effective Session Date. If the CLI stamped a weekend, holiday, or other wall-clock date, correct only that ticker's `analyzed_date` to the Effective Session Date supported by the raw payloads. If the raw payload session cannot be proven, mark the result `BLOCKED: SESSION_DATE_UNVERIFIED` instead of persisting or reporting `CONFIRMED`/`PENDING`.
+6. **Render grading results**: Output setup grading dashboard and include the Effective Session Date and persisted `analyzed_date`.
 
 #### Layout:
 ```markdown
@@ -141,6 +143,7 @@ Grade the Setup’s structural quality on an 11-point system ($\ge 9/11$ require
   $$\frac{Reward}{Risk} = R.R \ge 2.5$$
 
 ### 📁 Setup Status: 🟢 CONFIRMED / 🟡 PENDING / 🔴 BLOCKED
+- **Watchlist Sync Action**: [Added pending stock candidate TICKER to GEX_DAILY_CANDIDATES via add_to_watchlist / Option candidate to be synced to Options Watchlist via option-selector]
 
 *Note: Option contract selection recommendations are delegated to the specialized `option-selector` subagent.*
 ```

@@ -37,13 +37,13 @@ The workspace utilizes specialized subagents and skills organized into four high
 4. **Trade Journal Audit**: Run `trade-journal-analyst` to reconcile realized performance.
 
 #### Phase II: Discovery & Sentiment
-1. **Candidate Sourcing**: Run `gex-candidate-generator` to run Robinhood scans, apply baseline filters, check RSI/MACD crossovers, and update `data/candidate_stocks.json`.
+1. **Candidate Sourcing**: Run `gex-candidate-generator` to run Robinhood scans, apply baseline filters, check RSI/MACD crossovers, update `data/candidate_stocks.json`, and sync screened stock candidates to the Robinhood equity watchlist `GEX_DAILY_CANDIDATES`.
 2. **Social Sentiment**: Run `reddit-sentiment-analyst` for 5-factor sentiment scoring on WSB/options/stocks.
 
 #### Phase III: Setup Engineering & Selection
-1. **Setup Grading**: Run `gex-setup-grader` to download option chains in 40-ID chunks, derive pTrans/nTrans levels, and execute the 11-Rule checklist.
-2. **Option Selection**: Run `option-selector` to isolate optimal 30-45 DTE contracts within the Per-Trade Buying Power Budget.
+1. **Setup Grading**: Run `gex-setup-grader` to download option chains in 40-ID chunks, derive pTrans/nTrans levels, execute the 11-Rule checklist, and add pending stock candidates to the equity watchlist `GEX_DAILY_CANDIDATES` via `add_to_watchlist`.
+2. **Option Selection**: Run `option-selector` to isolate optimal 30-45 DTE contracts within the Per-Trade Buying Power Budget, and add isolated option candidates to the dedicated Robinhood **"options watchlist"** via `add_option_to_watchlist`.
 
 #### Phase IV: Execution Handoff
-- Present confirmed mechanical recommendations verbatim to the user.
+- Present confirmed mechanical recommendations verbatim to the user, including watchlist sync statuses (pending stock candidates on equity watchlist, option candidates on "options watchlist").
 - Require explicit user confirmation via `ask_question` before invoking `agentic-trader`.

@@ -80,14 +80,14 @@ When requested to run the analysis, utilize this streamlined three-phase workflo
    - **Analytical Continuity Rule**: Even if Phase I returns a `BLOCKED` status or `MAX LOSS DRAWDOWN BLOCK`, the Orchestrator **MUST** still proceed with Phase II and III to refresh the system's analytical state and keep ticker data from becoming stale. A market-regime-only block may be bypassed for the current run through the explicit question protocol above. Any other active block still prohibits new entries in Phase IV.
 
 #### Phase II: Discovery & Sentiment Filtering
-1. **Setup Candidate Sourcing**: Spawn `gex-candidate-generator` to run Robinhood scans and lists, applying baseline filters (Price, Volume, Market Cap), checking for **Technical Alerts** (RSI/MACD crossovers via `gex_engine.py`), and synchronizing to mobile watchlists.
+1. **Setup Candidate Sourcing**: Spawn `gex-candidate-generator` to run Robinhood scans and lists, applying baseline filters (Price, Volume, Market Cap), checking for **Technical Alerts** (RSI/MACD crossovers via `gex_engine.py`), and synchronizing stock candidates / pending stock candidates to the `"GEX_DAILY_CANDIDATES"` equity watchlist via `add_to_watchlist`.
    - **Missing-session recovery:** A `PARTIAL` result caused by absent current-session scan payloads is not a terminal discovery result. Require the candidate generator to verify and persist each live `run_scan` response under the Effective Session Date before reconciliation. If a scan payload is still unavailable after its one retry, keep that source `UNKNOWN/BLOCKED`, label historical carryovers `HISTORICAL/STALE`, and continue to Phase III with the full in-scope ticker set for current-session grading.
 2. **Social Sentiment Scans**: Spawn `reddit-sentiment-analyst` to compute 5-factor scores and flag **FOMO ALERTS** or **CAPITULATION WATCH**.
    - **Analytical Rule**: Refresh the candidate pool and sentiment data daily to maintain system situational awareness, regardless of authorization state.
 
 #### Phase III: Setup Engineering & Selection
-1. **Setup Analysis / Grading**: Spawn `gex-setup-grader` to fetch option chains (in 40-ID chunks), derive pTrans/nTrans levels, and execute the 11-Rule checklist.
-2. **Option Selection Protocol**: Spawn `option-selector` to isolate the optimal 30-45 DTE contract, performing earnings preflight checks and enforcing the **Per-Trade Buying Power Budget** received from Phase I.
+1. **Setup Analysis / Grading**: Spawn `gex-setup-grader` to fetch option chains (in 40-ID chunks), derive pTrans/nTrans levels, execute the 11-Rule checklist, and sync `PENDING` stock candidates to the `"GEX_DAILY_CANDIDATES"` equity watchlist via `add_to_watchlist(symbols=[TICKER])`.
+2. **Option Selection Protocol**: Spawn `option-selector` to isolate the optimal 30-45 DTE contract, performing earnings preflight checks, enforcing the **Per-Trade Buying Power Budget** received from Phase I, and adding isolated option candidates to the dedicated Robinhood **"options watchlist"** via `add_option_to_watchlist(option_ids=[CONTRACT_ID], position_type="long")`.
    - **Goal**: Maintain current-session `Ticker Analyses` for every in-scope candidate and active underlier. Prior-session records may be retained for history but cannot retain an actionable `CONFIRMED` or `PENDING` classification.
 3. **Ticker Analysis Freshness Repair (mandatory before finalizing Phase III)**:
    - Build the in-scope ticker set from the current-session candidate results, explicitly requested tickers, and every active-position underlier. Do not omit a ticker because its cached record is stale, blocked, or absent.
@@ -319,7 +319,9 @@ For every open stock position fetched from Robinhood:
 ### 🚀 Status & Action
 - **Signal Status**: [CONFIRMED / PENDING (watching pTrans close) / BLOCKED]
 - **Recommended Play**: Buy Option contract (e.g. Strike / Expiration suggestions if data provided)
-- **Position Watchlist Action**: [Add target to Options Watchlist via MCP]
+- **Watchlist Actions**:
+  - **Stock Watchlist Action**: [Added pending stock candidate TICKER to GEX_DAILY_CANDIDATES via add_to_watchlist]
+  - **Options Watchlist Action**: [Added target option contract CONTRACT_ID to Options Watchlist via add_option_to_watchlist]
    - *Note*: Ensure ticker analysis is appended/merged directly into [data/ticker_analyses.json](data/ticker_analyses.json), option contracts are persisted to [data/active_positions_ACCOUNT_NUMBER.json](data/active_positions_ACCOUNT_NUMBER.json), and all raw downloaded JSON payloads are saved into a session-specific raw API downloads folder (e.g., [data/downloads/](data/downloads/)).
 
 ### 🔌 Agentic Trade Execution & Approval Box

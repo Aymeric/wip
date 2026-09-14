@@ -12,4 +12,4 @@ Activate the **gex-candidate-generator** skill to:
 2. Sequentially query curated public lists (`100 most popular`, `Daily movers`, `Popular recurring investments`, `IPO Access`).
 3. Apply baseline quantitative filters (Price \$5-\$1000, 30d Avg Vol $\ge 200\text{k}$, Market Cap $\ge \$1\text{B}$).
 4. Screen out active holdings and overlay daily RSI/MACD indicators.
-5. Update `data/candidate_stocks.json` and synchronize candidates to the Robinhood watchlist `GEX_DAILY_CANDIDATES`.
+5. Update `data/candidate_stocks.json` and synchronize stock candidates / pending stock candidates to the Robinhood equity watchlist `GEX_DAILY_CANDIDATES` (with option candidates synced separately to the "options watchlist").

@@ -41,8 +41,9 @@ Derive:
 10. Session Confirmation: Green or consolidating daily action.
 11. Option Liquidity: Bid/ask spread $\le 10\%$.
 
-### Step 4: Classification & Storage
+### Step 4: Classification, Watchlist Sync & Storage
 - `CONFIRMED`: All 11 rules pass.
-- `PENDING`: High-quality structure, awaiting pullback or confirmation.
+- `PENDING`: High-quality structure, awaiting pullback to $pTrans$ or confirmation. Add pending stock candidates to the Robinhood equity watchlist `GEX_DAILY_CANDIDATES` via `robinhood-trading/add_to_watchlist` with `symbols: [TICKER]`.
 - `REJECTED`: Fails structural or risk rules.
+- **Option Candidates Separation**: Option contract candidates are handled separately by `option-selector` and added to the dedicated Robinhood **"options watchlist"** via `robinhood-trading/add_option_to_watchlist`.
 - Save to `data/ticker_analyses.json`.
