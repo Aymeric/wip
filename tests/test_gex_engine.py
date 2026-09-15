@@ -11,6 +11,7 @@ import subprocess
 # Ensure the src directory is in the path to import gex_engine correctly
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
 
+import gex_engine
 from gex_engine import (
     calculate_grade, 
     compute_regime_gates, 
@@ -24,6 +25,7 @@ from gex_engine import (
     calculate_trade_journal,
     parse_spot_overrides,
     parse_effective_session_date,
+    parse_historical_bars,
     RegimeGates,
     OptionPosition,
     StockPosition
@@ -2341,6 +2343,47 @@ class TestGEXEngine(unittest.TestCase):
                 self.assertIn("score", candidate)
         finally:
             shutil.rmtree(temp_dir)
+
+    def test_parse_historical_bars(self):
+        """Test parse_historical_bars with various payload structures."""
+        # 1. Nested dict structure: data.results containing symbol and bars
+        payload_nested = {
+            "data": {
+                "results": [
+                    {"symbol": "AAPL", "bars": [{"close_price": "150.0"}]},
+                    {"symbol": "MSFT", "bars": [{"close_price": "250.0"}]}
+                ]
+            }
+        }
+        bars = parse_historical_bars(payload_nested, "AAPL")
+        self.assertEqual(len(bars), 1)
+        self.assertEqual(bars[0]["close_price"], "150.0")
+
+        # 2. Top-level results list containing symbol and bars
+        payload_results = {
+            "results": [
+                {"symbol": "TSLA", "bars": [{"close_price": "200.0"}]}
+            ]
+        }
+        bars = parse_historical_bars(payload_results, "TSLA")
+        self.assertEqual(len(bars), 1)
+        self.assertEqual(bars[0]["close_price"], "200.0")
+
+        # 3. Top-level bars key
+        payload_bars = {
+            "bars": [{"close_price": "100.0"}, {"close_price": "101.0"}]
+        }
+        bars = parse_historical_bars(payload_bars, "UNKNOWN")
+        self.assertEqual(len(bars), 2)
+
+        # 4. List payload
+        payload_list = [{"close_price": "50.0"}, {"close_price": "51.0"}]
+        bars = parse_historical_bars(payload_list)
+        self.assertEqual(len(bars), 2)
+
+        # 5. Non-matching or empty payload
+        self.assertEqual(parse_historical_bars({}, "AAPL"), [])
+        self.assertEqual(parse_historical_bars(None, "AAPL"), [])
 
 
 if __name__ == '__main__':
