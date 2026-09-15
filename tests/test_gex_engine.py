@@ -13,6 +13,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..',
 
 from gex_engine import (
     calculate_grade, 
+    classify_etf,
     compute_regime_gates, 
     compute_exit_rule_state,
     derive_gex_profile,
@@ -1379,6 +1380,24 @@ class TestGEXEngine(unittest.TestCase):
         
         option_size_oversized = 3500.0
         self.assertGreater(option_size_oversized, max_option_per_leg)
+
+    def test_classify_etf(self):
+        """Test ETF classification logic for standard ETFs and HYG."""
+        # Standard ETF tests (thresholds: > 0.1 BULLISH, < -0.1 BEARISH, else FLAT)
+        self.assertEqual(classify_etf("SPY", 0.15), "BULLISH")
+        self.assertEqual(classify_etf("QQQ", -0.15), "BEARISH")
+        self.assertEqual(classify_etf("IWM", 0.05), "FLAT")
+        self.assertEqual(classify_etf("XLK", 0.1), "FLAT")
+        self.assertEqual(classify_etf("XLF", -0.1), "FLAT")
+
+        # HYG tests (thresholds: > 0.0 BULLISH, < 0.0 BEARISH, else FLAT)
+        self.assertEqual(classify_etf("HYG", 0.05), "BULLISH")
+        self.assertEqual(classify_etf("HYG", -0.05), "BEARISH")
+        self.assertEqual(classify_etf("HYG", 0.0), "FLAT")
+
+        # Case-insensitivity test
+        self.assertEqual(classify_etf("hyg", 0.02), "BULLISH")
+        self.assertEqual(classify_etf("spy", 0.2), "BULLISH")
 
     def test_pct_change_flat_classification(self):
         """Test ETF classification thresholds for flat/bullish/bearish."""

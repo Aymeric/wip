@@ -461,6 +461,21 @@ def get_performance_status(account: str = "") -> Dict[str, Any]:
     }
 
 
+def classify_etf(symbol: str, chg_pct: float) -> str:
+    """Classifies an ETF as BULLISH, BEARISH, or FLAT based on daily percent change."""
+    if symbol.upper() != "HYG":
+        if chg_pct > 0.1:
+            return "BULLISH"
+        if chg_pct < -0.1:
+            return "BEARISH"
+    else:
+        if chg_pct > 0.0:
+            return "BULLISH"
+        if chg_pct < 0.0:
+            return "BEARISH"
+    return "FLAT"
+
+
 def compute_regime_gates(spy_pct: float, qqq_pct: float, bull_count: int, bear_count: int, vix_dealer_delta_bearish: bool) -> Tuple[str, float, str, str, str, int]:
     """Mechanically computes the three Daily Regime Gates and system authorization.
 
@@ -580,17 +595,7 @@ def cmd_update_regime(args):
                         chg_pct = ((price - prev_close) / prev_close) * 100.0
                         found_symbols[sym_upper] = chg_pct
                         
-                    classification = "FLAT"
-                    if sym_upper != "HYG":
-                        if chg_pct > 0.1:
-                            classification = "BULLISH"
-                        elif chg_pct < -0.1:
-                            classification = "BEARISH"
-                    else:
-                        if chg_pct > 0.0:
-                            classification = "BULLISH"
-                        elif chg_pct < 0.0:
-                            classification = "BEARISH"
+                    classification = classify_etf(sym_upper, chg_pct)
                             
                     etf_segment_names = {
                         "SPY": "S&P 500 Broad Market",
@@ -695,17 +700,7 @@ def cmd_update_regime(args):
         for sym, val in [("SPY", spy_val), ("QQQ", qqq_val), ("HYG", hyg_val)]:
             if val is not None:
                 chg_pct = float(val)
-                classification = "FLAT"
-                if sym != "HYG":
-                    if chg_pct > 0.1:
-                        classification = "BULLISH"
-                    elif chg_pct < -0.1:
-                        classification = "BEARISH"
-                else:
-                    if chg_pct > 0.0:
-                        classification = "BULLISH"
-                    elif chg_pct < 0.0:
-                        classification = "BEARISH"
+                classification = classify_etf(sym, chg_pct)
                 etf_details[sym] = {
                     "Ticker": sym,
                     "ETF Segment / Sector Name": etf_segment_names.get(sym, "Unknown Sector"),
