@@ -21,6 +21,7 @@ from gex_engine import (
     discover_earnings_date,
     calculate_bollinger_bands,
     calculate_atr,
+    calculate_annualized_vol,
     calculate_trade_journal,
     parse_spot_overrides,
     parse_effective_session_date,
@@ -2132,6 +2133,32 @@ class TestGEXEngine(unittest.TestCase):
         best2, eligible2 = select_best_option(inst_data, quotes_data, spot=100.0, gex_target=110.0, today_override="2026-07-09", earnings_date="2026-08-25")
         self.assertIsNotNone(best2)
         self.assertFalse(best2["earnings_blocked"])
+
+    def test_calculate_annualized_vol(self):
+        """Test calculation of annualized volatility from daily log returns."""
+        import math
+
+        # 1. Edge case: empty list -> 0.0
+        self.assertEqual(calculate_annualized_vol([]), 0.0)
+
+        # 2. Edge case: single element -> 0.0
+        self.assertEqual(calculate_annualized_vol([0.01]), 0.0)
+
+        # 3. Edge case: zero variance (all values identical) -> 0.0
+        self.assertEqual(calculate_annualized_vol([0.02, 0.02, 0.02]), 0.0)
+
+        # 4. Known input calculation: [0.01, -0.01]
+        expected_val = math.sqrt(0.0002) * math.sqrt(252) * 100.0
+        result_val = calculate_annualized_vol([0.01, -0.01])
+        self.assertAlmostEqual(result_val, expected_val, places=7)
+
+        # 5. Realistic log return series
+        returns = [0.005, -0.003, 0.012, -0.008, 0.002, 0.001, -0.004, 0.006]
+        n = len(returns)
+        mean_ret = sum(returns) / n
+        variance = sum((x - mean_ret) ** 2 for x in returns) / (n - 1)
+        expected_real = math.sqrt(variance) * math.sqrt(252) * 100.0
+        self.assertAlmostEqual(calculate_annualized_vol(returns), expected_real, places=7)
 
     def test_technical_indicators_rsi_macd(self):
         """Test RSI and MACD calculation functions."""
