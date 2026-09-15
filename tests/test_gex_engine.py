@@ -3279,6 +3279,33 @@ class TestGEXEngine(unittest.TestCase):
         finally:
             shutil.rmtree(temp_dir)
 
+    def test_cmd_update_performance_invalid_net_liq(self):
+        """Test cmd_update_performance exits when --net-liq is missing, zero, or negative."""
+        from types import SimpleNamespace
+        from unittest.mock import patch
+        import io
+        import gex_engine
+
+        for invalid_net_liq in [None, 0.0, -500.0]:
+            with self.subTest(net_liq=invalid_net_liq):
+                args = SimpleNamespace(
+                    net_liq=invalid_net_liq,
+                    account="ACC123",
+                    monthly_file=None,
+                    pnl_file=None,
+                )
+                with patch("sys.stderr", new_callable=io.StringIO) as mock_stderr:
+                    with self.assertRaises(SystemExit) as cm:
+                        gex_engine.cmd_update_performance(args)
+                    self.assertEqual(cm.exception.code, 1)
+                    self.assertIn("Error: --net-liq must be a positive account net liquidation value.", mock_stderr.getvalue())
+
+    def test_cmd_update_performance_account_scoped(self):
+        """Test cmd_update_performance computes metrics and saves to account-scoped performance file."""
+        import tempfile
+        import shutil
+        from types import SimpleNamespace
+        from unittest.mock import patch
     def test_cmd_workflow_standard_and_subagent_logging(self):
         """Test cmd_workflow output with populated regime, state, portfolio, candidates, and analyses."""
         import tempfile
@@ -3289,6 +3316,33 @@ class TestGEXEngine(unittest.TestCase):
 
         temp_dir = tempfile.mkdtemp()
         try:
+            perf_path = os.path.join(temp_dir, "data", "performance_ACC123.json")
+            args = SimpleNamespace(
+                net_liq=50000.0,
+                account="ACC123",
+                monthly_file=None,
+                pnl_file=None,
+            )
+            with patch("gex_engine.account_performance_file", return_value=perf_path), \
+                 patch("gex_engine.get_monthly_realized_pnl", return_value=(2500.0, 5.0, "PASS", 10)):
+                gex_engine.cmd_update_performance(args)
+
+            data = gex_engine.load_json(perf_path, {})
+            self.assertEqual(data["account"], "ACC123")
+            self.assertEqual(data["monthly_pnl_dlr"], 2500.0)
+            self.assertEqual(data["monthly_pnl_pct"], 5.0)
+            self.assertEqual(data["drawdown_gate_status"], "PASS")
+            self.assertEqual(data["monthly_cnt"], 10)
+            self.assertIn("last_updated", data)
+        finally:
+            shutil.rmtree(temp_dir)
+
+    def test_cmd_update_performance_default_account(self):
+        """Test cmd_update_performance computes metrics and saves to default performance file when account is empty."""
+        import tempfile
+        import shutil
+        from types import SimpleNamespace
+        from unittest.mock import patch
             workflow_file = os.path.join(temp_dir, "workflow_state.json")
             regime_file = os.path.join(temp_dir, "regime.json")
             options_file = os.path.join(temp_dir, "active_positions.json")
@@ -3371,6 +3425,24 @@ class TestGEXEngine(unittest.TestCase):
 
         temp_dir = tempfile.mkdtemp()
         try:
+            perf_path = os.path.join(temp_dir, "data", "performance.json")
+            args = SimpleNamespace(
+                net_liq=100000.0,
+                account="",
+                monthly_file=None,
+                pnl_file=None,
+            )
+            with patch("gex_engine.account_performance_file", return_value=perf_path), \
+                 patch("gex_engine.get_monthly_realized_pnl", return_value=(-12000.0, -12.0, "FAIL", 5)):
+                gex_engine.cmd_update_performance(args)
+
+            data = gex_engine.load_json(perf_path, {})
+            self.assertEqual(data["account"], "")
+            self.assertEqual(data["monthly_pnl_dlr"], -12000.0)
+            self.assertEqual(data["monthly_pnl_pct"], -12.0)
+            self.assertEqual(data["drawdown_gate_status"], "FAIL")
+            self.assertEqual(data["monthly_cnt"], 5)
+            self.assertIn("last_updated", data)
             workflow_file = os.path.join(temp_dir, "workflow_state.json")
             regime_file = os.path.join(temp_dir, "regime.json")
             account_options_file = os.path.join(temp_dir, "active_positions_ACC99.json")
