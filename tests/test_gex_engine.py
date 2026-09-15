@@ -912,6 +912,96 @@ class TestGEXEngine(unittest.TestCase):
             if os.path.exists(closed_path):
                 os.remove(closed_path)
 
+    def test_cmd_update_opt(self):
+        import tempfile
+        from unittest.mock import patch
+        import gex_engine
+
+        temp_dir = tempfile.mkdtemp()
+        tmp_path = os.path.join(temp_dir, "active_positions_TEST.json")
+        initial_data = {
+            "options_positions": {
+                "OPT123": {
+                    "Underlier": "AAPL",
+                    "Mark Price": 2.50,
+                    "Delta": "0.45",
+                    "Gamma": "0.02",
+                    "Open Interest": 100,
+                    "ImpVol": "0.25",
+                    "Stalling Days": 0,
+                    "Target Mode": "T1",
+                    "T2 Target": 5.0
+                },
+                "OPT456": {
+                    "Underlier": "MSFT",
+                    "Mark Price": 10.0,
+                    "Delta": "0.60"
+                }
+            }
+        }
+        gex_engine.save_json(tmp_path, initial_data)
+
+        try:
+            with patch('gex_engine.account_positions_file', return_value=tmp_path):
+                # 1) Update by option ID with all optional arguments specified
+                class UpdateArgs1:
+                    account = "TEST"
+                    option_id = "OPT123"
+                    mark = 3.75
+                    delta = 0.55
+                    gamma = 0.03
+                    oi = 150
+                    iv = 0.30
+                    stalling_days = 2
+                    target_mode = "T2"
+                    t2_target = 7.5
+
+                gex_engine.cmd_update_opt(UpdateArgs1())
+                updated_data = gex_engine.load_json(tmp_path, {})
+                opt123 = updated_data["options_positions"]["OPT123"]
+                self.assertEqual(opt123["Mark Price"], 3.75)
+                self.assertEqual(opt123["Delta"], "0.55")
+                self.assertEqual(opt123["Gamma"], "0.03")
+                self.assertEqual(opt123["Open Interest"], 150)
+                self.assertEqual(opt123["ImpVol"], "0.3")
+                self.assertEqual(opt123["Stalling Days"], 2)
+                self.assertEqual(opt123["Target Mode"], "T2")
+                self.assertEqual(opt123["T2 Target"], 7.5)
+
+                # 2) Update by underlier ticker (case-insensitive match) with minimal arguments
+                class UpdateArgs2:
+                    account = "TEST"
+                    option_id = "msft"
+                    mark = 12.0
+                    delta = None
+                    gamma = None
+                    oi = None
+                    iv = None
+                    stalling_days = None
+
+                gex_engine.cmd_update_opt(UpdateArgs2())
+                updated_data = gex_engine.load_json(tmp_path, {})
+                opt456 = updated_data["options_positions"]["OPT456"]
+                self.assertEqual(opt456["Mark Price"], 12.0)
+                self.assertEqual(opt456["Delta"], "0.60")  # Unchanged
+
+                # 3) Non-existent option ID / ticker raises SystemExit
+                class NonExistentArgs:
+                    account = "TEST"
+                    option_id = "UNKNOWN"
+                    mark = 1.0
+                    delta = None
+                    gamma = None
+                    oi = None
+                    iv = None
+                    stalling_days = None
+
+                with self.assertRaises(SystemExit):
+                    gex_engine.cmd_update_opt(NonExistentArgs())
+        finally:
+            if os.path.exists(tmp_path):
+                os.remove(tmp_path)
+
     def test_sync_positions_prefers_newest_snapshot_over_folder_name(self):
         import tempfile
         import shutil
