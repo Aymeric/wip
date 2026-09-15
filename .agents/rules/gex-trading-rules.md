@@ -3,7 +3,7 @@
 These rules are enforced across all sessions in this workspace.
 
 ## 1. Tool Mapping & Interaction Protocol
-- **Human Decisions**: Whenever user input, account selection, gate bypass, or trade confirmation is needed, call the `ask_question` tool.
+- **Human Decisions**: Whenever user input, gate bypass, or trade confirmation is needed, call the `ask_question` tool. If target accounts are not specified in the prompt, prompt for account selection using `ask_question`.
 - **Single / Multi-Select**: Use `is_multi_select: false` for single choices and `is_multi_select: true` for multi-account selections.
 - **Safety Gate**: Never infer consent or trade approval from informal conversational text.
 

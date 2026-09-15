@@ -53,7 +53,8 @@ graph TD
 
 2. **Mandatory Account Preflight**:
    - Establish the target Robinhood account first via `robinhood-trading/get_accounts` and `robinhood-trading/get_portfolio`.
-   - Prompt the user using `ask_question` with masked account labels, account type, buying power, and `agentic_allowed` status.
+   - If target account(s) are explicitly listed in the agent prompt (e.g. `accounts: ••••9961`), validate and resolve them directly against retrieved live accounts.
+   - If not specified in the prompt or if ambiguous, prompt the user using `ask_question` with masked account labels, account type, buying power, and `agentic_allowed` status.
    - All downstream CLI commands (e.g. `update-option`, `update-stock`, `portfolio`, `sync-positions`, `sync-pnl`) **MUST** explicitly pass `--account ACCOUNT_NUMBER`.
    - Never combine or aggregate accounts unless explicitly instructed by the user.
 

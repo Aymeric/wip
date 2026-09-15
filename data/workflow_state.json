@@ -1,14 +1,14 @@
 {
   "current_phase": "Phase IV: Complete",
-  "last_updated": "2026-09-14T21:57:15.622679+00:00",
+  "last_updated": "2026-09-14T23:09:45.028817+00:00",
   "subagents": {
     "gex-orchestrator": {
       "status": "SUCCESS",
-      "timestamp": "2026-09-14T21:57:15.622557+00:00"
+      "timestamp": "2026-09-14T23:09:45.028696+00:00"
     },
     "portfolio-risk-manager": {
       "status": "SUCCESS",
-      "timestamp": "2026-09-09T03:38:11.998410+00:00"
+      "timestamp": "2026-09-14T23:09:21.845882+00:00"
     },
     "market-regime-analyst": {
       "status": "SUCCESS",
@@ -41,30 +41,6 @@
   },
   "notes": [
     {
-      "timestamp": "2026-09-14T13:14:00.122413+00:00",
-      "content": "Phase I complete: Regime BLOCKED (0/3 passed), Portfolio synchronized, closed-trade audit complete."
-    },
-    {
-      "timestamp": "2026-09-14T13:15:16.743149+00:00",
-      "content": "Market regime bypassed by human operator for current run. Starting Phase II discovery."
-    },
-    {
-      "timestamp": "2026-09-14T13:23:00.446994+00:00",
-      "content": "Phase II complete: 33 candidates screened, 10 added to GEX_DAILY_CANDIDATES watchlist. Starting Phase III setup grading."
-    },
-    {
-      "timestamp": "2026-09-14T13:28:07.372050+00:00",
-      "content": "Graded top screened candidates (CRWD, TEAM, ASAN, ALKT, BNTX, INTA, TLX). 0 setups achieved CONFIRMED status due to failed 11-rule structural checklist, R:R < 2.0, or high RV10. No orders to route."
-    },
-    {
-      "timestamp": "2026-09-14T21:50:13.345926+00:00",
-      "content": "Market regime gates failed, user authorized bypass for this run."
-    },
-    {
-      "timestamp": "2026-09-14T21:56:17.862962+00:00",
-      "content": "75 candidate tickers discovered and screened"
-    },
-    {
       "timestamp": "2026-09-14T21:56:17.939786+00:00",
       "content": "Graded COIN (10/11 PENDING), RBLX (9/11 PENDING), WIX, SDGR, NET"
     },
@@ -79,6 +55,30 @@
     {
       "timestamp": "2026-09-14T21:57:15.622677+00:00",
       "content": "RBLX added to GEX_DAILY_CANDIDATES; daily run concluded"
+    },
+    {
+      "timestamp": "2026-09-14T22:17:31.187408+00:00",
+      "content": "Starting daily GEX run for account 970049961"
+    },
+    {
+      "timestamp": "2026-09-14T22:19:19.350169+00:00",
+      "content": "Market regime bypassed by user. Starting Phase II Discovery."
+    },
+    {
+      "timestamp": "2026-09-14T22:20:06.831284+00:00",
+      "content": "Daily GEX run completed for account 970049961. Regime bypassed. 0 confirmed setups, 0 exits."
+    },
+    {
+      "timestamp": "2026-09-14T22:22:14.238199+00:00",
+      "content": "Starting daily session for accounts 970049961 and 5QR24141"
+    },
+    {
+      "timestamp": "2026-09-14T23:09:21.846018+00:00",
+      "content": "Audited accounts 970049961 and 5QR24141"
+    },
+    {
+      "timestamp": "2026-09-14T23:09:45.028814+00:00",
+      "content": "Daily run completed for accounts 970049961 and 5QR24141"
     }
   ]
 }

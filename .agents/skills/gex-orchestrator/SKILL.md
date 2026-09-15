@@ -22,11 +22,10 @@ When invoked directly, establishing target account selection is the mandatory fi
 
 1. **Retrieve Accounts**: Call `robinhood-trading/get_accounts` to retrieve available accounts.
 2. **Retrieve Authoritative Balances**: For each retrieved account, call `robinhood-trading/get_portfolio` with its exact account number to retrieve authoritative live buying power and account value/net liquidation basis.
-3. **Prompt User**: Call `ask_question` with one account-selection question:
-   - `is_multi_select: true`
-   - Label each option with only the masked account number, account name, account type, buying power, and `agentic_allowed` status. Never expose full account numbers in option labels.
-   - Always present this question, even when the request names an account or only one account is available.
-4. **Resolve Selection**: Resolve each selected masked label against the retrieved live account list. If accounts cannot be retrieved, a label does not resolve uniquely, or no selection is returned, stop with `BLOCKED: ACCOUNT_SELECTION_REQUIRED`.
+3. **Prompt User or Resolve Prompt Accounts**:
+   - If target account(s) are explicitly specified in the prompt (e.g. `accounts: ••••9961` or full/masked account numbers), match and resolve them directly against the retrieved accounts.
+   - If not specified or ambiguous, call `ask_question` with one account-selection question (`is_multi_select: true`). Label each option with only the masked account number, account name, account type, buying power, and `agentic_allowed` status. Never expose full account numbers in option labels.
+4. **Resolve Selection**: Confirm the resolved account(s) against the retrieved live account list. If accounts cannot be retrieved, a label does not resolve uniquely, or no selection is returned, stop with `BLOCKED: ACCOUNT_SELECTION_REQUIRED`.
 5. **Run Workflow Summary**: Start from the repository root by running:
    ```bash
    python3 src/gex_engine.py workflow

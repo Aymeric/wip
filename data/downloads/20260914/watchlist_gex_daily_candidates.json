@@ -1,1 +1,47 @@
-{"data":{"items":[{"object_id":"dd770da4-6ee8-4429-99f3-b0b5f965f50a","object_type":"instrument","symbol":"RBLX"},{"object_id":"872a4a6f-9e98-49a4-87fc-f851e0b00e8d","object_type":"instrument","symbol":"HUBS"},{"object_id":"6fb80910-6286-4848-a847-2098dc5ab6fa","object_type":"instrument","symbol":"TEAM"},{"object_id":"e182feb8-a811-4668-a1e8-5ce018346fa7","object_type":"instrument","symbol":"ASAN"},{"object_id":"614f53e5-93ee-4476-9687-4e156f51bf15","object_type":"instrument","symbol":"BNTX"},{"object_id":"d960293b-c360-4e3e-95fb-a47ec5aac934","object_type":"instrument","symbol":"ALKT"},{"object_id":"7f52d399-daf3-48cd-909f-d7ae59101683","object_type":"instrument","symbol":"TLX"},{"object_id":"4b4d198e-fe71-487c-8e3b-584732a2bfaa","object_type":"instrument","symbol":"CRWD"},{"object_id":"352ba63d-e75f-46f2-a594-5ac584879576","object_type":"instrument","symbol":"WLY"},{"object_id":"44b83005-a81e-4818-b940-8cf95266cba0","object_type":"instrument","symbol":"INTA"},{"object_id":"aba7c493-8a7b-4ebf-8be6-f0f6a9d44330","object_type":"instrument","symbol":"DFTX"},{"object_id":"940fc3f5-1db5-4fed-b452-f3a2e4562b5f","object_type":"instrument","symbol":"AMD"},{"object_id":"aedbcff3-1e3c-469b-9594-44cffed43404","object_type":"instrument","symbol":"COIN"},{"object_id":"a4ecd608-e7b4-4ff3-afa5-f77ae7632dfb","object_type":"instrument","symbol":"NVDA"},{"object_id":"81aace36-131a-4fed-98a5-cfe9fc29814e","object_type":"instrument","symbol":"WDC"},{"object_id":"9a69c0d6-47b3-4d3e-b9f0-78d8e51630ac","object_type":"instrument","symbol":"SOFI"},{"object_id":"fc443b92-03ca-4852-a834-e2378da76584","object_type":"instrument","symbol":"BOBS"},{"object_id":"f0768e63-5264-4080-ae4e-07423abe04d9","object_type":"instrument","symbol":"NAD"},{"object_id":"09649b23-26e8-4eb3-b163-72d86d3ab305","object_type":"instrument","symbol":"DLB"},{"object_id":"283abce4-3723-47ea-9555-2233862f94be","object_type":"instrument","symbol":"SGML"},{"object_id":"45cad9fa-3fb7-4d30-9c00-3fd44a916585","object_type":"instrument","symbol":"XXI"},{"object_id":"7fa50b5d-7ef0-4ae3-b96a-e1fff4fb83a5","object_type":"instrument","symbol":"LHX"},{"object_id":"9523e631-9a76-49df-b375-a8b103111902","object_type":"instrument","symbol":"DHC"},{"object_id":"3404a40a-2563-4b3c-9bf1-0bbc6d245b65","object_type":"instrument","symbol":"LTH"},{"object_id":"de96e8c6-76f6-42ae-bac9-4146f9e8dd54","object_type":"instrument","symbol":"MNSO"},{"object_id":"f9326830-fcbd-49c2-a95c-d417b8643903","object_type":"instrument","symbol":"DPC"},{"object_id":"5c5e7fb0-e80d-4809-a362-04eefbc1fd81","object_type":"instrument","symbol":"BUD"},{"object_id":"1f7366fd-d7b7-4e37-9960-80d09d5e3342","object_type":"instrument","symbol":"BEKE"},{"object_id":"b2e597ae-4b74-4c5b-be7a-cf19100c61f7","object_type":"instrument","symbol":"SEI"},{"object_id":"fd977364-40a5-45ac-9f26-b7cb113e1837","object_type":"instrument","symbol":"SECZ"},{"object_id":"a1f2c41a-8563-4d57-b7bc-a6a4c544d436","object_type":"instrument","symbol":"KC"},{"object_id":"eac02141-dae5-470c-aad1-220f9d4d411f","object_type":"instrument","symbol":"KB"},{"object_id":"5cfb0ce4-ee31-4aaa-9b20-b221f1e1f198","object_type":"instrument","symbol":"CCC"},{"object_id":"afc660d1-1d86-49ba-aee3-9695069daced","object_type":"instrument","symbol":"EQPT"},{"object_id":"82fff33b-6899-422b-adfa-aac69e833136","object_type":"instrument","symbol":"NTAP"},{"object_id":"be5fb320-73c5-4f9e-a825-1c632bdd5f92","object_type":"instrument","symbol":"ORCL"},{"object_id":"a919afe5-7d0a-46bf-9a41-8f4455b2047e","object_type":"instrument","symbol":"VIK"},{"object_id":"2a48765c-66d1-4ad8-ba40-8d3bc82cb61d","object_type":"instrument","symbol":"WDFC"},{"object_id":"a195d494-ea9b-4405-ab76-0828a27ea4ed","object_type":"instrument","symbol":"OKLO"},{"object_id":"8eec3912-304b-4ad9-b71a-39200fc34062","object_type":"instrument","symbol":"MARA"},{"object_id":"799356ca-41fb-449e-85dc-cb375ab3325b","object_type":"instrument","symbol":"SHC"}],"has_futures_contracts":false},"guide":"For instruments (object_type=instrument) the symbol is the ticker — pass to get_quotes for prices. For crypto (currency_pair), symbol is the pair (BTC-USD). The has_futures_contracts flag at the top tells you whether any futures items are present — futures behavior is different (the object_id is the active contract, not the product). When presenting to the user, lead with symbol + object_type; omit object_id unless asked."}
+{
+  "data": {
+    "items": [
+      {
+        "object_id": "dd770da4-6ee8-4429-99f3-b0b5f965f50a",
+        "object_type": "instrument",
+        "symbol": "RBLX"
+      },
+      {
+        "object_id": "872a4a6f-9e98-49a4-87fc-f851e0b00e8d",
+        "object_type": "instrument",
+        "symbol": "HUBS"
+      },
+      {
+        "object_id": "e182feb8-a811-4668-a1e8-5ce018346fa7",
+        "object_type": "instrument",
+        "symbol": "ASAN"
+      },
+      {
+        "object_id": "7f52d399-daf3-48cd-909f-d7ae59101683",
+        "object_type": "instrument",
+        "symbol": "TLX"
+      },
+      {
+        "object_id": "352ba63d-e75f-46f2-a594-5ac584879576",
+        "object_type": "instrument",
+        "symbol": "WLY"
+      },
+      {
+        "object_id": "aba7c493-8a7b-4ebf-8be6-f0f6a9d44330",
+        "object_type": "instrument",
+        "symbol": "DFTX"
+      },
+      {
+        "object_id": "aedbcff3-1e3c-469b-9594-44cffed43404",
+        "object_type": "instrument",
+        "symbol": "COIN"
+      },
+      {
+        "object_id": "45cad9fa-3fb7-4d30-9c00-3fd44a916585",
+        "object_type": "instrument",
+        "symbol": "XXI"
+      }
+    ],
+    "has_futures_contracts": false
+  }
+}
