@@ -73,6 +73,7 @@ Assign one of three classifications:
 
 ### Watchlist Actions:
 - **Pending Stock Candidates**: Add any symbol graded `PENDING` to the Robinhood equity watchlist (`GEX_DAILY_CANDIDATES`) via `robinhood-trading/add_to_watchlist(symbols=[TICKER])` so the trader can monitor price action and entry pullbacks toward $pTrans$.
+- **Prune Rejected Setups**: If an analyzed symbol is graded `REJECTED` or breaks below $nTrans$, remove it from `GEX_DAILY_CANDIDATES` via `robinhood-trading/remove_from_watchlist(symbols=[TICKER])` so invalid setups are not retained on the candidate watchlist.
 - **Option Candidates Separation**: Note that option contract candidates are handled separately by the **option-selector** agent and added to the dedicated Robinhood **"options watchlist"** via `robinhood-trading/add_option_to_watchlist(option_ids=[...], position_type="long")`.
 
 Save findings to `data/ticker_analyses.json`:
