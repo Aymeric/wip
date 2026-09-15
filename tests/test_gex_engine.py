@@ -2153,6 +2153,31 @@ class TestGEXEngine(unittest.TestCase):
         self.assertIsNotNone(best2)
         self.assertFalse(best2["earnings_blocked"])
 
+    def test_calculate_ema(self):
+        """Test module-level calculate_ema utility function."""
+        from gex_engine import calculate_ema
+
+        # 1. Standard EMA calculation with period 3
+        values = [10.0, 11.0, 12.0, 13.0, 14.0]
+        ema = calculate_ema(values, 3)
+        # Expected:
+        # seed SMA = (10+11+12)/3 = 11.0
+        # k = 2 / (3 + 1) = 0.5
+        # 13.0: 13.0 * 0.5 + 11.0 * 0.5 = 12.0
+        # 14.0: 14.0 * 0.5 + 12.0 * 0.5 = 13.0
+        self.assertEqual(len(ema), 3)
+        self.assertAlmostEqual(ema[0], 11.0)
+        self.assertAlmostEqual(ema[1], 12.0)
+        self.assertAlmostEqual(ema[2], 13.0)
+
+        # 2. Edge case: values length less than period or invalid period
+        self.assertEqual(calculate_ema([10.0, 12.0], 3), [])
+        self.assertEqual(calculate_ema([10.0, 12.0], 0), [])
+        self.assertEqual(calculate_ema([], 3), [])
+
+        # 3. Exact match when len(values) == p
+        self.assertEqual(calculate_ema([10.0, 20.0, 30.0], 3), [20.0])
+
     def test_technical_indicators_rsi_macd(self):
         """Test RSI and MACD calculation functions."""
         from gex_engine import calculate_rsi, calculate_macd
