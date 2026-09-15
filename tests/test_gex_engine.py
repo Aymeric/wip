@@ -3279,6 +3279,11 @@ class TestGEXEngine(unittest.TestCase):
         finally:
             shutil.rmtree(temp_dir)
 
+    def test_cmd_close_pos(self):
+        """Test cmd_close_pos for option closing, P&L calculations, error handling, and account scoping."""
+        import tempfile
+        import shutil
+        from io import StringIO
     def test_cmd_update_performance_invalid_net_liq(self):
         """Test cmd_update_performance exits when --net-liq is missing, zero, or negative."""
         from types import SimpleNamespace
@@ -3316,6 +3321,166 @@ class TestGEXEngine(unittest.TestCase):
 
         temp_dir = tempfile.mkdtemp()
         try:
+            active_file = os.path.join(temp_dir, "active_positions.json")
+            closed_file = os.path.join(temp_dir, "closed_positions.json")
+
+            active_data = {
+                "options_positions": {
+                    "opt_1": {
+                        "Underlier": "AAPL",
+                        "Strike": 150.0,
+                        "Type": "call",
+                        "Purchase Premium": 2.0,
+                        "Mark Price": 3.0,
+                    },
+                    "opt_2": {
+                        "Underlier": "NVDA",
+                        "Strike": 120.0,
+                        "Type": "call",
+                        "Purchase Premium": 5.0,
+                        "Mark Price": 8.0,
+                    },
+                    "opt_3": {
+                        "Underlier": "TSLA",
+                        "Strike": 200.0,
+                        "Type": "put",
+                        "Purchase Premium": 0.0,
+                    },
+                    "opt_4": {
+                        "Underlier": "AMZN",
+                        "Strike": 180.0,
+                        "Type": "call",
+                        "Purchase Premium": 10.0,
+                        "Mark Price": 7.0,
+                    },
+                },
+                "closed_options": [
+                    {"opt_id": "legacy_1", "Underlier": "MSFT"}
+                ],
+            }
+            gex_engine.save_json(active_file, active_data)
+
+            # 1) Position not found error test
+            class NotFoundArgs:
+                option_id = "NONEXISTENT"
+                close_premium = None
+                account = ""
+
+            with patch("gex_engine.account_positions_file", return_value=active_file), \
+                 patch("gex_engine.account_closed_positions_file", return_value=closed_file), \
+                 patch("sys.stderr", new_callable=StringIO) as mock_stderr:
+                with self.assertRaises(SystemExit) as cm:
+                    gex_engine.cmd_close_pos(NotFoundArgs())
+                self.assertEqual(cm.exception.code, 1)
+                self.assertIn("not found in portfolio", mock_stderr.getvalue())
+
+            # 2) Close position by option_id with explicit close_premium and legacy options migration
+            class CloseByIdArgs:
+                option_id = "opt_1"
+                close_premium = 3.50
+                account = ""
+
+            with patch("gex_engine.account_positions_file", return_value=active_file), \
+                 patch("gex_engine.account_closed_positions_file", return_value=closed_file), \
+                 patch("sys.stdout", new_callable=StringIO):
+                gex_engine.cmd_close_pos(CloseByIdArgs())
+
+            # Check active_positions.json state
+            active_res = gex_engine.load_json(active_file, {})
+            self.assertNotIn("opt_1", active_res.get("options_positions", {}))
+            self.assertNotIn("closed_options", active_res)  # Legacy closed options migrated
+
+            # Check closed_positions.json state
+            closed_res = gex_engine.load_json(closed_file, {})
+            closed_opts = closed_res.get("closed_options", [])
+            opt_ids = [opt.get("opt_id") for opt in closed_opts if "opt_id" in opt]
+            self.assertIn("legacy_1", opt_ids)
+
+            opt_1_closed = [opt for opt in closed_opts if opt.get("Underlier") == "AAPL"][0]
+            self.assertEqual(opt_1_closed["Close Premium"], 3.50)
+            self.assertEqual(opt_1_closed["Realized P&L ($)"], 150.0)  # (3.50 - 2.0) * 100
+            self.assertEqual(opt_1_closed["Realized P&L (%)"], 75.0)   # ((3.50 - 2.0)/2.0) * 100
+            self.assertIn("Close Date", opt_1_closed)
+
+            # 3) Close position by Underlier ticker (case-insensitive) with default close_premium (uses Mark Price)
+            class CloseByTickerArgs:
+                option_id = "nvda"
+                close_premium = None
+                account = ""
+
+            with patch("gex_engine.account_positions_file", return_value=active_file), \
+                 patch("gex_engine.account_closed_positions_file", return_value=closed_file), \
+                 patch("sys.stdout", new_callable=StringIO):
+                gex_engine.cmd_close_pos(CloseByTickerArgs())
+
+            active_res = gex_engine.load_json(active_file, {})
+            self.assertNotIn("opt_2", active_res.get("options_positions", {}))
+
+            closed_res = gex_engine.load_json(closed_file, {})
+            nvda_closed = [opt for opt in closed_res.get("closed_options", []) if opt.get("Underlier") == "NVDA"][0]
+            self.assertEqual(nvda_closed["Close Premium"], 8.0)  # defaulted to Mark Price
+            self.assertEqual(nvda_closed["Realized P&L ($)"], 300.0)  # (8.0 - 5.0) * 100
+            self.assertEqual(nvda_closed["Realized P&L (%)"], 60.0)
+
+            # 4) Close position with zero purchase premium (avoid ZeroDivisionError) and no Mark Price
+            class CloseZeroPremiumArgs:
+                option_id = "opt_3"
+                close_premium = None
+                account = ""
+
+            with patch("gex_engine.account_positions_file", return_value=active_file), \
+                 patch("gex_engine.account_closed_positions_file", return_value=closed_file), \
+                 patch("sys.stdout", new_callable=StringIO):
+                gex_engine.cmd_close_pos(CloseZeroPremiumArgs())
+
+            closed_res = gex_engine.load_json(closed_file, {})
+            tsla_closed = [opt for opt in closed_res.get("closed_options", []) if opt.get("Underlier") == "TSLA"][0]
+            self.assertEqual(tsla_closed["Realized P&L (%)"], 0.0)
+            self.assertEqual(tsla_closed["Realized P&L ($)"], 0.0)
+
+            # 5) Close position resulting in negative P&L (loss)
+            class CloseLossArgs:
+                option_id = "opt_4"
+                close_premium = 5.0
+                account = ""
+
+            with patch("gex_engine.account_positions_file", return_value=active_file), \
+                 patch("gex_engine.account_closed_positions_file", return_value=closed_file), \
+                 patch("sys.stdout", new_callable=StringIO) as mock_stdout:
+                gex_engine.cmd_close_pos(CloseLossArgs())
+
+            closed_res = gex_engine.load_json(closed_file, {})
+            amzn_closed = [opt for opt in closed_res.get("closed_options", []) if opt.get("Underlier") == "AMZN"][0]
+            self.assertEqual(amzn_closed["Realized P&L ($)"], -500.0)  # (5.0 - 10.0) * 100
+            self.assertEqual(amzn_closed["Realized P&L (%)"], -50.0)
+            self.assertIn("Closed AMZN 180.0 call (opt_4)", mock_stdout.getvalue())
+
+            # 6) Test account argument scoping
+            acc_active = os.path.join(temp_dir, "active_positions_123.json")
+            acc_closed = os.path.join(temp_dir, "closed_positions_123.json")
+            gex_engine.save_json(acc_active, {
+                "options_positions": {
+                    "opt_acc": {
+                        "Underlier": "AMD",
+                        "Purchase Premium": 1.0,
+                    }
+                }
+            })
+
+            class AccCloseArgs:
+                option_id = "opt_acc"
+                close_premium = 2.0
+                account = "123"
+
+            with patch("gex_engine.account_positions_file", return_value=acc_active), \
+                 patch("gex_engine.account_closed_positions_file", return_value=acc_closed), \
+                 patch("sys.stdout", new_callable=StringIO):
+                gex_engine.cmd_close_pos(AccCloseArgs())
+
+            acc_active_data = gex_engine.load_json(acc_active, {})
+            self.assertNotIn("opt_acc", acc_active_data.get("options_positions", {}))
+            acc_closed_data = gex_engine.load_json(acc_closed, {})
+            self.assertEqual(len(acc_closed_data.get("closed_options", [])), 1)
             perf_path = os.path.join(temp_dir, "data", "performance_ACC123.json")
             args = SimpleNamespace(
                 net_liq=50000.0,
