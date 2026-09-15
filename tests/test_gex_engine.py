@@ -3691,5 +3691,304 @@ class TestCmdStatus(unittest.TestCase):
             shutil.rmtree(temp_dir)
 
 
+    def test_cmd_analyze_explicit_args_confirmed(self):
+        """Test cmd_analyze when explicit CLI arguments result in a CONFIRMED setup."""
+        import tempfile
+        from unittest.mock import patch, MagicMock
+        from types import SimpleNamespace
+        import gex_engine
+
+        with tempfile.NamedTemporaryFile(suffix=".json", delete=False) as tmp_analyses:
+            analyses_path = tmp_analyses.name
+
+        try:
+            gex_engine.save_json(analyses_path, {})
+
+            args = SimpleNamespace(
+                symbol="AAPL",
+                effective_session_date="2026-08-11",
+                spot=290.0,
+                ptrans=285.0,
+                ntrans=280.0,
+                gex=310.0,
+                cotmp=275.0,
+                db_change=0.60,
+                spike_crash=False,
+                inst_file=None,
+                quote_file=None,
+                hist_file=None,
+                earnings_date=None,
+                net_liq=50000.0,
+                target_delta=0.45,
+                min_dte=30,
+                max_dte=45,
+                rule1=None, rule2=None, rule3=None, rule4=None, rule5=None,
+                rule6=None, rule7=None, rule8=None, rule9=None, rule10=None, rule11=None
+            )
+
+            with patch('gex_engine.ANALYSES_FILE', analyses_path), \
+                 patch('sys.stdout') as mock_stdout:
+                mock_stdout.isatty = MagicMock(return_value=False)
+                gex_engine.cmd_analyze(args)
+
+            analyses = gex_engine.load_json(analyses_path, {})
+            self.assertIn("AAPL", analyses)
+            record = analyses["AAPL"]
+            self.assertEqual(record["Ticker"], "AAPL")
+            self.assertEqual(record["Spot"], 290.0)
+            self.assertEqual(record["Grade"], 11)
+            self.assertTrue(record["Signal Status"].startswith("CONFIRMED"))
+            self.assertEqual(record["analyzed_date"], "2026-08-11")
+            self.assertEqual(record["db_change"], 0.60)
+            self.assertGreater(record["COTMP Cushion"], 2.0)
+            self.assertGreaterEqual(record["Risk/Reward"], 2.0)
+        finally:
+            if os.path.exists(analyses_path):
+                os.remove(analyses_path)
+
+    def test_cmd_analyze_pending_and_blocked(self):
+        """Test cmd_analyze classification for PENDING and BLOCKED signal status branches."""
+        import tempfile
+        from unittest.mock import patch, MagicMock
+        from types import SimpleNamespace
+        import gex_engine
+
+        with tempfile.NamedTemporaryFile(suffix=".json", delete=False) as tmp_analyses:
+            analyses_path = tmp_analyses.name
+
+        try:
+            # 1. PENDING (watchdog) setup: spot is below pTrans (285.0) but above watchdog threshold (285.0 * 0.995 = 283.575)
+            gex_engine.save_json(analyses_path, {})
+            args_pending = SimpleNamespace(
+                symbol="AAPL",
+                effective_session_date="2026-08-11",
+                spot=284.0,
+                ptrans=285.0,
+                ntrans=280.0,
+                gex=310.0,
+                cotmp=275.0,
+                db_change=0.60,
+                spike_crash=False,
+                inst_file=None, quote_file=None, hist_file=None, earnings_date=None, net_liq=50000.0,
+                rule1=None, rule2=None, rule3=None, rule4=None, rule5=None,
+                rule6=None, rule7=None, rule8=None, rule9=None, rule10=None, rule11=None
+            )
+
+            with patch('gex_engine.ANALYSES_FILE', analyses_path), patch('sys.stdout'):
+                gex_engine.cmd_analyze(args_pending)
+
+            record = gex_engine.load_json(analyses_path, {})["AAPL"]
+            self.assertTrue(record["Signal Status"].startswith("PENDING (watchdog)"))
+
+            # 2. BLOCKED setup due to Grade <= 8
+            args_low_grade = SimpleNamespace(
+                symbol="AAPL",
+                effective_session_date="2026-08-11",
+                spot=290.0,
+                ptrans=285.0,
+                ntrans=280.0,
+                gex=310.0,
+                cotmp=275.0,
+                db_change=0.60,
+                spike_crash=False,
+                inst_file=None, quote_file=None, hist_file=None, earnings_date=None, net_liq=50000.0,
+                rule1=False, rule2=False, rule7=False, rule3=None, rule4=None, rule5=None,
+                rule6=None, rule8=None, rule9=None, rule10=None, rule11=None
+            )
+
+            with patch('gex_engine.ANALYSES_FILE', analyses_path), patch('sys.stdout'):
+                gex_engine.cmd_analyze(args_low_grade)
+
+            record = gex_engine.load_json(analyses_path, {})["AAPL"]
+            self.assertTrue(record["Signal Status"].startswith("BLOCKED"))
+            self.assertIn("Grade <= 8", record["Signal Status"])
+
+            # 3. BLOCKED setup due to db_change < threshold
+            args_low_db = SimpleNamespace(
+                symbol="AAPL",
+                effective_session_date="2026-08-11",
+                spot=290.0,
+                ptrans=285.0,
+                ntrans=280.0,
+                gex=310.0,
+                cotmp=275.0,
+                db_change=0.10, # < 0.50
+                spike_crash=False,
+                inst_file=None, quote_file=None, hist_file=None, earnings_date=None, net_liq=50000.0,
+                rule1=None, rule2=None, rule3=None, rule4=None, rule5=None,
+                rule6=None, rule7=None, rule8=None, rule9=None, rule10=None, rule11=None
+            )
+
+            with patch('gex_engine.ANALYSES_FILE', analyses_path), patch('sys.stdout'):
+                gex_engine.cmd_analyze(args_low_db)
+
+            record = gex_engine.load_json(analyses_path, {})["AAPL"]
+            self.assertTrue(record["Signal Status"].startswith("BLOCKED"))
+            self.assertIn("db_change", record["Signal Status"])
+
+            # 4. BLOCKED setup due to Risk/Reward < 2.0
+            args_low_rr = SimpleNamespace(
+                symbol="AAPL",
+                effective_session_date="2026-08-11",
+                spot=290.0,
+                ptrans=285.0,
+                ntrans=280.0,
+                gex=292.0, # reward = 2.0, risk = 5.0 -> R/R = 0.40
+                cotmp=275.0,
+                db_change=0.60,
+                spike_crash=False,
+                inst_file=None, quote_file=None, hist_file=None, earnings_date=None, net_liq=50000.0,
+                rule1=None, rule2=None, rule3=None, rule4=None, rule5=None,
+                rule6=None, rule7=None, rule8=None, rule9=None, rule10=None, rule11=None
+            )
+
+            with patch('gex_engine.ANALYSES_FILE', analyses_path), patch('sys.stdout'):
+                gex_engine.cmd_analyze(args_low_rr)
+
+            record = gex_engine.load_json(analyses_path, {})["AAPL"]
+            self.assertTrue(record["Signal Status"].startswith("BLOCKED"))
+            self.assertIn("Risk/Reward ratio", record["Signal Status"])
+        finally:
+            if os.path.exists(analyses_path):
+                os.remove(analyses_path)
+
+
+    def test_cmd_analyze_with_option_files_derivation(self):
+        """Test cmd_analyze auto-derivation of levels and best option selection using option data files."""
+        import tempfile
+        import shutil
+        from unittest.mock import patch, MagicMock
+        from types import SimpleNamespace
+        import gex_engine
+
+        temp_dir = tempfile.mkdtemp()
+        try:
+            analyses_path = os.path.join(temp_dir, "ticker_analyses.json")
+            inst_path = os.path.join(temp_dir, "test_instruments.json")
+            quote_path = os.path.join(temp_dir, "test_quotes.json")
+            hist_path = os.path.join(temp_dir, "test_historicals.json")
+
+            gex_engine.save_json(analyses_path, {})
+            gex_engine.save_json(inst_path, {
+                "instruments": [
+                    {"id": "put1", "strike_price": "90.0000", "type": "put"},
+                    {"id": "put2", "strike_price": "95.0000", "type": "put"},
+                    {"id": "call1", "strike_price": "105.0000", "type": "call", "expiration_date": "2026-08-08"},
+                    {"id": "call2", "strike_price": "115.0000", "type": "call", "expiration_date": "2026-08-08"}
+                ]
+            })
+            gex_engine.save_json(quote_path, {
+                "results": [
+                    {"quote": {"instrument_id": "put1", "open_interest": 2000, "gamma": "0.02"}},
+                    {"quote": {"instrument_id": "put2", "open_interest": 4000, "gamma": "0.02"}},
+                    {"quote": {"instrument_id": "call1", "bid_price": "2.40", "ask_price": "2.50", "mark_price": "2.45", "open_interest": 3000, "volume": 100, "delta": "0.45", "gamma": "0.02"}},
+                    {"quote": {"instrument_id": "call2", "bid_price": "1.00", "ask_price": "1.10", "mark_price": "1.05", "open_interest": 8000, "volume": 50, "delta": "0.25", "gamma": "0.01"}}
+                ]
+            })
+            bars = [{"begins_at": f"2026-06-{i:02d}T00:00:00Z", "close_price": str(100.0 + (i % 2) * 0.1)} for i in range(1, 13)]
+            gex_engine.save_json(hist_path, {"results": [{"symbol": "DERIV", "bars": bars}]})
+
+            args = SimpleNamespace(
+                symbol="DERIV",
+                effective_session_date="2026-08-11",
+                spot=100.0,
+                ptrans=None,
+                ntrans=None,
+                gex=None,
+                cotmp=None,
+                db_change=0.60,
+                spike_crash=False,
+                inst_file=inst_path,
+                quote_file=quote_path,
+                hist_file=hist_path,
+                earnings_date=None,
+                net_liq=50000.0,
+                target_delta=0.45,
+                min_dte=14,
+                max_dte=45,
+                rule1=None, rule2=None, rule3=None, rule4=None, rule5=None,
+                rule6=None, rule7=None, rule8=None, rule9=None, rule10=None, rule11=None
+            )
+
+            with patch('gex_engine.ANALYSES_FILE', analyses_path), \
+                 patch('sys.stdout') as mock_stdout:
+                mock_stdout.isatty = MagicMock(return_value=False)
+                gex_engine.cmd_analyze(args)
+
+            analyses = gex_engine.load_json(analyses_path, {})
+            self.assertIn("DERIV", analyses)
+            record = analyses["DERIV"]
+            self.assertEqual(record["pTrans"], 95.0)
+            self.assertEqual(record["nTrans"], 90.0)
+            self.assertEqual(record["+GEX"], 115.0)
+            self.assertTrue(record["Signal Status"].startswith("CONFIRMED"))
+        finally:
+            shutil.rmtree(temp_dir)
+
+    def test_cmd_analyze_cached_fallback_and_missing_metrics(self):
+        """Test cmd_analyze cached fallback when metrics are omitted and error handling when metrics are missing."""
+        import tempfile
+        from unittest.mock import patch, MagicMock
+        from types import SimpleNamespace
+        import gex_engine
+
+        with tempfile.NamedTemporaryFile(suffix=".json", delete=False) as tmp_analyses:
+            analyses_path = tmp_analyses.name
+
+        try:
+            # 1. Fallback to cached metrics
+            gex_engine.save_json(analyses_path, {
+                "AAPL": {
+                    "Ticker": "AAPL",
+                    "Spot": 290.0,
+                    "pTrans": 285.0,
+                    "nTrans": 280.0,
+                    "+GEX": 310.0,
+                    "COTMP": 275.0,
+                    "db_change": 0.60,
+                    "spike_crash": False
+                }
+            })
+
+            args_cached = SimpleNamespace(
+                symbol="AAPL",
+                effective_session_date="2026-08-11",
+                spot=None, ptrans=None, ntrans=None, gex=None, cotmp=None, db_change=None,
+                spike_crash=None, inst_file=None, quote_file=None, hist_file=None, earnings_date=None, net_liq=50000.0,
+                target_delta=0.45, min_dte=30, max_dte=45,
+                rule1=None, rule2=None, rule3=None, rule4=None, rule5=None,
+                rule6=None, rule7=None, rule8=None, rule9=None, rule10=None, rule11=None
+            )
+
+            with patch('gex_engine.ANALYSES_FILE', analyses_path), patch('sys.stdout'):
+                gex_engine.cmd_analyze(args_cached)
+
+            record = gex_engine.load_json(analyses_path, {})["AAPL"]
+            self.assertEqual(record["Spot"], 290.0)
+            self.assertEqual(record["pTrans"], 285.0)
+            self.assertTrue(record["Signal Status"].startswith("CONFIRMED"))
+
+            # 2. Missing metrics triggers sys.exit(1)
+            gex_engine.save_json(analyses_path, {})
+            args_missing = SimpleNamespace(
+                symbol="UNKNOWN",
+                effective_session_date="2026-08-11",
+                spot=None, ptrans=None, ntrans=None, gex=None, cotmp=None, db_change=None,
+                spike_crash=None, inst_file=None, quote_file=None, hist_file=None, earnings_date=None, net_liq=50000.0,
+                rule1=None, rule2=None, rule3=None, rule4=None, rule5=None,
+                rule6=None, rule7=None, rule8=None, rule9=None, rule10=None, rule11=None
+            )
+
+            with patch('gex_engine.ANALYSES_FILE', analyses_path), \
+                 patch('gex_engine.find_latest_underlier_spot', return_value=None), \
+                 patch('sys.stderr'), patch('sys.stdout'):
+                with self.assertRaises(SystemExit) as cm:
+                    gex_engine.cmd_analyze(args_missing)
+                self.assertEqual(cm.exception.code, 1)
+        finally:
+            if os.path.exists(analyses_path):
+                os.remove(analyses_path)
+
+
 if __name__ == '__main__':
     unittest.main()
