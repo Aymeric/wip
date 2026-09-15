@@ -1947,14 +1947,29 @@ def get_all_active_symbols() -> List[str]:
 
 def calculate_candidate_score(candidate: Dict[str, Any]) -> float:
     """Calculates a 0-100 screen score from the metrics available for a candidate."""
+    macd = candidate.get("macd_hist")
+    macd_val = None
+    if macd is not None:
+        try:
+            macd_val = 1.0 if float(macd) > 0.0 else 0.0
+        except (ValueError, TypeError):
+            macd_val = None
+
     weighted_metrics = [
         (candidate.get("relative_options_volume"), 30.0, 10.0),
         (candidate.get("chg_pct"), 25.0, 5.0),
         (candidate.get("iv"), 15.0, 1.0),
         (candidate.get("rsi"), 20.0, 100.0),
-        (1.0 if (candidate.get("macd_hist") or 0.0) > 0.0 else 0.0 if candidate.get("macd_hist") is not None else None, 10.0, 1.0),
+        (macd_val, 10.0, 1.0),
     ]
-    available = [(min(max(float(value) / cap, 0.0), 1.0) * weight, weight) for value, weight, cap in weighted_metrics if value is not None]
+    available = []
+    for value, weight, cap in weighted_metrics:
+        if value is not None:
+            try:
+                numeric_val = float(value)
+                available.append((min(max(numeric_val / cap, 0.0), 1.0) * weight, weight))
+            except (ValueError, TypeError):
+                pass
     if not available:
         return 0.0
     return round(sum(value for value, _ in available) / sum(weight for _, weight in available) * 100.0, 2)
