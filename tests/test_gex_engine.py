@@ -777,6 +777,74 @@ class TestGEXEngine(unittest.TestCase):
             if os.path.exists(tmp_path):
                 os.remove(tmp_path)
 
+    def test_cmd_add_pos(self):
+        import tempfile
+        from unittest.mock import patch
+        import io
+        import sys
+        import gex_engine
+
+        with tempfile.NamedTemporaryFile(suffix=".json", delete=False) as tmp:
+            tmp_path = tmp.name
+
+        try:
+            with patch('gex_engine.OPTIONS_FILE', tmp_path):
+                class DummyArgs:
+                    option_id = "AAPL250117C00150000"
+                    underlier = "aapl"
+                    strike = 150.0
+                    expiration = "2025-01-17"
+                    type = "call"
+                    purchase_premium = 5.50
+                    delta = 0.55
+                    gamma = 0.03
+                    open_interest = 1000
+                    imp_vol = 0.25
+                    sector = "Tech"
+                    account = ""
+
+                gex_engine.cmd_add_pos(DummyArgs())
+
+                # Check options_positions contents
+                data = gex_engine.load_json(tmp_path, {})
+                positions = data.get("options_positions", {})
+                self.assertIn("AAPL250117C00150000", positions)
+                pos = positions["AAPL250117C00150000"]
+                self.assertEqual(pos["Option ID"], "AAPL250117C00150000")
+                self.assertEqual(pos["Underlier"], "AAPL")
+                self.assertEqual(pos["Strike"], "150.00")
+                self.assertEqual(pos["Expiration"], "2025-01-17")
+                self.assertEqual(pos["Type"], "call")
+                self.assertEqual(pos["Purchase Premium"], 5.50)
+                self.assertEqual(pos["Delta"], "0.55")
+                self.assertEqual(pos["Gamma"], "0.03")
+                self.assertEqual(pos["Asset Cost Basis"], 550.0)
+                self.assertEqual(pos["Current Value"], 550.0)
+                self.assertEqual(pos["Beta Sector Tag"], "Tech")
+
+                # Duplicate option_id check
+                stderr_buf = io.StringIO()
+                with patch('sys.stderr', stderr_buf):
+                    with self.assertRaises(SystemExit) as cm:
+                        gex_engine.cmd_add_pos(DummyArgs())
+                    self.assertEqual(cm.exception.code, 1)
+                    self.assertIn("Error: Option ID AAPL250117C00150000 already exists", stderr_buf.getvalue())
+
+                # Invalid expiration format check
+                class InvalidExpArgs(DummyArgs):
+                    option_id = "AAPL250117C00160000"
+                    expiration = "2025/01/17"
+
+                stderr_buf_exp = io.StringIO()
+                with patch('sys.stderr', stderr_buf_exp):
+                    with self.assertRaises(SystemExit) as cm:
+                        gex_engine.cmd_add_pos(InvalidExpArgs())
+                    self.assertEqual(cm.exception.code, 1)
+                    self.assertIn("Error: Expiration '2025/01/17' must be a valid date in YYYY-MM-DD format.", stderr_buf_exp.getvalue())
+        finally:
+            if os.path.exists(tmp_path):
+                os.remove(tmp_path)
+
     def test_add_and_update_stocks_positions(self):
         import tempfile
         from unittest.mock import patch
