@@ -18,7 +18,7 @@ The workspace utilizes specialized subagents and skills organized into four high
 #### 🛰️ Session State Management
 1. **Retrieve Accounts**: Call `robinhood-trading/get_accounts`.
 2. **Authoritative Balances**: Call `robinhood-trading/get_portfolio` with each account number to fetch live buying power and net liquidation value.
-3. **Account Selection**: Call `ask_question` with one account-selection question (`is_multi_select: true`). Label each option with only masked account number, account type, buying power, and `agentic_allowed` status.
+3. **Account Selection**: If target account(s) are explicitly specified in the prompt (e.g. `accounts: ••••9961`), validate and resolve them directly against retrieved accounts. Otherwise, call `ask_question` with one account-selection question (`is_multi_select: true`). Label each option with only masked account number, account type, buying power, and `agentic_allowed` status.
 4. **Resolve Selection**: Store selected accounts. For multiple selections, execute workflows independently per account and never aggregate positions, P&L, or drawdown.
 5. **Start Workflow**: Run `python3 src/gex_engine.py workflow` to summarize system state.
 6. **Update State**: Update workflow progress via `python3 src/gex_engine.py update-workflow --phase "..." --agent "gex-orchestrator" --status "SUCCESS" --note "..."`.

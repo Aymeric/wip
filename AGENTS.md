@@ -53,7 +53,8 @@ graph TD
 
 2. **Mandatory Account Preflight**:
    - Establish the target Robinhood account first via `robinhood-trading/get_accounts` and `robinhood-trading/get_portfolio`.
-   - Prompt the user using `ask_question` with masked account labels, account type, buying power, and `agentic_allowed` status.
+   - If target account(s) are explicitly listed in the agent prompt (e.g. `accounts: ••••9961`), validate and resolve them directly against retrieved live accounts.
+   - If not specified in the prompt or if ambiguous, prompt the user using `ask_question` with masked account labels, account type, buying power, and `agentic_allowed` status.
    - All downstream CLI commands (e.g. `update-option`, `update-stock`, `portfolio`, `sync-positions`, `sync-pnl`) **MUST** explicitly pass `--account ACCOUNT_NUMBER`.
    - Never combine or aggregate accounts unless explicitly instructed by the user.
 
@@ -73,8 +74,9 @@ graph TD
    - Always run the deterministic Python engine: `python3 src/gex_engine.py <subcommand>`.
    - Track workflow state using `python3 src/gex_engine.py workflow` and `update-workflow`.
 
-6. **Watchlist Separation & Synchronization**:
+6. **Watchlist Separation, Synchronization & Hygiene Pruning**:
    - **Pending Stock Candidates**: Add screened and pending stock candidates (underliers) to the equity watchlist (`GEX_DAILY_CANDIDATES`) via `robinhood-trading/add_to_watchlist` using `symbols`.
+   - **Outdated Entries Pruning**: Regularly prune outdated entries from `GEX_DAILY_CANDIDATES` via `python3 src/gex_engine.py prune-candidates` and `robinhood-trading/remove_from_watchlist`. Any ticker that becomes an active portfolio holding, is graded `REJECTED`, or falls out of the screened candidate universe must be removed after user confirmation.
    - **Option Candidates**: Add isolated option contract candidates separately to the dedicated Robinhood **"options watchlist"** via `robinhood-trading/add_option_to_watchlist` using `option_ids`.
    - Never mix equity and options watchlist tools.
 
