@@ -24,6 +24,7 @@ from gex_engine import (
     calculate_trade_journal,
     parse_spot_overrides,
     parse_effective_session_date,
+    get_all_active_symbols,
     RegimeGates,
     OptionPosition,
     StockPosition
@@ -2296,6 +2297,93 @@ class TestGEXEngine(unittest.TestCase):
                 cand_data = gex_engine.load_json(candidates_file, {})
                 self.assertEqual(len(cand_data.get("candidates", [])), 0)
                 
+        finally:
+            shutil.rmtree(temp_dir)
+
+    def test_get_all_active_symbols_standard(self):
+        import tempfile
+        import shutil
+        from unittest.mock import patch
+        import gex_engine
+
+        temp_dir = tempfile.mkdtemp()
+        try:
+            data_dir = os.path.join(temp_dir, "data")
+            os.makedirs(data_dir)
+
+            pos1 = {
+                "options_positions": {
+                    "opt1": {"Underlier": "aapl"},
+                    "opt2": {"Underlier": "MSFT"}
+                },
+                "stocks_positions": {
+                    "tsla": {},
+                    "BABA": {}
+                }
+            }
+            pos2 = {
+                "options_positions": {
+                    "opt3": {"Underlier": "MSFT"}
+                },
+                "stocks_positions": {
+                    "NVDA": {}
+                }
+            }
+
+            gex_engine.save_json(os.path.join(data_dir, "active_positions.json"), pos1)
+            gex_engine.save_json(os.path.join(data_dir, "active_positions_ACC123.json"), pos2)
+
+            with patch("gex_engine.REPOSITORY_ROOT", temp_dir):
+                symbols = get_all_active_symbols()
+
+            self.assertEqual(symbols, ["AAPL", "BABA", "MSFT", "NVDA", "TSLA"])
+        finally:
+            shutil.rmtree(temp_dir)
+
+    def test_get_all_active_symbols_edge_cases(self):
+        import tempfile
+        import shutil
+        from unittest.mock import patch
+        import gex_engine
+
+        temp_dir = tempfile.mkdtemp()
+        try:
+            # 1. Non-existent data directory
+            with patch("gex_engine.REPOSITORY_ROOT", temp_dir):
+                self.assertEqual(get_all_active_symbols(), [])
+
+            # 2. Data directory exists but no active_positions*.json matching files
+            data_dir = os.path.join(temp_dir, "data")
+            os.makedirs(data_dir)
+            gex_engine.save_json(os.path.join(data_dir, "closed_positions.json"), {
+                "closed_stocks": [{"Ticker": "AMZN"}]
+            })
+            with open(os.path.join(data_dir, "active_positions.txt"), "w") as f:
+                f.write("text content")
+
+            with patch("gex_engine.REPOSITORY_ROOT", temp_dir):
+                self.assertEqual(get_all_active_symbols(), [])
+
+            # 3. Active positions file with malformed / non-dict entries and missing/empty fields
+            malformed_pos = {
+                "options_positions": {
+                    "opt1": None,  # details is not a dict
+                    "opt2": "invalid string",
+                    "opt3": {"Underlier": ""},  # empty string
+                    "opt4": {},  # missing Underlier key
+                    "opt5": {"Underlier": "AMD"}  # valid entry
+                },
+                "stocks_positions": {
+                    "": {},  # empty ticker string
+                    "INTC": {}  # valid ticker key
+                }
+            }
+            gex_engine.save_json(os.path.join(data_dir, "active_positions_malformed.json"), malformed_pos)
+
+            with patch("gex_engine.REPOSITORY_ROOT", temp_dir):
+                symbols = get_all_active_symbols()
+
+            self.assertEqual(symbols, ["AMD", "INTC"])
         finally:
             shutil.rmtree(temp_dir)
 
