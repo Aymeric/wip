@@ -2059,6 +2059,90 @@ class TestGEXEngine(unittest.TestCase):
             self.assertIn("$200.00", output)
             self.assertIn("$210.00", output)
 
+    def test_cmd_journal(self):
+        """Test cmd_journal subcommand with default account, explicit account, and empty data."""
+        import json
+        import io
+        import tempfile
+        from unittest.mock import patch, MagicMock
+        import gex_engine
+
+        # 1. Default account with trade data
+        closed_mock = {
+            "closed_options": [
+                {"Realized P&L ($)": 200.0, "Days Held": 4, "Close Reason": "Target"}
+            ],
+            "closed_stocks": [
+                {"Realized P&L ($)": -50.0, "Days Held": 2, "Close Reason": "Stop"}
+            ]
+        }
+        perf_mock = {"monthly_pnl_dlr": 150.0}
+
+        def mock_load_json(filepath, default=None):
+            if "closed_positions" in filepath:
+                return closed_mock
+            if "performance" in filepath:
+                return perf_mock
+            return default if default is not None else {}
+
+        with patch("gex_engine.load_json", side_effect=mock_load_json), patch("sys.stdout", new_callable=io.StringIO) as mock_stdout:
+            class DefaultArgs:
+                pass
+
+            gex_engine.cmd_journal(DefaultArgs())
+            output = mock_stdout.getvalue()
+            data = json.loads(output)
+            self.assertEqual(data["records_reviewed"], 2)
+            self.assertEqual(data["total_realized_pnl"], 150.0)
+            self.assertEqual(data["win_count"], 1)
+            self.assertEqual(data["loss_count"], 1)
+            self.assertEqual(data["cache_reconciliation"], "MATCH")
+
+        # 2. Explicit account parameter
+        with tempfile.TemporaryDirectory() as tmpdir:
+            account_closed_file = os.path.join(tmpdir, "closed_positions_acct123.json")
+            account_perf_file = os.path.join(tmpdir, "performance_acct123.json")
+
+            acct_closed_data = {
+                "closed_options": [{"Realized P&L ($)": 300.0, "Days Held": 1, "Close Reason": "Target"}],
+                "closed_stocks": []
+            }
+            acct_perf_data = {"monthly_pnl_dlr": 300.0}
+
+            gex_engine.save_json(account_closed_file, acct_closed_data)
+            gex_engine.save_json(account_perf_file, acct_perf_data)
+
+            with patch("gex_engine.account_closed_positions_file", return_value=account_closed_file) as mock_acct_closed, \
+                 patch("gex_engine.account_performance_file", return_value=account_perf_file) as mock_acct_perf, \
+                 patch("sys.stdout", new_callable=io.StringIO) as mock_stdout:
+
+                class AccountArgs:
+                    account = "acct123"
+
+                gex_engine.cmd_journal(AccountArgs())
+                mock_acct_closed.assert_called_once_with("acct123")
+                mock_acct_perf.assert_called_once_with("acct123")
+
+                output = mock_stdout.getvalue()
+                data = json.loads(output)
+                self.assertEqual(data["records_reviewed"], 1)
+                self.assertEqual(data["total_realized_pnl"], 300.0)
+
+        # 3. Empty / missing file data
+        with patch("gex_engine.load_json") as mock_load, patch("sys.stdout", new_callable=io.StringIO) as mock_stdout:
+            def load_empty(filepath, default=None):
+                return default if default is not None else {}
+            mock_load.side_effect = load_empty
+
+            class EmptyArgs:
+                account = ""
+
+            gex_engine.cmd_journal(EmptyArgs())
+            output = mock_stdout.getvalue()
+            data = json.loads(output)
+            self.assertEqual(data["records_reviewed"], 0)
+            self.assertEqual(data["total_realized_pnl"], 0.0)
+
     def test_generate_ascii_gex_scale(self):
         """Test GEX ASCII runway map generation."""
         from gex_engine import generate_ascii_gex_scale
