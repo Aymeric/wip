@@ -1366,6 +1366,27 @@ def calculate_grade(ticker, spot, ptrans, ntrans, gex, cotmp, extra_rules=None):
     return grade, rules
 
 
+def extract_quotes_list(quotes_data: Any) -> List[Any]:
+    """Extracts a quotes list from dict or list data payload."""
+    if isinstance(quotes_data, dict):
+        data = quotes_data.get("data")
+        quotes_list = []
+        if isinstance(data, dict):
+            quotes_list = data.get("results", [])
+        elif isinstance(data, list):
+            quotes_list = data
+
+        if not quotes_list:
+            res = quotes_data.get("results")
+            if isinstance(res, list):
+                quotes_list = res
+
+        return quotes_list if isinstance(quotes_list, list) else []
+    elif isinstance(quotes_data, list):
+        return quotes_data
+    return []
+
+
 def derive_gex_profile(inst_data, quotes_data, spot):
     """
     Derives GEX levels and key option metrics (COTMP, pTrans, nTrans, +GEX)
@@ -1400,15 +1421,7 @@ def derive_gex_profile(inst_data, quotes_data, spot):
         except (ValueError, KeyError):
             continue
         
-    quotes_list = []
-    if isinstance(quotes_data, dict):
-        quotes_list = quotes_data.get("data", {}).get("results", [])
-        if not quotes_list:
-            quotes_list = quotes_data.get("data", [])
-        if not quotes_list:
-            quotes_list = quotes_data.get("results", [])
-    elif isinstance(quotes_data, list):
-        quotes_list = quotes_data
+    quotes_list = extract_quotes_list(quotes_data)
         
     strike_put_oi = {}
     strike_call_oi = {}
@@ -2196,15 +2209,7 @@ def select_best_option(inst_data, quotes_data, spot, gex_target, today_override=
             continue
 
     # 2. Parse quotes
-    quotes_list = []
-    if isinstance(quotes_data, dict):
-        quotes_list = quotes_data.get("data", {}).get("results", [])
-        if not quotes_list:
-            quotes_list = quotes_data.get("data", [])
-        if not quotes_list:
-            quotes_list = quotes_data.get("results", [])
-    elif isinstance(quotes_data, list):
-        quotes_list = quotes_data
+    quotes_list = extract_quotes_list(quotes_data)
 
     quotes_map = {}
     for q_item in quotes_list:
