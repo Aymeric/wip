@@ -24,6 +24,7 @@ import argparse
 import re
 import shutil
 import tempfile
+import time
 from datetime import datetime, timezone
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Sequence, Tuple, Any, Iterable, Union
@@ -337,25 +338,89 @@ def parse_effective_session_date(value: str) -> str:
         ) from exc
 
 
+_DIR_FILES_CACHE: Dict[Any, List[str]] = {}
+_LAST_MTIME_CHECK_TIME: Dict[str, float] = {}
+_CACHED_DIR_MTIME_KEY: Dict[str, Any] = {}
+
+
+def _get_dir_mtime_key(d: str, ttl: float = 0.5) -> Any:
+    now = time.time()
+    last_check = _LAST_MTIME_CHECK_TIME.get(d, 0.0)
+    if now - last_check < ttl and d in _CACHED_DIR_MTIME_KEY:
+        return _CACHED_DIR_MTIME_KEY[d]
+    if not os.path.exists(d):
+        return None
+    try:
+        subdirs = [root for root, _, _ in os.walk(d)]
+        key = (d, tuple((sd, os.path.getmtime(sd)) for sd in subdirs))
+        _LAST_MTIME_CHECK_TIME[d] = now
+        _CACHED_DIR_MTIME_KEY[d] = key
+        return key
+    except Exception:
+        return None
+
+
+def _get_downloads_files(downloads_dir: str) -> List[str]:
+    """Efficiently retrieves all file paths under downloads_dir with mtime caching."""
+    if not os.path.exists(downloads_dir):
+        return []
+    mtime_key = _get_dir_mtime_key(downloads_dir)
+    if mtime_key and mtime_key in _DIR_FILES_CACHE:
+        return _DIR_FILES_CACHE[mtime_key]
+
+    files_list = []
+    for root, dirs, files in os.walk(downloads_dir):
+        for f in files:
+            files_list.append(os.path.join(root, f))
+
+    if mtime_key:
+        _DIR_FILES_CACHE.clear()
+        _DIR_FILES_CACHE[mtime_key] = files_list
+    return files_list
+
+
+_MAX_JSON_CACHE_SIZE = 1000
+_JSON_FILE_CACHE: Dict[Tuple[str, float], Any] = {}
+
+
 def load_json(filepath: str, default: Any) -> Any:
-    """Loads a JSON file from disk, returning default if absent or corrupted."""
+    """Loads a JSON file from disk with mtime caching, returning default if absent or corrupted."""
     if not os.path.exists(filepath):
         return default
     try:
+        mtime = os.path.getmtime(filepath)
         if os.path.getsize(filepath) == 0:
             return default
     except Exception:
-        pass
+        return default
+
+    cache_key = (filepath, mtime)
+    if cache_key in _JSON_FILE_CACHE:
+        return _JSON_FILE_CACHE[cache_key]
+
     try:
         with open(filepath, "r") as f:
-            return json.load(f)
+            data = json.load(f)
+        if len(_JSON_FILE_CACHE) >= _MAX_JSON_CACHE_SIZE:
+            _JSON_FILE_CACHE.pop(next(iter(_JSON_FILE_CACHE)))
+        _JSON_FILE_CACHE[cache_key] = data
+        return data
     except Exception as e:
         print(f"Warning: Failed to load {filepath}: {e}", file=sys.stderr)
         return default
 
 
+def _clear_cache_for_write():
+    _SPOT_PRICE_CACHE.clear()
+    _DIR_FILES_CACHE.clear()
+    _JSON_FILE_CACHE.clear()
+    _LAST_MTIME_CHECK_TIME.clear()
+    _CACHED_DIR_MTIME_KEY.clear()
+
+
 def save_json(filepath: str, data: Any) -> None:
     """Saves JSON atomically so a failed write cannot truncate existing state."""
+    _clear_cache_for_write()
     temp_path = None
     try:
         dir_name = os.path.dirname(filepath)
@@ -1748,12 +1813,11 @@ def find_latest_historical_closes(symbol: str) -> List[float]:
     symbol_upper = symbol.upper()
     matching_files = []
     
-    # Recursively scan DOWNLOADS_DIR
     if os.path.exists(DOWNLOADS_DIR):
-        for root, dirs, files in os.walk(DOWNLOADS_DIR):
-            for file in files:
-                if file.endswith(".json") and symbol_upper in file.upper() and "HISTORICAL" in file.upper():
-                    matching_files.append(os.path.join(root, file))
+        for filepath in _get_downloads_files(DOWNLOADS_DIR):
+            file = os.path.basename(filepath)
+            if file.endswith(".json") and symbol_upper in file.upper() and "HISTORICAL" in file.upper():
+                matching_files.append(filepath)
                     
     if not matching_files:
         return []
@@ -1763,8 +1827,7 @@ def find_latest_historical_closes(symbol: str) -> List[float]:
     
     for filepath in matching_files:
         try:
-            with open(filepath, 'r') as f:
-                data = json.load(f)
+            data = load_json(filepath, {})
             
             bars = []
             if isinstance(data, dict):
@@ -1810,15 +1873,14 @@ def find_latest_technical_indicators(symbol: str) -> Tuple[Optional[float], Opti
     symbol_upper = symbol.upper()
     matching_files = []
     if os.path.exists(DOWNLOADS_DIR):
-        for root, dirs, files in os.walk(DOWNLOADS_DIR):
-            for file in files:
-                if file.endswith(".json") and symbol_upper in file.upper() and "TECHNICAL" in file.upper():
-                    matching_files.append(os.path.join(root, file))
+        for filepath in _get_downloads_files(DOWNLOADS_DIR):
+            file = os.path.basename(filepath)
+            if file.endswith(".json") and symbol_upper in file.upper() and "TECHNICAL" in file.upper():
+                matching_files.append(filepath)
 
     for filepath in sorted(matching_files, reverse=True):
         try:
-            with open(filepath, "r") as f:
-                data = json.load(f)
+            data = load_json(filepath, {})
             indicators = data.get("data", {}).get("indicators", []) if isinstance(data, dict) else []
             values: Dict[str, Optional[float]] = {"rsi": None, "macd_hist": None}
             for indicator in indicators:
@@ -1853,12 +1915,7 @@ def find_latest_option_files(symbol: str) -> Dict[str, Optional[str]]:
     if not os.path.exists(DOWNLOADS_DIR):
         return result
         
-    all_files = []
-    for root, dirs, files in os.walk(DOWNLOADS_DIR):
-        for file in files:
-            if file.endswith(".json"):
-                all_files.append(os.path.join(root, file))
-    
+    all_files = [f for f in _get_downloads_files(DOWNLOADS_DIR) if f.endswith(".json")]
     all_files.sort(reverse=True)
     
     for filepath in all_files:
@@ -1878,23 +1935,43 @@ def find_latest_option_files(symbol: str) -> Dict[str, Optional[str]]:
     return result
 
 
+_SPOT_PRICE_CACHE: Dict[Tuple[str, Any, Any, Any], Optional[float]] = {}
+
+
+def _get_file_mtime(filepath: str) -> Optional[float]:
+    try:
+        if os.path.exists(filepath):
+            return os.path.getmtime(filepath)
+    except Exception:
+        pass
+    return None
+
+
 def find_latest_underlier_spot(symbol: str) -> Optional[float]:
     """Finds latest spot price for a symbol from downloaded underlier quotes or candidates."""
     symbol_upper = symbol.upper()
     symbol_lower = symbol.lower()
     
+    mtime_key = _get_dir_mtime_key(DOWNLOADS_DIR) if os.path.exists(DOWNLOADS_DIR) else None
+    cand_mtime = _get_file_mtime(CANDIDATES_FILE)
+    anal_mtime = _get_file_mtime(ANALYSES_FILE)
+    cache_key = (symbol_upper, mtime_key, cand_mtime, anal_mtime)
+    if cache_key in _SPOT_PRICE_CACHE:
+        return _SPOT_PRICE_CACHE[cache_key]
+
+    price_result: Optional[float] = None
+
     # 1) Try downloaded quote file
     if os.path.exists(DOWNLOADS_DIR):
         quote_files = []
-        for root, dirs, files in os.walk(DOWNLOADS_DIR):
-            for file in files:
-                if file.endswith(".json") and (symbol_lower in file.lower() or symbol_upper in file.upper()) and "QUOTE" in file.upper() and "OPTION" not in file.upper() and "ETF" not in file.upper():
-                    quote_files.append(os.path.join(root, file))
+        for filepath in _get_downloads_files(DOWNLOADS_DIR):
+            file = os.path.basename(filepath)
+            if file.endswith(".json") and (symbol_lower in file.lower() or symbol_upper in file.upper()) and "QUOTE" in file.upper() and "OPTION" not in file.upper() and "ETF" not in file.upper():
+                quote_files.append(filepath)
         quote_files.sort(reverse=True)
         for qf in quote_files:
             try:
-                with open(qf, "r") as f:
-                    qdata = json.load(f)
+                qdata = load_json(qf, {})
                 res_list = qdata.get("data", {}).get("results", []) if isinstance(qdata, dict) else []
                 if not res_list and isinstance(qdata, dict):
                     res_list = qdata.get("results", [])
@@ -1904,27 +1981,35 @@ def find_latest_underlier_spot(symbol: str) -> Optional[float]:
                     if isinstance(r, dict) and r.get("symbol", "").upper() == symbol_upper:
                         price = r.get("last_trade_price") or r.get("last_non_reg_trade_price") or r.get("last_extended_hours_trade_price") or r.get("price")
                         if price:
-                            return float(price)
+                            price_result = float(price)
+                            break
+                if price_result is not None:
+                    break
             except Exception:
                 continue
-                
-    # 2) Try candidate_stocks.json
-    cand_data = load_json(CANDIDATES_FILE, {})
-    for c in cand_data.get("candidates", []):
-        if c.get("symbol", "").upper() == symbol_upper and c.get("price") is not None:
-            return float(c["price"])
-            
-    # 3) Try ticker_analyses.json
-    analyses = load_json(ANALYSES_FILE, {})
-    if symbol_upper in analyses and analyses[symbol_upper].get("Spot") is not None:
-        return float(analyses[symbol_upper]["Spot"])
-        
-    # 4) Fallback to latest historical close price
-    closes = find_latest_historical_closes(symbol)
-    if closes:
-        return float(closes[-1])
 
-    return None
+    if price_result is None:
+        # 2) Try candidate_stocks.json
+        cand_data = load_json(CANDIDATES_FILE, {})
+        for c in cand_data.get("candidates", []):
+            if c.get("symbol", "").upper() == symbol_upper and c.get("price") is not None:
+                price_result = float(c["price"])
+                break
+
+    if price_result is None:
+        # 3) Try ticker_analyses.json
+        analyses = load_json(ANALYSES_FILE, {})
+        if symbol_upper in analyses and analyses[symbol_upper].get("Spot") is not None:
+            price_result = float(analyses[symbol_upper]["Spot"])
+
+    if price_result is None:
+        # 4) Fallback to latest historical close price
+        closes = find_latest_historical_closes(symbol)
+        if closes:
+            price_result = float(closes[-1])
+
+    _SPOT_PRICE_CACHE[cache_key] = price_result
+    return price_result
 
 
 def get_all_active_symbols() -> List[str]:
