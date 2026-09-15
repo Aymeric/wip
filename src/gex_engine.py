@@ -1571,6 +1571,28 @@ def calculate_rsi(closes: List[float], period: int = 14) -> Optional[float]:
     return 100.0 - (100.0 / (1.0 + rs))
 
 
+def calculate_ema(values: List[float], p: int) -> List[float]:
+    """
+    Calculates the Exponential Moving Average (EMA) for a list of values.
+
+    Args:
+        values: List of float numerical values (e.g. closing prices).
+        p: The window period for the EMA calculation.
+
+    Returns:
+        List of EMA values starting from the p-th element seeded by SMA of first p values.
+    """
+    if len(values) < p or p <= 0:
+        return []
+    ema = []
+    k = 2.0 / (p + 1)
+    sma = sum(values[:p]) / p
+    ema.append(sma)
+    for val in values[p:]:
+        ema.append(val * k + ema[-1] * (1.0 - k))
+    return ema
+
+
 def calculate_macd(closes: List[float], fast_period: int = 12, slow_period: int = 26, signal_period: int = 9) -> Tuple[Optional[float], Optional[float], Optional[float]]:
     """
     Calculates the MACD Line, Signal Line, and Histogram for a list of closes.
@@ -1580,19 +1602,9 @@ def calculate_macd(closes: List[float], fast_period: int = 12, slow_period: int 
     """
     if len(closes) < slow_period + signal_period:
         return None, None, None
-        
-    def get_ema(values: List[float], p: int) -> List[float]:
-        ema = []
-        k = 2.0 / (p + 1)
-        # Seed EMA with SMA of the first p values
-        sma = sum(values[:p]) / p
-        ema.append(sma)
-        for val in values[p:]:
-            ema.append(val * k + ema[-1] * (1.0 - k))
-        return ema
 
-    ema_fast = get_ema(closes, fast_period)
-    ema_slow = get_ema(closes, slow_period)
+    ema_fast = calculate_ema(closes, fast_period)
+    ema_slow = calculate_ema(closes, slow_period)
     
     align_index = slow_period - fast_period
     aligned_fast = ema_fast[align_index:]
@@ -1604,7 +1616,7 @@ def calculate_macd(closes: List[float], fast_period: int = 12, slow_period: int 
     if len(macd_line) < signal_period:
         return None, None, None
         
-    signal_line = get_ema(macd_line, signal_period)
+    signal_line = calculate_ema(macd_line, signal_period)
     
     return macd_line[-1], signal_line[-1], macd_line[-1] - signal_line[-1]
 
@@ -1974,22 +1986,13 @@ def check_technical_alerts(closes: List[float], highs: Optional[List[float]] = N
 
     # For MACD Crossover
     if len(closes) >= 35:
-        def get_ema(values: List[float], p: int) -> List[float]:
-            ema = []
-            k = 2.0 / (p + 1)
-            sma = sum(values[:p]) / p
-            ema.append(sma)
-            for val in values[p:]:
-                ema.append(val * k + ema[-1] * (1.0 - k))
-            return ema
-
-        ema_fast = get_ema(closes, 12)
-        ema_slow = get_ema(closes, 26)
+        ema_fast = calculate_ema(closes, 12)
+        ema_slow = calculate_ema(closes, 26)
         aligned_fast = ema_fast[14:]
         
         macd_line_list = [f - s for f, s in zip(aligned_fast, ema_slow)]
         if len(macd_line_list) >= 10:
-            signal_line_list = get_ema(macd_line_list, 9)
+            signal_line_list = calculate_ema(macd_line_list, 9)
             
             prev_hist = macd_line_list[-2] - signal_line_list[-2]
             curr_hist = macd_line_list[-1] - signal_line_list[-1]
