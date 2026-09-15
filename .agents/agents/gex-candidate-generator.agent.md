@@ -35,7 +35,8 @@ Your job is to derive the daily candidate universe from Robinhood scanners, cura
 - Query daily RSI and MACD crossovers via `robinhood-trading/get_equity_technical_indicators`.
 - Update `data/candidate_stocks.json` via CLI:
   ```bash
-  python3 src/gex_engine.py update-candidates --scan-files ...
+  python3 src/gex_engine.py update-candidates --date YYYYMMDD --exclude-active
   ```
+- **Watchlist Pruning & Hygiene**: Run `python3 src/gex_engine.py prune-candidates` to identify outdated entries on `GEX_DAILY_CANDIDATES` (active holdings, rejected setups, or stale non-candidates). Confirm with user via `ask_question` and prune via `robinhood-trading/remove_from_watchlist`.
 - **Stock Watchlist Sync**: Sync verified stock candidates and pending stock candidates to the Robinhood equity watchlist `GEX_DAILY_CANDIDATES` via `robinhood-trading/add_to_watchlist` (`symbols`).
 - **Options Watchlist Distinction**: Option contract candidates are managed separately by `option-selector` and added to the dedicated Robinhood **"options watchlist"** via `robinhood-trading/add_option_to_watchlist`.
