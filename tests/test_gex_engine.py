@@ -16,6 +16,7 @@ from gex_engine import (
     classify_etf,
     compute_regime_gates, 
     compute_exit_rule_state,
+    extract_quotes_list,
     derive_gex_profile,
     derive_volatility_profile,
     select_best_option,
@@ -32,6 +33,27 @@ from gex_engine import (
 )
 
 class TestGEXEngine(unittest.TestCase):
+
+    def test_extract_quotes_list(self):
+        sample_quotes = [{"instrument_id": "opt1"}]
+
+        # 1. Nested dict data -> results
+        self.assertEqual(extract_quotes_list({"data": {"results": sample_quotes}}), sample_quotes)
+
+        # 2. Dict data list fallback
+        self.assertEqual(extract_quotes_list({"data": sample_quotes}), sample_quotes)
+
+        # 3. Dict results list fallback
+        self.assertEqual(extract_quotes_list({"results": sample_quotes}), sample_quotes)
+
+        # 4. Direct list
+        self.assertEqual(extract_quotes_list(sample_quotes), sample_quotes)
+
+        # 5. Empty dict or invalid payload fallback
+        self.assertEqual(extract_quotes_list({}), [])
+        self.assertEqual(extract_quotes_list(None), [])
+        self.assertEqual(extract_quotes_list("invalid"), [])
+        self.assertEqual(extract_quotes_list(123), [])
 
     def test_repository_root_launcher_forwards_cli_arguments(self):
         repository_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
