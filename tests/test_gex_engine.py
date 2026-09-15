@@ -2075,6 +2075,174 @@ class TestGEXEngine(unittest.TestCase):
         self.assertIn("COTMP", scale_grouped)
         self.assertIn("+", scale_grouped)
 
+    def test_cmd_simulate_not_found(self):
+        """Test cmd_simulate exits with code 1 when symbol is not found in analyses or candidates."""
+        from unittest.mock import patch, MagicMock
+        import gex_engine
+
+        class SimArgs:
+            symbol = "UNKNOWN"
+            spot = 100.0
+            account = ""
+
+        with patch("gex_engine.load_json", return_value={}):
+            with patch("sys.stdout") as mock_stdout:
+                mock_stdout.isatty = MagicMock(return_value=False)
+                with self.assertRaises(SystemExit) as cm:
+                    gex_engine.cmd_simulate(SimArgs())
+                self.assertEqual(cm.exception.code, 1)
+
+    def test_cmd_simulate_from_analyses_with_option_position(self):
+        """Test cmd_simulate with symbol in analyses and active option position."""
+        from unittest.mock import patch, MagicMock
+        import gex_engine
+
+        class SimArgs:
+            symbol = "TSLA"
+            spot = 210.0
+            account = ""
+
+        analyses_data = {
+            "TSLA": {
+                "Ticker": "TSLA",
+                "Spot": 200.0,
+                "pTrans": 190.0,
+                "nTrans": 180.0,
+                "+GEX": 220.0,
+                "COTMP": 175.0,
+            }
+        }
+        options_data = {
+            "options_positions": {
+                "TSLA": {
+                    "Purchase Premium": 10.0,
+                    "Mark Price": 10.0,
+                    "Delta": 0.5,
+                    "Gamma": 0.02,
+                    "Entry Date": "2025-01-01",
+                    "Stalling Days": 0,
+                }
+            },
+            "stocks_positions": {},
+        }
+
+        def fake_load_json(filepath, default=None):
+            if "analyses" in filepath or filepath == gex_engine.ANALYSES_FILE:
+                return analyses_data
+            if "options" in filepath or "active_positions" in filepath or filepath == gex_engine.OPTIONS_FILE:
+                return options_data
+            return default if default is not None else {}
+
+        with patch("gex_engine.load_json", side_effect=fake_load_json):
+            with patch("sys.stdout") as mock_stdout:
+                mock_stdout.isatty = MagicMock(return_value=False)
+                gex_engine.cmd_simulate(SimArgs())
+                output = "".join(call.args[0] for call in mock_stdout.write.call_args_list if call.args)
+
+                self.assertIn("Simulation for TSLA", output)
+                self.assertIn("Original Spot", output)
+                self.assertIn("$200.00", output)
+                self.assertIn("Simulated Spot", output)
+                self.assertIn("$210.00", output)
+                self.assertIn("Active Position Impact", output)
+                self.assertIn("Simulated Mark Price", output)
+                self.assertIn("GEX Runway Map (Simulated)", output)
+
+    def test_cmd_simulate_from_analyses_with_stock_position(self):
+        """Test cmd_simulate with symbol in analyses and active stock position."""
+        from unittest.mock import patch, MagicMock
+        import gex_engine
+
+        class SimArgs:
+            symbol = "AAPL"
+            spot = 160.0
+            account = ""
+
+        analyses_data = {
+            "AAPL": {
+                "Ticker": "AAPL",
+                "Spot": 150.0,
+                "pTrans": 140.0,
+                "nTrans": 130.0,
+                "+GEX": 170.0,
+                "COTMP": 125.0,
+            }
+        }
+        options_data = {
+            "options_positions": {},
+            "stocks_positions": {
+                "AAPL": {
+                    "Shares": 100.0,
+                    "Average Buy Price": 150.0,
+                }
+            },
+        }
+
+        def fake_load_json(filepath, default=None):
+            if "analyses" in filepath or filepath == gex_engine.ANALYSES_FILE:
+                return analyses_data
+            if "options" in filepath or "active_positions" in filepath or filepath == gex_engine.OPTIONS_FILE:
+                return options_data
+            return default if default is not None else {}
+
+        with patch("gex_engine.load_json", side_effect=fake_load_json):
+            with patch("sys.stdout") as mock_stdout:
+                mock_stdout.isatty = MagicMock(return_value=False)
+                gex_engine.cmd_simulate(SimArgs())
+                output = "".join(call.args[0] for call in mock_stdout.write.call_args_list if call.args)
+
+                self.assertIn("Simulation for AAPL", output)
+                self.assertIn("Original Spot", output)
+                self.assertIn("$150.00", output)
+                self.assertIn("Simulated Spot", output)
+                self.assertIn("$160.00", output)
+                self.assertIn("Active Position Impact", output)
+                self.assertIn("Simulated Position Value", output)
+                self.assertIn("$16,000.00", output)
+
+    def test_cmd_simulate_from_candidates_fallback(self):
+        """Test cmd_simulate falls back to candidates file when symbol is not in analyses."""
+        from unittest.mock import patch, MagicMock
+        import gex_engine
+
+        class SimArgs:
+            symbol = "NVDA"
+            spot = 105.0
+            account = ""
+
+        candidates_data = {
+            "candidates": [
+                {
+                    "symbol": "NVDA",
+                    "price": 100.0,
+                    "ptrans": 98.0,
+                    "ntrans": 95.0,
+                    "gex": 110.0,
+                    "cotmp": 92.0,
+                }
+            ]
+        }
+
+        def fake_load_json(filepath, default=None):
+            if "candidates" in filepath or filepath == gex_engine.CANDIDATES_FILE:
+                return candidates_data
+            if "analyses" in filepath or filepath == gex_engine.ANALYSES_FILE:
+                return {}
+            return default if default is not None else {}
+
+        with patch("gex_engine.load_json", side_effect=fake_load_json):
+            with patch("sys.stdout") as mock_stdout:
+                mock_stdout.isatty = MagicMock(return_value=False)
+                gex_engine.cmd_simulate(SimArgs())
+                output = "".join(call.args[0] for call in mock_stdout.write.call_args_list if call.args)
+
+                self.assertIn("Simulation for NVDA", output)
+                self.assertIn("Original Spot", output)
+                self.assertIn("$100.00", output)
+                self.assertIn("Simulated Spot", output)
+                self.assertIn("$105.00", output)
+                self.assertIn("GEX Runway Map (Simulated)", output)
+
     def test_discover_earnings_date(self):
         """Test scanning directory for earnings date files with multi-date and ISO timestamp support."""
         import tempfile
