@@ -7,7 +7,7 @@ When working in this repository:
    - Never infer, guess, or assume missing market data. If live quotes or GEX levels are unavailable, record `UNKNOWN/BLOCKED` with explicit evidence.
 
 2. **User Interaction Convention**:
-   - For all user prompts requiring decisions, confirmations, account picks, or gate skips, invoke the `ask_question` tool.
+   - For all user prompts requiring decisions, confirmations, account picks (unless explicitly specified in the prompt), or gate skips, invoke the `ask_question` tool.
    - Never ask or confirm orders via free-form chat.
 
 3. **Account Partitioning**:

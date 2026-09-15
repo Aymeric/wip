@@ -1,0 +1,47 @@
+{
+  "data": {
+    "items": [
+      {
+        "object_id": "dd770da4-6ee8-4429-99f3-b0b5f965f50a",
+        "object_type": "instrument",
+        "symbol": "RBLX"
+      },
+      {
+        "object_id": "872a4a6f-9e98-49a4-87fc-f851e0b00e8d",
+        "object_type": "instrument",
+        "symbol": "HUBS"
+      },
+      {
+        "object_id": "e182feb8-a811-4668-a1e8-5ce018346fa7",
+        "object_type": "instrument",
+        "symbol": "ASAN"
+      },
+      {
+        "object_id": "7f52d399-daf3-48cd-909f-d7ae59101683",
+        "object_type": "instrument",
+        "symbol": "TLX"
+      },
+      {
+        "object_id": "352ba63d-e75f-46f2-a594-5ac584879576",
+        "object_type": "instrument",
+        "symbol": "WLY"
+      },
+      {
+        "object_id": "aba7c493-8a7b-4ebf-8be6-f0f6a9d44330",
+        "object_type": "instrument",
+        "symbol": "DFTX"
+      },
+      {
+        "object_id": "aedbcff3-1e3c-469b-9594-44cffed43404",
+        "object_type": "instrument",
+        "symbol": "COIN"
+      },
+      {
+        "object_id": "45cad9fa-3fb7-4d30-9c00-3fd44a916585",
+        "object_type": "instrument",
+        "symbol": "XXI"
+      }
+    ],
+    "has_futures_contracts": false
+  }
+}
