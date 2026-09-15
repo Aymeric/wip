@@ -2362,6 +2362,77 @@ class TestGEXEngine(unittest.TestCase):
         finally:
             shutil.rmtree(temp_dir)
 
+    def test_extract_col_case_insensitive_and_null_handling(self):
+        """Test _extract_col logic via cmd_update_candidates column parsing."""
+        import tempfile
+        import shutil
+        from unittest.mock import patch
+        import gex_engine
+
+        temp_dir = tempfile.mkdtemp()
+        try:
+            downloads_dir = os.path.join(temp_dir, "downloads")
+            os.makedirs(downloads_dir, exist_ok=True)
+            active_file = os.path.join(temp_dir, "active_positions.json")
+            gex_engine.save_json(active_file, {"options_positions": {}, "stocks_positions": {}})
+
+            # Scan file with uppercase / mixed case keys and None values
+            gex_engine.save_json(os.path.join(downloads_dir, "test_scan.json"), {
+                "data": {"result": {"scan_title": "Test Scan", "results": [
+                    {
+                        "ticker": "STOCK1",
+                        "columns": {
+                            "Last": None,
+                            "LAST_TRADE_PRICE": "50.0",
+                            "VOLUME": "1000000",
+                            "% CHANGE": "1.5",
+                            "MARKET CAP": "5000000000",
+                            "IV": "0.35",
+                            "RELATIVE VOLUME": "2.1"
+                        }
+                    },
+                    {
+                        "ticker": "STOCK2",
+                        "columns": {
+                            "price": "75.0",
+                            "volume": "800000",
+                            "change_pct": "2.0",
+                            "market_cap": "10000000000",
+                            "implied_volatility": "0.25",
+                            "relative_options_volume": "1.8"
+                        }
+                    }
+                ]}}
+            })
+            candidates_file = os.path.join(temp_dir, "candidate_stocks.json")
+            with patch('gex_engine.OPTIONS_FILE', active_file), \
+                 patch('gex_engine.DOWNLOADS_DIR', downloads_dir), \
+                 patch('gex_engine.CANDIDATES_FILE', candidates_file), \
+                 patch('gex_engine.ANALYSES_FILE', os.path.join(temp_dir, "ticker_analyses.json")), \
+                 patch('gex_engine.persist_new_scans', return_value=[]):
+                class UpdateArgs:
+                    min_rsi = None
+                    max_rsi = None
+                    macd_filter = "none"
+
+                gex_engine.cmd_update_candidates(UpdateArgs())
+                candidates = gex_engine.load_json(candidates_file, {})["candidates"]
+                self.assertEqual(len(candidates), 2)
+
+                stock1 = next(c for c in candidates if c["symbol"] == "STOCK1")
+                self.assertEqual(stock1["price"], 50.0)
+                self.assertEqual(stock1["chg_pct"], 1.5)
+                self.assertEqual(stock1["iv"], 0.35)
+                self.assertEqual(stock1["relative_options_volume"], 2.1)
+
+                stock2 = next(c for c in candidates if c["symbol"] == "STOCK2")
+                self.assertEqual(stock2["price"], 75.0)
+                self.assertEqual(stock2["chg_pct"], 2.0)
+                self.assertEqual(stock2["iv"], 0.25)
+                self.assertEqual(stock2["relative_options_volume"], 1.8)
+        finally:
+            shutil.rmtree(temp_dir)
+
 
     def test_find_latest_technical_indicators(self):
         """Test find_latest_technical_indicators under various file structures and edge cases."""

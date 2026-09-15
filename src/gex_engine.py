@@ -4743,13 +4743,16 @@ def cmd_update_candidates(args):
     min_market_cap = getattr(args, "min_market_cap", MIN_MARKET_CAP)
     date_filter = getattr(args, "date", None)
     
-    def _extract_col(cols: Dict[str, Any], keys: Sequence[str], default: Any = None) -> Any:
+    def _extract_col(cols: Dict[str, Any], keys: Sequence[str], default: Any = None, lower_cols: Optional[Dict[str, Any]] = None) -> Any:
         for k in keys:
             if k in cols and cols[k] is not None:
                 return cols[k]
-            for ck, cv in cols.items():
-                if ck.lower() == k.lower() and cv is not None:
-                    return cv
+        if lower_cols is None:
+            lower_cols = {ck.lower(): cv for ck, cv in cols.items() if cv is not None}
+        for k in keys:
+            k_lower = k.lower()
+            if k_lower in lower_cols:
+                return lower_cols[k_lower]
         return default
 
     def process_scan_file(filepath, source_name):
@@ -4792,20 +4795,21 @@ def cmd_update_candidates(args):
                 continue
 
             columns = item.get("columns", {}) if isinstance(item.get("columns"), dict) else item
+            lower_columns = {ck.lower(): cv for ck, cv in columns.items() if cv is not None} if isinstance(columns, dict) else None
             
             try:
-                raw_price = _extract_col(columns, ["Last", "Price", "price", "last_trade_price", "last_non_reg_trade_price", "Close", "close"], 0)
+                raw_price = _extract_col(columns, ["Last", "Price", "price", "last_trade_price", "last_non_reg_trade_price", "Close", "close"], 0, lower_cols=lower_columns)
                 price = float(raw_price)
                 
-                raw_volume = _extract_col(columns, ["Volume", "volume", "Average Volume", "average_volume", "Day volume"], 0)
+                raw_volume = _extract_col(columns, ["Volume", "volume", "Average Volume", "average_volume", "Day volume"], 0, lower_cols=lower_columns)
                 volume = float(raw_volume)
                 
-                raw_chg = _extract_col(columns, ["% Change", "Percent change", "percent_change", "change_pct", "percent_change_from_close"], 0)
+                raw_chg = _extract_col(columns, ["% Change", "Percent change", "percent_change", "change_pct", "percent_change_from_close"], 0, lower_cols=lower_columns)
                 chg_val = float(raw_chg)
                 # If change is expressed as decimal fraction (e.g. 0.05 for 5%), normalize to percentage
                 chg_pct = chg_val * 100.0 if abs(chg_val) <= 1.0 and "%" not in str(raw_chg) else chg_val
                 
-                raw_mcap = _extract_col(columns, ["Market cap", "market_cap", "Market Cap", "marketCap"], 0)
+                raw_mcap = _extract_col(columns, ["Market cap", "market_cap", "Market Cap", "marketCap"], 0, lower_cols=lower_columns)
                 market_cap = float(raw_mcap) if raw_mcap else 0.0
             except Exception:
                 continue
@@ -4852,7 +4856,7 @@ def cmd_update_candidates(args):
                 continue
 
             iv = None
-            raw_iv = _extract_col(columns, ["Implied volatility", "implied_volatility", "iv", "IV"])
+            raw_iv = _extract_col(columns, ["Implied volatility", "implied_volatility", "iv", "IV"], lower_cols=lower_columns)
             if raw_iv is not None:
                 try:
                     iv = float(raw_iv)
@@ -4860,7 +4864,7 @@ def cmd_update_candidates(args):
                     pass
                     
             rel_opt_vol = None
-            raw_rov = _extract_col(columns, ["Relative options volume", "relative_options_volume", "Relative volume", "relative_volume"])
+            raw_rov = _extract_col(columns, ["Relative options volume", "relative_options_volume", "Relative volume", "relative_volume"], lower_cols=lower_columns)
             if raw_rov is not None:
                 try:
                     rel_opt_vol = float(raw_rov)
