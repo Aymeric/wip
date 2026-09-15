@@ -24,12 +24,35 @@ from gex_engine import (
     calculate_trade_journal,
     parse_spot_overrides,
     parse_effective_session_date,
+    slugify,
     RegimeGates,
     OptionPosition,
     StockPosition
 )
 
 class TestGEXEngine(unittest.TestCase):
+
+    def test_slugify(self):
+        # Standard text lowercasing and space replacement
+        self.assertEqual(slugify("Hello World"), "hello_world")
+
+        # Special characters and punctuation replacement
+        self.assertEqual(slugify("Scan #1: High Volatility!"), "scan_1_high_volatility")
+
+        # Consecutive non-alphanumeric character collapsing
+        self.assertEqual(slugify("foo---bar___baz"), "foo_bar_baz")
+
+        # Leading and trailing non-alphanumeric character stripping
+        self.assertEqual(slugify("___hello world___"), "hello_world")
+        self.assertEqual(slugify("---!hello world!---"), "hello_world")
+
+        # Numbers and mixed alphanumeric strings
+        self.assertEqual(slugify("Top 10 Scans 2026"), "top_10_scans_2026")
+
+        # Edge cases: empty string, whitespace-only, non-alphanumeric-only
+        self.assertEqual(slugify(""), "")
+        self.assertEqual(slugify("   "), "")
+        self.assertEqual(slugify("!!!###$$$"), "")
 
     def test_repository_root_launcher_forwards_cli_arguments(self):
         repository_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
