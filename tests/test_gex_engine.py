@@ -29,6 +29,7 @@ from gex_engine import (
     parse_effective_session_date,
     get_all_active_symbols,
     find_latest_technical_indicators,
+    cmd_status,
     RegimeGates,
     OptionPosition,
     StockPosition
@@ -2707,6 +2708,262 @@ class TestGEXEngine(unittest.TestCase):
                 self.assertIsNone(rsi)
                 self.assertIsNone(macd_hist)
 
+        finally:
+            shutil.rmtree(temp_dir)
+
+
+class TestCmdStatus(unittest.TestCase):
+
+    def test_cmd_status_missing_files(self):
+        import tempfile
+        import shutil
+        from types import SimpleNamespace
+        from unittest.mock import patch, MagicMock
+        import gex_engine
+
+        temp_dir = tempfile.mkdtemp()
+        try:
+            non_existent = os.path.join(temp_dir, "nonexistent.json")
+            with patch('gex_engine.REGIME_FILE', non_existent), \
+                 patch('gex_engine.PERFORMANCE_FILE', non_existent), \
+                 patch('gex_engine.CANDIDATES_FILE', non_existent), \
+                 patch('gex_engine.OPTIONS_FILE', non_existent), \
+                 patch('gex_engine.ANALYSES_FILE', non_existent), \
+                 patch('sys.stdout') as mock_stdout:
+
+                mock_stdout.isatty = MagicMock(return_value=False)
+                args = SimpleNamespace(account="")
+                cmd_status(args)
+
+                output = "".join(call.args[0] for call in mock_stdout.write.call_args_list if call.args)
+                self.assertIn("📅 Cache Freshness Report", output)
+                self.assertIn("MISSING", output)
+                self.assertIn("📊 GEX Regime Check", output)
+                self.assertIn("SYSTEM STATUS: BLOCKED", output)
+        finally:
+            shutil.rmtree(temp_dir)
+
+    def test_cmd_status_fresh_and_blocked_states(self):
+        import tempfile
+        import shutil
+        from datetime import datetime
+        from types import SimpleNamespace
+        from unittest.mock import patch, MagicMock
+        import gex_engine
+
+        temp_dir = tempfile.mkdtemp()
+        today = datetime.today().strftime('%Y-%m-%d')
+        try:
+            regime_file = os.path.join(temp_dir, "regime.json")
+            perf_file = os.path.join(temp_dir, "performance.json")
+            cand_file = os.path.join(temp_dir, "candidates.json")
+            options_file = os.path.join(temp_dir, "active_positions.json")
+            analyses_file = os.path.join(temp_dir, "ticker_analyses.json")
+
+            gex_engine.save_json(regime_file, {
+                "basket_gate": "PASS",
+                "bull_bear_gate": "PASS",
+                "vix_delta_gate": "PASS",
+                "spy_change_pct": 0.8,
+                "qqq_change_pct": 1.2,
+                "bull_count": 10,
+                "bear_count": 2,
+                "bull_bear_ratio": 5.0,
+                "vix_spot": 14.5,
+                "vix_bearish": True,
+                "system_authorization": "ALL TRACKS OK",
+                "gates_passed": 3,
+                "last_updated": today,
+                "etf_details": {
+                    "SPY": {"Ticker": "SPY", "ETF Segment / Sector Name": "S&P 500 Broad Market", "Daily Change %": 0.8, "Classification": "BULLISH"},
+                    "XLK": {"Ticker": "XLK", "ETF Segment / Sector Name": "Technology", "Daily Change %": 1.5, "Classification": "BULLISH"}
+                }
+            })
+            gex_engine.save_json(perf_file, {
+                "monthly_pnl_dlr": 1500.0,
+                "monthly_pnl_pct": 3.0,
+                "drawdown_gate_status": "PASS",
+                "monthly_cnt": 5,
+                "last_updated": today
+            })
+            gex_engine.save_json(cand_file, {
+                "last_updated": today,
+                "candidates": [{"symbol": "AAPL"}]
+            })
+            gex_engine.save_json(options_file, {
+                "options_positions": {},
+                "stocks_positions": {}
+            })
+            gex_engine.save_json(analyses_file, {
+                "AAPL": {
+                    "analyzed_date": today,
+                    "Signal Status": "PENDING"
+                }
+            })
+
+            with patch('gex_engine.REGIME_FILE', regime_file), \
+                 patch('gex_engine.PERFORMANCE_FILE', perf_file), \
+                 patch('gex_engine.CANDIDATES_FILE', cand_file), \
+                 patch('gex_engine.OPTIONS_FILE', options_file), \
+                 patch('gex_engine.ANALYSES_FILE', analyses_file), \
+                 patch('sys.stdout') as mock_stdout:
+
+                mock_stdout.isatty = MagicMock(return_value=False)
+                args = SimpleNamespace(account="")
+                cmd_status(args)
+
+                output = "".join(call.args[0] for call in mock_stdout.write.call_args_list if call.args)
+                self.assertIn("FRESH", output)
+                self.assertIn("ALL TRACKS OK", output)
+                self.assertIn("SYSTEM STATUS: AUTHORIZED", output)
+                self.assertIn("Sector Momentum & Rotation", output)
+        finally:
+            shutil.rmtree(temp_dir)
+
+    def test_cmd_status_actionable_alerts(self):
+        import tempfile
+        import shutil
+        from datetime import datetime
+        from types import SimpleNamespace
+        from unittest.mock import patch, MagicMock
+        import gex_engine
+
+        temp_dir = tempfile.mkdtemp()
+        today = datetime.today().strftime('%Y-%m-%d')
+        try:
+            regime_file = os.path.join(temp_dir, "regime.json")
+            perf_file = os.path.join(temp_dir, "performance.json")
+            cand_file = os.path.join(temp_dir, "candidates.json")
+            options_file = os.path.join(temp_dir, "active_positions.json")
+            analyses_file = os.path.join(temp_dir, "ticker_analyses.json")
+
+            gex_engine.save_json(regime_file, {
+                "basket_gate": "PASS",
+                "bull_bear_gate": "PASS",
+                "vix_delta_gate": "PASS",
+                "spy_change_pct": 0.8,
+                "qqq_change_pct": 1.2,
+                "bull_count": 10,
+                "bear_count": 2,
+                "bull_bear_ratio": 5.0,
+                "vix_spot": 14.5,
+                "vix_bearish": True,
+                "system_authorization": "ALL TRACKS OK",
+                "gates_passed": 3,
+                "hyg_change_pct": -0.40,  # Credit divergence (< -0.30% with positive SPY/QQQ)
+                "last_updated": today
+            })
+            gex_engine.save_json(perf_file, {"last_updated": today})
+            gex_engine.save_json(cand_file, {"last_updated": today, "candidates": []})
+
+            # Active option and stock triggers
+            gex_engine.save_json(options_file, {
+                "options_positions": {
+                    "opt1": {
+                        "Underlier": "NVDA",
+                        "Purchase Premium": 5.0,
+                        "Mark Price": 10.0,
+                        "Strike": 120.0,
+                        "Expiration": "2026-08-20",
+                        "Entry Date": "2026-07-01",
+                        "Stalling Days": 0
+                    }
+                },
+                "stocks_positions": {
+                    "TSLA": {
+                        "Shares": 10,
+                        "Average Buy Price": 200.0,
+                        "Current Price": 180.0
+                    }
+                }
+            })
+            gex_engine.save_json(analyses_file, {
+                "NVDA": {
+                    "Spot": 130.0,
+                    "+GEX": 125.0,  # Spot 130 >= +GEX 125 -> T1 Target Met
+                    "pTrans": 115.0,
+                    "nTrans": 110.0,
+                    "analyzed_date": today,
+                    "Signal Status": "CONFIRMED (11/11)"
+                },
+                "TSLA": {
+                    "Spot": 180.0,
+                    "+GEX": 220.0,
+                    "pTrans": 195.0,
+                    "nTrans": 190.0,  # Spot 180 < nTrans 190 -> Structural Stop Triggered
+                    "analyzed_date": today,
+                    "Signal Status": "BLOCKED"
+                },
+                "AMD": {
+                    "Spot": 150.0,
+                    "Grade": 11,
+                    "analyzed_date": today,
+                    "Signal Status": "CONFIRMED (11/11)"
+                }
+            })
+
+            with patch('gex_engine.REGIME_FILE', regime_file), \
+                 patch('gex_engine.PERFORMANCE_FILE', perf_file), \
+                 patch('gex_engine.CANDIDATES_FILE', cand_file), \
+                 patch('gex_engine.OPTIONS_FILE', options_file), \
+                 patch('gex_engine.ANALYSES_FILE', analyses_file), \
+                 patch('sys.stdout') as mock_stdout:
+
+                mock_stdout.isatty = MagicMock(return_value=False)
+                args = SimpleNamespace(account="")
+                cmd_status(args)
+
+                output = "".join(call.args[0] for call in mock_stdout.write.call_args_list if call.args)
+                self.assertIn("CREDIT DIVERGENCE DETECTED", output)
+                self.assertIn("Central Command Actionable Alerts Summary", output)
+                self.assertIn("TRIGGERED SYSTEMATIC EXITS DETECTED", output)
+                self.assertIn("NVDA (Option:", output)
+                self.assertIn("TSLA (Stock:", output)
+                self.assertIn("CONFIRMED SETUPS READY FOR ENTRY", output)
+                self.assertIn("AMD", output)
+        finally:
+            shutil.rmtree(temp_dir)
+
+    def test_cmd_status_account_scoping(self):
+        import tempfile
+        import shutil
+        from datetime import datetime
+        from types import SimpleNamespace
+        from unittest.mock import patch, MagicMock
+        import gex_engine
+
+        temp_dir = tempfile.mkdtemp()
+        today = datetime.today().strftime('%Y-%m-%d')
+        account = "ACC123"
+        try:
+            regime_file = os.path.join(temp_dir, "regime.json")
+            perf_file = os.path.join(temp_dir, f"performance_{account}.json")
+            cand_file = os.path.join(temp_dir, "candidates.json")
+            options_file = os.path.join(temp_dir, f"active_positions_{account}.json")
+            analyses_file = os.path.join(temp_dir, "ticker_analyses.json")
+
+            gex_engine.save_json(regime_file, {"last_updated": today})
+            gex_engine.save_json(perf_file, {"last_updated": today})
+            gex_engine.save_json(cand_file, {"last_updated": today})
+            gex_engine.save_json(options_file, {"options_positions": {}, "stocks_positions": {}})
+            gex_engine.save_json(analyses_file, {})
+
+            with patch('gex_engine.REGIME_FILE', regime_file), \
+                 patch('gex_engine.PERFORMANCE_FILE', perf_file), \
+                 patch('gex_engine.CANDIDATES_FILE', cand_file), \
+                 patch('gex_engine.OPTIONS_FILE', options_file), \
+                 patch('gex_engine.ANALYSES_FILE', analyses_file), \
+                 patch('gex_engine.account_performance_file', return_value=perf_file), \
+                 patch('gex_engine.account_positions_file', return_value=options_file), \
+                 patch('sys.stdout') as mock_stdout:
+
+                mock_stdout.isatty = MagicMock(return_value=False)
+                args = SimpleNamespace(account=account)
+                cmd_status(args)
+
+                output = "".join(call.args[0] for call in mock_stdout.write.call_args_list if call.args)
+                self.assertIn("Cache Freshness Report", output)
+                self.assertIn("FRESH", output)
         finally:
             shutil.rmtree(temp_dir)
 
