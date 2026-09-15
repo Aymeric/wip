@@ -777,6 +777,74 @@ class TestGEXEngine(unittest.TestCase):
             if os.path.exists(tmp_path):
                 os.remove(tmp_path)
 
+    def test_cmd_add_pos(self):
+        import tempfile
+        from unittest.mock import patch
+        import io
+        import sys
+        import gex_engine
+
+        with tempfile.NamedTemporaryFile(suffix=".json", delete=False) as tmp:
+            tmp_path = tmp.name
+
+        try:
+            with patch('gex_engine.OPTIONS_FILE', tmp_path):
+                class DummyArgs:
+                    option_id = "AAPL250117C00150000"
+                    underlier = "aapl"
+                    strike = 150.0
+                    expiration = "2025-01-17"
+                    type = "call"
+                    purchase_premium = 5.50
+                    delta = 0.55
+                    gamma = 0.03
+                    open_interest = 1000
+                    imp_vol = 0.25
+                    sector = "Tech"
+                    account = ""
+
+                gex_engine.cmd_add_pos(DummyArgs())
+
+                # Check options_positions contents
+                data = gex_engine.load_json(tmp_path, {})
+                positions = data.get("options_positions", {})
+                self.assertIn("AAPL250117C00150000", positions)
+                pos = positions["AAPL250117C00150000"]
+                self.assertEqual(pos["Option ID"], "AAPL250117C00150000")
+                self.assertEqual(pos["Underlier"], "AAPL")
+                self.assertEqual(pos["Strike"], "150.00")
+                self.assertEqual(pos["Expiration"], "2025-01-17")
+                self.assertEqual(pos["Type"], "call")
+                self.assertEqual(pos["Purchase Premium"], 5.50)
+                self.assertEqual(pos["Delta"], "0.55")
+                self.assertEqual(pos["Gamma"], "0.03")
+                self.assertEqual(pos["Asset Cost Basis"], 550.0)
+                self.assertEqual(pos["Current Value"], 550.0)
+                self.assertEqual(pos["Beta Sector Tag"], "Tech")
+
+                # Duplicate option_id check
+                stderr_buf = io.StringIO()
+                with patch('sys.stderr', stderr_buf):
+                    with self.assertRaises(SystemExit) as cm:
+                        gex_engine.cmd_add_pos(DummyArgs())
+                    self.assertEqual(cm.exception.code, 1)
+                    self.assertIn("Error: Option ID AAPL250117C00150000 already exists", stderr_buf.getvalue())
+
+                # Invalid expiration format check
+                class InvalidExpArgs(DummyArgs):
+                    option_id = "AAPL250117C00160000"
+                    expiration = "2025/01/17"
+
+                stderr_buf_exp = io.StringIO()
+                with patch('sys.stderr', stderr_buf_exp):
+                    with self.assertRaises(SystemExit) as cm:
+                        gex_engine.cmd_add_pos(InvalidExpArgs())
+                    self.assertEqual(cm.exception.code, 1)
+                    self.assertIn("Error: Expiration '2025/01/17' must be a valid date in YYYY-MM-DD format.", stderr_buf_exp.getvalue())
+        finally:
+            if os.path.exists(tmp_path):
+                os.remove(tmp_path)
+
     def test_add_and_update_stocks_positions(self):
         import tempfile
         from unittest.mock import patch
@@ -876,6 +944,81 @@ class TestGEXEngine(unittest.TestCase):
             positions = gex_engine.load_json(active_file, {})["stocks_positions"]
             self.assertIn("NEW", positions)
             self.assertNotIn("OLD", positions)
+        finally:
+            shutil.rmtree(temp_dir)
+
+    def test_cmd_cleanup_downloads(self):
+        """Test cmd_cleanup_downloads for directory age filtering, tmp cleaning, and non-existent dir handling."""
+        import tempfile
+        import shutil
+        from datetime import datetime, timedelta
+        from unittest.mock import patch, MagicMock
+        import gex_engine
+
+        temp_dir = tempfile.mkdtemp()
+        try:
+            # 1. Test non-existent DOWNLOADS_DIR
+            non_existent_dir = os.path.join(temp_dir, "nonexistent")
+            with patch("gex_engine.DOWNLOADS_DIR", non_existent_dir), patch("sys.stdout") as mock_stdout:
+                class Args:
+                    days = 7
+                gex_engine.cmd_cleanup_downloads(Args())
+                output = "".join(call.args[0] for call in mock_stdout.write.call_args_list if call.args)
+                self.assertIn("No downloads directory found.", output)
+
+            # 2. Test directory cleanup logic
+            downloads_dir = os.path.join(temp_dir, "downloads")
+            os.makedirs(downloads_dir, exist_ok=True)
+
+            now = datetime.now()
+            old_date_str = (now - timedelta(days=10)).strftime("%Y%m%d")
+            new_date_str = (now - timedelta(days=2)).strftime("%Y%m%d")
+
+            old_date_dir = os.path.join(downloads_dir, old_date_str)
+            new_date_dir = os.path.join(downloads_dir, new_date_str)
+            tmp_dir = os.path.join(downloads_dir, "tmp")
+            other_dir = os.path.join(downloads_dir, "other_folder")
+            sample_file = os.path.join(downloads_dir, "sample.json")
+
+            os.makedirs(old_date_dir)
+            os.makedirs(new_date_dir)
+            os.makedirs(tmp_dir)
+            os.makedirs(other_dir)
+            with open(sample_file, "w") as f:
+                f.write("{}")
+
+            # Set mtime for tmp folder to 2 days ago so age_days >= 1
+            old_time = (now - timedelta(days=2)).timestamp()
+            os.utime(tmp_dir, (old_time, old_time))
+
+            with patch("gex_engine.DOWNLOADS_DIR", downloads_dir), patch("sys.stdout") as mock_stdout:
+                class Args:
+                    days = 7
+                gex_engine.cmd_cleanup_downloads(Args())
+                output = "".join(call.args[0] for call in mock_stdout.write.call_args_list if call.args)
+                self.assertIn("Removing stale download folder", output)
+                self.assertIn("Removing stale tmp folder", output)
+                self.assertIn("Cleanup complete. Removed 2 folders.", output)
+
+            # Verify files/folders after cleanup
+            self.assertFalse(os.path.exists(old_date_dir))
+            self.assertFalse(os.path.exists(tmp_dir))
+            self.assertTrue(os.path.exists(new_date_dir))
+            self.assertTrue(os.path.exists(other_dir))
+            self.assertTrue(os.path.exists(sample_file))
+
+            # 3. Test recent tmp folder retention
+            os.makedirs(tmp_dir, exist_ok=True)
+            # mtime is now (fresh tmp)
+            with patch("gex_engine.DOWNLOADS_DIR", downloads_dir), patch("sys.stdout") as mock_stdout:
+                class Args:
+                    days = 7
+                gex_engine.cmd_cleanup_downloads(Args())
+                output = "".join(call.args[0] for call in mock_stdout.write.call_args_list if call.args)
+                self.assertIn("Cleanup complete. Removed 0 folders.", output)
+
+            self.assertTrue(os.path.exists(tmp_dir))
+
         finally:
             shutil.rmtree(temp_dir)
 
@@ -2737,6 +2880,12 @@ class TestGEXEngine(unittest.TestCase):
         import shutil
         from types import SimpleNamespace
         from unittest.mock import patch
+    def test_cmd_workflow_standard_and_subagent_logging(self):
+        """Test cmd_workflow output with populated regime, state, portfolio, candidates, and analyses."""
+        import tempfile
+        import shutil
+        from unittest.mock import patch, MagicMock
+        from types import SimpleNamespace
         import gex_engine
 
         temp_dir = tempfile.mkdtemp()
@@ -2768,6 +2917,84 @@ class TestGEXEngine(unittest.TestCase):
         import shutil
         from types import SimpleNamespace
         from unittest.mock import patch
+            workflow_file = os.path.join(temp_dir, "workflow_state.json")
+            regime_file = os.path.join(temp_dir, "regime.json")
+            options_file = os.path.join(temp_dir, "active_positions.json")
+            candidates_file = os.path.join(temp_dir, "candidate_stocks.json")
+            analyses_file = os.path.join(temp_dir, "ticker_analyses.json")
+
+            gex_engine.save_json(workflow_file, {
+                "current_phase": "Phase I: Risk & Audit",
+                "subagents": {
+                    "market-regime-analyst": {"status": "SUCCESS"},
+                    "portfolio-risk-manager": {"status": "FAILED"},
+                    "gex-candidate-generator": {"status": "RUNNING"},
+                },
+                "notes": []
+            })
+            gex_engine.save_json(regime_file, {
+                "basket_gate": "PASS",
+                "bull_bear_gate": "PASS",
+                "vix_delta_gate": "PASS",
+                "system_authorization": "ALL TRACKS OK",
+                "bull_count": 12,
+                "bear_count": 2,
+                "bull_bear_ratio": 6.0,
+                "vix_spot": 15.2,
+                "spy_change_pct": 0.75,
+                "qqq_change_pct": 0.85,
+            })
+            gex_engine.save_json(options_file, {
+                "options_positions": {"opt_1": {"Underlier": "AAPL"}},
+                "stocks_positions": {"MSFT": {"Ticker": "MSFT"}},
+            })
+            gex_engine.save_json(candidates_file, {
+                "candidates": [{"symbol": "NVDA"}, {"symbol": "AMD"}]
+            })
+            gex_engine.save_json(analyses_file, {
+                "NVDA": {"Signal Status": "CONFIRMED (11/11)"},
+                "AMD": {"Signal Status": "PENDING (below watchdog)"},
+                "TSLA": {"Signal Status": "BLOCKED (Grade <= 8)"},
+            })
+
+            args = SimpleNamespace(account="")
+
+            with patch("gex_engine.WORKFLOW_STATE_FILE", workflow_file), \
+                 patch("gex_engine.REGIME_FILE", regime_file), \
+                 patch("gex_engine.OPTIONS_FILE", options_file), \
+                 patch("gex_engine.CANDIDATES_FILE", candidates_file), \
+                 patch("gex_engine.ANALYSES_FILE", analyses_file), \
+                 patch("sys.stdout") as mock_stdout:
+                mock_stdout.isatty = MagicMock(return_value=False)
+
+                gex_engine.cmd_workflow(args)
+
+                output = "".join(call.args[0] for call in mock_stdout.write.call_args_list if call.args)
+
+                self.assertIn("SYSTEM WORKFLOW STATUS", output)
+                self.assertIn("Current Phase: Phase I: Risk & Audit", output)
+                self.assertIn("[PHASE I] System Authorization: ALL TRACKS OK", output)
+                self.assertIn("Bull:Bear Ratio: 6.0 (12B : 2R)", output)
+                self.assertIn("VIX Delta Gate: PASS (Spot: 15.2)", output)
+                self.assertIn("Basket Gate: PASS (SPY: +0.75%, QQQ: +0.85%)", output)
+                self.assertIn("[PHASE I] Active Portfolio: 1 Options | 1 Stocks", output)
+                self.assertIn("[PHASE II] Discovery: 2 Candidate Tickers", output)
+                self.assertIn("[PHASE III] Setup Grading: 1 CONFIRMED | 1 PENDING", output)
+                self.assertIn("- Confirmed: NVDA", output)
+                self.assertIn("[PHASE LOG] Subagent Executions:", output)
+                self.assertIn("market-regime-analyst    : SUCCESS", output)
+                self.assertIn("portfolio-risk-manager   : FAILED", output)
+                self.assertIn("gex-candidate-generator  : RUNNING", output)
+                self.assertIn("--- END STATUS ---", output)
+        finally:
+            shutil.rmtree(temp_dir)
+
+    def test_cmd_workflow_account_scoped_and_default_fallbacks(self):
+        """Test cmd_workflow with account-scoped position reading and fallback defaults for missing files."""
+        import tempfile
+        import shutil
+        from unittest.mock import patch, MagicMock
+        from types import SimpleNamespace
         import gex_engine
 
         temp_dir = tempfile.mkdtemp()
@@ -2790,6 +3017,66 @@ class TestGEXEngine(unittest.TestCase):
             self.assertEqual(data["drawdown_gate_status"], "FAIL")
             self.assertEqual(data["monthly_cnt"], 5)
             self.assertIn("last_updated", data)
+            workflow_file = os.path.join(temp_dir, "workflow_state.json")
+            regime_file = os.path.join(temp_dir, "regime.json")
+            account_options_file = os.path.join(temp_dir, "active_positions_ACC99.json")
+            candidates_file = os.path.join(temp_dir, "candidate_stocks.json")
+            analyses_file = os.path.join(temp_dir, "ticker_analyses.json")
+
+            gex_engine.save_json(account_options_file, {
+                "options_positions": {
+                    "opt_1": {"Underlier": "GOOG"},
+                    "opt_2": {"Underlier": "AMZN"},
+                },
+                "stocks_positions": {
+                    "INTC": {"Ticker": "INTC"},
+                },
+            })
+
+            args_account = SimpleNamespace(account="ACC99")
+
+            with patch("gex_engine.WORKFLOW_STATE_FILE", workflow_file), \
+                 patch("gex_engine.REGIME_FILE", regime_file), \
+                 patch("gex_engine.CANDIDATES_FILE", candidates_file), \
+                 patch("gex_engine.ANALYSES_FILE", analyses_file), \
+                 patch("gex_engine.account_positions_file", return_value=account_options_file), \
+                 patch("sys.stdout") as mock_stdout:
+                mock_stdout.isatty = MagicMock(return_value=False)
+
+                gex_engine.cmd_workflow(args_account)
+
+                output = "".join(call.args[0] for call in mock_stdout.write.call_args_list if call.args)
+
+                self.assertIn("Current Phase: Phase 0: Initialization", output)
+                self.assertIn("[PHASE I] System Authorization: BLOCKED", output)
+                self.assertIn("[PHASE I] Active Portfolio: 2 Options | 1 Stocks", output)
+                self.assertIn("[PHASE II] Discovery: 0 Candidate Tickers", output)
+                self.assertIn("[PHASE III] Setup Grading: 0 CONFIRMED | 0 PENDING", output)
+                self.assertNotIn("[PHASE LOG] Subagent Executions:", output)
+                self.assertIn("--- END STATUS ---", output)
+
+            # Test fallback when cache files do not exist
+            non_existent_dir = os.path.join(temp_dir, "nonexistent")
+            args_default = SimpleNamespace(account="")
+
+            with patch("gex_engine.WORKFLOW_STATE_FILE", os.path.join(non_existent_dir, "workflow.json")), \
+                 patch("gex_engine.REGIME_FILE", os.path.join(non_existent_dir, "regime.json")), \
+                 patch("gex_engine.OPTIONS_FILE", os.path.join(non_existent_dir, "options.json")), \
+                 patch("gex_engine.CANDIDATES_FILE", os.path.join(non_existent_dir, "candidates.json")), \
+                 patch("gex_engine.ANALYSES_FILE", os.path.join(non_existent_dir, "analyses.json")), \
+                 patch("sys.stdout") as mock_stdout:
+                mock_stdout.isatty = MagicMock(return_value=False)
+
+                gex_engine.cmd_workflow(args_default)
+
+                output_fallback = "".join(call.args[0] for call in mock_stdout.write.call_args_list if call.args)
+
+                self.assertIn("Current Phase: Phase 0: Initialization", output_fallback)
+                self.assertIn("[PHASE I] System Authorization: BLOCKED", output_fallback)
+                self.assertIn("[PHASE I] Active Portfolio: 0 Options | 0 Stocks", output_fallback)
+                self.assertIn("[PHASE II] Discovery: 0 Candidate Tickers", output_fallback)
+                self.assertIn("[PHASE III] Setup Grading: 0 CONFIRMED | 0 PENDING", output_fallback)
+                self.assertIn("--- END STATUS ---", output_fallback)
         finally:
             shutil.rmtree(temp_dir)
 
