@@ -2002,6 +2002,8 @@ def check_technical_alerts(closes: List[float], highs: Optional[List[float]] = N
     return {
         "rsi": rsi,
         "macd_hist": macd_hist,
+        "bb": (mid_bb, upper_bb, lower_bb),
+        "atr": atr,
         "alerts": alerts
     }
 

@@ -24,6 +24,7 @@ from gex_engine import (
     calculate_trade_journal,
     parse_spot_overrides,
     parse_effective_session_date,
+    check_technical_alerts,
     RegimeGates,
     OptionPosition,
     StockPosition
@@ -2147,6 +2148,64 @@ class TestGEXEngine(unittest.TestCase):
         self.assertIsNotNone(macd_line)
         self.assertIsNotNone(sig_line)
         self.assertIsNotNone(macd_hist)
+
+    def test_check_technical_alerts(self):
+        """Test check_technical_alerts under various market scenarios."""
+        # Scenario 1: Short series (< 15 closes)
+        short_closes = [100.0 + i for i in range(10)]
+        res_short = check_technical_alerts(short_closes)
+        self.assertIsNone(res_short["rsi"])
+        self.assertIsNone(res_short["macd_hist"])
+        self.assertEqual(res_short["alerts"], [])
+
+        # Scenario 2: Oversold RSI (steadily falling closes)
+        falling_closes = [200.0 - i * 2.0 for i in range(30)]
+        res_oversold = check_technical_alerts(falling_closes)
+        self.assertIsNotNone(res_oversold["rsi"])
+        assert res_oversold["rsi"] is not None
+        self.assertLessEqual(res_oversold["rsi"], 30.0)
+        self.assertIn("RSI_OVERSOLD", res_oversold["alerts"])
+
+        # Scenario 3: Overbought RSI (steadily rising closes)
+        rising_closes = [100.0 + i * 2.0 for i in range(30)]
+        res_overbought = check_technical_alerts(rising_closes)
+        self.assertIsNotNone(res_overbought["rsi"])
+        assert res_overbought["rsi"] is not None
+        self.assertGreaterEqual(res_overbought["rsi"], 70.0)
+        self.assertIn("RSI_OVERBOUGHT", res_overbought["alerts"])
+
+        # Scenario 4: Bollinger Bands Lower Touch & Upper Touch
+        # Create a stable 20-day series then drop sharply
+        stable_closes = [100.0] * 20
+        # Lower touch when last price is <= lower BB
+        drop_closes = stable_closes.copy()
+        drop_closes[-1] = 80.0
+        res_bb_lower = check_technical_alerts(drop_closes)
+        self.assertIn("BB_LOWER_TOUCH", res_bb_lower["alerts"])
+
+        # Upper touch when last price is >= upper BB
+        pop_closes = stable_closes.copy()
+        pop_closes[-1] = 120.0
+        res_bb_upper = check_technical_alerts(pop_closes)
+        self.assertIn("BB_UPPER_TOUCH", res_bb_upper["alerts"])
+
+        # Scenario 5: ATR calculation with highs and lows
+        highs = [c + 2.0 for c in rising_closes]
+        lows = [c - 2.0 for c in rising_closes]
+        res_atr = check_technical_alerts(rising_closes, highs=highs, lows=lows)
+        self.assertIsNotNone(res_atr.get("atr"))
+
+        # Scenario 6: MACD Bullish Crossover
+        # Construct a series where MACD histogram crosses from negative to positive
+        macd_bullish_closes = [100.0] * 30 + [100.0 - i for i in range(1, 15)] + [100.0 - 14 + 8 * 2.0]
+        res_macd_bull = check_technical_alerts(macd_bullish_closes)
+        self.assertIn("MACD_BULLISH_CROSSOVER", res_macd_bull["alerts"])
+
+        # Scenario 7: MACD Bearish Crossover
+        # Construct a series where MACD histogram crosses from positive to negative
+        macd_bearish_closes = [100.0] * 30 + [100.0 + i for i in range(1, 15)] + [100.0 + 14 - 8 * 2.0]
+        res_macd_bear = check_technical_alerts(macd_bearish_closes)
+        self.assertIn("MACD_BEARISH_CROSSOVER", res_macd_bear["alerts"])
 
     def test_stock_portfolio_exit_rules(self):
         """Test trailing stops, stop losses, and profit targets for stocks in portfolio review."""
