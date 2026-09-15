@@ -879,6 +879,81 @@ class TestGEXEngine(unittest.TestCase):
         finally:
             shutil.rmtree(temp_dir)
 
+    def test_cmd_cleanup_downloads(self):
+        """Test cmd_cleanup_downloads for directory age filtering, tmp cleaning, and non-existent dir handling."""
+        import tempfile
+        import shutil
+        from datetime import datetime, timedelta
+        from unittest.mock import patch, MagicMock
+        import gex_engine
+
+        temp_dir = tempfile.mkdtemp()
+        try:
+            # 1. Test non-existent DOWNLOADS_DIR
+            non_existent_dir = os.path.join(temp_dir, "nonexistent")
+            with patch("gex_engine.DOWNLOADS_DIR", non_existent_dir), patch("sys.stdout") as mock_stdout:
+                class Args:
+                    days = 7
+                gex_engine.cmd_cleanup_downloads(Args())
+                output = "".join(call.args[0] for call in mock_stdout.write.call_args_list if call.args)
+                self.assertIn("No downloads directory found.", output)
+
+            # 2. Test directory cleanup logic
+            downloads_dir = os.path.join(temp_dir, "downloads")
+            os.makedirs(downloads_dir, exist_ok=True)
+
+            now = datetime.now()
+            old_date_str = (now - timedelta(days=10)).strftime("%Y%m%d")
+            new_date_str = (now - timedelta(days=2)).strftime("%Y%m%d")
+
+            old_date_dir = os.path.join(downloads_dir, old_date_str)
+            new_date_dir = os.path.join(downloads_dir, new_date_str)
+            tmp_dir = os.path.join(downloads_dir, "tmp")
+            other_dir = os.path.join(downloads_dir, "other_folder")
+            sample_file = os.path.join(downloads_dir, "sample.json")
+
+            os.makedirs(old_date_dir)
+            os.makedirs(new_date_dir)
+            os.makedirs(tmp_dir)
+            os.makedirs(other_dir)
+            with open(sample_file, "w") as f:
+                f.write("{}")
+
+            # Set mtime for tmp folder to 2 days ago so age_days >= 1
+            old_time = (now - timedelta(days=2)).timestamp()
+            os.utime(tmp_dir, (old_time, old_time))
+
+            with patch("gex_engine.DOWNLOADS_DIR", downloads_dir), patch("sys.stdout") as mock_stdout:
+                class Args:
+                    days = 7
+                gex_engine.cmd_cleanup_downloads(Args())
+                output = "".join(call.args[0] for call in mock_stdout.write.call_args_list if call.args)
+                self.assertIn("Removing stale download folder", output)
+                self.assertIn("Removing stale tmp folder", output)
+                self.assertIn("Cleanup complete. Removed 2 folders.", output)
+
+            # Verify files/folders after cleanup
+            self.assertFalse(os.path.exists(old_date_dir))
+            self.assertFalse(os.path.exists(tmp_dir))
+            self.assertTrue(os.path.exists(new_date_dir))
+            self.assertTrue(os.path.exists(other_dir))
+            self.assertTrue(os.path.exists(sample_file))
+
+            # 3. Test recent tmp folder retention
+            os.makedirs(tmp_dir, exist_ok=True)
+            # mtime is now (fresh tmp)
+            with patch("gex_engine.DOWNLOADS_DIR", downloads_dir), patch("sys.stdout") as mock_stdout:
+                class Args:
+                    days = 7
+                gex_engine.cmd_cleanup_downloads(Args())
+                output = "".join(call.args[0] for call in mock_stdout.write.call_args_list if call.args)
+                self.assertIn("Cleanup complete. Removed 0 folders.", output)
+
+            self.assertTrue(os.path.exists(tmp_dir))
+
+        finally:
+            shutil.rmtree(temp_dir)
+
     def test_sync_positions_removes_cached_positions_absent_from_snapshot(self):
         import tempfile
         import shutil
