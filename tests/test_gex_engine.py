@@ -27,6 +27,7 @@ from gex_engine import (
     calculate_trade_journal,
     parse_spot_overrides,
     parse_effective_session_date,
+    find_latest_historical_ohlc,
     get_all_active_symbols,
     find_latest_technical_indicators,
     RegimeGates,
@@ -2523,6 +2524,8 @@ class TestGEXEngine(unittest.TestCase):
         finally:
             shutil.rmtree(temp_dir)
 
+    def test_find_latest_historical_ohlc_empty_or_missing_dir(self):
+        """Test find_latest_historical_ohlc when DOWNLOADS_DIR does not exist or has no matching files."""
     def test_extract_col_case_insensitive_and_null_handling(self):
         """Test _extract_col logic via cmd_update_candidates column parsing."""
         import tempfile
@@ -2532,6 +2535,24 @@ class TestGEXEngine(unittest.TestCase):
 
         temp_dir = tempfile.mkdtemp()
         try:
+            non_existent_dir = os.path.join(temp_dir, "non_existent")
+            with patch("gex_engine.DOWNLOADS_DIR", non_existent_dir):
+                closes, highs, lows, opens = find_latest_historical_ohlc("AAPL")
+                self.assertEqual((closes, highs, lows, opens), ([], [], [], []))
+
+            downloads_dir = os.path.join(temp_dir, "downloads")
+            os.makedirs(downloads_dir, exist_ok=True)
+            # Add a file that does not match historical pattern
+            gex_engine.save_json(os.path.join(downloads_dir, "unrelated_scan.json"), {"data": []})
+
+            with patch("gex_engine.DOWNLOADS_DIR", downloads_dir):
+                closes, highs, lows, opens = find_latest_historical_ohlc("AAPL")
+                self.assertEqual((closes, highs, lows, opens), ([], [], [], []))
+        finally:
+            shutil.rmtree(temp_dir)
+
+    def test_find_latest_historical_ohlc_various_json_structures_and_aliases(self):
+        """Test find_latest_historical_ohlc parsing varied JSON layouts and column aliases."""
             downloads_dir = os.path.join(temp_dir, "downloads")
             os.makedirs(downloads_dir, exist_ok=True)
             active_file = os.path.join(temp_dir, "active_positions.json")
@@ -2605,6 +2626,116 @@ class TestGEXEngine(unittest.TestCase):
         temp_dir = tempfile.mkdtemp()
         try:
             downloads_dir = os.path.join(temp_dir, "downloads")
+            os.makedirs(downloads_dir, exist_ok=True)
+
+            # Structure 1: data -> results -> symbol/bars with close_price, high_price, low_price, open_price
+            struct1_file = os.path.join(downloads_dir, "20260801_TSLA_HISTORICAL_raw.json")
+            gex_engine.save_json(struct1_file, {
+                "data": {
+                    "results": [
+                        {
+                            "symbol": "TSLA",
+                            "bars": [
+                                {"begins_at": "2026-08-01", "close_price": "200.0", "high_price": "205.0", "low_price": "198.0", "open_price": "199.0"},
+                                {"begins_at": "2026-08-02", "close_price": "210.0", "high_price": "215.0", "low_price": "201.0", "open_price": "202.0"}
+                            ]
+                        }
+                    ]
+                }
+            })
+
+            # Structure 2: top-level bars dictionary with short aliases (close, high, low, open)
+            struct2_file = os.path.join(downloads_dir, "20260801_NVDA_HISTORICAL_raw.json")
+            gex_engine.save_json(struct2_file, {
+                "bars": [
+                    {"begins_at": "2026-08-01", "close": 120.0, "high": 125.0, "low": 118.0, "open": 119.0},
+                    {"begins_at": "2026-08-02", "close": 122.0, "high": 127.0, "low": 120.0, "open": 121.0}
+                ]
+            })
+
+            # Structure 3: direct list of bar dictionaries
+            struct3_file = os.path.join(downloads_dir, "20260801_AMD_HISTORICAL_raw.json")
+            gex_engine.save_json(struct3_file, [
+                {"begins_at": "2026-08-01", "close_price": 150.0, "high_price": 155.0, "low_price": 148.0, "open_price": 149.0}
+            ])
+
+            with patch("gex_engine.DOWNLOADS_DIR", downloads_dir):
+                c1, h1, l1, o1 = find_latest_historical_ohlc("TSLA")
+                self.assertEqual(c1, [200.0, 210.0])
+                self.assertEqual(h1, [205.0, 215.0])
+                self.assertEqual(l1, [198.0, 201.0])
+                self.assertEqual(o1, [199.0, 202.0])
+
+                c2, h2, l2, o2 = find_latest_historical_ohlc("NVDA")
+                self.assertEqual(c2, [120.0, 122.0])
+                self.assertEqual(h2, [125.0, 127.0])
+                self.assertEqual(l2, [118.0, 120.0])
+                self.assertEqual(o2, [119.0, 121.0])
+
+                c3, h3, l3, o3 = find_latest_historical_ohlc("AMD")
+                self.assertEqual(c3, [150.0])
+                self.assertEqual(h3, [155.0])
+                self.assertEqual(l3, [148.0])
+                self.assertEqual(o3, [149.0])
+        finally:
+            shutil.rmtree(temp_dir)
+
+    def test_find_latest_historical_ohlc_sorting_filtering_and_file_precedence(self):
+        """Test chronological sorting, price filtering, file precedence, and corrupted file handling."""
+        import tempfile
+        import shutil
+        from unittest.mock import patch
+        import gex_engine
+
+        temp_dir = tempfile.mkdtemp()
+        try:
+            downloads_dir = os.path.join(temp_dir, "downloads")
+            os.makedirs(downloads_dir, exist_ok=True)
+
+            # Older file with out-of-order bars, invalid non-positive prices, and valid prices
+            older_file = os.path.join(downloads_dir, "20260701_AAPL_HISTORICAL_raw.json")
+            gex_engine.save_json(older_file, {
+                "bars": [
+                    {"begins_at": "2026-07-03T00:00:00Z", "close": "180.0", "high": "185.0", "low": "178.0", "open": "179.0"},
+                    {"begins_at": "2026-07-01T00:00:00Z", "close": "0.0", "high": "10.0", "low": "0.0", "open": "5.0"},  # Should be filtered out
+                    {"begins_at": "2026-07-02T00:00:00Z", "close": "175.0", "high": "177.0", "low": "172.0", "open": "173.0"},
+                    {"begins_at": "2026-07-04T00:00:00Z", "close": "invalid", "high": "180.0", "low": "170.0", "open": "175.0"}, # Invalid float, should be skipped
+                ]
+            })
+
+            # Newer file (lexicographically higher filename) should take precedence
+            newer_file = os.path.join(downloads_dir, "20260801_AAPL_HISTORICAL_raw.json")
+            gex_engine.save_json(newer_file, {
+                "bars": [
+                    {"begins_at": "2026-08-01T00:00:00Z", "close": "190.0", "high": "195.0", "low": "188.0", "open": "189.0"},
+                    {"begins_at": "2026-08-02T00:00:00Z", "close": "192.0", "high": "197.0", "low": "190.0", "open": "191.0"}
+                ]
+            })
+
+            # Corrupted / unparseable JSON file lexicographically higher than newer_file should be skipped gracefully
+            corrupt_file = os.path.join(downloads_dir, "20260901_AAPL_HISTORICAL_raw.json")
+            with open(corrupt_file, "w") as f:
+                f.write("Corrupted { JSON syntax error")
+
+            with patch("gex_engine.DOWNLOADS_DIR", downloads_dir):
+                closes, highs, lows, opens = find_latest_historical_ohlc("AAPL")
+                # Should skip corrupt_file and pick newer_file
+                self.assertEqual(closes, [190.0, 192.0])
+                self.assertEqual(highs, [195.0, 197.0])
+                self.assertEqual(lows, [188.0, 190.0])
+                self.assertEqual(opens, [189.0, 191.0])
+
+            # Remove corrupt_file and newer_file to test older_file sorting & filtering
+            os.remove(corrupt_file)
+            os.remove(newer_file)
+
+            with patch("gex_engine.DOWNLOADS_DIR", downloads_dir):
+                closes, highs, lows, opens = find_latest_historical_ohlc("AAPL")
+                # Sorted chronologically (2026-07-02 then 2026-07-03), invalid/0 close prices filtered
+                self.assertEqual(closes, [175.0, 180.0])
+                self.assertEqual(highs, [177.0, 185.0])
+                self.assertEqual(lows, [172.0, 178.0])
+                self.assertEqual(opens, [173.0, 179.0])
 
             # 1. Non-existent DOWNLOADS_DIR -> (None, None)
             with patch("gex_engine.DOWNLOADS_DIR", os.path.join(temp_dir, "nonexistent")):
