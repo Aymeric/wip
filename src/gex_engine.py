@@ -1671,6 +1671,26 @@ def calculate_atr(highs: Sequence[float], lows: Sequence[float], closes: Sequenc
     return atr
 
 
+def parse_historical_bars(data: Any, symbol: Optional[str] = None) -> List[Dict[str, Any]]:
+    """Extracts historical bar dictionaries from various API payload structures."""
+    bars = []
+    if isinstance(data, dict):
+        results = data.get("data", {}).get("results", [])
+        if not results:
+            results = data.get("results", [])
+        if results and symbol:
+            symbol_upper = symbol.upper()
+            for res in results:
+                if isinstance(res, dict) and res.get("symbol", "").upper() == symbol_upper:
+                    bars = res.get("bars", [])
+                    break
+        if not bars:
+            bars = data.get("bars", [])
+    elif isinstance(data, list):
+        bars = data
+    return bars if isinstance(bars, list) else []
+
+
 def find_latest_historical_ohlc(symbol: str) -> Tuple[List[float], List[float], List[float], List[float]]:
     """
     Recursively scans for historical data and returns (closes, highs, lows, opens).
@@ -1694,20 +1714,7 @@ def find_latest_historical_ohlc(symbol: str) -> Tuple[List[float], List[float], 
             with open(filepath, 'r') as f:
                 data = json.load(f)
             
-            bars = []
-            if isinstance(data, dict):
-                results = data.get("data", {}).get("results", [])
-                if not results:
-                    results = data.get("results", [])
-                if results:
-                    for res in results:
-                        if res.get("symbol", "").upper() == symbol_upper:
-                            bars = res.get("bars", [])
-                            break
-                if not bars:
-                    bars = data.get("bars", [])
-            elif isinstance(data, list):
-                bars = data
+            bars = parse_historical_bars(data, symbol)
                 
             if not bars:
                 continue
@@ -1766,20 +1773,7 @@ def find_latest_historical_closes(symbol: str) -> List[float]:
             with open(filepath, 'r') as f:
                 data = json.load(f)
             
-            bars = []
-            if isinstance(data, dict):
-                results = data.get("data", {}).get("results", [])
-                if not results:
-                    results = data.get("results", [])
-                if results:
-                    for res in results:
-                        if res.get("symbol", "").upper() == symbol_upper:
-                            bars = res.get("bars", [])
-                            break
-                if not bars:
-                    bars = data.get("bars", [])
-            elif isinstance(data, list):
-                bars = data
+            bars = parse_historical_bars(data, symbol)
                 
             if not bars:
                 continue
@@ -2043,20 +2037,7 @@ def derive_volatility_profile(hist_data, symbol, iv_sum, iv_count):
         dict: Derived volatilities and rules.
     """
     import math
-    bars = []
-    if isinstance(hist_data, dict):
-        results = hist_data.get("data", {}).get("results", [])
-        if not results:
-            results = hist_data.get("results", [])
-        if results:
-            for res in results:
-                if res.get("symbol", "").upper() == symbol:
-                    bars = res.get("bars", [])
-                    break
-        if not bars:
-            bars = hist_data.get("bars", [])
-    elif isinstance(hist_data, list):
-        bars = hist_data
+    bars = parse_historical_bars(hist_data, symbol)
         
     if not bars:
         return {
