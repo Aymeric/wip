@@ -14,23 +14,49 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..',
 from gex_engine import (
     calculate_candidate_score,
     calculate_grade, 
+    classify_etf,
     compute_regime_gates, 
     compute_exit_rule_state,
+    extract_quotes_list,
     derive_gex_profile,
     derive_volatility_profile,
     select_best_option,
     discover_earnings_date,
     calculate_bollinger_bands,
     calculate_atr,
+    calculate_annualized_vol,
     calculate_trade_journal,
     parse_spot_overrides,
     parse_effective_session_date,
+    get_all_active_symbols,
+    find_latest_technical_indicators,
     RegimeGates,
     OptionPosition,
     StockPosition
 )
 
 class TestGEXEngine(unittest.TestCase):
+
+    def test_extract_quotes_list(self):
+        sample_quotes = [{"instrument_id": "opt1"}]
+
+        # 1. Nested dict data -> results
+        self.assertEqual(extract_quotes_list({"data": {"results": sample_quotes}}), sample_quotes)
+
+        # 2. Dict data list fallback
+        self.assertEqual(extract_quotes_list({"data": sample_quotes}), sample_quotes)
+
+        # 3. Dict results list fallback
+        self.assertEqual(extract_quotes_list({"results": sample_quotes}), sample_quotes)
+
+        # 4. Direct list
+        self.assertEqual(extract_quotes_list(sample_quotes), sample_quotes)
+
+        # 5. Empty dict or invalid payload fallback
+        self.assertEqual(extract_quotes_list({}), [])
+        self.assertEqual(extract_quotes_list(None), [])
+        self.assertEqual(extract_quotes_list("invalid"), [])
+        self.assertEqual(extract_quotes_list(123), [])
 
     def test_repository_root_launcher_forwards_cli_arguments(self):
         repository_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
@@ -1380,6 +1406,24 @@ class TestGEXEngine(unittest.TestCase):
         option_size_oversized = 3500.0
         self.assertGreater(option_size_oversized, max_option_per_leg)
 
+    def test_classify_etf(self):
+        """Test ETF classification logic for standard ETFs and HYG."""
+        # Standard ETF tests (thresholds: > 0.1 BULLISH, < -0.1 BEARISH, else FLAT)
+        self.assertEqual(classify_etf("SPY", 0.15), "BULLISH")
+        self.assertEqual(classify_etf("QQQ", -0.15), "BEARISH")
+        self.assertEqual(classify_etf("IWM", 0.05), "FLAT")
+        self.assertEqual(classify_etf("XLK", 0.1), "FLAT")
+        self.assertEqual(classify_etf("XLF", -0.1), "FLAT")
+
+        # HYG tests (thresholds: > 0.0 BULLISH, < 0.0 BEARISH, else FLAT)
+        self.assertEqual(classify_etf("HYG", 0.05), "BULLISH")
+        self.assertEqual(classify_etf("HYG", -0.05), "BEARISH")
+        self.assertEqual(classify_etf("HYG", 0.0), "FLAT")
+
+        # Case-insensitivity test
+        self.assertEqual(classify_etf("hyg", 0.02), "BULLISH")
+        self.assertEqual(classify_etf("spy", 0.2), "BULLISH")
+
     def test_pct_change_flat_classification(self):
         """Test ETF classification thresholds for flat/bullish/bearish."""
         # Bullish threshold: > +0.1%
@@ -2134,6 +2178,56 @@ class TestGEXEngine(unittest.TestCase):
         self.assertIsNotNone(best2)
         self.assertFalse(best2["earnings_blocked"])
 
+    def test_calculate_annualized_vol(self):
+        """Test calculation of annualized volatility from daily log returns."""
+        import math
+
+        # 1. Edge case: empty list -> 0.0
+        self.assertEqual(calculate_annualized_vol([]), 0.0)
+
+        # 2. Edge case: single element -> 0.0
+        self.assertEqual(calculate_annualized_vol([0.01]), 0.0)
+
+        # 3. Edge case: zero variance (all values identical) -> 0.0
+        self.assertEqual(calculate_annualized_vol([0.02, 0.02, 0.02]), 0.0)
+
+        # 4. Known input calculation: [0.01, -0.01]
+        expected_val = math.sqrt(0.0002) * math.sqrt(252) * 100.0
+        result_val = calculate_annualized_vol([0.01, -0.01])
+        self.assertAlmostEqual(result_val, expected_val, places=7)
+
+        # 5. Realistic log return series
+        returns = [0.005, -0.003, 0.012, -0.008, 0.002, 0.001, -0.004, 0.006]
+        n = len(returns)
+        mean_ret = sum(returns) / n
+        variance = sum((x - mean_ret) ** 2 for x in returns) / (n - 1)
+        expected_real = math.sqrt(variance) * math.sqrt(252) * 100.0
+        self.assertAlmostEqual(calculate_annualized_vol(returns), expected_real, places=7)
+    def test_calculate_ema(self):
+        """Test module-level calculate_ema utility function."""
+        from gex_engine import calculate_ema
+
+        # 1. Standard EMA calculation with period 3
+        values = [10.0, 11.0, 12.0, 13.0, 14.0]
+        ema = calculate_ema(values, 3)
+        # Expected:
+        # seed SMA = (10+11+12)/3 = 11.0
+        # k = 2 / (3 + 1) = 0.5
+        # 13.0: 13.0 * 0.5 + 11.0 * 0.5 = 12.0
+        # 14.0: 14.0 * 0.5 + 12.0 * 0.5 = 13.0
+        self.assertEqual(len(ema), 3)
+        self.assertAlmostEqual(ema[0], 11.0)
+        self.assertAlmostEqual(ema[1], 12.0)
+        self.assertAlmostEqual(ema[2], 13.0)
+
+        # 2. Edge case: values length less than period or invalid period
+        self.assertEqual(calculate_ema([10.0, 12.0], 3), [])
+        self.assertEqual(calculate_ema([10.0, 12.0], 0), [])
+        self.assertEqual(calculate_ema([], 3), [])
+
+        # 3. Exact match when len(values) == p
+        self.assertEqual(calculate_ema([10.0, 20.0, 30.0], 3), [20.0])
+
     def test_technical_indicators_rsi_macd(self):
         """Test RSI and MACD calculation functions."""
         from gex_engine import calculate_rsi, calculate_macd
@@ -2382,6 +2476,92 @@ class TestGEXEngine(unittest.TestCase):
             "macd_hist": "0.1"
         }
         self.assertEqual(calculate_candidate_score(str_candidate), 100.0)
+    def test_get_all_active_symbols_standard(self):
+        import tempfile
+        import shutil
+        from unittest.mock import patch
+        import gex_engine
+
+        temp_dir = tempfile.mkdtemp()
+        try:
+            data_dir = os.path.join(temp_dir, "data")
+            os.makedirs(data_dir)
+
+            pos1 = {
+                "options_positions": {
+                    "opt1": {"Underlier": "aapl"},
+                    "opt2": {"Underlier": "MSFT"}
+                },
+                "stocks_positions": {
+                    "tsla": {},
+                    "BABA": {}
+                }
+            }
+            pos2 = {
+                "options_positions": {
+                    "opt3": {"Underlier": "MSFT"}
+                },
+                "stocks_positions": {
+                    "NVDA": {}
+                }
+            }
+
+            gex_engine.save_json(os.path.join(data_dir, "active_positions.json"), pos1)
+            gex_engine.save_json(os.path.join(data_dir, "active_positions_ACC123.json"), pos2)
+
+            with patch("gex_engine.REPOSITORY_ROOT", temp_dir):
+                symbols = get_all_active_symbols()
+
+            self.assertEqual(symbols, ["AAPL", "BABA", "MSFT", "NVDA", "TSLA"])
+        finally:
+            shutil.rmtree(temp_dir)
+
+    def test_get_all_active_symbols_edge_cases(self):
+        import tempfile
+        import shutil
+        from unittest.mock import patch
+        import gex_engine
+
+        temp_dir = tempfile.mkdtemp()
+        try:
+            # 1. Non-existent data directory
+            with patch("gex_engine.REPOSITORY_ROOT", temp_dir):
+                self.assertEqual(get_all_active_symbols(), [])
+
+            # 2. Data directory exists but no active_positions*.json matching files
+            data_dir = os.path.join(temp_dir, "data")
+            os.makedirs(data_dir)
+            gex_engine.save_json(os.path.join(data_dir, "closed_positions.json"), {
+                "closed_stocks": [{"Ticker": "AMZN"}]
+            })
+            with open(os.path.join(data_dir, "active_positions.txt"), "w") as f:
+                f.write("text content")
+
+            with patch("gex_engine.REPOSITORY_ROOT", temp_dir):
+                self.assertEqual(get_all_active_symbols(), [])
+
+            # 3. Active positions file with malformed / non-dict entries and missing/empty fields
+            malformed_pos = {
+                "options_positions": {
+                    "opt1": None,  # details is not a dict
+                    "opt2": "invalid string",
+                    "opt3": {"Underlier": ""},  # empty string
+                    "opt4": {},  # missing Underlier key
+                    "opt5": {"Underlier": "AMD"}  # valid entry
+                },
+                "stocks_positions": {
+                    "": {},  # empty ticker string
+                    "INTC": {}  # valid ticker key
+                }
+            }
+            gex_engine.save_json(os.path.join(data_dir, "active_positions_malformed.json"), malformed_pos)
+
+            with patch("gex_engine.REPOSITORY_ROOT", temp_dir):
+                symbols = get_all_active_symbols()
+
+            self.assertEqual(symbols, ["AMD", "INTC"])
+        finally:
+            shutil.rmtree(temp_dir)
 
     def test_update_candidates_reads_cached_technical_indicators(self):
         import tempfile
@@ -2423,6 +2603,193 @@ class TestGEXEngine(unittest.TestCase):
                 self.assertEqual(candidate["rsi"], 39.01)
                 self.assertEqual(candidate["macd_hist"], -0.1624)
                 self.assertIn("score", candidate)
+        finally:
+            shutil.rmtree(temp_dir)
+
+    def test_extract_col_case_insensitive_and_null_handling(self):
+        """Test _extract_col logic via cmd_update_candidates column parsing."""
+        import tempfile
+        import shutil
+        from unittest.mock import patch
+        import gex_engine
+
+        temp_dir = tempfile.mkdtemp()
+        try:
+            downloads_dir = os.path.join(temp_dir, "downloads")
+            os.makedirs(downloads_dir, exist_ok=True)
+            active_file = os.path.join(temp_dir, "active_positions.json")
+            gex_engine.save_json(active_file, {"options_positions": {}, "stocks_positions": {}})
+
+            # Scan file with uppercase / mixed case keys and None values
+            gex_engine.save_json(os.path.join(downloads_dir, "test_scan.json"), {
+                "data": {"result": {"scan_title": "Test Scan", "results": [
+                    {
+                        "ticker": "STOCK1",
+                        "columns": {
+                            "Last": None,
+                            "LAST_TRADE_PRICE": "50.0",
+                            "VOLUME": "1000000",
+                            "% CHANGE": "1.5",
+                            "MARKET CAP": "5000000000",
+                            "IV": "0.35",
+                            "RELATIVE VOLUME": "2.1"
+                        }
+                    },
+                    {
+                        "ticker": "STOCK2",
+                        "columns": {
+                            "price": "75.0",
+                            "volume": "800000",
+                            "change_pct": "2.0",
+                            "market_cap": "10000000000",
+                            "implied_volatility": "0.25",
+                            "relative_options_volume": "1.8"
+                        }
+                    }
+                ]}}
+            })
+            candidates_file = os.path.join(temp_dir, "candidate_stocks.json")
+            with patch('gex_engine.OPTIONS_FILE', active_file), \
+                 patch('gex_engine.DOWNLOADS_DIR', downloads_dir), \
+                 patch('gex_engine.CANDIDATES_FILE', candidates_file), \
+                 patch('gex_engine.ANALYSES_FILE', os.path.join(temp_dir, "ticker_analyses.json")), \
+                 patch('gex_engine.persist_new_scans', return_value=[]):
+                class UpdateArgs:
+                    min_rsi = None
+                    max_rsi = None
+                    macd_filter = "none"
+
+                gex_engine.cmd_update_candidates(UpdateArgs())
+                candidates = gex_engine.load_json(candidates_file, {})["candidates"]
+                self.assertEqual(len(candidates), 2)
+
+                stock1 = next(c for c in candidates if c["symbol"] == "STOCK1")
+                self.assertEqual(stock1["price"], 50.0)
+                self.assertEqual(stock1["chg_pct"], 1.5)
+                self.assertEqual(stock1["iv"], 0.35)
+                self.assertEqual(stock1["relative_options_volume"], 2.1)
+
+                stock2 = next(c for c in candidates if c["symbol"] == "STOCK2")
+                self.assertEqual(stock2["price"], 75.0)
+                self.assertEqual(stock2["chg_pct"], 2.0)
+                self.assertEqual(stock2["iv"], 0.25)
+                self.assertEqual(stock2["relative_options_volume"], 1.8)
+        finally:
+            shutil.rmtree(temp_dir)
+
+
+    def test_find_latest_technical_indicators(self):
+        """Test find_latest_technical_indicators under various file structures and edge cases."""
+        import tempfile
+        import shutil
+        from unittest.mock import patch
+        import gex_engine
+
+        temp_dir = tempfile.mkdtemp()
+        try:
+            downloads_dir = os.path.join(temp_dir, "downloads")
+
+            # 1. Non-existent DOWNLOADS_DIR -> (None, None)
+            with patch("gex_engine.DOWNLOADS_DIR", os.path.join(temp_dir, "nonexistent")):
+                rsi, macd_hist = find_latest_technical_indicators("AAPL")
+                self.assertIsNone(rsi)
+                self.assertIsNone(macd_hist)
+
+            os.makedirs(downloads_dir, exist_ok=True)
+
+            # 2. DOWNLOADS_DIR exists but no matching files for symbol -> (None, None)
+            with patch("gex_engine.DOWNLOADS_DIR", downloads_dir):
+                rsi, macd_hist = find_latest_technical_indicators("AAPL")
+                self.assertIsNone(rsi)
+                self.assertIsNone(macd_hist)
+
+            # 3. Happy path: valid indicator file containing both RSI and MACD
+            file_path_happy = os.path.join(downloads_dir, "aapl_technical_indicators_20260101.json")
+            gex_engine.save_json(file_path_happy, {
+                "data": {
+                    "indicators": [
+                        {"type": "rsi", "series": [{"value": 65.4}]},
+                        {"type": "macd", "series": [{"histogram": 1.25}]},
+                    ]
+                }
+            })
+
+            with patch("gex_engine.DOWNLOADS_DIR", downloads_dir):
+                rsi, macd_hist = find_latest_technical_indicators("aapl") # case-insensitive symbol check
+                self.assertEqual(rsi, 65.4)
+                self.assertEqual(macd_hist, 1.25)
+
+            # 4. Latest file precedence & fallback on corrupted newest file
+            # Create a newer file (lexicographically sorting after 20260101)
+            file_path_newer_corrupt = os.path.join(downloads_dir, "aapl_technical_indicators_20260102.json")
+            with open(file_path_newer_corrupt, "w") as f:
+                f.write("{ invalid json... ")
+
+            with patch("gex_engine.DOWNLOADS_DIR", downloads_dir):
+                # Should skip corrupt 20260102 file and fall back to 20260101 file
+                rsi, macd_hist = find_latest_technical_indicators("AAPL")
+                self.assertEqual(rsi, 65.4)
+                self.assertEqual(macd_hist, 1.25)
+
+            # Now fix 20260102 file with newer values -> should take 20260102
+            gex_engine.save_json(file_path_newer_corrupt, {
+                "data": {
+                    "indicators": [
+                        {"type": "rsi", "series": [{"value": 72.1}]},
+                        {"type": "macd", "series": [{"histogram": 0.85}]},
+                    ]
+                }
+            })
+
+            with patch("gex_engine.DOWNLOADS_DIR", downloads_dir):
+                rsi, macd_hist = find_latest_technical_indicators("AAPL")
+                self.assertEqual(rsi, 72.1)
+                self.assertEqual(macd_hist, 0.85)
+
+            # 5. Partial indicators: file with only RSI or only MACD
+            dir_partial = os.path.join(temp_dir, "downloads_partial")
+            os.makedirs(dir_partial, exist_ok=True)
+            gex_engine.save_json(os.path.join(dir_partial, "msft_technical_indicators.json"), {
+                "data": {
+                    "indicators": [
+                        {"type": "rsi", "series": [{"value": 45.0}]},
+                    ]
+                }
+            })
+
+            with patch("gex_engine.DOWNLOADS_DIR", dir_partial):
+                rsi, macd_hist = find_latest_technical_indicators("MSFT")
+                self.assertEqual(rsi, 45.0)
+                self.assertIsNone(macd_hist)
+
+            # 6. Malformed entries: empty series, invalid value types, non-dict root
+            dir_malformed = os.path.join(temp_dir, "downloads_malformed")
+            os.makedirs(dir_malformed, exist_ok=True)
+
+            # Non-dict JSON root
+            gex_engine.save_json(os.path.join(dir_malformed, "nvda_technical_1.json"), ["not", "a", "dict"])
+            # Non-numeric string value
+            gex_engine.save_json(os.path.join(dir_malformed, "nvda_technical_2.json"), {
+                "data": {
+                    "indicators": [
+                        {"type": "rsi", "series": [{"value": "invalid_number"}]}
+                    ]
+                }
+            })
+            # Empty series list
+            gex_engine.save_json(os.path.join(dir_malformed, "nvda_technical_3.json"), {
+                "data": {
+                    "indicators": [
+                        {"type": "rsi", "series": []}
+                    ]
+                }
+            })
+
+            with patch("gex_engine.DOWNLOADS_DIR", dir_malformed):
+                rsi, macd_hist = find_latest_technical_indicators("NVDA")
+                self.assertIsNone(rsi)
+                self.assertIsNone(macd_hist)
+
         finally:
             shutil.rmtree(temp_dir)
 

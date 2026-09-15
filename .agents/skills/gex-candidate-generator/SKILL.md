@@ -54,13 +54,24 @@ Filter the raw aggregated ticker pool against:
 
 ---
 
-## Step 5: Reconcile Candidates & Watchlist Sync
+## Step 5: Reconcile Candidates, Watchlist Sync & Hygiene Pruning
 
 1. Update candidate pool via CLI:
     ```bash
-    python3 src/gex_engine.py update-candidates --scan-files data/downloads/YYYYMMDD/...
+    python3 src/gex_engine.py update-candidates --date YYYYMMDD --exclude-active
     ```
 2. Check `data/candidate_stocks.json` to verify candidate pool integrity.
-3. **Stock Watchlist Sync**: Sync verified stock candidates and pending stock candidates (underlier symbols) to the Robinhood equity watchlist `GEX_DAILY_CANDIDATES` via `robinhood-trading/add_to_watchlist` with `symbols`.
+3. **Watchlist Pruning & Hygiene**:
+   - Inspect current entries on `GEX_DAILY_CANDIDATES` via `robinhood-trading/get_watchlist_items`.
+   - Run the pruning engine to identify outdated entries:
+     ```bash
+     python3 src/gex_engine.py prune-candidates --watchlist-file data/downloads/YYYYMMDD/watchlist_gex_daily_candidates.json
+     ```
+   - Identify symbols that no longer apply:
+     - **Active Holdings**: Symbols entered and now held in the active portfolio (`active_positions_<account>.json`).
+     - **REJECTED Setups**: Symbols analyzed and failing non-negotiable risk rules in `data/ticker_analyses.json`.
+     - **Stale Tickers**: Tickers no longer present in current screened scans and not actively `PENDING`.
+   - Confirm with user via `ask_question` and remove outdated symbols via `robinhood-trading/remove_from_watchlist(list_id=..., symbols=[...])`.
+4. **Stock Watchlist Sync**: Sync newly verified stock candidates and pending stock candidates (underlier symbols) to the Robinhood equity watchlist `GEX_DAILY_CANDIDATES` via `robinhood-trading/add_to_watchlist` with `symbols`.
 
 > **Note**: Option contract candidates are synced separately by the **option-selector** agent after contract selection. Use `robinhood-trading/add_option_to_watchlist` (with `option_ids` and `position_type: "long"`) to add selected contracts to the dedicated Robinhood **"options watchlist"**. Do not mix equity and option watchlist tools.
