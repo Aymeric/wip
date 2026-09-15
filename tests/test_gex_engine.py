@@ -24,6 +24,7 @@ from gex_engine import (
     calculate_trade_journal,
     parse_spot_overrides,
     parse_effective_session_date,
+    find_latest_technical_indicators,
     RegimeGates,
     OptionPosition,
     StockPosition
@@ -2339,6 +2340,122 @@ class TestGEXEngine(unittest.TestCase):
                 self.assertEqual(candidate["rsi"], 39.01)
                 self.assertEqual(candidate["macd_hist"], -0.1624)
                 self.assertIn("score", candidate)
+        finally:
+            shutil.rmtree(temp_dir)
+
+
+    def test_find_latest_technical_indicators(self):
+        """Test find_latest_technical_indicators under various file structures and edge cases."""
+        import tempfile
+        import shutil
+        from unittest.mock import patch
+        import gex_engine
+
+        temp_dir = tempfile.mkdtemp()
+        try:
+            downloads_dir = os.path.join(temp_dir, "downloads")
+
+            # 1. Non-existent DOWNLOADS_DIR -> (None, None)
+            with patch("gex_engine.DOWNLOADS_DIR", os.path.join(temp_dir, "nonexistent")):
+                rsi, macd_hist = find_latest_technical_indicators("AAPL")
+                self.assertIsNone(rsi)
+                self.assertIsNone(macd_hist)
+
+            os.makedirs(downloads_dir, exist_ok=True)
+
+            # 2. DOWNLOADS_DIR exists but no matching files for symbol -> (None, None)
+            with patch("gex_engine.DOWNLOADS_DIR", downloads_dir):
+                rsi, macd_hist = find_latest_technical_indicators("AAPL")
+                self.assertIsNone(rsi)
+                self.assertIsNone(macd_hist)
+
+            # 3. Happy path: valid indicator file containing both RSI and MACD
+            file_path_happy = os.path.join(downloads_dir, "aapl_technical_indicators_20260101.json")
+            gex_engine.save_json(file_path_happy, {
+                "data": {
+                    "indicators": [
+                        {"type": "rsi", "series": [{"value": 65.4}]},
+                        {"type": "macd", "series": [{"histogram": 1.25}]},
+                    ]
+                }
+            })
+
+            with patch("gex_engine.DOWNLOADS_DIR", downloads_dir):
+                rsi, macd_hist = find_latest_technical_indicators("aapl") # case-insensitive symbol check
+                self.assertEqual(rsi, 65.4)
+                self.assertEqual(macd_hist, 1.25)
+
+            # 4. Latest file precedence & fallback on corrupted newest file
+            # Create a newer file (lexicographically sorting after 20260101)
+            file_path_newer_corrupt = os.path.join(downloads_dir, "aapl_technical_indicators_20260102.json")
+            with open(file_path_newer_corrupt, "w") as f:
+                f.write("{ invalid json... ")
+
+            with patch("gex_engine.DOWNLOADS_DIR", downloads_dir):
+                # Should skip corrupt 20260102 file and fall back to 20260101 file
+                rsi, macd_hist = find_latest_technical_indicators("AAPL")
+                self.assertEqual(rsi, 65.4)
+                self.assertEqual(macd_hist, 1.25)
+
+            # Now fix 20260102 file with newer values -> should take 20260102
+            gex_engine.save_json(file_path_newer_corrupt, {
+                "data": {
+                    "indicators": [
+                        {"type": "rsi", "series": [{"value": 72.1}]},
+                        {"type": "macd", "series": [{"histogram": 0.85}]},
+                    ]
+                }
+            })
+
+            with patch("gex_engine.DOWNLOADS_DIR", downloads_dir):
+                rsi, macd_hist = find_latest_technical_indicators("AAPL")
+                self.assertEqual(rsi, 72.1)
+                self.assertEqual(macd_hist, 0.85)
+
+            # 5. Partial indicators: file with only RSI or only MACD
+            dir_partial = os.path.join(temp_dir, "downloads_partial")
+            os.makedirs(dir_partial, exist_ok=True)
+            gex_engine.save_json(os.path.join(dir_partial, "msft_technical_indicators.json"), {
+                "data": {
+                    "indicators": [
+                        {"type": "rsi", "series": [{"value": 45.0}]},
+                    ]
+                }
+            })
+
+            with patch("gex_engine.DOWNLOADS_DIR", dir_partial):
+                rsi, macd_hist = find_latest_technical_indicators("MSFT")
+                self.assertEqual(rsi, 45.0)
+                self.assertIsNone(macd_hist)
+
+            # 6. Malformed entries: empty series, invalid value types, non-dict root
+            dir_malformed = os.path.join(temp_dir, "downloads_malformed")
+            os.makedirs(dir_malformed, exist_ok=True)
+
+            # Non-dict JSON root
+            gex_engine.save_json(os.path.join(dir_malformed, "nvda_technical_1.json"), ["not", "a", "dict"])
+            # Non-numeric string value
+            gex_engine.save_json(os.path.join(dir_malformed, "nvda_technical_2.json"), {
+                "data": {
+                    "indicators": [
+                        {"type": "rsi", "series": [{"value": "invalid_number"}]}
+                    ]
+                }
+            })
+            # Empty series list
+            gex_engine.save_json(os.path.join(dir_malformed, "nvda_technical_3.json"), {
+                "data": {
+                    "indicators": [
+                        {"type": "rsi", "series": []}
+                    ]
+                }
+            })
+
+            with patch("gex_engine.DOWNLOADS_DIR", dir_malformed):
+                rsi, macd_hist = find_latest_technical_indicators("NVDA")
+                self.assertIsNone(rsi)
+                self.assertIsNone(macd_hist)
+
         finally:
             shutil.rmtree(temp_dir)
 
