@@ -12,6 +12,7 @@ import subprocess
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
 
 from gex_engine import (
+    calculate_candidate_score,
     calculate_grade, 
     classify_etf,
     compute_regime_gates, 
@@ -2536,6 +2537,88 @@ class TestGEXEngine(unittest.TestCase):
         finally:
             shutil.rmtree(temp_dir)
 
+    def test_calculate_candidate_score(self):
+        """Test candidate score calculation across various input combinations and edge cases."""
+        # 1. Empty dictionary or all None values -> returns 0.0
+        self.assertEqual(calculate_candidate_score({}), 0.0)
+        self.assertEqual(
+            calculate_candidate_score({
+                "relative_options_volume": None,
+                "chg_pct": None,
+                "iv": None,
+                "rsi": None,
+                "macd_hist": None
+            }),
+            0.0
+        )
+
+        # 2. Maximum values at or exceeding caps -> returns 100.0
+        max_candidate = {
+            "relative_options_volume": 10.0,  # cap 10.0
+            "chg_pct": 5.0,                  # cap 5.0
+            "iv": 1.0,                       # cap 1.0
+            "rsi": 100.0,                    # cap 100.0
+            "macd_hist": 0.5                 # > 0 -> 1.0, cap 1.0
+        }
+        self.assertEqual(calculate_candidate_score(max_candidate), 100.0)
+
+        # 3. Exceeding caps -> clamped to 1.0 -> returns 100.0
+        exceeding_candidate = {
+            "relative_options_volume": 20.0,
+            "chg_pct": 10.0,
+            "iv": 2.0,
+            "rsi": 150.0,
+            "macd_hist": 1.5
+        }
+        self.assertEqual(calculate_candidate_score(exceeding_candidate), 100.0)
+
+        # 4. Zero or negative values -> returns 0.0
+        min_candidate = {
+            "relative_options_volume": 0.0,
+            "chg_pct": -5.0,
+            "iv": 0.0,
+            "rsi": 0.0,
+            "macd_hist": -0.5  # <= 0 -> 0.0
+        }
+        self.assertEqual(calculate_candidate_score(min_candidate), 0.0)
+
+        # 5. Partial metrics -> reweights based on available metric weights
+        # relative_options_volume = 5.0 (50% of cap 10.0, weight 30.0 -> 15.0)
+        # chg_pct = 2.5 (50% of cap 5.0, weight 25.0 -> 12.5)
+        # total available weighted sum = 27.5, total available weight = 55.0
+        # 27.5 / 55.0 * 100 = 50.0
+        partial_candidate = {
+            "relative_options_volume": 5.0,
+            "chg_pct": 2.5
+        }
+        self.assertEqual(calculate_candidate_score(partial_candidate), 50.0)
+
+        # 6. MACD Hist edge cases
+        # macd_hist > 0 -> 1.0 (weight 10.0)
+        cand_macd_pos = {"macd_hist": 0.01}
+        self.assertEqual(calculate_candidate_score(cand_macd_pos), 100.0)
+
+        # macd_hist == 0 -> 0.0 (weight 10.0)
+        cand_macd_zero = {"macd_hist": 0.0}
+        self.assertEqual(calculate_candidate_score(cand_macd_zero), 0.0)
+
+        # macd_hist < 0 -> 0.0 (weight 10.0)
+        cand_macd_neg = {"macd_hist": -0.01}
+        self.assertEqual(calculate_candidate_score(cand_macd_neg), 0.0)
+
+        # macd_hist is None -> metric not available
+        cand_macd_none = {"macd_hist": None}
+        self.assertEqual(calculate_candidate_score(cand_macd_none), 0.0)
+
+        # 7. Handles string numeric values
+        str_candidate = {
+            "relative_options_volume": "10.0",
+            "chg_pct": "5.0",
+            "iv": "1.0",
+            "rsi": "100.0",
+            "macd_hist": "0.1"
+        }
+        self.assertEqual(calculate_candidate_score(str_candidate), 100.0)
     def test_get_all_active_symbols_standard(self):
         import tempfile
         import shutil
