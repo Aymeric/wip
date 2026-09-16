@@ -28,6 +28,7 @@ from gex_engine import (
     calculate_trade_journal,
     parse_spot_overrides,
     parse_effective_session_date,
+    str2bool,
     find_latest_historical_ohlc,
     get_all_active_symbols,
     find_latest_technical_indicators,
@@ -114,6 +115,29 @@ class TestGEXEngine(unittest.TestCase):
 
         with self.assertRaises(ArgumentTypeError):
             parse_effective_session_date("2026-08-12T00:00:00")
+
+    def test_str2bool(self):
+        from argparse import ArgumentTypeError
+
+        # Native boolean values
+        self.assertTrue(str2bool(True))
+        self.assertFalse(str2bool(False))
+
+        # Truthy string representations
+        for val in ("true", "True", "TRUE", "t", "T", "yes", "Yes", "YES", "y", "Y", "1"):
+            with self.subTest(val=val):
+                self.assertTrue(str2bool(val))
+
+        # Falsy string representations
+        for val in ("false", "False", "FALSE", "f", "F", "no", "No", "NO", "n", "N", "0"):
+            with self.subTest(val=val):
+                self.assertFalse(str2bool(val))
+
+        # Invalid string representations
+        for val in ("maybe", "2", "", "invalid", "2026", "None", "off", "on"):
+            with self.subTest(val=val):
+                with self.assertRaises(ArgumentTypeError):
+                    str2bool(val)
 
     def test_calculate_trade_journal_metrics(self):
         report = calculate_trade_journal({
