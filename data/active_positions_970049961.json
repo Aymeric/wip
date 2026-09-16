@@ -1,5 +1,30 @@
 {
-  "options_positions": {},
+  "options_positions": {
+    "edd8cff7-9a8d-450c-9e0d-2d5a31d1b3c4": {
+      "Option ID": "edd8cff7-9a8d-450c-9e0d-2d5a31d1b3c4",
+      "Underlier": "FRO",
+      "Strike": "50.00",
+      "Expiration": "2026-10-16",
+      "Type": "call",
+      "Purchase Premium": 2.69,
+      "Delta": "0.674621",
+      "Gamma": "0.083586",
+      "Mark Price": 2.7,
+      "Open Interest": 4030,
+      "ImpVol": "0.287667",
+      "Asset Cost Basis": 269.0,
+      "Current Value": 270.0,
+      "P&L (%)": 0.37,
+      "P&L ($)": 1.0,
+      "Sizing Risk Weight (%)": 26.73,
+      "Beta Sector Tag": "Technology/Beta",
+      "Entry Date": "2026-09-15",
+      "Stalling Days": 0,
+      "Target Mode": "T1",
+      "T2 Target": null,
+      "Account": "970049961"
+    }
+  },
   "stocks_positions": {},
   "net_liq": 1005.31
 }
