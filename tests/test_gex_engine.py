@@ -29,6 +29,7 @@ from gex_engine import (
     parse_spot_overrides,
     parse_effective_session_date,
     normalize_workflow_state,
+    format_color,
     find_latest_historical_ohlc,
     get_all_active_symbols,
     find_latest_technical_indicators,
@@ -2337,6 +2338,20 @@ class TestGEXEngine(unittest.TestCase):
             self.assertIn("$200.00", output)
             self.assertIn("$210.00", output)
 
+    def test_format_color(self):
+        from unittest.mock import patch
+
+        # Case 1: TTY output enabled (sys.stdout.isatty() is True)
+        with patch("sys.stdout.isatty", return_value=True):
+            # Non-bold text formatting
+            self.assertEqual(format_color("Test Text", "32", bold=False), "\033[0;32mTest Text\033[0m")
+            # Bold text formatting
+            self.assertEqual(format_color("Test Text", "31", bold=True), "\033[1;31mTest Text\033[0m")
+
+        # Case 2: Non-TTY output (sys.stdout.isatty() is False)
+        with patch("sys.stdout.isatty", return_value=False):
+            self.assertEqual(format_color("Test Text", "32", bold=False), "Test Text")
+            self.assertEqual(format_color("Test Text", "31", bold=True), "Test Text")
     def test_cmd_journal(self):
         """Test cmd_journal subcommand with default account, explicit account, and empty data."""
         import json
