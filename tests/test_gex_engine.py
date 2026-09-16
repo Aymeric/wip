@@ -29,6 +29,8 @@ from gex_engine import (
     parse_spot_overrides,
     parse_effective_session_date,
     check_technical_alerts,
+    normalize_workflow_state,
+    format_color,
     find_latest_historical_ohlc,
     get_all_active_symbols,
     find_latest_technical_indicators,
@@ -686,6 +688,47 @@ class TestGEXEngine(unittest.TestCase):
         self.assertEqual(freshness["current"], ["AAPL"])
         self.assertEqual(freshness["stale"][0]["symbol"], "MSFT")
         self.assertEqual(freshness["missing"], ["NVDA"])
+
+    def test_normalize_workflow_state(self):
+        # Case 1: Well-formed input state
+        valid_state = {
+            "current_phase": "Phase I: Risk & Audit",
+            "last_updated": "2026-08-11T12:00:00Z",
+            "subagents": {"agent1": {"status": "SUCCESS"}},
+            "notes": [{"content": "note 1"}],
+        }
+        res1 = normalize_workflow_state(valid_state)
+        self.assertEqual(res1["current_phase"], "Phase I: Risk & Audit")
+        self.assertEqual(res1["last_updated"], "2026-08-11T12:00:00Z")
+        self.assertEqual(res1["subagents"], {"agent1": {"status": "SUCCESS"}})
+        self.assertEqual(res1["notes"], [{"content": "note 1"}])
+
+        # Case 2: Non-dict inputs (None, int, str, list)
+        for non_dict in (None, 123, "malformed", ["phase"]):
+            with self.subTest(non_dict=non_dict):
+                res = normalize_workflow_state(non_dict)
+                self.assertEqual(res["current_phase"], "Phase 0: Initialization")
+                self.assertIsNone(res["last_updated"])
+                self.assertEqual(res["subagents"], {})
+                self.assertEqual(res["notes"], [])
+
+        # Case 3: Missing or empty current_phase
+        for falsy_phase in ("", None, 0):
+            with self.subTest(falsy_phase=falsy_phase):
+                res = normalize_workflow_state({"current_phase": falsy_phase})
+                self.assertEqual(res["current_phase"], "Phase 0: Initialization")
+
+        # Case 4: Malformed subagents and notes
+        malformed_fields = {
+            "current_phase": "Phase II: Discovery",
+            "last_updated": "2026-08-11T12:00:00Z",
+            "subagents": "not a dict",
+            "notes": {"invalid": "not a list"},
+        }
+        res4 = normalize_workflow_state(malformed_fields)
+        self.assertEqual(res4["current_phase"], "Phase II: Discovery")
+        self.assertEqual(res4["subagents"], {})
+        self.assertEqual(res4["notes"], [])
 
     def test_update_workflow_recovers_from_incomplete_state(self):
         from types import SimpleNamespace
@@ -2296,6 +2339,20 @@ class TestGEXEngine(unittest.TestCase):
             self.assertIn("$200.00", output)
             self.assertIn("$210.00", output)
 
+    def test_format_color(self):
+        from unittest.mock import patch
+
+        # Case 1: TTY output enabled (sys.stdout.isatty() is True)
+        with patch("sys.stdout.isatty", return_value=True):
+            # Non-bold text formatting
+            self.assertEqual(format_color("Test Text", "32", bold=False), "\033[0;32mTest Text\033[0m")
+            # Bold text formatting
+            self.assertEqual(format_color("Test Text", "31", bold=True), "\033[1;31mTest Text\033[0m")
+
+        # Case 2: Non-TTY output (sys.stdout.isatty() is False)
+        with patch("sys.stdout.isatty", return_value=False):
+            self.assertEqual(format_color("Test Text", "32", bold=False), "Test Text")
+            self.assertEqual(format_color("Test Text", "31", bold=True), "Test Text")
     def test_cmd_journal(self):
         """Test cmd_journal subcommand with default account, explicit account, and empty data."""
         import json
