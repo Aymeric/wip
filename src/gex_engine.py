@@ -1947,14 +1947,29 @@ def get_all_active_symbols() -> List[str]:
 
 def calculate_candidate_score(candidate: Dict[str, Any]) -> float:
     """Calculates a 0-100 screen score from the metrics available for a candidate."""
+    macd = candidate.get("macd_hist")
+    macd_val = None
+    if macd is not None:
+        try:
+            macd_val = 1.0 if float(macd) > 0.0 else 0.0
+        except (ValueError, TypeError):
+            macd_val = None
+
     weighted_metrics = [
         (candidate.get("relative_options_volume"), 30.0, 10.0),
         (candidate.get("chg_pct"), 25.0, 5.0),
         (candidate.get("iv"), 15.0, 1.0),
         (candidate.get("rsi"), 20.0, 100.0),
-        (1.0 if (candidate.get("macd_hist") or 0.0) > 0.0 else 0.0 if candidate.get("macd_hist") is not None else None, 10.0, 1.0),
+        (macd_val, 10.0, 1.0),
     ]
-    available = [(min(max(float(value) / cap, 0.0), 1.0) * weight, weight) for value, weight, cap in weighted_metrics if value is not None]
+    available = []
+    for value, weight, cap in weighted_metrics:
+        if value is not None:
+            try:
+                numeric_val = float(value)
+                available.append((min(max(numeric_val / cap, 0.0), 1.0) * weight, weight))
+            except (ValueError, TypeError):
+                pass
     if not available:
         return 0.0
     return round(sum(value for value, _ in available) / sum(weight for _, weight in available) * 100.0, 2)
@@ -4339,47 +4354,37 @@ def cmd_sync_positions(args):
         # Scan DOWNLOADS_DIR for latest directory with positions
         candidates = []
         if os.path.exists(DOWNLOADS_DIR):
-            # Also check the root DOWNLOADS_DIR itself
-            root_files = os.listdir(DOWNLOADS_DIR)
-            has_matching_root = False
-            if account:
-                if any((f.startswith(f"option_positions_{account}") or f.startswith(f"equity_positions_{account}")) and f.endswith(".json") for f in root_files):
-                    has_matching_root = True
-            else:
-                if any((f.startswith("option_positions") or f.startswith("equity_positions")) and f.endswith(".json") for f in root_files):
-                    has_matching_root = True
-            
-            if has_matching_root:
-                matching_root_files = [
-                    os.path.join(DOWNLOADS_DIR, f)
-                    for f in root_files
-                    if (not account or f.startswith(f"option_positions_{account}") or f.startswith(f"equity_positions_{account}"))
-                    and f.endswith(".json")
-                ]
-                candidates.append((max(os.path.getmtime(f) for f in matching_root_files), DOWNLOADS_DIR))
+            try:
+                entries = list(os.scandir(DOWNLOADS_DIR))
+            except OSError:
+                entries = []
 
-            for d in os.listdir(DOWNLOADS_DIR):
-                d_path = os.path.join(DOWNLOADS_DIR, d)
-                if os.path.isdir(d_path) and d != "downloads": # Avoid infinite recursion if DOWNLOADS_DIR is relative
-                    files = os.listdir(d_path)
-                    if account:
-                        if any((f.startswith(f"option_positions_{account}") or f.startswith(f"equity_positions_{account}")) and f.endswith(".json") for f in files):
-                            matching_files = [
-                                os.path.join(d_path, f)
-                                for f in files
-                                if (f.startswith(f"option_positions_{account}") or f.startswith(f"equity_positions_{account}"))
-                                and f.endswith(".json")
-                            ]
-                            candidates.append((max(os.path.getmtime(f) for f in matching_files), d_path))
-                    else:
-                        if any((f.startswith("option_positions") or f.startswith("equity_positions")) and f.endswith(".json") for f in files):
-                            matching_files = [
-                                os.path.join(d_path, f)
-                                for f in files
-                                if (f.startswith("option_positions") or f.startswith("equity_positions"))
-                                and f.endswith(".json")
-                            ]
-                            candidates.append((max(os.path.getmtime(f) for f in matching_files), d_path))
+            def is_matching_pos_file(filename: str) -> bool:
+                if not filename.endswith(".json"):
+                    return False
+                if account:
+                    return filename.startswith(f"option_positions_{account}") or filename.startswith(f"equity_positions_{account}")
+                return filename.startswith("option_positions") or filename.startswith("equity_positions")
+
+            matching_root_files = [
+                e.path for e in entries
+                if e.is_file() and is_matching_pos_file(e.name)
+            ]
+            if matching_root_files:
+                candidates.append((max(os.path.getmtime(p) for p in matching_root_files), DOWNLOADS_DIR))
+
+            for e in entries:
+                if e.is_dir() and e.name != "downloads":
+                    try:
+                        sub_entries = list(os.scandir(e.path))
+                    except OSError:
+                        continue
+                    matching_files = [
+                        se.path for se in sub_entries
+                        if se.is_file() and is_matching_pos_file(se.name)
+                    ]
+                    if matching_files:
+                        candidates.append((max(os.path.getmtime(p) for p in matching_files), e.path))
         if candidates:
             # Folder names can lag the broker snapshot date, so select by file mtime.
             base_dir = max(candidates, key=lambda candidate: (candidate[0], candidate[1]))[1]
@@ -4408,10 +4413,17 @@ def cmd_sync_positions(args):
             if not os.path.exists(d_path):
                 continue
             for file in sorted(os.listdir(d_path)):
+                if not file.endswith(".json"):
+                    continue
+                is_inst = "option_instruments" in file
+                is_quote = "option_quotes" in file
+                if not (is_inst or is_quote):
+                    continue
                 file_path = os.path.join(d_path, file)
                 if not os.path.isfile(file_path):
                     continue
-                if "option_instruments" in file and file.endswith(".json"):
+
+                if is_inst:
                     data = load_json(file_path, {})
                     instruments = (
                         data.get("data", {}).get("instruments", []) or
@@ -4425,7 +4437,7 @@ def cmd_sync_positions(args):
                                 "type": inst.get("type"),
                                 "expiration": inst.get("expiration_date")
                             }
-                if "option_quotes" in file and file.endswith(".json"):
+                elif is_quote:
                     data = load_json(file_path, {})
                     quotes = (
                         data.get("data", {}).get("results", []) or
