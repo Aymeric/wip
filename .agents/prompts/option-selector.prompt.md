@@ -13,4 +13,3 @@ Activate the **option-selector** skill to:
 3. Check earnings dates to ensure no earnings report occurs during the contract's lifespan.
 4. Size position strictly within the Per-Trade Buying Power Budget received from Phase I.
 5. Present the recommended contract execution ticket, update `data/candidate_options.json`, and sync the isolated option candidate to the dedicated Robinhood "options watchlist" via `add_option_to_watchlist`.
-

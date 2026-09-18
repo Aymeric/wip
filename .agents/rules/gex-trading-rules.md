@@ -34,4 +34,3 @@ These rules are enforced across all sessions in this workspace.
 - **Outdated Entries Removal**: Any symbol currently on `GEX_DAILY_CANDIDATES` that transitions to an active portfolio position, is graded `REJECTED`, or drops off the screened candidate universe must be pruned via `robinhood-trading/remove_from_watchlist`.
 - **Pre-Pruning Confirmation**: Always obtain human confirmation via `ask_question` with the explicit list of tickers or contract IDs before invoking `remove_from_watchlist` or `remove_option_from_watchlist`.
 - **Options Watchlist Isolation & Sync**: Never mix equity candidate lists with the dedicated `Options Watchlist`. Option contracts must only be added via `add_option_to_watchlist(option_ids=[...], position_type="long")` and removed via `remove_option_from_watchlist`.
-

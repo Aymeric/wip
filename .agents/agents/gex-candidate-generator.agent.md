@@ -53,4 +53,3 @@ Your job is to derive the daily candidate universe for **both options contracts 
   - Inspect contracts via `robinhood-trading/get_option_watchlist`.
   - Add qualifying option contract candidates via `robinhood-trading/add_option_to_watchlist(option_ids=[...], position_type="long")`.
   - Prune expired or invalidated contracts via `robinhood-trading/remove_option_from_watchlist(option_ids=[...])` after confirmation.
-
