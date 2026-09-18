@@ -248,5 +248,29 @@
     "position_score": 0.0,
     "volume_score": 0.0,
     "meme_score": 0.0
+  },
+  "SMCI": {
+    "Ticker": "SMCI",
+    "Sentiment": 0.2,
+    "Buzz": "High",
+    "Narrative": "Polarized battleground between deep value AI backlog dip-buyers and governance overhang bears",
+    "last_updated": "2026-09-17T16:28:46.853539Z",
+    "tone_score": 0.0,
+    "comments_score": 0.0,
+    "position_score": 0.0,
+    "volume_score": 0.0,
+    "meme_score": 0.0
+  },
+  "SECZ": {
+    "Ticker": "SECZ",
+    "Sentiment": 0.25,
+    "Buzz": "Medium",
+    "Narrative": "Fintech tokenization play surging +18% on SEC favorable regulatory TSV development; retail interest emerging",
+    "last_updated": "2026-09-17T16:28:49.678839Z",
+    "tone_score": 0.0,
+    "comments_score": 0.0,
+    "position_score": 0.0,
+    "volume_score": 0.0,
+    "meme_score": 0.0
   }
 }

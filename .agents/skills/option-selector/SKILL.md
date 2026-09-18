@@ -45,8 +45,10 @@ For each `CONFIRMED` setup, filter the option chain against these quantitative c
 
 ## Execution Protocol
 
-1. Query `robinhood-trading/get_option_instruments` and `robinhood-trading/get_option_quotes` (chunked to $\le 40$ IDs).
-2. Rank qualifying contracts by liquidity (tightest spread, highest open interest).
+1. **Option Candidate Ingestion**:
+   - Inspect pre-screened option candidates in `data/candidate_options.json` and contracts from the dedicated Options Watchlist (`robinhood-trading/get_option_watchlist`).
+   - For all `CONFIRMED` setups, query full option chains via `robinhood-trading/get_option_instruments` and `robinhood-trading/get_option_quotes` (chunked to $\le 40$ IDs).
+2. Rank qualifying contracts by liquidity (tightest spread, highest open interest, optimal delta 0.40–0.45).
 3. Generate the finalized contract recommendation card:
    - **Underlier**: Symbol & Spot Price
    - **Contract**: Expiration Date, Strike Price, Type (Call)
@@ -56,6 +58,8 @@ For each `CONFIRMED` setup, filter the option chain against these quantitative c
    - **Recommended Sizing**: Number of contracts and total cash outlay
    - **Downside Risk Benchmark**: $pTrans$ stop level and implied dollar risk
    - **Upside Target**: $+GEX$ Call Wall and target option value
-4. **Options Watchlist Sync**:
+4. **Options Watchlist Sync & Persistence**:
    - Add isolated option candidates (contract UUIDs) to the user's dedicated Robinhood **"options watchlist"** via `robinhood-trading/add_option_to_watchlist` with `option_ids: [CONTRACT_UUID]` and `position_type: "long"`.
+   - Update `data/candidate_options.json` with the selected contract recommendation.
    - **Separation Rule**: Pending stock candidates are synced to equity watchlists via `add_to_watchlist(symbols=...)`, whereas option candidates are synced to the dedicated "options watchlist" via `add_option_to_watchlist(option_ids=...)`.
+

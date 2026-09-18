@@ -60,16 +60,16 @@ Interpret each request as one of these modes:
    - Run `python3 src/gex_engine.py update-performance --account ACCOUNT_NUMBER --net-liq NET_LIQ --monthly-file data/downloads/YYYYMMDD/realized_pnl_monthly_ACCOUNT_NUMBER_raw.json --pnl-file data/downloads/YYYYMMDD/pnl_trade_history_ACCOUNT_NUMBER_raw.json`.
 4. **Closed-Trade Quality Audit**: Run `trade-journal-analyst` to reconcile performance and extract process improvements.
 
-### Phase II: Discovery & Sentiment Filtering
-1. **Setup Candidate Sourcing & Watchlist Hygiene**: Run `gex-candidate-generator` to execute Robinhood scans, apply baseline filters, check RSI/MACD crossovers, update `data/candidate_stocks.json`, prune outdated entries (active holdings, rejected setups, or stale tickers) from `GEX_DAILY_CANDIDATES` via `prune-candidates` and `robinhood-trading/remove_from_watchlist`, and sync valid screened stock candidates via `add_to_watchlist`.
+### Phase II: Discovery & Sentiment Filtering (Stocks & Options)
+1. **Stock & Option Candidate Sourcing & Watchlist Hygiene**: Run `gex-candidate-generator` to execute options/momentum scans (`High options volume and IV`, `GEX Momentum Candidates`, `Upcoming Earnings GEX`), query the dedicated Robinhood Options Watchlist via `robinhood-trading/get_option_watchlist`, apply options liquidity and baseline filters, extract viable option contracts (30–45 DTE, 0.35–0.50 Delta), update `data/candidate_stocks.json` and `data/candidate_options.json`, prune outdated entries from `GEX_DAILY_CANDIDATES` via `prune-candidates` and `remove_from_watchlist`, sync valid underliers to `GEX_DAILY_CANDIDATES`, and sync isolated option candidates to the dedicated "options watchlist" via `add_option_to_watchlist`.
 2. **Social Sentiment Scans**: Run `reddit-sentiment-analyst` to compute 5-factor sentiment scores on WSB/options/stocks.
 
 ### Phase III: Setup Engineering & Selection
-1. **Setup Analysis & Grading**: Run `gex-setup-grader` to download option chains (chunked to 40 contract IDs), derive pTrans/nTrans levels, apply the 11-Rule checklist, add pending stock candidates (`PENDING` status) to the equity watchlist `GEX_DAILY_CANDIDATES` via `add_to_watchlist`, and remove any failing/rejected setups via `remove_from_watchlist`.
+1. **Setup Analysis & Grading**: Run `gex-setup-grader` to download option chains (chunked to 40 contract IDs), derive pTrans/nTrans levels, apply the 11-Rule checklist, evaluate candidate options from the discovery pool, add pending stock candidates (`PENDING` status) to the equity watchlist `GEX_DAILY_CANDIDATES` via `add_to_watchlist`, and remove any failing/rejected setups via `remove_from_watchlist`.
 2. **Option Selection & Options Watchlist Sync**: Run `option-selector` to isolate optimal 30-45 DTE contracts within the Per-Trade Buying Power Budget, and add isolated option candidates to the dedicated Robinhood **"options watchlist"** via `add_option_to_watchlist`.
 
 ### Phase IV: Order Execution Handoff
-- Present confirmed setups and contract recommendations.
-- Display Watchlist actions: Pending stock candidates on the equity watchlist (`GEX_DAILY_CANDIDATES`), pruned outdated entries removed, option candidates on the dedicated **"options watchlist"**.
+- Present confirmed setups and specific option contract recommendations.
+- Display Watchlist actions: Pending stock candidates on the equity watchlist (`GEX_DAILY_CANDIDATES`), pruned outdated entries removed, and option candidates on the dedicated **"options watchlist"**.
 - Prompt user for execution approval via `ask_question`.
 - If approved, invoke `agentic-trader` for pre-trade clearance, simulation, and limit order submission.
