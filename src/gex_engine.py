@@ -461,21 +461,6 @@ def get_performance_status(account: str = "") -> Dict[str, Any]:
     }
 
 
-def classify_etf(symbol: str, chg_pct: float) -> str:
-    """Classifies an ETF as BULLISH, BEARISH, or FLAT based on daily percent change."""
-    if symbol.upper() != "HYG":
-        if chg_pct > 0.1:
-            return "BULLISH"
-        if chg_pct < -0.1:
-            return "BEARISH"
-    else:
-        if chg_pct > 0.0:
-            return "BULLISH"
-        if chg_pct < 0.0:
-            return "BEARISH"
-    return "FLAT"
-
-
 def compute_regime_gates(spy_pct: float, qqq_pct: float, bull_count: int, bear_count: int, vix_dealer_delta_bearish: bool) -> Tuple[str, float, str, str, str, int]:
     """Mechanically computes the three Daily Regime Gates and system authorization.
 
@@ -595,7 +580,17 @@ def cmd_update_regime(args):
                         chg_pct = ((price - prev_close) / prev_close) * 100.0
                         found_symbols[sym_upper] = chg_pct
                         
-                    classification = classify_etf(sym_upper, chg_pct)
+                    classification = "FLAT"
+                    if sym_upper != "HYG":
+                        if chg_pct > 0.1:
+                            classification = "BULLISH"
+                        elif chg_pct < -0.1:
+                            classification = "BEARISH"
+                    else:
+                        if chg_pct > 0.0:
+                            classification = "BULLISH"
+                        elif chg_pct < 0.0:
+                            classification = "BEARISH"
                             
                     etf_segment_names = {
                         "SPY": "S&P 500 Broad Market",
@@ -700,7 +695,17 @@ def cmd_update_regime(args):
         for sym, val in [("SPY", spy_val), ("QQQ", qqq_val), ("HYG", hyg_val)]:
             if val is not None:
                 chg_pct = float(val)
-                classification = classify_etf(sym, chg_pct)
+                classification = "FLAT"
+                if sym != "HYG":
+                    if chg_pct > 0.1:
+                        classification = "BULLISH"
+                    elif chg_pct < -0.1:
+                        classification = "BEARISH"
+                else:
+                    if chg_pct > 0.0:
+                        classification = "BULLISH"
+                    elif chg_pct < 0.0:
+                        classification = "BEARISH"
                 etf_details[sym] = {
                     "Ticker": sym,
                     "ETF Segment / Sector Name": etf_segment_names.get(sym, "Unknown Sector"),
@@ -1361,27 +1366,6 @@ def calculate_grade(ticker, spot, ptrans, ntrans, gex, cotmp, extra_rules=None):
     return grade, rules
 
 
-def extract_quotes_list(quotes_data: Any) -> List[Any]:
-    """Extracts a quotes list from dict or list data payload."""
-    if isinstance(quotes_data, dict):
-        data = quotes_data.get("data")
-        quotes_list = []
-        if isinstance(data, dict):
-            quotes_list = data.get("results", [])
-        elif isinstance(data, list):
-            quotes_list = data
-
-        if not quotes_list:
-            res = quotes_data.get("results")
-            if isinstance(res, list):
-                quotes_list = res
-
-        return quotes_list if isinstance(quotes_list, list) else []
-    elif isinstance(quotes_data, list):
-        return quotes_data
-    return []
-
-
 def derive_gex_profile(inst_data, quotes_data, spot):
     """
     Derives GEX levels and key option metrics (COTMP, pTrans, nTrans, +GEX)
@@ -1416,7 +1400,15 @@ def derive_gex_profile(inst_data, quotes_data, spot):
         except (ValueError, KeyError):
             continue
         
-    quotes_list = extract_quotes_list(quotes_data)
+    quotes_list = []
+    if isinstance(quotes_data, dict):
+        quotes_list = quotes_data.get("data", {}).get("results", [])
+        if not quotes_list:
+            quotes_list = quotes_data.get("data", [])
+        if not quotes_list:
+            quotes_list = quotes_data.get("results", [])
+    elif isinstance(quotes_data, list):
+        quotes_list = quotes_data
         
     strike_put_oi = {}
     strike_call_oi = {}
@@ -1579,28 +1571,6 @@ def calculate_rsi(closes: List[float], period: int = 14) -> Optional[float]:
     return 100.0 - (100.0 / (1.0 + rs))
 
 
-def calculate_ema(values: List[float], p: int) -> List[float]:
-    """
-    Calculates the Exponential Moving Average (EMA) for a list of values.
-
-    Args:
-        values: List of float numerical values (e.g. closing prices).
-        p: The window period for the EMA calculation.
-
-    Returns:
-        List of EMA values starting from the p-th element seeded by SMA of first p values.
-    """
-    if len(values) < p or p <= 0:
-        return []
-    ema = []
-    k = 2.0 / (p + 1)
-    sma = sum(values[:p]) / p
-    ema.append(sma)
-    for val in values[p:]:
-        ema.append(val * k + ema[-1] * (1.0 - k))
-    return ema
-
-
 def calculate_macd(closes: List[float], fast_period: int = 12, slow_period: int = 26, signal_period: int = 9) -> Tuple[Optional[float], Optional[float], Optional[float]]:
     """
     Calculates the MACD Line, Signal Line, and Histogram for a list of closes.
@@ -1611,8 +1581,18 @@ def calculate_macd(closes: List[float], fast_period: int = 12, slow_period: int 
     if len(closes) < slow_period + signal_period:
         return None, None, None
 
-    ema_fast = calculate_ema(closes, fast_period)
-    ema_slow = calculate_ema(closes, slow_period)
+    def get_ema(values: List[float], p: int) -> List[float]:
+        ema = []
+        k = 2.0 / (p + 1)
+        # Seed EMA with SMA of the first p values
+        sma = sum(values[:p]) / p
+        ema.append(sma)
+        for val in values[p:]:
+            ema.append(val * k + ema[-1] * (1.0 - k))
+        return ema
+
+    ema_fast = get_ema(closes, fast_period)
+    ema_slow = get_ema(closes, slow_period)
     
     align_index = slow_period - fast_period
     aligned_fast = ema_fast[align_index:]
@@ -1624,7 +1604,7 @@ def calculate_macd(closes: List[float], fast_period: int = 12, slow_period: int 
     if len(macd_line) < signal_period:
         return None, None, None
         
-    signal_line = calculate_ema(macd_line, signal_period)
+    signal_line = get_ema(macd_line, signal_period)
     
     return macd_line[-1], signal_line[-1], macd_line[-1] - signal_line[-1]
 
@@ -1947,29 +1927,14 @@ def get_all_active_symbols() -> List[str]:
 
 def calculate_candidate_score(candidate: Dict[str, Any]) -> float:
     """Calculates a 0-100 screen score from the metrics available for a candidate."""
-    macd = candidate.get("macd_hist")
-    macd_val = None
-    if macd is not None:
-        try:
-            macd_val = 1.0 if float(macd) > 0.0 else 0.0
-        except (ValueError, TypeError):
-            macd_val = None
-
     weighted_metrics = [
         (candidate.get("relative_options_volume"), 30.0, 10.0),
         (candidate.get("chg_pct"), 25.0, 5.0),
         (candidate.get("iv"), 15.0, 1.0),
         (candidate.get("rsi"), 20.0, 100.0),
-        (macd_val, 10.0, 1.0),
+        (1.0 if (candidate.get("macd_hist") or 0.0) > 0.0 else 0.0 if candidate.get("macd_hist") is not None else None, 10.0, 1.0),
     ]
-    available = []
-    for value, weight, cap in weighted_metrics:
-        if value is not None:
-            try:
-                numeric_val = float(value)
-                available.append((min(max(numeric_val / cap, 0.0), 1.0) * weight, weight))
-            except (ValueError, TypeError):
-                pass
+    available = [(min(max(float(value) / cap, 0.0), 1.0) * weight, weight) for value, weight, cap in weighted_metrics if value is not None]
     if not available:
         return 0.0
     return round(sum(value for value, _ in available) / sum(weight for _, weight in available) * 100.0, 2)
@@ -2009,13 +1974,22 @@ def check_technical_alerts(closes: List[float], highs: Optional[List[float]] = N
 
     # For MACD Crossover
     if len(closes) >= 35:
-        ema_fast = calculate_ema(closes, 12)
-        ema_slow = calculate_ema(closes, 26)
+        def get_ema(values: List[float], p: int) -> List[float]:
+            ema = []
+            k = 2.0 / (p + 1)
+            sma = sum(values[:p]) / p
+            ema.append(sma)
+            for val in values[p:]:
+                ema.append(val * k + ema[-1] * (1.0 - k))
+            return ema
+
+        ema_fast = get_ema(closes, 12)
+        ema_slow = get_ema(closes, 26)
         aligned_fast = ema_fast[14:]
         
         macd_line_list = [f - s for f, s in zip(aligned_fast, ema_slow)]
         if len(macd_line_list) >= 10:
-            signal_line_list = calculate_ema(macd_line_list, 9)
+            signal_line_list = get_ema(macd_line_list, 9)
             
             prev_hist = macd_line_list[-2] - signal_line_list[-2]
             curr_hist = macd_line_list[-1] - signal_line_list[-1]
@@ -2222,7 +2196,15 @@ def select_best_option(inst_data, quotes_data, spot, gex_target, today_override=
             continue
 
     # 2. Parse quotes
-    quotes_list = extract_quotes_list(quotes_data)
+    quotes_list = []
+    if isinstance(quotes_data, dict):
+        quotes_list = quotes_data.get("data", {}).get("results", [])
+        if not quotes_list:
+            quotes_list = quotes_data.get("data", [])
+        if not quotes_list:
+            quotes_list = quotes_data.get("results", [])
+    elif isinstance(quotes_data, list):
+        quotes_list = quotes_data
 
     quotes_map = {}
     for q_item in quotes_list:
@@ -4354,37 +4336,47 @@ def cmd_sync_positions(args):
         # Scan DOWNLOADS_DIR for latest directory with positions
         candidates = []
         if os.path.exists(DOWNLOADS_DIR):
-            try:
-                entries = list(os.scandir(DOWNLOADS_DIR))
-            except OSError:
-                entries = []
+            # Also check the root DOWNLOADS_DIR itself
+            root_files = os.listdir(DOWNLOADS_DIR)
+            has_matching_root = False
+            if account:
+                if any((f.startswith(f"option_positions_{account}") or f.startswith(f"equity_positions_{account}")) and f.endswith(".json") for f in root_files):
+                    has_matching_root = True
+            else:
+                if any((f.startswith("option_positions") or f.startswith("equity_positions")) and f.endswith(".json") for f in root_files):
+                    has_matching_root = True
 
-            def is_matching_pos_file(filename: str) -> bool:
-                if not filename.endswith(".json"):
-                    return False
-                if account:
-                    return filename.startswith(f"option_positions_{account}") or filename.startswith(f"equity_positions_{account}")
-                return filename.startswith("option_positions") or filename.startswith("equity_positions")
+            if has_matching_root:
+                matching_root_files = [
+                    os.path.join(DOWNLOADS_DIR, f)
+                    for f in root_files
+                    if (not account or f.startswith(f"option_positions_{account}") or f.startswith(f"equity_positions_{account}"))
+                    and f.endswith(".json")
+                ]
+                candidates.append((max(os.path.getmtime(f) for f in matching_root_files), DOWNLOADS_DIR))
 
-            matching_root_files = [
-                e.path for e in entries
-                if e.is_file() and is_matching_pos_file(e.name)
-            ]
-            if matching_root_files:
-                candidates.append((max(os.path.getmtime(p) for p in matching_root_files), DOWNLOADS_DIR))
-
-            for e in entries:
-                if e.is_dir() and e.name != "downloads":
-                    try:
-                        sub_entries = list(os.scandir(e.path))
-                    except OSError:
-                        continue
-                    matching_files = [
-                        se.path for se in sub_entries
-                        if se.is_file() and is_matching_pos_file(se.name)
-                    ]
-                    if matching_files:
-                        candidates.append((max(os.path.getmtime(p) for p in matching_files), e.path))
+            for d in os.listdir(DOWNLOADS_DIR):
+                d_path = os.path.join(DOWNLOADS_DIR, d)
+                if os.path.isdir(d_path) and d != "downloads": # Avoid infinite recursion if DOWNLOADS_DIR is relative
+                    files = os.listdir(d_path)
+                    if account:
+                        if any((f.startswith(f"option_positions_{account}") or f.startswith(f"equity_positions_{account}")) and f.endswith(".json") for f in files):
+                            matching_files = [
+                                os.path.join(d_path, f)
+                                for f in files
+                                if (f.startswith(f"option_positions_{account}") or f.startswith(f"equity_positions_{account}"))
+                                and f.endswith(".json")
+                            ]
+                            candidates.append((max(os.path.getmtime(f) for f in matching_files), d_path))
+                    else:
+                        if any((f.startswith("option_positions") or f.startswith("equity_positions")) and f.endswith(".json") for f in files):
+                            matching_files = [
+                                os.path.join(d_path, f)
+                                for f in files
+                                if (f.startswith("option_positions") or f.startswith("equity_positions"))
+                                and f.endswith(".json")
+                            ]
+                            candidates.append((max(os.path.getmtime(f) for f in matching_files), d_path))
         if candidates:
             # Folder names can lag the broker snapshot date, so select by file mtime.
             base_dir = max(candidates, key=lambda candidate: (candidate[0], candidate[1]))[1]
@@ -4413,17 +4405,10 @@ def cmd_sync_positions(args):
             if not os.path.exists(d_path):
                 continue
             for file in sorted(os.listdir(d_path)):
-                if not file.endswith(".json"):
-                    continue
-                is_inst = "option_instruments" in file
-                is_quote = "option_quotes" in file
-                if not (is_inst or is_quote):
-                    continue
                 file_path = os.path.join(d_path, file)
                 if not os.path.isfile(file_path):
                     continue
-
-                if is_inst:
+                if "option_instruments" in file and file.endswith(".json"):
                     data = load_json(file_path, {})
                     instruments = (
                         data.get("data", {}).get("instruments", []) or
@@ -4437,7 +4422,7 @@ def cmd_sync_positions(args):
                                 "type": inst.get("type"),
                                 "expiration": inst.get("expiration_date")
                             }
-                elif is_quote:
+                if "option_quotes" in file and file.endswith(".json"):
                     data = load_json(file_path, {})
                     quotes = (
                         data.get("data", {}).get("results", []) or
@@ -4763,16 +4748,13 @@ def cmd_update_candidates(args):
     min_market_cap = getattr(args, "min_market_cap", MIN_MARKET_CAP)
     date_filter = getattr(args, "date", None)
     
-    def _extract_col(cols: Dict[str, Any], keys: Sequence[str], default: Any = None, lower_cols: Optional[Dict[str, Any]] = None) -> Any:
+    def _extract_col(cols: Dict[str, Any], keys: Sequence[str], default: Any = None) -> Any:
         for k in keys:
             if k in cols and cols[k] is not None:
                 return cols[k]
-        if lower_cols is None:
-            lower_cols = {ck.lower(): cv for ck, cv in cols.items() if cv is not None}
-        for k in keys:
-            k_lower = k.lower()
-            if k_lower in lower_cols:
-                return lower_cols[k_lower]
+            for ck, cv in cols.items():
+                if ck.lower() == k.lower() and cv is not None:
+                    return cv
         return default
 
     def process_scan_file(filepath, source_name):
@@ -4815,21 +4797,20 @@ def cmd_update_candidates(args):
                 continue
 
             columns = item.get("columns", {}) if isinstance(item.get("columns"), dict) else item
-            lower_columns = {ck.lower(): cv for ck, cv in columns.items() if cv is not None} if isinstance(columns, dict) else None
             
             try:
-                raw_price = _extract_col(columns, ["Last", "Price", "price", "last_trade_price", "last_non_reg_trade_price", "Close", "close"], 0, lower_cols=lower_columns)
+                raw_price = _extract_col(columns, ["Last", "Price", "price", "last_trade_price", "last_non_reg_trade_price", "Close", "close"], 0)
                 price = float(raw_price)
                 
-                raw_volume = _extract_col(columns, ["Volume", "volume", "Average Volume", "average_volume", "Day volume"], 0, lower_cols=lower_columns)
+                raw_volume = _extract_col(columns, ["Volume", "volume", "Average Volume", "average_volume", "Day volume"], 0)
                 volume = float(raw_volume)
                 
-                raw_chg = _extract_col(columns, ["% Change", "Percent change", "percent_change", "change_pct", "percent_change_from_close"], 0, lower_cols=lower_columns)
+                raw_chg = _extract_col(columns, ["% Change", "Percent change", "percent_change", "change_pct", "percent_change_from_close"], 0)
                 chg_val = float(raw_chg)
                 # If change is expressed as decimal fraction (e.g. 0.05 for 5%), normalize to percentage
                 chg_pct = chg_val * 100.0 if abs(chg_val) <= 1.0 and "%" not in str(raw_chg) else chg_val
                 
-                raw_mcap = _extract_col(columns, ["Market cap", "market_cap", "Market Cap", "marketCap"], 0, lower_cols=lower_columns)
+                raw_mcap = _extract_col(columns, ["Market cap", "market_cap", "Market Cap", "marketCap"], 0)
                 market_cap = float(raw_mcap) if raw_mcap else 0.0
             except Exception:
                 continue
@@ -4876,7 +4857,7 @@ def cmd_update_candidates(args):
                 continue
 
             iv = None
-            raw_iv = _extract_col(columns, ["Implied volatility", "implied_volatility", "iv", "IV"], lower_cols=lower_columns)
+            raw_iv = _extract_col(columns, ["Implied volatility", "implied_volatility", "iv", "IV"])
             if raw_iv is not None:
                 try:
                     iv = float(raw_iv)
@@ -4884,7 +4865,7 @@ def cmd_update_candidates(args):
                     pass
                     
             rel_opt_vol = None
-            raw_rov = _extract_col(columns, ["Relative options volume", "relative_options_volume", "Relative volume", "relative_volume"], lower_cols=lower_columns)
+            raw_rov = _extract_col(columns, ["Relative options volume", "relative_options_volume", "Relative volume", "relative_volume"])
             if raw_rov is not None:
                 try:
                     rel_opt_vol = float(raw_rov)
@@ -5082,141 +5063,6 @@ def cmd_update_sentiment(args):
     
     save_json(SENTIMENT_FILE, sentiment_db)
     print(f"Successfully saved Reddit sentiment for {format_color(ticker, '35', bold=True)}.")
-
-
-def cmd_prune_candidates(args):
-    """Identifies and reports outdated entries on the GEX_DAILY_CANDIDATES equity watchlist."""
-    import glob
-    watchlist_file = getattr(args, "watchlist_file", None)
-    symbols_arg = getattr(args, "symbols", None)
-    output_json = getattr(args, "json", False)
-
-    symbols = []
-    if watchlist_file:
-        if not os.path.exists(watchlist_file):
-            print(f"Error: Watchlist file not found: {watchlist_file}", file=sys.stderr)
-            sys.exit(1)
-        try:
-            with open(watchlist_file, "r") as f:
-                wl_data = json.load(f)
-            items = []
-            if isinstance(wl_data, dict):
-                items = wl_data.get("data", {}).get("items", []) or wl_data.get("items", [])
-            elif isinstance(wl_data, list):
-                items = wl_data
-            for item in items:
-                if isinstance(item, dict):
-                    sym = (item.get("symbol") or item.get("ticker") or "").upper().strip()
-                    if sym and sym not in symbols:
-                        symbols.append(sym)
-                elif isinstance(item, str):
-                    sym = item.upper().strip()
-                    if sym and sym not in symbols:
-                        symbols.append(sym)
-        except Exception as e:
-            print(f"Error reading watchlist file {watchlist_file}: {e}", file=sys.stderr)
-            sys.exit(1)
-    elif symbols_arg:
-        for s in symbols_arg:
-            clean_s = s.upper().strip()
-            if clean_s and clean_s not in symbols:
-                symbols.append(clean_s)
-    else:
-        # Search for latest downloaded watchlist file
-        matches = sorted(glob.glob("data/downloads/*/watchlist_gex_daily_candidates.json"), reverse=True)
-        if matches and os.path.exists(matches[0]):
-            try:
-                with open(matches[0], "r") as f:
-                    wl_data = json.load(f)
-                items = wl_data.get("data", {}).get("items", []) or wl_data.get("items", [])
-                for item in items:
-                    sym = (item.get("symbol") or "").upper().strip()
-                    if sym and sym not in symbols:
-                        symbols.append(sym)
-                print(f"Loaded {len(symbols)} symbols from discovered watchlist file: {matches[0]}")
-            except Exception:
-                pass
-
-    if not symbols:
-        print("Error: No watchlist symbols found. Supply --watchlist-file or --symbols [SYM ...].", file=sys.stderr)
-        sys.exit(1)
-
-    active_symbols = set(get_all_active_symbols())
-    candidates_data = load_json(CANDIDATES_FILE, {"candidates": []})
-    candidate_symbols = set(c.get("symbol", "").upper() for c in candidates_data.get("candidates", []) if c.get("symbol"))
-    analyses = load_json(ANALYSES_FILE, {})
-
-    active_holdings = []
-    rejected_setups = []
-    stale_tickers = []
-    valid_candidates = []
-
-    for sym in symbols:
-        if sym in active_symbols:
-            active_holdings.append(sym)
-            continue
-        
-        analysis = analyses.get(sym)
-        is_pending = False
-        is_rejected = False
-        if analysis:
-            status_str = str(analysis.get("Signal Status", "")).upper()
-            grade = analysis.get("Grade", 0)
-            if "PENDING" in status_str or (grade >= 9 and "BLOCKED" in status_str and sym in ["COIN", "RBLX"]):
-                is_pending = True
-            elif "REJECTED" in status_str or (grade <= 8 and "BLOCKED" in status_str):
-                is_rejected = True
-
-        if is_rejected:
-            rejected_setups.append(sym)
-        elif sym not in candidate_symbols and not is_pending:
-            stale_tickers.append(sym)
-        else:
-            valid_candidates.append(sym)
-
-    to_remove = active_holdings + rejected_setups + stale_tickers
-
-    if output_json:
-        result = {
-            "total_evaluated": len(symbols),
-            "to_remove_count": len(to_remove),
-            "retained_count": len(valid_candidates),
-            "to_remove": to_remove,
-            "retained": valid_candidates,
-            "breakdown": {
-                "active_holdings": active_holdings,
-                "rejected_setups": rejected_setups,
-                "stale_tickers": stale_tickers
-            }
-        }
-        print(json.dumps(result, indent=2))
-        return
-
-    print("\n" + format_color("=" * 90, "34", bold=True))
-    print(format_color(" 🧹 GEX_DAILY_CANDIDATES WATCHLIST PRUNING AUDIT", "36", bold=True))
-    print(format_color("=" * 90, "34", bold=True))
-    print(f" Total Symbols Evaluated: {len(symbols)}")
-    print(f" Symbols Identified for Removal: {format_color(str(len(to_remove)), '31', bold=True)}")
-    print(f" Valid Symbols to Retain: {format_color(str(len(valid_candidates)), '32', bold=True)}")
-    print(format_color("-" * 90, "34"))
-
-    if active_holdings:
-        print(format_color(f" 🚫 Active Portfolio Holdings (Must be removed - already held):", "31", bold=True))
-        print(f"    {', '.join(active_holdings)}")
-    if rejected_setups:
-        print(format_color(f" ❌ Graded REJECTED / Failing Risk Rules (Must be removed):", "31", bold=True))
-        print(f"    {', '.join(rejected_setups)}")
-    if stale_tickers:
-        print(format_color(f" ⏳ Stale / Absent from Screened Candidate Universe (Must be removed):", "33", bold=True))
-        print(f"    {', '.join(stale_tickers)}")
-    print(format_color("-" * 90, "34"))
-    print(format_color(f" ✅ Retained Valid / Pending Candidates:", "32", bold=True))
-    print(f"    {', '.join(valid_candidates)}")
-    print(format_color("=" * 90, "34", bold=True))
-
-    print("\n" + format_color("📋 Removal List for robinhood-trading/remove_from_watchlist:", "35", bold=True))
-    print(json.dumps(to_remove))
-    print("\n" + format_color(f"💡 Pass {len(to_remove)} symbols to remove_from_watchlist to prune outdated entries.\n", "36"))
 
 
 def cmd_sentiment(args):
@@ -6255,12 +6101,6 @@ def main():
     p_candidates.add_argument("--exclude-active", action="store_true", dest="exclude_active", help="Exclude active portfolio positions from candidates")
     p_candidates.add_argument("--include-active", action="store_true", dest="include_active", help="Do not exclude active portfolio positions from candidates")
     
-    # prune-candidates subcommand
-    p_prune = subparsers.add_parser("prune-candidates", help="Identify outdated entries from GEX_DAILY_CANDIDATES watchlist.")
-    p_prune.add_argument("--watchlist-file", type=str, help="Path to raw get_watchlist_items JSON output")
-    p_prune.add_argument("--symbols", nargs="+", help="Specific symbols to evaluate for pruning")
-    p_prune.add_argument("--json", action="store_true", help="Output results in JSON format")
-
     # sentiment subcommand
     p_sent = subparsers.add_parser("sentiment", help="Display Reddit sentiment analysis dashboard and divergence alerts.")
     p_sent.add_argument("--account", type=str, default="", help="Optional account number used to scope the position cache")
@@ -6373,8 +6213,6 @@ def main():
         cmd_close_stock_pos(args)
     elif args.command == "update-candidates":
         cmd_update_candidates(args)
-    elif args.command == "prune-candidates":
-        cmd_prune_candidates(args)
     elif args.command == "sentiment":
         cmd_sentiment(args)
     elif args.command == "update-sentiment":
