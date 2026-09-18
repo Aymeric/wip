@@ -1,7 +1,7 @@
 {
   "basket_gate": "FAIL",
   "bull_bear_gate": "FAIL",
-  "vix_spot": 15.44,
+  "vix_spot": 15.01,
   "vix_bearish": true,
   "vix_delta_gate": "PASS",
   "system_authorization": "BLOCKED",
@@ -10,107 +10,107 @@
     "SPY": {
       "Ticker": "SPY",
       "ETF Segment / Sector Name": "S&P 500 Broad Market",
-      "Price": 762.82,
-      "Daily Change %": 0.0288,
+      "Price": 760.81,
+      "Daily Change %": 0.013,
       "Classification": "FLAT"
     },
     "QQQ": {
       "Ticker": "QQQ",
       "ETF Segment / Sector Name": "Nasdaq 100 Growth Index",
-      "Price": 718.97,
-      "Daily Change %": 0.2859,
+      "Price": 718.98,
+      "Daily Change %": 0.2873,
       "Classification": "BULLISH"
     },
     "IWM": {
       "Ticker": "IWM",
       "ETF Segment / Sector Name": "Russell 2000 Small Caps",
-      "Price": 285.82,
-      "Daily Change %": 0.1366,
-      "Classification": "BULLISH"
+      "Price": 283.55,
+      "Daily Change %": -0.6587,
+      "Classification": "BEARISH"
     },
     "DIA": {
       "Ticker": "DIA",
       "ETF Segment / Sector Name": "Dow Jones Industrials Value",
-      "Price": 518.32,
-      "Daily Change %": -0.0058,
-      "Classification": "FLAT"
+      "Price": 516.01,
+      "Daily Change %": -0.2219,
+      "Classification": "BEARISH"
     },
     "XLK": {
       "Ticker": "XLK",
       "ETF Segment / Sector Name": "Technology",
-      "Price": 188.61,
-      "Daily Change %": 0.2925,
+      "Price": 188.48,
+      "Daily Change %": 0.2233,
       "Classification": "BULLISH"
     },
     "XLF": {
       "Ticker": "XLF",
       "ETF Segment / Sector Name": "Financials",
-      "Price": 55.89,
-      "Daily Change %": 0.0179,
+      "Price": 55.9,
+      "Daily Change %": 0.0358,
       "Classification": "FLAT"
     },
     "XLV": {
       "Ticker": "XLV",
       "ETF Segment / Sector Name": "Health Care",
-      "Price": 168.86,
-      "Daily Change %": 0.0296,
-      "Classification": "FLAT"
+      "Price": 168.47,
+      "Daily Change %": -0.2044,
+      "Classification": "BEARISH"
     },
     "XLY": {
       "Ticker": "XLY",
       "ETF Segment / Sector Name": "Consumer Discretionary",
-      "Price": 111.31,
-      "Daily Change %": -0.0718,
-      "Classification": "FLAT"
+      "Price": 111.13,
+      "Daily Change %": -0.2334,
+      "Classification": "BEARISH"
     },
     "XLP": {
       "Ticker": "XLP",
       "ETF Segment / Sector Name": "Consumer Staples",
-      "Price": 83.65,
-      "Daily Change %": 0.1916,
-      "Classification": "BULLISH"
+      "Price": 83.02,
+      "Daily Change %": -0.5629,
+      "Classification": "BEARISH"
     },
     "XLI": {
       "Ticker": "XLI",
       "ETF Segment / Sector Name": "Industrials",
-      "Price": 169.03,
-      "Daily Change %": 0.0118,
-      "Classification": "FLAT"
+      "Price": 169.49,
+      "Daily Change %": 0.284,
+      "Classification": "BULLISH"
     },
     "XLU": {
       "Ticker": "XLU",
       "ETF Segment / Sector Name": "Utilities",
-      "Price": 41.61,
-      "Daily Change %": -0.1919,
+      "Price": 41.2,
+      "Daily Change %": -1.1753,
       "Classification": "BEARISH"
     },
     "XLB": {
       "Ticker": "XLB",
       "ETF Segment / Sector Name": "Materials",
-      "Price": 50.27,
-      "Daily Change %": -0.8677,
+      "Price": 50.02,
+      "Daily Change %": -1.3705,
       "Classification": "BEARISH"
     },
     "XLRE": {
       "Ticker": "XLRE",
       "ETF Segment / Sector Name": "Real Estate",
-      "Price": 43.0,
-      "Daily Change %": 0.1502,
-      "Classification": "BULLISH"
+      "Price": 42.62,
+      "Daily Change %": -0.7569,
+      "Classification": "BEARISH"
     },
     "XLE": {
       "Ticker": "XLE",
       "ETF Segment / Sector Name": "Energy",
-      "Price": 64.28,
-      "Daily Change %": -0.3102,
+      "Price": 64.25,
+      "Daily Change %": -0.3489,
       "Classification": "BEARISH"
     },
     "XLC": {
       "Ticker": "XLC",
       "ETF Segment / Sector Name": "Communication Services",
-      "Price": 112.49,
-      "Daily Change %": 0.1246,
-      "Classification": "BULLISH"
+      "Price": 111.27,
+      "Daily Change %": -0.9613,
+      "Classification": "BEARISH"
     }
   },
   "last_updated": "2026-09-18"
