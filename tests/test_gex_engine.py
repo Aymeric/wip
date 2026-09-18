@@ -3695,7 +3695,11 @@ class TestGEXEngine(unittest.TestCase):
         import tempfile
         import shutil
         from types import SimpleNamespace
-        from unittest.mock import patch
+        from unittest.mock import patch, MagicMock
+        import gex_engine
+
+        temp_dir = tempfile.mkdtemp()
+        try:
             workflow_file = os.path.join(temp_dir, "workflow_state.json")
             regime_file = os.path.join(temp_dir, "regime.json")
             options_file = os.path.join(temp_dir, "active_positions.json")
