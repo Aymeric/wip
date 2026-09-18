@@ -13,6 +13,7 @@ Your job is to monitor retail options sentiment across key trading subreddits (`
 ### Step 1: Scan Target Subreddits
 - Query mentions using `mcp-reddit` across `r/wallstreetbets`, `r/options`, and `r/stocks`.
 - Pull top and hot posts from the last 24-48 hours.
+- **Scraping Fallback**: If `mcp-reddit` is unavailable or unauthenticated (`REDDIT_BRIDGE_UNAVAILABLE`), fall back to `search_web` (`site:reddit.com/r/... TICKER`) and `read_url_content` to extract post discussions, sentiment skew, and mention intensity directly.
 
 ### Step 2: Compute 5-Factor Sentiment Scoring (1-10)
 1. **Mention Velocity**: Frequency of mentions over the past 24-48 hours.

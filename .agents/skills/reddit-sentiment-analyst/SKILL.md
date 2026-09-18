@@ -20,7 +20,13 @@ Your job is to monitor retail options sentiment across key trading subreddits (`
    - `r/options`
    - `r/stocks`
 2. Fetch top and hot posts from the last 24 to 48 hours for in-scope candidates.
-3. If Reddit tools are unavailable or unauthenticated, report `REDDIT_BRIDGE_UNAVAILABLE` and do not invent sentiment data.
+3. **Scraping Fallback Protocol**:
+   - If `mcp-reddit` tools are unavailable, unauthenticated, or return connection/auth errors (`REDDIT_BRIDGE_UNAVAILABLE`), **DO NOT abort or skip sentiment analysis**.
+   - Immediately fallback to web search and public scraping tools (`search_web` and `read_url_content`):
+     - Query Reddit discussions via targeted site searches: e.g. `search_web(query="site:reddit.com/r/wallstreetbets OR site:reddit.com/r/options TICKER")` and `search_web(query="site:reddit.com/r/stocks TICKER")`.
+     - Inspect top post threads and comments using `read_url_content` or `search_web` snippets from the last 24-48 hours.
+     - Extract mention frequency, sentiment tone (calls vs. puts), upvote counts, and community discussions.
+   - If both `mcp-reddit` and web scraping fail to yield results, report `SENTIMENT_DATA_UNAVAILABLE` with evidence, and do not invent synthetic data.
 
 ---
 

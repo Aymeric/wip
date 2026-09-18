@@ -74,10 +74,11 @@ graph TD
    - Always run the deterministic Python engine: `python3 src/gex_engine.py <subcommand>`.
    - Track workflow state using `python3 src/gex_engine.py workflow` and `update-workflow`.
 
-6. **Watchlist Separation, Synchronization & Hygiene Pruning**:
-   - **Pending Stock Candidates**: Add screened and pending stock candidates (underliers) to the equity watchlist (`GEX_DAILY_CANDIDATES`) via `robinhood-trading/add_to_watchlist` using `symbols`.
-   - **Outdated Entries Pruning**: Regularly prune outdated entries from `GEX_DAILY_CANDIDATES` via `python3 src/gex_engine.py prune-candidates` and `robinhood-trading/remove_from_watchlist`. Any ticker that becomes an active portfolio holding, is graded `REJECTED`, or falls out of the screened candidate universe must be removed after user confirmation.
-   - **Option Candidates**: Add isolated option contract candidates separately to the dedicated Robinhood **"options watchlist"** via `robinhood-trading/add_option_to_watchlist` using `option_ids`.
+6. **Dual Candidate Discovery, Watchlist Separation & Hygiene Pruning**:
+   - **Dual Candidate Universe**: Candidate discovery must find and track both **stock underlier candidates** (`data/candidate_stocks.json`) and specific **option contract candidates** (`data/candidate_options.json`). Sourcing must prioritize options liquidity (scanners with 30d options volume $\ge 10,000$, IV $\ge 30\%$, relative options volume), inspect the dedicated Robinhood **"options watchlist"** via `robinhood-trading/get_option_watchlist`, and pre-screen viable contracts.
+   - **Pending Stock Candidates**: Add screened and pending stock underliers to the equity watchlist (`GEX_DAILY_CANDIDATES`) via `robinhood-trading/add_to_watchlist` using `symbols`.
+   - **Outdated Stock Entries Pruning**: Regularly prune outdated entries from `GEX_DAILY_CANDIDATES` via `python3 src/gex_engine.py prune-candidates` and `robinhood-trading/remove_from_watchlist`. Any ticker that becomes an active portfolio holding, is graded `REJECTED`, or falls out of the screened candidate universe must be removed after user confirmation.
+   - **Option Contract Candidates**: Add screened and isolated option contract candidates separately to the dedicated Robinhood **"options watchlist"** via `robinhood-trading/add_option_to_watchlist` using `option_ids` (with `position_type: "long"`). Prune expired or non-viable options via `robinhood-trading/remove_option_from_watchlist`.
    - Never mix equity and options watchlist tools.
 
 ---
@@ -91,7 +92,7 @@ The workspace discovers and activates the following skills:
 | **gex-orchestrator** | [gex-orchestrator](.agents/skills/gex-orchestrator/SKILL.md) | End-to-end daily GEX run, account selection, Phase I-IV execution. |
 | **market-regime-analyst** | [market-regime-analyst](.agents/skills/market-regime-analyst/SKILL.md) | Basket gate, 15-ETF Bull:Bear ratio, VIX delta compression. |
 | **portfolio-risk-manager** | [portfolio-risk-manager](.agents/skills/portfolio-risk-manager/SKILL.md) | Live position sync, Stop 1-5 evaluation, buying power budgeting. |
-| **gex-candidate-generator** | [gex-candidate-generator](.agents/skills/gex-candidate-generator/SKILL.md) | Robinhood scans, curated lists, technical alerts (RSI/MACD). |
+| **gex-candidate-generator** | [gex-candidate-generator](.agents/skills/gex-candidate-generator/SKILL.md) | Sources stock & options candidates from scanners (options vol/IV), options watchlist, extracts contracts, and syncs candidates. |
 | **gex-setup-grader** | [gex-setup-grader](.agents/skills/gex-setup-grader/SKILL.md) | Option chain parsing, pTrans/nTrans derivation, 11-Rule checklist. |
 | **option-selector** | [option-selector](.agents/skills/option-selector/SKILL.md) | Isolates 30-45 DTE contracts, earnings preflight, spread checks. |
 | **agentic-trader** | [agentic-trader](.agents/skills/agentic-trader/SKILL.md) | Pre-trade clearance, sizing, order simulation, execution confirmation. |
