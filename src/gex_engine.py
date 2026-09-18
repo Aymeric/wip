@@ -2143,6 +2143,8 @@ def check_technical_alerts(closes: List[float], highs: Optional[List[float]] = N
     return {
         "rsi": rsi,
         "macd_hist": macd_hist,
+        "bb": (mid_bb, upper_bb, lower_bb),
+        "atr": atr,
         "alerts": alerts
     }
 
@@ -5274,7 +5276,7 @@ def cmd_prune_candidates(args):
         if sym in active_symbols:
             active_holdings.append(sym)
             continue
-        
+
         analysis = analyses.get(sym)
         is_pending = False
         is_rejected = False

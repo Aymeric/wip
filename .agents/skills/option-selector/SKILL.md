@@ -62,3 +62,4 @@ For each `CONFIRMED` setup, filter the option chain against these quantitative c
    - Add isolated option candidates (contract UUIDs) to the user's dedicated Robinhood **"options watchlist"** via `robinhood-trading/add_option_to_watchlist` with `option_ids: [CONTRACT_UUID]` and `position_type: "long"`.
    - Update `data/candidate_options.json` with the selected contract recommendation.
    - **Separation Rule**: Pending stock candidates are synced to equity watchlists via `add_to_watchlist(symbols=...)`, whereas option candidates are synced to the dedicated "options watchlist" via `add_option_to_watchlist(option_ids=...)`.
+

@@ -24,3 +24,4 @@ When working in this repository:
    - Workspace Prompts are located in `.agents/prompts/`.
    - Workspace Agent definitions are in `.agents/agents/`.
    - Workspace rules reside in `.agents/rules/`.
+
