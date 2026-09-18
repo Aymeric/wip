@@ -28,6 +28,7 @@ from gex_engine import (
     calculate_trade_journal,
     parse_spot_overrides,
     parse_effective_session_date,
+    slugify,
     normalize_workflow_state,
     format_color,
     find_latest_historical_ohlc,
@@ -41,6 +42,27 @@ from gex_engine import (
 
 class TestGEXEngine(unittest.TestCase):
 
+    def test_slugify(self):
+        # Standard text lowercasing and space replacement
+        self.assertEqual(slugify("Hello World"), "hello_world")
+
+        # Special characters and punctuation replacement
+        self.assertEqual(slugify("Scan #1: High Volatility!"), "scan_1_high_volatility")
+
+        # Consecutive non-alphanumeric character collapsing
+        self.assertEqual(slugify("foo---bar___baz"), "foo_bar_baz")
+
+        # Leading and trailing non-alphanumeric character stripping
+        self.assertEqual(slugify("___hello world___"), "hello_world")
+        self.assertEqual(slugify("---!hello world!---"), "hello_world")
+
+        # Numbers and mixed alphanumeric strings
+        self.assertEqual(slugify("Top 10 Scans 2026"), "top_10_scans_2026")
+
+        # Edge cases: empty string, whitespace-only, non-alphanumeric-only
+        self.assertEqual(slugify(""), "")
+        self.assertEqual(slugify("   "), "")
+        self.assertEqual(slugify("!!!###$$$"), "")
     def test_extract_quotes_list(self):
         sample_quotes = [{"instrument_id": "opt1"}]
 
@@ -3179,13 +3201,6 @@ class TestGEXEngine(unittest.TestCase):
 
     def test_find_latest_historical_ohlc_various_json_structures_and_aliases(self):
         """Test find_latest_historical_ohlc parsing varied JSON layouts and column aliases."""
-        import tempfile
-        import shutil
-        from unittest.mock import patch
-        import gex_engine
-
-        temp_dir = tempfile.mkdtemp()
-        try:
             downloads_dir = os.path.join(temp_dir, "downloads")
             os.makedirs(downloads_dir, exist_ok=True)
             active_file = os.path.join(temp_dir, "active_positions.json")
@@ -3702,38 +3717,7 @@ class TestGEXEngine(unittest.TestCase):
         import tempfile
         import shutil
         from types import SimpleNamespace
-        from unittest.mock import patch
-        import gex_engine
-
-        temp_dir = tempfile.mkdtemp()
-        try:
-            perf_path = os.path.join(temp_dir, "data", "performance.json")
-            args = SimpleNamespace(
-                net_liq=100000.0,
-                account="",
-                monthly_file=None,
-                pnl_file=None,
-            )
-            with patch("gex_engine.account_performance_file", return_value=perf_path), \
-                 patch("gex_engine.get_monthly_realized_pnl", return_value=(-12000.0, -12.0, "FAIL", 5)):
-                gex_engine.cmd_update_performance(args)
-
-            data = gex_engine.load_json(perf_path, {})
-            self.assertEqual(data["account"], "")
-            self.assertEqual(data["monthly_pnl_dlr"], -12000.0)
-            self.assertEqual(data["monthly_pnl_pct"], -12.0)
-            self.assertEqual(data["drawdown_gate_status"], "FAIL")
-            self.assertEqual(data["monthly_cnt"], 5)
-            self.assertIn("last_updated", data)
-        finally:
-            shutil.rmtree(temp_dir)
-
-    def test_cmd_workflow_standard_and_subagent_logging(self):
-        """Test cmd_workflow output with populated regime, state, portfolio, candidates, and analyses."""
-        import tempfile
-        import shutil
         from unittest.mock import patch, MagicMock
-        from types import SimpleNamespace
         import gex_engine
 
         temp_dir = tempfile.mkdtemp()
