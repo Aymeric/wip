@@ -1,0 +1,17 @@
+{
+  "data": {
+    "items": [
+      {
+        "object_id": "49e5da2a-7d19-4685-8377-f2c157f1eb5f",
+        "object_type": "instrument",
+        "symbol": "SLS"
+      },
+      {
+        "object_id": "50846aee-ce5f-4bd4-bfbb-cef4414f69bd",
+        "object_type": "instrument",
+        "symbol": "SMCI"
+      }
+    ],
+    "has_futures_contracts": false
+  }
+}

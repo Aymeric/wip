@@ -1,0 +1,31 @@
+{
+  "data": {
+    "items": [
+      {
+        "id": "6a8cee92-164b-48d1-9526-a264862030c8",
+        "name": "SECZ $10 Call",
+        "option_ids": [
+          "55602508-dd78-43cd-8d58-2abeb8e432d9"
+        ],
+        "chain_symbol": "SECZ"
+      },
+      {
+        "id": "6a0c6056-a669-49e6-9ac3-80bb34815bd1",
+        "name": "SLS $14 Call",
+        "option_ids": [
+          "67c51ad2-f526-462e-8c15-c85a68866a9f"
+        ],
+        "chain_symbol": "SLS"
+      },
+      {
+        "id": "6aa0175b-7357-481f-9afa-111609faad48",
+        "name": "SMCI $42 Call",
+        "option_ids": [
+          "085f8cbc-48da-49ae-a461-e05612246a38"
+        ],
+        "chain_symbol": "SMCI"
+      }
+    ],
+    "list_id": "7a803fc0-bd97-4623-b141-748f3afa56a4"
+  }
+}

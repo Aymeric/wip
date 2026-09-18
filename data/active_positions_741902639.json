@@ -1,0 +1,65 @@
+{
+  "options_positions": {},
+  "stocks_positions": {
+    "BAC": {
+      "Ticker": "BAC",
+      "Shares": 295.739017,
+      "Average Buy Price": 5.2,
+      "Current Price": 5.2,
+      "Highest Price": 5.2,
+      "Beta Sector Tag": "Equity",
+      "Entry Date": "2026-09-18",
+      "Asset Cost Basis": 1537.8428884,
+      "Current Value": 1537.8428884,
+      "P&L (%)": 0.0,
+      "P&L ($)": 0.0,
+      "Sizing Risk Weight (%)": 6.14,
+      "Account": "741902639"
+    },
+    "VOO": {
+      "Ticker": "VOO",
+      "Shares": 5.489923,
+      "Average Buy Price": 586.17,
+      "Current Price": 586.17,
+      "Highest Price": 586.17,
+      "Beta Sector Tag": "Equity",
+      "Entry Date": "2026-09-18",
+      "Asset Cost Basis": 3218.0281649099998,
+      "Current Value": 3218.0281649099998,
+      "P&L (%)": 0.0,
+      "P&L ($)": 0.0,
+      "Sizing Risk Weight (%)": 12.85,
+      "Account": "741902639"
+    },
+    "ARKQ": {
+      "Ticker": "ARKQ",
+      "Shares": 10.02637,
+      "Average Buy Price": 75.61,
+      "Current Price": 75.61,
+      "Highest Price": 75.61,
+      "Beta Sector Tag": "Equity",
+      "Entry Date": "2026-09-18",
+      "Asset Cost Basis": 758.0938357,
+      "Current Value": 758.0938357,
+      "P&L (%)": 0.0,
+      "P&L ($)": 0.0,
+      "Sizing Risk Weight (%)": 3.03,
+      "Account": "741902639"
+    },
+    "ARKK": {
+      "Ticker": "ARKK",
+      "Shares": 15.0,
+      "Average Buy Price": 128.53,
+      "Current Price": 128.53,
+      "Highest Price": 128.53,
+      "Beta Sector Tag": "Equity",
+      "Entry Date": "2026-09-18",
+      "Asset Cost Basis": 1927.95,
+      "Current Value": 1927.95,
+      "P&L (%)": 0.0,
+      "P&L ($)": 0.0,
+      "Sizing Risk Weight (%)": 7.7,
+      "Account": "741902639"
+    }
+  }
+}

@@ -11,7 +11,7 @@ description: >-
 
 You are the official candidate sourcing agent for the GEX trading system.
 
-Your job is to derive the daily candidate universe for **both options contracts and underlier setups** from Robinhood options scanners, the user's Options Watchlist, curated lists, and social boards. You must apply baseline quantitative screens, enforce options liquidity filters, remove existing holdings, isolate high-probability option contract candidates, and produce finalized candidate stores for setup grading and execution.
+Your job is to derive the daily candidate universe for **both options contracts and underlier setups** from Robinhood options scanners, the user's Options Watchlist, curated lists, and social boards. You must apply baseline quantitative screens, enforce options liquidity filters, isolate high-probability option contract candidates, and produce finalized candidate stores for setup grading and execution.
 
 ---
 
@@ -52,7 +52,6 @@ Filter the raw aggregated ticker pool against:
   - The underlier must have an active, tradable options chain.
   - 30-day average options volume $\ge 10,000$ contracts OR relative options volume $\ge 1.5\times$.
   - At least one monthly expiration cycle within 30 to 45 DTE with open interest $\ge 500$ on near-the-money strikes.
-- **Active Holdings Exclusion**: Exclude any symbol currently held in the active portfolio (`data/active_positions_<account>.json`).
 
 ---
 
@@ -84,7 +83,7 @@ For each screened candidate underlier and for contracts retrieved from `get_opti
 
 1. **Update Candidate Pools via CLI**:
    ```bash
-   python3 src/gex_engine.py update-candidates --date YYYYMMDD --exclude-active
+   python3 src/gex_engine.py update-candidates --date YYYYMMDD
    ```
 2. Verify candidate pool integrity across both:
    - `data/candidate_stocks.json` (Screened Underliers)
