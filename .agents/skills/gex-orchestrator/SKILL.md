@@ -22,10 +22,11 @@ When invoked directly, establishing target account selection is the mandatory fi
 
 1. **Retrieve Accounts**: Call `robinhood-trading/get_accounts` to retrieve available accounts.
 2. **Retrieve Authoritative Balances**: For each retrieved account, call `robinhood-trading/get_portfolio` with its exact account number to retrieve authoritative live buying power and account value/net liquidation basis.
-3. **Prompt User or Resolve Prompt Accounts**:
-   - If target account(s) are explicitly specified in the prompt (e.g. `accounts: ••••9961` or full/masked account numbers), match and resolve them directly against the retrieved accounts.
-   - If not specified or ambiguous, call `ask_question` with one account-selection question (`is_multi_select: true`). Label each option with only the masked account number, account name, account type, buying power, and `agentic_allowed` status. Never expose full account numbers in option labels.
-4. **Resolve Selection**: Confirm the resolved account(s) against the retrieved live account list. If accounts cannot be retrieved, a label does not resolve uniquely, or no selection is returned, stop with `BLOCKED: ACCOUNT_SELECTION_REQUIRED`.
+3. **Prompt User**: Call `ask_question` with one account-selection question:
+   - `is_multi_select: true`
+   - Label each option with only the masked account number, account name, account type, buying power, and `agentic_allowed` status. Never expose full account numbers in option labels.
+   - Always present this question, even when the request names an account or only one account is available.
+4. **Resolve Selection**: Resolve each selected masked label against the retrieved live account list. If accounts cannot be retrieved, a label does not resolve uniquely, or no selection is returned, stop with `BLOCKED: ACCOUNT_SELECTION_REQUIRED`.
 5. **Run Workflow Summary**: Start from the repository root by running:
    ```bash
    python3 src/gex_engine.py workflow
@@ -61,15 +62,15 @@ Interpret each request as one of these modes:
 4. **Closed-Trade Quality Audit**: Run `trade-journal-analyst` to reconcile performance and extract process improvements.
 
 ### Phase II: Discovery & Sentiment Filtering
-1. **Setup Candidate Sourcing & Watchlist Hygiene**: Run `gex-candidate-generator` to execute Robinhood scans, apply baseline filters, check RSI/MACD crossovers, update `data/candidate_stocks.json`, prune outdated entries (active holdings, rejected setups, or stale tickers) from `GEX_DAILY_CANDIDATES` via `prune-candidates` and `robinhood-trading/remove_from_watchlist`, and sync valid screened stock candidates via `add_to_watchlist`.
+1. **Setup Candidate Sourcing**: Run `gex-candidate-generator` to execute Robinhood scans, apply baseline filters, check RSI/MACD crossovers, update `data/candidate_stocks.json`, and sync screened stock candidates to the Robinhood equity watchlist `GEX_DAILY_CANDIDATES`.
 2. **Social Sentiment Scans**: Run `reddit-sentiment-analyst` to compute 5-factor sentiment scores on WSB/options/stocks.
 
 ### Phase III: Setup Engineering & Selection
-1. **Setup Analysis & Grading**: Run `gex-setup-grader` to download option chains (chunked to 40 contract IDs), derive pTrans/nTrans levels, apply the 11-Rule checklist, add pending stock candidates (`PENDING` status) to the equity watchlist `GEX_DAILY_CANDIDATES` via `add_to_watchlist`, and remove any failing/rejected setups via `remove_from_watchlist`.
+1. **Setup Analysis & Grading**: Run `gex-setup-grader` to download option chains (chunked to 40 contract IDs), derive pTrans/nTrans levels, apply the 11-Rule checklist, and add pending stock candidates (`PENDING` status) to the equity watchlist `GEX_DAILY_CANDIDATES` via `add_to_watchlist`.
 2. **Option Selection & Options Watchlist Sync**: Run `option-selector` to isolate optimal 30-45 DTE contracts within the Per-Trade Buying Power Budget, and add isolated option candidates to the dedicated Robinhood **"options watchlist"** via `add_option_to_watchlist`.
 
 ### Phase IV: Order Execution Handoff
 - Present confirmed setups and contract recommendations.
-- Display Watchlist actions: Pending stock candidates on the equity watchlist (`GEX_DAILY_CANDIDATES`), pruned outdated entries removed, option candidates on the dedicated **"options watchlist"**.
+- Display Watchlist actions: Pending stock candidates on the equity watchlist (`GEX_DAILY_CANDIDATES`), option candidates on the dedicated **"options watchlist"**.
 - Prompt user for execution approval via `ask_question`.
 - If approved, invoke `agentic-trader` for pre-trade clearance, simulation, and limit order submission.

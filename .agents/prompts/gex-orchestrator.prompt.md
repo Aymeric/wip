@@ -14,8 +14,8 @@ To maintain absolute quantitative discipline, prevent logic drift, and guarantee
 Before delegating or performing any other workflow step, establish target account selection:
 1. Call `robinhood-trading/get_accounts` to retrieve available accounts.
 2. For every retrieved account, call `robinhood-trading/get_portfolio` with its exact account number to retrieve authoritative live buying power and account value/net liquidation basis.
-3. If target account(s) are explicitly specified in the prompt (e.g. `accounts: ••••9961` or full/masked account numbers), validate and resolve them directly against retrieved live accounts.
-4. If not specified or ambiguous, call `ask_question` with one account-selection question (`is_multi_select: true`). Label each option with only the masked account number, account name, account type, buying power, and `agentic_allowed` status. Never expose full account numbers in option labels.
-5. Resolve each selection against the retrieved live account list. If accounts cannot be retrieved, a label does not resolve uniquely, or no selection is returned, stop with `BLOCKED: ACCOUNT_SELECTION_REQUIRED`.
+3. Immediately call `ask_question` with one account-selection question (`is_multi_select: true`). Label each option with only the masked account number, account name, account type, buying power, and `agentic_allowed` status. Never expose full account numbers in option labels.
+4. Always show this question, even when the request names an account or only one account is available. Mark a matching supplied account as recommended.
+5. Resolve each selected masked label against the retrieved live account list. If accounts cannot be retrieved, a label does not resolve uniquely, or no selection is returned, stop with `BLOCKED: ACCOUNT_SELECTION_REQUIRED`.
 
 After account selection is complete, execute the workflow by activating the `gex-orchestrator` skill, following Phase I (Audit & Regime), Phase II (Discovery & Sentiment, syncing stock candidates to the equity watchlist), Phase III (Grading & Selection, syncing pending stock candidates to the equity watchlist and option candidates separately to the dedicated "options watchlist"), and presenting Phase IV (Execution Handoff) for explicit user approval via `ask_question`.
