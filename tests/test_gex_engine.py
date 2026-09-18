@@ -28,7 +28,6 @@ from gex_engine import (
     calculate_trade_journal,
     parse_spot_overrides,
     parse_effective_session_date,
-<<<<<<< Updated upstream
     slugify,
     normalize_workflow_state,
     format_color,
@@ -36,9 +35,7 @@ from gex_engine import (
     get_all_active_symbols,
     find_latest_technical_indicators,
     cmd_status,
-=======
     check_technical_alerts,
->>>>>>> Stashed changes
     RegimeGates,
     OptionPosition,
     StockPosition
