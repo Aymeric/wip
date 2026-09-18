@@ -3257,7 +3257,9 @@ def cmd_portfolio(args):
     
     if not positions and not stocks:
         print("### 🛡️ Active Portfolio Tracker & Exits (Current Positions)")
-        print("No open positions found in cache.")
+        acct_msg = f" for account {account}" if account else ""
+        print(f"No open positions found in cache{acct_msg}.")
+        print("💡 Tip: Register active holdings using 'add-position' or 'add-stock', or run 'sync-positions'.")
         return
         
     print("### 🛡️ Active Portfolio Tracker & Exits (Current Positions)")
@@ -5335,9 +5337,12 @@ def cmd_prune_candidates(args):
     print(f"    {', '.join(valid_candidates)}")
     print(format_color("=" * 90, "34", bold=True))
 
-    print("\n" + format_color("📋 Removal List for robinhood-trading/remove_from_watchlist:", "35", bold=True))
-    print(json.dumps(to_remove))
-    print("\n" + format_color(f"💡 Pass {len(to_remove)} symbols to remove_from_watchlist to prune outdated entries.\n", "36"))
+    if not to_remove:
+        print("\n" + format_color("✨ Watchlist is fully up-to-date! No outdated entries need removal.\n", "32", bold=True))
+    else:
+        print("\n" + format_color("📋 Removal List for robinhood-trading/remove_from_watchlist:", "35", bold=True))
+        print(json.dumps(to_remove))
+        print("\n" + format_color(f"💡 Pass {len(to_remove)} symbols to remove_from_watchlist to prune outdated entries.\n", "36"))
 
 
 def cmd_sentiment(args):
@@ -5575,6 +5580,7 @@ def cmd_rankings(args):
     if not filtered_analyses:
         print("### 🔍 GEX Setup Rankings & Report")
         print(f"No tickers matched the specified filters (Status: {status_filter}, Min Grade: {min_grade or 'Any'}).")
+        print("💡 Tip: Try relaxing filters (e.g. --status ALL or --min-grade 0) to view all analyzed setups.")
         return
 
     # Sorting
@@ -5769,6 +5775,7 @@ def cmd_closed(args):
     if not closed_options and not closed_stocks:
         print("### 📊 GEX Closed Positions History")
         print("No closed positions found in the archive.")
+        print("💡 Tip: Import closed trades from Robinhood trade history using 'sync-pnl'.")
         return
         
     print("### 📊 GEX Closed Positions History")
