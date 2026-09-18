@@ -101,4 +101,3 @@ For each screened candidate underlier and for contracts retrieved from `get_opti
 4. **Dual Watchlist Synchronization**:
    - **Stock Candidates / Pending Underliers**: Sync to `GEX_DAILY_CANDIDATES` via `robinhood-trading/add_to_watchlist(symbols=[...])`.
    - **Option Candidates**: Add qualifying option contract candidates to the dedicated Robinhood **"options watchlist"** via `robinhood-trading/add_option_to_watchlist(option_ids=[...], position_type="long")`.
-

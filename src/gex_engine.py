@@ -22,6 +22,7 @@ import sys
 import json
 import argparse
 import re
+import copy
 import shutil
 import tempfile
 import time
@@ -396,14 +397,14 @@ def load_json(filepath: str, default: Any) -> Any:
 
     cache_key = (filepath, mtime)
     if cache_key in _JSON_FILE_CACHE:
-        return _JSON_FILE_CACHE[cache_key]
+        return copy.deepcopy(_JSON_FILE_CACHE[cache_key])
 
     try:
         with open(filepath, "r") as f:
             data = json.load(f)
         if len(_JSON_FILE_CACHE) >= _MAX_JSON_CACHE_SIZE:
             _JSON_FILE_CACHE.pop(next(iter(_JSON_FILE_CACHE)))
-        _JSON_FILE_CACHE[cache_key] = data
+        _JSON_FILE_CACHE[cache_key] = copy.deepcopy(data)
         return data
     except Exception as e:
         print(f"Warning: Failed to load {filepath}: {e}", file=sys.stderr)
@@ -1813,16 +1814,31 @@ def find_latest_historical_ohlc(symbol: str) -> Tuple[List[float], List[float], 
     return [], [], [], []
 
 
-def find_latest_historical_closes(symbol: str) -> List[float]:
+def list_download_files(downloads_dir: Optional[str] = None) -> List[str]:
+    """Recursively lists all .json file paths in downloads_dir (defaults to DOWNLOADS_DIR)."""
+    target_dir = downloads_dir or DOWNLOADS_DIR
+    matching_files = []
+    if os.path.exists(target_dir):
+        for root, dirs, files in os.walk(target_dir):
+            for file in files:
+                if file.endswith(".json"):
+                    matching_files.append(os.path.join(root, file))
+    return matching_files
+
+
+def find_latest_historical_closes(symbol: str, file_list: Optional[List[str]] = None) -> List[float]:
     """
-    Recursively scans the DOWNLOADS_DIR directory for historical daily closes files
+    Scans the DOWNLOADS_DIR directory for historical daily closes files
     matching the symbol (e.g. symbol_historicals_raw.json). Returns a chronological
-    list of close prices.
+    list of close prices. Accepts an optional pre-listed file_list to avoid repeated
+    os.walk directory traversals during batch processing.
     """
     symbol_upper = symbol.upper()
     matching_files = []
     
-    if os.path.exists(DOWNLOADS_DIR):
+    if file_list is not None:
+        matching_files = [f for f in file_list if symbol_upper in os.path.basename(f).upper() and "HISTORICAL" in os.path.basename(f).upper()]
+    elif os.path.exists(DOWNLOADS_DIR):
         for filepath in _get_downloads_files(DOWNLOADS_DIR):
             file = os.path.basename(filepath)
             if file.endswith(".json") and symbol_upper in file.upper() and "HISTORICAL" in file.upper():
@@ -1877,11 +1893,16 @@ def find_latest_historical_closes(symbol: str) -> List[float]:
             
     return []
 
-def find_latest_technical_indicators(symbol: str) -> Tuple[Optional[float], Optional[float]]:
-    """Reads the latest RSI and MACD histogram from cached indicator downloads."""
+def find_latest_technical_indicators(symbol: str, file_list: Optional[List[str]] = None) -> Tuple[Optional[float], Optional[float]]:
+    """
+    Reads the latest RSI and MACD histogram from cached indicator downloads.
+    Accepts an optional pre-listed file_list to avoid repeated os.walk directory traversals during batch processing.
+    """
     symbol_upper = symbol.upper()
     matching_files = []
-    if os.path.exists(DOWNLOADS_DIR):
+    if file_list is not None:
+        matching_files = [f for f in file_list if symbol_upper in os.path.basename(f).upper() and "TECHNICAL" in os.path.basename(f).upper()]
+    elif os.path.exists(DOWNLOADS_DIR):
         for filepath in _get_downloads_files(DOWNLOADS_DIR):
             file = os.path.basename(filepath)
             if file.endswith(".json") and symbol_upper in file.upper() and "TECHNICAL" in file.upper():
@@ -4833,6 +4854,9 @@ def cmd_update_candidates(args):
     # First persist any new scan downloads
     persist_new_scans()
     
+    # Pre-list download directory files once for candidate indicator lookups to avoid O(N) os.walk traversals in loops
+    download_files = list_download_files(DOWNLOADS_DIR)
+
     # Identify active positions to optionally exclude if requested
     active_symbols = set(get_all_active_symbols())
     exclude_active = getattr(args, "exclude_active", False)
@@ -4941,8 +4965,9 @@ def cmd_update_candidates(args):
                 continue
                 
             # Prefer cached broker indicators, with local history calculations as fallback.
-            closes = find_latest_historical_closes(ticker)
-            rsi_val, macd_hist = find_latest_technical_indicators(ticker)
+            # Pass pre-listed download_files to avoid O(N) os.walk filesystem traversals per candidate ticker.
+            closes = find_latest_historical_closes(ticker, file_list=download_files)
+            rsi_val, macd_hist = find_latest_technical_indicators(ticker, file_list=download_files)
             if closes and (rsi_val is None or macd_hist is None):
                 if rsi_val is None:
                     rsi_val = calculate_rsi(closes)
@@ -5017,12 +5042,12 @@ def cmd_update_candidates(args):
     scans_processed = []
     if os.path.exists(DOWNLOADS_DIR):
         all_scan_files = []
-        for root, dirs, files in os.walk(DOWNLOADS_DIR):
-            for file in files:
-                if file.endswith(".json"):
-                    if date_filter and date_filter not in root and date_filter not in file:
-                        continue
-                    all_scan_files.append(os.path.join(root, file))
+        for full_path in download_files:
+            root = os.path.dirname(full_path)
+            file = os.path.basename(full_path)
+            if date_filter and date_filter not in root and date_filter not in file:
+                continue
+            all_scan_files.append(full_path)
         
         all_scan_files.sort()
         
