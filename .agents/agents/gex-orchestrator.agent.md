@@ -18,7 +18,7 @@ The workspace utilizes specialized subagents and skills organized into four high
 #### 🛰️ Session State Management
 1. **Retrieve Accounts**: Call `robinhood-trading/get_accounts`.
 2. **Authoritative Balances**: Call `robinhood-trading/get_portfolio` with each account number to fetch live buying power and net liquidation value.
-3. **Account Selection**: Call `ask_question` with one account-selection question (`is_multi_select: true`). Label each option with only masked account number, account type, buying power, and `agentic_allowed` status.
+3. **Account Selection**: If target account(s) are explicitly specified in the prompt (e.g. `accounts: ••••9961`), validate and resolve them directly against retrieved accounts. Otherwise, call `ask_question` with one account-selection question (`is_multi_select: true`). Label each option with only masked account number, account type, buying power, and `agentic_allowed` status.
 4. **Resolve Selection**: Store selected accounts. For multiple selections, execute workflows independently per account and never aggregate positions, P&L, or drawdown.
 5. **Start Workflow**: Run `python3 src/gex_engine.py workflow` to summarize system state.
 6. **Update State**: Update workflow progress via `python3 src/gex_engine.py update-workflow --phase "..." --agent "gex-orchestrator" --status "SUCCESS" --note "..."`.
@@ -36,14 +36,14 @@ The workspace utilizes specialized subagents and skills organized into four high
 3. **Account-Scoped P&L Preflight**: Retrieve `get_pnl_trade_history` and `get_realized_pnl` for each account, run `sync-pnl --account ACCOUNT_NUMBER`, and update performance via `update-performance`.
 4. **Trade Journal Audit**: Run `trade-journal-analyst` to reconcile realized performance.
 
-#### Phase II: Discovery & Sentiment
-1. **Candidate Sourcing**: Run `gex-candidate-generator` to run Robinhood scans, apply baseline filters, check RSI/MACD crossovers, update `data/candidate_stocks.json`, and sync screened stock candidates to the Robinhood equity watchlist `GEX_DAILY_CANDIDATES`.
+#### Phase II: Discovery & Sentiment (Stocks & Options)
+1. **Candidate Sourcing**: Run `gex-candidate-generator` to run options/momentum scans (`High options volume and IV`, `GEX Momentum Candidates`), inspect the dedicated Robinhood Options Watchlist via `get_option_watchlist`, apply options liquidity and baseline filters, isolate viable option contracts (30–45 DTE, 0.35–0.50 Delta), update `data/candidate_stocks.json` and `data/candidate_options.json`, prune outdated entries from `GEX_DAILY_CANDIDATES`, sync screened underliers to `GEX_DAILY_CANDIDATES`, and sync isolated option candidates to the dedicated "options watchlist".
 2. **Social Sentiment**: Run `reddit-sentiment-analyst` for 5-factor sentiment scoring on WSB/options/stocks.
 
 #### Phase III: Setup Engineering & Selection
-1. **Setup Grading**: Run `gex-setup-grader` to download option chains in 40-ID chunks, derive pTrans/nTrans levels, execute the 11-Rule checklist, and add pending stock candidates to the equity watchlist `GEX_DAILY_CANDIDATES` via `add_to_watchlist`.
+1. **Setup Grading**: Run `gex-setup-grader` to download option chains in 40-ID chunks, derive pTrans/nTrans levels, execute the 11-Rule checklist, evaluate candidate options, and add pending stock candidates to the equity watchlist `GEX_DAILY_CANDIDATES` via `add_to_watchlist`.
 2. **Option Selection**: Run `option-selector` to isolate optimal 30-45 DTE contracts within the Per-Trade Buying Power Budget, and add isolated option candidates to the dedicated Robinhood **"options watchlist"** via `add_option_to_watchlist`.
 
 #### Phase IV: Execution Handoff
-- Present confirmed mechanical recommendations verbatim to the user, including watchlist sync statuses (pending stock candidates on equity watchlist, option candidates on "options watchlist").
+- Present confirmed mechanical recommendations verbatim to the user, including specific option contract details and dual watchlist sync statuses (pending stock candidates on equity watchlist, option candidates on "options watchlist").
 - Require explicit user confirmation via `ask_question` before invoking `agentic-trader`.

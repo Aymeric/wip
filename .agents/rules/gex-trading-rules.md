@@ -3,7 +3,7 @@
 These rules are enforced across all sessions in this workspace.
 
 ## 1. Tool Mapping & Interaction Protocol
-- **Human Decisions**: Whenever user input, account selection, gate bypass, or trade confirmation is needed, call the `ask_question` tool.
+- **Human Decisions**: Whenever user input, gate bypass, or trade confirmation is needed, call the `ask_question` tool. If target accounts are not specified in the prompt, prompt for account selection using `ask_question`.
 - **Single / Multi-Select**: Use `is_multi_select: false` for single choices and `is_multi_select: true` for multi-account selections.
 - **Safety Gate**: Never infer consent or trade approval from informal conversational text.
 
@@ -27,3 +27,10 @@ These rules are enforced across all sessions in this workspace.
 ## 5. Market Session & Freshness
 - Derive the **Effective Session Date** from the latest completed regular US equity trading session. Never use wall-clock calendar date on weekends or market holidays.
 - Outdated cached analyses (>1 session old) must be marked `HISTORICAL/STALE` and cannot authorize new entries.
+
+## 6. Dual Candidate Discovery & Watchlist Hygiene Protocol
+- **Options Candidates First**: Candidate discovery must search for and evaluate **options candidates**, not just stock underliers. Sourcing must check options liquidity (30d average options volume $\ge 10,000$, IV $\ge 30\%$, relative options volume), actively query the dedicated Robinhood Options Watchlist via `robinhood-trading/get_option_watchlist`, and pre-screen viable contracts.
+- **Dual Candidate Stores**: Persist screened underlier setups to `data/candidate_stocks.json` and screened option contracts to `data/candidate_options.json`.
+- **Outdated Entries Removal**: Any symbol currently on `GEX_DAILY_CANDIDATES` that transitions to an active portfolio position, is graded `REJECTED`, or drops off the screened candidate universe must be pruned via `robinhood-trading/remove_from_watchlist`.
+- **Pre-Pruning Confirmation**: Always obtain human confirmation via `ask_question` with the explicit list of tickers or contract IDs before invoking `remove_from_watchlist` or `remove_option_from_watchlist`.
+- **Options Watchlist Isolation & Sync**: Never mix equity candidate lists with the dedicated `Options Watchlist`. Option contracts must only be added via `add_option_to_watchlist(option_ids=[...], position_type="long")` and removed via `remove_option_from_watchlist`.

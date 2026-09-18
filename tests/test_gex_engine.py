@@ -12,25 +12,81 @@ import subprocess
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
 
 from gex_engine import (
+    calculate_candidate_score,
     calculate_grade, 
+    classify_etf,
     compute_regime_gates, 
     compute_exit_rule_state,
+    extract_quotes_list,
     derive_gex_profile,
     derive_volatility_profile,
     select_best_option,
     discover_earnings_date,
     calculate_bollinger_bands,
     calculate_atr,
+    calculate_annualized_vol,
     calculate_trade_journal,
     parse_spot_overrides,
     parse_effective_session_date,
+<<<<<<< Updated upstream
+    slugify,
+    normalize_workflow_state,
+    format_color,
+    find_latest_historical_ohlc,
+    get_all_active_symbols,
+    find_latest_technical_indicators,
+    cmd_status,
+=======
     check_technical_alerts,
+>>>>>>> Stashed changes
     RegimeGates,
     OptionPosition,
     StockPosition
 )
 
 class TestGEXEngine(unittest.TestCase):
+
+    def test_slugify(self):
+        # Standard text lowercasing and space replacement
+        self.assertEqual(slugify("Hello World"), "hello_world")
+
+        # Special characters and punctuation replacement
+        self.assertEqual(slugify("Scan #1: High Volatility!"), "scan_1_high_volatility")
+
+        # Consecutive non-alphanumeric character collapsing
+        self.assertEqual(slugify("foo---bar___baz"), "foo_bar_baz")
+
+        # Leading and trailing non-alphanumeric character stripping
+        self.assertEqual(slugify("___hello world___"), "hello_world")
+        self.assertEqual(slugify("---!hello world!---"), "hello_world")
+
+        # Numbers and mixed alphanumeric strings
+        self.assertEqual(slugify("Top 10 Scans 2026"), "top_10_scans_2026")
+
+        # Edge cases: empty string, whitespace-only, non-alphanumeric-only
+        self.assertEqual(slugify(""), "")
+        self.assertEqual(slugify("   "), "")
+        self.assertEqual(slugify("!!!###$$$"), "")
+    def test_extract_quotes_list(self):
+        sample_quotes = [{"instrument_id": "opt1"}]
+
+        # 1. Nested dict data -> results
+        self.assertEqual(extract_quotes_list({"data": {"results": sample_quotes}}), sample_quotes)
+
+        # 2. Dict data list fallback
+        self.assertEqual(extract_quotes_list({"data": sample_quotes}), sample_quotes)
+
+        # 3. Dict results list fallback
+        self.assertEqual(extract_quotes_list({"results": sample_quotes}), sample_quotes)
+
+        # 4. Direct list
+        self.assertEqual(extract_quotes_list(sample_quotes), sample_quotes)
+
+        # 5. Empty dict or invalid payload fallback
+        self.assertEqual(extract_quotes_list({}), [])
+        self.assertEqual(extract_quotes_list(None), [])
+        self.assertEqual(extract_quotes_list("invalid"), [])
+        self.assertEqual(extract_quotes_list(123), [])
 
     def test_repository_root_launcher_forwards_cli_arguments(self):
         repository_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
@@ -658,6 +714,47 @@ class TestGEXEngine(unittest.TestCase):
         self.assertEqual(freshness["stale"][0]["symbol"], "MSFT")
         self.assertEqual(freshness["missing"], ["NVDA"])
 
+    def test_normalize_workflow_state(self):
+        # Case 1: Well-formed input state
+        valid_state = {
+            "current_phase": "Phase I: Risk & Audit",
+            "last_updated": "2026-08-11T12:00:00Z",
+            "subagents": {"agent1": {"status": "SUCCESS"}},
+            "notes": [{"content": "note 1"}],
+        }
+        res1 = normalize_workflow_state(valid_state)
+        self.assertEqual(res1["current_phase"], "Phase I: Risk & Audit")
+        self.assertEqual(res1["last_updated"], "2026-08-11T12:00:00Z")
+        self.assertEqual(res1["subagents"], {"agent1": {"status": "SUCCESS"}})
+        self.assertEqual(res1["notes"], [{"content": "note 1"}])
+
+        # Case 2: Non-dict inputs (None, int, str, list)
+        for non_dict in (None, 123, "malformed", ["phase"]):
+            with self.subTest(non_dict=non_dict):
+                res = normalize_workflow_state(non_dict)
+                self.assertEqual(res["current_phase"], "Phase 0: Initialization")
+                self.assertIsNone(res["last_updated"])
+                self.assertEqual(res["subagents"], {})
+                self.assertEqual(res["notes"], [])
+
+        # Case 3: Missing or empty current_phase
+        for falsy_phase in ("", None, 0):
+            with self.subTest(falsy_phase=falsy_phase):
+                res = normalize_workflow_state({"current_phase": falsy_phase})
+                self.assertEqual(res["current_phase"], "Phase 0: Initialization")
+
+        # Case 4: Malformed subagents and notes
+        malformed_fields = {
+            "current_phase": "Phase II: Discovery",
+            "last_updated": "2026-08-11T12:00:00Z",
+            "subagents": "not a dict",
+            "notes": {"invalid": "not a list"},
+        }
+        res4 = normalize_workflow_state(malformed_fields)
+        self.assertEqual(res4["current_phase"], "Phase II: Discovery")
+        self.assertEqual(res4["subagents"], {})
+        self.assertEqual(res4["notes"], [])
+
     def test_update_workflow_recovers_from_incomplete_state(self):
         from types import SimpleNamespace
         from unittest.mock import patch
@@ -752,6 +849,74 @@ class TestGEXEngine(unittest.TestCase):
             if os.path.exists(tmp_path):
                 os.remove(tmp_path)
 
+    def test_cmd_add_pos(self):
+        import tempfile
+        from unittest.mock import patch
+        import io
+        import sys
+        import gex_engine
+
+        with tempfile.NamedTemporaryFile(suffix=".json", delete=False) as tmp:
+            tmp_path = tmp.name
+
+        try:
+            with patch('gex_engine.OPTIONS_FILE', tmp_path):
+                class DummyArgs:
+                    option_id = "AAPL250117C00150000"
+                    underlier = "aapl"
+                    strike = 150.0
+                    expiration = "2025-01-17"
+                    type = "call"
+                    purchase_premium = 5.50
+                    delta = 0.55
+                    gamma = 0.03
+                    open_interest = 1000
+                    imp_vol = 0.25
+                    sector = "Tech"
+                    account = ""
+
+                gex_engine.cmd_add_pos(DummyArgs())
+
+                # Check options_positions contents
+                data = gex_engine.load_json(tmp_path, {})
+                positions = data.get("options_positions", {})
+                self.assertIn("AAPL250117C00150000", positions)
+                pos = positions["AAPL250117C00150000"]
+                self.assertEqual(pos["Option ID"], "AAPL250117C00150000")
+                self.assertEqual(pos["Underlier"], "AAPL")
+                self.assertEqual(pos["Strike"], "150.00")
+                self.assertEqual(pos["Expiration"], "2025-01-17")
+                self.assertEqual(pos["Type"], "call")
+                self.assertEqual(pos["Purchase Premium"], 5.50)
+                self.assertEqual(pos["Delta"], "0.55")
+                self.assertEqual(pos["Gamma"], "0.03")
+                self.assertEqual(pos["Asset Cost Basis"], 550.0)
+                self.assertEqual(pos["Current Value"], 550.0)
+                self.assertEqual(pos["Beta Sector Tag"], "Tech")
+
+                # Duplicate option_id check
+                stderr_buf = io.StringIO()
+                with patch('sys.stderr', stderr_buf):
+                    with self.assertRaises(SystemExit) as cm:
+                        gex_engine.cmd_add_pos(DummyArgs())
+                    self.assertEqual(cm.exception.code, 1)
+                    self.assertIn("Error: Option ID AAPL250117C00150000 already exists", stderr_buf.getvalue())
+
+                # Invalid expiration format check
+                class InvalidExpArgs(DummyArgs):
+                    option_id = "AAPL250117C00160000"
+                    expiration = "2025/01/17"
+
+                stderr_buf_exp = io.StringIO()
+                with patch('sys.stderr', stderr_buf_exp):
+                    with self.assertRaises(SystemExit) as cm:
+                        gex_engine.cmd_add_pos(InvalidExpArgs())
+                    self.assertEqual(cm.exception.code, 1)
+                    self.assertIn("Error: Expiration '2025/01/17' must be a valid date in YYYY-MM-DD format.", stderr_buf_exp.getvalue())
+        finally:
+            if os.path.exists(tmp_path):
+                os.remove(tmp_path)
+
     def test_add_and_update_stocks_positions(self):
         import tempfile
         from unittest.mock import patch
@@ -818,6 +983,96 @@ class TestGEXEngine(unittest.TestCase):
             if os.path.exists(closed_path):
                 os.remove(closed_path)
 
+    def test_cmd_update_opt(self):
+        import tempfile
+        from unittest.mock import patch
+        import gex_engine
+
+        temp_dir = tempfile.mkdtemp()
+        tmp_path = os.path.join(temp_dir, "active_positions_TEST.json")
+        initial_data = {
+            "options_positions": {
+                "OPT123": {
+                    "Underlier": "AAPL",
+                    "Mark Price": 2.50,
+                    "Delta": "0.45",
+                    "Gamma": "0.02",
+                    "Open Interest": 100,
+                    "ImpVol": "0.25",
+                    "Stalling Days": 0,
+                    "Target Mode": "T1",
+                    "T2 Target": 5.0
+                },
+                "OPT456": {
+                    "Underlier": "MSFT",
+                    "Mark Price": 10.0,
+                    "Delta": "0.60"
+                }
+            }
+        }
+        gex_engine.save_json(tmp_path, initial_data)
+
+        try:
+            with patch('gex_engine.account_positions_file', return_value=tmp_path):
+                # 1) Update by option ID with all optional arguments specified
+                class UpdateArgs1:
+                    account = "TEST"
+                    option_id = "OPT123"
+                    mark = 3.75
+                    delta = 0.55
+                    gamma = 0.03
+                    oi = 150
+                    iv = 0.30
+                    stalling_days = 2
+                    target_mode = "T2"
+                    t2_target = 7.5
+
+                gex_engine.cmd_update_opt(UpdateArgs1())
+                updated_data = gex_engine.load_json(tmp_path, {})
+                opt123 = updated_data["options_positions"]["OPT123"]
+                self.assertEqual(opt123["Mark Price"], 3.75)
+                self.assertEqual(opt123["Delta"], "0.55")
+                self.assertEqual(opt123["Gamma"], "0.03")
+                self.assertEqual(opt123["Open Interest"], 150)
+                self.assertEqual(opt123["ImpVol"], "0.3")
+                self.assertEqual(opt123["Stalling Days"], 2)
+                self.assertEqual(opt123["Target Mode"], "T2")
+                self.assertEqual(opt123["T2 Target"], 7.5)
+
+                # 2) Update by underlier ticker (case-insensitive match) with minimal arguments
+                class UpdateArgs2:
+                    account = "TEST"
+                    option_id = "msft"
+                    mark = 12.0
+                    delta = None
+                    gamma = None
+                    oi = None
+                    iv = None
+                    stalling_days = None
+
+                gex_engine.cmd_update_opt(UpdateArgs2())
+                updated_data = gex_engine.load_json(tmp_path, {})
+                opt456 = updated_data["options_positions"]["OPT456"]
+                self.assertEqual(opt456["Mark Price"], 12.0)
+                self.assertEqual(opt456["Delta"], "0.60")  # Unchanged
+
+                # 3) Non-existent option ID / ticker raises SystemExit
+                class NonExistentArgs:
+                    account = "TEST"
+                    option_id = "UNKNOWN"
+                    mark = 1.0
+                    delta = None
+                    gamma = None
+                    oi = None
+                    iv = None
+                    stalling_days = None
+
+                with self.assertRaises(SystemExit):
+                    gex_engine.cmd_update_opt(NonExistentArgs())
+        finally:
+            if os.path.exists(tmp_path):
+                os.remove(tmp_path)
+
     def test_sync_positions_prefers_newest_snapshot_over_folder_name(self):
         import tempfile
         import shutil
@@ -851,6 +1106,81 @@ class TestGEXEngine(unittest.TestCase):
             positions = gex_engine.load_json(active_file, {})["stocks_positions"]
             self.assertIn("NEW", positions)
             self.assertNotIn("OLD", positions)
+        finally:
+            shutil.rmtree(temp_dir)
+
+    def test_cmd_cleanup_downloads(self):
+        """Test cmd_cleanup_downloads for directory age filtering, tmp cleaning, and non-existent dir handling."""
+        import tempfile
+        import shutil
+        from datetime import datetime, timedelta
+        from unittest.mock import patch, MagicMock
+        import gex_engine
+
+        temp_dir = tempfile.mkdtemp()
+        try:
+            # 1. Test non-existent DOWNLOADS_DIR
+            non_existent_dir = os.path.join(temp_dir, "nonexistent")
+            with patch("gex_engine.DOWNLOADS_DIR", non_existent_dir), patch("sys.stdout") as mock_stdout:
+                class Args:
+                    days = 7
+                gex_engine.cmd_cleanup_downloads(Args())
+                output = "".join(call.args[0] for call in mock_stdout.write.call_args_list if call.args)
+                self.assertIn("No downloads directory found.", output)
+
+            # 2. Test directory cleanup logic
+            downloads_dir = os.path.join(temp_dir, "downloads")
+            os.makedirs(downloads_dir, exist_ok=True)
+
+            now = datetime.now()
+            old_date_str = (now - timedelta(days=10)).strftime("%Y%m%d")
+            new_date_str = (now - timedelta(days=2)).strftime("%Y%m%d")
+
+            old_date_dir = os.path.join(downloads_dir, old_date_str)
+            new_date_dir = os.path.join(downloads_dir, new_date_str)
+            tmp_dir = os.path.join(downloads_dir, "tmp")
+            other_dir = os.path.join(downloads_dir, "other_folder")
+            sample_file = os.path.join(downloads_dir, "sample.json")
+
+            os.makedirs(old_date_dir)
+            os.makedirs(new_date_dir)
+            os.makedirs(tmp_dir)
+            os.makedirs(other_dir)
+            with open(sample_file, "w") as f:
+                f.write("{}")
+
+            # Set mtime for tmp folder to 2 days ago so age_days >= 1
+            old_time = (now - timedelta(days=2)).timestamp()
+            os.utime(tmp_dir, (old_time, old_time))
+
+            with patch("gex_engine.DOWNLOADS_DIR", downloads_dir), patch("sys.stdout") as mock_stdout:
+                class Args:
+                    days = 7
+                gex_engine.cmd_cleanup_downloads(Args())
+                output = "".join(call.args[0] for call in mock_stdout.write.call_args_list if call.args)
+                self.assertIn("Removing stale download folder", output)
+                self.assertIn("Removing stale tmp folder", output)
+                self.assertIn("Cleanup complete. Removed 2 folders.", output)
+
+            # Verify files/folders after cleanup
+            self.assertFalse(os.path.exists(old_date_dir))
+            self.assertFalse(os.path.exists(tmp_dir))
+            self.assertTrue(os.path.exists(new_date_dir))
+            self.assertTrue(os.path.exists(other_dir))
+            self.assertTrue(os.path.exists(sample_file))
+
+            # 3. Test recent tmp folder retention
+            os.makedirs(tmp_dir, exist_ok=True)
+            # mtime is now (fresh tmp)
+            with patch("gex_engine.DOWNLOADS_DIR", downloads_dir), patch("sys.stdout") as mock_stdout:
+                class Args:
+                    days = 7
+                gex_engine.cmd_cleanup_downloads(Args())
+                output = "".join(call.args[0] for call in mock_stdout.write.call_args_list if call.args)
+                self.assertIn("Cleanup complete. Removed 0 folders.", output)
+
+            self.assertTrue(os.path.exists(tmp_dir))
+
         finally:
             shutil.rmtree(temp_dir)
 
@@ -1379,6 +1709,24 @@ class TestGEXEngine(unittest.TestCase):
         
         option_size_oversized = 3500.0
         self.assertGreater(option_size_oversized, max_option_per_leg)
+
+    def test_classify_etf(self):
+        """Test ETF classification logic for standard ETFs and HYG."""
+        # Standard ETF tests (thresholds: > 0.1 BULLISH, < -0.1 BEARISH, else FLAT)
+        self.assertEqual(classify_etf("SPY", 0.15), "BULLISH")
+        self.assertEqual(classify_etf("QQQ", -0.15), "BEARISH")
+        self.assertEqual(classify_etf("IWM", 0.05), "FLAT")
+        self.assertEqual(classify_etf("XLK", 0.1), "FLAT")
+        self.assertEqual(classify_etf("XLF", -0.1), "FLAT")
+
+        # HYG tests (thresholds: > 0.0 BULLISH, < 0.0 BEARISH, else FLAT)
+        self.assertEqual(classify_etf("HYG", 0.05), "BULLISH")
+        self.assertEqual(classify_etf("HYG", -0.05), "BEARISH")
+        self.assertEqual(classify_etf("HYG", 0.0), "FLAT")
+
+        # Case-insensitivity test
+        self.assertEqual(classify_etf("hyg", 0.02), "BULLISH")
+        self.assertEqual(classify_etf("spy", 0.2), "BULLISH")
 
     def test_pct_change_flat_classification(self):
         """Test ETF classification thresholds for flat/bullish/bearish."""
@@ -2016,6 +2364,104 @@ class TestGEXEngine(unittest.TestCase):
             self.assertIn("$200.00", output)
             self.assertIn("$210.00", output)
 
+    def test_format_color(self):
+        from unittest.mock import patch
+
+        # Case 1: TTY output enabled (sys.stdout.isatty() is True)
+        with patch("sys.stdout.isatty", return_value=True):
+            # Non-bold text formatting
+            self.assertEqual(format_color("Test Text", "32", bold=False), "\033[0;32mTest Text\033[0m")
+            # Bold text formatting
+            self.assertEqual(format_color("Test Text", "31", bold=True), "\033[1;31mTest Text\033[0m")
+
+        # Case 2: Non-TTY output (sys.stdout.isatty() is False)
+        with patch("sys.stdout.isatty", return_value=False):
+            self.assertEqual(format_color("Test Text", "32", bold=False), "Test Text")
+            self.assertEqual(format_color("Test Text", "31", bold=True), "Test Text")
+    def test_cmd_journal(self):
+        """Test cmd_journal subcommand with default account, explicit account, and empty data."""
+        import json
+        import io
+        import tempfile
+        from unittest.mock import patch, MagicMock
+        import gex_engine
+
+        # 1. Default account with trade data
+        closed_mock = {
+            "closed_options": [
+                {"Realized P&L ($)": 200.0, "Days Held": 4, "Close Reason": "Target"}
+            ],
+            "closed_stocks": [
+                {"Realized P&L ($)": -50.0, "Days Held": 2, "Close Reason": "Stop"}
+            ]
+        }
+        perf_mock = {"monthly_pnl_dlr": 150.0}
+
+        def mock_load_json(filepath, default=None):
+            if "closed_positions" in filepath:
+                return closed_mock
+            if "performance" in filepath:
+                return perf_mock
+            return default if default is not None else {}
+
+        with patch("gex_engine.load_json", side_effect=mock_load_json), patch("sys.stdout", new_callable=io.StringIO) as mock_stdout:
+            class DefaultArgs:
+                pass
+
+            gex_engine.cmd_journal(DefaultArgs())
+            output = mock_stdout.getvalue()
+            data = json.loads(output)
+            self.assertEqual(data["records_reviewed"], 2)
+            self.assertEqual(data["total_realized_pnl"], 150.0)
+            self.assertEqual(data["win_count"], 1)
+            self.assertEqual(data["loss_count"], 1)
+            self.assertEqual(data["cache_reconciliation"], "MATCH")
+
+        # 2. Explicit account parameter
+        with tempfile.TemporaryDirectory() as tmpdir:
+            account_closed_file = os.path.join(tmpdir, "closed_positions_acct123.json")
+            account_perf_file = os.path.join(tmpdir, "performance_acct123.json")
+
+            acct_closed_data = {
+                "closed_options": [{"Realized P&L ($)": 300.0, "Days Held": 1, "Close Reason": "Target"}],
+                "closed_stocks": []
+            }
+            acct_perf_data = {"monthly_pnl_dlr": 300.0}
+
+            gex_engine.save_json(account_closed_file, acct_closed_data)
+            gex_engine.save_json(account_perf_file, acct_perf_data)
+
+            with patch("gex_engine.account_closed_positions_file", return_value=account_closed_file) as mock_acct_closed, \
+                 patch("gex_engine.account_performance_file", return_value=account_perf_file) as mock_acct_perf, \
+                 patch("sys.stdout", new_callable=io.StringIO) as mock_stdout:
+
+                class AccountArgs:
+                    account = "acct123"
+
+                gex_engine.cmd_journal(AccountArgs())
+                mock_acct_closed.assert_called_once_with("acct123")
+                mock_acct_perf.assert_called_once_with("acct123")
+
+                output = mock_stdout.getvalue()
+                data = json.loads(output)
+                self.assertEqual(data["records_reviewed"], 1)
+                self.assertEqual(data["total_realized_pnl"], 300.0)
+
+        # 3. Empty / missing file data
+        with patch("gex_engine.load_json") as mock_load, patch("sys.stdout", new_callable=io.StringIO) as mock_stdout:
+            def load_empty(filepath, default=None):
+                return default if default is not None else {}
+            mock_load.side_effect = load_empty
+
+            class EmptyArgs:
+                account = ""
+
+            gex_engine.cmd_journal(EmptyArgs())
+            output = mock_stdout.getvalue()
+            data = json.loads(output)
+            self.assertEqual(data["records_reviewed"], 0)
+            self.assertEqual(data["total_realized_pnl"], 0.0)
+
     def test_generate_ascii_gex_scale(self):
         """Test GEX ASCII runway map generation."""
         from gex_engine import generate_ascii_gex_scale
@@ -2031,6 +2477,174 @@ class TestGEXEngine(unittest.TestCase):
         self.assertIn("nTrans", scale_grouped)
         self.assertIn("COTMP", scale_grouped)
         self.assertIn("+", scale_grouped)
+
+    def test_cmd_simulate_not_found(self):
+        """Test cmd_simulate exits with code 1 when symbol is not found in analyses or candidates."""
+        from unittest.mock import patch, MagicMock
+        import gex_engine
+
+        class SimArgs:
+            symbol = "UNKNOWN"
+            spot = 100.0
+            account = ""
+
+        with patch("gex_engine.load_json", return_value={}):
+            with patch("sys.stdout") as mock_stdout:
+                mock_stdout.isatty = MagicMock(return_value=False)
+                with self.assertRaises(SystemExit) as cm:
+                    gex_engine.cmd_simulate(SimArgs())
+                self.assertEqual(cm.exception.code, 1)
+
+    def test_cmd_simulate_from_analyses_with_option_position(self):
+        """Test cmd_simulate with symbol in analyses and active option position."""
+        from unittest.mock import patch, MagicMock
+        import gex_engine
+
+        class SimArgs:
+            symbol = "TSLA"
+            spot = 210.0
+            account = ""
+
+        analyses_data = {
+            "TSLA": {
+                "Ticker": "TSLA",
+                "Spot": 200.0,
+                "pTrans": 190.0,
+                "nTrans": 180.0,
+                "+GEX": 220.0,
+                "COTMP": 175.0,
+            }
+        }
+        options_data = {
+            "options_positions": {
+                "TSLA": {
+                    "Purchase Premium": 10.0,
+                    "Mark Price": 10.0,
+                    "Delta": 0.5,
+                    "Gamma": 0.02,
+                    "Entry Date": "2025-01-01",
+                    "Stalling Days": 0,
+                }
+            },
+            "stocks_positions": {},
+        }
+
+        def fake_load_json(filepath, default=None):
+            if "analyses" in filepath or filepath == gex_engine.ANALYSES_FILE:
+                return analyses_data
+            if "options" in filepath or "active_positions" in filepath or filepath == gex_engine.OPTIONS_FILE:
+                return options_data
+            return default if default is not None else {}
+
+        with patch("gex_engine.load_json", side_effect=fake_load_json):
+            with patch("sys.stdout") as mock_stdout:
+                mock_stdout.isatty = MagicMock(return_value=False)
+                gex_engine.cmd_simulate(SimArgs())
+                output = "".join(call.args[0] for call in mock_stdout.write.call_args_list if call.args)
+
+                self.assertIn("Simulation for TSLA", output)
+                self.assertIn("Original Spot", output)
+                self.assertIn("$200.00", output)
+                self.assertIn("Simulated Spot", output)
+                self.assertIn("$210.00", output)
+                self.assertIn("Active Position Impact", output)
+                self.assertIn("Simulated Mark Price", output)
+                self.assertIn("GEX Runway Map (Simulated)", output)
+
+    def test_cmd_simulate_from_analyses_with_stock_position(self):
+        """Test cmd_simulate with symbol in analyses and active stock position."""
+        from unittest.mock import patch, MagicMock
+        import gex_engine
+
+        class SimArgs:
+            symbol = "AAPL"
+            spot = 160.0
+            account = ""
+
+        analyses_data = {
+            "AAPL": {
+                "Ticker": "AAPL",
+                "Spot": 150.0,
+                "pTrans": 140.0,
+                "nTrans": 130.0,
+                "+GEX": 170.0,
+                "COTMP": 125.0,
+            }
+        }
+        options_data = {
+            "options_positions": {},
+            "stocks_positions": {
+                "AAPL": {
+                    "Shares": 100.0,
+                    "Average Buy Price": 150.0,
+                }
+            },
+        }
+
+        def fake_load_json(filepath, default=None):
+            if "analyses" in filepath or filepath == gex_engine.ANALYSES_FILE:
+                return analyses_data
+            if "options" in filepath or "active_positions" in filepath or filepath == gex_engine.OPTIONS_FILE:
+                return options_data
+            return default if default is not None else {}
+
+        with patch("gex_engine.load_json", side_effect=fake_load_json):
+            with patch("sys.stdout") as mock_stdout:
+                mock_stdout.isatty = MagicMock(return_value=False)
+                gex_engine.cmd_simulate(SimArgs())
+                output = "".join(call.args[0] for call in mock_stdout.write.call_args_list if call.args)
+
+                self.assertIn("Simulation for AAPL", output)
+                self.assertIn("Original Spot", output)
+                self.assertIn("$150.00", output)
+                self.assertIn("Simulated Spot", output)
+                self.assertIn("$160.00", output)
+                self.assertIn("Active Position Impact", output)
+                self.assertIn("Simulated Position Value", output)
+                self.assertIn("$16,000.00", output)
+
+    def test_cmd_simulate_from_candidates_fallback(self):
+        """Test cmd_simulate falls back to candidates file when symbol is not in analyses."""
+        from unittest.mock import patch, MagicMock
+        import gex_engine
+
+        class SimArgs:
+            symbol = "NVDA"
+            spot = 105.0
+            account = ""
+
+        candidates_data = {
+            "candidates": [
+                {
+                    "symbol": "NVDA",
+                    "price": 100.0,
+                    "ptrans": 98.0,
+                    "ntrans": 95.0,
+                    "gex": 110.0,
+                    "cotmp": 92.0,
+                }
+            ]
+        }
+
+        def fake_load_json(filepath, default=None):
+            if "candidates" in filepath or filepath == gex_engine.CANDIDATES_FILE:
+                return candidates_data
+            if "analyses" in filepath or filepath == gex_engine.ANALYSES_FILE:
+                return {}
+            return default if default is not None else {}
+
+        with patch("gex_engine.load_json", side_effect=fake_load_json):
+            with patch("sys.stdout") as mock_stdout:
+                mock_stdout.isatty = MagicMock(return_value=False)
+                gex_engine.cmd_simulate(SimArgs())
+                output = "".join(call.args[0] for call in mock_stdout.write.call_args_list if call.args)
+
+                self.assertIn("Simulation for NVDA", output)
+                self.assertIn("Original Spot", output)
+                self.assertIn("$100.00", output)
+                self.assertIn("Simulated Spot", output)
+                self.assertIn("$105.00", output)
+                self.assertIn("GEX Runway Map (Simulated)", output)
 
     def test_discover_earnings_date(self):
         """Test scanning directory for earnings date files with multi-date and ISO timestamp support."""
@@ -2133,6 +2747,56 @@ class TestGEXEngine(unittest.TestCase):
         best2, eligible2 = select_best_option(inst_data, quotes_data, spot=100.0, gex_target=110.0, today_override="2026-07-09", earnings_date="2026-08-25")
         self.assertIsNotNone(best2)
         self.assertFalse(best2["earnings_blocked"])
+
+    def test_calculate_annualized_vol(self):
+        """Test calculation of annualized volatility from daily log returns."""
+        import math
+
+        # 1. Edge case: empty list -> 0.0
+        self.assertEqual(calculate_annualized_vol([]), 0.0)
+
+        # 2. Edge case: single element -> 0.0
+        self.assertEqual(calculate_annualized_vol([0.01]), 0.0)
+
+        # 3. Edge case: zero variance (all values identical) -> 0.0
+        self.assertEqual(calculate_annualized_vol([0.02, 0.02, 0.02]), 0.0)
+
+        # 4. Known input calculation: [0.01, -0.01]
+        expected_val = math.sqrt(0.0002) * math.sqrt(252) * 100.0
+        result_val = calculate_annualized_vol([0.01, -0.01])
+        self.assertAlmostEqual(result_val, expected_val, places=7)
+
+        # 5. Realistic log return series
+        returns = [0.005, -0.003, 0.012, -0.008, 0.002, 0.001, -0.004, 0.006]
+        n = len(returns)
+        mean_ret = sum(returns) / n
+        variance = sum((x - mean_ret) ** 2 for x in returns) / (n - 1)
+        expected_real = math.sqrt(variance) * math.sqrt(252) * 100.0
+        self.assertAlmostEqual(calculate_annualized_vol(returns), expected_real, places=7)
+    def test_calculate_ema(self):
+        """Test module-level calculate_ema utility function."""
+        from gex_engine import calculate_ema
+
+        # 1. Standard EMA calculation with period 3
+        values = [10.0, 11.0, 12.0, 13.0, 14.0]
+        ema = calculate_ema(values, 3)
+        # Expected:
+        # seed SMA = (10+11+12)/3 = 11.0
+        # k = 2 / (3 + 1) = 0.5
+        # 13.0: 13.0 * 0.5 + 11.0 * 0.5 = 12.0
+        # 14.0: 14.0 * 0.5 + 12.0 * 0.5 = 13.0
+        self.assertEqual(len(ema), 3)
+        self.assertAlmostEqual(ema[0], 11.0)
+        self.assertAlmostEqual(ema[1], 12.0)
+        self.assertAlmostEqual(ema[2], 13.0)
+
+        # 2. Edge case: values length less than period or invalid period
+        self.assertEqual(calculate_ema([10.0, 12.0], 3), [])
+        self.assertEqual(calculate_ema([10.0, 12.0], 0), [])
+        self.assertEqual(calculate_ema([], 3), [])
+
+        # 3. Exact match when len(values) == p
+        self.assertEqual(calculate_ema([10.0, 20.0, 30.0], 3), [20.0])
 
     def test_technical_indicators_rsi_macd(self):
         """Test RSI and MACD calculation functions."""
@@ -2358,6 +3022,175 @@ class TestGEXEngine(unittest.TestCase):
         finally:
             shutil.rmtree(temp_dir)
 
+    def test_calculate_candidate_score(self):
+        """Test candidate score calculation across various input combinations and edge cases."""
+        # 1. Empty dictionary or all None values -> returns 0.0
+        self.assertEqual(calculate_candidate_score({}), 0.0)
+        self.assertEqual(
+            calculate_candidate_score({
+                "relative_options_volume": None,
+                "chg_pct": None,
+                "iv": None,
+                "rsi": None,
+                "macd_hist": None
+            }),
+            0.0
+        )
+
+        # 2. Maximum values at or exceeding caps -> returns 100.0
+        max_candidate = {
+            "relative_options_volume": 10.0,  # cap 10.0
+            "chg_pct": 5.0,                  # cap 5.0
+            "iv": 1.0,                       # cap 1.0
+            "rsi": 100.0,                    # cap 100.0
+            "macd_hist": 0.5                 # > 0 -> 1.0, cap 1.0
+        }
+        self.assertEqual(calculate_candidate_score(max_candidate), 100.0)
+
+        # 3. Exceeding caps -> clamped to 1.0 -> returns 100.0
+        exceeding_candidate = {
+            "relative_options_volume": 20.0,
+            "chg_pct": 10.0,
+            "iv": 2.0,
+            "rsi": 150.0,
+            "macd_hist": 1.5
+        }
+        self.assertEqual(calculate_candidate_score(exceeding_candidate), 100.0)
+
+        # 4. Zero or negative values -> returns 0.0
+        min_candidate = {
+            "relative_options_volume": 0.0,
+            "chg_pct": -5.0,
+            "iv": 0.0,
+            "rsi": 0.0,
+            "macd_hist": -0.5  # <= 0 -> 0.0
+        }
+        self.assertEqual(calculate_candidate_score(min_candidate), 0.0)
+
+        # 5. Partial metrics -> reweights based on available metric weights
+        # relative_options_volume = 5.0 (50% of cap 10.0, weight 30.0 -> 15.0)
+        # chg_pct = 2.5 (50% of cap 5.0, weight 25.0 -> 12.5)
+        # total available weighted sum = 27.5, total available weight = 55.0
+        # 27.5 / 55.0 * 100 = 50.0
+        partial_candidate = {
+            "relative_options_volume": 5.0,
+            "chg_pct": 2.5
+        }
+        self.assertEqual(calculate_candidate_score(partial_candidate), 50.0)
+
+        # 6. MACD Hist edge cases
+        # macd_hist > 0 -> 1.0 (weight 10.0)
+        cand_macd_pos = {"macd_hist": 0.01}
+        self.assertEqual(calculate_candidate_score(cand_macd_pos), 100.0)
+
+        # macd_hist == 0 -> 0.0 (weight 10.0)
+        cand_macd_zero = {"macd_hist": 0.0}
+        self.assertEqual(calculate_candidate_score(cand_macd_zero), 0.0)
+
+        # macd_hist < 0 -> 0.0 (weight 10.0)
+        cand_macd_neg = {"macd_hist": -0.01}
+        self.assertEqual(calculate_candidate_score(cand_macd_neg), 0.0)
+
+        # macd_hist is None -> metric not available
+        cand_macd_none = {"macd_hist": None}
+        self.assertEqual(calculate_candidate_score(cand_macd_none), 0.0)
+
+        # 7. Handles string numeric values
+        str_candidate = {
+            "relative_options_volume": "10.0",
+            "chg_pct": "5.0",
+            "iv": "1.0",
+            "rsi": "100.0",
+            "macd_hist": "0.1"
+        }
+        self.assertEqual(calculate_candidate_score(str_candidate), 100.0)
+    def test_get_all_active_symbols_standard(self):
+        import tempfile
+        import shutil
+        from unittest.mock import patch
+        import gex_engine
+
+        temp_dir = tempfile.mkdtemp()
+        try:
+            data_dir = os.path.join(temp_dir, "data")
+            os.makedirs(data_dir)
+
+            pos1 = {
+                "options_positions": {
+                    "opt1": {"Underlier": "aapl"},
+                    "opt2": {"Underlier": "MSFT"}
+                },
+                "stocks_positions": {
+                    "tsla": {},
+                    "BABA": {}
+                }
+            }
+            pos2 = {
+                "options_positions": {
+                    "opt3": {"Underlier": "MSFT"}
+                },
+                "stocks_positions": {
+                    "NVDA": {}
+                }
+            }
+
+            gex_engine.save_json(os.path.join(data_dir, "active_positions.json"), pos1)
+            gex_engine.save_json(os.path.join(data_dir, "active_positions_ACC123.json"), pos2)
+
+            with patch("gex_engine.REPOSITORY_ROOT", temp_dir):
+                symbols = get_all_active_symbols()
+
+            self.assertEqual(symbols, ["AAPL", "BABA", "MSFT", "NVDA", "TSLA"])
+        finally:
+            shutil.rmtree(temp_dir)
+
+    def test_get_all_active_symbols_edge_cases(self):
+        import tempfile
+        import shutil
+        from unittest.mock import patch
+        import gex_engine
+
+        temp_dir = tempfile.mkdtemp()
+        try:
+            # 1. Non-existent data directory
+            with patch("gex_engine.REPOSITORY_ROOT", temp_dir):
+                self.assertEqual(get_all_active_symbols(), [])
+
+            # 2. Data directory exists but no active_positions*.json matching files
+            data_dir = os.path.join(temp_dir, "data")
+            os.makedirs(data_dir)
+            gex_engine.save_json(os.path.join(data_dir, "closed_positions.json"), {
+                "closed_stocks": [{"Ticker": "AMZN"}]
+            })
+            with open(os.path.join(data_dir, "active_positions.txt"), "w") as f:
+                f.write("text content")
+
+            with patch("gex_engine.REPOSITORY_ROOT", temp_dir):
+                self.assertEqual(get_all_active_symbols(), [])
+
+            # 3. Active positions file with malformed / non-dict entries and missing/empty fields
+            malformed_pos = {
+                "options_positions": {
+                    "opt1": None,  # details is not a dict
+                    "opt2": "invalid string",
+                    "opt3": {"Underlier": ""},  # empty string
+                    "opt4": {},  # missing Underlier key
+                    "opt5": {"Underlier": "AMD"}  # valid entry
+                },
+                "stocks_positions": {
+                    "": {},  # empty ticker string
+                    "INTC": {}  # valid ticker key
+                }
+            }
+            gex_engine.save_json(os.path.join(data_dir, "active_positions_malformed.json"), malformed_pos)
+
+            with patch("gex_engine.REPOSITORY_ROOT", temp_dir):
+                symbols = get_all_active_symbols()
+
+            self.assertEqual(symbols, ["AMD", "INTC"])
+        finally:
+            shutil.rmtree(temp_dir)
+
     def test_update_candidates_reads_cached_technical_indicators(self):
         import tempfile
         import shutil
@@ -2400,6 +3233,1274 @@ class TestGEXEngine(unittest.TestCase):
                 self.assertIn("score", candidate)
         finally:
             shutil.rmtree(temp_dir)
+
+    def test_find_latest_historical_ohlc_empty_or_missing_dir(self):
+        """Test find_latest_historical_ohlc when DOWNLOADS_DIR does not exist or has no matching files."""
+    def test_extract_col_case_insensitive_and_null_handling(self):
+        """Test _extract_col logic via cmd_update_candidates column parsing."""
+        import tempfile
+        import shutil
+        from unittest.mock import patch
+        import gex_engine
+
+        temp_dir = tempfile.mkdtemp()
+        try:
+            non_existent_dir = os.path.join(temp_dir, "non_existent")
+            with patch("gex_engine.DOWNLOADS_DIR", non_existent_dir):
+                closes, highs, lows, opens = find_latest_historical_ohlc("AAPL")
+                self.assertEqual((closes, highs, lows, opens), ([], [], [], []))
+
+            downloads_dir = os.path.join(temp_dir, "downloads")
+            os.makedirs(downloads_dir, exist_ok=True)
+            # Add a file that does not match historical pattern
+            gex_engine.save_json(os.path.join(downloads_dir, "unrelated_scan.json"), {"data": []})
+
+            with patch("gex_engine.DOWNLOADS_DIR", downloads_dir):
+                closes, highs, lows, opens = find_latest_historical_ohlc("AAPL")
+                self.assertEqual((closes, highs, lows, opens), ([], [], [], []))
+        finally:
+            shutil.rmtree(temp_dir)
+
+    def test_find_latest_historical_ohlc_various_json_structures_and_aliases(self):
+        """Test find_latest_historical_ohlc parsing varied JSON layouts and column aliases."""
+            downloads_dir = os.path.join(temp_dir, "downloads")
+            os.makedirs(downloads_dir, exist_ok=True)
+            active_file = os.path.join(temp_dir, "active_positions.json")
+            gex_engine.save_json(active_file, {"options_positions": {}, "stocks_positions": {}})
+
+            # Scan file with uppercase / mixed case keys and None values
+            gex_engine.save_json(os.path.join(downloads_dir, "test_scan.json"), {
+                "data": {"result": {"scan_title": "Test Scan", "results": [
+                    {
+                        "ticker": "STOCK1",
+                        "columns": {
+                            "Last": None,
+                            "LAST_TRADE_PRICE": "50.0",
+                            "VOLUME": "1000000",
+                            "% CHANGE": "1.5",
+                            "MARKET CAP": "5000000000",
+                            "IV": "0.35",
+                            "RELATIVE VOLUME": "2.1"
+                        }
+                    },
+                    {
+                        "ticker": "STOCK2",
+                        "columns": {
+                            "price": "75.0",
+                            "volume": "800000",
+                            "change_pct": "2.0",
+                            "market_cap": "10000000000",
+                            "implied_volatility": "0.25",
+                            "relative_options_volume": "1.8"
+                        }
+                    }
+                ]}}
+            })
+            candidates_file = os.path.join(temp_dir, "candidate_stocks.json")
+            with patch('gex_engine.OPTIONS_FILE', active_file), \
+                 patch('gex_engine.DOWNLOADS_DIR', downloads_dir), \
+                 patch('gex_engine.CANDIDATES_FILE', candidates_file), \
+                 patch('gex_engine.ANALYSES_FILE', os.path.join(temp_dir, "ticker_analyses.json")), \
+                 patch('gex_engine.persist_new_scans', return_value=[]):
+                class UpdateArgs:
+                    min_rsi = None
+                    max_rsi = None
+                    macd_filter = "none"
+
+                gex_engine.cmd_update_candidates(UpdateArgs())
+                candidates = gex_engine.load_json(candidates_file, {})["candidates"]
+                self.assertEqual(len(candidates), 2)
+
+                stock1 = next(c for c in candidates if c["symbol"] == "STOCK1")
+                self.assertEqual(stock1["price"], 50.0)
+                self.assertEqual(stock1["chg_pct"], 1.5)
+                self.assertEqual(stock1["iv"], 0.35)
+                self.assertEqual(stock1["relative_options_volume"], 2.1)
+
+                stock2 = next(c for c in candidates if c["symbol"] == "STOCK2")
+                self.assertEqual(stock2["price"], 75.0)
+                self.assertEqual(stock2["chg_pct"], 2.0)
+                self.assertEqual(stock2["iv"], 0.25)
+                self.assertEqual(stock2["relative_options_volume"], 1.8)
+        finally:
+            shutil.rmtree(temp_dir)
+
+
+    def test_find_latest_technical_indicators(self):
+        """Test find_latest_technical_indicators under various file structures and edge cases."""
+        import tempfile
+        import shutil
+        from unittest.mock import patch
+        import gex_engine
+
+        temp_dir = tempfile.mkdtemp()
+        try:
+            downloads_dir = os.path.join(temp_dir, "downloads")
+            os.makedirs(downloads_dir, exist_ok=True)
+
+            # Structure 1: data -> results -> symbol/bars with close_price, high_price, low_price, open_price
+            struct1_file = os.path.join(downloads_dir, "20260801_TSLA_HISTORICAL_raw.json")
+            gex_engine.save_json(struct1_file, {
+                "data": {
+                    "results": [
+                        {
+                            "symbol": "TSLA",
+                            "bars": [
+                                {"begins_at": "2026-08-01", "close_price": "200.0", "high_price": "205.0", "low_price": "198.0", "open_price": "199.0"},
+                                {"begins_at": "2026-08-02", "close_price": "210.0", "high_price": "215.0", "low_price": "201.0", "open_price": "202.0"}
+                            ]
+                        }
+                    ]
+                }
+            })
+
+            # Structure 2: top-level bars dictionary with short aliases (close, high, low, open)
+            struct2_file = os.path.join(downloads_dir, "20260801_NVDA_HISTORICAL_raw.json")
+            gex_engine.save_json(struct2_file, {
+                "bars": [
+                    {"begins_at": "2026-08-01", "close": 120.0, "high": 125.0, "low": 118.0, "open": 119.0},
+                    {"begins_at": "2026-08-02", "close": 122.0, "high": 127.0, "low": 120.0, "open": 121.0}
+                ]
+            })
+
+            # Structure 3: direct list of bar dictionaries
+            struct3_file = os.path.join(downloads_dir, "20260801_AMD_HISTORICAL_raw.json")
+            gex_engine.save_json(struct3_file, [
+                {"begins_at": "2026-08-01", "close_price": 150.0, "high_price": 155.0, "low_price": 148.0, "open_price": 149.0}
+            ])
+
+            with patch("gex_engine.DOWNLOADS_DIR", downloads_dir):
+                c1, h1, l1, o1 = find_latest_historical_ohlc("TSLA")
+                self.assertEqual(c1, [200.0, 210.0])
+                self.assertEqual(h1, [205.0, 215.0])
+                self.assertEqual(l1, [198.0, 201.0])
+                self.assertEqual(o1, [199.0, 202.0])
+
+                c2, h2, l2, o2 = find_latest_historical_ohlc("NVDA")
+                self.assertEqual(c2, [120.0, 122.0])
+                self.assertEqual(h2, [125.0, 127.0])
+                self.assertEqual(l2, [118.0, 120.0])
+                self.assertEqual(o2, [119.0, 121.0])
+
+                c3, h3, l3, o3 = find_latest_historical_ohlc("AMD")
+                self.assertEqual(c3, [150.0])
+                self.assertEqual(h3, [155.0])
+                self.assertEqual(l3, [148.0])
+                self.assertEqual(o3, [149.0])
+        finally:
+            shutil.rmtree(temp_dir)
+
+    def test_find_latest_historical_ohlc_sorting_filtering_and_file_precedence(self):
+        """Test chronological sorting, price filtering, file precedence, and corrupted file handling."""
+        import tempfile
+        import shutil
+        from unittest.mock import patch
+        import gex_engine
+
+        temp_dir = tempfile.mkdtemp()
+        try:
+            downloads_dir = os.path.join(temp_dir, "downloads")
+            os.makedirs(downloads_dir, exist_ok=True)
+
+            # Older file with out-of-order bars, invalid non-positive prices, and valid prices
+            older_file = os.path.join(downloads_dir, "20260701_AAPL_HISTORICAL_raw.json")
+            gex_engine.save_json(older_file, {
+                "bars": [
+                    {"begins_at": "2026-07-03T00:00:00Z", "close": "180.0", "high": "185.0", "low": "178.0", "open": "179.0"},
+                    {"begins_at": "2026-07-01T00:00:00Z", "close": "0.0", "high": "10.0", "low": "0.0", "open": "5.0"},  # Should be filtered out
+                    {"begins_at": "2026-07-02T00:00:00Z", "close": "175.0", "high": "177.0", "low": "172.0", "open": "173.0"},
+                    {"begins_at": "2026-07-04T00:00:00Z", "close": "invalid", "high": "180.0", "low": "170.0", "open": "175.0"}, # Invalid float, should be skipped
+                ]
+            })
+
+            # Newer file (lexicographically higher filename) should take precedence
+            newer_file = os.path.join(downloads_dir, "20260801_AAPL_HISTORICAL_raw.json")
+            gex_engine.save_json(newer_file, {
+                "bars": [
+                    {"begins_at": "2026-08-01T00:00:00Z", "close": "190.0", "high": "195.0", "low": "188.0", "open": "189.0"},
+                    {"begins_at": "2026-08-02T00:00:00Z", "close": "192.0", "high": "197.0", "low": "190.0", "open": "191.0"}
+                ]
+            })
+
+            # Corrupted / unparseable JSON file lexicographically higher than newer_file should be skipped gracefully
+            corrupt_file = os.path.join(downloads_dir, "20260901_AAPL_HISTORICAL_raw.json")
+            with open(corrupt_file, "w") as f:
+                f.write("Corrupted { JSON syntax error")
+
+            with patch("gex_engine.DOWNLOADS_DIR", downloads_dir):
+                closes, highs, lows, opens = find_latest_historical_ohlc("AAPL")
+                # Should skip corrupt_file and pick newer_file
+                self.assertEqual(closes, [190.0, 192.0])
+                self.assertEqual(highs, [195.0, 197.0])
+                self.assertEqual(lows, [188.0, 190.0])
+                self.assertEqual(opens, [189.0, 191.0])
+
+            # Remove corrupt_file and newer_file to test older_file sorting & filtering
+            os.remove(corrupt_file)
+            os.remove(newer_file)
+
+            with patch("gex_engine.DOWNLOADS_DIR", downloads_dir):
+                closes, highs, lows, opens = find_latest_historical_ohlc("AAPL")
+                # Sorted chronologically (2026-07-02 then 2026-07-03), invalid/0 close prices filtered
+                self.assertEqual(closes, [175.0, 180.0])
+                self.assertEqual(highs, [177.0, 185.0])
+                self.assertEqual(lows, [172.0, 178.0])
+                self.assertEqual(opens, [173.0, 179.0])
+
+            # 1. Non-existent DOWNLOADS_DIR -> (None, None)
+            with patch("gex_engine.DOWNLOADS_DIR", os.path.join(temp_dir, "nonexistent")):
+                rsi, macd_hist = find_latest_technical_indicators("AAPL")
+                self.assertIsNone(rsi)
+                self.assertIsNone(macd_hist)
+
+            os.makedirs(downloads_dir, exist_ok=True)
+
+            # 2. DOWNLOADS_DIR exists but no matching files for symbol -> (None, None)
+            with patch("gex_engine.DOWNLOADS_DIR", downloads_dir):
+                rsi, macd_hist = find_latest_technical_indicators("AAPL")
+                self.assertIsNone(rsi)
+                self.assertIsNone(macd_hist)
+
+            # 3. Happy path: valid indicator file containing both RSI and MACD
+            file_path_happy = os.path.join(downloads_dir, "aapl_technical_indicators_20260101.json")
+            gex_engine.save_json(file_path_happy, {
+                "data": {
+                    "indicators": [
+                        {"type": "rsi", "series": [{"value": 65.4}]},
+                        {"type": "macd", "series": [{"histogram": 1.25}]},
+                    ]
+                }
+            })
+
+            with patch("gex_engine.DOWNLOADS_DIR", downloads_dir):
+                rsi, macd_hist = find_latest_technical_indicators("aapl") # case-insensitive symbol check
+                self.assertEqual(rsi, 65.4)
+                self.assertEqual(macd_hist, 1.25)
+
+            # 4. Latest file precedence & fallback on corrupted newest file
+            # Create a newer file (lexicographically sorting after 20260101)
+            file_path_newer_corrupt = os.path.join(downloads_dir, "aapl_technical_indicators_20260102.json")
+            with open(file_path_newer_corrupt, "w") as f:
+                f.write("{ invalid json... ")
+
+            with patch("gex_engine.DOWNLOADS_DIR", downloads_dir):
+                # Should skip corrupt 20260102 file and fall back to 20260101 file
+                rsi, macd_hist = find_latest_technical_indicators("AAPL")
+                self.assertEqual(rsi, 65.4)
+                self.assertEqual(macd_hist, 1.25)
+
+            # Now fix 20260102 file with newer values -> should take 20260102
+            gex_engine.save_json(file_path_newer_corrupt, {
+                "data": {
+                    "indicators": [
+                        {"type": "rsi", "series": [{"value": 72.1}]},
+                        {"type": "macd", "series": [{"histogram": 0.85}]},
+                    ]
+                }
+            })
+
+            with patch("gex_engine.DOWNLOADS_DIR", downloads_dir):
+                rsi, macd_hist = find_latest_technical_indicators("AAPL")
+                self.assertEqual(rsi, 72.1)
+                self.assertEqual(macd_hist, 0.85)
+
+            # 5. Partial indicators: file with only RSI or only MACD
+            dir_partial = os.path.join(temp_dir, "downloads_partial")
+            os.makedirs(dir_partial, exist_ok=True)
+            gex_engine.save_json(os.path.join(dir_partial, "msft_technical_indicators.json"), {
+                "data": {
+                    "indicators": [
+                        {"type": "rsi", "series": [{"value": 45.0}]},
+                    ]
+                }
+            })
+
+            with patch("gex_engine.DOWNLOADS_DIR", dir_partial):
+                rsi, macd_hist = find_latest_technical_indicators("MSFT")
+                self.assertEqual(rsi, 45.0)
+                self.assertIsNone(macd_hist)
+
+            # 6. Malformed entries: empty series, invalid value types, non-dict root
+            dir_malformed = os.path.join(temp_dir, "downloads_malformed")
+            os.makedirs(dir_malformed, exist_ok=True)
+
+            # Non-dict JSON root
+            gex_engine.save_json(os.path.join(dir_malformed, "nvda_technical_1.json"), ["not", "a", "dict"])
+            # Non-numeric string value
+            gex_engine.save_json(os.path.join(dir_malformed, "nvda_technical_2.json"), {
+                "data": {
+                    "indicators": [
+                        {"type": "rsi", "series": [{"value": "invalid_number"}]}
+                    ]
+                }
+            })
+            # Empty series list
+            gex_engine.save_json(os.path.join(dir_malformed, "nvda_technical_3.json"), {
+                "data": {
+                    "indicators": [
+                        {"type": "rsi", "series": []}
+                    ]
+                }
+            })
+
+            with patch("gex_engine.DOWNLOADS_DIR", dir_malformed):
+                rsi, macd_hist = find_latest_technical_indicators("NVDA")
+                self.assertIsNone(rsi)
+                self.assertIsNone(macd_hist)
+
+        finally:
+            shutil.rmtree(temp_dir)
+
+    def test_cmd_close_pos(self):
+        """Test cmd_close_pos for option closing, P&L calculations, error handling, and account scoping."""
+        import tempfile
+        import shutil
+        from io import StringIO
+    def test_cmd_update_performance_invalid_net_liq(self):
+        """Test cmd_update_performance exits when --net-liq is missing, zero, or negative."""
+        from types import SimpleNamespace
+        from unittest.mock import patch
+        import io
+        import gex_engine
+
+        for invalid_net_liq in [None, 0.0, -500.0]:
+            with self.subTest(net_liq=invalid_net_liq):
+                args = SimpleNamespace(
+                    net_liq=invalid_net_liq,
+                    account="ACC123",
+                    monthly_file=None,
+                    pnl_file=None,
+                )
+                with patch("sys.stderr", new_callable=io.StringIO) as mock_stderr:
+                    with self.assertRaises(SystemExit) as cm:
+                        gex_engine.cmd_update_performance(args)
+                    self.assertEqual(cm.exception.code, 1)
+                    self.assertIn("Error: --net-liq must be a positive account net liquidation value.", mock_stderr.getvalue())
+
+    def test_cmd_update_performance_account_scoped(self):
+        """Test cmd_update_performance computes metrics and saves to account-scoped performance file."""
+        import tempfile
+        import shutil
+        from types import SimpleNamespace
+        from unittest.mock import patch
+    def test_cmd_workflow_standard_and_subagent_logging(self):
+        """Test cmd_workflow output with populated regime, state, portfolio, candidates, and analyses."""
+        import tempfile
+        import shutil
+        from unittest.mock import patch, MagicMock
+        from types import SimpleNamespace
+        import gex_engine
+
+        temp_dir = tempfile.mkdtemp()
+        try:
+            active_file = os.path.join(temp_dir, "active_positions.json")
+            closed_file = os.path.join(temp_dir, "closed_positions.json")
+
+            active_data = {
+                "options_positions": {
+                    "opt_1": {
+                        "Underlier": "AAPL",
+                        "Strike": 150.0,
+                        "Type": "call",
+                        "Purchase Premium": 2.0,
+                        "Mark Price": 3.0,
+                    },
+                    "opt_2": {
+                        "Underlier": "NVDA",
+                        "Strike": 120.0,
+                        "Type": "call",
+                        "Purchase Premium": 5.0,
+                        "Mark Price": 8.0,
+                    },
+                    "opt_3": {
+                        "Underlier": "TSLA",
+                        "Strike": 200.0,
+                        "Type": "put",
+                        "Purchase Premium": 0.0,
+                    },
+                    "opt_4": {
+                        "Underlier": "AMZN",
+                        "Strike": 180.0,
+                        "Type": "call",
+                        "Purchase Premium": 10.0,
+                        "Mark Price": 7.0,
+                    },
+                },
+                "closed_options": [
+                    {"opt_id": "legacy_1", "Underlier": "MSFT"}
+                ],
+            }
+            gex_engine.save_json(active_file, active_data)
+
+            # 1) Position not found error test
+            class NotFoundArgs:
+                option_id = "NONEXISTENT"
+                close_premium = None
+                account = ""
+
+            with patch("gex_engine.account_positions_file", return_value=active_file), \
+                 patch("gex_engine.account_closed_positions_file", return_value=closed_file), \
+                 patch("sys.stderr", new_callable=StringIO) as mock_stderr:
+                with self.assertRaises(SystemExit) as cm:
+                    gex_engine.cmd_close_pos(NotFoundArgs())
+                self.assertEqual(cm.exception.code, 1)
+                self.assertIn("not found in portfolio", mock_stderr.getvalue())
+
+            # 2) Close position by option_id with explicit close_premium and legacy options migration
+            class CloseByIdArgs:
+                option_id = "opt_1"
+                close_premium = 3.50
+                account = ""
+
+            with patch("gex_engine.account_positions_file", return_value=active_file), \
+                 patch("gex_engine.account_closed_positions_file", return_value=closed_file), \
+                 patch("sys.stdout", new_callable=StringIO):
+                gex_engine.cmd_close_pos(CloseByIdArgs())
+
+            # Check active_positions.json state
+            active_res = gex_engine.load_json(active_file, {})
+            self.assertNotIn("opt_1", active_res.get("options_positions", {}))
+            self.assertNotIn("closed_options", active_res)  # Legacy closed options migrated
+
+            # Check closed_positions.json state
+            closed_res = gex_engine.load_json(closed_file, {})
+            closed_opts = closed_res.get("closed_options", [])
+            opt_ids = [opt.get("opt_id") for opt in closed_opts if "opt_id" in opt]
+            self.assertIn("legacy_1", opt_ids)
+
+            opt_1_closed = [opt for opt in closed_opts if opt.get("Underlier") == "AAPL"][0]
+            self.assertEqual(opt_1_closed["Close Premium"], 3.50)
+            self.assertEqual(opt_1_closed["Realized P&L ($)"], 150.0)  # (3.50 - 2.0) * 100
+            self.assertEqual(opt_1_closed["Realized P&L (%)"], 75.0)   # ((3.50 - 2.0)/2.0) * 100
+            self.assertIn("Close Date", opt_1_closed)
+
+            # 3) Close position by Underlier ticker (case-insensitive) with default close_premium (uses Mark Price)
+            class CloseByTickerArgs:
+                option_id = "nvda"
+                close_premium = None
+                account = ""
+
+            with patch("gex_engine.account_positions_file", return_value=active_file), \
+                 patch("gex_engine.account_closed_positions_file", return_value=closed_file), \
+                 patch("sys.stdout", new_callable=StringIO):
+                gex_engine.cmd_close_pos(CloseByTickerArgs())
+
+            active_res = gex_engine.load_json(active_file, {})
+            self.assertNotIn("opt_2", active_res.get("options_positions", {}))
+
+            closed_res = gex_engine.load_json(closed_file, {})
+            nvda_closed = [opt for opt in closed_res.get("closed_options", []) if opt.get("Underlier") == "NVDA"][0]
+            self.assertEqual(nvda_closed["Close Premium"], 8.0)  # defaulted to Mark Price
+            self.assertEqual(nvda_closed["Realized P&L ($)"], 300.0)  # (8.0 - 5.0) * 100
+            self.assertEqual(nvda_closed["Realized P&L (%)"], 60.0)
+
+            # 4) Close position with zero purchase premium (avoid ZeroDivisionError) and no Mark Price
+            class CloseZeroPremiumArgs:
+                option_id = "opt_3"
+                close_premium = None
+                account = ""
+
+            with patch("gex_engine.account_positions_file", return_value=active_file), \
+                 patch("gex_engine.account_closed_positions_file", return_value=closed_file), \
+                 patch("sys.stdout", new_callable=StringIO):
+                gex_engine.cmd_close_pos(CloseZeroPremiumArgs())
+
+            closed_res = gex_engine.load_json(closed_file, {})
+            tsla_closed = [opt for opt in closed_res.get("closed_options", []) if opt.get("Underlier") == "TSLA"][0]
+            self.assertEqual(tsla_closed["Realized P&L (%)"], 0.0)
+            self.assertEqual(tsla_closed["Realized P&L ($)"], 0.0)
+
+            # 5) Close position resulting in negative P&L (loss)
+            class CloseLossArgs:
+                option_id = "opt_4"
+                close_premium = 5.0
+                account = ""
+
+            with patch("gex_engine.account_positions_file", return_value=active_file), \
+                 patch("gex_engine.account_closed_positions_file", return_value=closed_file), \
+                 patch("sys.stdout", new_callable=StringIO) as mock_stdout:
+                gex_engine.cmd_close_pos(CloseLossArgs())
+
+            closed_res = gex_engine.load_json(closed_file, {})
+            amzn_closed = [opt for opt in closed_res.get("closed_options", []) if opt.get("Underlier") == "AMZN"][0]
+            self.assertEqual(amzn_closed["Realized P&L ($)"], -500.0)  # (5.0 - 10.0) * 100
+            self.assertEqual(amzn_closed["Realized P&L (%)"], -50.0)
+            self.assertIn("Closed AMZN 180.0 call (opt_4)", mock_stdout.getvalue())
+
+            # 6) Test account argument scoping
+            acc_active = os.path.join(temp_dir, "active_positions_123.json")
+            acc_closed = os.path.join(temp_dir, "closed_positions_123.json")
+            gex_engine.save_json(acc_active, {
+                "options_positions": {
+                    "opt_acc": {
+                        "Underlier": "AMD",
+                        "Purchase Premium": 1.0,
+                    }
+                }
+            })
+
+            class AccCloseArgs:
+                option_id = "opt_acc"
+                close_premium = 2.0
+                account = "123"
+
+            with patch("gex_engine.account_positions_file", return_value=acc_active), \
+                 patch("gex_engine.account_closed_positions_file", return_value=acc_closed), \
+                 patch("sys.stdout", new_callable=StringIO):
+                gex_engine.cmd_close_pos(AccCloseArgs())
+
+            acc_active_data = gex_engine.load_json(acc_active, {})
+            self.assertNotIn("opt_acc", acc_active_data.get("options_positions", {}))
+            acc_closed_data = gex_engine.load_json(acc_closed, {})
+            self.assertEqual(len(acc_closed_data.get("closed_options", [])), 1)
+            perf_path = os.path.join(temp_dir, "data", "performance_ACC123.json")
+            args = SimpleNamespace(
+                net_liq=50000.0,
+                account="ACC123",
+                monthly_file=None,
+                pnl_file=None,
+            )
+            with patch("gex_engine.account_performance_file", return_value=perf_path), \
+                 patch("gex_engine.get_monthly_realized_pnl", return_value=(2500.0, 5.0, "PASS", 10)):
+                gex_engine.cmd_update_performance(args)
+
+            data = gex_engine.load_json(perf_path, {})
+            self.assertEqual(data["account"], "ACC123")
+            self.assertEqual(data["monthly_pnl_dlr"], 2500.0)
+            self.assertEqual(data["monthly_pnl_pct"], 5.0)
+            self.assertEqual(data["drawdown_gate_status"], "PASS")
+            self.assertEqual(data["monthly_cnt"], 10)
+            self.assertIn("last_updated", data)
+        finally:
+            shutil.rmtree(temp_dir)
+
+    def test_cmd_update_performance_default_account(self):
+        """Test cmd_update_performance computes metrics and saves to default performance file when account is empty."""
+        import tempfile
+        import shutil
+        from types import SimpleNamespace
+        from unittest.mock import patch, MagicMock
+        import gex_engine
+
+        temp_dir = tempfile.mkdtemp()
+        try:
+            workflow_file = os.path.join(temp_dir, "workflow_state.json")
+            regime_file = os.path.join(temp_dir, "regime.json")
+            options_file = os.path.join(temp_dir, "active_positions.json")
+            candidates_file = os.path.join(temp_dir, "candidate_stocks.json")
+            analyses_file = os.path.join(temp_dir, "ticker_analyses.json")
+
+            gex_engine.save_json(workflow_file, {
+                "current_phase": "Phase I: Risk & Audit",
+                "subagents": {
+                    "market-regime-analyst": {"status": "SUCCESS"},
+                    "portfolio-risk-manager": {"status": "FAILED"},
+                    "gex-candidate-generator": {"status": "RUNNING"},
+                },
+                "notes": []
+            })
+            gex_engine.save_json(regime_file, {
+                "basket_gate": "PASS",
+                "bull_bear_gate": "PASS",
+                "vix_delta_gate": "PASS",
+                "system_authorization": "ALL TRACKS OK",
+                "bull_count": 12,
+                "bear_count": 2,
+                "bull_bear_ratio": 6.0,
+                "vix_spot": 15.2,
+                "spy_change_pct": 0.75,
+                "qqq_change_pct": 0.85,
+            })
+            gex_engine.save_json(options_file, {
+                "options_positions": {"opt_1": {"Underlier": "AAPL"}},
+                "stocks_positions": {"MSFT": {"Ticker": "MSFT"}},
+            })
+            gex_engine.save_json(candidates_file, {
+                "candidates": [{"symbol": "NVDA"}, {"symbol": "AMD"}]
+            })
+            gex_engine.save_json(analyses_file, {
+                "NVDA": {"Signal Status": "CONFIRMED (11/11)"},
+                "AMD": {"Signal Status": "PENDING (below watchdog)"},
+                "TSLA": {"Signal Status": "BLOCKED (Grade <= 8)"},
+            })
+
+            args = SimpleNamespace(account="")
+
+            with patch("gex_engine.WORKFLOW_STATE_FILE", workflow_file), \
+                 patch("gex_engine.REGIME_FILE", regime_file), \
+                 patch("gex_engine.OPTIONS_FILE", options_file), \
+                 patch("gex_engine.CANDIDATES_FILE", candidates_file), \
+                 patch("gex_engine.ANALYSES_FILE", analyses_file), \
+                 patch("sys.stdout") as mock_stdout:
+                mock_stdout.isatty = MagicMock(return_value=False)
+
+                gex_engine.cmd_workflow(args)
+
+                output = "".join(call.args[0] for call in mock_stdout.write.call_args_list if call.args)
+
+                self.assertIn("SYSTEM WORKFLOW STATUS", output)
+                self.assertIn("Current Phase: Phase I: Risk & Audit", output)
+                self.assertIn("[PHASE I] System Authorization: ALL TRACKS OK", output)
+                self.assertIn("Bull:Bear Ratio: 6.0 (12B : 2R)", output)
+                self.assertIn("VIX Delta Gate: PASS (Spot: 15.2)", output)
+                self.assertIn("Basket Gate: PASS (SPY: +0.75%, QQQ: +0.85%)", output)
+                self.assertIn("[PHASE I] Active Portfolio: 1 Options | 1 Stocks", output)
+                self.assertIn("[PHASE II] Discovery: 2 Candidate Tickers", output)
+                self.assertIn("[PHASE III] Setup Grading: 1 CONFIRMED | 1 PENDING", output)
+                self.assertIn("- Confirmed: NVDA", output)
+                self.assertIn("[PHASE LOG] Subagent Executions:", output)
+                self.assertIn("market-regime-analyst    : SUCCESS", output)
+                self.assertIn("portfolio-risk-manager   : FAILED", output)
+                self.assertIn("gex-candidate-generator  : RUNNING", output)
+                self.assertIn("--- END STATUS ---", output)
+        finally:
+            shutil.rmtree(temp_dir)
+
+    def test_cmd_workflow_account_scoped_and_default_fallbacks(self):
+        """Test cmd_workflow with account-scoped position reading and fallback defaults for missing files."""
+        import tempfile
+        import shutil
+        from unittest.mock import patch, MagicMock
+        from types import SimpleNamespace
+        import gex_engine
+
+        temp_dir = tempfile.mkdtemp()
+        try:
+            perf_path = os.path.join(temp_dir, "data", "performance.json")
+            args = SimpleNamespace(
+                net_liq=100000.0,
+                account="",
+                monthly_file=None,
+                pnl_file=None,
+            )
+            with patch("gex_engine.account_performance_file", return_value=perf_path), \
+                 patch("gex_engine.get_monthly_realized_pnl", return_value=(-12000.0, -12.0, "FAIL", 5)):
+                gex_engine.cmd_update_performance(args)
+
+            data = gex_engine.load_json(perf_path, {})
+            self.assertEqual(data["account"], "")
+            self.assertEqual(data["monthly_pnl_dlr"], -12000.0)
+            self.assertEqual(data["monthly_pnl_pct"], -12.0)
+            self.assertEqual(data["drawdown_gate_status"], "FAIL")
+            self.assertEqual(data["monthly_cnt"], 5)
+            self.assertIn("last_updated", data)
+            workflow_file = os.path.join(temp_dir, "workflow_state.json")
+            regime_file = os.path.join(temp_dir, "regime.json")
+            account_options_file = os.path.join(temp_dir, "active_positions_ACC99.json")
+            candidates_file = os.path.join(temp_dir, "candidate_stocks.json")
+            analyses_file = os.path.join(temp_dir, "ticker_analyses.json")
+
+            gex_engine.save_json(account_options_file, {
+                "options_positions": {
+                    "opt_1": {"Underlier": "GOOG"},
+                    "opt_2": {"Underlier": "AMZN"},
+                },
+                "stocks_positions": {
+                    "INTC": {"Ticker": "INTC"},
+                },
+            })
+
+            args_account = SimpleNamespace(account="ACC99")
+
+            with patch("gex_engine.WORKFLOW_STATE_FILE", workflow_file), \
+                 patch("gex_engine.REGIME_FILE", regime_file), \
+                 patch("gex_engine.CANDIDATES_FILE", candidates_file), \
+                 patch("gex_engine.ANALYSES_FILE", analyses_file), \
+                 patch("gex_engine.account_positions_file", return_value=account_options_file), \
+                 patch("sys.stdout") as mock_stdout:
+                mock_stdout.isatty = MagicMock(return_value=False)
+
+                gex_engine.cmd_workflow(args_account)
+
+                output = "".join(call.args[0] for call in mock_stdout.write.call_args_list if call.args)
+
+                self.assertIn("Current Phase: Phase 0: Initialization", output)
+                self.assertIn("[PHASE I] System Authorization: BLOCKED", output)
+                self.assertIn("[PHASE I] Active Portfolio: 2 Options | 1 Stocks", output)
+                self.assertIn("[PHASE II] Discovery: 0 Candidate Tickers", output)
+                self.assertIn("[PHASE III] Setup Grading: 0 CONFIRMED | 0 PENDING", output)
+                self.assertNotIn("[PHASE LOG] Subagent Executions:", output)
+                self.assertIn("--- END STATUS ---", output)
+
+            # Test fallback when cache files do not exist
+            non_existent_dir = os.path.join(temp_dir, "nonexistent")
+            args_default = SimpleNamespace(account="")
+
+            with patch("gex_engine.WORKFLOW_STATE_FILE", os.path.join(non_existent_dir, "workflow.json")), \
+                 patch("gex_engine.REGIME_FILE", os.path.join(non_existent_dir, "regime.json")), \
+                 patch("gex_engine.OPTIONS_FILE", os.path.join(non_existent_dir, "options.json")), \
+                 patch("gex_engine.CANDIDATES_FILE", os.path.join(non_existent_dir, "candidates.json")), \
+                 patch("gex_engine.ANALYSES_FILE", os.path.join(non_existent_dir, "analyses.json")), \
+                 patch("sys.stdout") as mock_stdout:
+                mock_stdout.isatty = MagicMock(return_value=False)
+
+                gex_engine.cmd_workflow(args_default)
+
+                output_fallback = "".join(call.args[0] for call in mock_stdout.write.call_args_list if call.args)
+
+                self.assertIn("Current Phase: Phase 0: Initialization", output_fallback)
+                self.assertIn("[PHASE I] System Authorization: BLOCKED", output_fallback)
+                self.assertIn("[PHASE I] Active Portfolio: 0 Options | 0 Stocks", output_fallback)
+                self.assertIn("[PHASE II] Discovery: 0 Candidate Tickers", output_fallback)
+                self.assertIn("[PHASE III] Setup Grading: 0 CONFIRMED | 0 PENDING", output_fallback)
+                self.assertIn("--- END STATUS ---", output_fallback)
+        finally:
+            shutil.rmtree(temp_dir)
+
+
+class TestCmdStatus(unittest.TestCase):
+
+    def test_cmd_status_missing_files(self):
+        import tempfile
+        import shutil
+        from types import SimpleNamespace
+        from unittest.mock import patch, MagicMock
+        import gex_engine
+
+        temp_dir = tempfile.mkdtemp()
+        try:
+            non_existent = os.path.join(temp_dir, "nonexistent.json")
+            with patch('gex_engine.REGIME_FILE', non_existent), \
+                 patch('gex_engine.PERFORMANCE_FILE', non_existent), \
+                 patch('gex_engine.CANDIDATES_FILE', non_existent), \
+                 patch('gex_engine.OPTIONS_FILE', non_existent), \
+                 patch('gex_engine.ANALYSES_FILE', non_existent), \
+                 patch('sys.stdout') as mock_stdout:
+
+                mock_stdout.isatty = MagicMock(return_value=False)
+                args = SimpleNamespace(account="")
+                cmd_status(args)
+
+                output = "".join(call.args[0] for call in mock_stdout.write.call_args_list if call.args)
+                self.assertIn("📅 Cache Freshness Report", output)
+                self.assertIn("MISSING", output)
+                self.assertIn("📊 GEX Regime Check", output)
+                self.assertIn("SYSTEM STATUS: BLOCKED", output)
+        finally:
+            shutil.rmtree(temp_dir)
+
+    def test_cmd_status_fresh_and_blocked_states(self):
+        import tempfile
+        import shutil
+        from datetime import datetime
+        from types import SimpleNamespace
+        from unittest.mock import patch, MagicMock
+        import gex_engine
+
+        temp_dir = tempfile.mkdtemp()
+        today = datetime.today().strftime('%Y-%m-%d')
+        try:
+            regime_file = os.path.join(temp_dir, "regime.json")
+            perf_file = os.path.join(temp_dir, "performance.json")
+            cand_file = os.path.join(temp_dir, "candidates.json")
+            options_file = os.path.join(temp_dir, "active_positions.json")
+            analyses_file = os.path.join(temp_dir, "ticker_analyses.json")
+
+            gex_engine.save_json(regime_file, {
+                "basket_gate": "PASS",
+                "bull_bear_gate": "PASS",
+                "vix_delta_gate": "PASS",
+                "spy_change_pct": 0.8,
+                "qqq_change_pct": 1.2,
+                "bull_count": 10,
+                "bear_count": 2,
+                "bull_bear_ratio": 5.0,
+                "vix_spot": 14.5,
+                "vix_bearish": True,
+                "system_authorization": "ALL TRACKS OK",
+                "gates_passed": 3,
+                "last_updated": today,
+                "etf_details": {
+                    "SPY": {"Ticker": "SPY", "ETF Segment / Sector Name": "S&P 500 Broad Market", "Daily Change %": 0.8, "Classification": "BULLISH"},
+                    "XLK": {"Ticker": "XLK", "ETF Segment / Sector Name": "Technology", "Daily Change %": 1.5, "Classification": "BULLISH"}
+                }
+            })
+            gex_engine.save_json(perf_file, {
+                "monthly_pnl_dlr": 1500.0,
+                "monthly_pnl_pct": 3.0,
+                "drawdown_gate_status": "PASS",
+                "monthly_cnt": 5,
+                "last_updated": today
+            })
+            gex_engine.save_json(cand_file, {
+                "last_updated": today,
+                "candidates": [{"symbol": "AAPL"}]
+            })
+            gex_engine.save_json(options_file, {
+                "options_positions": {},
+                "stocks_positions": {}
+            })
+            gex_engine.save_json(analyses_file, {
+                "AAPL": {
+                    "analyzed_date": today,
+                    "Signal Status": "PENDING"
+                }
+            })
+
+            with patch('gex_engine.REGIME_FILE', regime_file), \
+                 patch('gex_engine.PERFORMANCE_FILE', perf_file), \
+                 patch('gex_engine.CANDIDATES_FILE', cand_file), \
+                 patch('gex_engine.OPTIONS_FILE', options_file), \
+                 patch('gex_engine.ANALYSES_FILE', analyses_file), \
+                 patch('sys.stdout') as mock_stdout:
+
+                mock_stdout.isatty = MagicMock(return_value=False)
+                args = SimpleNamespace(account="")
+                cmd_status(args)
+
+                output = "".join(call.args[0] for call in mock_stdout.write.call_args_list if call.args)
+                self.assertIn("FRESH", output)
+                self.assertIn("ALL TRACKS OK", output)
+                self.assertIn("SYSTEM STATUS: AUTHORIZED", output)
+                self.assertIn("Sector Momentum & Rotation", output)
+        finally:
+            shutil.rmtree(temp_dir)
+
+    def test_cmd_status_actionable_alerts(self):
+        import tempfile
+        import shutil
+        from datetime import datetime
+        from types import SimpleNamespace
+        from unittest.mock import patch, MagicMock
+        import gex_engine
+
+        temp_dir = tempfile.mkdtemp()
+        today = datetime.today().strftime('%Y-%m-%d')
+        try:
+            regime_file = os.path.join(temp_dir, "regime.json")
+            perf_file = os.path.join(temp_dir, "performance.json")
+            cand_file = os.path.join(temp_dir, "candidates.json")
+            options_file = os.path.join(temp_dir, "active_positions.json")
+            analyses_file = os.path.join(temp_dir, "ticker_analyses.json")
+
+            gex_engine.save_json(regime_file, {
+                "basket_gate": "PASS",
+                "bull_bear_gate": "PASS",
+                "vix_delta_gate": "PASS",
+                "spy_change_pct": 0.8,
+                "qqq_change_pct": 1.2,
+                "bull_count": 10,
+                "bear_count": 2,
+                "bull_bear_ratio": 5.0,
+                "vix_spot": 14.5,
+                "vix_bearish": True,
+                "system_authorization": "ALL TRACKS OK",
+                "gates_passed": 3,
+                "hyg_change_pct": -0.40,  # Credit divergence (< -0.30% with positive SPY/QQQ)
+                "last_updated": today
+            })
+            gex_engine.save_json(perf_file, {"last_updated": today})
+            gex_engine.save_json(cand_file, {"last_updated": today, "candidates": []})
+
+            # Active option and stock triggers
+            gex_engine.save_json(options_file, {
+                "options_positions": {
+                    "opt1": {
+                        "Underlier": "NVDA",
+                        "Purchase Premium": 5.0,
+                        "Mark Price": 10.0,
+                        "Strike": 120.0,
+                        "Expiration": "2026-08-20",
+                        "Entry Date": "2026-07-01",
+                        "Stalling Days": 0
+                    }
+                },
+                "stocks_positions": {
+                    "TSLA": {
+                        "Shares": 10,
+                        "Average Buy Price": 200.0,
+                        "Current Price": 180.0
+                    }
+                }
+            })
+            gex_engine.save_json(analyses_file, {
+                "NVDA": {
+                    "Spot": 130.0,
+                    "+GEX": 125.0,  # Spot 130 >= +GEX 125 -> T1 Target Met
+                    "pTrans": 115.0,
+                    "nTrans": 110.0,
+                    "analyzed_date": today,
+                    "Signal Status": "CONFIRMED (11/11)"
+                },
+                "TSLA": {
+                    "Spot": 180.0,
+                    "+GEX": 220.0,
+                    "pTrans": 195.0,
+                    "nTrans": 190.0,  # Spot 180 < nTrans 190 -> Structural Stop Triggered
+                    "analyzed_date": today,
+                    "Signal Status": "BLOCKED"
+                },
+                "AMD": {
+                    "Spot": 150.0,
+                    "Grade": 11,
+                    "analyzed_date": today,
+                    "Signal Status": "CONFIRMED (11/11)"
+                }
+            })
+
+            with patch('gex_engine.REGIME_FILE', regime_file), \
+                 patch('gex_engine.PERFORMANCE_FILE', perf_file), \
+                 patch('gex_engine.CANDIDATES_FILE', cand_file), \
+                 patch('gex_engine.OPTIONS_FILE', options_file), \
+                 patch('gex_engine.ANALYSES_FILE', analyses_file), \
+                 patch('sys.stdout') as mock_stdout:
+
+                mock_stdout.isatty = MagicMock(return_value=False)
+                args = SimpleNamespace(account="")
+                cmd_status(args)
+
+                output = "".join(call.args[0] for call in mock_stdout.write.call_args_list if call.args)
+                self.assertIn("CREDIT DIVERGENCE DETECTED", output)
+                self.assertIn("Central Command Actionable Alerts Summary", output)
+                self.assertIn("TRIGGERED SYSTEMATIC EXITS DETECTED", output)
+                self.assertIn("NVDA (Option:", output)
+                self.assertIn("TSLA (Stock:", output)
+                self.assertIn("CONFIRMED SETUPS READY FOR ENTRY", output)
+                self.assertIn("AMD", output)
+        finally:
+            shutil.rmtree(temp_dir)
+
+    def test_cmd_status_account_scoping(self):
+        import tempfile
+        import shutil
+        from datetime import datetime
+        from types import SimpleNamespace
+        from unittest.mock import patch, MagicMock
+        import gex_engine
+
+        temp_dir = tempfile.mkdtemp()
+        today = datetime.today().strftime('%Y-%m-%d')
+        account = "ACC123"
+        try:
+            regime_file = os.path.join(temp_dir, "regime.json")
+            perf_file = os.path.join(temp_dir, f"performance_{account}.json")
+            cand_file = os.path.join(temp_dir, "candidates.json")
+            options_file = os.path.join(temp_dir, f"active_positions_{account}.json")
+            analyses_file = os.path.join(temp_dir, "ticker_analyses.json")
+
+            gex_engine.save_json(regime_file, {"last_updated": today})
+            gex_engine.save_json(perf_file, {"last_updated": today})
+            gex_engine.save_json(cand_file, {"last_updated": today})
+            gex_engine.save_json(options_file, {"options_positions": {}, "stocks_positions": {}})
+            gex_engine.save_json(analyses_file, {})
+
+            with patch('gex_engine.REGIME_FILE', regime_file), \
+                 patch('gex_engine.PERFORMANCE_FILE', perf_file), \
+                 patch('gex_engine.CANDIDATES_FILE', cand_file), \
+                 patch('gex_engine.OPTIONS_FILE', options_file), \
+                 patch('gex_engine.ANALYSES_FILE', analyses_file), \
+                 patch('gex_engine.account_performance_file', return_value=perf_file), \
+                 patch('gex_engine.account_positions_file', return_value=options_file), \
+                 patch('sys.stdout') as mock_stdout:
+
+                mock_stdout.isatty = MagicMock(return_value=False)
+                args = SimpleNamespace(account=account)
+                cmd_status(args)
+
+                output = "".join(call.args[0] for call in mock_stdout.write.call_args_list if call.args)
+                self.assertIn("Cache Freshness Report", output)
+                self.assertIn("FRESH", output)
+        finally:
+            shutil.rmtree(temp_dir)
+
+
+    def test_cmd_analyze_explicit_args_confirmed(self):
+        """Test cmd_analyze when explicit CLI arguments result in a CONFIRMED setup."""
+        import tempfile
+        from unittest.mock import patch, MagicMock
+        from types import SimpleNamespace
+        import gex_engine
+
+        with tempfile.NamedTemporaryFile(suffix=".json", delete=False) as tmp_analyses:
+            analyses_path = tmp_analyses.name
+
+        try:
+            gex_engine.save_json(analyses_path, {})
+
+            args = SimpleNamespace(
+                symbol="AAPL",
+                effective_session_date="2026-08-11",
+                spot=290.0,
+                ptrans=285.0,
+                ntrans=280.0,
+                gex=310.0,
+                cotmp=275.0,
+                db_change=0.60,
+                spike_crash=False,
+                inst_file=None,
+                quote_file=None,
+                hist_file=None,
+                earnings_date=None,
+                net_liq=50000.0,
+                target_delta=0.45,
+                min_dte=30,
+                max_dte=45,
+                rule1=None, rule2=None, rule3=None, rule4=None, rule5=None,
+                rule6=None, rule7=None, rule8=None, rule9=None, rule10=None, rule11=None
+            )
+
+            with patch('gex_engine.ANALYSES_FILE', analyses_path), \
+                 patch('sys.stdout') as mock_stdout:
+                mock_stdout.isatty = MagicMock(return_value=False)
+                gex_engine.cmd_analyze(args)
+
+            analyses = gex_engine.load_json(analyses_path, {})
+            self.assertIn("AAPL", analyses)
+            record = analyses["AAPL"]
+            self.assertEqual(record["Ticker"], "AAPL")
+            self.assertEqual(record["Spot"], 290.0)
+            self.assertEqual(record["Grade"], 11)
+            self.assertTrue(record["Signal Status"].startswith("CONFIRMED"))
+            self.assertEqual(record["analyzed_date"], "2026-08-11")
+            self.assertEqual(record["db_change"], 0.60)
+            self.assertGreater(record["COTMP Cushion"], 2.0)
+            self.assertGreaterEqual(record["Risk/Reward"], 2.0)
+        finally:
+            if os.path.exists(analyses_path):
+                os.remove(analyses_path)
+
+    def test_cmd_analyze_pending_and_blocked(self):
+        """Test cmd_analyze classification for PENDING and BLOCKED signal status branches."""
+        import tempfile
+        from unittest.mock import patch, MagicMock
+        from types import SimpleNamespace
+        import gex_engine
+
+        with tempfile.NamedTemporaryFile(suffix=".json", delete=False) as tmp_analyses:
+            analyses_path = tmp_analyses.name
+
+        try:
+            # 1. PENDING (watchdog) setup: spot is below pTrans (285.0) but above watchdog threshold (285.0 * 0.995 = 283.575)
+            gex_engine.save_json(analyses_path, {})
+            args_pending = SimpleNamespace(
+                symbol="AAPL",
+                effective_session_date="2026-08-11",
+                spot=284.0,
+                ptrans=285.0,
+                ntrans=280.0,
+                gex=310.0,
+                cotmp=275.0,
+                db_change=0.60,
+                spike_crash=False,
+                inst_file=None, quote_file=None, hist_file=None, earnings_date=None, net_liq=50000.0,
+                rule1=None, rule2=None, rule3=None, rule4=None, rule5=None,
+                rule6=None, rule7=None, rule8=None, rule9=None, rule10=None, rule11=None
+            )
+
+            with patch('gex_engine.ANALYSES_FILE', analyses_path), patch('sys.stdout'):
+                gex_engine.cmd_analyze(args_pending)
+
+            record = gex_engine.load_json(analyses_path, {})["AAPL"]
+            self.assertTrue(record["Signal Status"].startswith("PENDING (watchdog)"))
+
+            # 2. BLOCKED setup due to Grade <= 8
+            args_low_grade = SimpleNamespace(
+                symbol="AAPL",
+                effective_session_date="2026-08-11",
+                spot=290.0,
+                ptrans=285.0,
+                ntrans=280.0,
+                gex=310.0,
+                cotmp=275.0,
+                db_change=0.60,
+                spike_crash=False,
+                inst_file=None, quote_file=None, hist_file=None, earnings_date=None, net_liq=50000.0,
+                rule1=False, rule2=False, rule7=False, rule3=None, rule4=None, rule5=None,
+                rule6=None, rule8=None, rule9=None, rule10=None, rule11=None
+            )
+
+            with patch('gex_engine.ANALYSES_FILE', analyses_path), patch('sys.stdout'):
+                gex_engine.cmd_analyze(args_low_grade)
+
+            record = gex_engine.load_json(analyses_path, {})["AAPL"]
+            self.assertTrue(record["Signal Status"].startswith("BLOCKED"))
+            self.assertIn("Grade <= 8", record["Signal Status"])
+
+            # 3. BLOCKED setup due to db_change < threshold
+            args_low_db = SimpleNamespace(
+                symbol="AAPL",
+                effective_session_date="2026-08-11",
+                spot=290.0,
+                ptrans=285.0,
+                ntrans=280.0,
+                gex=310.0,
+                cotmp=275.0,
+                db_change=0.10, # < 0.50
+                spike_crash=False,
+                inst_file=None, quote_file=None, hist_file=None, earnings_date=None, net_liq=50000.0,
+                rule1=None, rule2=None, rule3=None, rule4=None, rule5=None,
+                rule6=None, rule7=None, rule8=None, rule9=None, rule10=None, rule11=None
+            )
+
+            with patch('gex_engine.ANALYSES_FILE', analyses_path), patch('sys.stdout'):
+                gex_engine.cmd_analyze(args_low_db)
+
+            record = gex_engine.load_json(analyses_path, {})["AAPL"]
+            self.assertTrue(record["Signal Status"].startswith("BLOCKED"))
+            self.assertIn("db_change", record["Signal Status"])
+
+            # 4. BLOCKED setup due to Risk/Reward < 2.0
+            args_low_rr = SimpleNamespace(
+                symbol="AAPL",
+                effective_session_date="2026-08-11",
+                spot=290.0,
+                ptrans=285.0,
+                ntrans=280.0,
+                gex=292.0, # reward = 2.0, risk = 5.0 -> R/R = 0.40
+                cotmp=275.0,
+                db_change=0.60,
+                spike_crash=False,
+                inst_file=None, quote_file=None, hist_file=None, earnings_date=None, net_liq=50000.0,
+                rule1=None, rule2=None, rule3=None, rule4=None, rule5=None,
+                rule6=None, rule7=None, rule8=None, rule9=None, rule10=None, rule11=None
+            )
+
+            with patch('gex_engine.ANALYSES_FILE', analyses_path), patch('sys.stdout'):
+                gex_engine.cmd_analyze(args_low_rr)
+
+            record = gex_engine.load_json(analyses_path, {})["AAPL"]
+            self.assertTrue(record["Signal Status"].startswith("BLOCKED"))
+            self.assertIn("Risk/Reward ratio", record["Signal Status"])
+        finally:
+            if os.path.exists(analyses_path):
+                os.remove(analyses_path)
+
+
+    def test_cmd_analyze_with_option_files_derivation(self):
+        """Test cmd_analyze auto-derivation of levels and best option selection using option data files."""
+        import tempfile
+        import shutil
+        from unittest.mock import patch, MagicMock
+        from types import SimpleNamespace
+        import gex_engine
+
+        temp_dir = tempfile.mkdtemp()
+        try:
+            analyses_path = os.path.join(temp_dir, "ticker_analyses.json")
+            inst_path = os.path.join(temp_dir, "test_instruments.json")
+            quote_path = os.path.join(temp_dir, "test_quotes.json")
+            hist_path = os.path.join(temp_dir, "test_historicals.json")
+
+            gex_engine.save_json(analyses_path, {})
+            gex_engine.save_json(inst_path, {
+                "instruments": [
+                    {"id": "put1", "strike_price": "90.0000", "type": "put"},
+                    {"id": "put2", "strike_price": "95.0000", "type": "put"},
+                    {"id": "call1", "strike_price": "105.0000", "type": "call", "expiration_date": "2026-08-08"},
+                    {"id": "call2", "strike_price": "115.0000", "type": "call", "expiration_date": "2026-08-08"}
+                ]
+            })
+            gex_engine.save_json(quote_path, {
+                "results": [
+                    {"quote": {"instrument_id": "put1", "open_interest": 2000, "gamma": "0.02"}},
+                    {"quote": {"instrument_id": "put2", "open_interest": 4000, "gamma": "0.02"}},
+                    {"quote": {"instrument_id": "call1", "bid_price": "2.40", "ask_price": "2.50", "mark_price": "2.45", "open_interest": 3000, "volume": 100, "delta": "0.45", "gamma": "0.02"}},
+                    {"quote": {"instrument_id": "call2", "bid_price": "1.00", "ask_price": "1.10", "mark_price": "1.05", "open_interest": 8000, "volume": 50, "delta": "0.25", "gamma": "0.01"}}
+                ]
+            })
+            bars = [{"begins_at": f"2026-06-{i:02d}T00:00:00Z", "close_price": str(100.0 + (i % 2) * 0.1)} for i in range(1, 13)]
+            gex_engine.save_json(hist_path, {"results": [{"symbol": "DERIV", "bars": bars}]})
+
+            args = SimpleNamespace(
+                symbol="DERIV",
+                effective_session_date="2026-08-11",
+                spot=100.0,
+                ptrans=None,
+                ntrans=None,
+                gex=None,
+                cotmp=None,
+                db_change=0.60,
+                spike_crash=False,
+                inst_file=inst_path,
+                quote_file=quote_path,
+                hist_file=hist_path,
+                earnings_date=None,
+                net_liq=50000.0,
+                target_delta=0.45,
+                min_dte=14,
+                max_dte=45,
+                rule1=None, rule2=None, rule3=None, rule4=None, rule5=None,
+                rule6=None, rule7=None, rule8=None, rule9=None, rule10=None, rule11=None
+            )
+
+            with patch('gex_engine.ANALYSES_FILE', analyses_path), \
+                 patch('sys.stdout') as mock_stdout:
+                mock_stdout.isatty = MagicMock(return_value=False)
+                gex_engine.cmd_analyze(args)
+
+            analyses = gex_engine.load_json(analyses_path, {})
+            self.assertIn("DERIV", analyses)
+            record = analyses["DERIV"]
+            self.assertEqual(record["pTrans"], 95.0)
+            self.assertEqual(record["nTrans"], 90.0)
+            self.assertEqual(record["+GEX"], 115.0)
+            self.assertTrue(record["Signal Status"].startswith("CONFIRMED"))
+        finally:
+            shutil.rmtree(temp_dir)
+
+    def test_cmd_analyze_cached_fallback_and_missing_metrics(self):
+        """Test cmd_analyze cached fallback when metrics are omitted and error handling when metrics are missing."""
+        import tempfile
+        from unittest.mock import patch, MagicMock
+        from types import SimpleNamespace
+        import gex_engine
+
+        with tempfile.NamedTemporaryFile(suffix=".json", delete=False) as tmp_analyses:
+            analyses_path = tmp_analyses.name
+
+        try:
+            # 1. Fallback to cached metrics
+            gex_engine.save_json(analyses_path, {
+                "AAPL": {
+                    "Ticker": "AAPL",
+                    "Spot": 290.0,
+                    "pTrans": 285.0,
+                    "nTrans": 280.0,
+                    "+GEX": 310.0,
+                    "COTMP": 275.0,
+                    "db_change": 0.60,
+                    "spike_crash": False
+                }
+            })
+
+            args_cached = SimpleNamespace(
+                symbol="AAPL",
+                effective_session_date="2026-08-11",
+                spot=None, ptrans=None, ntrans=None, gex=None, cotmp=None, db_change=None,
+                spike_crash=None, inst_file=None, quote_file=None, hist_file=None, earnings_date=None, net_liq=50000.0,
+                target_delta=0.45, min_dte=30, max_dte=45,
+                rule1=None, rule2=None, rule3=None, rule4=None, rule5=None,
+                rule6=None, rule7=None, rule8=None, rule9=None, rule10=None, rule11=None
+            )
+
+            with patch('gex_engine.ANALYSES_FILE', analyses_path), patch('sys.stdout'):
+                gex_engine.cmd_analyze(args_cached)
+
+            record = gex_engine.load_json(analyses_path, {})["AAPL"]
+            self.assertEqual(record["Spot"], 290.0)
+            self.assertEqual(record["pTrans"], 285.0)
+            self.assertTrue(record["Signal Status"].startswith("CONFIRMED"))
+
+            # 2. Missing metrics triggers sys.exit(1)
+            gex_engine.save_json(analyses_path, {})
+            args_missing = SimpleNamespace(
+                symbol="UNKNOWN",
+                effective_session_date="2026-08-11",
+                spot=None, ptrans=None, ntrans=None, gex=None, cotmp=None, db_change=None,
+                spike_crash=None, inst_file=None, quote_file=None, hist_file=None, earnings_date=None, net_liq=50000.0,
+                rule1=None, rule2=None, rule3=None, rule4=None, rule5=None,
+                rule6=None, rule7=None, rule8=None, rule9=None, rule10=None, rule11=None
+            )
+
+            with patch('gex_engine.ANALYSES_FILE', analyses_path), \
+                 patch('gex_engine.find_latest_underlier_spot', return_value=None), \
+                 patch('sys.stderr'), patch('sys.stdout'):
+                with self.assertRaises(SystemExit) as cm:
+                    gex_engine.cmd_analyze(args_missing)
+                self.assertEqual(cm.exception.code, 1)
+        finally:
+            if os.path.exists(analyses_path):
+                os.remove(analyses_path)
 
 
 if __name__ == '__main__':
