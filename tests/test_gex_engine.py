@@ -361,7 +361,7 @@ class TestGEXEngine(unittest.TestCase):
                         self.bears = None
                         self.vix_bearish = None
                         self.vix_spot = 15.0
-                        self.etf_file = "data/downloads/20260708/etf_quotes.json"
+                        self.etf_file = "data/downloads/20260807/etf_quotes.json"
                         
                 # We can dynamically test the parsing engine on cached data file
                 args = DummyArgs()
@@ -429,7 +429,7 @@ class TestGEXEngine(unittest.TestCase):
                         self.vix_bearish = None
                         self.vix_spot = 15.0
                         self.hyg = -0.45
-                        self.etf_file = "data/downloads/20260708/etf_quotes.json"
+                        self.etf_file = "data/downloads/20260807/etf_quotes.json"
                         
                 args = DummyArgs()
                 from gex_engine import cmd_update_regime
@@ -3260,6 +3260,13 @@ class TestGEXEngine(unittest.TestCase):
 
     def test_find_latest_historical_ohlc_various_json_structures_and_aliases(self):
         """Test find_latest_historical_ohlc parsing varied JSON layouts and column aliases."""
+        import tempfile
+        import shutil
+        from unittest.mock import patch
+        import gex_engine
+
+        temp_dir = tempfile.mkdtemp()
+        try:
             downloads_dir = os.path.join(temp_dir, "downloads")
             os.makedirs(downloads_dir, exist_ok=True)
             active_file = os.path.join(temp_dir, "active_positions.json")
@@ -3584,6 +3591,7 @@ class TestGEXEngine(unittest.TestCase):
         """Test cmd_workflow output with populated regime, state, portfolio, candidates, and analyses."""
         import tempfile
         import shutil
+        from io import StringIO
         from unittest.mock import patch, MagicMock
         from types import SimpleNamespace
         import gex_engine
