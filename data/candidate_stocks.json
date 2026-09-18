@@ -1,137 +1,73 @@
 {
-  "last_updated": "2026-09-16T01:39:21.852885Z",
+  "last_updated": "2026-09-16T23:38:11.345270Z",
   "source_scans": [
-    "GEX Momentum Candidates",
-    "High options volume and IV",
-    "Upcoming Earnings GEX"
+    "GEX Momentum Candidates 3",
+    "High options volume and IV 3",
+    "Upcoming Earnings GEX 2"
   ],
   "user_additions": [],
-  "excluded_symbols": [
-    "AMZN",
-    "HOOD",
-    "META"
-  ],
-  "total": 10,
+  "excluded_symbols": [],
+  "total": 5,
   "candidates": [
-    {
-      "symbol": "LUXE",
-      "source": "scanner",
-      "price": 7.36,
-      "chg_pct": 2.9371,
-      "iv": 0.6337542,
-      "relative_options_volume": 7.339672672479441,
-      "market_cap": 1021226363.0,
-      "rsi": null,
-      "macd_hist": null,
-      "score": 66.02
-    },
-    {
-      "symbol": "TK",
-      "source": "scanner",
-      "price": 14.93,
-      "chg_pct": 5.222,
-      "iv": null,
-      "relative_options_volume": 1.1090185298120099,
-      "market_cap": 1238202144.0,
-      "rsi": null,
-      "macd_hist": null,
-      "score": 51.5
-    },
-    {
-      "symbol": "AADX",
-      "source": "scanner",
-      "price": 12.47,
-      "chg_pct": 2.0458,
-      "iv": 0.626359698817682,
-      "relative_options_volume": 5.160337151601104,
-      "market_cap": 2008384484.0,
-      "rsi": null,
-      "macd_hist": null,
-      "score": 50.15
-    },
-    {
-      "symbol": "INTA",
-      "source": "scanner",
-      "price": 39.48,
-      "chg_pct": 5.3172,
-      "iv": null,
-      "relative_options_volume": 1.1622962933849583,
-      "market_cap": 2902832955.0,
-      "rsi": 44.03,
-      "macd_hist": -0.9869,
-      "score": 43.87
-    },
-    {
-      "symbol": "FTRE",
-      "source": "scanner",
-      "price": 20.0,
-      "chg_pct": 1.3685,
-      "iv": 0.7700127923799012,
-      "relative_options_volume": 2.806384547706774,
-      "market_cap": 1656642000.0,
-      "rsi": null,
-      "macd_hist": null,
-      "score": 38.3
-    },
-    {
-      "symbol": "CENX",
-      "source": "scanner",
-      "price": 40.56,
-      "chg_pct": 2.1405,
-      "iv": 0.6265872985068367,
-      "relative_options_volume": 2.0292198196658733,
-      "market_cap": 4112181474.0,
-      "rsi": null,
-      "macd_hist": null,
-      "score": 37.41
-    },
-    {
-      "symbol": "VMET",
-      "source": "scanner",
-      "price": 9.83,
-      "chg_pct": 3.6551,
-      "iv": null,
-      "relative_options_volume": 0.7167685637972211,
-      "market_cap": 1046054253.0,
-      "rsi": null,
-      "macd_hist": null,
-      "score": 37.14
-    },
-    {
-      "symbol": "VERA",
-      "source": "scanner",
-      "price": 34.0,
-      "chg_pct": 0.9801,
-      "iv": 0.7443267,
-      "relative_options_volume": 2.2262619885761397,
-      "market_cap": 2453035923.0,
-      "rsi": null,
-      "macd_hist": null,
-      "score": 32.49
-    },
-    {
-      "symbol": "MGY",
-      "source": "scanner",
-      "price": 28.95,
-      "chg_pct": 1.4011,
-      "iv": 0.4254474,
-      "relative_options_volume": 2.0687536024656366,
-      "market_cap": 6545072511.0,
-      "rsi": null,
-      "macd_hist": null,
-      "score": 27.99
-    },
     {
       "symbol": "WOR",
       "source": "scanner",
-      "price": 55.03,
-      "chg_pct": 1.2382,
+      "price": 58.84,
+      "chg_pct": 8.2414,
       "iv": null,
-      "relative_options_volume": 1.0230018820849323,
-      "market_cap": 2703204816.0,
+      "relative_options_volume": 2.655412020712004,
+      "market_cap": 2659659978.0,
       "rsi": null,
       "macd_hist": null,
-      "score": 16.84
+      "score": 59.94
+    },
+    {
+      "symbol": "GNRC",
+      "source": "scanner",
+      "price": 233.0,
+      "chg_pct": 33.12,
+      "iv": null,
+      "relative_options_volume": 2.623344844493204,
+      "market_cap": 10327883365.0,
+      "rsi": null,
+      "macd_hist": null,
+      "score": 59.76
+    },
+    {
+      "symbol": "TCOM",
+      "source": "scanner",
+      "price": 40.76,
+      "chg_pct": 3.8471,
+      "iv": null,
+      "relative_options_volume": 1.364023884474618,
+      "market_cap": 24985052782.0,
+      "rsi": null,
+      "macd_hist": null,
+      "score": 42.41
+    },
+    {
+      "symbol": "AIR",
+      "source": "scanner",
+      "price": 117.23,
+      "chg_pct": 1.1301,
+      "iv": null,
+      "relative_options_volume": 0.499315342814117,
+      "market_cap": 4666804732.0,
+      "rsi": null,
+      "macd_hist": null,
+      "score": 13.0
+    },
+    {
+      "symbol": "GIS",
+      "source": "scanner",
+      "price": 36.88,
+      "chg_pct": 0.8201,
+      "iv": null,
+      "relative_options_volume": 0.841619078145856,
+      "market_cap": 19556746085.0,
+      "rsi": null,
+      "macd_hist": null,
+      "score": 12.05
     }
   ]
 }
