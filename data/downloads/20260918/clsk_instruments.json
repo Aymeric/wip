@@ -1,0 +1,690 @@
+{
+  "data": {
+    "instruments": [
+      {
+        "id": "01906906-faaa-41ec-9924-4c471aff1df5",
+        "chain_id": "9dd534ba-986d-4f57-b029-dd77ebe6435d",
+        "chain_symbol": "CLSK",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-16",
+        "sellout_datetime": "2026-10-16T19:30:00+00:00",
+        "strike_price": "11.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "1427c4eb-c81b-4e69-98cf-3df9f171dfce",
+        "chain_id": "9dd534ba-986d-4f57-b029-dd77ebe6435d",
+        "chain_symbol": "CLSK",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-30",
+        "sellout_datetime": "2026-10-30T19:30:00+00:00",
+        "strike_price": "11.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "70056fc0-c311-4409-9598-b0bbb4061409",
+        "chain_id": "9dd534ba-986d-4f57-b029-dd77ebe6435d",
+        "chain_symbol": "CLSK",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-30",
+        "sellout_datetime": "2026-10-30T19:30:00+00:00",
+        "strike_price": "11.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "b285c3a8-a778-4499-be71-1eb6ea3efcfe",
+        "chain_id": "9dd534ba-986d-4f57-b029-dd77ebe6435d",
+        "chain_symbol": "CLSK",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-23",
+        "sellout_datetime": "2026-10-23T19:30:00+00:00",
+        "strike_price": "11.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "b8667227-cc33-47f5-9a62-3735717e6cbd",
+        "chain_id": "9dd534ba-986d-4f57-b029-dd77ebe6435d",
+        "chain_symbol": "CLSK",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-16",
+        "sellout_datetime": "2026-10-16T19:30:00+00:00",
+        "strike_price": "11.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "f480a7d8-69d0-4da0-a80f-f7a58771ce6a",
+        "chain_id": "9dd534ba-986d-4f57-b029-dd77ebe6435d",
+        "chain_symbol": "CLSK",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-23",
+        "sellout_datetime": "2026-10-23T19:30:00+00:00",
+        "strike_price": "11.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "3379e37c-aaa3-463c-bd13-d7c8b42eef22",
+        "chain_id": "9dd534ba-986d-4f57-b029-dd77ebe6435d",
+        "chain_symbol": "CLSK",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-30",
+        "sellout_datetime": "2026-10-30T19:30:00+00:00",
+        "strike_price": "11.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "46112d9d-277f-4d22-8b99-8810c86d2455",
+        "chain_id": "9dd534ba-986d-4f57-b029-dd77ebe6435d",
+        "chain_symbol": "CLSK",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-23",
+        "sellout_datetime": "2026-10-23T19:30:00+00:00",
+        "strike_price": "11.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "af8dc01a-c8b6-4d64-b48a-24a651d93326",
+        "chain_id": "9dd534ba-986d-4f57-b029-dd77ebe6435d",
+        "chain_symbol": "CLSK",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-23",
+        "sellout_datetime": "2026-10-23T19:30:00+00:00",
+        "strike_price": "11.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "c48cbd62-955f-4e92-94fc-7fc37235c62e",
+        "chain_id": "9dd534ba-986d-4f57-b029-dd77ebe6435d",
+        "chain_symbol": "CLSK",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-30",
+        "sellout_datetime": "2026-10-30T19:30:00+00:00",
+        "strike_price": "11.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "073cf2aa-2f29-471f-849b-b8dad3c5c723",
+        "chain_id": "9dd534ba-986d-4f57-b029-dd77ebe6435d",
+        "chain_symbol": "CLSK",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-30",
+        "sellout_datetime": "2026-10-30T19:30:00+00:00",
+        "strike_price": "12.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "2735d4d3-1211-4ee5-8623-6a6621111a7a",
+        "chain_id": "9dd534ba-986d-4f57-b029-dd77ebe6435d",
+        "chain_symbol": "CLSK",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-30",
+        "sellout_datetime": "2026-10-30T19:30:00+00:00",
+        "strike_price": "12.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "8281baf4-a008-4d03-98a9-3ddc9f5d3836",
+        "chain_id": "9dd534ba-986d-4f57-b029-dd77ebe6435d",
+        "chain_symbol": "CLSK",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-23",
+        "sellout_datetime": "2026-10-23T19:30:00+00:00",
+        "strike_price": "12.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "9250b445-868d-448d-b1b9-c5d8743d0042",
+        "chain_id": "9dd534ba-986d-4f57-b029-dd77ebe6435d",
+        "chain_symbol": "CLSK",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-16",
+        "sellout_datetime": "2026-10-16T19:30:00+00:00",
+        "strike_price": "12.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "c9023c94-d604-4ffb-8bdf-6ab1c9ffb51c",
+        "chain_id": "9dd534ba-986d-4f57-b029-dd77ebe6435d",
+        "chain_symbol": "CLSK",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-23",
+        "sellout_datetime": "2026-10-23T19:30:00+00:00",
+        "strike_price": "12.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "e41a059d-422d-425f-b3e6-d51617d6892b",
+        "chain_id": "9dd534ba-986d-4f57-b029-dd77ebe6435d",
+        "chain_symbol": "CLSK",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-16",
+        "sellout_datetime": "2026-10-16T19:30:00+00:00",
+        "strike_price": "12.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "82f8445e-a51c-4f74-bdbb-6012e4b9c4f2",
+        "chain_id": "9dd534ba-986d-4f57-b029-dd77ebe6435d",
+        "chain_symbol": "CLSK",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-23",
+        "sellout_datetime": "2026-10-23T19:30:00+00:00",
+        "strike_price": "12.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "854bdb22-9e98-4972-bd5b-9d388e02ab78",
+        "chain_id": "9dd534ba-986d-4f57-b029-dd77ebe6435d",
+        "chain_symbol": "CLSK",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-30",
+        "sellout_datetime": "2026-10-30T19:30:00+00:00",
+        "strike_price": "12.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "b7ebdfd9-7648-41a6-b272-d66030fcb6a6",
+        "chain_id": "9dd534ba-986d-4f57-b029-dd77ebe6435d",
+        "chain_symbol": "CLSK",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-23",
+        "sellout_datetime": "2026-10-23T19:30:00+00:00",
+        "strike_price": "12.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "f66dada9-ac65-4fe9-b056-daa19504e42c",
+        "chain_id": "9dd534ba-986d-4f57-b029-dd77ebe6435d",
+        "chain_symbol": "CLSK",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-30",
+        "sellout_datetime": "2026-10-30T19:30:00+00:00",
+        "strike_price": "12.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "119da01f-4d90-4247-975e-5ddfd4a53ffd",
+        "chain_id": "9dd534ba-986d-4f57-b029-dd77ebe6435d",
+        "chain_symbol": "CLSK",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-30",
+        "sellout_datetime": "2026-10-30T19:30:00+00:00",
+        "strike_price": "13.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "47142b8e-27a3-45d7-9b6b-1c9bb2ea5f08",
+        "chain_id": "9dd534ba-986d-4f57-b029-dd77ebe6435d",
+        "chain_symbol": "CLSK",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-16",
+        "sellout_datetime": "2026-10-16T19:30:00+00:00",
+        "strike_price": "13.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "51c749ee-8f73-4059-9bc4-99860382532c",
+        "chain_id": "9dd534ba-986d-4f57-b029-dd77ebe6435d",
+        "chain_symbol": "CLSK",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-23",
+        "sellout_datetime": "2026-10-23T19:30:00+00:00",
+        "strike_price": "13.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "a8751baa-86c2-44c8-a821-fe23ee90a4e0",
+        "chain_id": "9dd534ba-986d-4f57-b029-dd77ebe6435d",
+        "chain_symbol": "CLSK",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-30",
+        "sellout_datetime": "2026-10-30T19:30:00+00:00",
+        "strike_price": "13.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "b15acd55-ac22-429e-9f0e-0821bf6c26a0",
+        "chain_id": "9dd534ba-986d-4f57-b029-dd77ebe6435d",
+        "chain_symbol": "CLSK",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-23",
+        "sellout_datetime": "2026-10-23T19:30:00+00:00",
+        "strike_price": "13.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "fe92de41-54f2-4f6a-a316-54cbf3eb6151",
+        "chain_id": "9dd534ba-986d-4f57-b029-dd77ebe6435d",
+        "chain_symbol": "CLSK",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-16",
+        "sellout_datetime": "2026-10-16T19:30:00+00:00",
+        "strike_price": "13.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "392d0ec6-d391-4a30-9362-0d37524badad",
+        "chain_id": "9dd534ba-986d-4f57-b029-dd77ebe6435d",
+        "chain_symbol": "CLSK",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-30",
+        "sellout_datetime": "2026-10-30T19:30:00+00:00",
+        "strike_price": "13.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "b832c8f8-ce9b-4048-b6cc-f51e32418077",
+        "chain_id": "9dd534ba-986d-4f57-b029-dd77ebe6435d",
+        "chain_symbol": "CLSK",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-30",
+        "sellout_datetime": "2026-10-30T19:30:00+00:00",
+        "strike_price": "13.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "c310c6b3-3a55-44dd-b1ee-8506bb0713b8",
+        "chain_id": "9dd534ba-986d-4f57-b029-dd77ebe6435d",
+        "chain_symbol": "CLSK",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-23",
+        "sellout_datetime": "2026-10-23T19:30:00+00:00",
+        "strike_price": "13.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "e5c8894c-437e-4a06-a2c6-49a2f91403a4",
+        "chain_id": "9dd534ba-986d-4f57-b029-dd77ebe6435d",
+        "chain_symbol": "CLSK",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-23",
+        "sellout_datetime": "2026-10-23T19:30:00+00:00",
+        "strike_price": "13.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "014de6fa-34e6-4a20-b40f-ba6fe57df834",
+        "chain_id": "9dd534ba-986d-4f57-b029-dd77ebe6435d",
+        "chain_symbol": "CLSK",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-23",
+        "sellout_datetime": "2026-10-23T19:30:00+00:00",
+        "strike_price": "14.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "186c5c33-37d8-4fc4-b8c5-8446634f28be",
+        "chain_id": "9dd534ba-986d-4f57-b029-dd77ebe6435d",
+        "chain_symbol": "CLSK",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-23",
+        "sellout_datetime": "2026-10-23T19:30:00+00:00",
+        "strike_price": "14.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "44cc27cd-6195-4380-8134-2c98a5ba1a61",
+        "chain_id": "9dd534ba-986d-4f57-b029-dd77ebe6435d",
+        "chain_symbol": "CLSK",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-16",
+        "sellout_datetime": "2026-10-16T19:30:00+00:00",
+        "strike_price": "14.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "5a01db32-14d9-48c2-bcb4-4b949198bb98",
+        "chain_id": "9dd534ba-986d-4f57-b029-dd77ebe6435d",
+        "chain_symbol": "CLSK",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-30",
+        "sellout_datetime": "2026-10-30T19:30:00+00:00",
+        "strike_price": "14.0000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "be47cd63-0355-4bc8-8a19-e34eb153c6fa",
+        "chain_id": "9dd534ba-986d-4f57-b029-dd77ebe6435d",
+        "chain_symbol": "CLSK",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-30",
+        "sellout_datetime": "2026-10-30T19:30:00+00:00",
+        "strike_price": "14.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "ce00e981-834a-4375-aee6-cd66312c4b5c",
+        "chain_id": "9dd534ba-986d-4f57-b029-dd77ebe6435d",
+        "chain_symbol": "CLSK",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-16",
+        "sellout_datetime": "2026-10-16T19:30:00+00:00",
+        "strike_price": "14.0000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "0f05dbd9-0d09-4a2c-a488-85846a8aa561",
+        "chain_id": "9dd534ba-986d-4f57-b029-dd77ebe6435d",
+        "chain_symbol": "CLSK",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-30",
+        "sellout_datetime": "2026-10-30T19:30:00+00:00",
+        "strike_price": "14.5000",
+        "type": "call",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      },
+      {
+        "id": "7272dd98-bf41-4570-824d-7ff81902a71f",
+        "chain_id": "9dd534ba-986d-4f57-b029-dd77ebe6435d",
+        "chain_symbol": "CLSK",
+        "underlying_type": "equity",
+        "expiration_date": "2026-10-23",
+        "sellout_datetime": "2026-10-23T19:30:00+00:00",
+        "strike_price": "14.5000",
+        "type": "put",
+        "state": "active",
+        "tradability": "tradable",
+        "trade_value_multiplier": "100.0000",
+        "min_ticks": {
+          "above_tick": "0.05",
+          "below_tick": "0.01",
+          "cutoff_price": "3.00"
+        }
+      }
+    ]
+  }
+}

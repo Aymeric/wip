@@ -1746,18 +1746,24 @@ def calculate_atr(highs: Sequence[float], lows: Sequence[float], closes: Sequenc
     return atr
 
 
-def find_latest_historical_ohlc(symbol: str) -> Tuple[List[float], List[float], List[float], List[float]]:
+def find_latest_historical_ohlc(symbol: str, file_list: Optional[List[str]] = None) -> Tuple[List[float], List[float], List[float], List[float]]:
     """
     Recursively scans for historical data and returns (closes, highs, lows, opens).
+    Accepts an optional pre-listed file_list parameter to avoid repeated os.walk traversals in loops.
     """
     symbol_upper = symbol.upper()
     matching_files = []
     
-    if os.path.exists(DOWNLOADS_DIR):
-        for root, dirs, files in os.walk(DOWNLOADS_DIR):
-            for file in files:
-                if file.endswith(".json") and symbol_upper in file.upper() and "HISTORICAL" in file.upper():
-                    matching_files.append(os.path.join(root, file))
+    # Performance optimization (Bolt):
+    # Use pre-listed file_list or _get_downloads_files cache instead of redundant os.walk traversals.
+    # Use load_json to utilize _JSON_FILE_CACHE.
+    if file_list is not None:
+        matching_files = [f for f in file_list if symbol_upper in os.path.basename(f).upper() and "HISTORICAL" in os.path.basename(f).upper()]
+    elif os.path.exists(DOWNLOADS_DIR):
+        for filepath in _get_downloads_files(DOWNLOADS_DIR):
+            file = os.path.basename(filepath)
+            if file.endswith(".json") and symbol_upper in file.upper() and "HISTORICAL" in file.upper():
+                matching_files.append(filepath)
                     
     if not matching_files:
         return [], [], [], []
@@ -1766,8 +1772,7 @@ def find_latest_historical_ohlc(symbol: str) -> Tuple[List[float], List[float], 
     
     for filepath in matching_files:
         try:
-            with open(filepath, 'r') as f:
-                data = json.load(f)
+            data = load_json(filepath, {})
             
             bars = []
             if isinstance(data, dict):
@@ -3971,8 +3976,9 @@ def cmd_portfolio(args):
     )))
     
     technical_alerts = []
+    download_files = _get_downloads_files(DOWNLOADS_DIR) if os.path.exists(DOWNLOADS_DIR) else []
     for tkr in unique_tickers:
-        closes, highs, lows, opens = find_latest_historical_ohlc(tkr)
+        closes, highs, lows, opens = find_latest_historical_ohlc(tkr, file_list=download_files)
         if closes:
             res = check_technical_alerts(closes, highs, lows)
             if res.get("alerts"):

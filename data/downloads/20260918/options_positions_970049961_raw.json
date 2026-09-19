@@ -1,0 +1,41 @@
+{
+  "data": {
+    "positions": [
+      {
+        "option_id": "f5ab836f-d066-4fc3-b9ec-cd73bf036438",
+        "chain_id": "b8b7313c-05ac-429d-a26e-0ba3c93ff857",
+        "chain_symbol": "FRO",
+        "type": "long",
+        "quantity": "1.0000",
+        "average_price": "269.0000",
+        "expiration_date": "2026-10-16",
+        "trade_value_multiplier": "100.0000",
+        "intraday_average_open_price": "0.0000",
+        "intraday_quantity": "0.0000",
+        "pending_buy_quantity": "0.0000",
+        "pending_sell_quantity": "0.0000",
+        "pending_exercise_quantity": "0.0000",
+        "pending_assignment_quantity": "0.0000",
+        "pending_expiration_quantity": "0.0000"
+      },
+      {
+        "option_id": "085f8cbc-48da-49ae-a461-e05612246a38",
+        "chain_id": "7c07bfb4-6b4a-4e8b-b188-dcf8dc71da7b",
+        "chain_symbol": "SMCI",
+        "type": "long",
+        "quantity": "1.0000",
+        "average_price": "290.0000",
+        "expiration_date": "2026-10-23",
+        "trade_value_multiplier": "100.0000",
+        "intraday_average_open_price": "290.0000",
+        "intraday_quantity": "1.0000",
+        "pending_buy_quantity": "0.0000",
+        "pending_sell_quantity": "0.0000",
+        "pending_exercise_quantity": "0.0000",
+        "pending_assignment_quantity": "0.0000",
+        "pending_expiration_quantity": "0.0000",
+        "opened_at": "2026-09-17T23:14:17.906111Z"
+      }
+    ]
+  }
+}

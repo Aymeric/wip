@@ -7,6 +7,8 @@ import unittest
 import sys
 import os
 import subprocess
+from io import StringIO
+
 
 # Ensure the src directory is in the path to import gex_engine correctly
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
@@ -346,9 +348,22 @@ class TestGEXEngine(unittest.TestCase):
 
     def test_etf_file_regime_integration(self):
         import tempfile
+        import json
         from unittest.mock import patch
-        with tempfile.NamedTemporaryFile(suffix=".json", delete=False) as tmp:
+        with tempfile.NamedTemporaryFile(suffix=".json", delete=False) as tmp, \
+             tempfile.NamedTemporaryFile(suffix=".json", delete=False, mode="w") as etf_tmp:
             tmp_path = tmp.name
+            etf_path = etf_tmp.name
+            json.dump({
+                "data": {
+                    "results": [
+                        {"quote": {"symbol": "SPY", "last_trade_price": "500.0", "adjusted_previous_close": "495.0", "has_traded": True}},
+                        {"quote": {"symbol": "QQQ", "last_trade_price": "400.0", "adjusted_previous_close": "395.0", "has_traded": True}},
+                        {"quote": {"symbol": "HYG", "last_trade_price": "75.0", "adjusted_previous_close": "76.0", "has_traded": True}},
+                    ]
+                }
+            }, etf_tmp)
+            etf_tmp.flush()
         try:
             import gex_engine
             with patch('gex_engine.REGIME_FILE', tmp_path):
@@ -361,7 +376,7 @@ class TestGEXEngine(unittest.TestCase):
                         self.bears = None
                         self.vix_bearish = None
                         self.vix_spot = 15.0
-                        self.etf_file = "data/downloads/20260807/etf_quotes.json"
+                        self.etf_file = etf_path
                         
                 # We can dynamically test the parsing engine on cached data file
                 args = DummyArgs()
@@ -371,6 +386,8 @@ class TestGEXEngine(unittest.TestCase):
         finally:
             if os.path.exists(tmp_path):
                 os.remove(tmp_path)
+            if os.path.exists(etf_path):
+                os.remove(etf_path)
 
     def test_regime_update_does_not_write_performance_cache(self):
         import tempfile
@@ -414,9 +431,22 @@ class TestGEXEngine(unittest.TestCase):
 
     def test_hyg_credit_divergence_integration(self):
         import tempfile
+        import json
         from unittest.mock import patch
-        with tempfile.NamedTemporaryFile(suffix=".json", delete=False) as tmp:
+        with tempfile.NamedTemporaryFile(suffix=".json", delete=False) as tmp, \
+             tempfile.NamedTemporaryFile(suffix=".json", delete=False, mode="w") as etf_tmp:
             tmp_path = tmp.name
+            etf_path = etf_tmp.name
+            json.dump({
+                "data": {
+                    "results": [
+                        {"quote": {"symbol": "SPY", "last_trade_price": "500.0", "adjusted_previous_close": "495.0", "has_traded": True}},
+                        {"quote": {"symbol": "QQQ", "last_trade_price": "400.0", "adjusted_previous_close": "395.0", "has_traded": True}},
+                        {"quote": {"symbol": "HYG", "last_trade_price": "75.0", "adjusted_previous_close": "76.0", "has_traded": True}},
+                    ]
+                }
+            }, etf_tmp)
+            etf_tmp.flush()
         try:
             import gex_engine
             with patch('gex_engine.REGIME_FILE', tmp_path):
@@ -429,7 +459,7 @@ class TestGEXEngine(unittest.TestCase):
                         self.vix_bearish = None
                         self.vix_spot = 15.0
                         self.hyg = -0.45
-                        self.etf_file = "data/downloads/20260807/etf_quotes.json"
+                        self.etf_file = etf_path
                         
                 args = DummyArgs()
                 from gex_engine import cmd_update_regime
@@ -437,6 +467,8 @@ class TestGEXEngine(unittest.TestCase):
         finally:
             if os.path.exists(tmp_path):
                 os.remove(tmp_path)
+            if os.path.exists(etf_path):
+                os.remove(etf_path)
 
     def test_derive_gex_profile_standard(self):
         # Setup realistic raw options instruments and quotes payloads
@@ -3231,35 +3263,8 @@ class TestGEXEngine(unittest.TestCase):
         finally:
             shutil.rmtree(temp_dir)
 
-    def test_find_latest_historical_ohlc_empty_or_missing_dir(self):
-        """Test find_latest_historical_ohlc when DOWNLOADS_DIR does not exist or has no matching files."""
     def test_extract_col_case_insensitive_and_null_handling(self):
         """Test _extract_col logic via cmd_update_candidates column parsing."""
-        import tempfile
-        import shutil
-        from unittest.mock import patch
-        import gex_engine
-
-        temp_dir = tempfile.mkdtemp()
-        try:
-            non_existent_dir = os.path.join(temp_dir, "non_existent")
-            with patch("gex_engine.DOWNLOADS_DIR", non_existent_dir):
-                closes, highs, lows, opens = find_latest_historical_ohlc("AAPL")
-                self.assertEqual((closes, highs, lows, opens), ([], [], [], []))
-
-            downloads_dir = os.path.join(temp_dir, "downloads")
-            os.makedirs(downloads_dir, exist_ok=True)
-            # Add a file that does not match historical pattern
-            gex_engine.save_json(os.path.join(downloads_dir, "unrelated_scan.json"), {"data": []})
-
-            with patch("gex_engine.DOWNLOADS_DIR", downloads_dir):
-                closes, highs, lows, opens = find_latest_historical_ohlc("AAPL")
-                self.assertEqual((closes, highs, lows, opens), ([], [], [], []))
-        finally:
-            shutil.rmtree(temp_dir)
-
-    def test_find_latest_historical_ohlc_various_json_structures_and_aliases(self):
-        """Test find_latest_historical_ohlc parsing varied JSON layouts and column aliases."""
         import tempfile
         import shutil
         from unittest.mock import patch
@@ -3329,9 +3334,33 @@ class TestGEXEngine(unittest.TestCase):
         finally:
             shutil.rmtree(temp_dir)
 
+    def test_find_latest_historical_ohlc_empty_or_missing_dir(self):
+        """Test find_latest_historical_ohlc when DOWNLOADS_DIR does not exist or has no matching files."""
+        import tempfile
+        import shutil
+        from unittest.mock import patch
+        import gex_engine
 
-    def test_find_latest_technical_indicators(self):
-        """Test find_latest_technical_indicators under various file structures and edge cases."""
+        temp_dir = tempfile.mkdtemp()
+        try:
+            non_existent_dir = os.path.join(temp_dir, "non_existent")
+            with patch("gex_engine.DOWNLOADS_DIR", non_existent_dir):
+                closes, highs, lows, opens = find_latest_historical_ohlc("AAPL")
+                self.assertEqual((closes, highs, lows, opens), ([], [], [], []))
+
+            downloads_dir = os.path.join(temp_dir, "downloads")
+            os.makedirs(downloads_dir, exist_ok=True)
+            # Add a file that does not match historical pattern
+            gex_engine.save_json(os.path.join(downloads_dir, "unrelated_scan.json"), {"data": []})
+
+            with patch("gex_engine.DOWNLOADS_DIR", downloads_dir):
+                closes, highs, lows, opens = find_latest_historical_ohlc("AAPL")
+                self.assertEqual((closes, highs, lows, opens), ([], [], [], []))
+        finally:
+            shutil.rmtree(temp_dir)
+
+    def test_find_latest_historical_ohlc_various_json_structures_and_aliases(self):
+        """Test find_latest_historical_ohlc parsing varied JSON layouts and column aliases."""
         import tempfile
         import shutil
         from unittest.mock import patch
@@ -3450,6 +3479,19 @@ class TestGEXEngine(unittest.TestCase):
                 self.assertEqual(highs, [177.0, 185.0])
                 self.assertEqual(lows, [172.0, 178.0])
                 self.assertEqual(opens, [173.0, 179.0])
+        finally:
+            shutil.rmtree(temp_dir)
+
+    def test_find_latest_technical_indicators(self):
+        """Test find_latest_technical_indicators under various file structures and edge cases."""
+        import tempfile
+        import shutil
+        from unittest.mock import patch
+        import gex_engine
+
+        temp_dir = tempfile.mkdtemp()
+        try:
+            downloads_dir = os.path.join(temp_dir, "downloads")
 
             # 1. Non-existent DOWNLOADS_DIR -> (None, None)
             with patch("gex_engine.DOWNLOADS_DIR", os.path.join(temp_dir, "nonexistent")):
@@ -3591,7 +3633,6 @@ class TestGEXEngine(unittest.TestCase):
         """Test cmd_workflow output with populated regime, state, portfolio, candidates, and analyses."""
         import tempfile
         import shutil
-        from io import StringIO
         from unittest.mock import patch, MagicMock
         from types import SimpleNamespace
         import gex_engine
