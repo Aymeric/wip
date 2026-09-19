@@ -5152,10 +5152,6 @@ def cmd_update_candidates(args):
     print("  " + "-" * 138)
     if len(candidate_list) > top_limit:
         print(f"  * Showing top {top_limit} sorted by score and relative options volume out of {len(candidate_list)} candidates total.")
-        print(f"  {ticker_fmt} | {price:<6} | {change_fmt} | {rsi:<6} | {macd_hist:<9} | {iv:<12} | {rel_opt_vol:<12} | {gex_grade_str} | {gex_status_str} | {mcap}")
-    print("  " + "-" * 138)
-    if len(candidate_list) > 10:
-        print(f"  * Showing top 10 sorted by relative options volume out of {len(candidate_list)} candidates total.")
 
 
 def cmd_update_sentiment(args):
