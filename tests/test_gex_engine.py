@@ -4548,6 +4548,65 @@ class TestCmdStatus(unittest.TestCase):
             if os.path.exists(analyses_path):
                 os.remove(analyses_path)
 
+    def test_cmd_update_candidates_table_formatting(self):
+        import tempfile
+        import shutil
+        import io
+        from unittest.mock import patch
+        import gex_engine
+
+        temp_dir = tempfile.mkdtemp()
+        try:
+            downloads_dir = os.path.join(temp_dir, "downloads")
+            os.makedirs(downloads_dir)
+            data_dir = os.path.join(temp_dir, "data")
+            os.makedirs(data_dir)
+
+            candidates_path = os.path.join(data_dir, "candidate_stocks.json")
+
+            scan_path = os.path.join(downloads_dir, "test_scan.json")
+            gex_engine.save_json(scan_path, {
+                "data": {
+                    "result": {
+                        "scan_id": "test-id",
+                        "scan_title": "Test Momentum Scan",
+                        "results": [
+                            {"ticker": f"TICK{i}", "columns": {"Last": "50.0", "Volume": "500000", "% Change": f"0.0{i}", "Market cap": "2000000000"}}
+                            for i in range(1, 6)
+                        ]
+                    }
+                }
+            })
+
+            class Args:
+                min_price = 5.0
+                max_price = 1000.0
+                min_volume = 200000
+                min_change = 0.01
+                min_market_cap = 1000000000
+                exclude_active = False
+                top = 2
+                date = None
+
+            captured_output = io.StringIO()
+            with patch("gex_engine.DOWNLOADS_DIR", downloads_dir), \
+                 patch("gex_engine.CANDIDATES_FILE", candidates_path), \
+                 patch("gex_engine.REPOSITORY_ROOT", temp_dir), \
+                 patch("sys.stdout", captured_output):
+                gex_engine.cmd_update_candidates(Args())
+
+            output = captured_output.getvalue()
+            # Ensure table title is present
+            self.assertIn("Top Screened GEX Candidates", output)
+            # Ensure top footnote is printed
+            self.assertIn("Showing top 2 sorted by score", output)
+            # Verify border line count at table bottom is clean (1 border before footnote, not consecutive)
+            border_line = "  " + "-" * 138
+            self.assertNotIn(f"{border_line}\n{border_line}", output)
+            self.assertNotIn("Showing top 10 sorted by relative options volume", output)
+        finally:
+            shutil.rmtree(temp_dir)
+
 
 if __name__ == '__main__':
     unittest.main()
