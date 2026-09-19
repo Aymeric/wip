@@ -1,7 +1,7 @@
 {
-  "last_updated": "2026-09-18T19:45:40.382734+00:00",
+  "last_updated": "2026-09-18T20:08:22.729975Z",
   "source": "Robinhood Options Watchlist & GEX Scanners",
-  "total": 4,
+  "total": 5,
   "candidates": [
     {
       "symbol": "COIN",
@@ -78,6 +78,25 @@
       "volume": 7,
       "iv": 1.724,
       "source": "options_watchlist"
+    },
+    {
+      "symbol": "AMD",
+      "name": "AMD 2026-10-16 450.0 Put",
+      "option_id": "5149b589-d89a-41a6-90da-77525c97629d",
+      "strike": 450.0,
+      "expiration_date": "2026-10-16",
+      "dte": 28,
+      "delta": -0.0639,
+      "gamma": 0.00145,
+      "theta": -0.1871,
+      "bid": 2.45,
+      "ask": 2.61,
+      "mark": 2.53,
+      "spread_pct": 0.0653,
+      "open_interest": 6230,
+      "volume": 843,
+      "iv": 0.5525,
+      "source": "options_watchlist_user_request"
     }
   ]
 }

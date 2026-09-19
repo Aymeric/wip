@@ -1,115 +1,115 @@
 {
-  "basket_gate": "FAIL",
+  "basket_gate": "PASS",
   "bull_bear_gate": "FAIL",
-  "vix_spot": 15.01,
+  "vix_spot": 14.81,
   "vix_bearish": true,
   "vix_delta_gate": "PASS",
-  "system_authorization": "BLOCKED",
-  "gates_passed": 1,
+  "system_authorization": "TRACK 1 OK",
+  "gates_passed": 2,
   "etf_details": {
     "SPY": {
       "Ticker": "SPY",
       "ETF Segment / Sector Name": "S&P 500 Broad Market",
-      "Price": 760.81,
-      "Daily Change %": 0.013,
-      "Classification": "FLAT"
+      "Price": 762.99,
+      "Daily Change %": 0.2996,
+      "Classification": "BULLISH"
     },
     "QQQ": {
       "Ticker": "QQQ",
       "ETF Segment / Sector Name": "Nasdaq 100 Growth Index",
-      "Price": 718.98,
-      "Daily Change %": 0.2873,
+      "Price": 722.68,
+      "Daily Change %": 0.8034,
       "Classification": "BULLISH"
     },
     "IWM": {
       "Ticker": "IWM",
       "ETF Segment / Sector Name": "Russell 2000 Small Caps",
-      "Price": 283.55,
-      "Daily Change %": -0.6587,
+      "Price": 284.06,
+      "Daily Change %": -0.48,
       "Classification": "BEARISH"
     },
     "DIA": {
       "Ticker": "DIA",
       "ETF Segment / Sector Name": "Dow Jones Industrials Value",
-      "Price": 516.01,
-      "Daily Change %": -0.2219,
+      "Price": 516.47,
+      "Daily Change %": -0.1328,
       "Classification": "BEARISH"
     },
     "XLK": {
       "Ticker": "XLK",
       "ETF Segment / Sector Name": "Technology",
-      "Price": 188.48,
-      "Daily Change %": 0.2233,
+      "Price": 189.85,
+      "Daily Change %": 0.9518,
       "Classification": "BULLISH"
     },
     "XLF": {
       "Ticker": "XLF",
       "ETF Segment / Sector Name": "Financials",
-      "Price": 55.9,
-      "Daily Change %": 0.0358,
-      "Classification": "FLAT"
+      "Price": 55.94,
+      "Daily Change %": 0.1074,
+      "Classification": "BULLISH"
     },
     "XLV": {
       "Ticker": "XLV",
       "ETF Segment / Sector Name": "Health Care",
-      "Price": 168.47,
-      "Daily Change %": -0.2044,
+      "Price": 168.4,
+      "Daily Change %": -0.2429,
       "Classification": "BEARISH"
     },
     "XLY": {
       "Ticker": "XLY",
       "ETF Segment / Sector Name": "Consumer Discretionary",
-      "Price": 111.13,
-      "Daily Change %": -0.2334,
+      "Price": 110.93,
+      "Daily Change %": -0.413,
       "Classification": "BEARISH"
     },
     "XLP": {
       "Ticker": "XLP",
       "ETF Segment / Sector Name": "Consumer Staples",
-      "Price": 83.02,
-      "Daily Change %": -0.5629,
+      "Price": 82.86,
+      "Daily Change %": -0.7546,
       "Classification": "BEARISH"
     },
     "XLI": {
       "Ticker": "XLI",
       "ETF Segment / Sector Name": "Industrials",
-      "Price": 169.49,
-      "Daily Change %": 0.284,
+      "Price": 170.0,
+      "Daily Change %": 0.5858,
       "Classification": "BULLISH"
     },
     "XLU": {
       "Ticker": "XLU",
       "ETF Segment / Sector Name": "Utilities",
-      "Price": 41.2,
-      "Daily Change %": -1.1753,
+      "Price": 41.17,
+      "Daily Change %": -1.2473,
       "Classification": "BEARISH"
     },
     "XLB": {
       "Ticker": "XLB",
       "ETF Segment / Sector Name": "Materials",
-      "Price": 50.02,
-      "Daily Change %": -1.3705,
+      "Price": 49.94,
+      "Daily Change %": -1.5184,
       "Classification": "BEARISH"
     },
     "XLRE": {
       "Ticker": "XLRE",
       "ETF Segment / Sector Name": "Real Estate",
-      "Price": 42.62,
-      "Daily Change %": -0.7569,
+      "Price": 42.52,
+      "Daily Change %": -0.9781,
       "Classification": "BEARISH"
     },
     "XLE": {
       "Ticker": "XLE",
       "ETF Segment / Sector Name": "Energy",
-      "Price": 64.25,
-      "Daily Change %": -0.3489,
+      "Price": 64.23,
+      "Daily Change %": -0.3877,
       "Classification": "BEARISH"
     },
     "XLC": {
       "Ticker": "XLC",
       "ETF Segment / Sector Name": "Communication Services",
-      "Price": 111.27,
-      "Daily Change %": -0.9613,
+      "Price": 110.84,
+      "Daily Change %": -1.344,
       "Classification": "BEARISH"
     }
   },
