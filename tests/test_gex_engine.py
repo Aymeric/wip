@@ -188,6 +188,27 @@ class TestGEXEngine(unittest.TestCase):
             if os.path.exists(tmp_path):
                 os.remove(tmp_path)
 
+    def test_load_json_copy_data_behavior(self):
+        import tempfile
+        import gex_engine
+
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as tmp:
+            tmp_path = tmp.name
+            tmp.write('{"items": [1, 2, 3]}')
+        try:
+            # Default copy_data=False returns zero-copy cached reference
+            data1 = gex_engine.load_json(tmp_path, {}, copy_data=False)
+            data2 = gex_engine.load_json(tmp_path, {}, copy_data=False)
+            self.assertIs(data1, data2)
+
+            # Explicit copy_data=True returns a deepcopy
+            data3 = gex_engine.load_json(tmp_path, {}, copy_data=True)
+            self.assertIsNot(data1, data3)
+            self.assertEqual(data1, data3)
+        finally:
+            if os.path.exists(tmp_path):
+                os.remove(tmp_path)
+
     def test_compute_regime_gates(self):
         # Case 1: All Tracks Passed (All Gates PASS)
         # SPY change > 0.5%, bull/bear ratio > 3.0, VIX bearish = True
