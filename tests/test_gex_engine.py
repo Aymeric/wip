@@ -420,6 +420,7 @@ class TestGEXEngine(unittest.TestCase):
         import gex_engine
 
         self.assertTrue(gex_engine.account_performance_file("5QR24141").endswith("performance_5QR24141.json"))
+        self.assertTrue(gex_engine.account_performance_file().endswith("performance.json"))
 
     def test_account_position_paths_are_scoped(self):
         import gex_engine
@@ -428,6 +429,16 @@ class TestGEXEngine(unittest.TestCase):
         self.assertTrue(gex_engine.account_closed_positions_file("5QR24141").endswith("closed_positions_5QR24141.json"))
         self.assertTrue(gex_engine.account_positions_file().endswith("active_positions.json"))
         self.assertTrue(gex_engine.account_closed_positions_file().endswith("closed_positions.json"))
+
+    def test_invalid_account_raises_value_error(self):
+        import gex_engine
+
+        with self.assertRaises(ValueError):
+            gex_engine.account_performance_file("!!!")
+        with self.assertRaises(ValueError):
+            gex_engine.account_positions_file("!!!")
+        with self.assertRaises(ValueError):
+            gex_engine.account_closed_positions_file("!!!")
 
     def test_hyg_credit_divergence_integration(self):
         import tempfile

@@ -194,7 +194,7 @@ def account_performance_file(account: str = "") -> str:
         return PERFORMANCE_FILE
     normalized_account = re.sub(r"[^A-Za-z0-9_-]", "", str(account))
     if not normalized_account:
-        return PERFORMANCE_FILE
+        raise ValueError("account must contain at least one alphanumeric character")
     return os.path.join(REPOSITORY_ROOT, f"data/performance_{normalized_account}.json")
 
 
