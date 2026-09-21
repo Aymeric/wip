@@ -1746,7 +1746,32 @@ def calculate_atr(highs: Sequence[float], lows: Sequence[float], closes: Sequenc
     return atr
 
 
-def find_latest_historical_ohlc(symbol: str, file_list: Optional[List[str]] = None) -> Tuple[List[float], List[float], List[float], List[float]]:
+def _match_file_list(
+    file_list: Sequence[Union[str, Tuple[str, str]]],
+    symbol_upper: str,
+    tag_upper: str
+) -> List[str]:
+    """
+    Filters a file list for files containing symbol_upper and tag_upper in their filename.
+    Supports either string filepaths or pre-computed (filepath, filename_upper) tuples
+    for high performance during repeated lookups in candidate loops.
+    """
+    matching_files = []
+    for item in file_list:
+        if isinstance(item, tuple):
+            filepath, filename_upper = item
+        else:
+            filepath = item
+            filename_upper = item.rsplit('/', 1)[-1].rsplit('\\', 1)[-1].upper()
+        if symbol_upper in filename_upper and tag_upper in filename_upper:
+            matching_files.append(filepath)
+    return matching_files
+
+
+def find_latest_historical_ohlc(
+    symbol: str,
+    file_list: Optional[Sequence[Union[str, Tuple[str, str]]]] = None
+) -> Tuple[List[float], List[float], List[float], List[float]]:
     """
     Recursively scans for historical data and returns (closes, highs, lows, opens).
     Accepts an optional pre-listed file_list parameter to avoid repeated os.walk traversals in loops.
@@ -1758,11 +1783,11 @@ def find_latest_historical_ohlc(symbol: str, file_list: Optional[List[str]] = No
     # Use pre-listed file_list or _get_downloads_files cache instead of redundant os.walk traversals.
     # Use load_json to utilize _JSON_FILE_CACHE.
     if file_list is not None:
-        matching_files = [f for f in file_list if symbol_upper in os.path.basename(f).upper() and "HISTORICAL" in os.path.basename(f).upper()]
+        matching_files = _match_file_list(file_list, symbol_upper, "HISTORICAL")
     elif os.path.exists(DOWNLOADS_DIR):
         for filepath in _get_downloads_files(DOWNLOADS_DIR):
-            file = os.path.basename(filepath)
-            if file.endswith(".json") and symbol_upper in file.upper() and "HISTORICAL" in file.upper():
+            file = filepath.rsplit('/', 1)[-1].rsplit('\\', 1)[-1].upper()
+            if file.endswith(".JSON") and symbol_upper in file and "HISTORICAL" in file:
                 matching_files.append(filepath)
                     
     if not matching_files:
@@ -1822,16 +1847,15 @@ def find_latest_historical_ohlc(symbol: str, file_list: Optional[List[str]] = No
 def list_download_files(downloads_dir: Optional[str] = None) -> List[str]:
     """Recursively lists all .json file paths in downloads_dir (defaults to DOWNLOADS_DIR)."""
     target_dir = downloads_dir or DOWNLOADS_DIR
-    matching_files = []
     if os.path.exists(target_dir):
-        for root, dirs, files in os.walk(target_dir):
-            for file in files:
-                if file.endswith(".json"):
-                    matching_files.append(os.path.join(root, file))
-    return matching_files
+        return [f for f in _get_downloads_files(target_dir) if f.endswith(".json")]
+    return []
 
 
-def find_latest_historical_closes(symbol: str, file_list: Optional[List[str]] = None) -> List[float]:
+def find_latest_historical_closes(
+    symbol: str,
+    file_list: Optional[Sequence[Union[str, Tuple[str, str]]]] = None
+) -> List[float]:
     """
     Scans the DOWNLOADS_DIR directory for historical daily closes files
     matching the symbol (e.g. symbol_historicals_raw.json). Returns a chronological
@@ -1842,11 +1866,11 @@ def find_latest_historical_closes(symbol: str, file_list: Optional[List[str]] = 
     matching_files = []
     
     if file_list is not None:
-        matching_files = [f for f in file_list if symbol_upper in os.path.basename(f).upper() and "HISTORICAL" in os.path.basename(f).upper()]
+        matching_files = _match_file_list(file_list, symbol_upper, "HISTORICAL")
     elif os.path.exists(DOWNLOADS_DIR):
         for filepath in _get_downloads_files(DOWNLOADS_DIR):
-            file = os.path.basename(filepath)
-            if file.endswith(".json") and symbol_upper in file.upper() and "HISTORICAL" in file.upper():
+            file = filepath.rsplit('/', 1)[-1].rsplit('\\', 1)[-1].upper()
+            if file.endswith(".JSON") and symbol_upper in file and "HISTORICAL" in file:
                 matching_files.append(filepath)
                     
     if not matching_files:
@@ -1898,7 +1922,10 @@ def find_latest_historical_closes(symbol: str, file_list: Optional[List[str]] = 
             
     return []
 
-def find_latest_technical_indicators(symbol: str, file_list: Optional[List[str]] = None) -> Tuple[Optional[float], Optional[float]]:
+def find_latest_technical_indicators(
+    symbol: str,
+    file_list: Optional[Sequence[Union[str, Tuple[str, str]]]] = None
+) -> Tuple[Optional[float], Optional[float]]:
     """
     Reads the latest RSI and MACD histogram from cached indicator downloads.
     Accepts an optional pre-listed file_list to avoid repeated os.walk directory traversals during batch processing.
@@ -1906,11 +1933,11 @@ def find_latest_technical_indicators(symbol: str, file_list: Optional[List[str]]
     symbol_upper = symbol.upper()
     matching_files = []
     if file_list is not None:
-        matching_files = [f for f in file_list if symbol_upper in os.path.basename(f).upper() and "TECHNICAL" in os.path.basename(f).upper()]
+        matching_files = _match_file_list(file_list, symbol_upper, "TECHNICAL")
     elif os.path.exists(DOWNLOADS_DIR):
         for filepath in _get_downloads_files(DOWNLOADS_DIR):
-            file = os.path.basename(filepath)
-            if file.endswith(".json") and symbol_upper in file.upper() and "TECHNICAL" in file.upper():
+            file = filepath.rsplit('/', 1)[-1].rsplit('\\', 1)[-1].upper()
+            if file.endswith(".JSON") and symbol_upper in file and "TECHNICAL" in file:
                 matching_files.append(filepath)
 
     for filepath in sorted(matching_files, reverse=True):
@@ -3974,7 +4001,8 @@ def cmd_portfolio(args):
     )))
     
     technical_alerts = []
-    download_files = _get_downloads_files(DOWNLOADS_DIR) if os.path.exists(DOWNLOADS_DIR) else []
+    raw_download_files = _get_downloads_files(DOWNLOADS_DIR) if os.path.exists(DOWNLOADS_DIR) else []
+    download_files = [(f, f.rsplit('/', 1)[-1].rsplit('\\', 1)[-1].upper()) for f in raw_download_files]
     for tkr in unique_tickers:
         closes, highs, lows, opens = find_latest_historical_ohlc(tkr, file_list=download_files)
         if closes:
@@ -4861,7 +4889,9 @@ def cmd_update_candidates(args):
     persist_new_scans()
     
     # Pre-list download directory files once for candidate indicator lookups to avoid O(N) os.walk traversals in loops
-    download_files = list_download_files(DOWNLOADS_DIR)
+    # Pre-compute (filepath, filename_upper) tuples to eliminate os.path.basename and .upper() string overhead in loops
+    raw_download_files = list_download_files(DOWNLOADS_DIR)
+    download_files = [(f, f.rsplit('/', 1)[-1].rsplit('\\', 1)[-1].upper()) for f in raw_download_files]
 
     # Identify active positions to optionally exclude if requested
     active_symbols = set(get_all_active_symbols())
@@ -5048,7 +5078,7 @@ def cmd_update_candidates(args):
     scans_processed = []
     if os.path.exists(DOWNLOADS_DIR):
         all_scan_files = []
-        for full_path in download_files:
+        for full_path in raw_download_files:
             root = os.path.dirname(full_path)
             file = os.path.basename(full_path)
             if date_filter and date_filter not in root and date_filter not in file:

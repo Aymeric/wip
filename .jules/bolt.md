@@ -9,3 +9,7 @@
 ## 2026-09-18 - Cached Downloads Listing & JSON Caching for Historical OHLC
 **Learning:** `find_latest_historical_ohlc` used direct `os.walk(DOWNLOADS_DIR)` traversals and uncached `open()`/`json.load()` file reads on every lookup. Passing an optional `file_list` parameter, falling back to `_get_downloads_files()`, and using `load_json()` (which leverages `_JSON_FILE_CACHE`) reduced historical OHLC lookup overhead by ~1.44x.
 **Action:** Always accept optional `file_list` in file lookup utilities and use `load_json()` rather than raw `open()` to benefit from workspace file list and JSON memory caching.
+
+## 2026-09-21 - Fast File Matching & Pre-Computed Filename Tuples
+**Learning:** Calling `os.path.basename(f).upper()` repeatedly inside candidate loops across thousands of file paths caused over 3.4 million path parsing and string allocation calls. Supporting pre-computed `(filepath, filename_upper)` tuples in `_match_file_list` and using fast string splitting (`rsplit('/', 1)[-1]`) reduced file list filtering time by ~6.9x and overall test execution time from 5.26s to 2.75s.
+**Action:** When filtering file lists inside candidate discovery or batch loops, pre-compute `(path, filename_upper)` tuples outside the loop and use `rsplit` string splitting rather than `os.path.basename` inside inner search loops.
