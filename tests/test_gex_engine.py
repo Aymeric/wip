@@ -420,6 +420,9 @@ class TestGEXEngine(unittest.TestCase):
         import gex_engine
 
         self.assertTrue(gex_engine.account_performance_file("5QR24141").endswith("performance_5QR24141.json"))
+        self.assertTrue(gex_engine.account_performance_file().endswith("performance.json"))
+        with self.assertRaises(ValueError):
+            gex_engine.account_performance_file("!!!")
 
     def test_account_position_paths_are_scoped(self):
         import gex_engine
