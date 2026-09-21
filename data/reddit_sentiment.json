@@ -275,27 +275,27 @@
   },
   "COIN": {
     "Ticker": "COIN",
-    "Sentiment": 0.1,
-    "Buzz": "High",
-    "Narrative": "Clarity Act legislative watch; retail mixed between fading move and calls; rangebound action",
-    "last_updated": "2026-09-18T19:43:04.480097Z",
-    "tone_score": 0.05,
-    "comments_score": 0.0,
+    "Sentiment": 0.25,
+    "Buzz": "Medium",
+    "Narrative": "Crypto correlation plays, retail assessing pullback entries",
+    "last_updated": "2026-09-21T20:28:30.381402Z",
+    "tone_score": 0.1,
+    "comments_score": 0.05,
     "position_score": 0.05,
     "volume_score": 0.05,
-    "meme_score": -0.05
+    "meme_score": 0.0
   },
   "MSTR": {
     "Ticker": "MSTR",
-    "Sentiment": 0.2,
+    "Sentiment": 0.35,
     "Buzz": "High",
-    "Narrative": "Speculative BTC proxy plays with active options trading and mixed bull/bear debate on NAV premium.",
-    "last_updated": "2026-09-18T17:10:21.006029Z",
-    "tone_score": 0.08,
-    "comments_score": 0.05,
-    "position_score": 0.05,
-    "volume_score": 0.04,
-    "meme_score": -0.02
+    "Narrative": "Leveraged Bitcoin proxy debate with active call buying and high IV awareness",
+    "last_updated": "2026-09-21T20:28:30.319138Z",
+    "tone_score": 0.1,
+    "comments_score": 0.1,
+    "position_score": 0.1,
+    "volume_score": 0.05,
+    "meme_score": 0.0
   },
   "CLSK": {
     "Ticker": "CLSK",
@@ -320,5 +320,17 @@
     "position_score": -0.05,
     "volume_score": 0.05,
     "meme_score": -0.05
+  },
+  "GRAL": {
+    "Ticker": "GRAL",
+    "Sentiment": 0.4,
+    "Buzz": "Medium",
+    "Narrative": "High-risk binary biotech play centered on Galleri cancer detection technology",
+    "last_updated": "2026-09-21T20:28:30.443743Z",
+    "tone_score": 0.15,
+    "comments_score": 0.1,
+    "position_score": 0.1,
+    "volume_score": 0.05,
+    "meme_score": 0.0
   }
 }
