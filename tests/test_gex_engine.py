@@ -4571,6 +4571,71 @@ class TestCmdStatus(unittest.TestCase):
             self.assertIn("add-position", output)
             self.assertIn("add-stock", output)
 
+    def test_portfolio_sizing_threshold_exempts_micro_accounts(self):
+        """Test cmd_portfolio exempts accounts below the sizing threshold from strict percentage caps."""
+        from types import SimpleNamespace
+        import io
+        from unittest.mock import patch
+        import gex_engine
+
+        positions = {
+            "options_positions": {
+                "opt_1": {
+                    "Underlier": "FRO",
+                    "Purchase Premium": 2.69,
+                    "Mark Price": 3.12,
+                    "Strike": 45.0,
+                    "Expiration": "2026-10-16",
+                    "Type": "call",
+                    "Days Held": 4,
+                    "Stalling Days": 0,
+                    "Target Mode": "T1",
+                    "Sizing Risk Weight (%)": 24.74,
+                    "Sector": "Technology/Beta"
+                }
+            },
+            "stocks_positions": {}
+        }
+
+        # Case 1: Account < $10,000 threshold (e.g. $1,087.23) -> Should show EXEMPT
+        mock_args_micro = SimpleNamespace(account="970049961", net_liq=1087.23, spot_overrides={}, sizing_threshold=10000.0)
+        with patch('gex_engine.load_json', return_value=positions), \
+             patch('gex_engine.find_latest_underlier_spot', return_value=49.20), \
+             patch('sys.stdout', new_callable=io.StringIO) as mock_stdout:
+            gex_engine.cmd_portfolio(mock_args_micro)
+            output = mock_stdout.getvalue()
+            self.assertIn("Single-Leg Sizing Limit (<= 3.0% of Net Liq)**: EXEMPT", output)
+            self.assertIn("Sector Sizing Cap (Tech/Beta <= 15.0% of Net Liq)**: EXEMPT", output)
+            self.assertIn("Micro-Account Allocation Note", output)
+
+        # Case 2: Account >= $10,000 threshold (e.g. $50,000) -> Should enforce standard checks
+        positions_large = {
+            "options_positions": {
+                "opt_1": {
+                    "Underlier": "FRO",
+                    "Purchase Premium": 2.69,
+                    "Mark Price": 3.12,
+                    "Strike": 45.0,
+                    "Expiration": "2026-10-16",
+                    "Type": "call",
+                    "Days Held": 4,
+                    "Stalling Days": 0,
+                    "Target Mode": "T1",
+                    "Sizing Risk Weight (%)": 0.54,
+                    "Sector": "Technology/Beta"
+                }
+            },
+            "stocks_positions": {}
+        }
+        mock_args_large = SimpleNamespace(account="5QR24141", net_liq=50000.0, spot_overrides={}, sizing_threshold=10000.0)
+        with patch('gex_engine.load_json', return_value=positions_large), \
+             patch('gex_engine.find_latest_underlier_spot', return_value=49.20), \
+             patch('sys.stdout', new_callable=io.StringIO) as mock_stdout:
+            gex_engine.cmd_portfolio(mock_args_large)
+            output = mock_stdout.getvalue()
+            self.assertIn("Single-Leg Sizing Limit (<= 3.0% of Net Liq)**: PASS", output)
+            self.assertIn("Sector Sizing Cap (Tech/Beta <= 15.0% of Net Liq)**: PASS", output)
+
 
 if __name__ == '__main__':
     unittest.main()

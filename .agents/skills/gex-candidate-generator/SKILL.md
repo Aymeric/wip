@@ -18,10 +18,11 @@ Your job is to derive the daily candidate universe for **both options contracts 
 ## Step 1: Run Robinhood Scanners (Options & Underlier Focus)
 
 1. Retrieve filter specs via `robinhood-trading/get_scanner_filter_specs` and existing scans via `robinhood-trading/get_scans`.
-2. Ensure the following scans are executed:
-   - **`"High options volume and IV"`**: Price \$5-\$1000, 30d Avg Vol $\ge 200,000$, 30d Avg Options Vol $\ge 10,000$, IV $\ge 30\%$, Market Cap $\ge \$1\text{B}$.
-   - **`"GEX Momentum Candidates"`**: Price \$5-\$1000, 30d Avg Vol $\ge 200,000$, % Change from Close $\ge +0.30\%$, Market Cap $\ge \$1\text{B}$.
-   - **`"Upcoming Earnings GEX"`**: Stocks with earnings between 0 and 7 days (used for earnings blackout screening and post-earnings GEX setups).
+2. Ensure the following scans are executed with correct decimal percentage formatting:
+   - **`"High options volume and IV"`**: Price \$5-\$1000, 30d Avg Vol $\ge 200,000$, 30d Avg Options Vol $\ge 10,000$, IV $\ge 30\%$ (`values: ["0.30"]`), Market Cap $\ge \$1\text{B}$.
+   - **`"GEX Momentum Candidates"`**: Price \$5-\$1000, 30d Avg Vol $\ge 200,000$, % Change from Close $\ge +0.30\%$ (`values: ["0.003"]`), Market Cap $\ge \$1\text{B}$.
+   - **`"Upcoming Earnings GEX"`**: Stocks with earnings between 0 and 7 days (used exclusively for post-earnings monitoring; never trade ahead of release due to Rule 7 earnings blackout).
+   - ⚠️ **Critical Scanner Percentage Convention**: Any scanner filter with `unit_type: PERCENTAGE` (`FILTER_TYPE_IMPLIED_VOLATILITY`, `FILTER_TYPE_PERCENT_CHANGE_FROM_CLOSE`, `FILTER_TYPE_HISTORICAL_VOLATILITY`, etc.) **MUST** take decimal ratios. For example, $30\%$ IV must be `["0.30"]` (passing `["30"]` screens for $3,000\%$ IV and returns 0 results), and $+0.30\%$ price change must be `["0.003"]` (passing `["0.30"]` screens for $+30.00\%$ and returns only parabolic outliers).
 3. Call `robinhood-trading/run_scan` for each scan and save the raw responses under `data/downloads/YYYYMMDD/`.
 
 ---

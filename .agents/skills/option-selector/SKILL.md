@@ -37,9 +37,12 @@ For each `CONFIRMED` setup, filter the option chain against these quantitative c
    - Verify no corporate earnings occur before contract expiration. If earnings fall within the contract's life, reject the contract.
 
 5. **Sizing & Buying Power Budget**:
-   - Total capital commitment per contract ($100 \times \text{Ask}$) must fit within the **Per-Trade Buying Power Budget** established in Phase I.
-   - Calculate maximum number of contracts allowed:
-     $$\text{Max Contracts} = \left\lfloor \frac{\text{Per-Trade Budget}}{\text{Ask Price} \times 100} \right\rfloor$$
+   - Total capital commitment per contract ($100 \times \text{Ask}$) must fit within the **Per-Trade Buying Power Budget** established in Phase I:
+     - **Accounts $\ge \$10,000$ (Standard Accounts)**:
+       $$\text{Max Contracts} = \left\lfloor \frac{\text{Per-Trade Budget}}{\text{Ask Price} \times 100} \right\rfloor$$
+     - **Accounts $< \$10,000$ (Micro-Accounts)**:
+       $$\text{Max Contracts} = 1 \quad \text{if } (\text{Ask Price} \times 100 \le \text{Available Cash Buying Power}) \text{ else } 0$$
+       (Enforces 1-contract minimum allocation; never trades with margin leverage or exceeds available cash).
 
 ---
 

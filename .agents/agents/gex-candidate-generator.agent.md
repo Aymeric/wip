@@ -12,9 +12,10 @@ Your job is to derive the daily candidate universe for **both options contracts 
 
 ### Step 1: Run Robinhood Scanners (Options & Momentum)
 - Execute scans via `robinhood-trading/run_scan`:
-  - `"High options volume and IV"` (Price \$5-\$1000, 30d Avg Vol $\ge 200\text{k}$, 30d Avg Opt Vol $\ge 10\text{k}$, IV $\ge 30\%$, Mkt Cap $\ge \$1\text{B}$)
-  - `"GEX Momentum Candidates"` (Price \$5-\$1000, 30d Avg Vol $\ge 200\text{k}$, Change $\ge +0.30\%$, Mkt Cap $\ge \$1\text{B}$)
-  - `"Upcoming Earnings GEX"` (Earnings in 0 to 7 days for blackout tracking)
+  - `"High options volume and IV"` (Price \$5-\$1000, 30d Avg Vol $\ge 200\text{k}$, 30d Avg Opt Vol $\ge 10\text{k}$, IV $\ge 30\%$ via `["0.30"]`, Mkt Cap $\ge \$1\text{B}$)
+  - `"GEX Momentum Candidates"` (Price \$5-\$1000, 30d Avg Vol $\ge 200\text{k}$, Change $\ge +0.30\%$ via `["0.003"]`, Mkt Cap $\ge \$1\text{B}$)
+  - `"Upcoming Earnings GEX"` (Earnings in 0 to 7 days for post-earnings monitoring; never enter pre-earnings under Rule 7)
+- ⚠️ **Percentage Syntax**: All percentage filters (`FILTER_TYPE_IMPLIED_VOLATILITY`, `FILTER_TYPE_PERCENT_CHANGE_FROM_CLOSE`, etc.) must use decimal ratios (`0.30` = 30%, `0.003` = 0.30%).
 - Save raw responses under `data/downloads/YYYYMMDD/`.
 
 ### Step 2: Sourcing from Options Watchlist & Curated Public Lists

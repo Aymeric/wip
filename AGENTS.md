@@ -76,10 +76,17 @@ graph TD
 
 6. **Dual Candidate Discovery, Watchlist Separation & Hygiene Pruning**:
    - **Dual Candidate Universe**: Candidate discovery must find and track both **stock underlier candidates** (`data/candidate_stocks.json`) and specific **option contract candidates** (`data/candidate_options.json`). Sourcing must prioritize options liquidity (scanners with 30d options volume $\ge 10,000$, IV $\ge 30\%$, relative options volume), inspect the dedicated Robinhood **"options watchlist"** via `robinhood-trading/get_option_watchlist`, and pre-screen viable contracts.
+   - **Scanner Percentage Formatting**: Any Robinhood scanner filter with `unit_type: PERCENTAGE` (`FILTER_TYPE_IMPLIED_VOLATILITY`, `FILTER_TYPE_PERCENT_CHANGE_FROM_CLOSE`, etc.) **MUST** use decimal ratios. For example, $30\%$ IV must be passed as `["0.30"]` (passing `["30"]` evaluates as $3,000\%$ IV and returns 0 results), and $+0.30\%$ price change must be passed as `["0.003"]` (passing `["0.30"]` evaluates as $+30.00\%$).
+   - **Rule 7 Earnings Distinction**: `"Upcoming Earnings GEX"` scans for underliers with earnings in 0–7 days. These candidates are strictly for post-earnings reaction tracking, NOT pre-earnings trade entry (which is prohibited under Rule 7's 14-day earnings blackout).
    - **Pending Stock Candidates**: Add screened and pending stock underliers to the equity watchlist (`GEX_DAILY_CANDIDATES`) via `robinhood-trading/add_to_watchlist` using `symbols`.
    - **Outdated Stock Entries Pruning**: Regularly prune outdated entries from `GEX_DAILY_CANDIDATES` via `python3 src/gex_engine.py prune-candidates` and `robinhood-trading/remove_from_watchlist`. Any ticker that becomes an active portfolio holding, is graded `REJECTED`, or falls out of the screened candidate universe must be removed after user confirmation.
    - **Option Contract Candidates**: Add screened and isolated option contract candidates separately to the dedicated Robinhood **"options watchlist"** via `robinhood-trading/add_option_to_watchlist` using `option_ids` (with `position_type: "long"`). Prune expired or non-viable options via `robinhood-trading/remove_option_from_watchlist`.
    - Never mix equity and options watchlist tools.
+
+7. **Portfolio Sizing Threshold & Micro-Account Rules**:
+   - **Threshold**: **\$10,000 Portfolio Net Liquidation Value**.
+   - **Accounts $\ge \$10,000$ (Standard Accounts)**: Strictly enforce percentage sizing constraints: single-leg limit $\le 3.0\%$ to $5.0\%$ of Net Liq, and sector concentration cap $\le 15.0\%$.
+   - **Accounts $< \$10,000$ (Micro-Accounts, e.g. `••••9961`)**: Percentage constraints and sector caps are marked **`EXEMPT`** in sizing checklists. Trades are sized for a **1-contract minimum allocation**, constrained strictly by available cash buying power (contract cost $\le$ Available Cash Buying Power; no margin leverage).
 
 ---
 

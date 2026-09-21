@@ -68,12 +68,18 @@ Evaluate exits in this *strict priority order* for open options:
 
 ## Step 3: Portfolio Sizing & Concentration Constraints
 
-1. **Sector Concentration Limit**:
-   - Total exposure in any single industry sector must not exceed **$15.00\%$** of total portfolio net liquidation value.
-2. **Per-Trade Buying Power Budget**:
-   - Compute maximum allocation per new trade:
-     $$\text{Budget} = \min(5\% \times \text{Net Liq}, \text{Available Buying Power})$$
-   - Pass this budget to Phase III (`option-selector`).
+1. **Portfolio Sizing Threshold ($10,000 Net Liq)**:
+   - **Accounts $\ge \$10,000$ (Standard Accounts)**:
+     - **Single-Leg Sizing Limit**: Maximum $3.0\%$ to $5.0\%$ of Net Liq per position.
+     - **Sector Concentration Limit**: Total exposure in any single industry sector must not exceed **$15.00\%$** of total portfolio net liquidation value.
+     - **Per-Trade Buying Power Budget**:
+       $$\text{Budget} = \min(5\% \times \text{Net Liq}, \text{Available Buying Power})$$
+   - **Accounts $< \$10,000$ (Micro-Accounts, e.g. `••••9961`)**:
+     - Strict percentage sizing ($\le 3\%$) and sector caps ($\le 15\%$) are marked **`EXEMPT`**.
+     - Sizing allows a **1-contract minimum allocation**, constrained strictly by available cash buying power (total contract premium $\le$ Available Cash Buying Power; no margin leverage).
+     - **Per-Trade Buying Power Budget**:
+       $$\text{Budget} = \text{Available Cash Buying Power (sized for 1 contract)}$$
+2. Pass the computed budget and account sizing mode to Phase III (`option-selector`).
 
 ---
 

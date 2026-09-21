@@ -1,54 +1,21 @@
 {
   "options_positions": {
-    "f5ab836f-d066-4fc3-b9ec-cd73bf036438": {
-      "Option ID": "f5ab836f-d066-4fc3-b9ec-cd73bf036438",
+    "opt_1": {
       "Underlier": "FRO",
-      "Strike": "49.20",
+      "Purchase Premium": 2.69,
+      "Mark Price": 3.12,
+      "Strike": 45.0,
       "Expiration": "2026-10-16",
       "Type": "call",
-      "Purchase Premium": 2.69,
-      "Delta": "0.570503",
-      "Gamma": "0.056657",
-      "Mark Price": 3.125,
-      "Open Interest": 418,
-      "ImpVol": "0.531897",
-      "Asset Cost Basis": 269.0,
-      "Current Value": 312.5,
-      "P&L (%)": 16.17,
-      "P&L ($)": 43.5,
-      "Sizing Risk Weight (%)": 24.74,
-      "Beta Sector Tag": "Technology/Beta",
-      "Entry Date": "2026-09-18",
+      "Days Held": 4,
       "Stalling Days": 0,
       "Target Mode": "T1",
-      "T2 Target": null,
-      "Account": "970049961"
-    },
-    "085f8cbc-48da-49ae-a461-e05612246a38": {
-      "Option ID": "085f8cbc-48da-49ae-a461-e05612246a38",
-      "Underlier": "SMCI",
-      "Strike": "42.00",
-      "Expiration": "2026-10-23",
-      "Type": "call",
-      "Purchase Premium": 2.9,
-      "Delta": "0.514005",
-      "Gamma": "0.044396",
-      "Mark Price": 3.275,
-      "Open Interest": 302,
-      "ImpVol": "0.736639",
-      "Asset Cost Basis": 290.0,
-      "Current Value": 327.5,
-      "P&L (%)": 12.93,
-      "P&L ($)": 37.5,
-      "Sizing Risk Weight (%)": 26.67,
-      "Beta Sector Tag": "Technology/Beta",
-      "Entry Date": "2026-09-21",
-      "Stalling Days": 0,
-      "Target Mode": "T1",
-      "T2 Target": null,
-      "Account": "970049961"
+      "Sizing Risk Weight (%)": 0.54,
+      "Sector": "Technology/Beta",
+      "Current Value": 312.0,
+      "P&L ($)": 43.0,
+      "P&L (%)": 15.99
     }
   },
-  "stocks_positions": {},
-  "net_liq": 1005.31
+  "stocks_positions": {}
 }

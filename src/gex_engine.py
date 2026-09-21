@@ -186,6 +186,7 @@ PERFORMANCE_FILE = os.path.join(REPOSITORY_ROOT, "data/performance.json")
 DOWNLOADS_DIR = os.path.join(REPOSITORY_ROOT, "data/downloads")
 SENTIMENT_FILE = os.path.join(REPOSITORY_ROOT, "data/reddit_sentiment.json")
 WORKFLOW_STATE_FILE = os.path.join(REPOSITORY_ROOT, "data/workflow_state.json")
+DEFAULT_SIZING_THRESHOLD = 10000.0 # Portfolio Net Liq threshold for strict percentage sizing
 
 
 def account_performance_file(account: str = "") -> str:
@@ -2898,19 +2899,40 @@ def cmd_analyze(args):
         net_liq = getattr(args, "net_liq", None)
         if net_liq is None:
             net_liq = 50000.0
+
+        sizing_threshold = getattr(args, "sizing_threshold", None)
+        if sizing_threshold is None:
+            sizing_threshold = DEFAULT_SIZING_THRESHOLD
         
-        max_risk = net_liq * 0.03
         cost_per_contract = best_option['mark'] * 100.0
         cost_per_contract_cached = cost_per_contract
-        if cost_per_contract > 0:
-            max_contracts = int(max_risk // cost_per_contract)
+        is_micro_account = net_liq < sizing_threshold
+
+        if is_micro_account:
+            # Micro-Account (< $10,000 Net Liq): 1-contract minimum sizing applies, bounded strictly by available buying power
+            if cost_per_contract > 0 and cost_per_contract <= net_liq:
+                max_contracts = 1
+                max_risk = cost_per_contract
+            else:
+                max_contracts = 0
+                max_risk = 0.0
         else:
-            max_contracts = 0
+            max_risk = net_liq * 0.03
+            if cost_per_contract > 0:
+                max_contracts = int(max_risk // cost_per_contract)
+            else:
+                max_contracts = 0
         max_contracts_cached = max_contracts
             
         print(f"- **Aggregate Sizing Simulation**:")
         print(f"  - Portfolio Net Liq Reference: ${net_liq:,.2f}")
-        print(f"  - Single-Leg Max Sizing Allowed (3.0% Net Liq): ${max_risk:,.2f}")
+        if is_micro_account:
+            print(f"  - Sizing Mode: {format_color(f'Micro-Account (< ${sizing_threshold:,.0f} Net Liq)', '33', bold=True)} (1-Contract Minimum Sizing, exempt from <=3.0% cap)")
+            print(f"  - Single-Leg Max Sizing Allowed: {format_color(f'1 contract up to Net Liq (${net_liq:,.2f})', '33')}")
+            if cost_per_contract > net_liq:
+                print(format_color(f"  - ⚠️ INSUFFICIENT BUYING POWER: Contract cost (${cost_per_contract:,.2f}) exceeds account Net Liq (${net_liq:,.2f}).", "31", bold=True))
+        else:
+            print(f"  - Single-Leg Max Sizing Allowed (3.0% Net Liq): ${max_risk:,.2f}")
         print(f"  - Estimated Sizing Recommendation: {format_color(f'{max_contracts} contracts', '32', bold=True)} at ${best_option['mark']:.2f} per premium (Total Premium: ${max_contracts * cost_per_contract:,.2f})")
 
         # Render Option Payoff Projection Matrix Table
@@ -3946,21 +3968,33 @@ def cmd_portfolio(args):
 
     print("\n### 📏 Sizing Constraints Checklist")
     # Sizing constraints check
-    over_allocated = []
-    for opt_id, details in positions.items():
-        risk_weight = details.get("Sizing Risk Weight (%)", 0.0)
-        tk = details.get("Underlier")
-        if risk_weight > 3.0:
-            over_allocated.append(f"{tk} ({risk_weight:.2f}% > 3.0%)")
-            
-    single_leg_ok = len(over_allocated) == 0
-    single_leg_fmt = format_color("PASS", "32", bold=True) if single_leg_ok else format_color(f"FAIL ({', '.join(over_allocated)})", "31", bold=True)
-    print(f"- **Single-Leg Sizing Limit (<= 3.0% of Net Liq)**: {single_leg_fmt}")
-    
-    sector_cap_ok = tech_exposure <= 15.0
-    sector_cap_fmt = format_color("PASS", "32", bold=True) if sector_cap_ok else format_color("FAIL", "31", bold=True)
-    print(f"- **Sector Sizing Cap (Tech/Beta <= 15.0% of Net Liq)**: "
-          f"{sector_cap_fmt} (Tech Sizing exposure: {format_color(f'{tech_exposure:.2f}%', '32' if sector_cap_ok else '31')})")
+    sizing_threshold = getattr(args, "sizing_threshold", None)
+    if sizing_threshold is None:
+        sizing_threshold = DEFAULT_SIZING_THRESHOLD
+        
+    is_micro_account = net_liq < sizing_threshold
+
+    if is_micro_account:
+        print(f"- **Single-Leg Sizing Limit (<= 3.0% of Net Liq)**: "
+              f"{format_color('EXEMPT', '33', bold=True)} (Net Liq ${net_liq:,.2f} < ${sizing_threshold:,.0f} threshold; 1-contract minimum sizing applies)")
+        print(f"- **Sector Sizing Cap (Tech/Beta <= 15.0% of Net Liq)**: "
+              f"{format_color('EXEMPT', '33', bold=True)} (Net Liq ${net_liq:,.2f} < ${sizing_threshold:,.0f} threshold; Tech exposure: {tech_exposure:.2f}%)")
+    else:
+        over_allocated = []
+        for opt_id, details in positions.items():
+            risk_weight = details.get("Sizing Risk Weight (%)", 0.0)
+            tk = details.get("Underlier")
+            if risk_weight > 3.0:
+                over_allocated.append(f"{tk} ({risk_weight:.2f}% > 3.0%)")
+                
+        single_leg_ok = len(over_allocated) == 0
+        single_leg_fmt = format_color("PASS", "32", bold=True) if single_leg_ok else format_color(f"FAIL ({', '.join(over_allocated)})", "31", bold=True)
+        print(f"- **Single-Leg Sizing Limit (<= 3.0% of Net Liq)**: {single_leg_fmt}")
+        
+        sector_cap_ok = tech_exposure <= 15.0
+        sector_cap_fmt = format_color("PASS", "32", bold=True) if sector_cap_ok else format_color("FAIL", "31", bold=True)
+        print(f"- **Sector Sizing Cap (Tech/Beta <= 15.0% of Net Liq)**: "
+              f"{sector_cap_fmt} (Tech Sizing exposure: {format_color(f'{tech_exposure:.2f}%', '32' if sector_cap_ok else '31')})")
     
     # Sizing warnings for high concentration (exceeding 15% of net liq)
     high_concentration = []
@@ -3984,12 +4018,16 @@ def cmd_portfolio(args):
         if curr_weight >= 15.0:
             high_concentration.append(f"{ticker} ({curr_weight:.2f}%)")
     
-    if high_concentration:
-        print_color(f"\n⚠️ HIGH CONCENTRATION ALERT: {', '.join(high_concentration)} exceed 15-20% portfolio Net Liquidation threshold.", "31", bold=True)
-        print_color("⚠️ RECOMMENDED ACTION: Trim or reduce position exposure to maintain aggregate capital health.", "31", bold=False)
-        
-    if not sector_cap_ok:
-        print_color(f"\n⚠️ SECTOR EXPOSURE ALERT: High-beta tech/beta exposure exceeds 15.0% ({tech_exposure:.2f}%).", "33", bold=True)
+    if is_micro_account:
+        if high_concentration:
+            print(format_color(f"\nℹ️ Micro-Account Allocation Note: {', '.join(high_concentration)} exceed 15% Net Liq due to single-contract sizing on sub-${sizing_threshold:,.0f} portfolio.", "33"))
+    else:
+        if high_concentration:
+            print_color(f"\n⚠️ HIGH CONCENTRATION ALERT: {', '.join(high_concentration)} exceed 15-20% portfolio Net Liquidation threshold.", "31", bold=True)
+            print_color("⚠️ RECOMMENDED ACTION: Trim or reduce position exposure to maintain aggregate capital health.", "31", bold=False)
+            
+        if not sector_cap_ok:
+            print_color(f"\n⚠️ SECTOR EXPOSURE ALERT: High-beta tech/beta exposure exceeds 15.0% ({tech_exposure:.2f}%).", "33", bold=True)
     # Collect unique active underliers and scan for technical alerts
     unique_tickers = sorted(list(set(
         [details.get("Underlier", "") for details in positions.values() if details.get("Underlier")] +
@@ -6304,6 +6342,7 @@ def main():
     p_analyze.add_argument("--hist-file", type=str, help="Underlier historical daily closes JSON file for volatility derivation")
     p_analyze.add_argument("--earnings-date", type=str, dest="earnings_date", help="Upcoming quarterly earnings release date (YYYY-MM-DD)")
     p_analyze.add_argument("--net-liq", type=float, dest="net_liq", help="Estimated Portfolio Net Liq value for sizing checks")
+    p_analyze.add_argument("--sizing-threshold", type=float, dest="sizing_threshold", default=DEFAULT_SIZING_THRESHOLD, help=f"Portfolio Net Liq threshold for strict percentage sizing (default: {DEFAULT_SIZING_THRESHOLD})")
     p_analyze.add_argument("--target-delta", type=float, dest="target_delta", default=0.45, help="Option selection target delta (default: 0.45)")
     p_analyze.add_argument("--min-dte", type=int, dest="min_dte", default=30, help="Option selection minimum DTE (default: 30)")
     p_analyze.add_argument("--max-dte", type=int, dest="max_dte", default=45, help="Option selection maximum DTE (default: 45)")
@@ -6321,6 +6360,7 @@ def main():
     p_port = subparsers.add_parser("portfolio", help="Analyzes position exits, trailing stops, and sizing limits.")
     p_port.add_argument("--account", type=str, default="", help="Optional account number used to scope tagged positions and performance")
     p_port.add_argument("--net-liq", type=float, dest="net_liq", help="Estimated Portfolio Net Liq value for sizing checks")
+    p_port.add_argument("--sizing-threshold", type=float, dest="sizing_threshold", default=DEFAULT_SIZING_THRESHOLD, help=f"Portfolio Net Liq threshold for strict percentage sizing (default: {DEFAULT_SIZING_THRESHOLD})")
     p_port.add_argument("--spot-overrides", type=parse_spot_overrides, dest="spot_overrides", help="Comma-separated ticker=price overrides, e.g. AAPL=290,BABA=81")
     
     # add-position subcommand
