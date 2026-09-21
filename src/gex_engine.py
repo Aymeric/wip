@@ -3261,8 +3261,12 @@ def cmd_portfolio(args):
     pending_exits = []
     
     if not positions and not stocks:
-        print("### 🛡️ Active Portfolio Tracker & Exits (Current Positions)")
-        print("No open positions found in cache.")
+        print("### 🛡️ Active Portfolio Tracker & Exits (Current Positions)\n")
+        print_color("💤 No open portfolio positions found in local cache.", "33")
+        print("\n💡 Actionable Next Steps:")
+        print("  • Add an option position: python3 gex_engine.py add-position <option_id> <ticker> <strike> <expiration> <type> <purchase_premium>")
+        print("  • Add a stock position:  python3 gex_engine.py add-stock <ticker> <shares> <average_buy_price>")
+        print("  • Sync positions:        python3 gex_engine.py sync-positions")
         return
         
     print("### 🛡️ Active Portfolio Tracker & Exits (Current Positions)")

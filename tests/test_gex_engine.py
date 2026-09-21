@@ -4548,6 +4548,26 @@ class TestCmdStatus(unittest.TestCase):
             if os.path.exists(analyses_path):
                 os.remove(analyses_path)
 
+    def test_portfolio_empty_state_output(self):
+        """Test cmd_portfolio displays a friendly empty state message with actionable next steps."""
+        from types import SimpleNamespace
+        import io
+        from unittest.mock import patch
+        import gex_engine
+
+        mock_args = SimpleNamespace(account="", net_liq=50000.0, spot_overrides={})
+        empty_cache = {"options_positions": {}, "stocks_positions": {}}
+
+        with patch('gex_engine.load_json', return_value=empty_cache), \
+             patch('sys.stdout', new_callable=io.StringIO) as mock_stdout:
+            gex_engine.cmd_portfolio(mock_args)
+            output = mock_stdout.getvalue()
+            self.assertIn("Active Portfolio Tracker & Exits", output)
+            self.assertIn("No open portfolio positions found in local cache", output)
+            self.assertIn("Actionable Next Steps", output)
+            self.assertIn("add-position", output)
+            self.assertIn("add-stock", output)
+
 
 if __name__ == '__main__':
     unittest.main()
