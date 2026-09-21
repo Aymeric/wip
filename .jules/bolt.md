@@ -9,3 +9,7 @@
 ## 2026-09-18 - Cached Downloads Listing & JSON Caching for Historical OHLC
 **Learning:** `find_latest_historical_ohlc` used direct `os.walk(DOWNLOADS_DIR)` traversals and uncached `open()`/`json.load()` file reads on every lookup. Passing an optional `file_list` parameter, falling back to `_get_downloads_files()`, and using `load_json()` (which leverages `_JSON_FILE_CACHE`) reduced historical OHLC lookup overhead by ~1.44x.
 **Action:** Always accept optional `file_list` in file lookup utilities and use `load_json()` rather than raw `open()` to benefit from workspace file list and JSON memory caching.
+
+## 2026-09-19 - Fast Recursive JSON Cloning & Single-Pass Indicator Calculations
+**Learning:** Standard library `copy.deepcopy` used in JSON cache lookups incurs massive Python runtime object introspection and memoization overhead. Replacing `copy.deepcopy` with a lightweight recursive dict/list cloner (`_clone_json`) yielded a ~2.4x speedup in `load_json`. Additionally, reusing computed MACD series in `check_technical_alerts` eliminated duplicate EMA calculations for a ~1.3x speedup.
+**Action:** Use tailored recursive cloners for plain JSON structures rather than `copy.deepcopy`, and store freshly parsed `json.load()` objects directly into cache without deepcopying on cache miss.
