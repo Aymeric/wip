@@ -429,6 +429,16 @@ class TestGEXEngine(unittest.TestCase):
         self.assertTrue(gex_engine.account_positions_file().endswith("active_positions.json"))
         self.assertTrue(gex_engine.account_closed_positions_file().endswith("closed_positions.json"))
 
+    def test_account_file_path_traversal_prevention(self):
+        import gex_engine
+
+        traversal_inputs = ["../", "../../etc/passwd", "..\\..\\secret", "...", "/", "slashes///", "bad/acc"]
+        for fn in (gex_engine.account_performance_file, gex_engine.account_positions_file, gex_engine.account_closed_positions_file):
+            for bad_acc in traversal_inputs:
+                with self.subTest(fn=fn.__name__, bad_acc=bad_acc):
+                    with self.assertRaises(ValueError):
+                        fn(bad_acc)
+
     def test_hyg_credit_divergence_integration(self):
         import tempfile
         import json

@@ -188,34 +188,53 @@ SENTIMENT_FILE = os.path.join(REPOSITORY_ROOT, "data/reddit_sentiment.json")
 WORKFLOW_STATE_FILE = os.path.join(REPOSITORY_ROOT, "data/workflow_state.json")
 
 
+def _validate_account_param(account: str) -> str:
+    """Validates and normalizes account parameter string to prevent path traversal or arbitrary file writes.
+
+    Only alphanumeric characters, underscores, and hyphens are allowed in account identifiers.
+    """
+    account_str = str(account)
+    if not re.match(r"^[A-Za-z0-9_-]+$", account_str):
+        raise ValueError("account must contain only alphanumeric characters, underscores, or hyphens")
+    return account_str
+
+
+def _verify_path_contained_in_data(filepath: str) -> None:
+    """Security check to ensure the target cache path resides inside REPOSITORY_ROOT/data."""
+    data_dir = os.path.abspath(os.path.join(REPOSITORY_ROOT, "data"))
+    abs_path = os.path.abspath(filepath)
+    if not (abs_path == data_dir or abs_path.startswith(data_dir + os.sep)):
+        raise ValueError("Path traversal detected: resolved path is outside repository data directory")
+
+
 def account_performance_file(account: str = "") -> str:
     """Return the account-scoped performance cache path."""
     if not account:
         return PERFORMANCE_FILE
-    normalized_account = re.sub(r"[^A-Za-z0-9_-]", "", str(account))
-    if not normalized_account:
-        return PERFORMANCE_FILE
-    return os.path.join(REPOSITORY_ROOT, f"data/performance_{normalized_account}.json")
+    normalized_account = _validate_account_param(account)
+    target_path = os.path.join(REPOSITORY_ROOT, f"data/performance_{normalized_account}.json")
+    _verify_path_contained_in_data(target_path)
+    return target_path
 
 
 def account_positions_file(account: str = "") -> str:
     """Return the active-position cache path, scoped when an account is supplied."""
     if not account:
         return OPTIONS_FILE
-    normalized_account = re.sub(r"[^A-Za-z0-9_-]", "", str(account))
-    if not normalized_account:
-        raise ValueError("account must contain at least one alphanumeric character")
-    return os.path.join(REPOSITORY_ROOT, f"data/active_positions_{normalized_account}.json")
+    normalized_account = _validate_account_param(account)
+    target_path = os.path.join(REPOSITORY_ROOT, f"data/active_positions_{normalized_account}.json")
+    _verify_path_contained_in_data(target_path)
+    return target_path
 
 
 def account_closed_positions_file(account: str = "") -> str:
     """Return the closed-position cache path, scoped when an account is supplied."""
     if not account:
         return os.path.join(os.path.dirname(OPTIONS_FILE), "closed_positions.json")
-    normalized_account = re.sub(r"[^A-Za-z0-9_-]", "", str(account))
-    if not normalized_account:
-        raise ValueError("account must contain at least one alphanumeric character")
-    return os.path.join(REPOSITORY_ROOT, f"data/closed_positions_{normalized_account}.json")
+    normalized_account = _validate_account_param(account)
+    target_path = os.path.join(REPOSITORY_ROOT, f"data/closed_positions_{normalized_account}.json")
+    _verify_path_contained_in_data(target_path)
+    return target_path
 
 # Standard Mechanical Screener Baseline Filter Constants
 MIN_PRICE = 5.0
