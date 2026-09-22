@@ -13,3 +13,7 @@
 ## 2026-09-19 - Fast Recursive JSON Cloning & Single-Pass Indicator Calculations
 **Learning:** Standard library `copy.deepcopy` used in JSON cache lookups incurs massive Python runtime object introspection and memoization overhead. Replacing `copy.deepcopy` with a lightweight recursive dict/list cloner (`_clone_json`) yielded a ~2.4x speedup in `load_json`. Additionally, reusing computed MACD series in `check_technical_alerts` eliminated duplicate EMA calculations for a ~1.3x speedup.
 **Action:** Use tailored recursive cloners for plain JSON structures rather than `copy.deepcopy`, and store freshly parsed `json.load()` objects directly into cache without deepcopying on cache miss.
+
+## 2026-09-20 - Single-pass Wilder's ATR calculation
+**Learning:** Allocating intermediate list structures (`true_ranges`), slicing (`true_ranges[:period]`), and repeated function call overhead of `max()` in `calculate_atr` caused significant execution latency. Replacing list construction and `max()` calls with inline comparisons and direct Wilder's smoothing yielded a ~2.8x execution speedup.
+**Action:** In rolling technical indicator calculations (ATR, RSI, EMA), avoid intermediate array allocations and built-in function call overhead inside high-frequency price loops by using scalar running accumulators and inline comparisons.

@@ -21,5 +21,18 @@ class TestPerformanceBenchmark(unittest.TestCase):
 
         print(f"\n[BENCHMARK] Executed {total_calls} calls to find_latest_underlier_spot in {elapsed:.4f} seconds ({elapsed/total_calls*1000:.4f} ms/call)")
 
+    def test_benchmark_calculate_atr(self):
+        highs = [100.0 + i * 0.5 for i in range(300)]
+        lows = [98.0 + i * 0.5 for i in range(300)]
+        closes = [99.0 + i * 0.5 for i in range(300)]
+        iterations = 10000
+
+        start_time = time.perf_counter()
+        for _ in range(iterations):
+            _ = gex_engine.calculate_atr(highs, lows, closes, period=14)
+        elapsed = time.perf_counter() - start_time
+
+        print(f"\n[BENCHMARK] Executed {iterations} calls to calculate_atr in {elapsed:.4f} seconds ({elapsed/iterations*1000:.4f} ms/call)")
+
 if __name__ == "__main__":
     unittest.main()
