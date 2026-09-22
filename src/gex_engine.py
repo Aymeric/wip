@@ -247,7 +247,7 @@ def format_color(text: str, color_code: str, bold: bool = False) -> str:
 def generate_ascii_gex_scale(spot: float, ptrans: Optional[float], ntrans: Optional[float], gex: Optional[float], cotmp: Optional[float]) -> str:
     """Constructs a visual linear ASCII representation of GEX levels and where SPOT resides."""
     levels_by_price = {}
-    for price, label in [(cotmp, "COTMP"), (ntrans, "nTrans"), (ptrans, "pTrans"), (gex, "+GEX"), (spot, "*SPOT*")]:
+    for price, label in [(cotmp, "COTMP"), (ntrans, "nTrans"), (ptrans, "pTrans"), (gex, "+GEX"), (spot, "SPOT")]:
         if price is None:
             continue
         p_round = round(price, 2)
@@ -260,7 +260,7 @@ def generate_ascii_gex_scale(spot: float, ptrans: Optional[float], ntrans: Optio
         labels = levels_by_price[price]
         label_strs = []
         for label in labels:
-            if label == "*SPOT*":
+            if label == "SPOT":
                 label_strs.append(format_color("SPOT", "35", bold=True))
             elif label == "+GEX":
                 label_strs.append(format_color("+GEX (T1 Target)", "32", bold=True))
@@ -273,10 +273,6 @@ def generate_ascii_gex_scale(spot: float, ptrans: Optional[float], ntrans: Optio
                 
         label_block = " + ".join(label_strs)
         formatted_block = f"[{label_block}: ${price:.2f}]"
-        
-        # If it's just a single SPOT label, format it as [*SPOT*: $price] for bracket consistency
-        if len(labels) == 1 and labels[0] == "*SPOT*":
-            formatted_block = f"[{format_color('*SPOT*', '35', bold=True)}: ${price:.2f}]"
             
         runway_segments.append(formatted_block)
         
