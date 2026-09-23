@@ -167,13 +167,17 @@ class TestGEXEngine(unittest.TestCase):
         self.assertTrue(upper > mid > lower)
 
         # ATR Test
-        highs = [105] * 20
-        lows = [95] * 20
-        closes = [100] * 20
+        highs = [105.0] * 20
+        lows = [95.0] * 20
+        closes = [100.0] * 20
         atr = calculate_atr(highs, lows, closes, period=10)
         self.assertIsNotNone(atr)
         assert atr is not None
-        self.assertGreater(atr, 0)
+        self.assertAlmostEqual(atr, 10.0)
+
+        # ATR Edge cases
+        self.assertIsNone(calculate_atr([100.0] * 5, [95.0] * 5, [98.0] * 5, period=10))
+        self.assertIsNone(calculate_atr([100.0] * 20, [95.0] * 20, [98.0] * 20, period=0))
 
     def test_save_json_preserves_existing_file_on_serialization_failure(self):
         import tempfile
