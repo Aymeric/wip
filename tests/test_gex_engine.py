@@ -193,6 +193,24 @@ class TestGEXEngine(unittest.TestCase):
             if os.path.exists(tmp_path):
                 os.remove(tmp_path)
 
+    def test_load_json_handles_non_container_json_files(self):
+        import tempfile
+        import gex_engine
+
+        for content in ("null", "123", '"string_value"', "true"):
+            with self.subTest(content=content):
+                with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as tmp:
+                    tmp_path = tmp.name
+                    tmp.write(content)
+                try:
+                    default_dict = {"fallback": True}
+                    default_list = ["fallback"]
+                    self.assertEqual(gex_engine.load_json(tmp_path, default_dict), default_dict)
+                    self.assertEqual(gex_engine.load_json(tmp_path, default_list), default_list)
+                finally:
+                    if os.path.exists(tmp_path):
+                        os.remove(tmp_path)
+
     def test_compute_regime_gates(self):
         # Case 1: All Tracks Passed (All Gates PASS)
         # SPY change > 0.5%, bull/bear ratio > 3.0, VIX bearish = True
