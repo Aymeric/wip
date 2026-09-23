@@ -14,6 +14,7 @@ from io import StringIO
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
 
 from gex_engine import (
+    sanitize_account,
     calculate_candidate_score,
     calculate_grade, 
     classify_etf,
@@ -416,10 +417,27 @@ class TestGEXEngine(unittest.TestCase):
                 if os.path.exists(path):
                     os.remove(path)
 
+    def test_sanitize_account(self):
+        # Empty or default
+        self.assertEqual(sanitize_account(""), "")
+        self.assertEqual(sanitize_account(None), "")
+
+        # Valid alphanumeric / hyphen / underscore
+        self.assertEqual(sanitize_account("ACC_123-A"), "ACC_123-A")
+
+        # Path traversal / special characters stripped
+        self.assertEqual(sanitize_account("../ACC_123"), "ACC_123")
+        self.assertEqual(sanitize_account("acc/sub/123"), "accsub123")
+
+        # Non-alphanumeric only raises ValueError
+        with self.assertRaises(ValueError):
+            sanitize_account("!!!")
+
     def test_account_performance_path_is_scoped(self):
         import gex_engine
 
         self.assertTrue(gex_engine.account_performance_file("5QR24141").endswith("performance_5QR24141.json"))
+        self.assertTrue(gex_engine.account_performance_file("../5QR24141").endswith("performance_5QR24141.json"))
         self.assertTrue(gex_engine.account_performance_file().endswith("performance.json"))
         with self.assertRaises(ValueError):
             gex_engine.account_performance_file("!!!")

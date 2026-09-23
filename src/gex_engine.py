@@ -189,33 +189,37 @@ WORKFLOW_STATE_FILE = os.path.join(REPOSITORY_ROOT, "data/workflow_state.json")
 DEFAULT_SIZING_THRESHOLD = 10000.0 # Portfolio Net Liq threshold for strict percentage sizing
 
 
-def account_performance_file(account: str = "") -> str:
-    """Return the account-scoped performance cache path."""
+def sanitize_account(account: str = "") -> str:
+    """Sanitize account identifier string to prevent path traversal or invalid file paths."""
     if not account:
-        return PERFORMANCE_FILE
+        return ""
     normalized_account = re.sub(r"[^A-Za-z0-9_-]", "", str(account))
     if not normalized_account:
         raise ValueError("account must contain at least one alphanumeric character")
+    return normalized_account
+
+
+def account_performance_file(account: str = "") -> str:
+    """Return the account-scoped performance cache path."""
+    normalized_account = sanitize_account(account)
+    if not normalized_account:
+        return PERFORMANCE_FILE
     return os.path.join(REPOSITORY_ROOT, f"data/performance_{normalized_account}.json")
 
 
 def account_positions_file(account: str = "") -> str:
     """Return the active-position cache path, scoped when an account is supplied."""
-    if not account:
-        return OPTIONS_FILE
-    normalized_account = re.sub(r"[^A-Za-z0-9_-]", "", str(account))
+    normalized_account = sanitize_account(account)
     if not normalized_account:
-        raise ValueError("account must contain at least one alphanumeric character")
+        return OPTIONS_FILE
     return os.path.join(REPOSITORY_ROOT, f"data/active_positions_{normalized_account}.json")
 
 
 def account_closed_positions_file(account: str = "") -> str:
     """Return the closed-position cache path, scoped when an account is supplied."""
-    if not account:
-        return os.path.join(os.path.dirname(OPTIONS_FILE), "closed_positions.json")
-    normalized_account = re.sub(r"[^A-Za-z0-9_-]", "", str(account))
+    normalized_account = sanitize_account(account)
     if not normalized_account:
-        raise ValueError("account must contain at least one alphanumeric character")
+        return os.path.join(os.path.dirname(OPTIONS_FILE), "closed_positions.json")
     return os.path.join(REPOSITORY_ROOT, f"data/closed_positions_{normalized_account}.json")
 
 # Standard Mechanical Screener Baseline Filter Constants
@@ -4342,7 +4346,8 @@ def cmd_close_pos(args):
 def cmd_sync_pnl(args):
     """Syncs P&L trade history from retrieved file to detect closed positions, and moves closed positions to closed_positions.json."""
     pnl_file = getattr(args, "pnl_file", "")
-    account = getattr(args, "account", "")
+    raw_account = getattr(args, "account", "")
+    account = sanitize_account(raw_account) if raw_account else ""
     options_file = account_positions_file(account)
     if not pnl_file or not os.path.exists(pnl_file):
         # Scan DOWNLOADS_DIR and sort lexicographically to find the latest trade history file
@@ -4532,7 +4537,8 @@ def cmd_sync_pnl(args):
 def cmd_sync_positions(args):
     """Syncs active options and equity positions from raw Robinhood downloads to active_positions.json."""
     base_dir = args.base_dir
-    account = args.account
+    raw_account = getattr(args, "account", "")
+    account = sanitize_account(raw_account) if raw_account else ""
     options_file = account_positions_file(account)
     if not base_dir or not os.path.exists(base_dir):
         # Scan DOWNLOADS_DIR for latest directory with positions
