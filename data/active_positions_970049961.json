@@ -1,10 +1,9 @@
 {
   "options_positions": {
-    "opt_1": {
+    "f5ab836f-d066-4fc3-b9ec-cd73bf036438": {
+      "Option ID": "f5ab836f-d066-4fc3-b9ec-cd73bf036438",
       "Underlier": "FRO",
-      "Purchase Premium": 2.69,
-      "Mark Price": 3.12,
-      "Strike": 45.0,
+      "Strike": "49.20",
       "Expiration": "2026-10-16",
       "Type": "call",
       "Days Held": 4,
