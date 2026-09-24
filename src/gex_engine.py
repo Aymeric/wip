@@ -26,6 +26,7 @@ import copy
 import shutil
 import tempfile
 import time
+import math
 from datetime import datetime, timezone
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Sequence, Tuple, Any, Iterable, Union
@@ -390,7 +391,7 @@ def _clone_json(obj: Any) -> Any:
 
     Performance optimization (Bolt):
     Replaces copy.deepcopy with a lightweight recursive copier that avoids
-    heavy Python runtime object introspection and memoization tracking. ~2.4x speedup.
+    heavy Python runtime object introspection and memoization tracking (~2.4x speedup).
     """
     if isinstance(obj, dict):
         return {k: _clone_json(v) for k, v in obj.items()}
@@ -1737,7 +1738,6 @@ def calculate_bollinger_bands(closes: Sequence[float], period: int = 20, num_std
     if len(closes) < period:
         return None, None, None
     
-    import math
     recent_closes = closes[-period:]
     middle_band = sum(recent_closes) / period
     
@@ -1803,9 +1803,9 @@ def find_latest_historical_ohlc(symbol: str, file_list: Optional[List[str]] = No
     
     # Performance optimization (Bolt):
     # Use pre-listed file_list or _get_downloads_files cache instead of redundant os.walk traversals.
-    # Use load_json to utilize _JSON_FILE_CACHE.
+    # Use walrus operator to compute os.path.basename once per file path.
     if file_list is not None:
-        matching_files = [f for f in file_list if symbol_upper in os.path.basename(f).upper() and "HISTORICAL" in os.path.basename(f).upper()]
+        matching_files = [f for f in file_list if symbol_upper in (fn := os.path.basename(f).upper()) and "HISTORICAL" in fn]
     elif os.path.exists(DOWNLOADS_DIR):
         for filepath in _get_downloads_files(DOWNLOADS_DIR):
             file = os.path.basename(filepath)
@@ -1888,8 +1888,10 @@ def find_latest_historical_closes(symbol: str, file_list: Optional[List[str]] = 
     symbol_upper = symbol.upper()
     matching_files = []
     
+    # Performance optimization (Bolt):
+    # Use walrus operator to compute os.path.basename once per file path.
     if file_list is not None:
-        matching_files = [f for f in file_list if symbol_upper in os.path.basename(f).upper() and "HISTORICAL" in os.path.basename(f).upper()]
+        matching_files = [f for f in file_list if symbol_upper in (fn := os.path.basename(f).upper()) and "HISTORICAL" in fn]
     elif os.path.exists(DOWNLOADS_DIR):
         for filepath in _get_downloads_files(DOWNLOADS_DIR):
             file = os.path.basename(filepath)
@@ -1952,8 +1954,10 @@ def find_latest_technical_indicators(symbol: str, file_list: Optional[List[str]]
     """
     symbol_upper = symbol.upper()
     matching_files = []
+    # Performance optimization (Bolt):
+    # Use walrus operator to compute os.path.basename once per file path.
     if file_list is not None:
-        matching_files = [f for f in file_list if symbol_upper in os.path.basename(f).upper() and "TECHNICAL" in os.path.basename(f).upper()]
+        matching_files = [f for f in file_list if symbol_upper in (fn := os.path.basename(f).upper()) and "TECHNICAL" in fn]
     elif os.path.exists(DOWNLOADS_DIR):
         for filepath in _get_downloads_files(DOWNLOADS_DIR):
             file = os.path.basename(filepath)
@@ -2200,7 +2204,6 @@ def check_technical_alerts(closes: List[float], highs: Optional[List[float]] = N
 
 def calculate_annualized_vol(returns_list):
     """Calculates annualized volatility from daily log returns."""
-    import math
     n = len(returns_list)
     if n < 2:
         return 0.0
@@ -2223,7 +2226,6 @@ def derive_volatility_profile(hist_data, symbol, iv_sum, iv_count):
     Returns:
         dict: Derived volatilities and rules.
     """
-    import math
     bars = []
     if isinstance(hist_data, dict):
         results = hist_data.get("data", {}).get("results", [])
