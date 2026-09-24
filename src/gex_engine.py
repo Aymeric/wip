@@ -5858,8 +5858,12 @@ def cmd_closed(args):
     closed_stocks = closed_data.get("closed_stocks", [])
     
     if not closed_options and not closed_stocks:
-        print("### 📊 GEX Closed Positions History")
-        print("No closed positions found in the archive.")
+        print("### 📊 GEX Closed Positions History\n")
+        print_color("💤 No closed positions found in the local archive.", "33")
+        print("\n💡 Actionable Next Steps:")
+        print("  • Sync P&L trade history: python3 gex_engine.py sync-pnl")
+        print("  • Close an option position: python3 gex_engine.py close-position <option_id_or_ticker> --close-premium <premium>")
+        print("  • Close a stock position:  python3 gex_engine.py close-stock <ticker> --close-price <price>")
         return
         
     print("### 📊 GEX Closed Positions History")
