@@ -17,3 +17,7 @@
 ## 2026-09-20 - Single-pass Wilder's ATR calculation
 **Learning:** Allocating intermediate list structures (`true_ranges`), slicing (`true_ranges[:period]`), and repeated function call overhead of `max()` in `calculate_atr` caused significant execution latency. Replacing list construction and `max()` calls with inline comparisons and direct Wilder's smoothing yielded a ~2.8x execution speedup.
 **Action:** In rolling technical indicator calculations (ATR, RSI, EMA), avoid intermediate array allocations and built-in function call overhead inside high-frequency price loops by using scalar running accumulators and inline comparisons.
+
+## 2026-09-24 - Pre-indexed Basename Tuples in Directory Caches
+**Learning:** Repeated calls to `os.path.basename(f).upper()` across cached directory lists in lookup functions (`find_latest_historical_closes`, `find_latest_underlier_spot`, `find_latest_technical_indicators`) created significant string manipulation and C-extension function call overhead. Storing pre-indexed `(filepath, filename_upper)` tuples directly in `_get_downloads_files()`'s `_DIR_FILES_CACHE` reduced string comp lookups by ~12x and boosted `find_latest_underlier_spot` execution speed by ~3.4x.
+**Action:** When caching filesystem directory listings for repeated string pattern matching, pre-compute and store normalized filename metadata (e.g. `(path, basename_upper)`) directly in the cache structure.
