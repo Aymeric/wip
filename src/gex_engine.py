@@ -270,7 +270,7 @@ def generate_ascii_gex_scale(spot: float, ptrans: Optional[float], ntrans: Optio
             elif label == "+GEX":
                 label_strs.append(format_color("+GEX (T1 Target)", "32", bold=True))
             elif label == "pTrans":
-                label_strs.append("pTrans")
+                label_strs.append(format_color("pTrans (Trigger)", "36", bold=True))
             elif label == "nTrans":
                 label_strs.append(format_color("nTrans (Stop)", "31"))
             elif label == "COTMP":
