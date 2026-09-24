@@ -402,7 +402,7 @@ def _clone_json(obj: Any) -> Any:
 
 
 def load_json(filepath: str, default: Any) -> Any:
-    """Loads a JSON file from disk with mtime caching, returning default if absent or corrupted."""
+    """Loads a JSON file from disk with mtime caching, returning default if absent, corrupted, or unexpected type."""
     if not os.path.exists(filepath):
         return default
     try:
@@ -414,11 +414,16 @@ def load_json(filepath: str, default: Any) -> Any:
 
     cache_key = (filepath, mtime)
     if cache_key in _JSON_FILE_CACHE:
-        return _clone_json(_JSON_FILE_CACHE[cache_key])
+        cached_data = _JSON_FILE_CACHE[cache_key]
+        if isinstance(default, (dict, list)) and not isinstance(cached_data, (dict, list)):
+            return _clone_json(default)
+        return _clone_json(cached_data)
 
     try:
         with open(filepath, "r") as f:
             data = json.load(f)
+        if isinstance(default, (dict, list)) and not isinstance(data, (dict, list)):
+            return _clone_json(default)
         if len(_JSON_FILE_CACHE) >= _MAX_JSON_CACHE_SIZE:
             _JSON_FILE_CACHE.pop(next(iter(_JSON_FILE_CACHE)))
         # Performance optimization (Bolt): Store freshly parsed JSON data directly without deepcopying,
