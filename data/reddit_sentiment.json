@@ -332,5 +332,17 @@
     "position_score": 0.1,
     "volume_score": 0.05,
     "meme_score": 0.0
+  },
+  "IONQ": {
+    "Ticker": "IONQ",
+    "Sentiment": 0.45,
+    "Buzz": "High",
+    "Narrative": "Quantum platform integration via SkyWater deal and trapped-ion roadmaps vs commercial breakeven debate; active options interest in high IV calls.",
+    "last_updated": "2026-09-24T03:07:17.262946Z",
+    "tone_score": 0.15,
+    "comments_score": 0.1,
+    "position_score": 0.1,
+    "volume_score": 0.05,
+    "meme_score": 0.05
   }
 }
