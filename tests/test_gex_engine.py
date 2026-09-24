@@ -985,6 +985,30 @@ class TestGEXEngine(unittest.TestCase):
                         gex_engine.cmd_add_pos(InvalidExpArgs())
                     self.assertEqual(cm.exception.code, 1)
                     self.assertIn("Error: Expiration '2025/01/17' must be a valid date in YYYY-MM-DD format.", stderr_buf_exp.getvalue())
+
+                # Invalid strike price validation check (e.g. negative strike)
+                class InvalidStrikeArgs(DummyArgs):
+                    option_id = "AAPL250117C00170000"
+                    strike = -10.0
+
+                stderr_buf_strike = io.StringIO()
+                with patch('sys.stderr', stderr_buf_strike):
+                    with self.assertRaises(SystemExit) as cm:
+                        gex_engine.cmd_add_pos(InvalidStrikeArgs())
+                    self.assertEqual(cm.exception.code, 1)
+                    self.assertIn("Error validating option position parameters: strike must be positive: -10.0", stderr_buf_strike.getvalue())
+
+                # Invalid purchase premium validation check (e.g. negative premium)
+                class InvalidPremiumArgs(DummyArgs):
+                    option_id = "AAPL250117C00180000"
+                    purchase_premium = -5.0
+
+                stderr_buf_prem = io.StringIO()
+                with patch('sys.stderr', stderr_buf_prem):
+                    with self.assertRaises(SystemExit) as cm:
+                        gex_engine.cmd_add_pos(InvalidPremiumArgs())
+                    self.assertEqual(cm.exception.code, 1)
+                    self.assertIn("Error validating option position parameters: purchase_premium must be positive: -5.0", stderr_buf_prem.getvalue())
         finally:
             if os.path.exists(tmp_path):
                 os.remove(tmp_path)
@@ -1007,6 +1031,19 @@ class TestGEXEngine(unittest.TestCase):
                     sector = "Technology/Beta"
                 
                 gex_engine.cmd_add_stock_pos(AddArgs())
+
+                # Test invalid stock parameters validation (e.g. negative shares or buy price)
+                class InvalidStockSharesArgs(AddArgs):
+                    ticker = "NVDA"
+                    shares = -5.0
+
+                import io
+                stderr_buf_stock = io.StringIO()
+                with patch('sys.stderr', stderr_buf_stock):
+                    with self.assertRaises(SystemExit) as cm:
+                        gex_engine.cmd_add_stock_pos(InvalidStockSharesArgs())
+                    self.assertEqual(cm.exception.code, 1)
+                    self.assertIn("Error validating stock position parameters: shares must be positive: -5.0", stderr_buf_stock.getvalue())
                 
                 # Check stored structure
                 data = gex_engine.load_json(tmp_path, {})
