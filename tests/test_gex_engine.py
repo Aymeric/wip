@@ -2344,6 +2344,68 @@ class TestGEXEngine(unittest.TestCase):
             if os.path.exists(closed_path):
                 os.remove(closed_path)
 
+    def test_cmd_closed_empty_state(self):
+        """Test closed subcommand friendly empty state with actionable next steps."""
+        import tempfile
+        from unittest.mock import patch, MagicMock
+        import gex_engine
+
+        with tempfile.NamedTemporaryFile(suffix=".json", delete=False) as tmp_options:
+            options_path = tmp_options.name
+
+        try:
+            gex_engine.save_json(options_path, {})
+            closed_path = os.path.join(os.path.dirname(options_path), "closed_positions.json")
+            gex_engine.save_json(closed_path, {"closed_options": [], "closed_stocks": []})
+
+            with patch('gex_engine.OPTIONS_FILE', options_path), patch('sys.stdout') as mock_stdout:
+                mock_stdout.isatty = MagicMock(return_value=False)
+                class ClosedArgs:
+                    pass
+                gex_engine.cmd_closed(ClosedArgs())
+
+                output = "".join(call.args[0] for call in mock_stdout.write.call_args_list if call.args)
+                self.assertIn("GEX Closed Positions History", output)
+                self.assertIn("No closed positions found in local cache", output)
+                self.assertIn("Actionable Next Steps:", output)
+                self.assertIn("sync-pnl", output)
+        finally:
+            if os.path.exists(options_path):
+                os.remove(options_path)
+            closed_path = os.path.join(os.path.dirname(options_path), "closed_positions.json")
+            if os.path.exists(closed_path):
+                os.remove(closed_path)
+
+    def test_cmd_rankings_empty_state(self):
+        """Test rankings subcommand friendly empty state when database or filter is empty."""
+        import tempfile
+        from unittest.mock import patch, MagicMock
+        import gex_engine
+
+        with tempfile.NamedTemporaryFile(suffix=".json", delete=False) as tmp_analyses:
+            analyses_path = tmp_analyses.name
+
+        try:
+            gex_engine.save_json(analyses_path, {})
+
+            with patch('gex_engine.ANALYSES_FILE', analyses_path), patch('sys.stdout') as mock_stdout:
+                mock_stdout.isatty = MagicMock(return_value=False)
+                class RankingsArgs:
+                    status = "ALL"
+                    min_grade = None
+                    sort = "grade"
+
+                gex_engine.cmd_rankings(RankingsArgs())
+
+                output = "".join(call.args[0] for call in mock_stdout.write.call_args_list if call.args)
+                self.assertIn("GEX Setup Rankings & Report", output)
+                self.assertIn("No analyzed tickers found in local cache", output)
+                self.assertIn("Actionable Next Steps:", output)
+                self.assertIn("analyze", output)
+        finally:
+            if os.path.exists(analyses_path):
+                os.remove(analyses_path)
+
     def test_file_auto_discovery_lexicographical_latest(self):
         """Test that get_monthly_realized_pnl and cmd_sync_pnl auto-discover the latest index files."""
         import tempfile
