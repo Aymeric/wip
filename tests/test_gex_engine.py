@@ -454,6 +454,12 @@ class TestGEXEngine(unittest.TestCase):
         # Non-alphanumeric only raises ValueError
         with self.assertRaises(ValueError):
             sanitize_account("!!!")
+        with self.assertRaises(ValueError):
+            sanitize_account("--")
+        with self.assertRaises(ValueError):
+            sanitize_account("___")
+        with self.assertRaises(ValueError):
+            sanitize_account("-.-")
 
     def test_account_performance_path_is_scoped(self):
         import gex_engine

@@ -195,7 +195,7 @@ def sanitize_account(account: str = "") -> str:
     if not account:
         return ""
     normalized_account = re.sub(r"[^A-Za-z0-9_-]", "", str(account))
-    if not normalized_account:
+    if not re.search(r"[A-Za-z0-9]", normalized_account):
         raise ValueError("account must contain at least one alphanumeric character")
     return normalized_account
 
