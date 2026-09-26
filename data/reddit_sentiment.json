@@ -251,15 +251,15 @@
   },
   "SMCI": {
     "Ticker": "SMCI",
-    "Sentiment": 0.25,
+    "Sentiment": 0.2,
     "Buzz": "High",
-    "Narrative": "AI server demand and backlog vs governance volatility; polarized options speculation",
-    "last_updated": "2026-09-18T17:38:38.705801Z",
+    "Narrative": "High AI hardware server rack orders and liquid cooling demand vs persistent governance/accounting skepticism and volatile options trading.",
+    "last_updated": "2026-09-25T13:46:52.132563Z",
     "tone_score": 0.1,
     "comments_score": 0.05,
-    "position_score": 0.1,
-    "volume_score": 0.1,
-    "meme_score": -0.1
+    "position_score": 0.05,
+    "volume_score": 0.05,
+    "meme_score": -0.05
   },
   "SECZ": {
     "Ticker": "SECZ",
@@ -335,14 +335,38 @@
   },
   "IONQ": {
     "Ticker": "IONQ",
-    "Sentiment": 0.45,
-    "Buzz": "High",
-    "Narrative": "Quantum platform integration via SkyWater deal and trapped-ion roadmaps vs commercial breakeven debate; active options interest in high IV calls.",
-    "last_updated": "2026-09-24T03:07:17.262946Z",
+    "Sentiment": 0.35,
+    "Buzz": "Medium",
+    "Narrative": "Quantum trapped-ion commercialization, SkyWater acquisition, and platform partnerships across AWS/Azure/GCP",
+    "last_updated": "2026-09-25T20:46:16.002926Z",
     "tone_score": 0.15,
     "comments_score": 0.1,
+    "position_score": 0.05,
+    "volume_score": 0.05,
+    "meme_score": 0.0
+  },
+  "AKAM": {
+    "Ticker": "AKAM",
+    "Sentiment": 0.55,
+    "Buzz": "Medium",
+    "Narrative": "Multi-year Anthropic agreement for AI cloud infrastructure; Linode Kubernetes integration; attractive valuation compared to cloud peers.",
+    "last_updated": "2026-09-25T13:46:55.765619Z",
+    "tone_score": 0.2,
+    "comments_score": 0.15,
     "position_score": 0.1,
     "volume_score": 0.05,
     "meme_score": 0.05
+  },
+  "HUM": {
+    "Ticker": "HUM",
+    "Sentiment": -0.1,
+    "Buzz": "Low",
+    "Narrative": "Medicare Advantage utilization rate volatility, CMS rate announcements, valuation scrutiny",
+    "last_updated": "2026-09-25T20:46:18.946232Z",
+    "tone_score": -0.05,
+    "comments_score": -0.05,
+    "position_score": 0.0,
+    "volume_score": 0.0,
+    "meme_score": 0.0
   }
 }
