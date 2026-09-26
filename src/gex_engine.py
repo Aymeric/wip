@@ -850,6 +850,7 @@ def cmd_update_performance(args):
 
 def cmd_workflow(args):
     """Aggregates all JSON state into a high-level system summary."""
+    cleanup_downloads()
     regime = get_regime_status()
     auth = regime.get("system_authorization", "BLOCKED")
     state = load_json(WORKFLOW_STATE_FILE, {"current_phase": "Phase 0: Initialization", "subagents": {}, "notes": []})
@@ -6381,9 +6382,8 @@ def cmd_simulate(args):
     print(f"  {generate_ascii_gex_scale(sim_spot, ptrans, ntrans, gex, cotmp)}\n")
 
 
-def cmd_cleanup_downloads(args):
-    """Removes temporary download folders older than N days."""
-    days = args.days
+def cleanup_downloads(days=7):
+    """Removes dated download folders older than the retention period and stale tmp folders."""
     now = datetime.now()
     removed_count = 0
     
@@ -6414,6 +6414,11 @@ def cmd_cleanup_downloads(args):
                     removed_count += 1
                     
     print(f"Cleanup complete. Removed {removed_count} folders.")
+
+
+def cmd_cleanup_downloads(args):
+    """CLI wrapper for download-folder cleanup."""
+    cleanup_downloads(args.days)
 
 
 def main():
@@ -6646,8 +6651,8 @@ def main():
     p_sim.add_argument("--account", type=str, default="", help="Optional account number used to scope the position cache")
     
     # cleanup-downloads subcommand
-    p_clean = subparsers.add_parser("cleanup-downloads", help="Removes temporary download folders older than N days.")
-    p_clean.add_argument("--days", type=int, default=7, help="Remove folders older than N days (default: 7)")
+    p_clean = subparsers.add_parser("cleanup-downloads", help="Remove dated download folders older than N days and stale tmp folders.")
+    p_clean.add_argument("--days", type=int, default=7, help="Remove dated download folders older than N days (default: 7)")
 
     args = parser.parse_args()
     

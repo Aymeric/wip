@@ -84,7 +84,7 @@ The Python engine serves as the technical validation layer. It computes structur
 - **Portfolio Tracker**: Real-time monitoring of P&L, trailing stops, and time-limit exits.
 - **Technical Analysis**: Integrated RSI, MACD, Bollinger Bands, and ATR indicators.
 - **Simulation**: Test price movement scenarios via `simulate <TICKER> <SPOT>`.
-- **Cleanup**: Manage temporary data via `cleanup-downloads`.
+- **Cleanup**: `workflow` automatically removes dated download folders older than 7 days and `tmp` download folders older than one day before displaying its summary. Today's downloads and persistent system state are preserved.
 - **Trade Journal Audit**: Review closed-trade expectancy, rule-level outcomes, data quality, and bounded process improvements through the Trade Journal Analyst.
 - **Journal Metrics CLI**: Run `journal` for machine-readable expectancy, profit factor, holding-time, exit-reason, target-mode, and cache-reconciliation metrics.
 

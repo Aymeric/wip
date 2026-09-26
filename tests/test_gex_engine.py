@@ -4025,10 +4025,12 @@ class TestGEXEngine(unittest.TestCase):
                  patch("gex_engine.OPTIONS_FILE", options_file), \
                  patch("gex_engine.CANDIDATES_FILE", candidates_file), \
                  patch("gex_engine.ANALYSES_FILE", analyses_file), \
+                 patch("gex_engine.cleanup_downloads") as cleanup_mock, \
                  patch("sys.stdout") as mock_stdout:
                 mock_stdout.isatty = MagicMock(return_value=False)
 
                 gex_engine.cmd_workflow(args)
+                cleanup_mock.assert_called_once_with()
 
                 output = "".join(call.args[0] for call in mock_stdout.write.call_args_list if call.args)
 
@@ -4101,6 +4103,7 @@ class TestGEXEngine(unittest.TestCase):
                  patch("gex_engine.CANDIDATES_FILE", candidates_file), \
                  patch("gex_engine.ANALYSES_FILE", analyses_file), \
                  patch("gex_engine.account_positions_file", return_value=account_options_file), \
+                 patch("gex_engine.cleanup_downloads"), \
                  patch("sys.stdout") as mock_stdout:
                 mock_stdout.isatty = MagicMock(return_value=False)
 
@@ -4125,6 +4128,7 @@ class TestGEXEngine(unittest.TestCase):
                  patch("gex_engine.OPTIONS_FILE", os.path.join(non_existent_dir, "options.json")), \
                  patch("gex_engine.CANDIDATES_FILE", os.path.join(non_existent_dir, "candidates.json")), \
                  patch("gex_engine.ANALYSES_FILE", os.path.join(non_existent_dir, "analyses.json")), \
+                 patch("gex_engine.cleanup_downloads"), \
                  patch("sys.stdout") as mock_stdout:
                 mock_stdout.isatty = MagicMock(return_value=False)
 
