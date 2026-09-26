@@ -195,7 +195,7 @@ def sanitize_account(account: str = "") -> str:
     if not account:
         return ""
     normalized_account = re.sub(r"[^A-Za-z0-9_-]", "", str(account))
-    if not normalized_account:
+    if not re.search(r"[A-Za-z0-9]", normalized_account):
         raise ValueError("account must contain at least one alphanumeric character")
     return normalized_account
 
@@ -1495,15 +1495,18 @@ def derive_gex_profile(inst_data, quotes_data, spot):
     elif isinstance(inst_data, list):
         instruments_list = inst_data
         
+    # Performance optimization (Bolt):
+    # Use 2-tuple lookup mapping for instruments, increment running put OI totals directly
+    # in quote loop, and use O(K) max/min queries instead of full sorting list allocations.
     inst_map = {}
     for inst in instruments_list:
         if not isinstance(inst, dict) or "id" not in inst:
             continue
         try:
-            inst_map[inst["id"]] = {
-                "strike": float(inst["strike_price"]) if "strike_price" in inst else float(inst.get("strike", 0.0)),
-                "type": inst["type"]
-            }
+            inst_map[inst["id"]] = (
+                float(inst["strike_price"]) if "strike_price" in inst else float(inst.get("strike", 0.0)),
+                inst["type"]
+            )
         except (ValueError, KeyError):
             continue
         
@@ -1516,6 +1519,8 @@ def derive_gex_profile(inst_data, quotes_data, spot):
     total_oi = 0
     total_call_gex = 0.0
     total_put_gex = 0.0
+    sum_strike_put_oi = 0.0
+    sum_put_oi = 0
     
     iv_sum = 0.0
     iv_count = 0
@@ -1539,8 +1544,7 @@ def derive_gex_profile(inst_data, quotes_data, spot):
         except (ValueError, TypeError):
             continue
             
-        strike = inst_map[opt_id]["strike"]
-        opt_type = inst_map[opt_id]["type"]
+        strike, opt_type = inst_map[opt_id]
         
         total_oi += oi
         gex_val = oi * gamma * 100.0 * calc_spot
@@ -1555,6 +1559,8 @@ def derive_gex_profile(inst_data, quotes_data, spot):
             strike_put_oi[strike] = strike_put_oi.get(strike, 0) + oi
             strike_put_gex[strike] = strike_put_gex.get(strike, 0.0) + gex_val
             total_put_gex += gex_val
+            sum_strike_put_oi += strike * oi
+            sum_put_oi += oi
         elif opt_type == "call":
             strike_call_oi[strike] = strike_call_oi.get(strike, 0) + oi
             strike_call_gex[strike] = strike_call_gex.get(strike, 0.0) + gex_val
@@ -1579,34 +1585,26 @@ def derive_gex_profile(inst_data, quotes_data, spot):
         }
         
     # COTMP = weighted put strike
-    sum_strike_put_oi = sum(s * oi for s, oi in strike_put_oi.items())
-    sum_put_oi = sum(strike_put_oi.values())
     derived_cotmp = sum_strike_put_oi / sum_put_oi if sum_put_oi > 0 else calc_spot * 0.95
     
     # pTrans = strike at/below spot with largest put OI
-    at_below_spot_puts = {s: oi for s, oi in strike_put_oi.items() if s <= calc_spot}
+    at_below_spot_puts = [item for item in strike_put_oi.items() if item[0] <= calc_spot]
     if at_below_spot_puts:
-        # Sort by strike descending so in case of tie we get highest strike closest to spot
-        sorted_puts = sorted(at_below_spot_puts.items(), key=lambda item: (item[1], item[0]), reverse=True)
-        derived_ptrans = sorted_puts[0][0]
+        derived_ptrans = max(at_below_spot_puts, key=lambda item: (item[1], item[0]))[0]
     else:
         derived_ptrans = calc_spot * 0.98
         
     # nTrans = strike below pTrans with next largest put OI
-    below_ptrans_puts = {s: oi for s, oi in strike_put_oi.items() if s < derived_ptrans}
+    below_ptrans_puts = [item for item in strike_put_oi.items() if item[0] < derived_ptrans]
     if below_ptrans_puts:
-        # Sort by strike descending so in case of tie we get highest strike closest to pTrans
-        sorted_below_puts = sorted(below_ptrans_puts.items(), key=lambda item: (item[1], item[0]), reverse=True)
-        derived_ntrans = sorted_below_puts[0][0]
+        derived_ntrans = max(below_ptrans_puts, key=lambda item: (item[1], item[0]))[0]
     else:
         derived_ntrans = derived_ptrans * 0.95
         
     # +GEX = strike at/above spot with largest call OI
-    at_above_spot_calls = {s: oi for s, oi in strike_call_oi.items() if s >= calc_spot}
+    at_above_spot_calls = [item for item in strike_call_oi.items() if item[0] >= calc_spot]
     if at_above_spot_calls:
-        # Sort by strike ascending so that in case of a tie (e.g. all 0), we get lowest strike closest to spot
-        sorted_calls = sorted(at_above_spot_calls.items(), key=lambda item: (item[1], -item[0]), reverse=True)
-        derived_gex = sorted_calls[0][0]
+        derived_gex = max(at_above_spot_calls, key=lambda item: (item[1], -item[0]))[0]
     else:
         derived_gex = calc_spot * 1.05
         
@@ -1618,8 +1616,8 @@ def derive_gex_profile(inst_data, quotes_data, spot):
     max_call_oi = max(strike_call_oi.values()) if strike_call_oi else 0
     rule9_derived = call_oi_at_target >= max_call_oi if max_call_oi > 0 else True
     
-    all_strikes = sorted(list(set(strike_put_gex.keys()) | set(strike_call_gex.keys())))
-    nearest_strike = min(all_strikes, key=lambda s: abs(s - calc_spot)) if all_strikes else calc_spot
+    all_strikes_set = set(strike_put_gex.keys()) | set(strike_call_gex.keys())
+    nearest_strike = min(all_strikes_set, key=lambda s: (abs(s - calc_spot), s)) if all_strikes_set else calc_spot
     net_gex_nearest = strike_call_gex.get(nearest_strike, 0.0) - strike_put_gex.get(nearest_strike, 0.0)
     rule10_derived = net_gex_nearest >= 0.0
     
@@ -1690,32 +1688,61 @@ def calculate_ema(values: List[float], p: int) -> List[float]:
     Returns:
         List of EMA values starting from the p-th element seeded by SMA of first p values.
     """
-    if len(values) < p or p <= 0:
+    n = len(values)
+    if n < p or p <= 0:
         return []
-    ema = []
+
+    # Performance optimization (Bolt):
+    # Pre-allocate output list and hoist `one_minus_k` constant outside loop
+    # to eliminate list append resizing and `ema[-1]` indexing overhead.
     k = 2.0 / (p + 1)
-    sma = sum(values[:p]) / p
-    ema.append(sma)
-    for val in values[p:]:
-        ema.append(val * k + ema[-1] * (1.0 - k))
-    return ema
+    one_minus_k = 1.0 - k
+    prev = sum(values[:p]) / p
+    res = [0.0] * (n - p + 1)
+    res[0] = prev
+    idx = 1
+    for i in range(p, n):
+        prev = values[i] * k + prev * one_minus_k
+        res[idx] = prev
+        idx += 1
+    return res
 
 
 def calculate_macd_series(closes: List[float], fast_period: int = 12, slow_period: int = 26, signal_period: int = 9) -> Tuple[List[float], List[float]]:
     """Calculates the full MACD line series and Signal line series for a list of closes."""
-    if len(closes) < slow_period + signal_period:
+    n = len(closes)
+    if n < slow_period + signal_period:
         return [], []
 
-    ema_fast = calculate_ema(closes, fast_period)
-    ema_slow = calculate_ema(closes, slow_period)
-    
-    align_index = slow_period - fast_period
-    aligned_fast = ema_fast[align_index:]
-    
-    macd_line = [f - s for f, s in zip(aligned_fast, ema_slow)]
-    if len(macd_line) < signal_period:
+    # Performance optimization (Bolt):
+    # Advance scalar fast/slow EMAs directly to `slow_period - 1` and compute `macd_line`
+    # in a single aligned loop, avoiding redundant fast EMA iterations and list zips.
+    k_fast = 2.0 / (fast_period + 1)
+    k_slow = 2.0 / (slow_period + 1)
+    one_minus_k_fast = 1.0 - k_fast
+    one_minus_k_slow = 1.0 - k_slow
+
+    ema_fast = sum(closes[:fast_period]) / fast_period
+    for i in range(fast_period, slow_period):
+        ema_fast = closes[i] * k_fast + ema_fast * one_minus_k_fast
+
+    ema_slow = sum(closes[:slow_period]) / slow_period
+
+    num_macd = n - slow_period + 1
+    macd_line = [0.0] * num_macd
+    macd_line[0] = ema_fast - ema_slow
+
+    idx = 1
+    for i in range(slow_period, n):
+        c = closes[i]
+        ema_fast = c * k_fast + ema_fast * one_minus_k_fast
+        ema_slow = c * k_slow + ema_slow * one_minus_k_slow
+        macd_line[idx] = ema_fast - ema_slow
+        idx += 1
+
+    if num_macd < signal_period:
         return [], []
-        
+
     signal_line = calculate_ema(macd_line, signal_period)
     return macd_line, signal_line
 
@@ -1735,13 +1762,19 @@ def calculate_macd(closes: List[float], fast_period: int = 12, slow_period: int 
 
 def calculate_bollinger_bands(closes: Sequence[float], period: int = 20, num_std: float = 2.0) -> Tuple[Optional[float], Optional[float], Optional[float]]:
     """Calculates Middle, Upper, and Lower Bollinger Bands."""
-    if len(closes) < period:
+    n = len(closes)
+    if n < period:
         return None, None, None
     
-    recent_closes = closes[-period:]
-    middle_band = sum(recent_closes) / period
-    
-    variance = sum((x - middle_band) ** 2 for x in recent_closes) / period
+    # Performance optimization (Bolt):
+    # Iterate tail indices directly to compute mean and variance without slicing list.
+    sum_val = 0.0
+    start_idx = n - period
+    for i in range(start_idx, n):
+        sum_val += closes[i]
+    middle_band = sum_val / period
+
+    variance = sum((closes[i] - middle_band) ** 2 for i in range(start_idx, n)) / period
     std_dev = math.sqrt(variance)
     
     upper_band = middle_band + (num_std * std_dev)
@@ -5636,8 +5669,11 @@ def cmd_rankings(args):
     """Displays a beautiful ranked report of all historically analyzed ticker setups."""
     analyses = load_json(ANALYSES_FILE, {})
     if not analyses:
-        print("### 🔍 GEX Setup Rankings & Report")
-        print(f"No analyzed tickers found in database ({ANALYSES_FILE}). Run the 'analyze' subcommand for some ticker symbols first.")
+        print("### 🔍 GEX Setup Rankings & Report\n")
+        print("💤 No analyzed tickers found in local cache.\n")
+        print("💡 Actionable Next Steps:")
+        print("  • Analyze a candidate ticker setup: python3 gex_engine.py analyze <TICKER> --spot <price>")
+        print("  • Ingest and filter candidates:      python3 gex_engine.py update-candidates")
         return
 
     status_filter = args.status.upper() if getattr(args, "status", None) else "ALL"
@@ -5664,8 +5700,11 @@ def cmd_rankings(args):
         filtered_analyses.append(data)
 
     if not filtered_analyses:
-        print("### 🔍 GEX Setup Rankings & Report")
-        print(f"No tickers matched the specified filters (Status: {status_filter}, Min Grade: {min_grade or 'Any'}).")
+        print("### 🔍 GEX Setup Rankings & Report\n")
+        print(f"💤 No tickers matched the specified filters (Status: {status_filter}, Min Grade: {min_grade or 'Any'}).\n")
+        print("💡 Actionable Next Steps:")
+        print("  • View all setup rankings: python3 gex_engine.py rankings --status ALL")
+        print("  • Lower min grade filter:  python3 gex_engine.py rankings --min-grade 0")
         return
 
     # Sorting
@@ -5859,11 +5898,11 @@ def cmd_closed(args):
     
     if not closed_options and not closed_stocks:
         print("### 📊 GEX Closed Positions History\n")
-        print_color("💤 No closed positions found in the local archive.", "33")
-        print("\n💡 Actionable Next Steps:")
-        print("  • Sync P&L trade history: python3 gex_engine.py sync-pnl")
-        print("  • Close an option position: python3 gex_engine.py close-position <option_id_or_ticker> --close-premium <premium>")
-        print("  • Close a stock position:  python3 gex_engine.py close-stock <ticker> --close-price <price>")
+        print("💤 No closed positions found in local cache.\n")
+        print("💡 Actionable Next Steps:")
+        print("  • Sync trade history to archive closed trades: python3 gex_engine.py sync-pnl [--pnl-file <path>]")
+        print("  • Close an active option position:            python3 gex_engine.py close-position <option_id_or_ticker> --close-premium <price>")
+        print("  • Close an active stock position:             python3 gex_engine.py close-stock <ticker> --close-price <price>")
         return
         
     print("### 📊 GEX Closed Positions History")
