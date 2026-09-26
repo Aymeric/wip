@@ -1,7 +1,0 @@
-{
-  "data": {"results": [
-    {"quote": {"symbol":"UVXY","last_trade_price":"17.540000","adjusted_previous_close":"17.410000","previous_close_date":"2026-09-03","venue_last_trade_time":"2026-09-04T19:59:59.186271975Z","state":"active"},"close":{"symbol":"UVXY","date":"2026-09-03","price":"17.41"}},
-    {"quote": {"symbol":"VXX","last_trade_price":"17.740000","adjusted_previous_close":"17.620000","previous_close_date":"2026-09-03","venue_last_trade_time":"2026-09-04T19:59:56.897034073Z","state":"active"},"close":{"symbol":"VXX","date":"2026-09-03","price":"17.62"}},
-    {"quote": {"symbol":"HYG","last_trade_price":"79.155000","adjusted_previous_close":"79.210000","previous_close_date":"2026-09-03","venue_last_trade_time":"2026-09-04T19:59:57.842549137Z","state":"active"},"close":{"symbol":"HYG","date":"2026-09-03","price":"79.21"}}
-  ]}
-}
