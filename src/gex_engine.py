@@ -5669,8 +5669,11 @@ def cmd_rankings(args):
     """Displays a beautiful ranked report of all historically analyzed ticker setups."""
     analyses = load_json(ANALYSES_FILE, {})
     if not analyses:
-        print("### 🔍 GEX Setup Rankings & Report")
-        print(f"No analyzed tickers found in database ({ANALYSES_FILE}). Run the 'analyze' subcommand for some ticker symbols first.")
+        print("### 🔍 GEX Setup Rankings & Report\n")
+        print("💤 No analyzed tickers found in local cache.\n")
+        print("💡 Actionable Next Steps:")
+        print("  • Analyze a candidate ticker setup: python3 gex_engine.py analyze <TICKER> --spot <price>")
+        print("  • Ingest and filter candidates:      python3 gex_engine.py update-candidates")
         return
 
     status_filter = args.status.upper() if getattr(args, "status", None) else "ALL"
@@ -5697,8 +5700,11 @@ def cmd_rankings(args):
         filtered_analyses.append(data)
 
     if not filtered_analyses:
-        print("### 🔍 GEX Setup Rankings & Report")
-        print(f"No tickers matched the specified filters (Status: {status_filter}, Min Grade: {min_grade or 'Any'}).")
+        print("### 🔍 GEX Setup Rankings & Report\n")
+        print(f"💤 No tickers matched the specified filters (Status: {status_filter}, Min Grade: {min_grade or 'Any'}).\n")
+        print("💡 Actionable Next Steps:")
+        print("  • View all setup rankings: python3 gex_engine.py rankings --status ALL")
+        print("  • Lower min grade filter:  python3 gex_engine.py rankings --min-grade 0")
         return
 
     # Sorting
@@ -5891,8 +5897,12 @@ def cmd_closed(args):
     closed_stocks = closed_data.get("closed_stocks", [])
     
     if not closed_options and not closed_stocks:
-        print("### 📊 GEX Closed Positions History")
-        print("No closed positions found in the archive.")
+        print("### 📊 GEX Closed Positions History\n")
+        print("💤 No closed positions found in local cache.\n")
+        print("💡 Actionable Next Steps:")
+        print("  • Sync trade history to archive closed trades: python3 gex_engine.py sync-pnl [--pnl-file <path>]")
+        print("  • Close an active option position:            python3 gex_engine.py close-position <option_id_or_ticker> --close-premium <price>")
+        print("  • Close an active stock position:             python3 gex_engine.py close-stock <ticker> --close-price <price>")
         return
         
     print("### 📊 GEX Closed Positions History")
