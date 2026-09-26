@@ -4176,6 +4176,28 @@ def cmd_add_pos(args):
     except ValueError:
         print(f"Error: Expiration '{args.expiration}' must be a valid date in YYYY-MM-DD format.", file=sys.stderr)
         sys.exit(1)
+
+    try:
+        opt_pos = OptionPosition(
+            option_id=args.option_id,
+            underlier=args.underlier,
+            strike=args.strike,
+            expiration=args.expiration,
+            type=args.type,
+            purchase_premium=args.purchase_premium,
+            mark_price=args.purchase_premium,
+            days_held=1,
+            stalling_days=0,
+            delta=args.delta,
+            gamma=args.gamma,
+            open_interest=args.open_interest,
+            imp_vol=args.imp_vol,
+            beta_sector_tag=args.sector
+        )
+        opt_pos.validate()
+    except ValueError as e:
+        print(f"Error validating option position parameters: {e}", file=sys.stderr)
+        sys.exit(1)
     
     positions[args.option_id] = {
         "Option ID": args.option_id,
@@ -4215,6 +4237,22 @@ def cmd_add_stock_pos(args):
     
     if ticker in stocks:
         print(f"Error: Stock Ticker {ticker} already exists in portfolio. Use update-stock to modify it.", file=sys.stderr)
+        sys.exit(1)
+
+    try:
+        stock_pos = StockPosition(
+            ticker=ticker,
+            shares=args.shares,
+            average_buy_price=args.average_buy_price,
+            current_price=args.average_buy_price,
+            beta_sector_tag=args.sector,
+            trailing_stop_pct=getattr(args, "trail_pct", None),
+            stop_loss_pct=getattr(args, "stop_pct", None),
+            profit_target_pct=getattr(args, "target_pct", None)
+        )
+        stock_pos.validate()
+    except ValueError as e:
+        print(f"Error validating stock position parameters: {e}", file=sys.stderr)
         sys.exit(1)
         
     stocks[ticker] = {
