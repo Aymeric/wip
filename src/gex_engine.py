@@ -3566,9 +3566,9 @@ def cmd_portfolio(args):
         total_beta_weighted_delta_exposure_dlr += (shares * spot) * stk_beta
 
     print("\n### 📊 Portfolio Allocation & Performance Matrix")
-    print("  " + "-" * 112)
-    print(f"  {'Ticker':<6} | {'Class':<6} | {'Spot':<8} | {'Cost Basis':<10} | {'Current Val':<11} | {'Unrealized P&L':<18} | {'Weight':<6} | {'Rule State'}")
-    print("  " + "-" * 112)
+    print("  " + "-" * 114)
+    print(f"  {'Ticker':<6} | {'Class':<6} | {'Spot':<8} | {'Cost Basis':<10} | {'Current Val':<11} | {'Unrealized P&L':<20} | {'Weight':<6} | {'Rule State'}")
+    print("  " + "-" * 114)
     
     for r in table_rows:
         tk_str = f"{r['ticker']:<6}"
@@ -3580,9 +3580,14 @@ def cmd_portfolio(args):
         cb_fmt = f"${r['cost_basis']:<9,.2f}"
         cv_fmt = f"${r['current_value']:<10,.2f}"
         
-        pnl_str = f"{r['pnl_dlr']:+,.2f} ({r['pnl_pct']:+.2f}%)"
-        pnl_color = "32" if r['pnl_dlr'] >= 0 else "31"
-        pnl_fmt = format_color(f"{pnl_str:<18}", pnl_color, bold=True)
+        pnl_dlr = r['pnl_dlr']
+        pnl_pct = r['pnl_pct']
+        if pnl_dlr >= 0:
+            pnl_str = f"+${pnl_dlr:,.2f} ({pnl_pct:+.2f}%)"
+        else:
+            pnl_str = f"-${abs(pnl_dlr):,.2f} ({pnl_pct:+.2f}%)"
+        pnl_color = "32" if pnl_dlr >= 0 else "31"
+        pnl_fmt = format_color(f"{pnl_str:<20}", pnl_color, bold=True)
         
         weight_fmt = f"{r['weight']:5.2f}%"
         
@@ -3604,7 +3609,7 @@ def cmd_portfolio(args):
         
         print(f"  {tk_fmt} | {cls_fmt} | {spot_fmt} | {cb_fmt} | {cv_fmt} | {pnl_fmt} | {weight_fmt} | {r_fmt}")
         
-    print("  " + "-" * 112)
+    print("  " + "-" * 114)
     
     tech_exposure = 0.0
     total_cost_basis = 0.0
