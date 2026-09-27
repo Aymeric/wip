@@ -45,5 +45,16 @@ class TestPerformanceBenchmark(unittest.TestCase):
 
         print(f"\n[BENCHMARK] Executed {iterations} calls to calculate_bollinger_bands in {elapsed:.4f} seconds ({elapsed/iterations*1000:.4f} ms/call)")
 
+    def test_benchmark_calculate_annualized_vol(self):
+        returns_list = [0.001 * (i % 7 - 3) for i in range(90)]
+        iterations = 100000
+
+        start_time = time.perf_counter()
+        for _ in range(iterations):
+            _ = gex_engine.calculate_annualized_vol(returns_list)
+        elapsed = time.perf_counter() - start_time
+
+        print(f"\n[BENCHMARK] Executed {iterations} calls to calculate_annualized_vol in {elapsed:.4f} seconds ({elapsed/iterations*1000:.4f} ms/call)")
+
 if __name__ == "__main__":
     unittest.main()
