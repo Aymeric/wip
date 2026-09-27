@@ -1074,7 +1074,27 @@ class TestGEXEngine(unittest.TestCase):
                 self.assertEqual(target["Beta Sector Tag"], "Beta Core")
                 self.assertEqual(target["Asset Cost Basis"], 8000.0) # 20 shares * 400 avg price
 
-                # 3) Close stock position
+                # 3) Invalid stock update validation check (e.g. negative price or shares)
+                class InvalidStockUpdateArgs:
+                    ticker = "MSFT"
+                    price = -10.0
+                    shares = None
+                    sector = None
+
+                import io
+                stderr_buf_stock_up = io.StringIO()
+                with patch('sys.stderr', stderr_buf_stock_up):
+                    with self.assertRaises(SystemExit) as cm:
+                        gex_engine.cmd_update_stock_pos(InvalidStockUpdateArgs())
+                    self.assertEqual(cm.exception.code, 1)
+                    self.assertIn("Error validating stock position parameters", stderr_buf_stock_up.getvalue())
+
+                # Verify MSFT position remained unchanged
+                data_unchanged = gex_engine.load_json(tmp_path, {})
+                target_unchanged = data_unchanged.get("stocks_positions", {}).get("MSFT", {})
+                self.assertEqual(target_unchanged["Current Price"], 425.00)
+
+                # 4) Close stock position
                 class CloseArgs:
                     ticker = "MSFT"
                     close_price = 450.00
@@ -1184,6 +1204,30 @@ class TestGEXEngine(unittest.TestCase):
 
                 with self.assertRaises(SystemExit):
                     gex_engine.cmd_update_opt(NonExistentArgs())
+
+                # 4) Invalid option update validation check (e.g. negative mark price or stalling days)
+                class InvalidOptUpdateArgs:
+                    account = "TEST"
+                    option_id = "OPT123"
+                    mark = -5.0
+                    delta = None
+                    gamma = None
+                    oi = None
+                    iv = None
+                    stalling_days = None
+
+                import io
+                stderr_buf_opt_up = io.StringIO()
+                with patch('sys.stderr', stderr_buf_opt_up):
+                    with self.assertRaises(SystemExit) as cm:
+                        gex_engine.cmd_update_opt(InvalidOptUpdateArgs())
+                    self.assertEqual(cm.exception.code, 1)
+                    self.assertIn("Error validating option position parameters", stderr_buf_opt_up.getvalue())
+
+                # Verify OPT123 position mark price remained unchanged
+                data_opt_unchanged = gex_engine.load_json(tmp_path, {})
+                opt123_unchanged = data_opt_unchanged["options_positions"]["OPT123"]
+                self.assertEqual(opt123_unchanged["Mark Price"], 3.75)
         finally:
             if os.path.exists(tmp_path):
                 os.remove(tmp_path)

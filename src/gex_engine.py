@@ -4312,6 +4312,25 @@ def cmd_update_stock_pos(args):
         target_stock["Profit Target Pct"] = args.target_pct
     if getattr(args, "highest_price", None) is not None:
         target_stock["Highest Price"] = args.highest_price
+
+    # Validate updated stock position parameters
+    try:
+        stock_pos = StockPosition(
+            ticker=ticker,
+            shares=float(target_stock.get("Shares", 1.0)),
+            average_buy_price=float(target_stock.get("Average Buy Price", 1.0)),
+            current_price=float(target_stock.get("Current Price", 0.0)),
+            beta_sector_tag=target_stock.get("Beta Sector Tag", "Equity"),
+            entry_date=target_stock.get("Entry Date"),
+            highest_price=float(target_stock["Highest Price"]) if target_stock.get("Highest Price") is not None else None,
+            trailing_stop_pct=float(target_stock["Trailing Stop Pct"]) if target_stock.get("Trailing Stop Pct") is not None else None,
+            stop_loss_pct=float(target_stock["Stop Loss Pct"]) if target_stock.get("Stop Loss Pct") is not None else None,
+            profit_target_pct=float(target_stock["Profit Target Pct"]) if target_stock.get("Profit Target Pct") is not None else None,
+        )
+        stock_pos.validate()
+    except ValueError as e:
+        print(f"Error validating stock position parameters: {e}", file=sys.stderr)
+        sys.exit(1)
         
     # Save the updated stocks dict back using stocks_positions
     options["stocks_positions"] = stocks
@@ -4400,6 +4419,28 @@ def cmd_update_opt(args):
         target_pos["Target Mode"] = args.target_mode
     if getattr(args, "t2_target", None) is not None:
         target_pos["T2 Target"] = args.t2_target
+
+    # Validate updated option position parameters
+    try:
+        opt_pos = OptionPosition(
+            option_id=target_pos.get("Option ID", args.option_id),
+            underlier=target_pos.get("Underlier", "UNKNOWN"),
+            strike=float(target_pos.get("Strike", 1.0)),
+            expiration=target_pos.get("Expiration", "1970-01-01"),
+            type=target_pos.get("Type", "call"),
+            purchase_premium=float(target_pos.get("Purchase Premium", 1.0)),
+            mark_price=float(target_pos.get("Mark Price", 0.0)),
+            days_held=int(target_pos.get("Days Held", 1)),
+            stalling_days=int(target_pos.get("Stalling Days", 0)),
+            target_mode=target_pos.get("Target Mode", "T1"),
+            t2_target=float(target_pos["T2 Target"]) if target_pos.get("T2 Target") is not None else None,
+            beta_sector_tag=target_pos.get("Beta Sector Tag", "Technology/Beta"),
+            entry_date=target_pos.get("Entry Date")
+        )
+        opt_pos.validate()
+    except ValueError as e:
+        print(f"Error validating option position parameters: {e}", file=sys.stderr)
+        sys.exit(1)
         
     save_json(options_file, options)
     print(f"Successfully updated metrics for option {args.option_id} in {options_file}.")
