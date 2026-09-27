@@ -1962,6 +1962,31 @@ class TestGEXEngine(unittest.TestCase):
                 type="invalid_type", purchase_premium=4.50, mark_price=5.10, days_held=3, stalling_days=0
             ).validate()
 
+        # Expiration and entry_date format validations
+        with self.assertRaises(ValueError):
+            OptionPosition(
+                option_id="opt_123", underlier="AAPL", strike=310.0, expiration="",
+                type="call", purchase_premium=4.50, mark_price=5.10, days_held=3, stalling_days=0
+            ).validate()
+
+        with self.assertRaises(ValueError):
+            OptionPosition(
+                option_id="opt_123", underlier="AAPL", strike=310.0, expiration="2026/08/08",
+                type="call", purchase_premium=4.50, mark_price=5.10, days_held=3, stalling_days=0
+            ).validate()
+
+        op_entry_ok = OptionPosition(
+            option_id="opt_123", underlier="AAPL", strike=310.0, expiration="2026-08-08",
+            type="call", purchase_premium=4.50, mark_price=5.10, days_held=3, stalling_days=0, entry_date="2026-08-01"
+        )
+        self.assertTrue(op_entry_ok.validate())
+
+        with self.assertRaises(ValueError):
+            OptionPosition(
+                option_id="opt_123", underlier="AAPL", strike=310.0, expiration="2026-08-08",
+                type="call", purchase_premium=4.50, mark_price=5.10, days_held=3, stalling_days=0, entry_date="2026/08/01"
+            ).validate()
+
         # StockPosition validation
         sp_ok = StockPosition("AMZN", 10.0, 180.0, 185.0)
         self.assertTrue(sp_ok.validate())
@@ -1971,6 +1996,12 @@ class TestGEXEngine(unittest.TestCase):
 
         with self.assertRaises(ValueError):
             StockPosition("AMZN", -1.0, 180.0, 185.0).validate()
+
+        sp_entry_ok = StockPosition("AMZN", 10.0, 180.0, 185.0, entry_date="2026-08-01")
+        self.assertTrue(sp_entry_ok.validate())
+
+        with self.assertRaises(ValueError):
+            StockPosition("AMZN", 10.0, 180.0, 185.0, entry_date="2026/08/01").validate()
 
     def test_portfolio_consolidated_realized_stats(self):
         """Test unified Options and Stocks realized performance stats reporting."""
