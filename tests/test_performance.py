@@ -45,5 +45,33 @@ class TestPerformanceBenchmark(unittest.TestCase):
 
         print(f"\n[BENCHMARK] Executed {iterations} calls to calculate_bollinger_bands in {elapsed:.4f} seconds ({elapsed/iterations*1000:.4f} ms/call)")
 
+    def test_benchmark_calculate_annualized_vol(self):
+        returns_list = [0.01 * (i % 5 - 2) for i in range(250)]
+        iterations = 50000
+
+        start_time = time.perf_counter()
+        for _ in range(iterations):
+            _ = gex_engine.calculate_annualized_vol(returns_list)
+        elapsed = time.perf_counter() - start_time
+
+        print(f"\n[BENCHMARK] Executed {iterations} calls to calculate_annualized_vol in {elapsed:.4f} seconds ({elapsed/iterations*1000:.4f} ms/call)")
+
+    def test_benchmark_calculate_candidate_score(self):
+        candidate = {
+            'relative_options_volume': 15.0,
+            'chg_pct': 3.5,
+            'iv': 0.8,
+            'rsi': 65.0,
+            'macd_hist': 0.12
+        }
+        iterations = 100000
+
+        start_time = time.perf_counter()
+        for _ in range(iterations):
+            _ = gex_engine.calculate_candidate_score(candidate)
+        elapsed = time.perf_counter() - start_time
+
+        print(f"\n[BENCHMARK] Executed {iterations} calls to calculate_candidate_score in {elapsed:.4f} seconds ({elapsed/iterations*1000:.4f} ms/call)")
+
 if __name__ == "__main__":
     unittest.main()
