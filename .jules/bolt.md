@@ -25,3 +25,7 @@
 ## 2026-09-27 - Replace Generator Expressions with Scalar Loops in Window Statistics
 **Learning:** Using Python generator expressions inside built-in aggregators like `sum((closes[i] - mean)**2 for ...)` incurs CPython generator frame allocation, iteration protocol, and opcode dispatch overhead per element. Replacing generator expressions with explicit scalar accumulator loops (`for i in range(...): diff = closes[i] - mean; sum_sq_diff += diff * diff`) in `calculate_bollinger_bands` yielded a ~1.8x execution speedup.
 **Action:** In statistical and mathematical window calculations, prefer explicit scalar accumulation loops over generator expressions inside `sum()` to eliminate generator frame allocation overhead.
+
+## 2026-09-28 - Scalar Accumulation for Volatility and Candidate Scoring
+**Learning:** `calculate_candidate_score` allocated temporary lists (`available`) and ran generator expression `sum()` calls, while `calculate_annualized_vol` ran generator expressions with exponentiation `** 2`. Replacing list allocations and generator `sum()` with scalar accumulation loops and direct multiplication (`diff * diff`) yielded ~3.0x and ~2.3x speedups respectively.
+**Action:** In scoring and statistical return metrics, perform normalization and weight accumulation in a single inline loop rather than building intermediate lists or passing generator expressions to `sum()`.
