@@ -5005,10 +5005,14 @@ def cmd_sync_positions(args):
     print(f"Active positions updated in {options_file}.")
 
 
-def slugify(text):
-    text = text.lower()
-    text = re.sub(r'[^a-z0-9]+', '_', text)
-    return text.strip('_')
+def slugify(text: Any) -> str:
+    """Sanitizes text for safe filename generation, falling back to 'scan' if empty or invalid."""
+    if text is None:
+        return "scan"
+    s = str(text).lower()
+    s = re.sub(r'[^a-z0-9]+', '_', s)
+    s = s.strip('_')
+    return s if s else "scan"
 
 
 def persist_new_scans():
