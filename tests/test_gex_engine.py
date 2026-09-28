@@ -63,10 +63,13 @@ class TestGEXEngine(unittest.TestCase):
         # Numbers and mixed alphanumeric strings
         self.assertEqual(slugify("Top 10 Scans 2026"), "top_10_scans_2026")
 
-        # Edge cases: empty string, whitespace-only, non-alphanumeric-only
-        self.assertEqual(slugify(""), "")
-        self.assertEqual(slugify("   "), "")
-        self.assertEqual(slugify("!!!###$$$"), "")
+        # Edge cases: empty string, whitespace-only, non-alphanumeric-only, None, numbers, path traversal
+        self.assertEqual(slugify(""), "scan")
+        self.assertEqual(slugify("   "), "scan")
+        self.assertEqual(slugify("!!!###$$$"), "scan")
+        self.assertEqual(slugify(None), "scan")
+        self.assertEqual(slugify(12345), "12345")
+        self.assertEqual(slugify("../../../etc/passwd"), "etc_passwd")
     def test_extract_quotes_list(self):
         sample_quotes = [{"instrument_id": "opt1"}]
 
