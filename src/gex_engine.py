@@ -95,6 +95,18 @@ class OptionPosition:
             raise ValueError(f"stalling_days must be >= 0: {self.stalling_days}")
         if self.target_mode not in ("T1", "T2"):
             raise ValueError(f"target_mode must be 'T1' or 'T2': {self.target_mode}")
+        # Security: Strict date format validation prevents state corruption & date parsing failures
+        if not self.expiration:
+            raise ValueError("expiration cannot be empty")
+        try:
+            datetime.strptime(self.expiration, "%Y-%m-%d")
+        except ValueError:
+            raise ValueError(f"expiration must be a valid date in YYYY-MM-DD format: {self.expiration}")
+        if self.entry_date:
+            try:
+                datetime.strptime(self.entry_date, "%Y-%m-%d")
+            except ValueError:
+                raise ValueError(f"entry_date must be a valid date in YYYY-MM-DD format: {self.entry_date}")
         return True
 
 
@@ -131,6 +143,12 @@ class StockPosition:
             raise ValueError(f"stop_loss_pct must be positive: {self.stop_loss_pct}")
         if self.profit_target_pct is not None and self.profit_target_pct <= 0:
             raise ValueError(f"profit_target_pct must be positive: {self.profit_target_pct}")
+        # Security: Strict date format validation prevents state corruption & date parsing failures
+        if self.entry_date:
+            try:
+                datetime.strptime(self.entry_date, "%Y-%m-%d")
+            except ValueError:
+                raise ValueError(f"entry_date must be a valid date in YYYY-MM-DD format: {self.entry_date}")
         return True
 
 
