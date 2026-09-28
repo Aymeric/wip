@@ -2134,6 +2134,17 @@ class TestGEXEngine(unittest.TestCase):
                  patch('gex_engine.OPTIONS_FILE', options_path), \
                  patch('gex_engine.CANDIDATES_FILE', cand_path):
                 
+                # Test cmd_sentiment on empty sentiment store
+                with patch('sys.stdout') as mock_stdout:
+                    mock_stdout.isatty = MagicMock(return_value=False)
+                    class SentimentArgs:
+                        pass
+                    gex_engine.cmd_sentiment(SentimentArgs())
+
+                    empty_output = "".join(call.args[0] for call in mock_stdout.write.call_args_list if call.args)
+                    self.assertIn("No Reddit sentiment records found in local cache.", empty_output)
+                    self.assertIn("Actionable Next Steps:", empty_output)
+
                 # Update Sentiment for OKLO (exuberant FOMO setup)
                 class UpdateArgs1:
                     ticker = "OKLO"

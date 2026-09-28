@@ -5583,8 +5583,10 @@ def cmd_sentiment(args):
     stk_symbols = {t.upper() for t in stocks.keys()}
     
     if not sentiment_db:
-        print("### 🧠 Reddit Social Sentiment & GEX Divergence Dashboard")
-        print("No Reddit sentiment records found in database. Update sentiment using update-sentiment command.")
+        print("### 🧠 Reddit Social Sentiment & GEX Divergence Dashboard\n")
+        print("💤 No Reddit sentiment records found in local cache.\n")
+        print("💡 Actionable Next Steps:")
+        print("  • Register sentiment for a ticker: python3 gex_engine.py update-sentiment <ticker> --score <score> --buzz <buzz> --narrative <narrative>")
         return
         
     total_candidates = sum(1 for sym in sentiment_db if sym in cand_symbols)
