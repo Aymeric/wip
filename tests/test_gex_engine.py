@@ -4843,6 +4843,55 @@ class TestCmdStatus(unittest.TestCase):
             self.assertIn("Single-Leg Sizing Limit (<= 3.0% of Net Liq)**: PASS", output)
             self.assertIn("Sector Sizing Cap (Tech/Beta <= 15.0% of Net Liq)**: PASS", output)
 
+    def test_portfolio_table_alignment(self):
+        """Test cmd_portfolio table rendering formats positive and negative P&L with consistent alignment."""
+        from types import SimpleNamespace
+        import io
+        from unittest.mock import patch
+        import gex_engine
+
+        positions = {
+            "options_positions": {
+                "opt_win": {
+                    "Underlier": "AAPL",
+                    "Purchase Premium": 2.69,
+                    "Mark Price": 3.12,
+                    "Strike": 150.0,
+                    "Expiration": "2026-10-16",
+                    "Type": "call",
+                    "Days Held": 4,
+                    "Stalling Days": 0,
+                    "Target Mode": "T1",
+                    "Sector": "Technology/Beta"
+                },
+                "opt_loss": {
+                    "Underlier": "NVDA",
+                    "Purchase Premium": 5.00,
+                    "Mark Price": 4.50,
+                    "Strike": 120.0,
+                    "Expiration": "2026-10-16",
+                    "Type": "call",
+                    "Days Held": 4,
+                    "Stalling Days": 0,
+                    "Target Mode": "T1",
+                    "Sector": "Technology/Beta"
+                }
+            },
+            "stocks_positions": {}
+        }
+
+        mock_args = SimpleNamespace(account="", net_liq=50000.0, spot_overrides={}, sizing_threshold=10000.0)
+        with patch('gex_engine.load_json', return_value=positions), \
+             patch('gex_engine.find_latest_underlier_spot', return_value=150.0), \
+             patch('sys.stdout', new_callable=io.StringIO) as mock_stdout:
+            gex_engine.cmd_portfolio(mock_args)
+            output = mock_stdout.getvalue()
+            self.assertIn("Portfolio Allocation & Performance Matrix", output)
+            self.assertIn("Unrealized P&L", output)
+            self.assertIn("+$43.00 (+15.99%)", output)
+            self.assertIn("-$50.00 (-10.00%)", output)
+            self.assertIn("-" * 114, output)
+
 
 if __name__ == '__main__':
     unittest.main()
