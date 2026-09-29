@@ -3615,10 +3615,15 @@ def cmd_portfolio(args):
         tk_fmt = format_color(tk_str, "35", bold=True)
         
         cls_fmt = f"{r['asset_cls']:<6}"
-        spot_fmt = f"${r['spot']:<7.2f}"
         
-        cb_fmt = f"${r['cost_basis']:<9,.2f}"
-        cv_fmt = f"${r['current_value']:<10,.2f}"
+        spot_str = f"${r['spot']:,.2f}"
+        spot_fmt = f"{spot_str:<8}"
+
+        cb_str = f"${r['cost_basis']:,.2f}"
+        cb_fmt = f"{cb_str:<10}"
+
+        cv_str = f"${r['current_value']:,.2f}"
+        cv_fmt = f"{cv_str:<11}"
         
         pnl_dlr = r['pnl_dlr']
         pnl_pct = r['pnl_pct']
