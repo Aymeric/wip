@@ -208,6 +208,29 @@ WORKFLOW_STATE_FILE = os.path.join(REPOSITORY_ROOT, "data/workflow_state.json")
 DEFAULT_SIZING_THRESHOLD = 10000.0 # Portfolio Net Liq threshold for strict percentage sizing
 
 
+def validate_safe_path(filepath: str, allowed_roots: Optional[List[str]] = None) -> str:
+    """Ensure filepath resolves strictly within allowed roots (defaults to REPOSITORY_ROOT and temp dir)."""
+    if allowed_roots is None:
+        allowed_roots = [REPOSITORY_ROOT, tempfile.gettempdir()]
+
+    if not os.path.isabs(filepath):
+        abs_target = os.path.abspath(os.path.join(REPOSITORY_ROOT, filepath))
+    else:
+        abs_target = os.path.abspath(filepath)
+
+    for root in allowed_roots:
+        if not root:
+            continue
+        abs_root = os.path.abspath(root)
+        try:
+            if os.path.commonpath([abs_root, abs_target]) == abs_root:
+                return abs_target
+        except ValueError:
+            continue
+
+    raise ValueError(f"Path traversal detected: '{filepath}' is outside allowed directories")
+
+
 def sanitize_account(account: str = "") -> str:
     """Sanitize account identifier string to prevent path traversal or invalid file paths."""
     if not account:
@@ -473,7 +496,8 @@ def save_json(filepath: str, data: Any) -> None:
     _clear_cache_for_write()
     temp_path = None
     try:
-        dir_name = os.path.dirname(filepath)
+        target_filepath = validate_safe_path(filepath)
+        dir_name = os.path.dirname(target_filepath)
         if dir_name:
             os.makedirs(dir_name, exist_ok=True)
 
@@ -486,7 +510,7 @@ def save_json(filepath: str, data: Any) -> None:
             json.dump(data, f, indent=2)
             f.flush()
             os.fsync(f.fileno())
-        os.replace(temp_path, filepath)
+        os.replace(temp_path, target_filepath)
         temp_path = None
     except Exception as e:
         print(f"Error: Failed to save to {filepath}: {e}", file=sys.stderr)
