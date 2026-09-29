@@ -73,5 +73,25 @@ class TestPerformanceBenchmark(unittest.TestCase):
 
         print(f"\n[BENCHMARK] Executed {iterations} calls to calculate_candidate_score in {elapsed:.4f} seconds ({elapsed/iterations*1000:.4f} ms/call)")
 
+    def test_benchmark_calculate_trade_journal(self):
+        closed_data = {
+            'closed_options': [
+                {'Realized P&L ($)': '150.50', 'Entry Date': '2026-01-01', 'Close Date': '2026-01-10', 'Close Reason': 'TARGET', 'Target Mode': 'SWING'}
+                for _ in range(50)
+            ],
+            'closed_stocks': [
+                {'Realized P&L ($)': '-50.25', 'Entry Date': '2026-01-05', 'Close Date': '2026-01-12', 'Close Reason': 'STOP', 'Target Mode': 'DAY'}
+                for _ in range(50)
+            ]
+        }
+        iterations = 5000
+
+        start_time = time.perf_counter()
+        for _ in range(iterations):
+            _ = gex_engine.calculate_trade_journal(closed_data)
+        elapsed = time.perf_counter() - start_time
+
+        print(f"\n[BENCHMARK] Executed {iterations} calls to calculate_trade_journal in {elapsed:.4f} seconds ({elapsed/iterations*1000:.4f} ms/call)")
+
 if __name__ == "__main__":
     unittest.main()
