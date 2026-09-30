@@ -231,6 +231,16 @@ class TestGEXEngine(unittest.TestCase):
                     if os.path.exists(tmp_path):
                         os.remove(tmp_path)
 
+    def test_load_json_prevents_path_traversal(self):
+        import gex_engine
+
+        default_val = {"safe": True}
+        result = gex_engine.load_json("../../../etc/passwd", default_val)
+        self.assertEqual(result, default_val)
+
+        result_abs = gex_engine.load_json("/etc/passwd", default_val)
+        self.assertEqual(result_abs, default_val)
+
     def test_compute_regime_gates(self):
         # Case 1: All Tracks Passed (All Gates PASS)
         # SPY change > 0.5%, bull/bear ratio > 3.0, VIX bearish = True

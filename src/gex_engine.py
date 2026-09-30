@@ -209,9 +209,10 @@ DEFAULT_SIZING_THRESHOLD = 10000.0 # Portfolio Net Liq threshold for strict perc
 
 
 def validate_safe_path(filepath: str, allowed_roots: Optional[List[str]] = None) -> str:
-    """Ensure filepath resolves strictly within allowed roots (defaults to REPOSITORY_ROOT and temp dir)."""
+    """Ensure filepath resolves strictly within allowed roots (defaults to REPOSITORY_ROOT, module root, and temp dir)."""
     if allowed_roots is None:
-        allowed_roots = [REPOSITORY_ROOT, tempfile.gettempdir()]
+        module_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        allowed_roots = [REPOSITORY_ROOT, module_root, tempfile.gettempdir()]
 
     if not os.path.isabs(filepath):
         abs_target = os.path.abspath(os.path.join(REPOSITORY_ROOT, filepath))
@@ -451,6 +452,13 @@ def _clone_json(obj: Any) -> Any:
 
 def load_json(filepath: str, default: Any) -> Any:
     """Loads a JSON file from disk with mtime caching, returning default if absent, corrupted, or unexpected type."""
+    try:
+        # Validate path to prevent directory traversal outside repository/temp directories
+        filepath = validate_safe_path(filepath)
+    except Exception as e:
+        print(f"Warning: Failed to load {filepath}: {e}", file=sys.stderr)
+        return default
+
     if not os.path.exists(filepath):
         return default
     try:
