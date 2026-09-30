@@ -313,9 +313,9 @@ def generate_ascii_gex_scale(spot: float, ptrans: Optional[float], ntrans: Optio
             elif label == "pTrans":
                 label_strs.append(format_color("pTrans (Trigger)", "36", bold=True))
             elif label == "nTrans":
-                label_strs.append(format_color("nTrans (Stop)", "31"))
+                label_strs.append(format_color("nTrans (Stop)", "31", bold=True))
             elif label == "COTMP":
-                label_strs.append(format_color("COTMP (Support)", "31"))
+                label_strs.append(format_color("COTMP (Support)", "31", bold=True))
                 
         label_block = " + ".join(label_strs)
         formatted_block = f"[{label_block}: ${price:.2f}]"
