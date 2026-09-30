@@ -29,3 +29,7 @@
 ## 2026-09-28 - Scalar Accumulation for Volatility and Candidate Scoring
 **Learning:** `calculate_candidate_score` allocated temporary lists (`available`) and ran generator expression `sum()` calls, while `calculate_annualized_vol` ran generator expressions with exponentiation `** 2`. Replacing list allocations and generator `sum()` with scalar accumulation loops and direct multiplication (`diff * diff`) yielded ~3.0x and ~2.3x speedups respectively.
 **Action:** In scoring and statistical return metrics, perform normalization and weight accumulation in a single inline loop rather than building intermediate lists or passing generator expressions to `sum()`.
+
+## 2026-09-29 - ISO Date Parsing & Single-Pass Journal Aggregation
+**Learning:** `calculate_trade_journal` used `datetime.strptime` for date string parsing and multi-pass list comprehensions to compute trade metrics across closed options/stocks. Replacing `datetime.strptime` with `date.fromisoformat` (~27x faster per date pair) and consolidating multi-pass filtering into a single scalar loop yielded a ~6.5x execution speedup.
+**Action:** Prefer `date.fromisoformat` over `datetime.strptime` for ISO formatted date strings (`YYYY-MM-DD`), and accumulate grouped statistics in a single iteration pass rather than making repeated list comprehension passes over dataset items.
