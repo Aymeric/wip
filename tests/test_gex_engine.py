@@ -182,6 +182,23 @@ class TestGEXEngine(unittest.TestCase):
         self.assertIsNone(calculate_atr([100.0] * 5, [95.0] * 5, [98.0] * 5, period=10))
         self.assertIsNone(calculate_atr([100.0] * 20, [95.0] * 20, [98.0] * 20, period=0))
 
+    def test_validate_safe_path_and_save_json_path_traversal_prevention(self):
+        from unittest.mock import patch
+        import gex_engine
+
+        # Valid paths within REPOSITORY_ROOT or allowed roots
+        valid_path = os.path.join(gex_engine.REPOSITORY_ROOT, "data", "test_sample.json")
+        self.assertEqual(gex_engine.validate_safe_path(valid_path), os.path.abspath(valid_path))
+
+        # Path traversal attempting to break out of repository root
+        invalid_path = os.path.join(gex_engine.REPOSITORY_ROOT, "..", "..", "etc", "passwd")
+        with self.assertRaises(ValueError):
+            gex_engine.validate_safe_path(invalid_path)
+
+        # save_json handles ValueError cleanly when path traversal is attempted
+        with patch('sys.stderr') as mock_stderr:
+            gex_engine.save_json(invalid_path, {"test": "data"})
+
     def test_save_json_preserves_existing_file_on_serialization_failure(self):
         import tempfile
         import gex_engine
