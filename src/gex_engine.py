@@ -3273,6 +3273,19 @@ def compute_exit_rule_state(spot, purchase_premium, mark_price, ptrans, ntrans, 
                     exit_rule_state = "PROFIT TAKE (T1 TARGET MET)"
                     proposed_action = "Exit for 100% gains OR Trail stop to entry price and target structural T2"
 
+    # Stop 3 (Theta Gate / Time Stop): Hard exit when DTE <= 14 days to prevent terminal theta decay
+    if dte is not None and 0 <= dte <= 14:
+        if not exit_rule_state.startswith("STOP TRIGGERED") and not exit_rule_state.startswith("PROFIT TAKE") and exit_rule_state != "UNDERLIER TARGET MET (Option in Loss)":
+            exit_rule_state = "STOP TRIGGERED (Theta Stop: DTE <= 14 days)"
+            proposed_action = "Immediate Exit (Theta Stop)"
+            time_status = "THETA EXHAUSTION (DTE <= 14)"
+
+    # Stop 5 (Catastrophic Risk Stop): Hard stop at -50% position value
+    if pl_pct <= -50.0:
+        if not exit_rule_state.startswith("STOP TRIGGERED"):
+            exit_rule_state = "STOP TRIGGERED (Catastrophic Risk Stop: Loss <= -50%)"
+            proposed_action = "Immediate Exit (Catastrophic Risk Stop)"
+
     if dte is not None and dte < 0:
         exit_rule_state = "EXPIRED (Contract past expiration)"
         proposed_action = "Remove from tracker via close-position"

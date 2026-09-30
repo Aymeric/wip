@@ -389,6 +389,25 @@ class TestGEXEngine(unittest.TestCase):
         )
         self.assertEqual(exit_rule, "PROFIT TAKE (T1 TARGET MET)")
 
+        # Case 11: Stop 3 - Theta Stop Triggered (DTE <= 14 days when target not met)
+        exit_rule, action, time_st, dist_ntrans, dist_max = compute_exit_rule_state(
+            spot=290.0, purchase_premium=5.0, mark_price=4.5,
+            ptrans=285.0, ntrans=282.0, gex_t1=310.0,
+            days_held=3, stalling_counter=0, dte=14
+        )
+        self.assertTrue("Theta Stop" in exit_rule)
+        self.assertTrue("Theta Stop" in action)
+        self.assertEqual(time_st, "THETA EXHAUSTION (DTE <= 14)")
+
+        # Case 12: Stop 5 - Catastrophic Risk Stop Triggered (Loss <= -50%)
+        exit_rule, action, time_st, dist_ntrans, dist_max = compute_exit_rule_state(
+            spot=290.0, purchase_premium=5.0, mark_price=2.0,
+            ptrans=285.0, ntrans=282.0, gex_t1=310.0,
+            days_held=2, stalling_counter=0, dte=35
+        )
+        self.assertTrue("Catastrophic Risk Stop" in exit_rule)
+        self.assertTrue("Catastrophic Risk Stop" in action)
+
     def test_etf_file_regime_integration(self):
         import tempfile
         import json
@@ -4884,6 +4903,7 @@ class TestCmdStatus(unittest.TestCase):
         }
         mock_args_large = SimpleNamespace(account="5QR24141", net_liq=50000.0, spot_overrides={}, sizing_threshold=10000.0)
         with patch('gex_engine.load_json', return_value=positions_large), \
+             patch('gex_engine.save_json'), \
              patch('gex_engine.find_latest_underlier_spot', return_value=49.20), \
              patch('sys.stdout', new_callable=io.StringIO) as mock_stdout:
             gex_engine.cmd_portfolio(mock_args_large)
@@ -4930,6 +4950,7 @@ class TestCmdStatus(unittest.TestCase):
 
         mock_args = SimpleNamespace(account="", net_liq=50000.0, spot_overrides={}, sizing_threshold=10000.0)
         with patch('gex_engine.load_json', return_value=positions), \
+             patch('gex_engine.save_json'), \
              patch('gex_engine.find_latest_underlier_spot', return_value=150.0), \
              patch('sys.stdout', new_callable=io.StringIO) as mock_stdout:
             gex_engine.cmd_portfolio(mock_args)
