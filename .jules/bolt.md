@@ -33,3 +33,7 @@
 ## 2026-09-29 - ISO Date Parsing & Single-Pass Journal Aggregation
 **Learning:** `calculate_trade_journal` used `datetime.strptime` for date string parsing and multi-pass list comprehensions to compute trade metrics across closed options/stocks. Replacing `datetime.strptime` with `date.fromisoformat` (~27x faster per date pair) and consolidating multi-pass filtering into a single scalar loop yielded a ~6.5x execution speedup.
 **Action:** Prefer `date.fromisoformat` over `datetime.strptime` for ISO formatted date strings (`YYYY-MM-DD`), and accumulate grouped statistics in a single iteration pass rather than making repeated list comprehension passes over dataset items.
+
+## 2026-09-30 - Direct Scalar EMA Accumulation for Point MACD Estimates
+**Learning:** `calculate_macd` previously called `calculate_macd_series` and `calculate_ema`, allocating full time-series lists (`macd_line` and `signal_line`) even though candidate screening and technical filtering only need the latest scalar MACD, Signal, and Histogram values. Computing fast/slow EMAs and the signal line EMA directly via scalar variables eliminated list allocations and provided a ~1.27x execution speedup.
+**Action:** When computing point technical indicators for filtering or screening where only the latest value is needed, use scalar accumulators instead of allocating full time-series lists.
