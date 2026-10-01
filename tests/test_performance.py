@@ -93,5 +93,37 @@ class TestPerformanceBenchmark(unittest.TestCase):
 
         print(f"\n[BENCHMARK] Executed {iterations} calls to calculate_trade_journal in {elapsed:.4f} seconds ({elapsed/iterations*1000:.4f} ms/call)")
 
+    def test_benchmark_select_best_option(self):
+        expirations = ['2026-04-17', '2026-05-15', '2026-06-19', '2026-07-17']
+        inst_data = [
+            {
+                'id': f'opt_{i}',
+                'strike_price': str(100.0 + (i % 30) * 0.5),
+                'type': 'call' if i % 2 == 0 else 'put',
+                'expiration_date': expirations[i % len(expirations)],
+                'chain_symbol': 'TEST'
+            } for i in range(500)
+        ]
+        quotes_data = [
+            {
+                'instrument_id': f'opt_{i}',
+                'bid_price': '1.50',
+                'ask_price': '1.60',
+                'open_interest': 1000,
+                'volume': 500,
+                'delta': '0.45',
+                'gamma': '0.05',
+                'implied_volatility': '0.30'
+            } for i in range(500)
+        ]
+        iterations = 1000
+
+        start_time = time.perf_counter()
+        for _ in range(iterations):
+            _ = gex_engine.select_best_option(inst_data, quotes_data, 100.0, 110.0, today_override='2026-03-31', earnings_date='2026-04-20')
+        elapsed = time.perf_counter() - start_time
+
+        print(f"\n[BENCHMARK] Executed {iterations} calls to select_best_option in {elapsed:.4f} seconds ({elapsed/iterations*1000:.4f} ms/call)")
+
 if __name__ == "__main__":
     unittest.main()
