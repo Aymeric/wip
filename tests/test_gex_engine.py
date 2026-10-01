@@ -2673,7 +2673,7 @@ class TestGEXEngine(unittest.TestCase):
             self.assertIn("NVDA", output)
             self.assertIn("Target Spot", output)
             self.assertIn("$190.00", output)
-            self.assertIn("$200.00", output)
+            self.assertIn("$200.00 (Spot)", output)
             self.assertIn("$210.00", output)
 
     def test_format_color(self):
