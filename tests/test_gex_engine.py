@@ -199,6 +199,25 @@ class TestGEXEngine(unittest.TestCase):
         with patch('sys.stderr') as mock_stderr:
             gex_engine.save_json(invalid_path, {"test": "data"})
 
+    def test_load_json_and_cli_commands_path_traversal_prevention(self):
+        from unittest.mock import patch
+        from types import SimpleNamespace
+        import gex_engine
+
+        invalid_path = os.path.join(gex_engine.REPOSITORY_ROOT, "..", "..", "etc", "passwd")
+
+        # load_json returns default when path traversal is attempted
+        with patch('sys.stderr'):
+            res = gex_engine.load_json(invalid_path, {"default": True})
+            self.assertEqual(res, {"default": True})
+
+        # prune-candidates with path traversal watchlist_file safely handles path traversal
+        prune_args = SimpleNamespace(watchlist_file=invalid_path, symbols=None, json=True)
+        with patch('sys.stderr'), patch('sys.stdout'), patch('os.path.exists', return_value=True):
+            with self.assertRaises(SystemExit) as cm:
+                gex_engine.cmd_prune_candidates(prune_args)
+            self.assertEqual(cm.exception.code, 1)
+
     def test_save_json_preserves_existing_file_on_serialization_failure(self):
         import tempfile
         import gex_engine

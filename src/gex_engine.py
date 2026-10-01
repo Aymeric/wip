@@ -678,9 +678,7 @@ def cmd_update_regime(args):
             
     if hasattr(args, "etf_file") and args.etf_file:
         try:
-            with open(args.etf_file, "r") as f:
-                etf_data = json.load(f)
-                
+            etf_data = load_json(args.etf_file, {})
             results = []
             if isinstance(etf_data, dict):
                 results = etf_data.get("data", {}).get("results", [])
@@ -5273,11 +5271,8 @@ def cmd_update_candidates(args):
         if not os.path.exists(filepath):
             print(f"Offline file not found for {source_name}: {filepath}")
             return
-        try:
-            with open(filepath, 'r') as f:
-                data = json.load(f)
-        except Exception as e:
-            print(f"Error reading offline file {filepath}: {e}", file=sys.stderr)
+        data = load_json(filepath, None)
+        if data is None:
             return
 
         results = []
@@ -5587,26 +5582,21 @@ def cmd_prune_candidates(args):
         if not os.path.exists(watchlist_file):
             print(f"Error: Watchlist file not found: {watchlist_file}", file=sys.stderr)
             sys.exit(1)
-        try:
-            with open(watchlist_file, "r") as f:
-                wl_data = json.load(f)
-            items = []
-            if isinstance(wl_data, dict):
-                items = wl_data.get("data", {}).get("items", []) or wl_data.get("items", [])
-            elif isinstance(wl_data, list):
-                items = wl_data
-            for item in items:
-                if isinstance(item, dict):
-                    sym = (item.get("symbol") or item.get("ticker") or "").upper().strip()
-                    if sym and sym not in symbols:
-                        symbols.append(sym)
-                elif isinstance(item, str):
-                    sym = item.upper().strip()
-                    if sym and sym not in symbols:
-                        symbols.append(sym)
-        except Exception as e:
-            print(f"Error reading watchlist file {watchlist_file}: {e}", file=sys.stderr)
-            sys.exit(1)
+        wl_data = load_json(watchlist_file, {})
+        items = []
+        if isinstance(wl_data, dict):
+            items = wl_data.get("data", {}).get("items", []) or wl_data.get("items", [])
+        elif isinstance(wl_data, list):
+            items = wl_data
+        for item in items:
+            if isinstance(item, dict):
+                sym = (item.get("symbol") or item.get("ticker") or "").upper().strip()
+                if sym and sym not in symbols:
+                    symbols.append(sym)
+            elif isinstance(item, str):
+                sym = item.upper().strip()
+                if sym and sym not in symbols:
+                    symbols.append(sym)
     elif symbols_arg:
         for s in symbols_arg:
             clean_s = s.upper().strip()
@@ -5616,17 +5606,14 @@ def cmd_prune_candidates(args):
         # Search for latest downloaded watchlist file
         matches = sorted(glob.glob("data/downloads/*/watchlist_gex_daily_candidates.json"), reverse=True)
         if matches and os.path.exists(matches[0]):
-            try:
-                with open(matches[0], "r") as f:
-                    wl_data = json.load(f)
-                items = wl_data.get("data", {}).get("items", []) or wl_data.get("items", [])
-                for item in items:
-                    sym = (item.get("symbol") or "").upper().strip()
-                    if sym and sym not in symbols:
-                        symbols.append(sym)
+            wl_data = load_json(matches[0], {})
+            items = wl_data.get("data", {}).get("items", []) or wl_data.get("items", [])
+            for item in items:
+                sym = (item.get("symbol") or "").upper().strip()
+                if sym and sym not in symbols:
+                    symbols.append(sym)
+            if symbols:
                 print(f"Loaded {len(symbols)} symbols from discovered watchlist file: {matches[0]}")
-            except Exception:
-                pass
 
     if not symbols:
         print("Error: No watchlist symbols found. Supply --watchlist-file or --symbols [SYM ...].", file=sys.stderr)
