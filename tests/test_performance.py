@@ -93,6 +93,19 @@ class TestPerformanceBenchmark(unittest.TestCase):
 
         print(f"\n[BENCHMARK] Executed {iterations} calls to calculate_trade_journal in {elapsed:.4f} seconds ({elapsed/iterations*1000:.4f} ms/call)")
 
+    def test_benchmark_discover_earnings_date(self):
+        symbols = ['SHOP', 'OKLO', 'AVGO', 'TSLA', 'MARA', 'ASAN', 'BNTX', 'CRWD', 'TEAM', 'ACVA', 'KNSA', 'LASR', 'SUPN', 'NBIS', 'AAPL', 'MSFT', 'GOOG']
+        iterations = 500
+        total_calls = len(symbols) * iterations
+
+        start_time = time.perf_counter()
+        for _ in range(iterations):
+            for sym in symbols:
+                _ = gex_engine.discover_earnings_date(sym)
+        elapsed = time.perf_counter() - start_time
+
+        print(f"\n[BENCHMARK] Executed {total_calls} calls to discover_earnings_date in {elapsed:.4f} seconds ({elapsed/total_calls*1000:.4f} ms/call)")
+
     def test_benchmark_select_best_option(self):
         expirations = ['2026-04-17', '2026-05-15', '2026-06-19', '2026-07-17']
         inst_data = [
