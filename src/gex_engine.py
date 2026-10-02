@@ -3148,9 +3148,9 @@ def cmd_analyze(args):
         print(f"\n### 📊 Option Payoff Projection Matrix")
         print("  This matrix simulates target contract value using Delta & Gamma price adjustment")
         print("  and is adjusted for square-root-of-time extrinsic decay.")
-        print("  " + "-" * 133)
-        print(f"  {'Target Spot':<12} | {'Underlier %':<11} | {'Scenario / Level':<24} | {'Day 0 (Instant)':<17} | {'Day 3 Held':<17} | {'Day 7 Held':<17} | {'Day 14 Held'}")
-        print("  " + "-" * 133)
+        print("  " + "-" * 141)
+        print(f"  {'Target Spot':<20} | {'Underlier %':<11} | {'Scenario / Level':<24} | {'Day 0 (Instant)':<17} | {'Day 3 Held':<17} | {'Day 7 Held':<17} | {'Day 14 Held'}")
+        print("  " + "-" * 141)
         
         # Scenarios to print
         scenarios = []
@@ -3209,7 +3209,9 @@ def cmd_analyze(args):
             day14_mark = intrinsic_target + extrinsic_instant * t_decay_factor_14
             day14_pnl = ((day14_mark - opt_mark) / opt_mark) * 100.0 if opt_mark > 0 else 0.0
             
-            s_price_str = f"${s_price:<11.2f}"
+            is_spot_row = abs(s_price - spot) < 0.01
+            s_price_label = f"${s_price:.2f} (Baseline Spot)" if is_spot_row else f"${s_price:.2f}"
+            s_price_str = f"{s_price_label:<20}"
             s_name_str = f"{s_name:<24}"
             
             def fmt_pnl_cell(m_val, p_val, width=17):
@@ -3224,13 +3226,13 @@ def cmd_analyze(args):
             cell_d7 = fmt_pnl_cell(day7_mark, day7_pnl)
             cell_d14 = fmt_pnl_cell(day14_mark, day14_pnl)
             
-            spot_col_color = "35" if s_price == spot else "37"
-            spot_fmt_str = format_color(s_price_str, spot_col_color, bold=(s_price == spot))
-            chg_fmt_str = format_color(f"{underlier_chg_str:<11}", "32" if pct_chg > 0 else ("31" if pct_chg < 0 else "37"), bold=(s_price == spot or s_price == gex))
+            spot_col_color = "35" if is_spot_row else "37"
+            spot_fmt_str = format_color(s_price_str, spot_col_color, bold=is_spot_row)
+            chg_fmt_str = format_color(f"{underlier_chg_str:<11}", "32" if pct_chg > 0 else ("31" if pct_chg < 0 else "37"), bold=(is_spot_row or (gex is not None and abs(s_price - gex) < 0.01)))
             
             print(f"  {spot_fmt_str} | {chg_fmt_str} | {s_name_str} | {cell_d0} | {cell_d3} | {cell_d7} | {cell_d14}")
             
-        print("  " + "-" * 133)
+        print("  " + "-" * 141)
 
     # Render Execution Approval Requests for systematic entry setups
     regime = get_regime_status()
