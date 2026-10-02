@@ -6440,9 +6440,9 @@ def cmd_payoff(args):
         spots_list = [round(spot * (1 + p/100.0), 2) for p in [-10.0, -5.0, -2.0, 0.0, 2.0, 5.0, 10.0]]
         spots_list = sorted(list(set(spots_list)))
         
-    print("  " + "-" * 105)
-    print(f"  {'Target Spot':<12} | {'Underlier %':<11} | {'Day 0 (Instant)':<17} | {'Day 3 Held':<17} | {'Day 7 Held':<17} | {'Day 14 Held'}")
-    print("  " + "-" * 105)
+    print("  " + "-" * 111)
+    print(f"  {'Target Spot':<18} | {'Underlier %':<11} | {'Day 0 (Instant)':<17} | {'Day 3 Held':<17} | {'Day 7 Held':<17} | {'Day 14 Held'}")
+    print("  " + "-" * 111)
     
     import math
     for s_price in spots_list:
@@ -6473,7 +6473,9 @@ def cmd_payoff(args):
         day14_pnl = ((day14_mark - mark) / mark) * 100.0 if mark > 0 else 0.0
         
         # Print row
-        s_price_str = f"${s_price:<11.2f}"
+        is_spot_row = abs(s_price - spot) < 0.01
+        s_price_label = f"${s_price:.2f} (Spot)" if is_spot_row else f"${s_price:.2f}"
+        s_price_str = f"{s_price_label:<18}"
         
         def fmt_pnl_cell(m_val, p_val, width=17):
             raw_str = f"${m_val:.2f} ({p_val:+.1f}%)"
@@ -6487,13 +6489,13 @@ def cmd_payoff(args):
         cell_d7 = fmt_pnl_cell(day7_mark, day7_pnl)
         cell_d14 = fmt_pnl_cell(day14_mark, day14_pnl)
         
-        spot_col_color = "35" if abs(s_price - spot) < 0.01 else "37"
-        spot_fmt_str = format_color(s_price_str, spot_col_color, bold=(spot_col_color == "35"))
-        chg_fmt_str = format_color(f"{underlier_chg_str:<11}", "32" if pct_chg > 0 else ("31" if pct_chg < 0 else "37"), bold=(spot_col_color == "35"))
+        spot_col_color = "35" if is_spot_row else "37"
+        spot_fmt_str = format_color(s_price_str, spot_col_color, bold=is_spot_row)
+        chg_fmt_str = format_color(f"{underlier_chg_str:<11}", "32" if pct_chg > 0 else ("31" if pct_chg < 0 else "37"), bold=is_spot_row)
         
         print(f"  {spot_fmt_str} | {chg_fmt_str} | {cell_d0} | {cell_d3} | {cell_d7} | {cell_d14}")
         
-    print("  " + "-" * 105)
+    print("  " + "-" * 111)
 
 
 def cmd_simulate(args):
