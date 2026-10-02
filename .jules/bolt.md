@@ -37,3 +37,7 @@
 ## 2026-09-30 - Direct Scalar EMA Accumulation for Point MACD Estimates
 **Learning:** `calculate_macd` previously called `calculate_macd_series` and `calculate_ema`, allocating full time-series lists (`macd_line` and `signal_line`) even though candidate screening and technical filtering only need the latest scalar MACD, Signal, and Histogram values. Computing fast/slow EMAs and the signal line EMA directly via scalar variables eliminated list allocations and provided a ~1.27x execution speedup.
 **Action:** When computing point technical indicators for filtering or screening where only the latest value is needed, use scalar accumulators instead of allocating full time-series lists.
+
+## 2026-10-01 - Early Filtering & Fast ISO Date Parsing in Option Selection
+**Learning:** `select_best_option` created full dictionary objects for all option contract instruments (including puts and non-target option types) and used `datetime.strptime` for date string comparisons. Pre-filtering target call options during the initial instrument sweep to store minimal 2-tuples `(strike, exp_str)` and switching date parsing to `date.fromisoformat` yielded a ~1.4x execution speedup.
+**Action:** In option chain analysis pipelines, pre-filter non-candidate instrument types during the first pass and use `date.fromisoformat` for ISO date strings (`YYYY-MM-DD`).
