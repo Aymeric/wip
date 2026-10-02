@@ -4990,6 +4990,50 @@ class TestCmdStatus(unittest.TestCase):
             self.assertIn("-$50.00 (-10.00%)", output)
             self.assertIn("-" * 114, output)
 
+    def test_cmd_analyze_path_traversal_protection(self):
+        """Verify cmd_analyze safely handles path traversal attempts for option files."""
+        from types import SimpleNamespace
+        from unittest.mock import patch
+        import io
+        import gex_engine
+        mock_args = SimpleNamespace(
+            symbol="AAPL",
+            effective_session_date="2026-09-22",
+            spot=150.0,
+            ptrans=140.0,
+            ntrans=130.0,
+            gex=160.0,
+            cotmp=120.0,
+            db_change=0.5,
+            spike_crash=False,
+            inst_file="../../../etc/passwd",
+            quote_file="../../../etc/shadow",
+            hist_file="../../../etc/hosts",
+            earnings_date=None,
+            rule1=None, rule2=None, rule7=None, rule8=None, rule9=None, rule10=None, rule11=None
+        )
+        with patch('sys.stdout', new_callable=io.StringIO) as mock_stdout, \
+             patch('sys.stderr', new_callable=io.StringIO) as mock_stderr:
+            gex_engine.cmd_analyze(mock_args)
+            stderr_output = mock_stderr.getvalue()
+            self.assertIn("Path traversal detected", stderr_output)
+
+    def test_get_monthly_realized_pnl_path_traversal_protection(self):
+        """Verify get_monthly_realized_pnl safely handles path traversal attempts."""
+        from unittest.mock import patch
+        import io
+        import gex_engine
+        with patch('sys.stderr', new_callable=io.StringIO) as mock_stderr:
+            pnl, pct, status, cnt = gex_engine.get_monthly_realized_pnl(
+                net_liq=10000.0,
+                monthly_file="../../../etc/passwd",
+                pnl_file="../../../etc/shadow"
+            )
+            stderr_output = mock_stderr.getvalue()
+            self.assertIn("Path traversal detected", stderr_output)
+            self.assertEqual(pnl, 0.0)
+            self.assertEqual(status, "PASS")
+
 
 if __name__ == '__main__':
     unittest.main()
