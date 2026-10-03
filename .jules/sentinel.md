@@ -1,3 +1,8 @@
+## 2026-09-22 - Auxiliary file reading functions must route through load_json to guarantee path traversal checks
+**Vulnerability:** Additional helper functions and subcommands (`cmd_analyze`, `get_monthly_realized_pnl`, `discover_earnings_date`, `persist_new_scans`) opened files using raw `open()` and `json.load()`, bypassing `load_json()` path traversal checks.
+**Learning:** Raw `open()` calls in auxiliary file reading routines bypass path traversal protection unless systematically converted to use `load_json()`.
+**Prevention:** Always use `load_json()` for all JSON file read operations across all subcommands and helper routines to enforce `validate_safe_path()`.
+
 ## 2026-09-21 - CLI subcommands must route file reading through load_json to enforce path traversal validation
 **Vulnerability:** Several CLI subcommands (`prune-candidates`, `update-candidates`, `update-regime`) used raw `open()` and `json.load()` directly on user-controlled input paths, bypassing `load_json()` and `validate_safe_path()` path traversal checks.
 **Learning:** Having a safe helper function like `load_json()` is ineffective if subcommand handlers open raw files directly without routing through the helper.

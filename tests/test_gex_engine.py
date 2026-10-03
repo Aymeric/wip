@@ -218,6 +218,46 @@ class TestGEXEngine(unittest.TestCase):
                 gex_engine.cmd_prune_candidates(prune_args)
             self.assertEqual(cm.exception.code, 1)
 
+    def test_cmd_analyze_and_realized_pnl_path_traversal_prevention(self):
+        from unittest.mock import patch
+        from types import SimpleNamespace
+        import gex_engine
+
+        invalid_path = os.path.join(gex_engine.REPOSITORY_ROOT, "..", "..", "etc", "passwd")
+
+        # get_monthly_realized_pnl safely handles path traversal for monthly_file and pnl_file
+        with patch('sys.stderr'), patch('os.path.exists', return_value=True):
+            pnl_val, pct_val, status, cnt = gex_engine.get_monthly_realized_pnl(
+                net_liq=50000.0, monthly_file=invalid_path, pnl_file=invalid_path
+            )
+            self.assertEqual((pnl_val, pct_val, status, cnt), (0.0, 0.0, "PASS", 0))
+
+        # cmd_analyze safely handles path traversal for inst_file, quote_file, and hist_file
+        analyze_args = SimpleNamespace(
+            symbol="AAPL",
+            effective_session_date="2026-09-22",
+            spot=150.0,
+            ptrans=145.0,
+            ntrans=140.0,
+            gex=160.0,
+            cotmp=135.0,
+            db_change=0.5,
+            spike_crash=False,
+            inst_file=invalid_path,
+            quote_file=invalid_path,
+            hist_file=invalid_path,
+            earnings_date=None,
+            net_liq=50000.0,
+            sizing_threshold=10000.0,
+            target_delta=0.45,
+            min_dte=30,
+            max_dte=45,
+            rule1=None, rule2=None, rule7=None, rule8=None, rule9=None, rule10=None, rule11=None
+        )
+        with patch('sys.stderr'), patch('sys.stdout'), patch('os.path.exists', return_value=True), patch('gex_engine.save_json'):
+            # Should run without opening invalid_path or crashing
+            gex_engine.cmd_analyze(analyze_args)
+
     def test_save_json_preserves_existing_file_on_serialization_failure(self):
         import tempfile
         import gex_engine
