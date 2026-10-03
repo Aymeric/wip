@@ -1155,8 +1155,7 @@ def cmd_status(args):
         else:
             file_date = ""
             try:
-                with open(filepath, "r") as f:
-                    content = json.load(f)
+                content = load_json(filepath, {})
                 if isinstance(content, dict):
                     if "last_updated" in content:
                         val = content["last_updated"]
@@ -2485,8 +2484,7 @@ def discover_earnings_date(symbol: str) -> Optional[str]:
     candidates.sort() # get the most recent download folder chronologically
     latest_file = candidates[-1]
     try:
-        with open(latest_file, "r") as f:
-            data = json.load(f)
+        data = load_json(latest_file, {})
         
         def parse_date(val):
             if isinstance(val, str):
@@ -2782,10 +2780,8 @@ def cmd_analyze(args):
     # If inst-file and quote-file exist, perform mechanical local GEX profile derivation
     if inst_file and quote_file and os.path.exists(inst_file) and os.path.exists(quote_file):
         try:
-            with open(inst_file, "r") as f:
-                inst_data = json.load(f)
-            with open(quote_file, "r") as f:
-                quotes_data = json.load(f)
+            inst_data = load_json(inst_file, {})
+            quotes_data = load_json(quote_file, {})
                 
             calc_spot = spot if spot is not None else 100.0
             gex_profile = derive_gex_profile(inst_data, quotes_data, calc_spot)
@@ -2814,8 +2810,7 @@ def cmd_analyze(args):
             if total_oi > 0:
                 if hist_file and os.path.exists(hist_file):
                     try:
-                        with open(hist_file, "r") as f:
-                            hist_data = json.load(f)
+                        hist_data = load_json(hist_file, {})
                         
                         vol_profile = derive_volatility_profile(hist_data, symbol, gex_profile["iv_sum"], gex_profile["iv_count"])
                         
@@ -3391,8 +3386,7 @@ def get_monthly_realized_pnl(net_liq: float, monthly_file: Optional[str] = None,
     # Try parsing monthly realized portfolio aggregate file
     if monthly_file and os.path.exists(monthly_file):
         try:
-            with open(monthly_file, 'r') as f:
-                data = json.load(f)
+            data = load_json(monthly_file, {})
             # Support multiple formats
             res = data.get("realized_pnl", data.get("data", data))
             if isinstance(res, dict):
@@ -3422,8 +3416,7 @@ def get_monthly_realized_pnl(net_liq: float, monthly_file: Optional[str] = None,
     # Try parsing pnl_trade_history trades within the last 30 days
     if pnl_file and os.path.exists(pnl_file):
         try:
-            with open(pnl_file, 'r') as f:
-                data = json.load(f)
+            data = load_json(pnl_file, {})
             trades = data.get("data", {}).get("trades", [])
             if not trades:
                 trades = data.get("trades", [])
@@ -5196,8 +5189,7 @@ def persist_new_scans():
         try:
             if not os.path.isfile(filepath):
                 continue
-            with open(filepath, "r") as f:
-                data = json.load(f)
+            data = load_json(filepath, {})
             
             # Verify if this is a Robinhood scan result structure
             scan_result = None
@@ -5434,8 +5426,7 @@ def cmd_update_candidates(args):
         
         for full_path in all_scan_files:
             try:
-                with open(full_path, 'r') as f:
-                    sdata = json.load(f)
+                sdata = load_json(full_path, {})
                 scan_result = None
                 if isinstance(sdata, dict):
                     scan_result = sdata.get("data", {}).get("result", {})
