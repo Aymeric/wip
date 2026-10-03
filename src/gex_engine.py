@@ -308,7 +308,7 @@ def generate_ascii_gex_scale(spot: float, ptrans: Optional[float], ntrans: Optio
         label_strs = []
         for label in labels:
             if label == "SPOT":
-                label_strs.append(format_color("SPOT", "35", bold=True))
+                label_strs.append(format_color("SPOT (Current)", "35", bold=True))
             elif label == "+GEX":
                 label_strs.append(format_color("+GEX (T1 Target)", "32", bold=True))
             elif label == "pTrans":
