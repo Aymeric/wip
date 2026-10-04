@@ -2797,7 +2797,7 @@ class TestGEXEngine(unittest.TestCase):
         """Test GEX ASCII runway map generation."""
         from gex_engine import generate_ascii_gex_scale
         scale = generate_ascii_gex_scale(spot=100.0, ptrans=98.0, ntrans=95.0, gex=110.0, cotmp=94.0)
-        self.assertIn("SPOT", scale)
+        self.assertIn("SPOT (Current Spot)", scale)
         self.assertIn("pTrans", scale)
         self.assertIn("nTrans", scale)
         self.assertIn("+GEX", scale)
