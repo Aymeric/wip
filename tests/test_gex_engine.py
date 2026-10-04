@@ -218,6 +218,13 @@ class TestGEXEngine(unittest.TestCase):
                 gex_engine.cmd_prune_candidates(prune_args)
             self.assertEqual(cm.exception.code, 1)
 
+        # get_monthly_realized_pnl safely handles path traversal in monthly_file and pnl_file
+        with patch('sys.stderr'), patch('os.path.exists', return_value=True):
+            pnl_val, pct_val, status, cnt = gex_engine.get_monthly_realized_pnl(
+                10000.0, monthly_file=invalid_path, pnl_file=invalid_path
+            )
+            self.assertEqual((pnl_val, pct_val, status, cnt), (0.0, 0.0, 'PASS', 0))
+
     def test_save_json_preserves_existing_file_on_serialization_failure(self):
         import tempfile
         import gex_engine
