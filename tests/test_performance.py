@@ -21,6 +21,32 @@ class TestPerformanceBenchmark(unittest.TestCase):
 
         print(f"\n[BENCHMARK] Executed {total_calls} calls to find_latest_underlier_spot in {elapsed:.4f} seconds ({elapsed/total_calls*1000:.4f} ms/call)")
 
+    def test_benchmark_find_latest_option_files(self):
+        symbols = ['SHOP', 'OKLO', 'AVGO', 'TSLA', 'MARA', 'ASAN', 'BNTX', 'CRWD', 'TEAM', 'ACVA', 'KNSA', 'LASR', 'SUPN', 'NBIS', 'AAPL', 'MSFT', 'GOOG']
+        iterations = 100
+        total_calls = len(symbols) * iterations
+
+        start_time = time.perf_counter()
+        for _ in range(iterations):
+            for sym in symbols:
+                _ = gex_engine.find_latest_option_files(sym)
+        elapsed = time.perf_counter() - start_time
+
+        print(f"\n[BENCHMARK] Executed {total_calls} calls to find_latest_option_files in {elapsed:.4f} seconds ({elapsed/total_calls*1000:.4f} ms/call)")
+
+    def test_benchmark_discover_earnings_date(self):
+        symbols = ['SHOP', 'OKLO', 'AVGO', 'TSLA', 'MARA', 'ASAN', 'BNTX', 'CRWD', 'TEAM', 'ACVA', 'KNSA', 'LASR', 'SUPN', 'NBIS', 'AAPL', 'MSFT', 'GOOG']
+        iterations = 100
+        total_calls = len(symbols) * iterations
+
+        start_time = time.perf_counter()
+        for _ in range(iterations):
+            for sym in symbols:
+                _ = gex_engine.discover_earnings_date(sym)
+        elapsed = time.perf_counter() - start_time
+
+        print(f"\n[BENCHMARK] Executed {total_calls} calls to discover_earnings_date in {elapsed:.4f} seconds ({elapsed/total_calls*1000:.4f} ms/call)")
+
     def test_benchmark_calculate_atr(self):
         highs = [100.0 + i * 0.5 for i in range(300)]
         lows = [98.0 + i * 0.5 for i in range(300)]

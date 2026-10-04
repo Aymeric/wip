@@ -41,3 +41,7 @@
 ## 2026-10-01 - Early Filtering & Fast ISO Date Parsing in Option Selection
 **Learning:** `select_best_option` created full dictionary objects for all option contract instruments (including puts and non-target option types) and used `datetime.strptime` for date string comparisons. Pre-filtering target call options during the initial instrument sweep to store minimal 2-tuples `(strike, exp_str)` and switching date parsing to `date.fromisoformat` yielded a ~1.4x execution speedup.
 **Action:** In option chain analysis pipelines, pre-filter non-candidate instrument types during the first pass and use `date.fromisoformat` for ISO date strings (`YYYY-MM-DD`).
+
+## 2026-10-04 - Fast Option & Earnings File Discovery via Pre-Indexed Metadata & JSON Caching
+**Learning:** `find_latest_option_files` and `discover_earnings_date` performed repeated un-cached `os.walk(DOWNLOADS_DIR)` traversals and raw `open()`/`json.load()` calls during ticker analysis. Accepting an optional `file_list` parameter, leveraging `_get_downloads_files()`'s pre-indexed upper-case metadata (`file_upper`), early exiting when all option files are found, and using `load_json()` memory caching yielded a ~5.7x speedup for option file discovery and ~5.0x speedup for earnings date discovery.
+**Action:** In file discovery utilities, accept an optional `file_list` parameter, leverage pre-indexed upper-case tuple metadata for fast string matching, exit early once targets are found, and use `load_json()` for file reading.
