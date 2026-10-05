@@ -218,6 +218,30 @@ class TestGEXEngine(unittest.TestCase):
                 gex_engine.cmd_prune_candidates(prune_args)
             self.assertEqual(cm.exception.code, 1)
 
+        # analyze command with path traversal file options safely rejects invalid paths
+        analyze_args = SimpleNamespace(
+            symbol="TEST",
+            spot=100.0,
+            ptrans=98.0,
+            ntrans=95.0,
+            gex=105.0,
+            cotmp=92.0,
+            db_change=0.5,
+            spike_crash=False,
+            effective_session_date="2026-09-22",
+            inst_file=invalid_path,
+            quote_file=invalid_path,
+            hist_file=invalid_path,
+            rule1=None, rule2=None, rule7=None, rule8=None, rule9=None, rule10=None, rule11=None
+        )
+        with patch('sys.stderr'), patch('sys.stdout'), patch('gex_engine.save_json'):
+            gex_engine.cmd_analyze(analyze_args)
+
+        # get_monthly_realized_pnl with path traversal files safely rejects invalid paths
+        with patch('sys.stderr'):
+            pnl, pct, status, cnt = gex_engine.get_monthly_realized_pnl(10000.0, monthly_file=invalid_path, pnl_file=invalid_path)
+            self.assertEqual((pnl, pct, status, cnt), (0.0, 0.0, "PASS", 0))
+
     def test_save_json_preserves_existing_file_on_serialization_failure(self):
         import tempfile
         import gex_engine
