@@ -308,7 +308,7 @@ def generate_ascii_gex_scale(spot: float, ptrans: Optional[float], ntrans: Optio
         label_strs = []
         for label in labels:
             if label == "SPOT":
-                label_strs.append(format_color("SPOT", "35", bold=True))
+                label_strs.append(format_color("SPOT (Current)", "35", bold=True))
             elif label == "+GEX":
                 label_strs.append(format_color("+GEX (T1 Target)", "32", bold=True))
             elif label == "pTrans":
@@ -3707,7 +3707,7 @@ def cmd_portfolio(args):
 
     print("\n### 📊 Portfolio Allocation & Performance Matrix")
     print("  " + "-" * 114)
-    print(f"  {'Ticker':<6} | {'Class':<6} | {'Spot':<8} | {'Cost Basis':<10} | {'Current Val':<11} | {'Unrealized P&L':<20} | {'Weight':<6} | {'Rule State'}")
+    print(f"  {'Ticker':<6} | {'Class':<6} | {'Spot':<8} | {'Cost Basis':<10} | {'Current Val':<11} | {'Unrealized P&L':<20} | {'Weight':<6} | {'Rule State':<26}")
     print("  " + "-" * 114)
     
     for r in table_rows:
@@ -3748,9 +3748,9 @@ def cmd_portfolio(args):
             r_color, r_bold = "32", False
         
         r_state_short = r_state
-        if len(r_state_short) > 32:
-            r_state_short = r_state_short[:29] + "..."
-        r_fmt = format_color(r_state_short, r_color, bold=r_bold)
+        if len(r_state_short) > 26:
+            r_state_short = r_state_short[:23] + "..."
+        r_fmt = format_color(f"{r_state_short:<26}", r_color, bold=r_bold)
         
         print(f"  {tk_fmt} | {cls_fmt} | {spot_fmt} | {cb_fmt} | {cv_fmt} | {pnl_fmt} | {weight_fmt} | {r_fmt}")
         
