@@ -1435,6 +1435,20 @@ class TestGEXEngine(unittest.TestCase):
         finally:
             shutil.rmtree(temp_dir)
 
+    def test_cleanup_downloads_path_traversal_prevention(self):
+        """Test cleanup_downloads prevents directory traversal outside allowed roots."""
+        import tempfile
+        import shutil
+        from unittest.mock import patch
+        import gex_engine
+
+        # Test with DOWNLOADS_DIR pointing to an unauthorized path outside allowed roots
+        unauthorized_dir = "/etc/downloads_test"
+        with patch("gex_engine.DOWNLOADS_DIR", unauthorized_dir), patch("sys.stderr") as mock_stderr:
+            gex_engine.cleanup_downloads()
+            err_output = "".join(call.args[0] for call in mock_stderr.write.call_args_list if call.args)
+            self.assertIn("Path traversal detected", err_output)
+
     def test_sync_positions_removes_cached_positions_absent_from_snapshot(self):
         import tempfile
         import shutil
