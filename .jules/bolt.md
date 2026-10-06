@@ -41,3 +41,7 @@
 ## 2026-10-01 - Early Filtering & Fast ISO Date Parsing in Option Selection
 **Learning:** `select_best_option` created full dictionary objects for all option contract instruments (including puts and non-target option types) and used `datetime.strptime` for date string comparisons. Pre-filtering target call options during the initial instrument sweep to store minimal 2-tuples `(strike, exp_str)` and switching date parsing to `date.fromisoformat` yielded a ~1.4x execution speedup.
 **Action:** In option chain analysis pipelines, pre-filter non-candidate instrument types during the first pass and use `date.fromisoformat` for ISO date strings (`YYYY-MM-DD`).
+
+## 2026-10-05 - Single-Pass Scalar Search Loops for Option Level Extraction
+**Learning:** `derive_gex_profile` used intermediate list comprehensions (`at_below_spot_puts`, `below_ptrans_puts`, `at_above_spot_calls`), lambda tuple key extractions in `max()`, and set union allocations (`set(...) | set(...)`) to calculate pTrans, nTrans, +GEX, and nearest strike levels. Replacing list allocations and lambda functions with single-pass scalar search loops yielded a ~1.16x execution speedup.
+**Action:** In option chain level derivation functions, find extremum strike levels using single-pass iterative searches with scalar comparison tuples `(oi, strike)` rather than constructing intermediate list comprehensions and passing lambda keys to `max()`.
