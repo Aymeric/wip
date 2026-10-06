@@ -308,7 +308,7 @@ def generate_ascii_gex_scale(spot: float, ptrans: Optional[float], ntrans: Optio
         label_strs = []
         for label in labels:
             if label == "SPOT":
-                label_strs.append(format_color("SPOT", "35", bold=True))
+                label_strs.append(format_color("SPOT (Current)", "35", bold=True))
             elif label == "+GEX":
                 label_strs.append(format_color("+GEX (T1 Target)", "32", bold=True))
             elif label == "pTrans":
@@ -1155,8 +1155,7 @@ def cmd_status(args):
         else:
             file_date = ""
             try:
-                with open(filepath, "r") as f:
-                    content = json.load(f)
+                content = load_json(filepath, {})
                 if isinstance(content, dict):
                     if "last_updated" in content:
                         val = content["last_updated"]
@@ -1551,8 +1550,8 @@ def derive_gex_profile(inst_data, quotes_data, spot):
         instruments_list = inst_data
         
     # Performance optimization (Bolt):
-    # Use 2-tuple lookup mapping for instruments, increment running put OI totals directly
-    # in quote loop, and use O(K) max/min queries instead of full sorting list allocations.
+    # Single-pass scalar search loops for pTrans, nTrans, +GEX, and nearest strike level extraction.
+    # Eliminates intermediate list allocations, lambda key extractions, and set union operations.
     inst_map = {}
     for inst in instruments_list:
         if not isinstance(inst, dict) or "id" not in inst:
@@ -1585,17 +1584,22 @@ def derive_gex_profile(inst_data, quotes_data, spot):
     for q_item in quotes_list:
         if not isinstance(q_item, dict):
             continue
-        q = q_item.get("quote", q_item)
+        q = q_item.get("quote")
         if not isinstance(q, dict):
-            continue
+            q = q_item
         opt_id = q.get("instrument_id") or q.get("id") or q.get("instrument")
         if not opt_id or opt_id not in inst_map:
             continue
             
         try:
-            oi = int(q.get("open_interest") or 0)
-            gamma = float(q.get("gamma") or 0.0)
-            iv = float(q.get("implied_volatility") or q.get("implied_vol", 0.0))
+            raw_oi = q.get("open_interest")
+            oi = int(raw_oi) if raw_oi else 0
+            raw_gamma = q.get("gamma")
+            gamma = float(raw_gamma) if raw_gamma else 0.0
+            raw_iv = q.get("implied_volatility")
+            if raw_iv is None:
+                raw_iv = q.get("implied_vol")
+            iv = float(raw_iv) if raw_iv else 0.0
         except (ValueError, TypeError):
             continue
             
@@ -1605,7 +1609,9 @@ def derive_gex_profile(inst_data, quotes_data, spot):
         gex_val = oi * gamma * 100.0 * calc_spot
         
         # IV proxy (within 15% of spot)
-        if abs(strike - calc_spot) / calc_spot <= 0.15:
+        diff = strike - calc_spot
+        abs_diff = diff if diff >= 0 else -diff
+        if abs_diff / calc_spot <= 0.15:
             if iv > 0.0:
                 iv_sum += iv
                 iv_count += 1
@@ -1643,24 +1649,39 @@ def derive_gex_profile(inst_data, quotes_data, spot):
     derived_cotmp = sum_strike_put_oi / sum_put_oi if sum_put_oi > 0 else calc_spot * 0.95
     
     # pTrans = strike at/below spot with largest put OI
-    at_below_spot_puts = [item for item in strike_put_oi.items() if item[0] <= calc_spot]
-    if at_below_spot_puts:
-        derived_ptrans = max(at_below_spot_puts, key=lambda item: (item[1], item[0]))[0]
-    else:
+    derived_ptrans = None
+    max_ptrans_key = (-1, -1.0)
+    for strike, oi in strike_put_oi.items():
+        if strike <= calc_spot:
+            key = (oi, strike)
+            if key > max_ptrans_key:
+                max_ptrans_key = key
+                derived_ptrans = strike
+    if derived_ptrans is None:
         derived_ptrans = calc_spot * 0.98
         
     # nTrans = strike below pTrans with next largest put OI
-    below_ptrans_puts = [item for item in strike_put_oi.items() if item[0] < derived_ptrans]
-    if below_ptrans_puts:
-        derived_ntrans = max(below_ptrans_puts, key=lambda item: (item[1], item[0]))[0]
-    else:
+    derived_ntrans = None
+    max_ntrans_key = (-1, -1.0)
+    for strike, oi in strike_put_oi.items():
+        if strike < derived_ptrans:
+            key = (oi, strike)
+            if key > max_ntrans_key:
+                max_ntrans_key = key
+                derived_ntrans = strike
+    if derived_ntrans is None:
         derived_ntrans = derived_ptrans * 0.95
         
     # +GEX = strike at/above spot with largest call OI
-    at_above_spot_calls = [item for item in strike_call_oi.items() if item[0] >= calc_spot]
-    if at_above_spot_calls:
-        derived_gex = max(at_above_spot_calls, key=lambda item: (item[1], -item[0]))[0]
-    else:
+    derived_gex = None
+    max_gex_key = (-1, float('-inf'))
+    for strike, oi in strike_call_oi.items():
+        if strike >= calc_spot:
+            key = (oi, -strike)
+            if key > max_gex_key:
+                max_gex_key = key
+                derived_gex = strike
+    if derived_gex is None:
         derived_gex = calc_spot * 1.05
         
     rule1_derived = total_call_gex > 0
@@ -1671,8 +1692,24 @@ def derive_gex_profile(inst_data, quotes_data, spot):
     max_call_oi = max(strike_call_oi.values()) if strike_call_oi else 0
     rule9_derived = call_oi_at_target >= max_call_oi if max_call_oi > 0 else True
     
-    all_strikes_set = set(strike_put_gex.keys()) | set(strike_call_gex.keys())
-    nearest_strike = min(all_strikes_set, key=lambda s: (abs(s - calc_spot), s)) if all_strikes_set else calc_spot
+    nearest_strike = calc_spot
+    min_dist_key = (float('inf'), float('inf'))
+    for strike in strike_put_gex:
+        diff = strike - calc_spot
+        dist = diff if diff >= 0 else -diff
+        dist_key = (dist, strike)
+        if dist_key < min_dist_key:
+            min_dist_key = dist_key
+            nearest_strike = strike
+    for strike in strike_call_gex:
+        if strike not in strike_put_gex:
+            diff = strike - calc_spot
+            dist = diff if diff >= 0 else -diff
+            dist_key = (dist, strike)
+            if dist_key < min_dist_key:
+                min_dist_key = dist_key
+                nearest_strike = strike
+
     net_gex_nearest = strike_call_gex.get(nearest_strike, 0.0) - strike_put_gex.get(nearest_strike, 0.0)
     rule10_derived = net_gex_nearest >= 0.0
     
@@ -2817,12 +2854,10 @@ def cmd_analyze(args):
     hist_file = getattr(args, "hist_file", None) or discovered_files.get("hist_file")
 
     # If inst-file and quote-file exist, perform mechanical local GEX profile derivation
-    if inst_file and quote_file and os.path.exists(inst_file) and os.path.exists(quote_file):
+    if inst_file and quote_file:
         try:
-            with open(inst_file, "r") as f:
-                inst_data = json.load(f)
-            with open(quote_file, "r") as f:
-                quotes_data = json.load(f)
+            inst_data = load_json(inst_file, None)
+            quotes_data = load_json(quote_file, None)
                 
             calc_spot = spot if spot is not None else 100.0
             gex_profile = derive_gex_profile(inst_data, quotes_data, calc_spot)
@@ -2848,11 +2883,10 @@ def cmd_analyze(args):
             if getattr(args, "rule9", None) is None: args.rule9 = gex_profile["rule9_derived"]
             if getattr(args, "rule10", None) is None: args.rule10 = gex_profile["rule10_derived"]
             
-            if total_oi > 0:
-                if hist_file and os.path.exists(hist_file):
+            if total_oi > 0 and inst_data and quotes_data:
+                if hist_file:
                     try:
-                        with open(hist_file, "r") as f:
-                            hist_data = json.load(f)
+                        hist_data = load_json(hist_file, None)
                         
                         vol_profile = derive_volatility_profile(hist_data, symbol, gex_profile["iv_sum"], gex_profile["iv_count"])
                         
@@ -3426,10 +3460,11 @@ def get_monthly_realized_pnl(net_liq: float, monthly_file: Optional[str] = None,
             pnl_file = pnl_candidates[-1]
                     
     # Try parsing monthly realized portfolio aggregate file
-    if monthly_file and os.path.exists(monthly_file):
+    if monthly_file:
         try:
-            with open(monthly_file, 'r') as f:
-                data = json.load(f)
+            data = load_json(monthly_file, None)
+            if data is None:
+                raise ValueError("Could not load monthly file")
             # Support multiple formats
             res = data.get("realized_pnl", data.get("data", data))
             if isinstance(res, dict):
@@ -3457,10 +3492,9 @@ def get_monthly_realized_pnl(net_liq: float, monthly_file: Optional[str] = None,
             pass
             
     # Try parsing pnl_trade_history trades within the last 30 days
-    if pnl_file and os.path.exists(pnl_file):
+    if pnl_file:
         try:
-            with open(pnl_file, 'r') as f:
-                data = json.load(f)
+            data = load_json(pnl_file, {})
             trades = data.get("data", {}).get("trades", [])
             if not trades:
                 trades = data.get("trades", [])
@@ -3744,7 +3778,7 @@ def cmd_portfolio(args):
 
     print("\n### 📊 Portfolio Allocation & Performance Matrix")
     print("  " + "-" * 114)
-    print(f"  {'Ticker':<6} | {'Class':<6} | {'Spot':<8} | {'Cost Basis':<10} | {'Current Val':<11} | {'Unrealized P&L':<20} | {'Weight':<6} | {'Rule State'}")
+    print(f"  {'Ticker':<6} | {'Class':<6} | {'Spot':<8} | {'Cost Basis':<10} | {'Current Val':<11} | {'Unrealized P&L':<20} | {'Weight':<6} | {'Rule State':<26}")
     print("  " + "-" * 114)
     
     for r in table_rows:
@@ -3785,9 +3819,9 @@ def cmd_portfolio(args):
             r_color, r_bold = "32", False
         
         r_state_short = r_state
-        if len(r_state_short) > 32:
-            r_state_short = r_state_short[:29] + "..."
-        r_fmt = format_color(r_state_short, r_color, bold=r_bold)
+        if len(r_state_short) > 26:
+            r_state_short = r_state_short[:23] + "..."
+        r_fmt = format_color(f"{r_state_short:<26}", r_color, bold=r_bold)
         
         print(f"  {tk_fmt} | {cls_fmt} | {spot_fmt} | {cb_fmt} | {cv_fmt} | {pnl_fmt} | {weight_fmt} | {r_fmt}")
         
@@ -5233,8 +5267,9 @@ def persist_new_scans():
         try:
             if not os.path.isfile(filepath):
                 continue
-            with open(filepath, "r") as f:
-                data = json.load(f)
+            data = load_json(filepath, None)
+            if data is None:
+                continue
             
             # Verify if this is a Robinhood scan result structure
             scan_result = None
@@ -5471,8 +5506,7 @@ def cmd_update_candidates(args):
         
         for full_path in all_scan_files:
             try:
-                with open(full_path, 'r') as f:
-                    sdata = json.load(f)
+                sdata = load_json(full_path, None)
                 scan_result = None
                 if isinstance(sdata, dict):
                     scan_result = sdata.get("data", {}).get("result", {})
