@@ -666,10 +666,9 @@ def cmd_update_regime(args):
         # Try to auto-discover latest ETF quotes file
         etf_candidates = []
         if os.path.exists(DOWNLOADS_DIR):
-            for root, dirs, files in os.walk(DOWNLOADS_DIR):
-                for filee in files:
-                    if filee == "etf_quotes.json":
-                        etf_candidates.append(os.path.join(root, filee))
+            for filepath, file_upper in _get_downloads_files(DOWNLOADS_DIR):
+                if file_upper == "ETF_QUOTES.JSON":
+                    etf_candidates.append(filepath)
         if etf_candidates:
             etf_candidates.sort()
             etf_file = etf_candidates[-1]
@@ -2504,19 +2503,31 @@ def derive_volatility_profile(hist_data, symbol, iv_sum, iv_count):
     }
 
 
-def discover_earnings_date(symbol: str) -> Optional[str]:
+def discover_earnings_date(symbol: str, file_list: Optional[Sequence[Union[str, Tuple[str, str]]]] = None) -> Optional[str]:
     """
     Search recursively inside DOWNLOADS_DIR to locate any <ticker>_earnings_raw.json file.
     Parse its content to locate the next scheduled or estimated earnings date.
+    Accepts an optional pre-listed file_list parameter to avoid repeated os.walk traversals in loops.
+    Supports file_list elements as plain string file paths or pre-indexed (filepath, filename_upper) tuples.
     """
-    sym_lower = symbol.lower()
+    sym_upper = symbol.upper()
     if not os.path.exists(DOWNLOADS_DIR):
         return None
     candidates = []
-    for root, dirs, files in os.walk(DOWNLOADS_DIR):
-        for f in files:
-            if f.lower() == f"{sym_lower}_earnings_raw.json" or f.lower() == f"{sym_lower}_earnings.json":
-                candidates.append(os.path.join(root, f))
+
+    # Performance optimization (Bolt):
+    # Use pre-indexed (filepath, filename_upper) tuples from file_list or _get_downloads_files cache
+    # to avoid repeated os.walk traversals and os.path.basename().upper() calls.
+    source = file_list if file_list is not None else _get_downloads_files(DOWNLOADS_DIR)
+    for item in source:
+        if isinstance(item, tuple):
+            filepath, file_upper = item
+        else:
+            filepath = item
+            file_upper = os.path.basename(filepath).upper()
+        if file_upper == f"{sym_upper}_EARNINGS_RAW.JSON" or file_upper == f"{sym_upper}_EARNINGS.JSON":
+            candidates.append(filepath)
+
     if not candidates:
         return None
     candidates.sort() # get the most recent download folder chronologically
@@ -4695,14 +4706,13 @@ def cmd_sync_pnl(args):
         # Scan DOWNLOADS_DIR and sort lexicographically to find the latest trade history file
         pnl_candidates = []
         if os.path.exists(DOWNLOADS_DIR):
-            for root, dirs, files in os.walk(DOWNLOADS_DIR):
-                for filee in files:
-                    if account:
-                        if filee == f"pnl_trade_history_{account}_raw.json" or filee == f"pnl_trade_history_{account}.json":
-                            pnl_candidates.append(os.path.join(root, filee))
-                    else:
-                        if filee == "pnl_trade_history.json" or filee == "pnl_trade_history_raw.json":
-                            pnl_candidates.append(os.path.join(root, filee))
+            for filepath, file_upper in _get_downloads_files(DOWNLOADS_DIR):
+                if account:
+                    if file_upper in (f"PNL_TRADE_HISTORY_{account.upper()}_RAW.JSON", f"PNL_TRADE_HISTORY_{account.upper()}.JSON"):
+                        pnl_candidates.append(filepath)
+                else:
+                    if file_upper in ("PNL_TRADE_HISTORY.JSON", "PNL_TRADE_HISTORY_RAW.JSON"):
+                        pnl_candidates.append(filepath)
         if pnl_candidates:
             pnl_candidates.sort()
             pnl_file = pnl_candidates[-1]
