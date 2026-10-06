@@ -1275,9 +1275,9 @@ def cmd_status(args):
             
     if etf_details:
         print("\n### 📈 Sector & Broad Market ETF Breadth Board")
-        print("  " + "-" * 75)
+        print("  " + "-" * 73)
         print(f"  {'Ticker':<8} | {'ETF Segment / Sector Name':<32} | {'Daily Change':<12} | {'Classification':<12}")
-        print("  " + "-" * 75)
+        print("  " + "-" * 73)
         # Sort by classification (BULLISH, FLAT, BEARISH) then daily change %
         def sort_key(x):
             c_val = 0
@@ -1304,7 +1304,7 @@ def cmd_status(args):
             class_fmt = format_color(f"{classification:<12}", class_color, bold=True)
             ticker_fmt = format_color(f"{ticker:<8}", "35", bold=True)
             print(f"  {ticker_fmt} | {name:<32} | {chg_fmt} | {class_fmt}")
-        print("  " + "-" * 75)
+        print("  " + "-" * 73)
 
     # Simple alert or summary
     if regime['system_authorization'] == "BLOCKED":
@@ -3194,9 +3194,9 @@ def cmd_analyze(args):
         print(f"\n### 📊 Option Payoff Projection Matrix")
         print("  This matrix simulates target contract value using Delta & Gamma price adjustment")
         print("  and is adjusted for square-root-of-time extrinsic decay.")
-        print("  " + "-" * 141)
+        print("  " + "-" * 135)
         print(f"  {'Target Spot':<20} | {'Underlier %':<11} | {'Scenario / Level':<24} | {'Day 0 (Instant)':<17} | {'Day 3 Held':<17} | {'Day 7 Held':<17} | {'Day 14 Held'}")
-        print("  " + "-" * 141)
+        print("  " + "-" * 135)
         
         # Scenarios to print
         scenarios = []
@@ -3278,7 +3278,7 @@ def cmd_analyze(args):
             
             print(f"  {spot_fmt_str} | {chg_fmt_str} | {s_name_str} | {cell_d0} | {cell_d3} | {cell_d7} | {cell_d14}")
             
-        print("  " + "-" * 141)
+        print("  " + "-" * 135)
 
     # Render Execution Approval Requests for systematic entry setups
     regime = get_regime_status()
@@ -4233,9 +4233,9 @@ def cmd_portfolio(args):
         sector_sums[sec] = sector_sums.get(sec, 0.0) + r["cost_basis"]
         
     print("\n### ⚖️ Portfolio Sector Risk Allocation")
-    print("  " + "-" * 55)
+    print("  " + "-" * 54)
     print(f"  {'Sector Tag':<28} | {'Cost Basis':<12} | {'Weight %'}")
-    print("  " + "-" * 55)
+    print("  " + "-" * 54)
     for sec, sec_cb in sorted(sector_sums.items(), key=lambda x: x[1], reverse=True):
         sec_weight = (sec_cb / net_liq) * 100.0
         sec_weight_fmt = f"{sec_weight:5.2f}%"
@@ -4244,7 +4244,7 @@ def cmd_portfolio(args):
             sec_color = "31" # Over Tech limit!
         sec_weight_fmt = format_color(sec_weight_fmt, sec_color, bold=(sec_color == "31"))
         print(f"  {sec:<28} | ${sec_cb:<11,.2f} | {sec_weight_fmt}")
-    print("  " + "-" * 55)
+    print("  " + "-" * 54)
 
     print("\n### 📏 Sizing Constraints Checklist")
     # Sizing constraints check
@@ -5527,9 +5527,9 @@ def cmd_update_candidates(args):
     if excluded_actives:
         print(f"Excluded {len(excluded_actives)} active holdings from candidate pool: {', '.join(sorted(list(excluded_actives))[:10])}{'...' if len(excluded_actives) > 10 else ''}")
     print(f"\n### 🚀 Top Screened GEX Candidates")
-    print("  " + "-" * 138)
+    print("  " + "-" * 132)
     print(f"  {'Ticker':<8} | {'Price':<6} | {'Daily Change':<12} | {'RSI':<6} | {'MACD Hist':<9} | {'Implied Vol':<12} | {'Rel Opt Vol':<12} | {'GEX Setup Grade':<16} | {'GEX Status':<16} | {'Market Cap'}")
-    print("  " + "-" * 138)
+    print("  " + "-" * 132)
     for c in candidate_list[:top_limit]:
         ticker = c['symbol']
         price = f"${c['price']:.2f}"
@@ -5571,7 +5571,7 @@ def cmd_update_candidates(args):
         ticker_fmt = format_color(f"{ticker:<8}", "35", bold=True)
         
         print(f"  {ticker_fmt} | {price:<6} | {change_fmt} | {rsi:<6} | {macd_hist:<9} | {iv:<12} | {rel_opt_vol:<12} | {gex_grade_str} | {gex_status_str} | {mcap}")
-    print("  " + "-" * 138)
+    print("  " + "-" * 132)
     if len(candidate_list) > top_limit:
         print(f"  * Showing top {top_limit} sorted by score and relative options volume out of {len(candidate_list)} candidates total.")
 
@@ -6015,9 +6015,9 @@ def cmd_rankings(args):
 
     print("### 🔍 GEX Setup Rankings & Report")
     print(f"Filters active -> Status Rank: {format_color(status_filter, '35', bold=True)} | Min Grade: {format_color(str(min_grade) if min_grade is not None else 'None', '35', bold=True)}")
-    print("  " + "-" * 125)
+    print("  " + "-" * 118)
     print(f"  {'Ticker':<8} | {'Spot':<8} | {'Grade':<6} | {'pTrans':<8} | {'nTrans':<8} | {'+GEX':<8} | {'COTMP':<8} | {'db_change':<10} | {'Cushion %':<10} | {'R/R':<6} | {'Signal Status'}")
-    print("  " + "-" * 125)
+    print("  " + "-" * 118)
 
     for data in filtered_analyses:
         ticker = data.get("Ticker", "")
@@ -6087,13 +6087,13 @@ def cmd_rankings(args):
         line = f"  {ticker_fmt} | {spot_fmt} | {grade_fmt} | {ptrans_fmt} | {ntrans_fmt} | {gex_fmt} | {cotmp_fmt} | {db_fmt} | {cushion_fmt} | {rr_fmt} | {status_fmt}"
         print(line)
 
-    print("  " + "-" * 125)
+    print("  " + "-" * 118)
 
     # Volatility and compression metrics print
     print("\n### ⚡ Implied vs Realized Volatility & Compression Board")
-    print("  " + "-" * 75)
+    print("  " + "-" * 86)
     print(f"  {'Ticker':<8} | {'IV30':<8} | {'HV90':<8} | {'RV10 (10d)':<12} | {'IV/HV Discount':<16} | {'State / Compression'}")
-    print("  " + "-" * 75)
+    print("  " + "-" * 86)
     for data in filtered_analyses:
         ticker = data.get("Ticker", "")
         iv30_val = data.get("iv30_val")
@@ -6127,7 +6127,7 @@ def cmd_rankings(args):
         
         ticker_fmt = format_color(f"{ticker:<8}", "35", bold=True)
         print(f"  {ticker_fmt} | {iv30_str:<8} | {hv90_str:<8} | {rv10_str:<12} | {discount_fmt} | {comp_fmt}")
-    print("  " + "-" * 75)
+    print("  " + "-" * 86)
     
     # Summary of databases metrics
     total_scanned = len(filtered_analyses)
@@ -6200,9 +6200,9 @@ def cmd_closed(args):
         return
         
     print("### 📊 GEX Closed Positions History")
-    print("  " + "-" * 115)
+    print("  " + "-" * 96)
     print(f"  {'Ticker':<6} | {'Class':<7} | {'Entry Date':<11} | {'Close Date':<11} | {'Days':<4} | {'Cost Basis':<11} | {'Realized P&L ($)':<16} | {'Realized P&L (%)'}")
-    print("  " + "-" * 115)
+    print("  " + "-" * 96)
     
     def format_row(item, asset_cls):
         ticker = item.get("Ticker") or item.get("Underlier", "Unknown").upper()
@@ -6242,7 +6242,8 @@ def cmd_closed(args):
         pnl_color = "32" if pnl_dlr >= 0 else "31"
         pnl_dlr_str = f"${pnl_dlr:+,.2f}"
         pnl_dlr_fmt = format_color(f"{pnl_dlr_str:<16}", pnl_color, bold=True)
-        pnl_pct_fmt = format_color(f"{pnl_pct:+.2f}%", pnl_color, bold=True)
+        pnl_pct_str = f"{pnl_pct:+.2f}%"
+        pnl_pct_fmt = format_color(f"{pnl_pct_str:<16}", pnl_color, bold=True)
         
         print(f"  {ticker_fmt} | {cls_fmt} | {entry_date:<11} | {close_date:<11} | {days_str} | {cb_fmt} | {pnl_dlr_fmt} | {pnl_pct_fmt}")
 
@@ -6251,7 +6252,7 @@ def cmd_closed(args):
     for stk in closed_stocks:
         format_row(stk, "Stock")
         
-    print("  " + "-" * 115)
+    print("  " + "-" * 96)
     
     # Print summarized stats
     if closed_options:
@@ -6499,9 +6500,9 @@ def cmd_payoff(args):
         spots_list = [round(spot * (1 + p/100.0), 2) for p in [-10.0, -5.0, -2.0, 0.0, 2.0, 5.0, 10.0]]
         spots_list = sorted(list(set(spots_list)))
         
-    print("  " + "-" * 111)
+    print("  " + "-" * 106)
     print(f"  {'Target Spot':<18} | {'Underlier %':<11} | {'Day 0 (Instant)':<17} | {'Day 3 Held':<17} | {'Day 7 Held':<17} | {'Day 14 Held'}")
-    print("  " + "-" * 111)
+    print("  " + "-" * 106)
     
     import math
     for s_price in spots_list:
@@ -6554,7 +6555,7 @@ def cmd_payoff(args):
         
         print(f"  {spot_fmt_str} | {chg_fmt_str} | {cell_d0} | {cell_d3} | {cell_d7} | {cell_d14}")
         
-    print("  " + "-" * 111)
+    print("  " + "-" * 106)
 
 
 def cmd_simulate(args):
