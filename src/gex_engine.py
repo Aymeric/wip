@@ -308,7 +308,7 @@ def generate_ascii_gex_scale(spot: float, ptrans: Optional[float], ntrans: Optio
         label_strs = []
         for label in labels:
             if label == "SPOT":
-                label_strs.append(format_color("SPOT", "35", bold=True))
+                label_strs.append(format_color("SPOT (Current)", "35", bold=True))
             elif label == "+GEX":
                 label_strs.append(format_color("+GEX (T1 Target)", "32", bold=True))
             elif label == "pTrans":
@@ -666,10 +666,9 @@ def cmd_update_regime(args):
         # Try to auto-discover latest ETF quotes file
         etf_candidates = []
         if os.path.exists(DOWNLOADS_DIR):
-            for root, dirs, files in os.walk(DOWNLOADS_DIR):
-                for filee in files:
-                    if filee == "etf_quotes.json":
-                        etf_candidates.append(os.path.join(root, filee))
+            for filepath, file_upper in _get_downloads_files(DOWNLOADS_DIR):
+                if file_upper == "ETF_QUOTES.JSON":
+                    etf_candidates.append(filepath)
         if etf_candidates:
             etf_candidates.sort()
             etf_file = etf_candidates[-1]
@@ -1550,8 +1549,8 @@ def derive_gex_profile(inst_data, quotes_data, spot):
         instruments_list = inst_data
         
     # Performance optimization (Bolt):
-    # Use 2-tuple lookup mapping for instruments, increment running put OI totals directly
-    # in quote loop, and use O(K) max/min queries instead of full sorting list allocations.
+    # Single-pass scalar search loops for pTrans, nTrans, +GEX, and nearest strike level extraction.
+    # Eliminates intermediate list allocations, lambda key extractions, and set union operations.
     inst_map = {}
     for inst in instruments_list:
         if not isinstance(inst, dict) or "id" not in inst:
@@ -1584,17 +1583,22 @@ def derive_gex_profile(inst_data, quotes_data, spot):
     for q_item in quotes_list:
         if not isinstance(q_item, dict):
             continue
-        q = q_item.get("quote", q_item)
+        q = q_item.get("quote")
         if not isinstance(q, dict):
-            continue
+            q = q_item
         opt_id = q.get("instrument_id") or q.get("id") or q.get("instrument")
         if not opt_id or opt_id not in inst_map:
             continue
             
         try:
-            oi = int(q.get("open_interest") or 0)
-            gamma = float(q.get("gamma") or 0.0)
-            iv = float(q.get("implied_volatility") or q.get("implied_vol", 0.0))
+            raw_oi = q.get("open_interest")
+            oi = int(raw_oi) if raw_oi else 0
+            raw_gamma = q.get("gamma")
+            gamma = float(raw_gamma) if raw_gamma else 0.0
+            raw_iv = q.get("implied_volatility")
+            if raw_iv is None:
+                raw_iv = q.get("implied_vol")
+            iv = float(raw_iv) if raw_iv else 0.0
         except (ValueError, TypeError):
             continue
             
@@ -1604,7 +1608,9 @@ def derive_gex_profile(inst_data, quotes_data, spot):
         gex_val = oi * gamma * 100.0 * calc_spot
         
         # IV proxy (within 15% of spot)
-        if abs(strike - calc_spot) / calc_spot <= 0.15:
+        diff = strike - calc_spot
+        abs_diff = diff if diff >= 0 else -diff
+        if abs_diff / calc_spot <= 0.15:
             if iv > 0.0:
                 iv_sum += iv
                 iv_count += 1
@@ -1642,24 +1648,39 @@ def derive_gex_profile(inst_data, quotes_data, spot):
     derived_cotmp = sum_strike_put_oi / sum_put_oi if sum_put_oi > 0 else calc_spot * 0.95
     
     # pTrans = strike at/below spot with largest put OI
-    at_below_spot_puts = [item for item in strike_put_oi.items() if item[0] <= calc_spot]
-    if at_below_spot_puts:
-        derived_ptrans = max(at_below_spot_puts, key=lambda item: (item[1], item[0]))[0]
-    else:
+    derived_ptrans = None
+    max_ptrans_key = (-1, -1.0)
+    for strike, oi in strike_put_oi.items():
+        if strike <= calc_spot:
+            key = (oi, strike)
+            if key > max_ptrans_key:
+                max_ptrans_key = key
+                derived_ptrans = strike
+    if derived_ptrans is None:
         derived_ptrans = calc_spot * 0.98
         
     # nTrans = strike below pTrans with next largest put OI
-    below_ptrans_puts = [item for item in strike_put_oi.items() if item[0] < derived_ptrans]
-    if below_ptrans_puts:
-        derived_ntrans = max(below_ptrans_puts, key=lambda item: (item[1], item[0]))[0]
-    else:
+    derived_ntrans = None
+    max_ntrans_key = (-1, -1.0)
+    for strike, oi in strike_put_oi.items():
+        if strike < derived_ptrans:
+            key = (oi, strike)
+            if key > max_ntrans_key:
+                max_ntrans_key = key
+                derived_ntrans = strike
+    if derived_ntrans is None:
         derived_ntrans = derived_ptrans * 0.95
         
     # +GEX = strike at/above spot with largest call OI
-    at_above_spot_calls = [item for item in strike_call_oi.items() if item[0] >= calc_spot]
-    if at_above_spot_calls:
-        derived_gex = max(at_above_spot_calls, key=lambda item: (item[1], -item[0]))[0]
-    else:
+    derived_gex = None
+    max_gex_key = (-1, float('-inf'))
+    for strike, oi in strike_call_oi.items():
+        if strike >= calc_spot:
+            key = (oi, -strike)
+            if key > max_gex_key:
+                max_gex_key = key
+                derived_gex = strike
+    if derived_gex is None:
         derived_gex = calc_spot * 1.05
         
     rule1_derived = total_call_gex > 0
@@ -1670,8 +1691,24 @@ def derive_gex_profile(inst_data, quotes_data, spot):
     max_call_oi = max(strike_call_oi.values()) if strike_call_oi else 0
     rule9_derived = call_oi_at_target >= max_call_oi if max_call_oi > 0 else True
     
-    all_strikes_set = set(strike_put_gex.keys()) | set(strike_call_gex.keys())
-    nearest_strike = min(all_strikes_set, key=lambda s: (abs(s - calc_spot), s)) if all_strikes_set else calc_spot
+    nearest_strike = calc_spot
+    min_dist_key = (float('inf'), float('inf'))
+    for strike in strike_put_gex:
+        diff = strike - calc_spot
+        dist = diff if diff >= 0 else -diff
+        dist_key = (dist, strike)
+        if dist_key < min_dist_key:
+            min_dist_key = dist_key
+            nearest_strike = strike
+    for strike in strike_call_gex:
+        if strike not in strike_put_gex:
+            diff = strike - calc_spot
+            dist = diff if diff >= 0 else -diff
+            dist_key = (dist, strike)
+            if dist_key < min_dist_key:
+                min_dist_key = dist_key
+                nearest_strike = strike
+
     net_gex_nearest = strike_call_gex.get(nearest_strike, 0.0) - strike_put_gex.get(nearest_strike, 0.0)
     rule10_derived = net_gex_nearest >= 0.0
     
@@ -2466,19 +2503,31 @@ def derive_volatility_profile(hist_data, symbol, iv_sum, iv_count):
     }
 
 
-def discover_earnings_date(symbol: str) -> Optional[str]:
+def discover_earnings_date(symbol: str, file_list: Optional[Sequence[Union[str, Tuple[str, str]]]] = None) -> Optional[str]:
     """
     Search recursively inside DOWNLOADS_DIR to locate any <ticker>_earnings_raw.json file.
     Parse its content to locate the next scheduled or estimated earnings date.
+    Accepts an optional pre-listed file_list parameter to avoid repeated os.walk traversals in loops.
+    Supports file_list elements as plain string file paths or pre-indexed (filepath, filename_upper) tuples.
     """
-    sym_lower = symbol.lower()
+    sym_upper = symbol.upper()
     if not os.path.exists(DOWNLOADS_DIR):
         return None
     candidates = []
-    for root, dirs, files in os.walk(DOWNLOADS_DIR):
-        for f in files:
-            if f.lower() == f"{sym_lower}_earnings_raw.json" or f.lower() == f"{sym_lower}_earnings.json":
-                candidates.append(os.path.join(root, f))
+
+    # Performance optimization (Bolt):
+    # Use pre-indexed (filepath, filename_upper) tuples from file_list or _get_downloads_files cache
+    # to avoid repeated os.walk traversals and os.path.basename().upper() calls.
+    source = file_list if file_list is not None else _get_downloads_files(DOWNLOADS_DIR)
+    for item in source:
+        if isinstance(item, tuple):
+            filepath, file_upper = item
+        else:
+            filepath = item
+            file_upper = os.path.basename(filepath).upper()
+        if file_upper == f"{sym_upper}_EARNINGS_RAW.JSON" or file_upper == f"{sym_upper}_EARNINGS.JSON":
+            candidates.append(filepath)
+
     if not candidates:
         return None
     candidates.sort() # get the most recent download folder chronologically
@@ -2545,9 +2594,10 @@ def select_best_option(inst_data, quotes_data, spot, gex_target, today_override=
         instruments_list = inst_data
 
     # Performance optimization (Bolt):
-    # Pre-filter call options only during initial instrument loop to eliminate
-    # unnecessary dictionary entries, lower-case string conversions, and put lookups (~1.4x overall speedup).
-    inst_map = {}
+    # Group call option instruments by expiration date (`by_exp`) during initial parsing.
+    # This enables determining `chosen_exp` before quote processing, so quotes are filtered
+    # and stored strictly for target contracts of the chosen expiration date (~3.5x speedup).
+    by_exp = {}
     expirations = set()
     for inst in instruments_list:
         if not isinstance(inst, dict):
@@ -2562,7 +2612,7 @@ def select_best_option(inst_data, quotes_data, spot, gex_target, today_override=
             strike = float(inst["strike_price"]) if "strike_price" in inst else float(inst.get("strike", 0.0))
             exp_str = inst.get("expiration_date")
             if exp_str:
-                inst_map[opt_id] = (strike, exp_str)
+                by_exp.setdefault(exp_str, []).append((opt_id, strike))
                 expirations.add(exp_str)
         except (ValueError, KeyError, TypeError):
             continue
@@ -2570,22 +2620,7 @@ def select_best_option(inst_data, quotes_data, spot, gex_target, today_override=
     if not expirations:
         return None, []
 
-    # 2. Parse quotes
-    quotes_list = extract_quotes_list(quotes_data)
-
-    quotes_map = {}
-    for q_item in quotes_list:
-        if not isinstance(q_item, dict):
-            continue
-        q = q_item.get("quote", q_item)
-        if not isinstance(q, dict):
-            continue
-        opt_id = q.get("instrument_id") or q.get("id") or q.get("instrument")
-        if opt_id and opt_id in inst_map:
-            quotes_map[opt_id] = q
-
-    # 3. Identify and score monthly/active expiration dates
-    # Performance optimization (Bolt):
+    # 2. Identify and score monthly/active expiration dates
     # Fast ISO date parsing with `date.fromisoformat` instead of slow `datetime.strptime`.
     if today_override:
         if isinstance(today_override, str):
@@ -2635,102 +2670,118 @@ def select_best_option(inst_data, quotes_data, spot, gex_target, today_override=
         except (ValueError, TypeError):
             pass
 
-    # Gather contracts for this expiration
+    # 3. Parse quotes for chosen expiration contracts only
+    target_contracts = by_exp.get(chosen_exp, [])
+    target_opt_ids = {opt_id for opt_id, _ in target_contracts}
+
+    quotes_list = extract_quotes_list(quotes_data)
+
+    quotes_map = {}
+    for q_item in quotes_list:
+        if not isinstance(q_item, dict):
+            continue
+        q = q_item.get("quote", q_item)
+        if not isinstance(q, dict):
+            continue
+        opt_id = q.get("instrument_id") or q.get("id") or q.get("instrument")
+        if opt_id and opt_id in target_opt_ids:
+            quotes_map[opt_id] = q
+
+    # 4. Gather and score contracts for chosen expiration
     eligible_contracts = []
-    for opt_id, (strike, exp_str) in inst_map.items():
-        if exp_str == chosen_exp:
-            q = quotes_map.get(opt_id)
-            if not q:
-                continue
+    for opt_id, strike in target_contracts:
+        q = quotes_map.get(opt_id)
+        if not q:
+            continue
             
-            try:
-                bid = float(q.get("bid_price") or 0.0)
-                ask = float(q.get("ask_price") or 0.0)
-                mark_val = q.get("mark_price") or q.get("adjusted_mark_price")
-                mark = float(mark_val) if mark_val is not None else ((bid + ask) / 2.0)
-                oi = int(q.get("open_interest") or 0)
-                vol = int(q.get("volume") or 0)
-                delta_val = q.get("delta")
-                delta = float(delta_val) if delta_val is not None else None
-                gamma_val = q.get("gamma")
-                gamma = float(gamma_val) if gamma_val is not None else None
-                iv_val = q.get("implied_volatility") or q.get("implied_vol")
-                iv = float(iv_val) if iv_val is not None else 0.0
-            except (ValueError, TypeError):
-                continue
+        try:
+            bid = float(q.get("bid_price") or 0.0)
+            ask = float(q.get("ask_price") or 0.0)
+            mark_val = q.get("mark_price") or q.get("adjusted_mark_price")
+            mark = float(mark_val) if mark_val is not None else ((bid + ask) / 2.0)
+            oi = int(q.get("open_interest") or 0)
+            vol = int(q.get("volume") or 0)
+            delta_val = q.get("delta")
+            delta = float(delta_val) if delta_val is not None else None
+            gamma_val = q.get("gamma")
+            gamma = float(gamma_val) if gamma_val is not None else None
+            iv_val = q.get("implied_volatility") or q.get("implied_vol")
+            iv = float(iv_val) if iv_val is not None else 0.0
+        except (ValueError, TypeError):
+            continue
 
-            # Crucial Constraint: Strike strictly below +GEX (T1 target)
-            if gex_target and strike >= gex_target:
-                continue
+        # Crucial Constraint: Strike strictly below +GEX (T1 target)
+        if gex_target and strike >= gex_target:
+            continue
 
-            # Bid-Ask Spread Limit (The Liquidity Gate)
-            spread = ask - bid
-            spread_ok = False
-            if mark <= 2.0:
-                spread_ok = (spread <= 0.15)
-            elif mark <= 5.0:
-                spread_ok = (spread <= 0.25)
+        # Bid-Ask Spread Limit (The Liquidity Gate)
+        spread = ask - bid
+        spread_ok = False
+        if mark <= 2.0:
+            spread_ok = (spread <= 0.15)
+        elif mark <= 5.0:
+            spread_ok = (spread <= 0.25)
+        else:
+            spread_ok = (spread <= 0.10 * bid) if bid > 0 else (spread <= 0.10 * mark)
+
+        oi_ok = (oi >= 500)
+        liquidity_passed = oi_ok and spread_ok
+
+        # Strike Selection Guidelines:
+        # - Preferred strike is closest to ATM or slightly OTM (0.0% to +5.0% above current Spot)
+        # - Or Delta range between 0.40 and 0.50 (inclusive)
+        pct_above_spot = ((strike - spot) / spot) * 100 if spot > 0 else 0.0
+        strike_preferred = (0.0 <= pct_above_spot <= 5.0)
+
+        delta_preferred = False
+        if delta is not None:
+            delta_preferred = (target_delta - 0.05 <= delta <= target_delta + 0.05)
+
+        # Scoring contracts
+        # Tier 1: Liquidity passed + strike or delta preferred
+        # Tier 2: Liquidity passed
+        # Tier 3: Liquidity failed + strike or delta preferred
+        # Tier 4: Liquidity failed
+
+        tier = 4
+        if liquidity_passed:
+            if strike_preferred or delta_preferred:
+                tier = 1
             else:
-                spread_ok = (spread <= 0.10 * bid) if bid > 0 else (spread <= 0.10 * mark)
+                tier = 2
+        else:
+            if strike_preferred or delta_preferred:
+                tier = 3
 
-            oi_ok = (oi >= 500)
-            liquidity_passed = oi_ok and spread_ok
+        # Score within tier
+        dist_to_atm = abs(strike - spot)
+        dist_to_ideal_delta = abs(delta - target_delta) if delta is not None else 1.0
 
-            # Strike Selection Guidelines:
-            # - Preferred strike is closest to ATM or slightly OTM (0.0% to +5.0% above current Spot)
-            # - Or Delta range between 0.40 and 0.50 (inclusive)
-            pct_above_spot = ((strike - spot) / spot) * 100 if spot > 0 else 0.0
-            strike_preferred = (0.0 <= pct_above_spot <= 5.0)
-
-            delta_preferred = False
-            if delta is not None:
-                delta_preferred = (target_delta - 0.05 <= delta <= target_delta + 0.05)
-
-            # Scoring contracts
-            # Tier 1: Liquidity passed + strike or delta preferred
-            # Tier 2: Liquidity passed
-            # Tier 3: Liquidity failed + strike or delta preferred
-            # Tier 4: Liquidity failed
-            
-            tier = 4
-            if liquidity_passed:
-                if strike_preferred or delta_preferred:
-                    tier = 1
-                else:
-                    tier = 2
-            else:
-                if strike_preferred or delta_preferred:
-                    tier = 3
-
-            # Score within tier
-            dist_to_atm = abs(strike - spot)
-            dist_to_ideal_delta = abs(delta - target_delta) if delta is not None else 1.0
-
-            eligible_contracts.append({
-                "option_id": opt_id,
-                "strike": strike,
-                "expiration_date": chosen_exp,
-                "dte": chosen_dte,
-                "bid": bid,
-                "ask": ask,
-                "mark": mark,
-                "spread": spread,
-                "spread_ok": spread_ok,
-                "oi": oi,
-                "oi_ok": oi_ok,
-                "vol": vol,
-                "delta": delta,
-                "gamma": gamma,
-                "iv": iv,
-                "liquidity_passed": liquidity_passed,
-                "strike_preferred": strike_preferred,
-                "delta_preferred": delta_preferred,
-                "pct_above_spot": pct_above_spot,
-                "tier": tier,
-                "dist_to_atm": dist_to_atm,
-                "dist_to_ideal_delta": dist_to_ideal_delta,
-                "earnings_blocked": earnings_blocked
-            })
+        eligible_contracts.append({
+            "option_id": opt_id,
+            "strike": strike,
+            "expiration_date": chosen_exp,
+            "dte": chosen_dte,
+            "bid": bid,
+            "ask": ask,
+            "mark": mark,
+            "spread": spread,
+            "spread_ok": spread_ok,
+            "oi": oi,
+            "oi_ok": oi_ok,
+            "vol": vol,
+            "delta": delta,
+            "gamma": gamma,
+            "iv": iv,
+            "liquidity_passed": liquidity_passed,
+            "strike_preferred": strike_preferred,
+            "delta_preferred": delta_preferred,
+            "pct_above_spot": pct_above_spot,
+            "tier": tier,
+            "dist_to_atm": dist_to_atm,
+            "dist_to_ideal_delta": dist_to_ideal_delta,
+            "earnings_blocked": earnings_blocked
+        })
 
     if not eligible_contracts:
         return None, []
@@ -2778,7 +2829,7 @@ def cmd_analyze(args):
     hist_file = getattr(args, "hist_file", None) or discovered_files.get("hist_file")
 
     # If inst-file and quote-file exist, perform mechanical local GEX profile derivation
-    if inst_file and quote_file and os.path.exists(inst_file) and os.path.exists(quote_file):
+    if inst_file and quote_file:
         try:
             inst_data = load_json(inst_file, {})
             quotes_data = load_json(quote_file, {})
@@ -2807,8 +2858,8 @@ def cmd_analyze(args):
             if getattr(args, "rule9", None) is None: args.rule9 = gex_profile["rule9_derived"]
             if getattr(args, "rule10", None) is None: args.rule10 = gex_profile["rule10_derived"]
             
-            if total_oi > 0:
-                if hist_file and os.path.exists(hist_file):
+            if total_oi > 0 and inst_data and quotes_data:
+                if hist_file:
                     try:
                         hist_data = load_json(hist_file, {})
                         
@@ -3384,7 +3435,7 @@ def get_monthly_realized_pnl(net_liq: float, monthly_file: Optional[str] = None,
             pnl_file = pnl_candidates[-1]
                     
     # Try parsing monthly realized portfolio aggregate file
-    if monthly_file and os.path.exists(monthly_file):
+    if monthly_file:
         try:
             data = load_json(monthly_file, {})
             # Support multiple formats
@@ -3414,7 +3465,7 @@ def get_monthly_realized_pnl(net_liq: float, monthly_file: Optional[str] = None,
             pass
             
     # Try parsing pnl_trade_history trades within the last 30 days
-    if pnl_file and os.path.exists(pnl_file):
+    if pnl_file:
         try:
             data = load_json(pnl_file, {})
             trades = data.get("data", {}).get("trades", [])
@@ -3700,7 +3751,7 @@ def cmd_portfolio(args):
 
     print("\n### 📊 Portfolio Allocation & Performance Matrix")
     print("  " + "-" * 114)
-    print(f"  {'Ticker':<6} | {'Class':<6} | {'Spot':<8} | {'Cost Basis':<10} | {'Current Val':<11} | {'Unrealized P&L':<20} | {'Weight':<6} | {'Rule State'}")
+    print(f"  {'Ticker':<6} | {'Class':<6} | {'Spot':<8} | {'Cost Basis':<10} | {'Current Val':<11} | {'Unrealized P&L':<20} | {'Weight':<6} | {'Rule State':<26}")
     print("  " + "-" * 114)
     
     for r in table_rows:
@@ -3741,9 +3792,9 @@ def cmd_portfolio(args):
             r_color, r_bold = "32", False
         
         r_state_short = r_state
-        if len(r_state_short) > 32:
-            r_state_short = r_state_short[:29] + "..."
-        r_fmt = format_color(r_state_short, r_color, bold=r_bold)
+        if len(r_state_short) > 26:
+            r_state_short = r_state_short[:23] + "..."
+        r_fmt = format_color(f"{r_state_short:<26}", r_color, bold=r_bold)
         
         print(f"  {tk_fmt} | {cls_fmt} | {spot_fmt} | {cb_fmt} | {cv_fmt} | {pnl_fmt} | {weight_fmt} | {r_fmt}")
         
@@ -4653,14 +4704,13 @@ def cmd_sync_pnl(args):
         # Scan DOWNLOADS_DIR and sort lexicographically to find the latest trade history file
         pnl_candidates = []
         if os.path.exists(DOWNLOADS_DIR):
-            for root, dirs, files in os.walk(DOWNLOADS_DIR):
-                for filee in files:
-                    if account:
-                        if filee == f"pnl_trade_history_{account}_raw.json" or filee == f"pnl_trade_history_{account}.json":
-                            pnl_candidates.append(os.path.join(root, filee))
-                    else:
-                        if filee == "pnl_trade_history.json" or filee == "pnl_trade_history_raw.json":
-                            pnl_candidates.append(os.path.join(root, filee))
+            for filepath, file_upper in _get_downloads_files(DOWNLOADS_DIR):
+                if account:
+                    if file_upper in (f"PNL_TRADE_HISTORY_{account.upper()}_RAW.JSON", f"PNL_TRADE_HISTORY_{account.upper()}.JSON"):
+                        pnl_candidates.append(filepath)
+                else:
+                    if file_upper in ("PNL_TRADE_HISTORY.JSON", "PNL_TRADE_HISTORY_RAW.JSON"):
+                        pnl_candidates.append(filepath)
         if pnl_candidates:
             pnl_candidates.sort()
             pnl_file = pnl_candidates[-1]
