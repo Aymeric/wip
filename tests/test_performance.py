@@ -138,5 +138,21 @@ class TestPerformanceBenchmark(unittest.TestCase):
 
         print(f"\n[BENCHMARK] Executed {iterations} calls to select_best_option in {elapsed:.4f} seconds ({elapsed/iterations*1000:.4f} ms/call)")
 
+    def test_benchmark_derive_volatility_profile(self):
+        hist_data = {
+            'results': [{
+                'symbol': 'AAPL',
+                'bars': [{'begins_at': f'2026-01-{i:03d}', 'close_price': str(100.0 + i * 0.2)} for i in range(1, 251)]
+            }]
+        }
+        iterations = 5000
+
+        start_time = time.perf_counter()
+        for _ in range(iterations):
+            _ = gex_engine.derive_volatility_profile(hist_data, 'AAPL', 1.5, 5)
+        elapsed = time.perf_counter() - start_time
+
+        print(f"\n[BENCHMARK] Executed {iterations} calls to derive_volatility_profile in {elapsed:.4f} seconds ({elapsed/iterations*1000:.4f} ms/call)")
+
 if __name__ == "__main__":
     unittest.main()
