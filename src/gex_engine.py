@@ -6659,14 +6659,26 @@ def cleanup_downloads(days=7):
     """Removes dated download folders older than the retention period and stale tmp folders."""
     now = datetime.now()
     removed_count = 0
-    
-    if not os.path.exists(DOWNLOADS_DIR):
+
+    try:
+        downloads_dir = validate_safe_path(DOWNLOADS_DIR)
+    except Exception as e:
+        print(f"Warning: Failed to validate DOWNLOADS_DIR {DOWNLOADS_DIR}: {e}", file=sys.stderr)
+        return
+
+    if not os.path.exists(downloads_dir):
         print("No downloads directory found.")
         return
-        
-    for item in os.listdir(DOWNLOADS_DIR):
-        item_path = os.path.join(DOWNLOADS_DIR, item)
+
+    for item in os.listdir(downloads_dir):
+        item_path = os.path.join(downloads_dir, item)
         if os.path.isdir(item_path):
+            try:
+                safe_item_path = validate_safe_path(item_path)
+            except Exception as e:
+                print(f"Warning: Failed to validate path {item_path}: {e}", file=sys.stderr)
+                continue
+
             # Check if directory name is a date YYYYMMDD
             if re.match(r"^\d{8}$", item):
                 try:
@@ -6674,18 +6686,21 @@ def cleanup_downloads(days=7):
                     age_days = (now - dir_date).days
                     if age_days > days:
                         print(f"Removing stale download folder: {item} ({age_days} days old)")
-                        shutil.rmtree(item_path)
+                        shutil.rmtree(safe_item_path)
                         removed_count += 1
                 except Exception as e:
                     print(f"Error removing {item}: {e}")
             elif item == "tmp":
                 # Always clean tmp folders if they exist and are older than 1 day
-                mtime = os.path.getmtime(item_path)
-                if (now - datetime.fromtimestamp(mtime)).days >= 1:
-                    print(f"Removing stale tmp folder: {item}")
-                    shutil.rmtree(item_path)
-                    removed_count += 1
-                    
+                try:
+                    mtime = os.path.getmtime(safe_item_path)
+                    if (now - datetime.fromtimestamp(mtime)).days >= 1:
+                        print(f"Removing stale tmp folder: {item}")
+                        shutil.rmtree(safe_item_path)
+                        removed_count += 1
+                except Exception as e:
+                    print(f"Error removing {item}: {e}")
+
     print(f"Cleanup complete. Removed {removed_count} folders.")
 
 

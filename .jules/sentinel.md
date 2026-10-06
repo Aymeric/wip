@@ -1,3 +1,8 @@
+## 2026-09-22 - Filesystem cleanup helpers must validate paths before deletion to prevent path traversal
+**Vulnerability:** `cleanup_downloads()` performed `shutil.rmtree()` on directory paths under `DOWNLOADS_DIR` without calling `validate_safe_path()`, creating path traversal risks if `DOWNLOADS_DIR` or subdirectories resolved outside allowed roots.
+**Learning:** Filesystem deletion helpers must explicitly validate target paths against allowed root directories before executing deletion operations like `shutil.rmtree()`.
+**Prevention:** Always validate directory and file targets with `validate_safe_path()` prior to invoking destructive filesystem methods.
+
 ## 2026-09-21 - CLI subcommands must route file reading through load_json to enforce path traversal validation
 **Vulnerability:** Several CLI subcommands (`prune-candidates`, `update-candidates`, `update-regime`) used raw `open()` and `json.load()` directly on user-controlled input paths, bypassing `load_json()` and `validate_safe_path()` path traversal checks.
 **Learning:** Having a safe helper function like `load_json()` is ineffective if subcommand handlers open raw files directly without routing through the helper.
