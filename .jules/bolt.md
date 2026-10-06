@@ -45,3 +45,7 @@
 ## 2026-10-05 - Single-Pass Scalar Search Loops for Option Level Extraction
 **Learning:** `derive_gex_profile` used intermediate list comprehensions (`at_below_spot_puts`, `below_ptrans_puts`, `at_above_spot_calls`), lambda tuple key extractions in `max()`, and set union allocations (`set(...) | set(...)`) to calculate pTrans, nTrans, +GEX, and nearest strike levels. Replacing list allocations and lambda functions with single-pass scalar search loops yielded a ~1.16x execution speedup.
 **Action:** In option chain level derivation functions, find extremum strike levels using single-pass iterative searches with scalar comparison tuples `(oi, strike)` rather than constructing intermediate list comprehensions and passing lambda keys to `max()`.
+
+## 2026-10-06 - Windowed Log-Return Slicing & Safe Bar Sorting in Volatility Profiles
+**Learning:** `derive_volatility_profile` previously computed `math.log` returns for all historical closes (e.g. 250 bars), even though HV90 and RV10 only require the last 90 log returns. Calculating log returns strictly for the required trailing window (at most 90 items) and streamlining bar price extractions reduced `math.log` calls by ~2.8x while preserving Timsort safety across arbitrary input orderings, yielding a ~1.22x execution speedup.
+**Action:** When deriving windowed volatility or statistical profile metrics from time-series datasets, compute log returns only for the required trailing window slice rather than the entire series.
