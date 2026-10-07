@@ -106,6 +106,27 @@ class TestPerformanceBenchmark(unittest.TestCase):
 
         print(f"\n[BENCHMARK] Executed {total_calls} calls to discover_earnings_date in {elapsed:.4f} seconds ({elapsed/total_calls*1000:.4f} ms/call)")
 
+    def test_benchmark_get_monthly_realized_pnl(self):
+        pnl_data = {
+            'trades': [
+                {'timestamp': f'2026-0{i % 9 + 1}-{i % 28 + 1:02d}T10:00:00Z', 'realized_gain': 100.0}
+                for i in range(1000)
+            ]
+        }
+        import tempfile, json
+        with tempfile.NamedTemporaryFile('w', delete=False, suffix='.json') as f:
+            json.dump(pnl_data, f)
+            tmp_path = f.name
+
+        iterations = 500
+        start_time = time.perf_counter()
+        for _ in range(iterations):
+            _ = gex_engine.get_monthly_realized_pnl(50000.0, pnl_file=tmp_path)
+        elapsed = time.perf_counter() - start_time
+
+        os.remove(tmp_path)
+        print(f"\n[BENCHMARK] Executed {iterations} calls to get_monthly_realized_pnl in {elapsed:.4f} seconds ({elapsed/iterations*1000:.4f} ms/call)")
+
     def test_benchmark_select_best_option(self):
         expirations = ['2026-04-17', '2026-05-15', '2026-06-19', '2026-07-17']
         inst_data = [
