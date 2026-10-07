@@ -3256,7 +3256,7 @@ def cmd_analyze(args):
             day14_pnl = ((day14_mark - opt_mark) / opt_mark) * 100.0 if opt_mark > 0 else 0.0
             
             is_spot_row = abs(s_price - spot) < 0.01
-            s_price_label = f"${s_price:.2f} (Baseline Spot)" if is_spot_row else f"${s_price:.2f}"
+            s_price_label = f"${s_price:.2f} (Spot)" if is_spot_row else f"${s_price:.2f}"
             s_price_str = f"{s_price_label:<20}"
             s_name_str = f"{s_name:<24}"
             
@@ -5526,7 +5526,14 @@ def cmd_update_candidates(args):
     print(f"\nWrote {len(candidate_list)} candidates to {CANDIDATES_FILE}")
     if excluded_actives:
         print(f"Excluded {len(excluded_actives)} active holdings from candidate pool: {', '.join(sorted(list(excluded_actives))[:10])}{'...' if len(excluded_actives) > 10 else ''}")
-    print(f"\n### 🚀 Top Screened GEX Candidates")
+    print(f"\n### 🚀 Top Screened GEX Candidates\n")
+    if not candidate_list:
+        print("💤 No candidate tickers matched the active screening filters or raw scan files.\n")
+        print("💡 Actionable Next Steps:")
+        print("  • Place market scan JSON files into data/downloads/")
+        print("  • Relax screening filters: python3 gex_engine.py update-candidates --min-volume 100000 --min-change 0.1")
+        return
+
     print("  " + "-" * 138)
     print(f"  {'Ticker':<8} | {'Price':<6} | {'Daily Change':<12} | {'RSI':<6} | {'MACD Hist':<9} | {'Implied Vol':<12} | {'Rel Opt Vol':<12} | {'GEX Setup Grade':<16} | {'GEX Status':<16} | {'Market Cap'}")
     print("  " + "-" * 138)
