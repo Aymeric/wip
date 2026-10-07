@@ -5265,6 +5265,8 @@ def persist_new_scans():
                     timestamped_filename = f"{slug_title}_{timestamp}.json"
                     
                     target_path = os.path.join(DOWNLOADS_DIR, timestamped_filename)
+                    # Security: Enforce strict path traversal validation before writing to target_path
+                    target_path = validate_safe_path(target_path)
                     
                     # Move file to downloads
                     shutil.copy2(filepath, target_path)

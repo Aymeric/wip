@@ -7,6 +7,10 @@ import unittest
 import sys
 import os
 import subprocess
+import tempfile
+import shutil
+import json
+from unittest.mock import patch
 from io import StringIO
 
 
@@ -5013,6 +5017,34 @@ class TestCmdStatus(unittest.TestCase):
             self.assertIn("+$43.00 (+15.99%)", output)
             self.assertIn("-$50.00 (-10.00%)", output)
             self.assertIn("-" * 114, output)
+
+    def test_persist_new_scans_path_traversal_prevention(self):
+        """Test that persist_new_scans enforces validate_safe_path on target destination paths."""
+        import gex_engine
+        temp_dir = tempfile.mkdtemp()
+        try:
+            scan_file = os.path.join(temp_dir, "raw_scan.json")
+            scan_data = {
+                "data": {
+                    "result": {
+                        "scan_title": "../../../etc/malicious_scan",
+                        "scan_id": "12345"
+                    }
+                }
+            }
+            with open(scan_file, "w") as f:
+                json.dump(scan_data, f)
+
+            # Mock os.listdir to return our temporary scan file in current directory
+            with patch('os.listdir', return_value=[os.path.basename(scan_file)]), \
+                 patch('gex_engine.load_json', return_value=scan_data), \
+                 patch('os.path.isfile', return_value=True), \
+                 patch('gex_engine.validate_safe_path', side_effect=ValueError("Path traversal detected")) as mock_val:
+                persisted = gex_engine.persist_new_scans()
+                self.assertEqual(persisted, [])
+                mock_val.assert_called()
+        finally:
+            shutil.rmtree(temp_dir, ignore_errors=True)
 
 
 if __name__ == '__main__':
