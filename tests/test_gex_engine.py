@@ -8,6 +8,7 @@ import sys
 import os
 import subprocess
 from io import StringIO
+from contextlib import redirect_stdout
 
 
 # Ensure the src directory is in the path to import gex_engine correctly
@@ -3370,9 +3371,14 @@ class TestGEXEngine(unittest.TestCase):
                     max_rsi = 30.0
                     macd_filter = "none"
                     
-                gex_engine.cmd_update_candidates(UpdateArgsFiltered())
+                io_out = StringIO()
+                with redirect_stdout(io_out):
+                    gex_engine.cmd_update_candidates(UpdateArgsFiltered())
                 cand_data = gex_engine.load_json(candidates_file, {})
                 self.assertEqual(len(cand_data.get("candidates", [])), 0)
+                output = io_out.getvalue()
+                self.assertIn("No candidate tickers matched the active screening filters", output)
+                self.assertIn("Actionable Next Steps:", output)
                 
         finally:
             shutil.rmtree(temp_dir)
