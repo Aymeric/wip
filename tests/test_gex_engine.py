@@ -3377,6 +3377,31 @@ class TestGEXEngine(unittest.TestCase):
         finally:
             shutil.rmtree(temp_dir)
 
+    def test_cmd_update_candidates_empty_state_output(self):
+        """Test cmd_update_candidates displays friendly empty state and tips when candidate list is empty."""
+        import tempfile
+        import shutil
+        from unittest.mock import patch
+        import gex_engine
+        temp_dir = tempfile.mkdtemp()
+        try:
+            candidates_file = os.path.join(temp_dir, "candidate_stocks.json")
+
+            class UpdateArgs:
+                min_rsi = None
+                max_rsi = None
+                macd_filter = "none"
+
+            with patch('gex_engine.DOWNLOADS_DIR', temp_dir), \
+                 patch('gex_engine.CANDIDATES_FILE', candidates_file), \
+                 patch("sys.stdout", new_callable=StringIO) as mock_stdout:
+                gex_engine.cmd_update_candidates(UpdateArgs())
+                output = mock_stdout.getvalue()
+                self.assertIn("No candidates matched the current screening criteria", output)
+                self.assertIn("Actionable Next Steps", output)
+        finally:
+            shutil.rmtree(temp_dir)
+
     def test_calculate_candidate_score(self):
         """Test candidate score calculation across various input combinations and edge cases."""
         # 1. Empty dictionary or all None values -> returns 0.0

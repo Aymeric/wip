@@ -5526,6 +5526,15 @@ def cmd_update_candidates(args):
     print(f"\nWrote {len(candidate_list)} candidates to {CANDIDATES_FILE}")
     if excluded_actives:
         print(f"Excluded {len(excluded_actives)} active holdings from candidate pool: {', '.join(sorted(list(excluded_actives))[:10])}{'...' if len(excluded_actives) > 10 else ''}")
+
+    if not candidate_list:
+        print("\n### 🚀 Top Screened GEX Candidates\n")
+        print_color("💤 No candidates matched the current screening criteria.", "33")
+        print("\n💡 Actionable Next Steps:")
+        print("  • Relax price or volume thresholds (e.g., --min-price 3.0 --min-volume 100000)")
+        print("  • Check for new offline scan files in data/downloads/ or run 'update-candidates'\n")
+        return
+
     print(f"\n### 🚀 Top Screened GEX Candidates")
     print("  " + "-" * 138)
     print(f"  {'Ticker':<8} | {'Price':<6} | {'Daily Change':<12} | {'RSI':<6} | {'MACD Hist':<9} | {'Implied Vol':<12} | {'Rel Opt Vol':<12} | {'GEX Setup Grade':<16} | {'GEX Status':<16} | {'Market Cap'}")

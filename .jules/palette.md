@@ -11,3 +11,7 @@
 ## 2026-10-03 - Plain Text Role Symmetry in Terminal ASCII Scales
 **Learning:** In ASCII linear diagrams, mixing a plain key label (e.g. `SPOT`) alongside descriptive role-tagged labels (e.g. `+GEX (T1 Target)`) creates visual asymmetry and ambiguity. Additionally, using plain ASCII text role tags (such as `SPOT (Current)`) instead of multi-byte Unicode emojis avoids column alignment distortions across varied terminal emulators.
 **Action:** Maintain consistent plain-text role descriptor suffixes across all scale nodes in ASCII visualizations.
+
+## 2026-10-18 - CLI Data Table Empty State Consistency
+**Learning:** In terminal CLI commands that output formatted data tables, rendering empty table headers with consecutive divider lines when query/screen filters return zero items creates visual clutter and user confusion.
+**Action:** Always intercept empty datasets before table rendering to display a clear empty state message (`💤`) paired with actionable next steps (`💡 Actionable Next Steps:`).
