@@ -242,6 +242,13 @@ class TestGEXEngine(unittest.TestCase):
             pnl, pct, status, cnt = gex_engine.get_monthly_realized_pnl(10000.0, monthly_file=invalid_path, pnl_file=invalid_path)
             self.assertEqual((pnl, pct, status, cnt), (0.0, 0.0, "PASS", 0))
 
+        # sync-positions command with path traversal base_dir safely rejects invalid paths
+        sync_args = SimpleNamespace(base_dir=invalid_path, account="")
+        with patch('sys.stderr'):
+            with self.assertRaises(SystemExit) as cm:
+                gex_engine.cmd_sync_positions(sync_args)
+            self.assertEqual(cm.exception.code, 1)
+
     def test_save_json_preserves_existing_file_on_serialization_failure(self):
         import tempfile
         import gex_engine

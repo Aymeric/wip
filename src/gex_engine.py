@@ -4891,6 +4891,12 @@ def cmd_sync_pnl(args):
 def cmd_sync_positions(args):
     """Syncs active options and equity positions from raw Robinhood downloads to active_positions.json."""
     base_dir = args.base_dir
+    if base_dir:
+        try:
+            base_dir = validate_safe_path(base_dir)
+        except ValueError as e:
+            print(f"Error: Invalid --base-dir path: {e}", file=sys.stderr)
+            sys.exit(1)
     raw_account = getattr(args, "account", "")
     account = sanitize_account(raw_account) if raw_account else ""
     options_file = account_positions_file(account)

@@ -1,3 +1,8 @@
+## 2026-09-22 - Subcommands accepting directory paths must validate base_dir with validate_safe_path
+**Vulnerability:** The `sync-positions` subcommand accepted a user-controlled `--base-dir` parameter and listed directory contents using `os.listdir()` without calling `validate_safe_path()`, allowing path traversal outside repository and temp directories.
+**Learning:** Subcommands accepting raw directory paths must pass them through `validate_safe_path()` before performing directory traversal or file listing operations.
+**Prevention:** Always validate user-provided directory paths with `validate_safe_path()` at the entry point of subcommand handlers before calling `os.listdir()` or `os.walk()`.
+
 ## 2026-09-21 - CLI subcommands must route file reading through load_json to enforce path traversal validation
 **Vulnerability:** Several CLI subcommands (`prune-candidates`, `update-candidates`, `update-regime`) used raw `open()` and `json.load()` directly on user-controlled input paths, bypassing `load_json()` and `validate_safe_path()` path traversal checks.
 **Learning:** Having a safe helper function like `load_json()` is ineffective if subcommand handlers open raw files directly without routing through the helper.
