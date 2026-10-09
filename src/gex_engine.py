@@ -5528,7 +5528,7 @@ def cmd_update_candidates(args):
         print(f"Excluded {len(excluded_actives)} active holdings from candidate pool: {', '.join(sorted(list(excluded_actives))[:10])}{'...' if len(excluded_actives) > 10 else ''}")
     print(f"\n### 🚀 Top Screened GEX Candidates")
     print("  " + "-" * 138)
-    print(f"  {'Ticker':<8} | {'Price':<6} | {'Daily Change':<12} | {'RSI':<6} | {'MACD Hist':<9} | {'Implied Vol':<12} | {'Rel Opt Vol':<12} | {'GEX Setup Grade':<16} | {'GEX Status':<16} | {'Market Cap'}")
+    print(f"  {'Ticker':<8} | {'Price':<8} | {'Daily Change':<12} | {'RSI':<6} | {'MACD Hist':<9} | {'Implied Vol':<12} | {'Rel Opt Vol':<12} | {'GEX Setup Grade':<16} | {'GEX Status':<16} | {'Market Cap'}")
     print("  " + "-" * 138)
     for c in candidate_list[:top_limit]:
         ticker = c['symbol']
@@ -5570,7 +5570,7 @@ def cmd_update_candidates(args):
         change_fmt = format_color(f"{change:<12}", change_color, bold=True)
         ticker_fmt = format_color(f"{ticker:<8}", "35", bold=True)
         
-        print(f"  {ticker_fmt} | {price:<6} | {change_fmt} | {rsi:<6} | {macd_hist:<9} | {iv:<12} | {rel_opt_vol:<12} | {gex_grade_str} | {gex_status_str} | {mcap}")
+        print(f"  {ticker_fmt} | {price:<8} | {change_fmt} | {rsi:<6} | {macd_hist:<9} | {iv:<12} | {rel_opt_vol:<12} | {gex_grade_str} | {gex_status_str} | {mcap}")
     print("  " + "-" * 138)
     if len(candidate_list) > top_limit:
         print(f"  * Showing top {top_limit} sorted by score and relative options volume out of {len(candidate_list)} candidates total.")
