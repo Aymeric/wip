@@ -45,3 +45,7 @@
 ## 2026-10-05 - Single-Pass Scalar Search Loops for Option Level Extraction
 **Learning:** `derive_gex_profile` used intermediate list comprehensions (`at_below_spot_puts`, `below_ptrans_puts`, `at_above_spot_calls`), lambda tuple key extractions in `max()`, and set union allocations (`set(...) | set(...)`) to calculate pTrans, nTrans, +GEX, and nearest strike levels. Replacing list allocations and lambda functions with single-pass scalar search loops yielded a ~1.16x execution speedup.
 **Action:** In option chain level derivation functions, find extremum strike levels using single-pass iterative searches with scalar comparison tuples `(oi, strike)` rather than constructing intermediate list comprehensions and passing lambda keys to `max()`.
+
+## 2026-10-06 - Pre-computed Invariants & Streamlined Option Candidate Scoring
+**Learning:** `select_best_option` re-computed delta range boundaries (`target_delta ± 0.05`), called `str.lower()` on contract type strings during loop iteration, and used `dict.setdefault()` for grouping. Pre-computing delta bounds outside the contract evaluation loop and checking direct equality before lowercasing yielded a ~1.16x execution speedup in `select_best_option`.
+**Action:** Hoist constant range boundary calculations and string normalizations outside loop passes in contract selection and option chain scoring functions.
