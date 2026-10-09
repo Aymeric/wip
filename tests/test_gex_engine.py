@@ -1435,6 +1435,26 @@ class TestGEXEngine(unittest.TestCase):
         finally:
             shutil.rmtree(temp_dir)
 
+    def test_cleanup_downloads_negative_days(self):
+        """Test cleanup_downloads and cmd_cleanup_downloads reject negative days arguments."""
+        import io
+        from types import SimpleNamespace
+        from unittest.mock import patch
+        import gex_engine
+
+        # 1. Calling cleanup_downloads with negative days raises ValueError
+        with self.assertRaises(ValueError) as cm:
+            gex_engine.cleanup_downloads(-1)
+        self.assertIn("days cannot be negative: -1", str(cm.exception))
+
+        # 2. Calling cmd_cleanup_downloads with negative days prints error and exits with code 1
+        args = SimpleNamespace(days=-5)
+        with patch("sys.stderr", new_callable=io.StringIO) as mock_stderr:
+            with self.assertRaises(SystemExit) as cm:
+                gex_engine.cmd_cleanup_downloads(args)
+            self.assertEqual(cm.exception.code, 1)
+            self.assertIn("Error: --days cannot be negative: -5", mock_stderr.getvalue())
+
     def test_sync_positions_removes_cached_positions_absent_from_snapshot(self):
         import tempfile
         import shutil

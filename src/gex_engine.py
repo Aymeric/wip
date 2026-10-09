@@ -6657,6 +6657,8 @@ def cmd_simulate(args):
 
 def cleanup_downloads(days=7):
     """Removes dated download folders older than the retention period and stale tmp folders."""
+    if days < 0:
+        raise ValueError(f"days cannot be negative: {days}")
     now = datetime.now()
     removed_count = 0
     
@@ -6665,7 +6667,7 @@ def cleanup_downloads(days=7):
         return
         
     for item in os.listdir(DOWNLOADS_DIR):
-        item_path = os.path.join(DOWNLOADS_DIR, item)
+        item_path = validate_safe_path(os.path.join(DOWNLOADS_DIR, item))
         if os.path.isdir(item_path):
             # Check if directory name is a date YYYYMMDD
             if re.match(r"^\d{8}$", item):
@@ -6691,6 +6693,9 @@ def cleanup_downloads(days=7):
 
 def cmd_cleanup_downloads(args):
     """CLI wrapper for download-folder cleanup."""
+    if getattr(args, "days", 7) < 0:
+        print(f"Error: --days cannot be negative: {args.days}", file=sys.stderr)
+        sys.exit(1)
     cleanup_downloads(args.days)
 
 

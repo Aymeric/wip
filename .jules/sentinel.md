@@ -1,3 +1,8 @@
+## 2026-09-22 - Download cleanup functions must validate retention days argument and enforce safe path validation on target directories
+**Vulnerability:** `cleanup_downloads()` allowed negative retention `days` values, causing `age_days > days` to evaluate to true for fresh download directories and deleting all download data. Additionally, target directory paths were deleted without running `validate_safe_path()` checks.
+**Learning:** Destructive file system utilities that delete directories based on numeric parameters must validate non-negative bounds and verify target paths against allowed root directories before invoking deletion functions like `shutil.rmtree()`.
+**Prevention:** Always validate numeric parameter boundaries (e.g. `days >= 0`) and pass target directory paths through `validate_safe_path()` prior to directory removal operations.
+
 ## 2026-09-21 - CLI subcommands must route file reading through load_json to enforce path traversal validation
 **Vulnerability:** Several CLI subcommands (`prune-candidates`, `update-candidates`, `update-regime`) used raw `open()` and `json.load()` directly on user-controlled input paths, bypassing `load_json()` and `validate_safe_path()` path traversal checks.
 **Learning:** Having a safe helper function like `load_json()` is ineffective if subcommand handlers open raw files directly without routing through the helper.
