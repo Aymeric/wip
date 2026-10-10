@@ -1,3 +1,8 @@
+## 2026-09-22 - Raw file move and removal helpers in scan persistence must apply validate_safe_path
+**Vulnerability:** `persist_new_scans()` performed raw `os.path.isfile()`, `shutil.copy2()`, and `os.remove()` operations on temporary file paths without applying `validate_safe_path()`.
+**Learning:** File utility functions that move or delete raw scan downloads must apply `validate_safe_path()` to both source and target paths before performing filesystem mutations.
+**Prevention:** Always validate both input source paths and computed output paths using `validate_safe_path()` before invoking file copying, moving, or deletion utilities.
+
 ## 2026-09-21 - CLI subcommands must route file reading through load_json to enforce path traversal validation
 **Vulnerability:** Several CLI subcommands (`prune-candidates`, `update-candidates`, `update-regime`) used raw `open()` and `json.load()` directly on user-controlled input paths, bypassing `load_json()` and `validate_safe_path()` path traversal checks.
 **Learning:** Having a safe helper function like `load_json()` is ineffective if subcommand handlers open raw files directly without routing through the helper.
