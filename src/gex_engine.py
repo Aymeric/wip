@@ -5241,9 +5241,10 @@ def persist_new_scans():
             
     for filepath, should_delete in search_paths:
         try:
-            if not os.path.isfile(filepath):
+            safe_filepath = validate_safe_path(filepath)
+            if not os.path.isfile(safe_filepath):
                 continue
-            data = load_json(filepath, None)
+            data = load_json(safe_filepath, None)
             if data is None:
                 continue
             
@@ -5264,15 +5265,15 @@ def persist_new_scans():
                     slug_title = slugify(scan_title)
                     timestamped_filename = f"{slug_title}_{timestamp}.json"
                     
-                    target_path = os.path.join(DOWNLOADS_DIR, timestamped_filename)
+                    target_path = validate_safe_path(os.path.join(DOWNLOADS_DIR, timestamped_filename))
                     
                     # Move file to downloads
-                    shutil.copy2(filepath, target_path)
+                    shutil.copy2(safe_filepath, target_path)
                     print(f"Persisted new scan '{scan_title}' to {target_path}")
                     
                     if should_delete:
-                        os.remove(filepath)
-                        print(f"  Removed raw temporary file: {filepath}")
+                        os.remove(safe_filepath)
+                        print(f"  Removed raw temporary file: {safe_filepath}")
                     
                     persisted_files.append((scan_title, target_path))
         except Exception:
