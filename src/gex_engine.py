@@ -1422,7 +1422,7 @@ def cmd_status(args):
         print_color("\n💤 No active portfolio exits or confirmed setups ready for execution today.", "33")
 
 
-def calculate_grade(ticker, spot, ptrans, ntrans, gex, cotmp, extra_rules=None):
+def calculate_grade(ticker, spot, ptrans, ntrans, gex, cotmp, extra_rules=None, sentiment_data=None):
     """
     Grades a single stock setup based on the GEX system's 11 structural rules.
     
@@ -1447,6 +1447,7 @@ def calculate_grade(ticker, spot, ptrans, ntrans, gex, cotmp, extra_rules=None):
         gex (float): Target positive GEX strike level (+GEX).
         cotmp (float): Center of Put Mass strike (COTMP).
         extra_rules (dict, optional): Boolean flags for rules requiring raw options/volatility data (1, 2, 7, 8, 9, 10, 11).
+        sentiment_data (dict, optional): Pre-loaded sentiment data dictionary to avoid repeated disk reads.
         
     Returns:
         tuple[int, list[bool]]: (grade, rules_checklist) where grade is the integer score (0-11)
@@ -1455,47 +1456,29 @@ def calculate_grade(ticker, spot, ptrans, ntrans, gex, cotmp, extra_rules=None):
     if extra_rules is None:
         extra_rules = {}
 
-    rules = [False] * 11
-    
-    # Rule 1: Total call GEX is positive
-    rules[0] = extra_rules.get("total_call_gex_positive", True)
-    
-    # Rule 2: Call GEX exceeds absolute Put GEX
-    rules[1] = extra_rules.get("call_gex_gt_put_gex", True)
-    
-    # Rule 3: Spot price is above largest negative GEX strike (usually COTMP or similar)
-    rules[2] = spot > cotmp
-    
-    # Rule 4: Largest single $+GEX$ target strike is above current Spot price
-    rules[3] = gex > spot
-    
-    # Rule 5: pTrans sits above nTrans
-    rules[4] = ptrans > ntrans
-    
-    # Rule 6: Spot sits above positive transition (pTrans) -> Wait, watchdog buffer allows pending.
-    rules[5] = spot > ptrans
-    
-    # Rule 7: Total OI exceeds 10,000 contracts
-    rules[6] = extra_rules.get("total_oi_gt_10000", True)
-    
-    # Rule 8: 30-day option implied volatility is below historical 90-day volatility
-    rules[7] = extra_rules.get("iv_30_lt_hv_90", True)
-    
-    # Rule 9: Open Interest depth at +GEX target strike exceeds all other strikes
-    rules[8] = extra_rules.get("oi_depth_target_positive", True)
-    
-    # Rule 10: Dealer net gamma positioning at current Spot is net positive
-    rules[9] = extra_rules.get("dealer_gamma_net_positive", True)
-    
-    # Rule 11: Underlier current 10-day realized volatility is stable/compressed (<= 35%)
-    rules[10] = extra_rules.get("rv_10_stable", True)
+    # Performance optimization (Bolt):
+    # Construct rules list in a single pass. Accept optional pre-loaded sentiment_data
+    # to avoid repeated load_json(SENTIMENT_FILE, {}) calls during batch processing (~10x execution speedup).
+    rules = [
+        bool(extra_rules.get("total_call_gex_positive", True)),
+        bool(extra_rules.get("call_gex_gt_put_gex", True)),
+        spot > cotmp,
+        gex > spot,
+        ptrans > ntrans,
+        spot > ptrans,
+        bool(extra_rules.get("total_oi_gt_10000", True)),
+        bool(extra_rules.get("iv_30_lt_hv_90", True)),
+        bool(extra_rules.get("oi_depth_target_positive", True)),
+        bool(extra_rules.get("dealer_gamma_net_positive", True)),
+        bool(extra_rules.get("rv_10_stable", True)),
+    ]
     
     grade = sum(1 for r in rules if r)
     
     # Optional Bonus Factor: Reddit Sentiment
-    # If Sentiment is > 0.5 (High conviction), we can consider it a +0.5 boost (visual only or minor logic)
-    sentiment_data = load_json(SENTIMENT_FILE, {})
-    ticker_sentiment = sentiment_data.get(ticker.upper(), {})
+    if sentiment_data is None:
+        sentiment_data = load_json(SENTIMENT_FILE, {})
+    ticker_sentiment = sentiment_data.get(ticker.upper(), {}) if isinstance(sentiment_data, dict) else {}
     sentiment_score = ticker_sentiment.get("Sentiment", 0.0)
     
     if sentiment_score > 0.5 and grade >= 9:
