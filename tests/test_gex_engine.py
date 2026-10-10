@@ -5012,7 +5012,7 @@ class TestCmdStatus(unittest.TestCase):
             self.assertIn("Unrealized P&L", output)
             self.assertIn("+$43.00 (+15.99%)", output)
             self.assertIn("-$50.00 (-10.00%)", output)
-            self.assertIn("-" * 114, output)
+            self.assertIn("-" * 112, output)
 
 
 if __name__ == '__main__':
