@@ -138,5 +138,16 @@ class TestPerformanceBenchmark(unittest.TestCase):
 
         print(f"\n[BENCHMARK] Executed {iterations} calls to select_best_option in {elapsed:.4f} seconds ({elapsed/iterations*1000:.4f} ms/call)")
 
+    def test_benchmark_calculate_grade(self):
+        iterations = 50000
+        sentiment_data = {'AAPL': {'Sentiment': 0.6}}
+
+        start_time = time.perf_counter()
+        for _ in range(iterations):
+            _ = gex_engine.calculate_grade('AAPL', 150.0, 140.0, 130.0, 160.0, 120.0, sentiment_data=sentiment_data)
+        elapsed = time.perf_counter() - start_time
+
+        print(f"\n[BENCHMARK] Executed {iterations} calls to calculate_grade in {elapsed:.4f} seconds ({elapsed/iterations*1000:.4f} ms/call)")
+
 if __name__ == "__main__":
     unittest.main()
