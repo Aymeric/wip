@@ -5264,15 +5264,16 @@ def persist_new_scans():
                     slug_title = slugify(scan_title)
                     timestamped_filename = f"{slug_title}_{timestamp}.json"
                     
-                    target_path = os.path.join(DOWNLOADS_DIR, timestamped_filename)
+                    target_path = validate_safe_path(os.path.join(DOWNLOADS_DIR, timestamped_filename))
+                    safe_filepath = validate_safe_path(filepath)
                     
                     # Move file to downloads
-                    shutil.copy2(filepath, target_path)
+                    shutil.copy2(safe_filepath, target_path)
                     print(f"Persisted new scan '{scan_title}' to {target_path}")
                     
                     if should_delete:
-                        os.remove(filepath)
-                        print(f"  Removed raw temporary file: {filepath}")
+                        os.remove(safe_filepath)
+                        print(f"  Removed raw temporary file: {safe_filepath}")
                     
                     persisted_files.append((scan_title, target_path))
         except Exception:
@@ -6667,6 +6668,11 @@ def cleanup_downloads(days=7):
     for item in os.listdir(DOWNLOADS_DIR):
         item_path = os.path.join(DOWNLOADS_DIR, item)
         if os.path.isdir(item_path):
+            try:
+                safe_item_path = validate_safe_path(item_path)
+            except ValueError as e:
+                print(f"Warning: Skipping cleanup of invalid path {item_path}: {e}", file=sys.stderr)
+                continue
             # Check if directory name is a date YYYYMMDD
             if re.match(r"^\d{8}$", item):
                 try:
@@ -6674,16 +6680,16 @@ def cleanup_downloads(days=7):
                     age_days = (now - dir_date).days
                     if age_days > days:
                         print(f"Removing stale download folder: {item} ({age_days} days old)")
-                        shutil.rmtree(item_path)
+                        shutil.rmtree(safe_item_path)
                         removed_count += 1
                 except Exception as e:
                     print(f"Error removing {item}: {e}")
             elif item == "tmp":
                 # Always clean tmp folders if they exist and are older than 1 day
-                mtime = os.path.getmtime(item_path)
+                mtime = os.path.getmtime(safe_item_path)
                 if (now - datetime.fromtimestamp(mtime)).days >= 1:
                     print(f"Removing stale tmp folder: {item}")
-                    shutil.rmtree(item_path)
+                    shutil.rmtree(safe_item_path)
                     removed_count += 1
                     
     print(f"Cleanup complete. Removed {removed_count} folders.")

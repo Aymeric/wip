@@ -242,6 +242,26 @@ class TestGEXEngine(unittest.TestCase):
             pnl, pct, status, cnt = gex_engine.get_monthly_realized_pnl(10000.0, monthly_file=invalid_path, pnl_file=invalid_path)
             self.assertEqual((pnl, pct, status, cnt), (0.0, 0.0, "PASS", 0))
 
+    def test_persist_new_scans_and_cleanup_downloads_path_traversal_prevention(self):
+        from unittest.mock import patch
+        import gex_engine
+
+        invalid_path = os.path.join(gex_engine.REPOSITORY_ROOT, "..", "..", "etc", "passwd")
+
+        # persist_new_scans handles path traversal attempts safely
+        with patch('os.listdir', return_value=['../../../etc/passwd']), \
+             patch('os.path.isfile', return_value=True), \
+             patch('gex_engine.load_json', return_value={'data': {'result': {'scan_title': 'test', 'scan_id': '123'}}}):
+            persisted = gex_engine.persist_new_scans()
+            self.assertEqual(persisted, [])
+
+        # cleanup_downloads handles invalid/traversal paths gracefully
+        with patch('os.path.exists', return_value=True), \
+             patch('os.listdir', return_value=['../../../etc/passwd']), \
+             patch('os.path.isdir', return_value=True), \
+             patch('sys.stderr'):
+            gex_engine.cleanup_downloads(days=7)
+
     def test_save_json_preserves_existing_file_on_serialization_failure(self):
         import tempfile
         import gex_engine
