@@ -11,3 +11,7 @@
 ## 2026-10-03 - Plain Text Role Symmetry in Terminal ASCII Scales
 **Learning:** In ASCII linear diagrams, mixing a plain key label (e.g. `SPOT`) alongside descriptive role-tagged labels (e.g. `+GEX (T1 Target)`) creates visual asymmetry and ambiguity. Additionally, using plain ASCII text role tags (such as `SPOT (Current)`) instead of multi-byte Unicode emojis avoids column alignment distortions across varied terminal emulators.
 **Action:** Maintain consistent plain-text role descriptor suffixes across all scale nodes in ASCII visualizations.
+
+## 2026-10-18 - CLI Table Column Padding & Divider Character Counting
+**Learning:** In terminal CLI data tables, unpadded final column cells cause trailing border separators to extend past column content. When adjusting table column formatting, calculate divider dash counts against total header string length (including column content widths and ` | ` column separators) to ensure visual alignment on both edges.
+**Action:** Always format final table column strings with explicit width specifiers (e.g., `f"{val:<16}"`) and match divider line lengths (`"-" * width`) to total table header width.

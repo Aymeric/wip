@@ -5527,9 +5527,9 @@ def cmd_update_candidates(args):
     if excluded_actives:
         print(f"Excluded {len(excluded_actives)} active holdings from candidate pool: {', '.join(sorted(list(excluded_actives))[:10])}{'...' if len(excluded_actives) > 10 else ''}")
     print(f"\n### 🚀 Top Screened GEX Candidates")
-    print("  " + "-" * 138)
-    print(f"  {'Ticker':<8} | {'Price':<6} | {'Daily Change':<12} | {'RSI':<6} | {'MACD Hist':<9} | {'Implied Vol':<12} | {'Rel Opt Vol':<12} | {'GEX Setup Grade':<16} | {'GEX Status':<16} | {'Market Cap'}")
-    print("  " + "-" * 138)
+    print("  " + "-" * 134)
+    print(f"  {'Ticker':<8} | {'Price':<6} | {'Daily Change':<12} | {'RSI':<6} | {'MACD Hist':<9} | {'Implied Vol':<12} | {'Rel Opt Vol':<12} | {'GEX Setup Grade':<16} | {'GEX Status':<16} | {'Market Cap':<10}")
+    print("  " + "-" * 134)
     for c in candidate_list[:top_limit]:
         ticker = c['symbol']
         price = f"${c['price']:.2f}"
@@ -5570,8 +5570,9 @@ def cmd_update_candidates(args):
         change_fmt = format_color(f"{change:<12}", change_color, bold=True)
         ticker_fmt = format_color(f"{ticker:<8}", "35", bold=True)
         
-        print(f"  {ticker_fmt} | {price:<6} | {change_fmt} | {rsi:<6} | {macd_hist:<9} | {iv:<12} | {rel_opt_vol:<12} | {gex_grade_str} | {gex_status_str} | {mcap}")
-    print("  " + "-" * 138)
+        mcap_fmt = f"{mcap:<10}"
+        print(f"  {ticker_fmt} | {price:<6} | {change_fmt} | {rsi:<6} | {macd_hist:<9} | {iv:<12} | {rel_opt_vol:<12} | {gex_grade_str} | {gex_status_str} | {mcap_fmt}")
+    print("  " + "-" * 134)
     if len(candidate_list) > top_limit:
         print(f"  * Showing top {top_limit} sorted by score and relative options volume out of {len(candidate_list)} candidates total.")
 
@@ -6200,9 +6201,9 @@ def cmd_closed(args):
         return
         
     print("### 📊 GEX Closed Positions History")
-    print("  " + "-" * 115)
-    print(f"  {'Ticker':<6} | {'Class':<7} | {'Entry Date':<11} | {'Close Date':<11} | {'Days':<4} | {'Cost Basis':<11} | {'Realized P&L ($)':<16} | {'Realized P&L (%)'}")
-    print("  " + "-" * 115)
+    print("  " + "-" * 103)
+    print(f"  {'Ticker':<6} | {'Class':<7} | {'Entry Date':<11} | {'Close Date':<11} | {'Days':<4} | {'Cost Basis':<11} | {'Realized P&L ($)':<16} | {'Realized P&L (%)':<16}")
+    print("  " + "-" * 103)
     
     def format_row(item, asset_cls):
         ticker = item.get("Ticker") or item.get("Underlier", "Unknown").upper()
@@ -6242,7 +6243,8 @@ def cmd_closed(args):
         pnl_color = "32" if pnl_dlr >= 0 else "31"
         pnl_dlr_str = f"${pnl_dlr:+,.2f}"
         pnl_dlr_fmt = format_color(f"{pnl_dlr_str:<16}", pnl_color, bold=True)
-        pnl_pct_fmt = format_color(f"{pnl_pct:+.2f}%", pnl_color, bold=True)
+        pnl_pct_str = f"{pnl_pct:+.2f}%"
+        pnl_pct_fmt = format_color(f"{pnl_pct_str:<16}", pnl_color, bold=True)
         
         print(f"  {ticker_fmt} | {cls_fmt} | {entry_date:<11} | {close_date:<11} | {days_str} | {cb_fmt} | {pnl_dlr_fmt} | {pnl_pct_fmt}")
 
@@ -6251,7 +6253,7 @@ def cmd_closed(args):
     for stk in closed_stocks:
         format_row(stk, "Stock")
         
-    print("  " + "-" * 115)
+    print("  " + "-" * 103)
     
     # Print summarized stats
     if closed_options:
