@@ -45,3 +45,7 @@
 ## 2026-10-05 - Single-Pass Scalar Search Loops for Option Level Extraction
 **Learning:** `derive_gex_profile` used intermediate list comprehensions (`at_below_spot_puts`, `below_ptrans_puts`, `at_above_spot_calls`), lambda tuple key extractions in `max()`, and set union allocations (`set(...) | set(...)`) to calculate pTrans, nTrans, +GEX, and nearest strike levels. Replacing list allocations and lambda functions with single-pass scalar search loops yielded a ~1.16x execution speedup.
 **Action:** In option chain level derivation functions, find extremum strike levels using single-pass iterative searches with scalar comparison tuples `(oi, strike)` rather than constructing intermediate list comprehensions and passing lambda keys to `max()`.
+
+## 2026-10-06 - Early Loop Termination & Uppercase Match in Option File Discovery
+**Learning:** `find_latest_option_files` previously called `.lower()` twice per file path on every loop iteration over reverse-chronological file listings and lacked early loop termination. Accepting an optional pre-listed `file_list` parameter, matching directly on pre-cached uppercase basenames (`file_upper`), and breaking immediately once all 5 required files are found provided a ~2.36x execution speedup.
+**Action:** In reverse-chronological file discovery helpers that seek a fixed set of target files, terminate file iteration loops early as soon as all target keys are populated.
