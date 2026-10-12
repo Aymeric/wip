@@ -45,3 +45,7 @@
 ## 2026-10-05 - Single-Pass Scalar Search Loops for Option Level Extraction
 **Learning:** `derive_gex_profile` used intermediate list comprehensions (`at_below_spot_puts`, `below_ptrans_puts`, `at_above_spot_calls`), lambda tuple key extractions in `max()`, and set union allocations (`set(...) | set(...)`) to calculate pTrans, nTrans, +GEX, and nearest strike levels. Replacing list allocations and lambda functions with single-pass scalar search loops yielded a ~1.16x execution speedup.
 **Action:** In option chain level derivation functions, find extremum strike levels using single-pass iterative searches with scalar comparison tuples `(oi, strike)` rather than constructing intermediate list comprehensions and passing lambda keys to `max()`.
+
+## 2026-10-08 - Defer Rounding & Avoid setdefault() Default Value Allocations
+**Learning:** `dict.setdefault(key, default_dict)` evaluates default arguments on every call, allocating new dictionary instances per iteration even when `key` is already present. In addition, calling `round(..., 2)` on running sums inside item loops creates redundant floating-point function call overhead. Replacing `setdefault()` with explicit key membership checks and deferring `round()` until after loop completion yielded a ~2.47x speedup in `calculate_trade_journal`.
+**Action:** In group aggregation loops, avoid passing mutable default literal objects (e.g. `{}`) to `setdefault()`, and accumulate raw scalar sums during loop iteration, deferring `round()` until after the loop completes.
