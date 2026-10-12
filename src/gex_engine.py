@@ -1390,11 +1390,9 @@ def cmd_status(args):
         if spot is None:
             spot = avg_price
             
-        exit_rule_state = "HOLD"
-        if ntrans and spot < ntrans:
-            exit_rule_state = "STOP TRIGGERED (Structural Stop)"
-        elif gex_t1 and spot >= gex_t1:
-            exit_rule_state = "PROFIT TAKE (T1 TARGET MET)"
+        exit_rule_state, _, _, _ = compute_stock_exit_rule_state(
+            details, spot, avg_price, ntrans=ntrans, gex_t1=gex_t1, ptrans=ptrans
+        )
             
         if "STOP" in exit_rule_state or "PROFIT" in exit_rule_state:
             pending_exits.append(f"{ticker} (Stock: {exit_rule_state})")
@@ -3409,6 +3407,64 @@ def compute_exit_rule_state(spot, purchase_premium, mark_price, ptrans, ntrans, 
     return exit_rule_state, proposed_action, time_status, distance_ntrans, distance_max_stop
 
 
+def compute_stock_exit_rule_state(details, spot, avg_price, ntrans=None, gex_t1=None, ptrans=None):
+    """
+    Computes exit rule evaluation logic and proposed actions for stock positions.
+
+    Returns:
+        tuple[str, str, float, str]: (exit_rule_state, proposed_action, highest_price, distance_ntrans)
+    """
+    exit_rule_state = "HOLD"
+    proposed_action = "No Action"
+
+    highest_price = details.get("Highest Price")
+    if highest_price is None:
+        highest_price = details.get("Average Buy Price", spot)
+    highest_price = max(highest_price, spot)
+
+    distance_ntrans = "N/A"
+    if ntrans:
+        dist = ((spot - ntrans) / ntrans) * 100
+        distance_ntrans = f"{dist:+.2f}%"
+        if spot < ntrans:
+            exit_rule_state = "STOP TRIGGERED (Structural Stop: Spot < nTrans)"
+            proposed_action = "Immediate Exit (Structural Stop)"
+
+    if exit_rule_state == "HOLD":
+        trail_pct = details.get("Trailing Stop Pct")
+        if trail_pct is not None:
+            trail_price = highest_price * (1.0 - trail_pct / 100.0)
+            if spot < trail_price:
+                exit_rule_state = f"STOP TRIGGERED (Trailing Stop: Spot < Highest Price - {trail_pct}%)"
+                proposed_action = f"Immediate Exit (Trailing Stop Triggered: spot ${spot:.2f} < stop price ${trail_price:.2f})"
+
+    if exit_rule_state == "HOLD":
+        stop_pct = details.get("Stop Loss Pct")
+        if stop_pct is not None:
+            stop_price = avg_price * (1.0 - stop_pct / 100.0)
+            if spot < stop_price:
+                exit_rule_state = f"STOP TRIGGERED (Stop Loss: Spot < Avg Buy Price - {stop_pct}%)"
+                proposed_action = f"Immediate Exit (Stop Loss Triggered: spot ${spot:.2f} < stop price ${stop_price:.2f})"
+
+    if exit_rule_state == "HOLD":
+        target_pct = details.get("Profit Target Pct")
+        if target_pct is not None:
+            target_price = avg_price * (1.0 + target_pct / 100.0)
+            if spot >= target_price:
+                exit_rule_state = f"PROFIT TAKE (Profit Target: Spot >= Avg Buy Price + {target_pct}%)"
+                proposed_action = f"Exit position or scale out at profit target (spot ${spot:.2f} >= target price ${target_price:.2f})"
+
+    if exit_rule_state == "HOLD":
+        if gex_t1 and spot >= gex_t1:
+            exit_rule_state = "PROFIT TAKE (T1 TARGET MET)"
+            proposed_action = "Exit position or scale out at +GEX target to lock in gains"
+        elif ptrans and spot < ptrans:
+            exit_rule_state = "WATCH"
+            proposed_action = "Hold existing, but add NOTHING"
+
+    return exit_rule_state, proposed_action, highest_price, distance_ntrans
+
+
 def get_monthly_realized_pnl(net_liq: float, monthly_file: Optional[str] = None, pnl_file: Optional[str] = None) -> Tuple[float, float, str, int]:
     """
     Computes or retrieves the trailing 30-day realized P&L from raw files.
@@ -3719,15 +3775,10 @@ def cmd_portfolio(args):
         pl_dollar = curr_val - cost_basis
         pl_pct = (pl_dollar / cost_basis) * 100.0 if cost_basis > 0 else 0.0
         
-        exit_rule_state = "HOLD"
-        if ntrans:
-            if spot < ntrans:
-                exit_rule_state = "STOP TRIGGERED (Structural)"
-        if exit_rule_state == "HOLD":
-            if gex_t1 and spot >= gex_t1:
-                exit_rule_state = "PROFIT TAKE"
-            elif ptrans and spot < ptrans:
-                exit_rule_state = "WATCH"
+        exit_rule_state, _, highest_price, _ = compute_stock_exit_rule_state(
+            details, spot, avg_price, ntrans=ntrans, gex_t1=gex_t1, ptrans=ptrans
+        )
+        details["Highest Price"] = highest_price
                 
         sizing_risk_weight = (cost_basis / net_liq) * 100
         
@@ -3968,60 +4019,10 @@ def cmd_portfolio(args):
         pl_pct = (pl_dollar / cost_basis) * 100.0 if cost_basis > 0 else 0.0
         
         # Determine exit rule states for stocks
-        exit_rule_state = "HOLD"
-        proposed_action = "No Action"
-        
-        # Update/get Highest Price
-        highest_price = details.get("Highest Price")
-        if highest_price is None:
-            highest_price = details.get("Average Buy Price", spot)
-        highest_price = max(highest_price, spot)
+        exit_rule_state, proposed_action, highest_price, distance_ntrans = compute_stock_exit_rule_state(
+            details, spot, avg_price, ntrans=ntrans, gex_t1=gex_t1, ptrans=ptrans
+        )
         details["Highest Price"] = highest_price
-        
-        # 1. Structural Stop
-        distance_ntrans = "N/A"
-        if ntrans:
-            dist = ((spot - ntrans) / ntrans) * 100
-            distance_ntrans = f"{dist:+.2f}%"
-            if spot < ntrans:
-                exit_rule_state = "STOP TRIGGERED (Structural Stop: Spot < nTrans)"
-                proposed_action = "Immediate Exit (Structural Stop)"
-                
-        # 2. Trailing Stop Pct
-        if exit_rule_state == "HOLD":
-            trail_pct = details.get("Trailing Stop Pct")
-            if trail_pct is not None:
-                trail_price = highest_price * (1.0 - trail_pct / 100.0)
-                if spot < trail_price:
-                    exit_rule_state = f"STOP TRIGGERED (Trailing Stop: Spot < Highest Price - {trail_pct}%)"
-                    proposed_action = f"Immediate Exit (Trailing Stop Triggered: spot ${spot:.2f} < stop price ${trail_price:.2f})"
-                    
-        # 3. Stop Loss Pct
-        if exit_rule_state == "HOLD":
-            stop_pct = details.get("Stop Loss Pct")
-            if stop_pct is not None:
-                stop_price = avg_price * (1.0 - stop_pct / 100.0)
-                if spot < stop_price:
-                    exit_rule_state = f"STOP TRIGGERED (Stop Loss: Spot < Avg Buy Price - {stop_pct}%)"
-                    proposed_action = f"Immediate Exit (Stop Loss Triggered: spot ${spot:.2f} < stop price ${stop_price:.2f})"
-                    
-        # 4. Profit Target Pct
-        if exit_rule_state == "HOLD":
-            target_pct = details.get("Profit Target Pct")
-            if target_pct is not None:
-                target_price = avg_price * (1.0 + target_pct / 100.0)
-                if spot >= target_price:
-                    exit_rule_state = f"PROFIT TAKE (Profit Target: Spot >= Avg Buy Price + {target_pct}%)"
-                    proposed_action = f"Exit position or scale out at profit target (spot ${spot:.2f} >= target price ${target_price:.2f})"
-                    
-        # 5. Standard GEX exits fallback
-        if exit_rule_state == "HOLD":
-            if gex_t1 and spot >= gex_t1:
-                exit_rule_state = "PROFIT TAKE (T1 TARGET MET)"
-                proposed_action = "Exit position or scale out at +GEX target to lock in gains"
-            elif ptrans and spot < ptrans:
-                exit_rule_state = "WATCH"
-                proposed_action = "Hold existing, but add NOTHING"
                 
         details["Current Price"] = spot
         details["Current Value"] = curr_val

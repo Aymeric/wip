@@ -5014,6 +5014,46 @@ class TestCmdStatus(unittest.TestCase):
             self.assertIn("-$50.00 (-10.00%)", output)
             self.assertIn("-" * 114, output)
 
+    def test_stock_exit_rule_state_consistency(self):
+        """Test compute_stock_exit_rule_state and consistency between cmd_portfolio table and detailed stock list."""
+        from types import SimpleNamespace
+        import io
+        from unittest.mock import patch
+        import gex_engine
+
+        stock_details = {
+            "Ticker": "MSFT",
+            "Shares": 10.0,
+            "Average Buy Price": 300.0,
+            "Current Price": 260.0,
+            "Highest Price": 300.0,
+            "Trailing Stop Pct": 10.0,
+            "Beta Sector Tag": "Technology/Beta"
+        }
+
+        # Test compute_stock_exit_rule_state helper directly
+        state, action, highest, _ = gex_engine.compute_stock_exit_rule_state(stock_details, 260.0, 300.0)
+        self.assertIn("STOP TRIGGERED (Trailing Stop", state)
+        self.assertIn("Immediate Exit", action)
+        self.assertEqual(highest, 300.0)
+
+        # Test cmd_portfolio table output matching detailed output
+        positions = {
+            "options_positions": {},
+            "stocks_positions": {
+                "MSFT": stock_details
+            }
+        }
+        mock_args = SimpleNamespace(account="", net_liq=50000.0, spot_overrides={}, sizing_threshold=10000.0)
+        with patch('gex_engine.load_json', return_value=positions), \
+             patch('gex_engine.save_json'), \
+             patch('sys.stdout', new_callable=io.StringIO) as mock_stdout:
+            gex_engine.cmd_portfolio(mock_args)
+            output = mock_stdout.getvalue()
+            self.assertIn("Portfolio Allocation & Performance Matrix", output)
+            self.assertIn("STOP TRIGGERED (Trailin...", output)
+            self.assertIn("Exits Rule State**: [STOP TRIGGERED (Trailing Stop: Spot < Highest Price - 10.0%)]", output)
+
 
 if __name__ == '__main__':
     unittest.main()
