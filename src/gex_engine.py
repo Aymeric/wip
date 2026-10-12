@@ -662,6 +662,13 @@ def cmd_update_regime(args):
     hyg_val = getattr(args, "hyg", None)
     
     etf_file = getattr(args, "etf_file", None)
+    if etf_file:
+        try:
+            etf_file = validate_safe_path(etf_file)
+            args.etf_file = etf_file
+        except ValueError as e:
+            print(f"Error: Invalid ETF file path: {e}", file=sys.stderr)
+            sys.exit(1)
     if not etf_file and spy_val is None:
         # Try to auto-discover latest ETF quotes file
         etf_candidates = []
@@ -4701,6 +4708,13 @@ def cmd_close_pos(args):
 def cmd_sync_pnl(args):
     """Syncs P&L trade history from retrieved file to detect closed positions, and moves closed positions to closed_positions.json."""
     pnl_file = getattr(args, "pnl_file", "")
+    if pnl_file:
+        try:
+            pnl_file = validate_safe_path(pnl_file)
+            args.pnl_file = pnl_file
+        except ValueError as e:
+            print(f"Error: Invalid P&L file path: {e}", file=sys.stderr)
+            sys.exit(1)
     raw_account = getattr(args, "account", "")
     account = sanitize_account(raw_account) if raw_account else ""
     options_file = account_positions_file(account)
@@ -4891,6 +4905,13 @@ def cmd_sync_pnl(args):
 def cmd_sync_positions(args):
     """Syncs active options and equity positions from raw Robinhood downloads to active_positions.json."""
     base_dir = args.base_dir
+    if base_dir:
+        try:
+            base_dir = validate_safe_path(base_dir)
+            args.base_dir = base_dir
+        except ValueError as e:
+            print(f"Error: Invalid base directory path: {e}", file=sys.stderr)
+            sys.exit(1)
     raw_account = getattr(args, "account", "")
     account = sanitize_account(raw_account) if raw_account else ""
     options_file = account_positions_file(account)
@@ -5638,6 +5659,12 @@ def cmd_prune_candidates(args):
 
     symbols = []
     if watchlist_file:
+        try:
+            watchlist_file = validate_safe_path(watchlist_file)
+            args.watchlist_file = watchlist_file
+        except ValueError as e:
+            print(f"Error: Invalid watchlist file path: {e}", file=sys.stderr)
+            sys.exit(1)
         if not os.path.exists(watchlist_file):
             print(f"Error: Watchlist file not found: {watchlist_file}", file=sys.stderr)
             sys.exit(1)

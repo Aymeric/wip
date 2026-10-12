@@ -1,3 +1,8 @@
+## 2026-09-22 - Directory path parameters in CLI subcommands must be validated before os.listdir calls
+**Vulnerability:** `cmd_sync_positions` accepted user-controlled `--base-dir` input paths and performed `os.listdir()` and `os.scandir()` without prior `validate_safe_path()` checks, allowing directory listing of arbitrary filesystem paths outside allowed roots.
+**Learning:** Functions that accept directory paths to scan or list files can bypass `load_json` path checks if `os.listdir` or `os.scandir` is called directly on unvalidated directory paths.
+**Prevention:** Always validate all user-supplied directory path parameters using `validate_safe_path()` before performing directory traversal or file listing operations.
+
 ## 2026-09-21 - CLI subcommands must route file reading through load_json to enforce path traversal validation
 **Vulnerability:** Several CLI subcommands (`prune-candidates`, `update-candidates`, `update-regime`) used raw `open()` and `json.load()` directly on user-controlled input paths, bypassing `load_json()` and `validate_safe_path()` path traversal checks.
 **Learning:** Having a safe helper function like `load_json()` is ineffective if subcommand handlers open raw files directly without routing through the helper.

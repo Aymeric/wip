@@ -218,6 +218,30 @@ class TestGEXEngine(unittest.TestCase):
                 gex_engine.cmd_prune_candidates(prune_args)
             self.assertEqual(cm.exception.code, 1)
 
+        # sync-positions with path traversal base_dir safely handles path traversal
+        sync_pos_args = SimpleNamespace(base_dir=invalid_path, account="")
+        with patch('sys.stderr'), patch('sys.stdout'):
+            with self.assertRaises(SystemExit) as cm:
+                gex_engine.cmd_sync_positions(sync_pos_args)
+            self.assertEqual(cm.exception.code, 1)
+
+        # sync-pnl with path traversal pnl_file safely handles path traversal
+        sync_pnl_args = SimpleNamespace(pnl_file=invalid_path, account="")
+        with patch('sys.stderr'), patch('sys.stdout'):
+            with self.assertRaises(SystemExit) as cm:
+                gex_engine.cmd_sync_pnl(sync_pnl_args)
+            self.assertEqual(cm.exception.code, 1)
+
+        # update-regime with path traversal etf_file safely handles path traversal
+        regime_args = SimpleNamespace(
+            spy=None, qqq=None, bulls=None, bears=None,
+            vix_bearish=None, vix_spot=None, hyg=None, etf_file=invalid_path
+        )
+        with patch('sys.stderr'), patch('sys.stdout'):
+            with self.assertRaises(SystemExit) as cm:
+                gex_engine.cmd_update_regime(regime_args)
+            self.assertEqual(cm.exception.code, 1)
+
         # analyze command with path traversal file options safely rejects invalid paths
         analyze_args = SimpleNamespace(
             symbol="TEST",
