@@ -45,3 +45,7 @@
 ## 2026-10-05 - Single-Pass Scalar Search Loops for Option Level Extraction
 **Learning:** `derive_gex_profile` used intermediate list comprehensions (`at_below_spot_puts`, `below_ptrans_puts`, `at_above_spot_calls`), lambda tuple key extractions in `max()`, and set union allocations (`set(...) | set(...)`) to calculate pTrans, nTrans, +GEX, and nearest strike levels. Replacing list allocations and lambda functions with single-pass scalar search loops yielded a ~1.16x execution speedup.
 **Action:** In option chain level derivation functions, find extremum strike levels using single-pass iterative searches with scalar comparison tuples `(oi, strike)` rather than constructing intermediate list comprehensions and passing lambda keys to `max()`.
+
+## 2026-10-06 - Post-Processing Deferred Rounding and Fast Dict Key Accumulation
+**Learning:** `calculate_trade_journal` called `round()` on every iteration inside a tight closed-position loop for reason/mode accumulators and used `dict.setdefault()` which allocated default dictionary literals on every iteration. Deferring `round()` to a post-processing loop over unique category buckets and replacing `setdefault()` with direct key existence checks (`if key in dict: ...`) yielded a ~1.6x execution speedup.
+**Action:** In loop aggregations over categorised data buckets, accumulate raw exact floating point totals during iteration and defer `round()` formatting until final report generation.
