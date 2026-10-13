@@ -3370,7 +3370,11 @@ class TestGEXEngine(unittest.TestCase):
                     max_rsi = 30.0
                     macd_filter = "none"
                     
-                gex_engine.cmd_update_candidates(UpdateArgsFiltered())
+                import io
+                with patch("sys.stdout", new_callable=io.StringIO) as mock_stdout:
+                    gex_engine.cmd_update_candidates(UpdateArgsFiltered())
+                    output = mock_stdout.getvalue()
+                    self.assertIn("No candidates matched the screening criteria in downloaded scans.", output)
                 cand_data = gex_engine.load_json(candidates_file, {})
                 self.assertEqual(len(cand_data.get("candidates", [])), 0)
                 
