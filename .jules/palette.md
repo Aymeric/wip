@@ -11,3 +11,7 @@
 ## 2026-10-03 - Plain Text Role Symmetry in Terminal ASCII Scales
 **Learning:** In ASCII linear diagrams, mixing a plain key label (e.g. `SPOT`) alongside descriptive role-tagged labels (e.g. `+GEX (T1 Target)`) creates visual asymmetry and ambiguity. Additionally, using plain ASCII text role tags (such as `SPOT (Current)`) instead of multi-byte Unicode emojis avoids column alignment distortions across varied terminal emulators.
 **Action:** Maintain consistent plain-text role descriptor suffixes across all scale nodes in ASCII visualizations.
+
+## 2026-10-14 - Dim Styling for Unanalyzed Placeholders in CLI Tables
+**Learning:** In CLI terminal tables mixing active status badges with placeholder/unanalyzed values, leaving placeholders uncolored causes them to take on default foreground brightness, competing visually with highlighted status indicators.
+**Action:** Always format unanalyzed or placeholder text entries with a dim/muted color (e.g. ANSI 37) so that actionable status indicators pop out clearly.

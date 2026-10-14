@@ -5562,8 +5562,8 @@ def cmd_update_candidates(args):
             status_text = status_clean.ljust(16)
             gex_status_str = format_color(status_text, status_color, bold=True)
         else:
-            gex_grade_str = f"{gex_grade_str:<16}"
-            gex_status_str = f"{gex_status_str:<16}"
+            gex_grade_str = format_color(f"{gex_grade_str:<16}", "37")
+            gex_status_str = format_color(f"{gex_status_str:<16}", "37")
         
         # Color coding changes
         change_color = "32" if c['chg_pct'] > 0.0 else "31"
