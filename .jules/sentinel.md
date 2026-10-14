@@ -1,3 +1,8 @@
+## 2026-09-22 - Directory arguments and directory scanners must enforce path traversal validation before listing contents
+**Vulnerability:** `cmd_sync_positions` directly accepted user-supplied directory arguments (`--base-dir`) and scanned directory contents via `os.listdir()` and `os.scandir()` without invoking `validate_safe_path()`, permitting directory traversal outside repository and temporary directories.
+**Learning:** Validating individual file paths during `load_json()` is insufficient when subcommand handlers or directory scanning helpers accept directory paths that are directly passed to filesystem inspection functions.
+**Prevention:** Always wrap user-controlled directory path parameters in `validate_safe_path()` before performing directory checks (`os.path.exists`), listings (`os.listdir`), or traversals (`os.walk`).
+
 ## 2026-09-21 - CLI subcommands must route file reading through load_json to enforce path traversal validation
 **Vulnerability:** Several CLI subcommands (`prune-candidates`, `update-candidates`, `update-regime`) used raw `open()` and `json.load()` directly on user-controlled input paths, bypassing `load_json()` and `validate_safe_path()` path traversal checks.
 **Learning:** Having a safe helper function like `load_json()` is ineffective if subcommand handlers open raw files directly without routing through the helper.

@@ -412,6 +412,12 @@ def _get_downloads_files(downloads_dir: str) -> List[Tuple[str, str]]:
     Pre-computes and caches uppercase basenames alongside file paths as (filepath, filename_upper)
     tuples to eliminate redundant os.path.basename(f).upper() calls in lookup utilities (~12x speedup).
     """
+    if not downloads_dir:
+        return []
+    try:
+        downloads_dir = validate_safe_path(downloads_dir)
+    except Exception:
+        return []
     if not os.path.exists(downloads_dir):
         return []
     mtime_key = _get_dir_mtime_key(downloads_dir)
@@ -2047,6 +2053,11 @@ def find_latest_historical_ohlc(symbol: str, file_list: Optional[Sequence[Union[
 def list_download_files(downloads_dir: Optional[str] = None) -> List[str]:
     """Recursively lists all .json file paths in downloads_dir (defaults to DOWNLOADS_DIR)."""
     target_dir = downloads_dir or DOWNLOADS_DIR
+    try:
+        target_dir = validate_safe_path(target_dir)
+    except Exception as e:
+        print(f"Warning: Failed to list download files for {target_dir}: {e}", file=sys.stderr)
+        return []
     matching_files = []
     if os.path.exists(target_dir):
         for root, dirs, files in os.walk(target_dir):
@@ -4891,6 +4902,12 @@ def cmd_sync_pnl(args):
 def cmd_sync_positions(args):
     """Syncs active options and equity positions from raw Robinhood downloads to active_positions.json."""
     base_dir = args.base_dir
+    if base_dir:
+        try:
+            base_dir = validate_safe_path(base_dir)
+        except Exception as e:
+            print(f"Error: Invalid base directory path: {e}", file=sys.stderr)
+            sys.exit(1)
     raw_account = getattr(args, "account", "")
     account = sanitize_account(raw_account) if raw_account else ""
     options_file = account_positions_file(account)
