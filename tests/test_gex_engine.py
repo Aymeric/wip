@@ -2833,6 +2833,12 @@ class TestGEXEngine(unittest.TestCase):
         self.assertIn("COTMP", scale_grouped)
         self.assertIn("+", scale_grouped)
 
+        # Test filtering out unassigned/non-positive levels (e.g. ntrans=0.0 or cotmp=0.0)
+        scale_zero_level = generate_ascii_gex_scale(spot=100.0, ptrans=98.0, ntrans=0.0, gex=110.0, cotmp=None)
+        self.assertNotIn("nTrans", scale_zero_level)
+        self.assertIn("SPOT (Current)", scale_zero_level)
+        self.assertIn("pTrans", scale_zero_level)
+
     def test_cmd_simulate_not_found(self):
         """Test cmd_simulate exits with code 1 when symbol is not found in analyses or candidates."""
         from unittest.mock import patch, MagicMock

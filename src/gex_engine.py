@@ -295,7 +295,7 @@ def generate_ascii_gex_scale(spot: float, ptrans: Optional[float], ntrans: Optio
     """Constructs a visual linear ASCII representation of GEX levels and where SPOT resides."""
     levels_by_price = {}
     for price, label in [(cotmp, "COTMP"), (ntrans, "nTrans"), (ptrans, "pTrans"), (gex, "+GEX"), (spot, "SPOT")]:
-        if price is None:
+        if price is None or price <= 0:
             continue
         p_round = round(price, 2)
         levels_by_price.setdefault(p_round, []).append(label)
@@ -5530,47 +5530,50 @@ def cmd_update_candidates(args):
     print("  " + "-" * 138)
     print(f"  {'Ticker':<8} | {'Price':<6} | {'Daily Change':<12} | {'RSI':<6} | {'MACD Hist':<9} | {'Implied Vol':<12} | {'Rel Opt Vol':<12} | {'GEX Setup Grade':<16} | {'GEX Status':<16} | {'Market Cap'}")
     print("  " + "-" * 138)
-    for c in candidate_list[:top_limit]:
-        ticker = c['symbol']
-        price = f"${c['price']:.2f}"
-        change = f"{c['chg_pct']:+.2f}%"
-        rsi = f"{c['rsi']:.1f}" if c.get('rsi') is not None else "N/A"
-        macd_hist = f"{c['macd_hist']:+.2f}" if c.get('macd_hist') is not None else "N/A"
-        iv = f"{c['iv']*100:.1f}%" if c.get('iv') is not None else "N/A"
-        rel_opt_vol = f"{c['relative_options_volume']:.2f}" if c.get('relative_options_volume') is not None else "N/A"
-        mcap = f"${c['market_cap']/1e9:.2f}B" if c.get('market_cap') is not None else "N/A"
-        
-        # Resolve GEX Grade and GEX Status from analyses if available
-        gex_grade_str = "Unanalyzed"
-        gex_status_str = "N/A"
-        ticker_up = ticker.upper()
-        if ticker_up in analyses:
-            gex_val = analyses[ticker_up]
-            g_val = gex_val.get("Grade", 0)
-            status_val = gex_val.get("Signal Status", "BLOCKED")
-            status_clean = status_val.split(" (")[0]
+    if not candidate_list:
+        print("  (No GEX candidates currently screened. Run scanners or update criteria to discover candidates.)")
+    else:
+        for c in candidate_list[:top_limit]:
+            ticker = c['symbol']
+            price = f"${c['price']:.2f}"
+            change = f"{c['chg_pct']:+.2f}%"
+            rsi = f"{c['rsi']:.1f}" if c.get('rsi') is not None else "N/A"
+            macd_hist = f"{c['macd_hist']:+.2f}" if c.get('macd_hist') is not None else "N/A"
+            iv = f"{c['iv']*100:.1f}%" if c.get('iv') is not None else "N/A"
+            rel_opt_vol = f"{c['relative_options_volume']:.2f}" if c.get('relative_options_volume') is not None else "N/A"
+            mcap = f"${c['market_cap']/1e9:.2f}B" if c.get('market_cap') is not None else "N/A"
             
-            grade_color = "32" if g_val >= 9 else "31"
-            grade_text = f"{g_val}/11".ljust(16)
-            gex_grade_str = format_color(grade_text, grade_color)
+            # Resolve GEX Grade and GEX Status from analyses if available
+            gex_grade_str = "Unanalyzed"
+            gex_status_str = "N/A"
+            ticker_up = ticker.upper()
+            if ticker_up in analyses:
+                gex_val = analyses[ticker_up]
+                g_val = gex_val.get("Grade", 0)
+                status_val = gex_val.get("Signal Status", "BLOCKED")
+                status_clean = status_val.split(" (")[0]
+
+                grade_color = "32" if g_val >= 9 else "31"
+                grade_text = f"{g_val}/11".ljust(16)
+                gex_grade_str = format_color(grade_text, grade_color)
+
+                status_color = "31"
+                if status_clean.startswith("CONFIRMED"):
+                    status_color = "32"
+                elif status_clean.startswith("PENDING"):
+                    status_color = "33"
+                status_text = status_clean.ljust(16)
+                gex_status_str = format_color(status_text, status_color, bold=True)
+            else:
+                gex_grade_str = f"{gex_grade_str:<16}"
+                gex_status_str = f"{gex_status_str:<16}"
             
-            status_color = "31"
-            if status_clean.startswith("CONFIRMED"):
-                status_color = "32"
-            elif status_clean.startswith("PENDING"):
-                status_color = "33"
-            status_text = status_clean.ljust(16)
-            gex_status_str = format_color(status_text, status_color, bold=True)
-        else:
-            gex_grade_str = f"{gex_grade_str:<16}"
-            gex_status_str = f"{gex_status_str:<16}"
-        
-        # Color coding changes
-        change_color = "32" if c['chg_pct'] > 0.0 else "31"
-        change_fmt = format_color(f"{change:<12}", change_color, bold=True)
-        ticker_fmt = format_color(f"{ticker:<8}", "35", bold=True)
-        
-        print(f"  {ticker_fmt} | {price:<6} | {change_fmt} | {rsi:<6} | {macd_hist:<9} | {iv:<12} | {rel_opt_vol:<12} | {gex_grade_str} | {gex_status_str} | {mcap}")
+            # Color coding changes
+            change_color = "32" if c['chg_pct'] > 0.0 else "31"
+            change_fmt = format_color(f"{change:<12}", change_color, bold=True)
+            ticker_fmt = format_color(f"{ticker:<8}", "35", bold=True)
+
+            print(f"  {ticker_fmt} | {price:<6} | {change_fmt} | {rsi:<6} | {macd_hist:<9} | {iv:<12} | {rel_opt_vol:<12} | {gex_grade_str} | {gex_status_str} | {mcap}")
     print("  " + "-" * 138)
     if len(candidate_list) > top_limit:
         print(f"  * Showing top {top_limit} sorted by score and relative options volume out of {len(candidate_list)} candidates total.")
