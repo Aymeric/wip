@@ -317,6 +317,8 @@ def generate_ascii_gex_scale(spot: float, ptrans: Optional[float], ntrans: Optio
                 label_strs.append(format_color("nTrans (Stop)", "31", bold=True))
             elif label == "COTMP":
                 label_strs.append(format_color("COTMP (Support)", "31", bold=True))
+            else:
+                label_strs.append(label)
                 
         label_block = " + ".join(label_strs)
         formatted_block = f"[{label_block}: ${price:.2f}]"
@@ -5527,9 +5529,9 @@ def cmd_update_candidates(args):
     if excluded_actives:
         print(f"Excluded {len(excluded_actives)} active holdings from candidate pool: {', '.join(sorted(list(excluded_actives))[:10])}{'...' if len(excluded_actives) > 10 else ''}")
     print(f"\n### 🚀 Top Screened GEX Candidates")
-    print("  " + "-" * 138)
+    print("  " + "-" * 131)
     print(f"  {'Ticker':<8} | {'Price':<6} | {'Daily Change':<12} | {'RSI':<6} | {'MACD Hist':<9} | {'Implied Vol':<12} | {'Rel Opt Vol':<12} | {'GEX Setup Grade':<16} | {'GEX Status':<16} | {'Market Cap'}")
-    print("  " + "-" * 138)
+    print("  " + "-" * 131)
     for c in candidate_list[:top_limit]:
         ticker = c['symbol']
         price = f"${c['price']:.2f}"
@@ -5571,7 +5573,7 @@ def cmd_update_candidates(args):
         ticker_fmt = format_color(f"{ticker:<8}", "35", bold=True)
         
         print(f"  {ticker_fmt} | {price:<6} | {change_fmt} | {rsi:<6} | {macd_hist:<9} | {iv:<12} | {rel_opt_vol:<12} | {gex_grade_str} | {gex_status_str} | {mcap}")
-    print("  " + "-" * 138)
+    print("  " + "-" * 131)
     if len(candidate_list) > top_limit:
         print(f"  * Showing top {top_limit} sorted by score and relative options volume out of {len(candidate_list)} candidates total.")
 
@@ -6091,9 +6093,9 @@ def cmd_rankings(args):
 
     # Volatility and compression metrics print
     print("\n### ⚡ Implied vs Realized Volatility & Compression Board")
-    print("  " + "-" * 75)
+    print("  " + "-" * 86)
     print(f"  {'Ticker':<8} | {'IV30':<8} | {'HV90':<8} | {'RV10 (10d)':<12} | {'IV/HV Discount':<16} | {'State / Compression'}")
-    print("  " + "-" * 75)
+    print("  " + "-" * 86)
     for data in filtered_analyses:
         ticker = data.get("Ticker", "")
         iv30_val = data.get("iv30_val")
@@ -6127,7 +6129,7 @@ def cmd_rankings(args):
         
         ticker_fmt = format_color(f"{ticker:<8}", "35", bold=True)
         print(f"  {ticker_fmt} | {iv30_str:<8} | {hv90_str:<8} | {rv10_str:<12} | {discount_fmt} | {comp_fmt}")
-    print("  " + "-" * 75)
+    print("  " + "-" * 86)
     
     # Summary of databases metrics
     total_scanned = len(filtered_analyses)
@@ -6200,9 +6202,9 @@ def cmd_closed(args):
         return
         
     print("### 📊 GEX Closed Positions History")
-    print("  " + "-" * 115)
+    print("  " + "-" * 99)
     print(f"  {'Ticker':<6} | {'Class':<7} | {'Entry Date':<11} | {'Close Date':<11} | {'Days':<4} | {'Cost Basis':<11} | {'Realized P&L ($)':<16} | {'Realized P&L (%)'}")
-    print("  " + "-" * 115)
+    print("  " + "-" * 99)
     
     def format_row(item, asset_cls):
         ticker = item.get("Ticker") or item.get("Underlier", "Unknown").upper()
@@ -6251,7 +6253,7 @@ def cmd_closed(args):
     for stk in closed_stocks:
         format_row(stk, "Stock")
         
-    print("  " + "-" * 115)
+    print("  " + "-" * 99)
     
     # Print summarized stats
     if closed_options:
@@ -6499,9 +6501,9 @@ def cmd_payoff(args):
         spots_list = [round(spot * (1 + p/100.0), 2) for p in [-10.0, -5.0, -2.0, 0.0, 2.0, 5.0, 10.0]]
         spots_list = sorted(list(set(spots_list)))
         
-    print("  " + "-" * 111)
+    print("  " + "-" * 106)
     print(f"  {'Target Spot':<18} | {'Underlier %':<11} | {'Day 0 (Instant)':<17} | {'Day 3 Held':<17} | {'Day 7 Held':<17} | {'Day 14 Held'}")
-    print("  " + "-" * 111)
+    print("  " + "-" * 106)
     
     import math
     for s_price in spots_list:
@@ -6554,7 +6556,7 @@ def cmd_payoff(args):
         
         print(f"  {spot_fmt_str} | {chg_fmt_str} | {cell_d0} | {cell_d3} | {cell_d7} | {cell_d14}")
         
-    print("  " + "-" * 111)
+    print("  " + "-" * 106)
 
 
 def cmd_simulate(args):
