@@ -138,5 +138,36 @@ class TestPerformanceBenchmark(unittest.TestCase):
 
         print(f"\n[BENCHMARK] Executed {iterations} calls to select_best_option in {elapsed:.4f} seconds ({elapsed/iterations*1000:.4f} ms/call)")
 
+    def test_benchmark_get_monthly_realized_pnl(self):
+        import tempfile
+        import shutil
+        temp_dir = tempfile.mkdtemp()
+        try:
+            downloads_dir = os.path.join(temp_dir, 'downloads')
+            day_dir = os.path.join(downloads_dir, '20260331')
+            os.makedirs(day_dir)
+            pnl_file = os.path.join(day_dir, 'pnl_trade_history.json')
+            data = {
+                'data': {
+                    'trades': [
+                        {
+                            'timestamp': f'2026-03-{(i % 28) + 1:02d}T10:00:00Z',
+                            'realized_gain': str(10.0 + i)
+                        } for i in range(200)
+                    ]
+                }
+            }
+            gex_engine.save_json(pnl_file, data)
+            iterations = 1000
+
+            start_time = time.perf_counter()
+            for _ in range(iterations):
+                _ = gex_engine.get_monthly_realized_pnl(50000.0, pnl_file=pnl_file)
+            elapsed = time.perf_counter() - start_time
+
+            print(f"\n[BENCHMARK] Executed {iterations} calls to get_monthly_realized_pnl in {elapsed:.4f} seconds ({elapsed/iterations*1000:.4f} ms/call)")
+        finally:
+            shutil.rmtree(temp_dir)
+
 if __name__ == "__main__":
     unittest.main()

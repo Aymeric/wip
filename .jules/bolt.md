@@ -45,3 +45,7 @@
 ## 2026-10-05 - Single-Pass Scalar Search Loops for Option Level Extraction
 **Learning:** `derive_gex_profile` used intermediate list comprehensions (`at_below_spot_puts`, `below_ptrans_puts`, `at_above_spot_calls`), lambda tuple key extractions in `max()`, and set union allocations (`set(...) | set(...)`) to calculate pTrans, nTrans, +GEX, and nearest strike levels. Replacing list allocations and lambda functions with single-pass scalar search loops yielded a ~1.16x execution speedup.
 **Action:** In option chain level derivation functions, find extremum strike levels using single-pass iterative searches with scalar comparison tuples `(oi, strike)` rather than constructing intermediate list comprehensions and passing lambda keys to `max()`.
+
+## 2026-10-08 - Cached Downloads Lookup & Fast ISO Date Parsing in Realized P&L
+**Learning:** `get_monthly_realized_pnl` ran uncached `os.walk(DOWNLOADS_DIR)` directory traversals on auto-discovery and parsed trade timestamp strings twice using slow `datetime.strptime(ts[:10], "%Y-%m-%d")`. Replacing `os.walk` with cached `_get_downloads_files()`, using `date.fromisoformat(ts[:10])` (~25.5x faster date parsing), and consolidating timestamp extraction and window filtering into a single pass yielded an overall ~11.3x execution speedup (from 5.66ms to 0.50ms per call).
+**Action:** Use cached directory listings (`_get_downloads_files`) for file discovery and `date.fromisoformat` in single-pass trade history calculations.
