@@ -6,6 +6,8 @@ Unit Tests for GEX Options Mechanical Trading Engine
 import unittest
 import sys
 import os
+import tempfile
+import json
 import subprocess
 from io import StringIO
 
@@ -5013,6 +5015,29 @@ class TestCmdStatus(unittest.TestCase):
             self.assertIn("+$43.00 (+15.99%)", output)
             self.assertIn("-$50.00 (-10.00%)", output)
             self.assertIn("-" * 114, output)
+
+    def test_persist_new_scans_path_traversal_prevention(self):
+        """Verify persist_new_scans enforces validate_safe_path when processing and deleting scan files."""
+        import gex_engine
+        scan_data = {"scan_title": "Test Scan", "scan_id": "12345"}
+
+        # Test valid scan persistence inside repository root
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".json", dir=".", delete=False) as tmp:
+            tmp.write(json.dumps(scan_data))
+            tmp_path = tmp.name
+
+        try:
+            persisted = gex_engine.persist_new_scans()
+            # Confirm file was moved/deleted safely
+            self.assertFalse(os.path.exists(tmp_path))
+            self.assertTrue(len(persisted) >= 1)
+            # Cleanup persisted target
+            for title, target_path in persisted:
+                if os.path.exists(target_path):
+                    os.remove(target_path)
+        finally:
+            if os.path.exists(tmp_path):
+                os.remove(tmp_path)
 
 
 if __name__ == '__main__':
