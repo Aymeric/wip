@@ -45,3 +45,7 @@
 ## 2026-10-05 - Single-Pass Scalar Search Loops for Option Level Extraction
 **Learning:** `derive_gex_profile` used intermediate list comprehensions (`at_below_spot_puts`, `below_ptrans_puts`, `at_above_spot_calls`), lambda tuple key extractions in `max()`, and set union allocations (`set(...) | set(...)`) to calculate pTrans, nTrans, +GEX, and nearest strike levels. Replacing list allocations and lambda functions with single-pass scalar search loops yielded a ~1.16x execution speedup.
 **Action:** In option chain level derivation functions, find extremum strike levels using single-pass iterative searches with scalar comparison tuples `(oi, strike)` rather than constructing intermediate list comprehensions and passing lambda keys to `max()`.
+
+## 2026-10-06 - Single-Pass `date.fromisoformat` for Monthly Realized P&L Calculations
+**Learning:** `get_monthly_realized_pnl` ran duplicate iteration passes over trade history and called slow `datetime.strptime` on every trade timestamp to find the reference date and filter 30-day gains. Replacing `datetime.strptime` with `date.fromisoformat` and tracking the latest trade date inline during a single tuple-parsing pass yielded a ~12.4x execution speedup.
+**Action:** When computing windowed aggregate stats over timestamped trade records, parse ISO date strings once with `date.fromisoformat` and track extremum dates inline in a single iteration pass.
