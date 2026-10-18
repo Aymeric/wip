@@ -32,6 +32,16 @@ from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Sequence, Tuple, Any, Iterable, Union
 
 from src.gex.quant.greeks import calculate_black_scholes_gamma
+from src.gex.quant.indicators import (
+    calculate_rsi,
+    calculate_ema,
+    calculate_macd_series,
+    calculate_macd,
+    calculate_bollinger_bands,
+    calculate_atr,
+    calculate_annualized_vol,
+)
+from src.gex.risk.stops import compute_exit_rule_state
 
 @dataclass
 class RegimeGates:
@@ -1799,243 +1809,10 @@ def derive_gex_profile(inst_data, quotes_data, spot):
         "rule10_derived": rule10_derived,
     }
 
-def calculate_rsi(closes: List[float], period: int = 14) -> Optional[float]:
-    """Calculates the Relative Strength Index (RSI) for a list of closes."""
-    n = len(closes)
-    if n < period + 1:
-        return None
+# Technical indicator implementations (calculate_rsi, calculate_ema, calculate_macd_series,
+# calculate_macd, calculate_bollinger_bands, calculate_atr) are modularized in src.gex.quant.indicators
+# and imported at the top of this module for backward compatibility.
 
-    # Performance optimization (Bolt):
-    # Eliminate temporary list allocations (`gains` & `losses`) and repeated list appends.
-    # Compute initial average gain and loss directly in O(period) single pass, then
-    # apply Wilder's smoothing in-place in O(N - period). ~2.4x execution speedup.
-    gain_sum = 0.0
-    loss_sum = 0.0
-    for i in range(1, period + 1):
-        diff = closes[i] - closes[i - 1]
-        if diff >= 0:
-            gain_sum += diff
-        else:
-            loss_sum -= diff
-
-    avg_gain = gain_sum / period
-    avg_loss = loss_sum / period
-
-    p_minus_1 = float(period - 1)
-
-    for i in range(period + 1, n):
-        diff = closes[i] - closes[i - 1]
-        if diff >= 0:
-            avg_gain = (avg_gain * p_minus_1 + diff) / period
-            avg_loss = (avg_loss * p_minus_1) / period
-        else:
-            avg_gain = (avg_gain * p_minus_1) / period
-            avg_loss = (avg_loss * p_minus_1 - diff) / period
-
-    if avg_loss == 0:
-        return 100.0
-    rs = avg_gain / avg_loss
-    return 100.0 - (100.0 / (1.0 + rs))
-
-
-def calculate_ema(values: List[float], p: int) -> List[float]:
-    """
-    Calculates the Exponential Moving Average (EMA) for a list of values.
-
-    Args:
-        values: List of float numerical values (e.g. closing prices).
-        p: The window period for the EMA calculation.
-
-    Returns:
-        List of EMA values starting from the p-th element seeded by SMA of first p values.
-    """
-    n = len(values)
-    if n < p or p <= 0:
-        return []
-
-    # Performance optimization (Bolt):
-    # Pre-allocate output list and hoist `one_minus_k` constant outside loop
-    # to eliminate list append resizing and `ema[-1]` indexing overhead.
-    k = 2.0 / (p + 1)
-    one_minus_k = 1.0 - k
-    prev = sum(values[:p]) / p
-    res = [0.0] * (n - p + 1)
-    res[0] = prev
-    idx = 1
-    for i in range(p, n):
-        prev = values[i] * k + prev * one_minus_k
-        res[idx] = prev
-        idx += 1
-    return res
-
-
-def calculate_macd_series(closes: List[float], fast_period: int = 12, slow_period: int = 26, signal_period: int = 9) -> Tuple[List[float], List[float]]:
-    """Calculates the full MACD line series and Signal line series for a list of closes."""
-    n = len(closes)
-    if n < slow_period + signal_period:
-        return [], []
-
-    # Performance optimization (Bolt):
-    # Advance scalar fast/slow EMAs directly to `slow_period - 1` and compute `macd_line`
-    # in a single aligned loop, avoiding redundant fast EMA iterations and list zips.
-    k_fast = 2.0 / (fast_period + 1)
-    k_slow = 2.0 / (slow_period + 1)
-    one_minus_k_fast = 1.0 - k_fast
-    one_minus_k_slow = 1.0 - k_slow
-
-    ema_fast = sum(closes[:fast_period]) / fast_period
-    for i in range(fast_period, slow_period):
-        ema_fast = closes[i] * k_fast + ema_fast * one_minus_k_fast
-
-    ema_slow = sum(closes[:slow_period]) / slow_period
-
-    num_macd = n - slow_period + 1
-    macd_line = [0.0] * num_macd
-    macd_line[0] = ema_fast - ema_slow
-
-    idx = 1
-    for i in range(slow_period, n):
-        c = closes[i]
-        ema_fast = c * k_fast + ema_fast * one_minus_k_fast
-        ema_slow = c * k_slow + ema_slow * one_minus_k_slow
-        macd_line[idx] = ema_fast - ema_slow
-        idx += 1
-
-    if num_macd < signal_period:
-        return [], []
-
-    signal_line = calculate_ema(macd_line, signal_period)
-    return macd_line, signal_line
-
-
-def calculate_macd(closes: List[float], fast_period: int = 12, slow_period: int = 26, signal_period: int = 9) -> Tuple[Optional[float], Optional[float], Optional[float]]:
-    """
-    Calculates the MACD Line, Signal Line, and Histogram for a list of closes.
-    
-    Returns:
-        tuple: (macd_line, signal_line, macd_histogram)
-    """
-    n = len(closes)
-    if n < slow_period + signal_period:
-        return None, None, None
-
-    # Performance optimization (Bolt):
-    # Eliminate full series list allocations (`macd_line` list and `signal_line` list) when only
-    # the latest scalar point estimate is required (e.g. candidate screening & technical filters).
-    # Compute fast/slow EMAs and running signal EMA directly in scalar variables (~1.27x speedup).
-    k_fast = 2.0 / (fast_period + 1)
-    k_slow = 2.0 / (slow_period + 1)
-    one_minus_k_fast = 1.0 - k_fast
-    one_minus_k_slow = 1.0 - k_slow
-
-    sum_fast = 0.0
-    for i in range(fast_period):
-        sum_fast += closes[i]
-    ema_fast = sum_fast / fast_period
-
-    for i in range(fast_period, slow_period):
-        ema_fast = closes[i] * k_fast + ema_fast * one_minus_k_fast
-
-    sum_slow = 0.0
-    for i in range(slow_period):
-        sum_slow += closes[i]
-    ema_slow = sum_slow / slow_period
-
-    macd_val = ema_fast - ema_slow
-
-    k_sig = 2.0 / (signal_period + 1)
-    one_minus_k_sig = 1.0 - k_sig
-
-    macd_sum = macd_val
-    for i in range(slow_period, slow_period + signal_period - 1):
-        c = closes[i]
-        ema_fast = c * k_fast + ema_fast * one_minus_k_fast
-        ema_slow = c * k_slow + ema_slow * one_minus_k_slow
-        macd_val = ema_fast - ema_slow
-        macd_sum += macd_val
-
-    signal_ema = macd_sum / signal_period
-
-    for i in range(slow_period + signal_period - 1, n):
-        c = closes[i]
-        ema_fast = c * k_fast + ema_fast * one_minus_k_fast
-        ema_slow = c * k_slow + ema_slow * one_minus_k_slow
-        macd_val = ema_fast - ema_slow
-        signal_ema = macd_val * k_sig + signal_ema * one_minus_k_sig
-
-    return macd_val, signal_ema, macd_val - signal_ema
-
-
-def calculate_bollinger_bands(closes: Sequence[float], period: int = 20, num_std: float = 2.0) -> Tuple[Optional[float], Optional[float], Optional[float]]:
-    """Calculates Middle, Upper, and Lower Bollinger Bands."""
-    n = len(closes)
-    if n < period:
-        return None, None, None
-    
-    # Performance optimization (Bolt):
-    # Iterate tail indices directly to compute mean and variance without slicing list.
-    # Replacing the generator expression inside `sum()` with an explicit scalar accumulation loop
-    # eliminates generator frame allocation overhead and yields ~1.8x execution speedup.
-    sum_val = 0.0
-    start_idx = n - period
-    for i in range(start_idx, n):
-        sum_val += closes[i]
-    middle_band = sum_val / period
-    
-    sum_sq_diff = 0.0
-    for i in range(start_idx, n):
-        diff = closes[i] - middle_band
-        sum_sq_diff += diff * diff
-    variance = sum_sq_diff / period
-    std_dev = math.sqrt(variance)
-    
-    upper_band = middle_band + (num_std * std_dev)
-    lower_band = middle_band - (num_std * std_dev)
-    
-    return middle_band, upper_band, lower_band
-
-
-def calculate_atr(highs: Sequence[float], lows: Sequence[float], closes: Sequence[float], period: int = 14) -> Optional[float]:
-    """Calculates the Average True Range (ATR)."""
-    n = min(len(closes), len(highs), len(lows)) if (closes and highs and lows) else 0
-    if n < period + 1 or period <= 0:
-        return None
-
-    # Performance optimization (Bolt):
-    # Eliminate temporary list allocations (`true_ranges`), slicing, and `max()` calls.
-    # Compute initial average True Range seed in O(period) single pass, then
-    # apply Wilder's smoothing in-place in O(N - period). ~2.2x execution speedup.
-    tr_sum = 0.0
-    for i in range(1, period + 1):
-        h = highs[i]
-        l = lows[i]
-        c_prev = closes[i - 1]
-        tr = h - l
-        d1 = abs(h - c_prev)
-        d2 = abs(l - c_prev)
-        if d1 > tr:
-            tr = d1
-        if d2 > tr:
-            tr = d2
-        tr_sum += tr
-
-    atr = tr_sum / period
-    p_minus_1 = float(period - 1)
-
-    for i in range(period + 1, n):
-        h = highs[i]
-        l = lows[i]
-        c_prev = closes[i - 1]
-        tr = h - l
-        d1 = abs(h - c_prev)
-        d2 = abs(l - c_prev)
-        if d1 > tr:
-            tr = d1
-        if d2 > tr:
-            tr = d2
-        atr = (atr * p_minus_1 + tr) / period
-
-    return atr
 
 
 def find_latest_historical_ohlc(symbol: str, file_list: Optional[Sequence[Union[str, Tuple[str, str]]]] = None) -> Tuple[List[float], List[float], List[float], List[float]]:
@@ -2475,24 +2252,8 @@ def check_technical_alerts(closes: List[float], highs: Optional[List[float]] = N
     }
 
 
-def calculate_annualized_vol(returns_list):
-    """Calculates annualized volatility from daily log returns."""
-    n = len(returns_list)
-    if n < 2:
-        return 0.0
-    mean_ret = sum(returns_list) / n
+# calculate_annualized_vol is modularized in src.gex.quant.indicators and imported above.
 
-    # Performance optimization (Bolt):
-    # Replacing the generator expression inside `sum()` with an explicit scalar accumulation loop
-    # and direct multiplication (`diff * diff`) eliminates generator frame allocation overhead
-    # and exponentiation overhead. ~2.3x execution speedup.
-    sum_sq_diff = 0.0
-    for x in returns_list:
-        diff = x - mean_ret
-        sum_sq_diff += diff * diff
-    variance = sum_sq_diff / (n - 1)
-    stdev_ret = math.sqrt(variance)
-    return stdev_ret * math.sqrt(252) * 100.0
 
 
 def derive_volatility_profile(hist_data, symbol, iv_sum, iv_count):
@@ -2828,6 +2589,10 @@ def select_best_option(inst_data, quotes_data, spot, gex_target, today_override=
             if strike_preferred or delta_preferred:
                 tier = 3
 
+        # Phase 3.3: Realistic slippage penalty modeling (35% spread penalty)
+        slippage_penalty = round(0.35 * spread, 4) if spread > 0 else 0.0
+        effective_entry_price = round(mark + slippage_penalty, 4)
+
         # Score within tier
         dist_to_atm = abs(strike - spot)
         dist_to_ideal_delta = abs(delta - target_delta) if delta is not None else 1.0
@@ -2842,6 +2607,8 @@ def select_best_option(inst_data, quotes_data, spot, gex_target, today_override=
             "mark": mark,
             "spread": spread,
             "spread_ok": spread_ok,
+            "slippage_penalty": slippage_penalty,
+            "effective_entry_price": effective_entry_price,
             "oi": oi,
             "oi_ok": oi_ok,
             "vol": vol,
@@ -3383,105 +3150,8 @@ def cmd_analyze(args):
         print_color(f"\n⚠️ ENTRY BLOCKED: Broad-market daily regime ({auth}) is currently prohibiting new entries. No action taken.", "31", bold=True)
 
 
-def compute_exit_rule_state(spot, purchase_premium, mark_price, ptrans, ntrans, gex_t1, days_held, stalling_counter, dte, target_mode="T1", t2_target=None):
-    """
-    Computes exit rule evaluation logic, proposed actions, and time status.
-    
-    Returns:
-        tuple[str, str, str, str, str]: (exit_rule_state, proposed_action, time_status, distance_ntrans, distance_max_stop)
-    """
-    pl_pct = ((mark_price - purchase_premium) / purchase_premium) * 100 if purchase_premium else 0.0
-    
-    exit_rule_state = "HOLD"
-    proposed_action = "No Action"
-    time_status = "ON TRACK"
-    
-    distance_ntrans = "N/A"
-    if ntrans:
-        dist = ((spot - ntrans) / ntrans) * 100
-        distance_ntrans = f"{dist:+.2f}%"
-        if spot < ntrans:
-            exit_rule_state = "STOP TRIGGERED (Structural Stop: Spot < nTrans)"
-            proposed_action = "Immediate Exit (Structural Stop)"
-            
-    distance_max_stop = "N/A"
-    if ptrans:
-        if spot < ptrans:
-            if not exit_rule_state.startswith("STOP TRIGGERED"):
-                if pl_pct <= -10.0:
-                    exit_rule_state = "STOP TRIGGERED (Max Asset Stop: -10% option loss below pTrans)"
-                    proposed_action = "Immediate Exit (Max Asset Stop)"
-            distance_max_stop = f"{pl_pct:+.2f}% vs -10.00% max"
-        else:
-            distance_max_stop = "Protection dormant (Spot > pTrans)"
-            
-    if days_held >= 7:
-        if dte is not None and dte > 90:
-            # LEAPs / long-dated options have negligible theta decay; exempt from the 7-day velocity time stop
-            time_status = "ON TRACK (LEAP/Long-DTE Exempt)"
-        elif gex_t1 and ptrans:
-            full_run = gex_t1 - ptrans
-            made_progress = spot - ptrans
-            progress_pct = (made_progress / full_run) * 100 if full_run > 0 else 0.0
-            if progress_pct < 50.0:
-                if not exit_rule_state.startswith("STOP TRIGGERED"):
-                    exit_rule_state = "STOP TRIGGERED (Time Stop: <50% progress by Day 7)"
-                    proposed_action = "Immediate Exit (Time Stop)"
-                time_status = "STALE (Time Limit Exceeded)"
-                
-    if stalling_counter >= 3:
-        if not exit_rule_state.startswith("STOP TRIGGERED"):
-            exit_rule_state = "STOP TRIGGERED (Stalling Stop: <10% daily progress for 3 consecutive days)"
-            proposed_action = "Immediate Exit (Stalling Stop)"
-        time_status = "STALLED"
-        
-    if target_mode == "T2":
-        # Sizing / protect T1 gains: Trail stop to entry price
-        if pl_pct <= 0.0:
-            if not exit_rule_state.startswith("STOP TRIGGERED"):
-                exit_rule_state = "STOP TRIGGERED (Trailed Stop: Option at or below entry premium)"
-                proposed_action = "Immediate Exit (Trailed Stop at Entry Premium to protect T1 gains)"
-                
-        # Target evaluation for T2
-        target_price = t2_target if t2_target is not None else (gex_t1 * 1.10 if gex_t1 else None)
-        if target_price and spot >= target_price:
-            if not exit_rule_state.startswith("STOP TRIGGERED"):
-                exit_rule_state = "PROFIT TAKE (T2 TARGET MET)"
-                proposed_action = "Exit position to lock in full T2/Lock & Ride gains"
-    else:
-        # Standard T1 target evaluation
-        if gex_t1 and spot >= gex_t1:
-            if not exit_rule_state.startswith("STOP TRIGGERED"):
-                if pl_pct < 0:
-                    exit_rule_state = "UNDERLIER TARGET MET (Option in Loss)"
-                    proposed_action = "Exit position to limit further losses (Strike/Maturity mismatch or decay)"
-                else:
-                    exit_rule_state = "PROFIT TAKE (T1 TARGET MET)"
-                    proposed_action = "Exit for 100% gains OR Trail stop to entry price and target structural T2"
+# compute_exit_rule_state is modularized in src.gex.risk.stops and imported at the top of this module.
 
-    # Stop 3 (Theta Gate / Time Stop): Hard exit when DTE <= 14 days to prevent terminal theta decay
-    if dte is not None and 0 <= dte <= 14:
-        if not exit_rule_state.startswith("STOP TRIGGERED") and not exit_rule_state.startswith("PROFIT TAKE") and exit_rule_state != "UNDERLIER TARGET MET (Option in Loss)":
-            exit_rule_state = "STOP TRIGGERED (Theta Stop: DTE <= 14 days)"
-            proposed_action = "Immediate Exit (Theta Stop)"
-            time_status = "THETA EXHAUSTION (DTE <= 14)"
-
-    # Stop 5 (Catastrophic Risk Stop): Hard stop at -50% position value
-    if pl_pct <= -50.0:
-        if not exit_rule_state.startswith("STOP TRIGGERED"):
-            exit_rule_state = "STOP TRIGGERED (Catastrophic Risk Stop: Loss <= -50%)"
-            proposed_action = "Immediate Exit (Catastrophic Risk Stop)"
-
-    if dte is not None and dte < 0:
-        exit_rule_state = "EXPIRED (Contract past expiration)"
-        proposed_action = "Remove from tracker via close-position"
-        time_status = "EXPIRED"
-        
-    if exit_rule_state == "HOLD" and ptrans and spot < ptrans:
-        exit_rule_state = "WATCH"
-        proposed_action = "Hold existing, but add NOTHING"
-        
-    return exit_rule_state, proposed_action, time_status, distance_ntrans, distance_max_stop
 
 
 def get_monthly_realized_pnl(net_liq: float, monthly_file: Optional[str] = None, pnl_file: Optional[str] = None) -> Tuple[float, float, str, int]:

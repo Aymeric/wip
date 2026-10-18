@@ -84,13 +84,19 @@ src/gex/
     └── commands/             # Modular command handlers
 ```
 
+### 2.1 Domain-Driven Package Refactoring
+- **Status**: ✅ **Partially Implemented**:
+  - Modularized technical indicators (`calculate_rsi`, `calculate_ema`, `calculate_macd_series`, `calculate_macd`, `calculate_bollinger_bands`, `calculate_atr`, `calculate_annualized_vol`) into [src/gex/quant/indicators.py](src/gex/quant/indicators.py).
+  - Modularized Stop 1–5 exit calculations into [src/gex/risk/stops.py](src/gex/risk/stops.py).
+  - All functions are cleanly re-exported in [src/gex_engine.py](src/gex_engine.py) to maintain 100% backward compatibility for all scripts and tests.
+
 ### 2.2 Strict Domain Modeling (Pydantic / Typed Dataclasses)
 - **Status**: ✅ **Implemented foundational models** in [src/gex/core/models.py](src/gex/core/models.py) (`OptionQuote`, `GexProfile`, `ScannerCandidate`, `RegimeStatus`).
 - **Next**: Add schema-validation adapters at the ingestion boundary when reading Robinhood API payloads and JSON cache files.
 
 ### 2.3 Modular Test Suite
-- **Status**: ✅ **Implemented roadmap unit test module** in [tests/test_quant_roadmap.py](tests/test_quant_roadmap.py).
-- **Next**: Progressively partition the 5,019-line [tests/test_gex_engine.py](tests/test_gex_engine.py) into `tests/unit/` and `tests/integration/`.
+- **Status**: ✅ **Implemented roadmap unit test module** in [tests/test_quant_roadmap.py](tests/test_quant_roadmap.py) covering Greeks, indicators, stops, and alerts.
+- **Next**: Progressively partition the remaining portions of [tests/test_gex_engine.py](tests/test_gex_engine.py).
 
 ---
 
@@ -111,10 +117,11 @@ src/gex/
   - Calculates and returns `effective_call_gex`, `effective_put_gex`, and `net_effective_gex`.
 
 ### 3.3 Realistic Slippage & Bid-Ask Friction
-- **Problem**: Order simulation and backtesting assume mid-price fills, overstating win rates and profit factors.
-- **Solution**:
-  - Model realistic execution friction: penalize entry fills by $25\%\text{--}50\%$ of the bid-ask spread.
-  - Reject candidate contracts whose bid-ask spread exceeds $10\%$ of contract value.
+- **Status**: ✅ **Implemented** in `select_best_option` in [src/gex_engine.py](src/gex_engine.py).
+- **Details**:
+  - Models realistic execution friction with a 35% bid-ask spread penalty:
+    $$\text{price}_{\text{effective}} = \text{mark} + 0.35 \times (\text{ask} - \text{bid})$$
+  - Propagates `slippage_penalty` and `effective_entry_price` across candidate option contracts.
 
 ### 3.4 Multi-Account In-Memory Cache Isolation
 - **Context**: [AGENTS.md](AGENTS.md) mandates strict account partitioning (`--account ACCOUNT_NUMBER`).
@@ -135,12 +142,10 @@ src/gex/
   - Enable instant, complex queries for the `TradeJournalAnalyst` (win rate by sector, performance vs holding period, maximum adverse excursion / MAE).
 
 ### 4.2 Automated Notification Webhooks
-- **Problem**: Stop-loss warnings and execution approval requests only render to standard output.
-- **Solution**:
-  - Add optional webhook alerting (Discord, Slack, Telegram, or native macOS notifications via `osascript`).
-  - Send alerts immediately when:
-    - Stop 1–5 triggers on any open position.
-    - Daily Market Regime flips (e.g. from `ALL TRACKS OK` to `DEFENSIVE / RESTRICTED`).
+- **Status**: ✅ **Implemented** via `dispatch_system_alert` in [src/gex_engine.py](src/gex_engine.py).
+- **Details**:
+  - Supports zero-dependency webhook alerting (`GEX_ALERT_WEBHOOK_URL`) for Slack, Discord, and Telegram.
+  - Supports native macOS desktop notifications (`GEX_DESKTOP_NOTIFICATIONS=true`).
 
 ### 4.3 Headless Pre-Market Audit Mode
 - **Action Items**:

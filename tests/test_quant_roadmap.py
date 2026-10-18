@@ -97,6 +97,65 @@ class TestRoadmapImplementations(unittest.TestCase):
         result = dispatch_system_alert(title="Test Alert", message="Test Message", webhook_url=None)
         self.assertFalse(result)
 
+    def test_compute_exit_rule_state_stops(self):
+        from src.gex.risk.stops import compute_exit_rule_state
+
+        # Normal HOLD
+        state, action, time_st, dist_ntrans, dist_max = compute_exit_rule_state(
+            spot=105.0, purchase_premium=3.0, mark_price=3.5, ptrans=100.0, ntrans=95.0,
+            gex_t1=115.0, days_held=2, stalling_counter=0, dte=35
+        )
+        self.assertEqual(state, "HOLD")
+        self.assertEqual(action, "No Action")
+
+        # Stop 1 (Structural Stop: Spot < nTrans)
+        state, action, _, _, _ = compute_exit_rule_state(
+            spot=94.0, purchase_premium=3.0, mark_price=2.0, ptrans=100.0, ntrans=95.0,
+            gex_t1=115.0, days_held=3, stalling_counter=0, dte=30
+        )
+        self.assertIn("Structural Stop", state)
+        self.assertIn("Immediate Exit", action)
+
+        # Stop 3 (Theta Stop: DTE <= 14 days)
+        state, action, time_st, _, _ = compute_exit_rule_state(
+            spot=104.0, purchase_premium=3.0, mark_price=2.8, ptrans=100.0, ntrans=95.0,
+            gex_t1=115.0, days_held=4, stalling_counter=0, dte=12
+        )
+        self.assertIn("Theta Stop", state)
+        self.assertIn("THETA EXHAUSTION", time_st)
+
+        # Stop 5 (Catastrophic Risk Stop: Loss <= -50%)
+        state, action, _, _, _ = compute_exit_rule_state(
+            spot=102.0, purchase_premium=4.0, mark_price=1.8, ptrans=100.0, ntrans=95.0,
+            gex_t1=115.0, days_held=3, stalling_counter=0, dte=28
+        )
+        self.assertIn("Catastrophic Risk Stop", state)
+        self.assertIn("Immediate Exit", action)
+
+    def test_indicators_modular(self):
+        from src.gex.quant.indicators import calculate_rsi, calculate_bollinger_bands, calculate_atr
+
+        # RSI with monotonic increase should be 100
+        rsi = calculate_rsi([10.0 + i for i in range(20)], period=14)
+        self.assertIsNotNone(rsi)
+        self.assertEqual(rsi, 100.0)
+
+        # Bollinger Bands
+        closes = [100.0 + i * 0.5 for i in range(25)]
+        mid, upper, lower = calculate_bollinger_bands(closes, period=20, num_std=2.0)
+        self.assertIsNotNone(mid)
+        self.assertGreater(upper, mid)
+        self.assertLess(lower, mid)
+
+        # ATR
+        highs = [102.0] * 20
+        lows = [98.0] * 20
+        closes = [100.0] * 20
+        atr = calculate_atr(highs, lows, closes, period=14)
+        self.assertIsNotNone(atr)
+        self.assertAlmostEqual(atr, 4.0, places=1)
+
 
 if __name__ == "__main__":
     unittest.main()
+
