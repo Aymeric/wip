@@ -3785,18 +3785,23 @@ def cmd_portfolio(args):
         
         weight_fmt = f"{r['weight']:5.2f}%"
         
-        # Color coding rule states in table
+        # Color coding rule states in table with explicit non-TTY status indicators
         r_state = r['rule_state']
         if "STOP" in r_state or "EXPIRED" in r_state:
             r_color, r_bold = "31", True
+            clean_state = r_state.replace("STOP TRIGGERED ", "").replace("EXPIRED ", "")
+            r_state_short = f"[STOP] {clean_state}"
         elif "PROFIT" in r_state or "MET" in r_state:
             r_color, r_bold = "32", True
+            clean_state = r_state.replace("PROFIT TAKE ", "")
+            r_state_short = f"[TAKE] {clean_state}"
         elif "WATCH" in r_state:
             r_color, r_bold = "33", False
+            r_state_short = f"[WARN] {r_state}"
         else:
             r_color, r_bold = "32", False
+            r_state_short = f"[HOLD] {r_state}" if r_state != "HOLD" else "[HOLD] Normal Posture"
         
-        r_state_short = r_state
         if len(r_state_short) > 26:
             r_state_short = r_state_short[:23] + "..."
         r_fmt = format_color(f"{r_state_short:<26}", r_color, bold=r_bold)
@@ -3913,7 +3918,7 @@ def cmd_portfolio(args):
         exit_rule_fmt = format_color(exit_rule_state, color_code, bold=bold)
         
         # Print position
-        print(f"- **{format_color(ticker, '35', bold=True)}**: Current Spot {format_color(f'${spot:.2f}', '36')} vs Avg Buy Premium {format_color(f'${purchase_premium:.2f}', '33')} / Mark {format_color(f'${mark_price:.2f}', '33')} (Gain/Loss: {format_color(f'{pl_pct:+.2f}%', pl_color, bold=True)})")
+        print(f"- **{format_color(ticker, '35', bold=True)}**: Current Spot {format_color(f'${spot:.2f} (Spot)', '36')} vs Avg Buy Premium {format_color(f'${purchase_premium:.2f}', '33')} / Mark {format_color(f'${mark_price:.2f}', '33')} (Gain/Loss: {format_color(f'{pl_pct:+.2f}%', pl_color, bold=True)})")
         print(f"  - **Exits Rule State**: [{exit_rule_fmt}]")
         print(f"  - **Target Mode**: [{target_mode}]{' (Target Strike: $' + f'{t2_target:.2f}' + ')' if t2_target else ''}")
         print(f"  - **Distance to Structural Stop (nTrans at ${ntrans if ntrans else 0.0:.2f})**: {distance_ntrans}")
@@ -4045,7 +4050,7 @@ def cmd_portfolio(args):
             color_code, bold = "33", False
         exit_rule_fmt = format_color(exit_rule_state, color_code, bold=bold)
         
-        print(f"- **{format_color(ticker, '35', bold=True)}**: Current Spot {format_color(f'${spot:.2f}', '36')} vs Avg Buy Price {format_color(f'${avg_price:.2f}', '33')} (Shares: {shares:,.2f} | Gain/Loss: {format_color(f'{pl_pct:+.2f}%', pl_color, bold=True)} / {format_color(f'${pl_dollar:+.2f}', pl_color, bold=True)})")
+        print(f"- **{format_color(ticker, '35', bold=True)}**: Current Spot {format_color(f'${spot:.2f} (Spot)', '36')} vs Avg Buy Price {format_color(f'${avg_price:.2f}', '33')} (Shares: {shares:,.2f} | Gain/Loss: {format_color(f'{pl_pct:+.2f}%', pl_color, bold=True)} / {format_color(f'${pl_dollar:+.2f}', pl_color, bold=True)})")
         print(f"  - **Exits Rule State**: [{exit_rule_fmt}]")
         print(f"  - **Distance to GEX nTrans Stop (nTrans at ${ntrans if ntrans else 0.0:.2f})**: {distance_ntrans}")
         
