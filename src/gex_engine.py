@@ -31,6 +31,8 @@ from datetime import datetime, date, timezone
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Sequence, Tuple, Any, Iterable, Union
 
+from src.gex.quant.greeks import calculate_black_scholes_gamma
+
 @dataclass
 class RegimeGates:
     basket_gate: str
@@ -530,6 +532,42 @@ def save_json(filepath: str, data: Any) -> None:
                 os.remove(temp_path)
             except OSError:
                 pass
+
+
+def dispatch_system_alert(title: str, message: str, webhook_url: Optional[str] = None) -> bool:
+    """Dispatches a system alert via webhook (Discord/Slack/Telegram) or desktop notification if configured."""
+    url = webhook_url or os.environ.get("GEX_ALERT_WEBHOOK_URL")
+    alert_sent = False
+
+    # 1. Webhook alert via urllib.request (zero external dependencies)
+    if url:
+        try:
+            import urllib.request
+            payload = json.dumps({"title": title, "text": message, "content": f"**{title}**\n{message}"}).encode("utf-8")
+            req = urllib.request.Request(
+                url,
+                data=payload,
+                headers={"Content-Type": "application/json", "User-Agent": "GEX-Trading-Suite/1.0"},
+            )
+            with urllib.request.urlopen(req, timeout=5) as response:
+                if response.status < 400:
+                    alert_sent = True
+        except Exception as e:
+            print(f"Warning: Failed to dispatch webhook alert: {e}", file=sys.stderr)
+
+    # 2. Optional macOS desktop alert via osascript
+    if sys.platform == "darwin" and os.environ.get("GEX_DESKTOP_NOTIFICATIONS", "").lower() in ("1", "true", "yes"):
+        try:
+            import subprocess
+            clean_title = title.replace('"', '\\"')
+            clean_msg = message.replace('"', '\\"').replace("\n", " ")
+            applescript = f'display notification "{clean_msg}" with title "{clean_title}"'
+            subprocess.run(["osascript", "-e", applescript], check=False, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            alert_sent = True
+        except Exception:
+            pass
+
+    return alert_sent
 
 
 def get_regime_status() -> Dict[str, Any]:
@@ -1562,7 +1600,8 @@ def derive_gex_profile(inst_data, quotes_data, spot):
         try:
             inst_map[inst["id"]] = (
                 float(inst["strike_price"]) if "strike_price" in inst else float(inst.get("strike", 0.0)),
-                inst["type"]
+                inst["type"],
+                inst.get("expiration_date"),
             )
         except (ValueError, KeyError):
             continue
@@ -1576,6 +1615,8 @@ def derive_gex_profile(inst_data, quotes_data, spot):
     total_oi = 0
     total_call_gex = 0.0
     total_put_gex = 0.0
+    effective_call_gex = 0.0
+    effective_put_gex = 0.0
     sum_strike_put_oi = 0.0
     sum_put_oi = 0
     
@@ -1606,10 +1647,25 @@ def derive_gex_profile(inst_data, quotes_data, spot):
         except (ValueError, TypeError):
             continue
             
-        strike, opt_type = inst_map[opt_id]
+        strike, opt_type, exp_str = inst_map[opt_id]
+
+        # Analytical Black-Scholes Gamma fallback if broker feed returns zero or missing gamma
+        dte_val = 30.0
+        if exp_str:
+            try:
+                exp_date = date.fromisoformat(exp_str[:10])
+                today_d = date.today()
+                dte_val = float(max((exp_date - today_d).days, 0))
+            except Exception:
+                pass
+
+        if gamma <= 0.0 and iv > 0.0:
+            gamma = calculate_black_scholes_gamma(calc_spot, strike, dte_val, iv)
         
         total_oi += oi
         gex_val = oi * gamma * 100.0 * calc_spot
+        dte_weight = 1.0 / math.sqrt(max(dte_val, 1.0))
+        effective_gex_val = gex_val * dte_weight
         
         # IV proxy (within 15% of spot)
         diff = strike - calc_spot
@@ -1623,12 +1679,14 @@ def derive_gex_profile(inst_data, quotes_data, spot):
             strike_put_oi[strike] = strike_put_oi.get(strike, 0) + oi
             strike_put_gex[strike] = strike_put_gex.get(strike, 0.0) + gex_val
             total_put_gex += gex_val
+            effective_put_gex += effective_gex_val
             sum_strike_put_oi += strike * oi
             sum_put_oi += oi
         elif opt_type == "call":
             strike_call_oi[strike] = strike_call_oi.get(strike, 0) + oi
             strike_call_gex[strike] = strike_call_gex.get(strike, 0.0) + gex_val
             total_call_gex += gex_val
+            effective_call_gex += effective_gex_val
             
     if total_oi <= 0:
         return {
@@ -1641,6 +1699,10 @@ def derive_gex_profile(inst_data, quotes_data, spot):
             "derived_gex": calc_spot * 1.05,
             "total_call_gex": 0.0,
             "total_put_gex": 0.0,
+            "effective_call_gex": 0.0,
+            "effective_put_gex": 0.0,
+            "net_gex": 0.0,
+            "net_effective_gex": 0.0,
             "rule1_derived": False,
             "rule2_derived": False,
             "rule7_derived": False,
@@ -1726,6 +1788,10 @@ def derive_gex_profile(inst_data, quotes_data, spot):
         "derived_gex": derived_gex,
         "total_call_gex": total_call_gex,
         "total_put_gex": total_put_gex,
+        "effective_call_gex": effective_call_gex,
+        "effective_put_gex": effective_put_gex,
+        "net_gex": total_call_gex - total_put_gex,
+        "net_effective_gex": effective_call_gex - effective_put_gex,
         "rule1_derived": rule1_derived,
         "rule2_derived": rule2_derived,
         "rule7_derived": rule7_derived,

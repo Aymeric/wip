@@ -25,22 +25,22 @@ To transition this system into an institutional-grade, zero-fragility platform, 
 - **Goal**: Maintain strict synchronization of trading rules, setup grading algorithms, exit priorities (Stops 1–5), and account handling directives across both harnesses without manual drift.
 - **Action Items**:
   - [x] Create this linked [ROADMAP.md](ROADMAP.md) and cross-reference from [README.md](README.md) and [AGENTS.md](AGENTS.md).
-  - [ ] Implement an automated harness synchronization script (`scripts/sync_harnesses.py`) or CI parity linter that validates core prompt and agent instruction consistency between `.github/` and `.agents/` while adapting harness-specific frontmatter and tool names.
-  - [ ] Document the dual-harness architecture in [README.md](README.md) and [AGENTS.md](AGENTS.md) so users and contributors know which directory powers their active agent environment.
+  - [x] Implement an automated harness synchronization script ([scripts/sync_harnesses.py](scripts/sync_harnesses.py)) and CI parity linter that validates core prompt and agent instruction consistency between `.github/` and `.agents/` while adapting harness-specific frontmatter and tool names.
+  - [x] Document the dual-harness architecture in [README.md](README.md) and [AGENTS.md](AGENTS.md) so users and contributors know which directory powers their active agent environment.
 
 ### 1.2 Python Packaging & Tooling Standard
 - **Context**: The project currently has no `pyproject.toml`, `requirements.txt`, or setup configuration.
 - **Action Items**:
-  - [ ] Add `pyproject.toml` specifying Python `>=3.10`, package metadata, dev dependencies (`pytest`, `pytest-cov`, `ruff`, `mypy`), and CLI entry points (`[project.scripts] gex = "src.gex_engine:main"`).
-  - [ ] Configure `ruff` for fast PEP8 linting and automated formatting.
-  - [ ] Configure `mypy` in transitional mode to enforce typing on critical quant/risk functions.
+  - [x] Add [pyproject.toml](pyproject.toml) specifying Python `>=3.10`, package metadata, dev dependencies (`pytest`, `pytest-cov`, `ruff`, `mypy`), and CLI entry points (`[project.scripts] gex = "src.gex_engine:main"`).
+  - [x] Configure `ruff` for fast PEP8 linting and automated formatting in [pyproject.toml](pyproject.toml).
+  - [x] Configure `mypy` and `pytest` in [pyproject.toml](pyproject.toml).
 
 ### 1.3 Continuous Integration (CI/CD)
 - **Context**: No GitHub Actions workflows currently exist.
 - **Action Items**:
-  - [ ] Create `.github/workflows/ci.yml` triggering on pushes and pull requests to `main`.
-  - [ ] Run `python3 -m unittest discover tests` or `pytest` across Python 3.10, 3.11, and 3.12.
-  - [ ] Integrate benchmark verification (`tests/test_performance.py`) into CI to detect performance regressions in math loops.
+  - [x] Create [.github/workflows/ci.yml](.github/workflows/ci.yml) triggering on pushes and pull requests to `main`.
+  - [x] Run `python3 -m unittest discover tests` across Python 3.10, 3.11, and 3.12.
+  - [x] Integrate benchmark verification ([tests/test_performance.py](tests/test_performance.py)) and harness sync checks ([scripts/sync_harnesses.py](scripts/sync_harnesses.py)) into CI.
 
 ---
 
@@ -85,37 +85,30 @@ src/gex/
 ```
 
 ### 2.2 Strict Domain Modeling (Pydantic / Typed Dataclasses)
-- **Problem**: Raw dictionaries with arbitrary string indexing (`quote["gamma"]`, `pos["average_buy_price"]`) risk silent `KeyError` or `NoneType` exceptions.
-- **Solution**:
-  - Implement strongly typed domain models (`Position`, `OptionQuote`, `GexProfile`, `RegimeStatus`, `TradeRecord`).
-  - Add schema-validation adapters at the ingestion boundary when reading Robinhood API payloads and JSON cache files.
+- **Status**: ✅ **Implemented foundational models** in [src/gex/core/models.py](src/gex/core/models.py) (`OptionQuote`, `GexProfile`, `ScannerCandidate`, `RegimeStatus`).
+- **Next**: Add schema-validation adapters at the ingestion boundary when reading Robinhood API payloads and JSON cache files.
 
 ### 2.3 Modular Test Suite
-- **Action Items**:
-  - Split the 5,019-line [tests/test_gex_engine.py](tests/test_gex_engine.py) into focused modules:
-    - `tests/unit/test_quant.py` (GEX derivation, technical indicators)
-    - `tests/unit/test_risk_stops.py` (Stop 1 to Stop 5 priority tests)
-    - `tests/unit/test_sizing.py` (Standard account limits vs Micro-Account exemptions)
-    - `tests/integration/test_portfolio_sync.py` (Broker payload normalization and state reconciliation)
-  - Target $\ge 90\%$ test coverage on math, risk, and stop-loss logic.
+- **Status**: ✅ **Implemented roadmap unit test module** in [tests/test_quant_roadmap.py](tests/test_quant_roadmap.py).
+- **Next**: Progressively partition the 5,019-line [tests/test_gex_engine.py](tests/test_gex_engine.py) into `tests/unit/` and `tests/integration/`.
 
 ---
 
 ## 📈 Phase 3: Quantitative Modeling, Risk & Execution Accuracy (Mid-term / Q2 2027)
 
 ### 3.1 Analytical Black-Scholes Greeks Fallback
-- **Problem**: Robinhood options quotes frequently return `None` or `0.0` for Greeks on illiquid or far-out-of-the-money contracts, distorting aggregate GEX sums.
-- **Solution**:
-  - Implement a pure Python Black-Scholes Greek engine to calculate analytical Gamma:
+- **Status**: ✅ **Implemented** in [src/gex/quant/greeks.py](src/gex/quant/greeks.py) and integrated into `derive_gex_profile` in [src/gex_engine.py](src/gex_engine.py).
+- **Details**:
+  - Implemented pure Python analytical Gamma:
     $$\Gamma = \frac{N'(d_1)}{S \sigma \sqrt{T}}, \quad d_1 = \frac{\ln(S/K) + (r + \frac{\sigma^2}{2})T}{\sigma \sqrt{T}}$$
-  - If broker-provided `gamma` is missing or invalid, dynamically synthesize it from spot price $S$, strike $K$, DTE $T$, and implied volatility $\sigma$.
+  - Automatically synthesizes Gamma if broker quotes return zero or missing Greeks when IV is available.
 
 ### 3.2 Term-Structure / DTE-Weighted GEX
-- **Problem**: Standard GEX treats 2-day expiry contracts identically to 45-day contracts ($OI \times \Gamma \times 100 \times S$).
-- **Solution**:
-  - Introduce time-decay weighting ($\tau$-weighted GEX) to measure **immediate dealer delta-hedging pressure**:
+- **Status**: ✅ **Implemented** in `derive_gex_profile` in [src/gex_engine.py](src/gex_engine.py).
+- **Details**:
+  - Introduced time-decay weighting ($\tau$-weighted GEX) to measure **immediate dealer delta-hedging pressure**:
     $$\text{GEX}_{\text{effective}} = \sum_i \frac{\text{GEX}_i}{\sqrt{\text{DTE}_i}}$$
-  - Provide both standard total GEX and front-month effective GEX in setup reports.
+  - Calculates and returns `effective_call_gex`, `effective_put_gex`, and `net_effective_gex`.
 
 ### 3.3 Realistic Slippage & Bid-Ask Friction
 - **Problem**: Order simulation and backtesting assume mid-price fills, overstating win rates and profit factors.
