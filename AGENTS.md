@@ -1,6 +1,7 @@
 # GEX Options Trading System - Agent Workspace
 
 Welcome to the **Gamma Exposure (GEX) Options Trading System** agent workspace. This project is a systematic, mechanical swing-trading platform for single-stock options engineered around dealer gamma positioning, volatility regimes, and liquidity dynamics.
+For the active architectural evolution and engineering roadmap, refer to [ROADMAP.md](ROADMAP.md).
 
 ---
 
