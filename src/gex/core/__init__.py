@@ -3,6 +3,8 @@ from src.gex.core.models import (
     GexProfile,
     ScannerCandidate,
     RegimeStatus,
+    Position,
+    TradeRecord,
 )
 
 __all__ = [
@@ -10,4 +12,6 @@ __all__ = [
     "GexProfile",
     "ScannerCandidate",
     "RegimeStatus",
+    "Position",
+    "TradeRecord",
 ]

@@ -124,22 +124,20 @@ src/gex/
   - Propagates `slippage_penalty` and `effective_entry_price` across candidate option contracts.
 
 ### 3.4 Multi-Account In-Memory Cache Isolation
-- **Context**: [AGENTS.md](AGENTS.md) mandates strict account partitioning (`--account ACCOUNT_NUMBER`).
-- **Action Items**:
-  - Namespace in-memory cache dictionaries by account ID to guarantee zero state bleeding when multiple accounts are evaluated in a single session.
+- **Status**: ✅ **Implemented** in [src/gex_engine.py](src/gex_engine.py) via `clear_account_cache`.
+- **Details**:
+  - Enforces explicit account scoping and cache eviction across in-memory structures to guarantee zero state bleeding when multiple accounts are evaluated in a single session.
 
 ---
 
 ## 💾 Phase 4: Persistence, Analytics & Operational Automation (Long-term / Q3 2027)
 
 ### 4.1 Embedded Database Engine (SQLite / DuckDB)
-- **Context**: Flat JSON files (`data/ticker_analyses.json` >120 KB, `data/candidate_stocks.json` >57 KB, `data/closed_positions_*.json`) grow unboundedly and must be fully parsed on every CLI call.
-- **Solution**:
-  - Retain lightweight JSON for active session state (`workflow_state.json`, `regime.json`).
-  - Migrate closed trades, daily scanner outputs, and historical GEX levels to an embedded **SQLite** (or DuckDB) database:
-    - `trades`: Historical fills, hold duration, entry/exit GEX levels, slippage, realized P&L.
-    - `gex_snapshots`: Daily pTrans, nTrans, and GEX wall readings per underlier.
-  - Enable instant, complex queries for the `TradeJournalAnalyst` (win rate by sector, performance vs holding period, maximum adverse excursion / MAE).
+- **Status**: ✅ **Implemented** in [src/gex/storage/db.py](src/gex/storage/db.py) and integrated into `gex sync-pnl`, `gex close-position`, `gex close-stock`, and `gex journal --db --sync-db`.
+- **Details**:
+  - Embedded SQLite database engine (`data/trades.db`) featuring ACID transactions, indexes (`trades`, `gex_snapshots`), and analytical aggregations (`query_trade_metrics`).
+  - Automatically synchronizes closed option and stock positions, computing win rates, profit factor, average hold times, and P&L.
+  - Supports persistence of daily underlier GEX profile snapshots (`save_gex_snapshot`, `query_latest_gex_snapshot`).
 
 ### 4.2 Automated Notification Webhooks
 - **Status**: ✅ **Implemented** via `dispatch_system_alert` in [src/gex_engine.py](src/gex_engine.py).
@@ -148,24 +146,51 @@ src/gex/
   - Supports native macOS desktop notifications (`GEX_DESKTOP_NOTIFICATIONS=true`).
 
 ### 4.3 Headless Pre-Market Audit Mode
-- **Action Items**:
-  - Provide a standalone CLI mode (`gex audit-all`) suitable for cron or scheduled tasks before the market open.
-  - Automatically fetch futures (/ES, /NQ), evaluate broad regime breadth, sync portfolio stops, and output an executive markdown morning brief.
+- **Status**: ✅ **Implemented** via `gex audit-all` in [src/gex_engine.py](src/gex_engine.py).
+- **Details**:
+  - Standalone pre-market execution CLI mode suitable for cron schedules and pre-market workflows.
+  - Automatically discovers all active account position caches, evaluates Stops 1–5, audits regime breadth and Bull:Bear ratios, outputs an executive markdown morning brief (or JSON via `--json`), and triggers alerts via `--alert`.
+
+---
+
+## 🧮 Phase 1: Port Advanced Transition Math to wip
+
+### 1.1 Port Zero-Crossing Linear Interpolation
+- **Context & Target File**: In [src/gex/quant/greeks.py](src/gex/quant/greeks.py) (re-exported in [src/gex_engine.py](src/gex_engine.py)), implement `find_flip_strikes(gex_by_strike)` matching the TypeScript implementation in `gamma-exposure.ts`.
+- **Mathematical Specification**:
+  Interpolate continuous zero-crossing strikes:
+  $$K^* = K_{i-1} + (K_i - K_{i-1}) \cdot \frac{|netGEX_{i-1}|}{|netGEX_{i-1}| + |netGEX_i|}$$
+
+### 1.2 Update Transition Point Selection in `src/gex_engine.py`
+- **Context & Target File**: In [src/gex_engine.py](src/gex_engine.py), replace the raw Put OI `derived_ptrans` / `derived_ntrans` block with zero-crossing selection:
+  $$pTrans = \min(K^* \ge Spot)$$
+  $$nTrans = \max(K^* < Spot)$$
+- **Guards & Fallbacks**:
+  - Apply fallback to COTMP / Put Wall when no zero-crossing exists.
+  - Enforce the Rule 4 invariant: $pTrans > nTrans$.
+
+### 1.3 Add Unit Tests in wip
+- **Context & Target Directory**: In [tests/](tests/) (e.g. [tests/test_quant_roadmap.py](tests/test_quant_roadmap.py)).
+- **Goal**: Add test cases verifying $pTrans$ and $nTrans$ parity with `robinhood-options-mobile`'s test fixtures.
 
 ---
 
 ## 📊 Summary Roadmap Matrix
 
-| Milestone | Phase | Priority | Primary Impact | Dependencies |
-| :--- | :---: | :---: | :--- | :--- |
-| **Multi-Harness Synchronization** | Phase 1 | 🔴 High | Keeps .github/ and .agents/ prompts/agents in sync across harnesses | None |
-| **Packaging & CI/CD** | Phase 1 | 🔴 High | Automated linting, test execution, regression guards | None |
-| **Modular Package Refactoring** | Phase 2 | 🟡 Medium | High maintainability, clean domain separation | Phase 1 |
-| **Pydantic / Typed Domain Models** | Phase 2 | 🟡 Medium | Robust data integrity, compile-time/runtime validation | Phase 2 |
-| **Black-Scholes Gamma Fallback** | Phase 3 | 🟡 Medium | Resilient GEX derivation on illiquid option chains | Phase 2 |
-| **DTE-Weighted GEX Modeling** | Phase 3 | 🟢 Low | More realistic dealer gamma pressure assessment | Phase 3 |
-| **SQLite Trade Journal Persistence** | Phase 4 | 🟢 Low | Scalable historical queries, advanced journal metrics | Phase 2 |
-| **Notification Webhooks** | Phase 4 | 🟢 Low | Proactive alerts for stop breaches & regime changes | Phase 2 |
+| Milestone | Phase | Priority | Status | Primary Impact | Dependencies |
+| :--- | :---: | :---: | :---: | :--- | :--- |
+| **Multi-Harness Synchronization** | Phase 1 (Foundations) | 🔴 High | ✅ Completed | Automated bidirectional sync between .github/ and .agents/ | None |
+| **Packaging & CI/CD** | Phase 1 (Foundations) | 🔴 High | ✅ Completed | Automated linting, test execution, regression guards (136 tests) | None |
+| **Modular Package Refactoring** | Phase 2 (Modularization) | 🟡 Medium | ✅ Completed | Clean domain separation (`src/gex/core`, `quant`, `risk`, `storage`) | Phase 1 |
+| **Pydantic / Typed Domain Models** | Phase 2 (Modularization) | 🟡 Medium | ✅ Completed | Strict dataclasses with slots for OptionQuote, GexProfile, etc. | Phase 2 |
+| **Black-Scholes Gamma Fallback** | Phase 3 (Quant Modeling) | 🟡 Medium | ✅ Completed | Pure Python analytical Gamma fallback for illiquid chains | Phase 2 |
+| **DTE-Weighted GEX Modeling** | Phase 3 (Quant Modeling) | 🟢 Low | ✅ Completed | Real-time effective dealer delta hedging pressure | Phase 3 |
+| **Slippage & Spread Friction** | Phase 3 (Quant Modeling) | 🟢 Low | ✅ Completed | 35% bid-ask spread penalty modeling in option contract selection | Phase 2 |
+| **Multi-Account Cache Isolation** | Phase 3 (Quant Modeling) | 🟢 Low | ✅ Completed | Zero state bleeding with account-scoped cache invalidation | Phase 2 |
+| **SQLite Trade Journal Persistence** | Phase 4 (Persistence) | 🟢 Low | ✅ Completed | Embedded ACID database for historical trades and GEX snapshots | Phase 2 |
+| **Notification Webhooks** | Phase 4 (Persistence) | 🟢 Low | ✅ Completed | Webhooks (Slack/Discord/Telegram) and macOS notifications | Phase 2 |
+| **Headless Pre-Market Audit Mode** | Phase 4 (Persistence) | 🟢 Low | ✅ Completed | Automated `audit-all` CLI mode with executive morning markdown | Phase 4 |
+| **Port Advanced Transition Math** | Phase 1 (Transition Math) | 🔴 High | ⏳ Pending | Zero-crossing linear interpolation for exact pTrans / nTrans derivation | Phase 3 |
 
 ---
 

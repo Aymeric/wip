@@ -31,7 +31,13 @@ from datetime import datetime, date, timezone
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Sequence, Tuple, Any, Iterable, Union
 
+# Ensure repository root is on sys.path for direct CLI invocations
+_REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if _REPO_ROOT not in sys.path:
+    sys.path.insert(0, _REPO_ROOT)
+
 from src.gex.quant.greeks import calculate_black_scholes_gamma
+
 from src.gex.quant.indicators import (
     calculate_rsi,
     calculate_ema,
@@ -42,6 +48,15 @@ from src.gex.quant.indicators import (
     calculate_annualized_vol,
 )
 from src.gex.risk.stops import compute_exit_rule_state
+from src.gex.storage.db import (
+    init_db,
+    upsert_trade,
+    query_trade_metrics,
+    sync_closed_positions_to_db,
+    save_gex_snapshot,
+    query_latest_gex_snapshot,
+)
+
 
 @dataclass
 class RegimeGates:
@@ -209,6 +224,7 @@ class OptionSentiment:
 
 # Resolve cache paths from the repository, so CLI behavior is independent of the caller's cwd.
 REPOSITORY_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DATA_DIR = os.path.join(REPOSITORY_ROOT, "data")
 REGIME_FILE = os.path.join(REPOSITORY_ROOT, "data/regime.json")
 ANALYSES_FILE = os.path.join(REPOSITORY_ROOT, "data/ticker_analyses.json")
 OPTIONS_FILE = os.path.join(REPOSITORY_ROOT, "data/active_positions.json")
@@ -217,7 +233,9 @@ PERFORMANCE_FILE = os.path.join(REPOSITORY_ROOT, "data/performance.json")
 DOWNLOADS_DIR = os.path.join(REPOSITORY_ROOT, "data/downloads")
 SENTIMENT_FILE = os.path.join(REPOSITORY_ROOT, "data/reddit_sentiment.json")
 WORKFLOW_STATE_FILE = os.path.join(REPOSITORY_ROOT, "data/workflow_state.json")
+DEFAULT_DB_FILE = os.path.join(REPOSITORY_ROOT, "data/trades.db")
 DEFAULT_SIZING_THRESHOLD = 10000.0 # Portfolio Net Liq threshold for strict percentage sizing
+
 
 
 def validate_safe_path(filepath: str, allowed_roots: Optional[List[str]] = None) -> str:
@@ -511,6 +529,24 @@ def _clear_cache_for_write():
     _JSON_FILE_CACHE.clear()
     _LAST_MTIME_CHECK_TIME.clear()
     _CACHED_DIR_MTIME_KEY.clear()
+
+
+def clear_account_cache(account: str = "") -> int:
+    """Evicts account-scoped files from in-memory cache to guarantee zero cross-account state bleeding.
+
+    Returns the number of evicted cache entries.
+    """
+    if not account:
+        count = len(_JSON_FILE_CACHE)
+        _JSON_FILE_CACHE.clear()
+        return count
+
+    sanitized = sanitize_account(account)
+    keys_to_remove = [k for k in _JSON_FILE_CACHE.keys() if sanitized in k[0]]
+    for k in keys_to_remove:
+        _JSON_FILE_CACHE.pop(k, None)
+    return len(keys_to_remove)
+
 
 
 def save_json(filepath: str, data: Any) -> None:
@@ -4115,6 +4151,260 @@ def cmd_portfolio(args):
         print_color("=" * 95 + "\n", "31", bold=True)
 
 
+def cmd_audit_all(args):
+    """Headless pre-market audit mode. Audits active positions across accounts, evaluates Stops 1-5, and dispatches alerts."""
+    raw_account = getattr(args, "account", "")
+    target_account = sanitize_account(raw_account) if raw_account else ""
+    is_json = getattr(args, "json", False)
+    should_alert = getattr(args, "alert", False)
+    net_liq = getattr(args, "net_liq", None)
+    if net_liq is None:
+        net_liq = 50000.0
+
+    # 1. Discover target account active position files
+    files_to_audit = []
+    if target_account:
+        pos_file = account_positions_file(target_account)
+        files_to_audit.append((target_account, pos_file))
+    else:
+        # Scan data/ directory for active_positions*.json
+        if os.path.exists(DATA_DIR):
+            for fname in sorted(os.listdir(DATA_DIR)):
+                if fname.startswith("active_positions") and fname.endswith(".json"):
+                    fpath = os.path.join(DATA_DIR, fname)
+                    m = re.match(r"active_positions_([A-Za-z0-9_-]+)\.json", fname)
+                    acc = m.group(1) if m else "default"
+                    files_to_audit.append((acc, fpath))
+        if not files_to_audit:
+            files_to_audit.append(("default", OPTIONS_FILE))
+
+    # 2. Market Regime & Macro
+    regime_data = load_json(REGIME_FILE, {})
+    regime_auth = regime_data.get("system_authorization", "UNKNOWN")
+    bb_ratio = float(regime_data.get("bull_bear_ratio", 0.0) or 0.0)
+    vix_delta = regime_data.get("vix_delta_gate", "UNKNOWN")
+
+    # 3. Load Analyses
+    analyses = load_json(ANALYSES_FILE, {})
+
+    # 4. Audit accounts
+    accounts_audit = {}
+    all_pending_exits = []
+    total_positions_count = 0
+    total_portfolio_cost_basis = 0.0
+    total_portfolio_current_value = 0.0
+
+    for acc, pos_file in files_to_audit:
+        pos_data = load_json(pos_file, {"options_positions": {}, "stocks_positions": {}})
+        options = pos_data.get("options_positions", {})
+        stocks = pos_data.get("stocks_positions", {})
+
+        opt_items = []
+        stock_items = []
+
+        # Audit Options
+        for opt_id, details in options.items():
+            ticker = details.get("Underlier", "")
+            strike = details.get("Strike")
+            exp = details.get("Expiration")
+            opt_type = details.get("Type", "call").lower()
+            purchase_px = float(details.get("Purchase Premium", 1.0) or 1.0)
+            mark_px = float(details.get("Mark Price", purchase_px) or purchase_px)
+            cost_basis = details.get("Asset Cost Basis") or (purchase_px * 100.0)
+
+            contracts = 1.0
+            if "Quantity" in details:
+                try:
+                    contracts = float(details["Quantity"])
+                except (ValueError, TypeError):
+                    contracts = 1.0
+            elif purchase_px > 0:
+                contracts = round(cost_basis / (purchase_px * 100.0), 2)
+                if contracts <= 0:
+                    contracts = 1.0
+
+            cur_val = mark_px * 100.0 * contracts
+            pnl_dlr = (mark_px - purchase_px) * 100.0 * contracts
+            pnl_pct = ((mark_px - purchase_px) / purchase_px) * 100.0 if purchase_px else 0.0
+
+            levels = analyses.get(ticker, {})
+            ptrans = levels.get("pTrans")
+            ntrans = levels.get("nTrans")
+            gex_t1 = levels.get("+GEX")
+            spot = levels.get("Spot") or details.get("Underlier Spot") or (float(strike) if strike else 100.0)
+
+            entry_date = details.get("Entry Date")
+            days_held = 1
+            if entry_date:
+                try:
+                    days_held = max((datetime.today() - datetime.strptime(entry_date, "%Y-%m-%d")).days + 1, 1)
+                except ValueError:
+                    pass
+
+            dte = None
+            if exp:
+                try:
+                    dte = (datetime.strptime(exp, "%Y-%m-%d") - datetime.today()).days
+                except ValueError:
+                    pass
+
+            stalling = details.get("Stalling Days", 0)
+            target_mode = details.get("Target Mode", "T1")
+            t2_target = details.get("T2 Target")
+            if t2_target is not None:
+                try:
+                    t2_target = float(t2_target)
+                except (ValueError, TypeError):
+                    t2_target = None
+
+            rule_state, _, _, _, _ = compute_exit_rule_state(
+                spot, purchase_px, mark_px, ptrans, ntrans, gex_t1, days_held, stalling, dte,
+                target_mode=target_mode, t2_target=t2_target
+            )
+
+            is_exit = any(k in rule_state for k in ("STOP", "EXIT", "BREACH", "GATE_FAIL"))
+            item_summary = {
+                "account": acc,
+                "asset_cls": "Option",
+                "ticker": ticker,
+                "id": opt_id,
+                "strike": strike,
+                "type": opt_type,
+                "expiration": exp,
+                "dte": dte,
+                "spot": spot,
+                "cost_basis": cost_basis,
+                "current_val": cur_val,
+                "pnl_dollar": pnl_dlr,
+                "pnl_pct": pnl_pct,
+                "rule_state": rule_state,
+                "is_pending_exit": is_exit,
+            }
+            opt_items.append(item_summary)
+            if is_exit:
+                all_pending_exits.append(item_summary)
+            total_positions_count += 1
+            total_portfolio_cost_basis += cost_basis
+            total_portfolio_current_value += cur_val
+
+        # Audit Stocks
+        for ticker, details in stocks.items():
+            shares = float(details.get("Shares", 0.0) or 0.0)
+            avg_px = float(details.get("Average Buy Price", 0.0) or 0.0)
+            cur_px = float(details.get("Current Price", avg_px) or avg_px)
+            cost_basis = shares * avg_px
+            cur_val = shares * cur_px
+            pnl_dlr = cur_val - cost_basis
+            pnl_pct = (pnl_dlr / cost_basis) * 100.0 if cost_basis > 0 else 0.0
+
+            levels = analyses.get(ticker, {})
+            ntrans = levels.get("nTrans")
+            rule_state = "HOLD"
+            if ntrans is not None and cur_px < ntrans:
+                rule_state = "STOP 1 (BREACH)"
+            if pnl_pct <= -50.0:
+                rule_state = "STOP 5 (CATASTROPHIC)"
+
+            is_exit = any(k in rule_state for k in ("STOP", "EXIT", "BREACH"))
+            item_summary = {
+                "account": acc,
+                "asset_cls": "Stock",
+                "ticker": ticker,
+                "shares": shares,
+                "spot": cur_px,
+                "cost_basis": cost_basis,
+                "current_val": cur_val,
+                "pnl_dollar": pnl_dlr,
+                "pnl_pct": pnl_pct,
+                "rule_state": rule_state,
+                "is_pending_exit": is_exit,
+            }
+            stock_items.append(item_summary)
+            if is_exit:
+                all_pending_exits.append(item_summary)
+            total_positions_count += 1
+            total_portfolio_cost_basis += cost_basis
+            total_portfolio_current_value += cur_val
+
+        accounts_audit[acc] = {
+            "options": opt_items,
+            "stocks": stock_items,
+            "total_account_positions": len(opt_items) + len(stock_items),
+        }
+
+    total_unrealized_pnl = total_portfolio_current_value - total_portfolio_cost_basis
+    total_unrealized_pct = (total_unrealized_pnl / total_portfolio_cost_basis * 100.0) if total_portfolio_cost_basis > 0 else 0.0
+
+    # 5. Dispatch Alert if requested
+    alert_dispatched = False
+    if should_alert and all_pending_exits:
+        alert_body = f"GEX Risk Stop Alert: {len(all_pending_exits)} exit(s) triggered across {len(accounts_audit)} account(s)!"
+        dispatch_system_alert(alert_body, title="GEX Pre-Market Risk Audit")
+        alert_dispatched = True
+
+    # 6. Output format
+    if is_json:
+        result = {
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "regime": {
+                "authorization": regime_auth,
+                "bull_bear_ratio": bb_ratio,
+                "vix_delta_gate": vix_delta,
+            },
+            "summary": {
+                "accounts_count": len(accounts_audit),
+                "total_positions": total_positions_count,
+                "total_cost_basis": round(total_portfolio_cost_basis, 2),
+                "total_current_value": round(total_portfolio_current_value, 2),
+                "total_unrealized_pnl": round(total_unrealized_pnl, 2),
+                "total_unrealized_pct": round(total_unrealized_pct, 2),
+                "pending_exits_count": len(all_pending_exits),
+                "alert_dispatched": alert_dispatched,
+            },
+            "pending_exits": all_pending_exits,
+            "accounts": accounts_audit,
+        }
+        print(json.dumps(result, indent=2, sort_keys=True))
+        return
+
+    # Render Markdown
+    now_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    auth_color = "32" if regime_auth in ("AUTHORIZED", "GO") else "31"
+    print(format_color(f"# 🌅 Pre-Market Portfolio & GEX Risk Audit Brief ({now_str})", "36", bold=True))
+    print(f"\n**Market Regime Authorization:** " + format_color(f"{regime_auth}", auth_color, bold=True)
+          + f" (Bull/Bear: {bb_ratio:.2f}, VIX Delta: {vix_delta})")
+    print(f"**Total Tracked Accounts:** {len(accounts_audit)} | **Open Positions:** {total_positions_count}")
+    print(f"**Portfolio Valuation:** ${total_portfolio_current_value:,.2f} | **Unrealized P&L:** ${total_unrealized_pnl:+,.2f} ({total_unrealized_pct:+.2f}%)\n")
+
+    print(format_color("## ⚠️ Action Items & Pending Exits", "33", bold=True))
+    if all_pending_exits:
+        for exit_item in all_pending_exits:
+            acc_str = f"[{exit_item['account']}]" if exit_item['account'] != 'default' else ""
+            print(f"  • {acc_str} " + format_color(f"{exit_item['ticker']} {exit_item['asset_cls']}", "35", bold=True)
+                  + f": " + format_color(f"{exit_item['rule_state']}", "31", bold=True)
+                  + f" (Spot: ${exit_item['spot']:.2f}, P&L: ${exit_item['pnl_dollar']:+,.2f} / {exit_item['pnl_pct']:+.1f}%)")
+    else:
+        print(format_color("  ✅ All positions within normal risk tolerance. No exit stops triggered.", "32", bold=True))
+
+    print("\n" + format_color("## 📊 Position Breakdown by Account", "36", bold=True))
+    for acc, acc_data in accounts_audit.items():
+        acc_label = f"Account {acc}" if acc != "default" else "Default Account"
+        print(f"\n### {acc_label} ({acc_data['total_account_positions']} positions)")
+        if not acc_data["options"] and not acc_data["stocks"]:
+            print("  💤 No open positions.")
+            continue
+        print("  " + "-" * 90)
+        print(f"  {'Ticker':<6} | {'Class':<7} | {'Spot':<8} | {'Cost Basis':<11} | {'Cur Value':<11} | {'P&L ($)':<12} | {'State'}")
+        print("  " + "-" * 90)
+        for p in acc_data["options"] + acc_data["stocks"]:
+            pnl_c = "32" if p["pnl_dollar"] >= 0 else "31"
+            pnl_s = format_color(f"${p['pnl_dollar']:+,.2f}", pnl_c)
+            state_c = "31" if p["is_pending_exit"] else "32" if "PROFIT" in p["rule_state"] or "T1" in p["rule_state"] else "37"
+            state_s = format_color(f"{p['rule_state']}", state_c, bold=p["is_pending_exit"])
+            print(f"  {p['ticker']:<6} | {p['asset_cls']:<7} | ${p['spot']:<7.2f} | ${p['cost_basis']:<10.2f} | ${p['current_val']:<10.2f} | {pnl_s:<21} | {state_s}")
+        print("  " + "-" * 90)
+
+
 def cmd_add_pos(args):
     """Add new options position manually."""
     options_file = account_positions_file(getattr(args, "account", ""))
@@ -4337,7 +4627,14 @@ def cmd_close_stock_pos(args):
     options["stocks_positions"] = stocks
     save_json(options_file, options)
     save_json(closed_file, closed_data)
+    try:
+        synced = sync_closed_positions_to_db(closed_data, account=getattr(args, "account", ""))
+        if synced:
+            print(f"Synchronized {synced} closed trade(s) to SQLite database.")
+    except Exception as e:
+        print(f"Notice: SQLite trade sync skipped: {e}", file=sys.stderr)
     print(f"Archived stock position for {ticker} to closed_stocks in {closed_file}.")
+
 
 
 def cmd_update_opt(args):
@@ -4444,7 +4741,14 @@ def cmd_close_pos(args):
     options["options_positions"] = positions
     save_json(options_file, options)
     save_json(closed_file, closed_data)
+    try:
+        synced = sync_closed_positions_to_db(closed_data, account=getattr(args, "account", ""))
+        if synced:
+            print(f"Synchronized {synced} closed trade(s) to SQLite database.")
+    except Exception as e:
+        print(f"Notice: SQLite trade sync skipped: {e}", file=sys.stderr)
     print(f"Archived {len(matches)} position(s) to closed_options in {closed_file}.")
+
 
 
 def cmd_sync_pnl(args):
@@ -4632,8 +4936,15 @@ def cmd_sync_pnl(args):
     options["options_positions"] = positions
     save_json(options_file, options)
     save_json(closed_file, closed_data)
+    try:
+        synced = sync_closed_positions_to_db(closed_data, account=account)
+        if synced:
+            print(f"Synchronized {synced} closed trade(s) to SQLite database.")
+    except Exception as e:
+        print(f"Notice: SQLite trade sync skipped: {e}", file=sys.stderr)
 
     print(f"Sync complete. Newly closed: {newly_closed_stocks} stocks, {newly_closed_options} options.")
+
     print(f"Closed positions saved to {closed_file}. Active positions saved to {options_file}.")
 
 
@@ -6220,11 +6531,24 @@ def calculate_trade_journal(closed_data: Dict[str, Any], performance_data: Optio
 def cmd_journal(args):
     """Display machine-readable closed-trade performance metrics."""
     account = getattr(args, "account", "")
+    use_db = getattr(args, "db", False)
+    sync_db = getattr(args, "sync_db", False)
     closed_file = account_closed_positions_file(account)
     closed_data = load_json(closed_file, {"closed_options": [], "closed_stocks": []})
+
+    if sync_db:
+        synced = sync_closed_positions_to_db(closed_data, account=account)
+        print(f"Synchronized {synced} trade(s) to SQLite database.", file=sys.stderr)
+
+    if use_db:
+        db_metrics = query_trade_metrics(account=account)
+        print(json.dumps(db_metrics, indent=2, sort_keys=True))
+        return
+
     performance_file = account_performance_file(account) if account else PERFORMANCE_FILE
     performance_data = load_json(performance_file, {})
     print(json.dumps(calculate_trade_journal(closed_data, performance_data), indent=2, sort_keys=True))
+
 
 
 def cmd_payoff(args):
@@ -6645,6 +6969,16 @@ def main():
     # journal subcommand
     p_journal = subparsers.add_parser("journal", help="Calculates machine-readable closed-trade performance and rule attribution metrics.")
     p_journal.add_argument("--account", type=str, default="", help="Account number used to scope position and performance caches")
+    p_journal.add_argument("--db", action="store_true", help="Output SQLite database performance metrics instead of JSON cache metrics")
+    p_journal.add_argument("--sync-db", action="store_true", help="Synchronize all closed positions into the SQLite database first")
+
+    # audit-all subcommand (Phase 4.3 Pre-Market Execution & Morning Audit)
+    p_audit_all = subparsers.add_parser("audit-all", help="Headless pre-market audit across accounts with regime checks, stop evaluation, and optional alerting.")
+    p_audit_all.add_argument("--account", type=str, default="", help="Optional specific account number to audit (audits all accounts if omitted)")
+    p_audit_all.add_argument("--net-liq", type=float, default=None, help="Estimated Net Liquidation Value for portfolio sizing evaluation")
+    p_audit_all.add_argument("--json", action="store_true", help="Output machine-readable JSON summary instead of markdown")
+    p_audit_all.add_argument("--alert", action="store_true", help="Dispatch system notification webhooks/desktop alerts if any stop breaches are detected")
+
 
     # workflow subcommand
     p_workflow = subparsers.add_parser("workflow", help="Aggregates all JSON state into a high-level system summary.")
@@ -6734,7 +7068,10 @@ def main():
         cmd_closed(args)
     elif args.command == "journal":
         cmd_journal(args)
+    elif args.command == "audit-all":
+        cmd_audit_all(args)
     elif args.command == "payoff":
+
         cmd_payoff(args)
     elif args.command == "simulate":
         cmd_simulate(args)

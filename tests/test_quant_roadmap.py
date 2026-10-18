@@ -155,7 +155,139 @@ class TestRoadmapImplementations(unittest.TestCase):
         self.assertIsNotNone(atr)
         self.assertAlmostEqual(atr, 4.0, places=1)
 
+    def test_sqlite_sync_and_queries(self):
+        import tempfile
+        from src.gex.storage.db import (
+            init_db,
+            sync_closed_positions_to_db,
+            query_trade_metrics,
+            save_gex_snapshot,
+            query_latest_gex_snapshot,
+        )
+
+        with tempfile.NamedTemporaryFile(suffix=".db") as tmp:
+            test_db = tmp.name
+
+            sample_closed = {
+                "closed_options": [
+                    {
+                        "Option ID": "opt_win_1",
+                        "Underlier": "NVDA",
+                        "Strike": 120.0,
+                        "Expiration": "2026-11-20",
+                        "Entry Date": "2026-10-01",
+                        "Close Date": "2026-10-15",
+                        "Purchase Premium": 4.5,
+                        "Close Premium": 7.0,
+                        "Realized P&L ($)": 250.0,
+                        "Realized P&L (%)": 55.56,
+                        "Quantity": 1.0,
+                        "Close Reason": "Target Hit",
+                        "Target Mode": "T1",
+                        "Account": "TEST_ACC",
+                    },
+                    {
+                        "Option ID": "opt_loss_1",
+                        "Underlier": "AAPL",
+                        "Strike": 220.0,
+                        "Expiration": "2026-11-20",
+                        "Entry Date": "2026-10-02",
+                        "Close Date": "2026-10-10",
+                        "Purchase Premium": 3.0,
+                        "Close Premium": 1.5,
+                        "Realized P&L ($)": -150.0,
+                        "Realized P&L (%)": -50.0,
+                        "Quantity": 1.0,
+                        "Close Reason": "Stop Hit",
+                        "Target Mode": "T1",
+                        "Account": "TEST_ACC",
+                    },
+                ],
+                "closed_stocks": [
+                    {
+                        "Ticker": "MSFT",
+                        "Trade ID": "stk_win_1",
+                        "Shares": 10.0,
+                        "Average Buy Price": 400.0,
+                        "Close Price": 420.0,
+                        "Entry Date": "2026-10-01",
+                        "Close Date": "2026-10-14",
+                        "Realized P&L ($)": 200.0,
+                        "Realized P&L (%)": 5.0,
+                        "Account": "TEST_ACC",
+                    }
+                ],
+            }
+
+            synced = sync_closed_positions_to_db(sample_closed, account="TEST_ACC", db_path=test_db)
+            self.assertEqual(synced, 3)
+
+            metrics = query_trade_metrics(account="TEST_ACC", db_path=test_db)
+            self.assertEqual(metrics["total_trades"], 3)
+            self.assertEqual(metrics["wins"], 2)
+            self.assertEqual(metrics["losses"], 1)
+            self.assertAlmostEqual(metrics["win_rate"], 66.67, places=1)
+            self.assertEqual(metrics["total_realized_pnl"], 300.0)
+            self.assertGreater(metrics["profit_factor"], 1.0)
+            self.assertGreater(metrics["avg_holding_days"], 0.0)
+
+            # Test GEX snapshot persistence
+            save_gex_snapshot(
+                symbol="NVDA",
+                session_date="2026-10-18",
+                spot=125.50,
+                ptrans=120.0,
+                ntrans=115.0,
+                call_wall=130.0,
+                put_wall=110.0,
+                net_gex=1500000.0,
+                db_path=test_db,
+            )
+            snapshot = query_latest_gex_snapshot("NVDA", db_path=test_db)
+            self.assertIsNotNone(snapshot)
+            self.assertEqual(snapshot["symbol"], "NVDA")
+            self.assertEqual(snapshot["spot"], 125.50)
+            self.assertEqual(snapshot["call_wall"], 130.0)
+
+    def test_multi_account_cache_isolation(self):
+        from src.gex_engine import _JSON_FILE_CACHE, clear_account_cache
+
+        _JSON_FILE_CACHE[("data/active_positions_ACC1.json", 100.0)] = {"options_positions": {}}
+        _JSON_FILE_CACHE[("data/active_positions_ACC2.json", 100.0)] = {"options_positions": {}}
+
+        evicted = clear_account_cache("ACC1")
+        self.assertEqual(evicted, 1)
+        self.assertNotIn(("data/active_positions_ACC1.json", 100.0), _JSON_FILE_CACHE)
+        self.assertIn(("data/active_positions_ACC2.json", 100.0), _JSON_FILE_CACHE)
+
+        # Clear remaining
+        clear_account_cache()
+        self.assertEqual(len(_JSON_FILE_CACHE), 0)
+
+    def test_cmd_audit_all_execution(self):
+        import io
+        import json
+        from unittest.mock import patch
+        from src.gex_engine import cmd_audit_all
+
+        class MockArgs:
+            account = ""
+            json = True
+            alert = False
+            net_liq = 50000.0
+
+        with patch("sys.stdout", new=io.StringIO()) as fake_out:
+            cmd_audit_all(MockArgs())
+            output = fake_out.getvalue()
+            data = json.loads(output)
+            self.assertIn("summary", data)
+            self.assertIn("regime", data)
+            self.assertIn("pending_exits", data)
+            self.assertIn("accounts", data)
+            self.assertGreaterEqual(data["summary"]["total_positions"], 0)
+
 
 if __name__ == "__main__":
     unittest.main()
+
 

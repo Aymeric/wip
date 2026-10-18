@@ -95,3 +95,45 @@ class RegimeStatus:
     vix_delta_gate: str       # "PASS" or "FAIL"
     system_authorization: str  # e.g. "ALL TRACKS OK", "TRACK 1 OK", "DEFENSIVE"
     updated_at: Optional[str] = None
+
+
+@dataclass(slots=True)
+class Position:
+    """Represents an active or tracked holding (equity or single-leg option)."""
+    symbol: str
+    asset_type: str  # "option" or "stock"
+    quantity: float
+    avg_buy_price: float
+    current_spot: float
+    mark_price: float
+    cost_basis: float
+    market_value: float
+    unrealized_pnl: float
+    unrealized_pnl_pct: float
+    exit_rule_state: str = "HOLD"
+    proposed_action: str = "No Action"
+    strike: Optional[float] = None
+    expiration_date: Optional[str] = None
+    dte: Optional[int] = None
+    option_type: Optional[str] = None  # "call" or "put"
+    account: Optional[str] = None
+
+
+@dataclass(slots=True)
+class TradeRecord:
+    """Represents a closed transaction in the trade journal."""
+    trade_id: str
+    symbol: str
+    asset_type: str  # "option" or "stock"
+    entry_price: float
+    exit_price: float
+    quantity: float
+    realized_pnl: float
+    realized_pnl_pct: float
+    opened_at: Optional[str] = None
+    closed_at: Optional[str] = None
+    holding_days: int = 0
+    exit_reason: str = "MANUAL"
+    target_mode: str = "T1"
+    account: Optional[str] = None
+
