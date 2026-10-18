@@ -818,6 +818,7 @@ class TestGEXEngine(unittest.TestCase):
     def test_build_system_snapshot_aggregates_cached_state(self):
         from unittest.mock import patch
         import tempfile
+        import os
         import gex_engine
 
         cached_state = {
@@ -853,7 +854,45 @@ class TestGEXEngine(unittest.TestCase):
             output_path = tmp.name
         try:
             with patch("gex_engine.build_system_snapshot", return_value=snapshot):
-                gex_engine.cmd_snapshot(type("Args", (), {"output": output_path})())
+                gex_engine.cmd_snapshot(type("Args", (), {"output": output_path, "account": ""})())
+            self.assertEqual(gex_engine.load_json(output_path, {}), snapshot)
+        finally:
+            if os.path.exists(output_path):
+                os.remove(output_path)
+
+    def test_build_system_snapshot_account_scoped(self):
+        from unittest.mock import patch
+        import tempfile
+        import os
+        import gex_engine
+
+        acc_positions_file = gex_engine.account_positions_file("ACC123")
+        cached_state = {
+            acc_positions_file: {
+                "options_positions": {"opt-acc": {"Underlier": "TSLA"}},
+                "stocks_positions": {},
+            },
+        }
+
+        def load_cached(path, default):
+            return cached_state.get(path, default)
+
+        with patch("gex_engine.load_json", side_effect=load_cached), \
+             patch("gex_engine.get_regime_status", return_value={"system_authorization": "ALL TRACKS OK"}), \
+             patch("gex_engine.get_performance_status") as mock_get_perf:
+            mock_get_perf.return_value = {"drawdown_gate_status": "PASS", "monthly_pnl_dlr": 500.0}
+            snapshot = gex_engine.build_system_snapshot("ACC123")
+
+        mock_get_perf.assert_called_once_with("ACC123")
+        self.assertEqual(snapshot["portfolio"]["option_count"], 1)
+        self.assertEqual(snapshot["portfolio"]["options_positions"], {"opt-acc": {"Underlier": "TSLA"}})
+
+        with tempfile.NamedTemporaryFile(suffix=".json", delete=False) as tmp:
+            output_path = tmp.name
+        try:
+            with patch("gex_engine.build_system_snapshot", return_value=snapshot) as mock_snapshot:
+                gex_engine.cmd_snapshot(type("Args", (), {"output": output_path, "account": "ACC123"})())
+                mock_snapshot.assert_called_once_with("ACC123")
             self.assertEqual(gex_engine.load_json(output_path, {}), snapshot)
         finally:
             if os.path.exists(output_path):

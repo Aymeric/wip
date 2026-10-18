@@ -943,9 +943,10 @@ def cmd_workflow(args):
     print(f"\n{format_color('--- END STATUS ---', '36')}\n")
 
 
-def build_system_snapshot() -> Dict[str, Any]:
+def build_system_snapshot(account: str = "") -> Dict[str, Any]:
     """Builds a machine-readable snapshot of the current cached system state."""
-    positions = load_json(OPTIONS_FILE, {"options_positions": {}, "stocks_positions": {}})
+    positions_file = account_positions_file(account)
+    positions = load_json(positions_file, {"options_positions": {}, "stocks_positions": {}})
     candidates = load_json(CANDIDATES_FILE, {"candidates": []})
     analyses = load_json(ANALYSES_FILE, {})
     sentiment = load_json(SENTIMENT_FILE, {})
@@ -972,7 +973,7 @@ def build_system_snapshot() -> Dict[str, Any]:
     return {
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "regime": get_regime_status(),
-        "performance": get_performance_status(),
+        "performance": get_performance_status(account),
         "portfolio": {
             "option_count": len(option_positions) if isinstance(option_positions, dict) else 0,
             "stock_count": len(stock_positions) if isinstance(stock_positions, dict) else 0,
@@ -995,7 +996,8 @@ def build_system_snapshot() -> Dict[str, Any]:
 
 def cmd_snapshot(args):
     """Exports the current cached system state as JSON for automation."""
-    snapshot = build_system_snapshot()
+    account = getattr(args, "account", "")
+    snapshot = build_system_snapshot(account)
     output_path = getattr(args, "output", None)
     if output_path:
         save_json(output_path, snapshot)
