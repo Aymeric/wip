@@ -2051,6 +2051,11 @@ def find_latest_historical_ohlc(symbol: str, file_list: Optional[Sequence[Union[
 def list_download_files(downloads_dir: Optional[str] = None) -> List[str]:
     """Recursively lists all .json file paths in downloads_dir (defaults to DOWNLOADS_DIR)."""
     target_dir = downloads_dir or DOWNLOADS_DIR
+    if downloads_dir:
+        try:
+            target_dir = validate_safe_path(downloads_dir)
+        except ValueError:
+            return []
     matching_files = []
     if os.path.exists(target_dir):
         for root, dirs, files in os.walk(target_dir):
@@ -4902,6 +4907,12 @@ def cmd_sync_positions(args):
     raw_account = getattr(args, "account", "")
     account = sanitize_account(raw_account) if raw_account else ""
     options_file = account_positions_file(account)
+    if base_dir:
+        try:
+            base_dir = validate_safe_path(base_dir)
+        except ValueError as e:
+            print(f"Error: Invalid base_dir: {e}", file=sys.stderr)
+            sys.exit(1)
     if not base_dir or not os.path.exists(base_dir):
         # Scan DOWNLOADS_DIR for latest directory with positions
         candidates = []
