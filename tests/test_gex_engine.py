@@ -645,9 +645,10 @@ class TestGEXEngine(unittest.TestCase):
         
         # Test GEX derivation at spot = 100.0
         gex_profile = derive_gex_profile(inst_data, quotes_data, spot=100.0)
-        self.assertEqual(gex_profile["derived_ptrans"], 95.0)
-        self.assertEqual(gex_profile["derived_ntrans"], 90.0)
+        self.assertEqual(gex_profile["derived_ptrans"], 100.0)
+        self.assertEqual(gex_profile["derived_ntrans"], 99.71)
         self.assertEqual(gex_profile["derived_gex"], 105.0)
+
         self.assertEqual(gex_profile["total_oi"], 1000 + 2000 + 3000 + 1500)
         self.assertFalse(gex_profile["rule7_derived"]) # Total OI > 10,000 is False (7500 <= 10000)
         
@@ -4859,10 +4860,11 @@ class TestCmdStatus(unittest.TestCase):
             analyses = gex_engine.load_json(analyses_path, {})
             self.assertIn("DERIV", analyses)
             record = analyses["DERIV"]
-            self.assertEqual(record["pTrans"], 95.0)
-            self.assertEqual(record["nTrans"], 90.0)
+            self.assertEqual(record["pTrans"], 100.71)
+            self.assertEqual(record["nTrans"], 95.0)
             self.assertEqual(record["+GEX"], 115.0)
-            self.assertTrue(record["Signal Status"].startswith("CONFIRMED"))
+
+            self.assertTrue(record["Signal Status"].startswith("PENDING"))
         finally:
             shutil.rmtree(temp_dir)
 

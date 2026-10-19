@@ -48,3 +48,124 @@ def calculate_black_scholes_gamma(
         return gamma if math.isfinite(gamma) else 0.0
     except (ValueError, OverflowError, ZeroDivisionError):
         return 0.0
+
+
+def find_flip_strikes(gex_by_strike: dict) -> list:
+    """
+    Finds continuous zero-crossing strikes where net GEX flips between positive and negative.
+    Matches the linear interpolation implementation in gamma-exposure.ts:
+
+        K* = K_{i-1} + (K_i - K_{i-1}) * (|netGEX_{i-1}| / (|netGEX_{i-1}| + |netGEX_i|))
+
+    Args:
+        gex_by_strike: Mapping from strike price (float) to net GEX value (float).
+
+    Returns:
+        List of continuous interpolated zero-crossing strike prices in ascending order.
+    """
+    if not gex_by_strike:
+        return []
+
+    # Sort strikes ascending
+    sorted_strikes = sorted(float(k) for k in gex_by_strike.keys())
+    if len(sorted_strikes) < 2:
+        return []
+
+    flip_strikes: list = []
+
+    for i in range(1, len(sorted_strikes)):
+        k_prev = sorted_strikes[i - 1]
+        k_curr = sorted_strikes[i]
+        g_prev = float(gex_by_strike[k_prev])
+        g_curr = float(gex_by_strike[k_curr])
+
+        # True zero-crossing between opposite signs
+        if (g_prev < 0.0 and g_curr > 0.0) or (g_prev > 0.0 and g_curr < 0.0):
+            denom = abs(g_prev) + abs(g_curr)
+            if denom > 0.0:
+                k_star = k_prev + (k_curr - k_prev) * (abs(g_prev) / denom)
+                if not flip_strikes or abs(flip_strikes[-1] - k_star) > 1e-6:
+                    flip_strikes.append(round(k_star, 4))
+        elif g_prev == 0.0 and g_curr != 0.0:
+            if i >= 2 and float(gex_by_strike[sorted_strikes[i - 2]]) * g_curr < 0:
+                if not flip_strikes or abs(flip_strikes[-1] - k_prev) > 1e-6:
+                    flip_strikes.append(round(k_prev, 4))
+
+    return sorted(flip_strikes)
+
+
+def select_transition_points(
+    flip_strikes: list,
+    spot: float,
+    cotmp: Optional[float] = None,
+    put_wall: Optional[float] = None,
+    secondary_put_wall: Optional[float] = None,
+) -> tuple:
+    """
+    Selects pTrans and nTrans transition levels based on zero-crossing flip strikes:
+        pTrans = min(K* >= Spot)
+        nTrans = max(K* < Spot)
+
+    Applies fallback to COTMP / Put Wall when no zero-crossing exists.
+    Enforces the Rule 4 invariant (pTrans > nTrans).
+
+    Args:
+        flip_strikes: Sequence of interpolated zero-crossing strike prices.
+        spot: Current underlying spot price.
+        cotmp: Weighted average put strike (COTMP).
+        put_wall: Strike with largest put GEX / open interest concentration.
+        secondary_put_wall: Strike below put_wall with secondary put concentration.
+
+    Returns:
+        tuple[float, float]: (pTrans, nTrans) where pTrans > nTrans strictly holds.
+    """
+    flips_above = [k for k in flip_strikes if k >= spot]
+    flips_below = [k for k in flip_strikes if k < spot]
+
+    ptrans: Optional[float] = min(flips_above) if flips_above else None
+    ntrans: Optional[float] = max(flips_below) if flips_below else None
+
+    default_put_wall = put_wall if put_wall is not None and put_wall > 0 else spot * 0.95
+    default_cotmp = cotmp if cotmp is not None and cotmp > 0 else default_put_wall
+    default_secondary_put = (
+        secondary_put_wall
+        if secondary_put_wall is not None and secondary_put_wall > 0
+        else default_put_wall * 0.95
+    )
+
+    # Fallback for pTrans if no flip >= spot
+    if ptrans is None:
+        if ntrans is not None:
+            # Zero-crossing below spot exists, but none >= spot.
+            # Enforce pTrans > nTrans invariant using fallback
+            if default_put_wall > ntrans:
+                ptrans = default_put_wall
+            elif default_cotmp > ntrans:
+                ptrans = default_cotmp
+            elif spot > ntrans:
+                ptrans = spot
+            else:
+                ptrans = ntrans * 1.05
+        else:
+            # No zero-crossings at all: fallback to Put Wall or COTMP
+            ptrans = default_put_wall if default_put_wall <= spot else default_cotmp
+
+    # Fallback for nTrans if no flip < spot
+    if ntrans is None:
+        candidates = [c for c in (default_secondary_put, default_put_wall, default_cotmp) if c < ptrans]
+        if candidates:
+            ntrans = max(candidates)
+        else:
+            ntrans = ptrans * 0.95
+
+    # Enforce Rule 4 invariant: pTrans > nTrans
+    if ptrans <= ntrans:
+        candidates = [c for c in (default_secondary_put, default_put_wall, default_cotmp) if c < ptrans]
+        if candidates:
+            ntrans = max(candidates)
+        else:
+            ntrans = ptrans * 0.95
+
+    return (round(ptrans, 2), round(ntrans, 2))
+
+

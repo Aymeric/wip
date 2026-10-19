@@ -36,7 +36,11 @@ _REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if _REPO_ROOT not in sys.path:
     sys.path.insert(0, _REPO_ROOT)
 
-from src.gex.quant.greeks import calculate_black_scholes_gamma
+from src.gex.quant.greeks import (
+    calculate_black_scholes_gamma,
+    find_flip_strikes,
+    select_transition_points,
+)
 
 from src.gex.quant.indicators import (
     calculate_rsi,
@@ -1759,29 +1763,46 @@ def derive_gex_profile(inst_data, quotes_data, spot):
     # COTMP = weighted put strike
     derived_cotmp = sum_strike_put_oi / sum_put_oi if sum_put_oi > 0 else calc_spot * 0.95
     
-    # pTrans = strike at/below spot with largest put OI
-    derived_ptrans = None
-    max_ptrans_key = (-1, -1.0)
+    # Put Wall = strike at/below spot with largest put OI (or largest put GEX)
+    put_wall = None
+    max_pw_key = (-1, -1.0)
     for strike, oi in strike_put_oi.items():
         if strike <= calc_spot:
             key = (oi, strike)
-            if key > max_ptrans_key:
-                max_ptrans_key = key
-                derived_ptrans = strike
-    if derived_ptrans is None:
-        derived_ptrans = calc_spot * 0.98
-        
-    # nTrans = strike below pTrans with next largest put OI
-    derived_ntrans = None
-    max_ntrans_key = (-1, -1.0)
+            if key > max_pw_key:
+                max_pw_key = key
+                put_wall = strike
+    if put_wall is None:
+        put_wall = calc_spot * 0.95
+
+    # Secondary Put Wall = strike below put_wall with next largest put OI
+    secondary_put_wall = None
+    max_spw_key = (-1, -1.0)
     for strike, oi in strike_put_oi.items():
-        if strike < derived_ptrans:
+        if strike < put_wall:
             key = (oi, strike)
-            if key > max_ntrans_key:
-                max_ntrans_key = key
-                derived_ntrans = strike
-    if derived_ntrans is None:
-        derived_ntrans = derived_ptrans * 0.95
+            if key > max_spw_key:
+                max_spw_key = key
+                secondary_put_wall = strike
+    if secondary_put_wall is None:
+        secondary_put_wall = put_wall * 0.95
+
+    # pTrans & nTrans via continuous zero-crossing linear interpolation
+    all_strikes = sorted(set(strike_put_gex.keys()) | set(strike_call_gex.keys()))
+    net_gex_by_strike = {
+        s: strike_call_gex.get(s, 0.0) - strike_put_gex.get(s, 0.0)
+        for s in all_strikes
+    }
+    flip_strikes = find_flip_strikes(net_gex_by_strike)
+    derived_ptrans, derived_ntrans = select_transition_points(
+        flip_strikes=flip_strikes,
+        spot=calc_spot,
+        cotmp=derived_cotmp,
+        put_wall=put_wall,
+        secondary_put_wall=secondary_put_wall,
+    )
+
+
         
     # +GEX = strike at/above spot with largest call OI
     derived_gex = None
@@ -1838,12 +1859,15 @@ def derive_gex_profile(inst_data, quotes_data, spot):
         "effective_put_gex": effective_put_gex,
         "net_gex": total_call_gex - total_put_gex,
         "net_effective_gex": effective_call_gex - effective_put_gex,
+        "flip_strikes": flip_strikes,
+        "put_wall": put_wall,
         "rule1_derived": rule1_derived,
         "rule2_derived": rule2_derived,
         "rule7_derived": rule7_derived,
         "rule9_derived": rule9_derived,
         "rule10_derived": rule10_derived,
     }
+
 
 # Technical indicator implementations (calculate_rsi, calculate_ema, calculate_macd_series,
 # calculate_macd, calculate_bollinger_bands, calculate_atr) are modularized in src.gex.quant.indicators

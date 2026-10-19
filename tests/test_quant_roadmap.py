@@ -286,8 +286,122 @@ class TestRoadmapImplementations(unittest.TestCase):
             self.assertIn("accounts", data)
             self.assertGreaterEqual(data["summary"]["total_positions"], 0)
 
+    def test_find_flip_strikes_linear_interpolation(self):
+        from src.gex.quant.greeks import find_flip_strikes
+
+        # Test 1: Simple linear interpolation between 100 and 110
+        # G(100) = -50, G(110) = 50 -> midpoint 105.0
+        gex = {100.0: -50.0, 110.0: 50.0}
+        flips = find_flip_strikes(gex)
+        self.assertEqual(len(flips), 1)
+        self.assertAlmostEqual(flips[0], 105.0, places=4)
+
+        # Test 2: Asymmetric linear interpolation
+        # G(100) = -200, G(110) = 100 -> 100 + 10 * (200 / 300) = 106.6667
+        gex_asym = {100.0: -200.0, 110.0: 100.0}
+        flips_asym = find_flip_strikes(gex_asym)
+        self.assertEqual(len(flips_asym), 1)
+        self.assertAlmostEqual(flips_asym[0], 100.0 + 10.0 * (200.0 / 300.0), places=4)
+
+        # Test 3: Multiple zero crossings
+        # 90 (+100) -> 100 (-100) -> 110 (+100)
+        # Flip 1: 90 + 10 * 0.5 = 95.0
+        # Flip 2: 100 + 10 * 0.5 = 105.0
+        gex_multi = {90.0: 100.0, 100.0: -100.0, 110.0: 100.0}
+        flips_multi = find_flip_strikes(gex_multi)
+        self.assertEqual(len(flips_multi), 2)
+        self.assertAlmostEqual(flips_multi[0], 95.0, places=4)
+        self.assertAlmostEqual(flips_multi[1], 105.0, places=4)
+
+    def test_find_flip_strikes_exact_zero_and_edges(self):
+        from src.gex.quant.greeks import find_flip_strikes
+
+        # Test exact zero at a strike
+        gex_zero = {95.0: -50.0, 100.0: 0.0, 105.0: 50.0}
+        flips = find_flip_strikes(gex_zero)
+        self.assertIn(100.0, flips)
+
+        # Test monotonic (no zero crossing)
+        gex_mono = {90.0: 10.0, 100.0: 20.0, 110.0: 30.0}
+        self.assertEqual(find_flip_strikes(gex_mono), [])
+
+        # Empty and single strike
+        self.assertEqual(find_flip_strikes({}), [])
+        self.assertEqual(find_flip_strikes({100.0: 50.0}), [])
+        self.assertEqual(find_flip_strikes({100.0: 0.0}), [])
+
+
+    def test_select_transition_points(self):
+        from src.gex.quant.greeks import select_transition_points
+
+        # Flips above and below spot: Spot = 100.0, flips = [95.0, 105.0]
+        # pTrans = min(K* >= 100) = 105.0
+        # nTrans = max(K* < 100) = 95.0
+        p, n = select_transition_points([95.0, 105.0], spot=100.0, cotmp=92.0, put_wall=90.0)
+        self.assertEqual(p, 105.0)
+        self.assertEqual(n, 95.0)
+        self.assertGreater(p, n)
+
+        # Flips only above spot: Spot = 100.0, flips = [105.0, 110.0]
+        # pTrans = 105.0, nTrans falls back to COTMP / Put Wall (< 105.0)
+        p, n = select_transition_points([105.0, 110.0], spot=100.0, cotmp=95.0, put_wall=90.0)
+        self.assertEqual(p, 105.0)
+        self.assertEqual(n, 95.0)
+        self.assertGreater(p, n)
+
+        # Flips only below spot: Spot = 100.0, flips = [88.0, 93.0]
+        # nTrans = 93.0, pTrans falls back
+        p, n = select_transition_points([88.0, 93.0], spot=100.0, cotmp=90.0, put_wall=85.0)
+        self.assertEqual(n, 93.0)
+        self.assertGreater(p, n)
+
+        # No flips: fallback to COTMP and Put Wall with Rule 4 invariant enforcement
+        p, n = select_transition_points([], spot=100.0, cotmp=95.0, put_wall=90.0)
+        self.assertGreater(p, n)
+
+    def test_derive_gex_profile_zero_crossing_integration(self):
+        from src.gex_engine import derive_gex_profile
+
+        # Synthetic chain with clear zero-crossing around 100.0:
+        # Calls dominant at 105, 110. Puts dominant at 90, 95.
+        chain = [
+            {"strike_price": "90.00", "type": "put", "open_interest": 1000, "gamma": 0.05, "implied_volatility": "0.30"},
+            {"strike_price": "95.00", "type": "put", "open_interest": 800, "gamma": 0.05, "implied_volatility": "0.30"},
+            {"strike_price": "100.00", "type": "call", "open_interest": 500, "gamma": 0.05, "implied_volatility": "0.30"},
+            {"strike_price": "100.00", "type": "put", "open_interest": 500, "gamma": 0.05, "implied_volatility": "0.30"},
+            {"strike_price": "105.00", "type": "call", "open_interest": 800, "gamma": 0.05, "implied_volatility": "0.30"},
+            {"strike_price": "110.00", "type": "call", "open_interest": 1000, "gamma": 0.05, "implied_volatility": "0.30"},
+        ]
+
+        inst_data = {
+            "instruments": [
+                {"id": f"opt_{i}", "strike_price": item["strike_price"], "type": item["type"]}
+                for i, item in enumerate(chain)
+            ]
+        }
+        quotes_data = {
+            "results": [
+                {
+                    "quote": {
+                        "instrument_id": f"opt_{i}",
+                        "open_interest": item["open_interest"],
+                        "gamma": str(item["gamma"]),
+                        "implied_volatility": item["implied_volatility"],
+                    }
+                }
+                for i, item in enumerate(chain)
+            ]
+        }
+
+        profile = derive_gex_profile(inst_data, quotes_data, spot=98.0)
+        self.assertIn("flip_strikes", profile)
+        self.assertIn("put_wall", profile)
+        self.assertGreater(profile["derived_ptrans"], profile["derived_ntrans"])
+
+
 
 if __name__ == "__main__":
     unittest.main()
+
 
 

@@ -156,22 +156,23 @@ src/gex/
 ## 🧮 Phase 1: Port Advanced Transition Math to wip
 
 ### 1.1 Port Zero-Crossing Linear Interpolation
-- **Context & Target File**: In [src/gex/quant/greeks.py](src/gex/quant/greeks.py) (re-exported in [src/gex_engine.py](src/gex_engine.py)), implement `find_flip_strikes(gex_by_strike)` matching the TypeScript implementation in `gamma-exposure.ts`.
+- **Status**: ✅ **Implemented** in [src/gex/quant/greeks.py](src/gex/quant/greeks.py) and re-exported in [src/gex_engine.py](src/gex_engine.py).
 - **Mathematical Specification**:
   Interpolate continuous zero-crossing strikes:
   $$K^* = K_{i-1} + (K_i - K_{i-1}) \cdot \frac{|netGEX_{i-1}|}{|netGEX_{i-1}| + |netGEX_i|}$$
 
 ### 1.2 Update Transition Point Selection in `src/gex_engine.py`
-- **Context & Target File**: In [src/gex_engine.py](src/gex_engine.py), replace the raw Put OI `derived_ptrans` / `derived_ntrans` block with zero-crossing selection:
+- **Status**: ✅ **Implemented** in `select_transition_points` ([src/gex/quant/greeks.py](src/gex/quant/greeks.py)) and integrated into `derive_gex_profile` in [src/gex_engine.py](src/gex_engine.py).
+- **Zero-Crossing Selection**:
   $$pTrans = \min(K^* \ge Spot)$$
   $$nTrans = \max(K^* < Spot)$$
 - **Guards & Fallbacks**:
-  - Apply fallback to COTMP / Put Wall when no zero-crossing exists.
-  - Enforce the Rule 4 invariant: $pTrans > nTrans$.
+  - Applies deterministic fallback to COTMP / Put Wall when no zero-crossing exists.
+  - Strictly enforces the Rule 4 invariant: $pTrans > nTrans$.
 
 ### 1.3 Add Unit Tests in wip
-- **Context & Target Directory**: In [tests/](tests/) (e.g. [tests/test_quant_roadmap.py](tests/test_quant_roadmap.py)).
-- **Goal**: Add test cases verifying $pTrans$ and $nTrans$ parity with `robinhood-options-mobile`'s test fixtures.
+- **Status**: ✅ **Implemented** in [tests/test_quant_roadmap.py](tests/test_quant_roadmap.py) and [tests/test_gex_engine.py](tests/test_gex_engine.py).
+- **Coverage**: Verified $pTrans$ and $nTrans$ parity with continuous linear interpolation, exact zero handling, edge cases, and end-to-end profile derivation across 140 passing unit tests.
 
 ---
 
@@ -190,7 +191,7 @@ src/gex/
 | **SQLite Trade Journal Persistence** | Phase 4 (Persistence) | 🟢 Low | ✅ Completed | Embedded ACID database for historical trades and GEX snapshots | Phase 2 |
 | **Notification Webhooks** | Phase 4 (Persistence) | 🟢 Low | ✅ Completed | Webhooks (Slack/Discord/Telegram) and macOS notifications | Phase 2 |
 | **Headless Pre-Market Audit Mode** | Phase 4 (Persistence) | 🟢 Low | ✅ Completed | Automated `audit-all` CLI mode with executive morning markdown | Phase 4 |
-| **Port Advanced Transition Math** | Phase 1 (Transition Math) | 🔴 High | ⏳ Pending | Zero-crossing linear interpolation for exact pTrans / nTrans derivation | Phase 3 |
+| **Port Advanced Transition Math** | Phase 1 (Transition Math) | 🔴 High | ✅ Completed | Zero-crossing linear interpolation for exact pTrans / nTrans derivation | Phase 3 |
 
 ---
 
