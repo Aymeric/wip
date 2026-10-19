@@ -21,10 +21,16 @@ def format_pct(value: Optional[float], default: str = "+0.00%", include_sign: bo
     return f"{sign}{value:.2f}%"
 
 
-def format_table(headers: List[str], rows: List[List[Any]]) -> str:
+def format_table(headers: List[str], rows: List[List[Any]], empty_message: str = "No data available") -> str:
     """Formats simple tabular text rows with aligned column widths."""
     if not headers:
         return ""
+    if not rows:
+        col_widths = [len(h) for h in headers]
+        header_line = " | ".join(h.ljust(col_widths[i]) for i, h in enumerate(headers))
+        separator_line = "-+-".join("-" * col_widths[i] for i in range(len(headers)))
+        return "\n".join([header_line, separator_line, empty_message])
+
     col_widths = [len(h) for h in headers]
     for row in rows:
         for i, val in enumerate(row):
