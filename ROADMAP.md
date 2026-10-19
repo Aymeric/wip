@@ -91,7 +91,7 @@ src/gex/
   - All functions are cleanly re-exported in [src/gex_engine.py](src/gex_engine.py) to maintain 100% backward compatibility for all scripts and tests.
 
 ### 2.2 Strict Domain Modeling (Pydantic / Typed Dataclasses)
-- **Status**: ✅ **Implemented foundational models** in [src/gex/core/models.py](src/gex/core/models.py) (`OptionQuote`, `GexProfile`, `ScannerCandidate`, `RegimeStatus`).
+- **Status**: ✅ **Implemented foundational models** in [src/gex/core/models.py](src/gex/core/models.py) (`OptionQuote`, `GexProfile`, `ScannerCandidate`, `RegimeStatus`). `GexProfile` includes continuous zero-crossing `flip_strikes`, `put_wall`, `to_dict()`, and boundary `from_dict()` reconstructor matching `derive_gex_profile`.
 - **Next**: Add schema-validation adapters at the ingestion boundary when reading Robinhood API payloads and JSON cache files.
 
 ### 2.3 Modular Test Suite

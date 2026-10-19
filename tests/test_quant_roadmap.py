@@ -92,6 +92,83 @@ class TestRoadmapImplementations(unittest.TestCase):
         )
         self.assertEqual(reg.system_authorization, "ALL TRACKS OK")
 
+        # GexProfile typed model instantiation
+        profile = GexProfile(
+            spot=100.0,
+            total_oi=5000,
+            derived_cotmp=105.0,
+            derived_ptrans=103.5,
+            derived_ntrans=96.5,
+            derived_gex=110.0,
+            total_call_gex=25000.0,
+            total_put_gex=15000.0,
+            effective_call_gex=23000.0,
+            effective_put_gex=14000.0,
+            net_gex=10000.0,
+            net_effective_gex=9000.0,
+            iv_sum=150.0,
+            iv_count=50,
+            flip_strikes=[96.5, 103.5],
+            put_wall=90.0,
+            rule1_derived=True,
+            rule2_derived=True,
+            rule7_derived=False,
+            rule9_derived=True,
+            rule10_derived=True,
+        )
+        self.assertEqual(profile.spot, 100.0)
+        self.assertEqual(profile.derived_ptrans, 103.5)
+        self.assertEqual(profile.derived_ntrans, 96.5)
+        self.assertEqual(profile.flip_strikes, [96.5, 103.5])
+        self.assertEqual(profile.put_wall, 90.0)
+
+        # to_dict verification
+        d = profile.to_dict()
+        self.assertEqual(d["derived_ptrans"], 103.5)
+        self.assertEqual(d["flip_strikes"], [96.5, 103.5])
+        self.assertEqual(d["put_wall"], 90.0)
+
+        # from_dict verification
+        reconstructed = GexProfile.from_dict(d, spot=100.0)
+        self.assertEqual(reconstructed.spot, 100.0)
+        self.assertEqual(reconstructed.derived_ptrans, 103.5)
+        self.assertEqual(reconstructed.derived_ntrans, 96.5)
+        self.assertEqual(reconstructed.flip_strikes, [96.5, 103.5])
+        self.assertEqual(reconstructed.put_wall, 90.0)
+        self.assertEqual(reconstructed.to_dict(), d)
+
+    def test_gex_profile_from_derive_gex_profile_roundtrip(self):
+        # Verify seamless integration with derive_gex_profile output dict
+        inst_data = {
+            "instruments": [
+                {"id": "p1", "strike_price": "90.00", "type": "put", "expiration_date": "2026-11-20"},
+                {"id": "p2", "strike_price": "95.00", "type": "put", "expiration_date": "2026-11-20"},
+                {"id": "c1", "strike_price": "105.00", "type": "call", "expiration_date": "2026-11-20"},
+                {"id": "c2", "strike_price": "110.00", "type": "call", "expiration_date": "2026-11-20"},
+            ]
+        }
+        quotes_data = {
+            "results": [
+                {"quote": {"instrument_id": "p1", "open_interest": 3000, "gamma": "0.03", "implied_volatility": "0.35"}},
+                {"quote": {"instrument_id": "p2", "open_interest": 2000, "gamma": "0.04", "implied_volatility": "0.35"}},
+                {"quote": {"instrument_id": "c1", "open_interest": 2500, "gamma": "0.04", "implied_volatility": "0.35"}},
+                {"quote": {"instrument_id": "c2", "open_interest": 3500, "gamma": "0.03", "implied_volatility": "0.35"}},
+            ]
+        }
+        raw_profile = derive_gex_profile(inst_data, quotes_data, spot=100.0)
+        gex_obj = GexProfile.from_dict(raw_profile, spot=100.0)
+
+        self.assertEqual(gex_obj.spot, 100.0)
+        self.assertIsNotNone(gex_obj.derived_ptrans)
+        self.assertIsNotNone(gex_obj.derived_ntrans)
+        self.assertIsNotNone(gex_obj.put_wall)
+        self.assertIsInstance(gex_obj.flip_strikes, list)
+
+        # Roundtrip to dict
+        roundtrip_dict = gex_obj.to_dict()
+        for k in ["derived_ptrans", "derived_ntrans", "put_wall", "flip_strikes", "net_gex"]:
+            self.assertEqual(roundtrip_dict[k], raw_profile[k])
+
     def test_dispatch_system_alert_noop_without_config(self):
         # Should cleanly return False when no webhook or desktop notification is configured
         result = dispatch_system_alert(title="Test Alert", message="Test Message", webhook_url=None)

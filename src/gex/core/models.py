@@ -42,6 +42,8 @@ class GexProfile:
     net_effective_gex: float = 0.0
     iv_sum: float = 0.0
     iv_count: int = 0
+    flip_strikes: List[float] = field(default_factory=list)
+    put_wall: Optional[float] = None
     rule1_derived: bool = False
     rule2_derived: bool = False
     rule7_derived: bool = False
@@ -64,12 +66,46 @@ class GexProfile:
             "effective_put_gex": self.effective_put_gex,
             "net_gex": self.net_gex,
             "net_effective_gex": self.net_effective_gex,
+            "flip_strikes": list(self.flip_strikes),
+            "put_wall": self.put_wall,
             "rule1_derived": self.rule1_derived,
             "rule2_derived": self.rule2_derived,
             "rule7_derived": self.rule7_derived,
             "rule9_derived": self.rule9_derived,
             "rule10_derived": self.rule10_derived,
         }
+
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any], spot: float = 0.0) -> "GexProfile":
+        """Reconstructs a GexProfile instance from a dictionary representation."""
+        ptrans = data.get("derived_ptrans")
+        ntrans = data.get("derived_ntrans")
+        dgex = data.get("derived_gex")
+        pwall = data.get("put_wall")
+        raw_flips = data.get("flip_strikes") or []
+        return cls(
+            spot=float(data.get("spot", spot)),
+            total_oi=int(data.get("total_oi", 0)),
+            derived_cotmp=float(data.get("derived_cotmp", 0.0)),
+            derived_ptrans=float(ptrans) if ptrans is not None else None,
+            derived_ntrans=float(ntrans) if ntrans is not None else None,
+            derived_gex=float(dgex) if dgex is not None else None,
+            total_call_gex=float(data.get("total_call_gex", 0.0)),
+            total_put_gex=float(data.get("total_put_gex", 0.0)),
+            effective_call_gex=float(data.get("effective_call_gex", 0.0)),
+            effective_put_gex=float(data.get("effective_put_gex", 0.0)),
+            net_gex=float(data.get("net_gex", 0.0)),
+            net_effective_gex=float(data.get("net_effective_gex", 0.0)),
+            iv_sum=float(data.get("iv_sum", 0.0)),
+            iv_count=int(data.get("iv_count", 0)),
+            flip_strikes=[float(s) for s in raw_flips],
+            put_wall=float(pwall) if pwall is not None else None,
+            rule1_derived=bool(data.get("rule1_derived", False)),
+            rule2_derived=bool(data.get("rule2_derived", False)),
+            rule7_derived=bool(data.get("rule7_derived", False)),
+            rule9_derived=bool(data.get("rule9_derived", False)),
+            rule10_derived=bool(data.get("rule10_derived", False)),
+        )
 
 
 @dataclass(slots=True)
