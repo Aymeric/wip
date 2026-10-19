@@ -12,6 +12,10 @@ from src.gex.quant.indicators import (
     calculate_atr,
     calculate_annualized_vol,
 )
+from src.gex.quant.gex import (
+    extract_quotes_list,
+    derive_gex_profile,
+)
 
 __all__ = [
     "calculate_black_scholes_gamma",
@@ -24,5 +28,6 @@ __all__ = [
     "calculate_bollinger_bands",
     "calculate_atr",
     "calculate_annualized_vol",
+    "extract_quotes_list",
+    "derive_gex_profile",
 ]
-

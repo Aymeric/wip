@@ -62,218 +62,39 @@ from src.gex.storage.db import (
 )
 
 
-@dataclass
-class RegimeGates:
-    basket_gate: str
-    bull_bear_ratio: float
-    bull_bear_gate: str
-    vix_delta_gate: str
-    system_authorization: str
-    gates_passed: int
-
-    def validate(self) -> bool:
-        """Validates internal gates metrics."""
-        if self.basket_gate not in ("PASS", "FAIL"):
-            raise ValueError(f"Invalid basket_gate: {self.basket_gate}")
-        if self.bull_bear_gate not in ("PASS", "FAIL"):
-            raise ValueError(f"Invalid bull_bear_gate: {self.bull_bear_gate}")
-        if self.vix_delta_gate not in ("PASS", "FAIL"):
-            raise ValueError(f"Invalid vix_delta_gate: {self.vix_delta_gate}")
-        if not (0 <= self.gates_passed <= 3):
-            raise ValueError(f"Invalid gates_passed: {self.gates_passed}")
-        if self.bull_bear_ratio < 0:
-            raise ValueError(f"Invalid bull_bear_ratio: {self.bull_bear_ratio}")
-        return True
-
-
-@dataclass
-class OptionPosition:
-    option_id: str
-    underlier: str
-    strike: float
-    expiration: str
-    type: str  # 'call' or 'put'
-    purchase_premium: float
-    mark_price: float
-    days_held: int
-    stalling_days: int
-    target_mode: str = "T1"
-    t2_target: Optional[float] = None
-    delta: Optional[float] = None
-    gamma: Optional[float] = None
-    open_interest: Optional[int] = None
-    imp_vol: Optional[float] = None
-    beta_sector_tag: str = "Technology/Beta"
-    entry_date: Optional[str] = None
-
-    def validate(self) -> bool:
-        """Validates option position parameters."""
-        if not self.option_id:
-            raise ValueError("option_id cannot be empty")
-        if not self.underlier:
-            raise ValueError("underlier cannot be empty")
-        if self.strike <= 0:
-            raise ValueError(f"strike must be positive: {self.strike}")
-        if self.type.lower() not in ("call", "put"):
-            raise ValueError(f"type must be 'call' or 'put': {self.type}")
-        if self.purchase_premium <= 0:
-            raise ValueError(f"purchase_premium must be positive: {self.purchase_premium}")
-        if self.mark_price < 0:
-            raise ValueError(f"mark_price cannot be negative: {self.mark_price}")
-        if self.days_held < 1:
-            raise ValueError(f"days_held must be >= 1: {self.days_held}")
-        if self.stalling_days < 0:
-            raise ValueError(f"stalling_days must be >= 0: {self.stalling_days}")
-        if self.target_mode not in ("T1", "T2"):
-            raise ValueError(f"target_mode must be 'T1' or 'T2': {self.target_mode}")
-        # Security: Strict date format validation prevents state corruption & date parsing failures
-        if not self.expiration:
-            raise ValueError("expiration cannot be empty")
-        try:
-            datetime.strptime(self.expiration, "%Y-%m-%d")
-        except ValueError:
-            raise ValueError(f"expiration must be a valid date in YYYY-MM-DD format: {self.expiration}")
-        if self.entry_date:
-            try:
-                datetime.strptime(self.entry_date, "%Y-%m-%d")
-            except ValueError:
-                raise ValueError(f"entry_date must be a valid date in YYYY-MM-DD format: {self.entry_date}")
-        return True
-
-
-@dataclass
-class StockPosition:
-    ticker: str
-    shares: float
-    average_buy_price: float
-    current_price: float
-    beta_sector_tag: str = "Equity"
-    entry_date: Optional[str] = None
-    asset_cost_basis: float = 0.0
-    current_value: float = 0.0
-    highest_price: Optional[float] = None
-    trailing_stop_pct: Optional[float] = None
-    stop_loss_pct: Optional[float] = None
-    profit_target_pct: Optional[float] = None
-
-    def validate(self) -> bool:
-        """Validates stock position parameters."""
-        if not self.ticker:
-            raise ValueError("ticker cannot be empty")
-        if self.shares <= 0:
-            raise ValueError(f"shares must be positive: {self.shares}")
-        if self.average_buy_price <= 0:
-            raise ValueError(f"average_buy_price must be positive: {self.average_buy_price}")
-        if self.current_price < 0:
-            raise ValueError(f"current_price cannot be negative: {self.current_price}")
-        if self.highest_price is not None and self.highest_price < 0:
-            raise ValueError(f"highest_price cannot be negative: {self.highest_price}")
-        if self.trailing_stop_pct is not None and self.trailing_stop_pct <= 0:
-            raise ValueError(f"trailing_stop_pct must be positive: {self.trailing_stop_pct}")
-        if self.stop_loss_pct is not None and self.stop_loss_pct <= 0:
-            raise ValueError(f"stop_loss_pct must be positive: {self.stop_loss_pct}")
-        if self.profit_target_pct is not None and self.profit_target_pct <= 0:
-            raise ValueError(f"profit_target_pct must be positive: {self.profit_target_pct}")
-        # Security: Strict date format validation prevents state corruption & date parsing failures
-        if self.entry_date:
-            try:
-                datetime.strptime(self.entry_date, "%Y-%m-%d")
-            except ValueError:
-                raise ValueError(f"entry_date must be a valid date in YYYY-MM-DD format: {self.entry_date}")
-        return True
-
-
-@dataclass
-class OptionSentiment:
-    ticker: str
-    sentiment: float
-    buzz: str  # 'High', 'Medium', 'Low', 'None'
-    narrative: str
-    last_updated: Optional[str] = field(default=None)
-    tone_score: float = field(default=0.0)
-    comments_score: float = field(default=0.0)
-    position_score: float = field(default=0.0)
-    volume_score: float = field(default=0.0)
-    meme_score: float = field(default=0.0)
-
-    def validate(self) -> bool:
-        """Validates sentiment parameters."""
-        if not self.ticker:
-            raise ValueError("ticker cannot be empty")
-        if not (-1.0 <= self.sentiment <= 1.0):
-            raise ValueError(f"sentiment must be between -1.0 and +1.0: {self.sentiment}")
-        if self.buzz not in ("High", "Medium", "Low", "None", "Med"):
-            raise ValueError(f"buzz must be High, Medium, Low, or None: {self.buzz}")
-            
-        # Validate 5-factor score subranges
-        if not (-0.301 <= self.tone_score <= 0.301):
-            raise ValueError(f"tone_score must be between -0.30 and +0.30: {self.tone_score}")
-        if not (-0.301 <= self.comments_score <= 0.301):
-            raise ValueError(f"comments_score must be between -0.30 and +0.30: {self.comments_score}")
-        if not (-0.201 <= self.position_score <= 0.201):
-            raise ValueError(f"position_score must be between -0.20 and +0.20: {self.position_score}")
-        if not (-0.101 <= self.volume_score <= 0.101):
-            raise ValueError(f"volume_score must be between -0.10 and +0.10: {self.volume_score}")
-        if not (-0.101 <= self.meme_score <= 0.101):
-            raise ValueError(f"meme_score must be between -0.10 and +0.10: {self.meme_score}")
-            
-        # Verify 5-factor components match the overall score if any are non-zero
-        components_sum = self.tone_score + self.comments_score + self.position_score + self.volume_score + self.meme_score
-        if abs(components_sum) > 0.001:
-            if abs(components_sum - self.sentiment) > 0.021:
-                raise ValueError(f"The sum of the 5-factors ({components_sum:+.2f}) must match the overall sentiment score ({self.sentiment:+.2f}) within ±0.02.")
-                
-        return True
-
-
-# Resolve cache paths from the repository, so CLI behavior is independent of the caller's cwd.
-REPOSITORY_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DATA_DIR = os.path.join(REPOSITORY_ROOT, "data")
-REGIME_FILE = os.path.join(REPOSITORY_ROOT, "data/regime.json")
-ANALYSES_FILE = os.path.join(REPOSITORY_ROOT, "data/ticker_analyses.json")
-OPTIONS_FILE = os.path.join(REPOSITORY_ROOT, "data/active_positions.json")
-CANDIDATES_FILE = os.path.join(REPOSITORY_ROOT, "data/candidate_stocks.json")
-PERFORMANCE_FILE = os.path.join(REPOSITORY_ROOT, "data/performance.json")
-DOWNLOADS_DIR = os.path.join(REPOSITORY_ROOT, "data/downloads")
-SENTIMENT_FILE = os.path.join(REPOSITORY_ROOT, "data/reddit_sentiment.json")
-WORKFLOW_STATE_FILE = os.path.join(REPOSITORY_ROOT, "data/workflow_state.json")
-DEFAULT_DB_FILE = os.path.join(REPOSITORY_ROOT, "data/trades.db")
-DEFAULT_SIZING_THRESHOLD = 10000.0 # Portfolio Net Liq threshold for strict percentage sizing
-
-
-
-def validate_safe_path(filepath: str, allowed_roots: Optional[List[str]] = None) -> str:
-    """Ensure filepath resolves strictly within allowed roots (defaults to REPOSITORY_ROOT, module root, and temp dir)."""
-    if allowed_roots is None:
-        module_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        allowed_roots = [REPOSITORY_ROOT, module_root, tempfile.gettempdir()]
-
-    if not os.path.isabs(filepath):
-        abs_target = os.path.abspath(os.path.join(REPOSITORY_ROOT, filepath))
-    else:
-        abs_target = os.path.abspath(filepath)
-
-    for root in allowed_roots:
-        if not root:
-            continue
-        abs_root = os.path.abspath(root)
-        try:
-            if os.path.commonpath([abs_root, abs_target]) == abs_root:
-                return abs_target
-        except ValueError:
-            continue
-
-    raise ValueError(f"Path traversal detected: '{filepath}' is outside allowed directories")
-
-
-def sanitize_account(account: str = "") -> str:
-    """Sanitize account identifier string to prevent path traversal or invalid file paths."""
-    if not account:
-        return ""
-    normalized_account = re.sub(r"[^A-Za-z0-9_-]", "", str(account))
-    if not re.search(r"[A-Za-z0-9]", normalized_account):
-        raise ValueError("account must contain at least one alphanumeric character")
-    return normalized_account
+from src.gex.core.models import (
+    OptionQuote,
+    GexProfile,
+    ScannerCandidate,
+    RegimeGates,
+    RegimeStatus,
+    OptionPosition,
+    StockPosition,
+    OptionSentiment,
+    Position,
+    TradeRecord,
+)
+from src.gex.core.config import (
+    REPOSITORY_ROOT,
+    DATA_DIR,
+    REGIME_FILE,
+    ANALYSES_FILE,
+    OPTIONS_FILE,
+    CANDIDATES_FILE,
+    PERFORMANCE_FILE,
+    DOWNLOADS_DIR,
+    SENTIMENT_FILE,
+    WORKFLOW_STATE_FILE,
+    DEFAULT_DB_FILE,
+    DEFAULT_SIZING_THRESHOLD,
+    MIN_PRICE,
+    MAX_PRICE,
+    MIN_VOLUME,
+    MIN_CHG_PCT,
+    MIN_MARKET_CAP,
+    validate_safe_path,
+    sanitize_account,
+)
 
 
 def account_performance_file(account: str = "") -> str:
@@ -299,73 +120,37 @@ def account_closed_positions_file(account: str = "") -> str:
         return os.path.join(os.path.dirname(OPTIONS_FILE), "closed_positions.json")
     return os.path.join(REPOSITORY_ROOT, f"data/closed_positions_{normalized_account}.json")
 
-# Standard Mechanical Screener Baseline Filter Constants
-MIN_PRICE = 5.0
-MAX_PRICE = 1000.0
-MIN_VOLUME = 200000
-MIN_CHG_PCT = 0.3
-MIN_MARKET_CAP = 1000000000
-
-
-
-def print_color(text: str, color_code: str, bold: bool = False) -> None:
-    """Prints text in ANSI color if the output is a tty."""
-    if sys.stdout.isatty():
-        prefix = f"\033[{1 if bold else 0};{color_code}m"
-        suffix = "\033[0m"
-        print(f"{prefix}{text}{suffix}")
-    else:
-        print(text)
-
-
-def format_color(text: str, color_code: str, bold: bool = False) -> str:
-    """Formats text with ANSI color codes if the output is a tty."""
-    if sys.stdout.isatty():
-        return f"\033[{1 if bold else 0};{color_code}m{text}\033[0m"
-    return text
-
-
-def generate_ascii_gex_scale(spot: float, ptrans: Optional[float], ntrans: Optional[float], gex: Optional[float], cotmp: Optional[float]) -> str:
-    """Constructs a visual linear ASCII representation of GEX levels and where SPOT resides."""
-    levels_by_price = {}
-    for price, label in [(cotmp, "COTMP"), (ntrans, "nTrans"), (ptrans, "pTrans"), (gex, "+GEX"), (spot, "SPOT")]:
-        if price is None:
-            continue
-        p_round = round(price, 2)
-        levels_by_price.setdefault(p_round, []).append(label)
-        
-    sorted_prices = sorted(levels_by_price.keys())
-    
-    runway_segments = []
-    for i, price in enumerate(sorted_prices):
-        labels = levels_by_price[price]
-        label_strs = []
-        for label in labels:
-            if label == "SPOT":
-                label_strs.append(format_color("SPOT (Current)", "35", bold=True))
-            elif label == "+GEX":
-                label_strs.append(format_color("+GEX (T1 Target)", "32", bold=True))
-            elif label == "pTrans":
-                label_strs.append(format_color("pTrans (Trigger)", "36", bold=True))
-            elif label == "nTrans":
-                label_strs.append(format_color("nTrans (Stop)", "31", bold=True))
-            elif label == "COTMP":
-                label_strs.append(format_color("COTMP (Support)", "31", bold=True))
-            else:
-                label_strs.append(label)
-                
-        label_block = " + ".join(label_strs)
-        formatted_block = f"[{label_block}: ${price:.2f}]"
-            
-        runway_segments.append(formatted_block)
-        
-        if i < len(sorted_prices) - 1:
-            next_price = sorted_prices[i+1]
-            delta = next_price - price
-            pct_dist = (delta / price) * 100.0 if price > 0 else 0.0
-            runway_segments.append(f" === {pct_dist:+.1f}% ===> ")
-            
-    return "".join(runway_segments)
+from src.gex.presentation.ascii_art import (
+    print_color,
+    format_color,
+    generate_ascii_gex_scale,
+)
+from src.gex.presentation.formatters import (
+    format_currency,
+    format_pct,
+    format_table,
+)
+from src.gex.storage.persistence import (
+    load_json,
+    save_json,
+    clear_account_cache,
+    register_cache_clear_callback,
+    _JSON_FILE_CACHE,
+)
+from src.gex.storage.retention import (
+    cleanup_downloads,
+)
+from src.gex.screening.scanner import (
+    calculate_candidate_score,
+    filter_candidate,
+)
+from src.gex.screening.selector import (
+    select_best_option,
+)
+from src.gex.quant.gex import (
+    extract_quotes_list,
+    derive_gex_profile,
+)
 
 
 def str2bool(value: Any) -> bool:
@@ -466,122 +251,14 @@ def _get_downloads_files(downloads_dir: str) -> List[Tuple[str, str]]:
     return files_list
 
 
-_MAX_JSON_CACHE_SIZE = 1000
-_JSON_FILE_CACHE: Dict[Tuple[str, float], Any] = {}
-
-
-def _clone_json(obj: Any) -> Any:
-    """Fast recursive cloner for JSON-serializable structures (dicts, lists, scalars).
-
-    Performance optimization (Bolt):
-    Replaces copy.deepcopy with a lightweight recursive copier that avoids
-    heavy Python runtime object introspection and memoization tracking (~2.4x speedup).
-    """
-    if isinstance(obj, dict):
-        return {k: _clone_json(v) for k, v in obj.items()}
-    if isinstance(obj, list):
-        return [_clone_json(item) for item in obj]
-    if isinstance(obj, tuple):
-        return tuple(_clone_json(item) for item in obj)
-    return obj
-
-
-def load_json(filepath: str, default: Any) -> Any:
-    """Loads a JSON file from disk with mtime caching, returning default if absent, corrupted, or unexpected type."""
-    try:
-        # Validate path to prevent directory traversal outside repository/temp directories
-        filepath = validate_safe_path(filepath)
-    except Exception as e:
-        print(f"Warning: Failed to load {filepath}: {e}", file=sys.stderr)
-        return default
-
-    if not os.path.exists(filepath):
-        return default
-    try:
-        mtime = os.path.getmtime(filepath)
-        if os.path.getsize(filepath) == 0:
-            return default
-    except Exception:
-        return default
-
-    cache_key = (filepath, mtime)
-    if cache_key in _JSON_FILE_CACHE:
-        cached_data = _JSON_FILE_CACHE[cache_key]
-        if isinstance(default, (dict, list)) and not isinstance(cached_data, (dict, list)):
-            return _clone_json(default)
-        return _clone_json(cached_data)
-
-    try:
-        with open(filepath, "r") as f:
-            data = json.load(f)
-        if isinstance(default, (dict, list)) and not isinstance(data, (dict, list)):
-            return _clone_json(default)
-        if len(_JSON_FILE_CACHE) >= _MAX_JSON_CACHE_SIZE:
-            _JSON_FILE_CACHE.pop(next(iter(_JSON_FILE_CACHE)))
-        # Performance optimization (Bolt): Store freshly parsed JSON data directly without deepcopying,
-        # then return a fast recursive clone for caller isolation.
-        _JSON_FILE_CACHE[cache_key] = data
-        return _clone_json(data)
-    except Exception as e:
-        print(f"Warning: Failed to load {filepath}: {e}", file=sys.stderr)
-        return default
-
-
-def _clear_cache_for_write():
+def _clear_engine_caches() -> None:
     _SPOT_PRICE_CACHE.clear()
     _DIR_FILES_CACHE.clear()
-    _JSON_FILE_CACHE.clear()
     _LAST_MTIME_CHECK_TIME.clear()
     _CACHED_DIR_MTIME_KEY.clear()
 
 
-def clear_account_cache(account: str = "") -> int:
-    """Evicts account-scoped files from in-memory cache to guarantee zero cross-account state bleeding.
-
-    Returns the number of evicted cache entries.
-    """
-    if not account:
-        count = len(_JSON_FILE_CACHE)
-        _JSON_FILE_CACHE.clear()
-        return count
-
-    sanitized = sanitize_account(account)
-    keys_to_remove = [k for k in _JSON_FILE_CACHE.keys() if sanitized in k[0]]
-    for k in keys_to_remove:
-        _JSON_FILE_CACHE.pop(k, None)
-    return len(keys_to_remove)
-
-
-
-def save_json(filepath: str, data: Any) -> None:
-    """Saves JSON atomically so a failed write cannot truncate existing state."""
-    _clear_cache_for_write()
-    temp_path = None
-    try:
-        target_filepath = validate_safe_path(filepath)
-        dir_name = os.path.dirname(target_filepath)
-        if dir_name:
-            os.makedirs(dir_name, exist_ok=True)
-
-        target_dir = dir_name or "."
-        with tempfile.NamedTemporaryFile(
-            mode="w", encoding="utf-8", dir=target_dir,
-            prefix=".gex-", suffix=".tmp", delete=False
-        ) as f:
-            temp_path = f.name
-            json.dump(data, f, indent=2)
-            f.flush()
-            os.fsync(f.fileno())
-        os.replace(temp_path, target_filepath)
-        temp_path = None
-    except Exception as e:
-        print(f"Error: Failed to save to {filepath}: {e}", file=sys.stderr)
-    finally:
-        if temp_path and os.path.exists(temp_path):
-            try:
-                os.remove(temp_path)
-            except OSError:
-                pass
+register_cache_clear_callback(_clear_engine_caches)
 
 
 def dispatch_system_alert(title: str, message: str, webhook_url: Optional[str] = None) -> bool:

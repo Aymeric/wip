@@ -6,6 +6,7 @@ Unit tests for roadmap implementations:
 4. System alert dispatching.
 """
 
+import os
 import unittest
 from src.gex.quant.greeks import calculate_black_scholes_gamma
 from src.gex.core.models import OptionQuote, GexProfile, ScannerCandidate, RegimeStatus
@@ -477,8 +478,221 @@ class TestRoadmapImplementations(unittest.TestCase):
 
 
 
+
+class TestPhase2ModularArchitecture(unittest.TestCase):
+    """Unit tests for Phase 2 domain packages and ingestion boundary adapters."""
+
+    def test_core_config_paths_and_sanitization(self):
+        from src.gex.core.config import (
+            REPOSITORY_ROOT,
+            validate_safe_path,
+            sanitize_account,
+            account_positions_file,
+            account_closed_positions_file,
+            account_performance_file,
+        )
+        self.assertTrue(os.path.isdir(REPOSITORY_ROOT))
+        self.assertEqual(sanitize_account("••••9961"), "9961")
+        self.assertEqual(sanitize_account("5QR24141"), "5QR24141")
+        with self.assertRaises(ValueError):
+            sanitize_account("!@#$%^")
+
+        # Test account scoping
+        pos_file = account_positions_file("9961")
+        self.assertIn("active_positions_9961.json", pos_file)
+        closed_file = account_closed_positions_file("9961")
+        self.assertIn("closed_positions_9961.json", closed_file)
+        perf_file = account_performance_file("9961")
+        self.assertIn("performance_9961.json", perf_file)
+
+        # Test path traversal prevention
+        safe = validate_safe_path("data/regime.json")
+        self.assertTrue(os.path.isabs(safe))
+        with self.assertRaises(ValueError):
+            validate_safe_path("../../etc/passwd")
+
+    def test_model_ingestion_adapters(self):
+        from src.gex.core.models import (
+            OptionQuote,
+            ScannerCandidate,
+            OptionPosition,
+            StockPosition,
+            RegimeGates,
+            OptionSentiment,
+        )
+
+        # 1. OptionQuote from Robinhood quote & instrument
+        raw_quote = {
+            "instrument_id": "opt_xyz",
+            "bid_price": "2.10",
+            "ask_price": "2.30",
+            "open_interest": 1200,
+            "gamma": "0.035",
+            "delta": "0.45",
+            "implied_volatility": "0.32",
+        }
+        raw_inst = {
+            "id": "opt_xyz",
+            "strike_price": "150.00",
+            "type": "call",
+            "expiration_date": "2026-11-20",
+        }
+        quote_obj = OptionQuote.from_robinhood(raw_quote, raw_inst)
+        self.assertEqual(quote_obj.strike, 150.0)
+        self.assertEqual(quote_obj.option_type, "call")
+        self.assertEqual(quote_obj.mark, 2.20)
+        self.assertEqual(quote_obj.delta, 0.45)
+        self.assertEqual(quote_obj.gamma, 0.035)
+
+        # 2. ScannerCandidate from dict
+        cand_dict = {
+            "ticker": "AAPL",
+            "price": "185.50",
+            "percent_change": "1.85",
+            "relative_options_volume": "2.3",
+            "iv": "0.28",
+        }
+        cand = ScannerCandidate.from_dict(cand_dict)
+        self.assertEqual(cand.symbol, "AAPL")
+        self.assertEqual(cand.price, 185.50)
+        self.assertEqual(cand.relative_options_volume, 2.3)
+
+        # 3. OptionPosition from dict with validation
+        opt_pos_dict = {
+            "Option ID": "pos_1",
+            "Underlier": "NVDA",
+            "Strike": 130.0,
+            "Expiration": "2026-11-20",
+            "Type": "call",
+            "Purchase Premium": 4.50,
+            "Mark Price": 5.20,
+            "Days Held": 2,
+            "Stalling Days": 0,
+        }
+        opt_pos = OptionPosition.from_dict(opt_pos_dict)
+        self.assertTrue(opt_pos.validate())
+        self.assertEqual(opt_pos.underlier, "NVDA")
+        self.assertEqual(opt_pos.purchase_premium, 4.50)
+
+        # 4. StockPosition from dict with validation
+        stock_dict = {
+            "symbol": "MSFT",
+            "shares": 10.0,
+            "average_buy_price": 400.0,
+            "current_price": 415.0,
+        }
+        stock_pos = StockPosition.from_dict(stock_dict)
+        self.assertTrue(stock_pos.validate())
+        self.assertEqual(stock_pos.ticker, "MSFT")
+        self.assertEqual(stock_pos.current_value, 4150.0)
+
+        # 5. RegimeGates validation
+        gates = RegimeGates(
+            basket_gate="PASS",
+            bull_bear_ratio=3.5,
+            bull_bear_gate="PASS",
+            vix_delta_gate="PASS",
+            system_authorization="ALL TRACKS OK",
+            gates_passed=3,
+        )
+        self.assertTrue(gates.validate())
+
+        # 6. OptionSentiment 5-factor validation
+        sentiment = OptionSentiment(
+            ticker="TSLA",
+            sentiment=0.35,
+            buzz="High",
+            narrative="Bullish catalyst",
+            tone_score=0.15,
+            comments_score=0.10,
+            position_score=0.05,
+            volume_score=0.03,
+            meme_score=0.02,
+        )
+        self.assertTrue(sentiment.validate())
+
+    def test_screening_scanner_and_selector(self):
+        from src.gex.screening.scanner import calculate_candidate_score, filter_candidate
+        from src.gex.screening.selector import select_best_option
+
+        # Scanner candidate scoring
+        high_score_cand = {
+            "relative_options_volume": 3.0,
+            "chg_pct": 2.5,
+            "iv": 0.40,
+            "rsi": 55.0,
+            "macd_hist": 0.5,
+        }
+        score = calculate_candidate_score(high_score_cand)
+        self.assertGreater(score, 45.0)
+
+        # Filtering
+        self.assertTrue(filter_candidate({"price": 50.0, "volume": 500000, "chg_pct": 1.2}))
+        self.assertFalse(filter_candidate({"price": 2.0}))  # Below MIN_PRICE
+
+        # Selector contract isolation
+        inst_data = {
+            "instruments": [
+                {"id": "c1", "strike_price": "105.00", "type": "call", "expiration_date": "2026-11-20"},
+                {"id": "c2", "strike_price": "110.00", "type": "call", "expiration_date": "2026-11-20"},
+            ]
+        }
+        quotes_data = {
+            "results": [
+                {"quote": {"instrument_id": "c1", "bid_price": "2.40", "ask_price": "2.50", "open_interest": 1500, "delta": "0.45"}},
+                {"quote": {"instrument_id": "c2", "bid_price": "1.20", "ask_price": "1.30", "open_interest": 800, "delta": "0.25"}},
+            ]
+        }
+        best, eligible = select_best_option(inst_data, quotes_data, spot=100.0, gex_target=115.0, today_override="2026-10-18")
+        self.assertIsNotNone(best)
+        self.assertEqual(best["option_id"], "c1")
+        self.assertEqual(best["strike"], 105.0)
+        self.assertTrue(best["liquidity_passed"])
+
+    def test_storage_persistence_atomic_and_retention(self):
+        import tempfile
+        from src.gex.storage.persistence import load_json, save_json, clear_account_cache
+        from src.gex.storage.retention import cleanup_downloads
+
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            fpath = os.path.join(tmp_dir, "test_atomic.json")
+            data = {"status": "ok", "count": 42}
+            save_json(fpath, data)
+            loaded = load_json(fpath)
+            self.assertEqual(loaded, data)
+
+            # Test account cache clear
+            evicted = clear_account_cache()
+            self.assertGreaterEqual(evicted, 0)
+
+            # Retention
+            cleaned = cleanup_downloads(days=7, downloads_dir=tmp_dir)
+            self.assertEqual(cleaned, 0)
+
+    def test_presentation_formatters_and_ascii(self):
+        from src.gex.presentation.ascii_art import generate_ascii_gex_scale, format_color
+        from src.gex.presentation.formatters import format_currency, format_pct, format_table
+
+        # ASCII Runway
+        scale = generate_ascii_gex_scale(spot=100.0, ptrans=103.0, ntrans=96.0, gex=110.0, cotmp=94.0)
+        self.assertIn("SPOT", scale)
+        self.assertIn("pTrans", scale)
+        self.assertIn("nTrans", scale)
+        self.assertIn("+GEX", scale)
+
+        # Formatters
+        self.assertEqual(format_currency(1234.5), "$1,234.50")
+        self.assertEqual(format_pct(5.2), "+5.20%")
+        self.assertEqual(format_pct(-3.1), "-3.10%")
+
+        table = format_table(["Sym", "Price"], [["AAPL", 180.0], ["MSFT", 400.0]])
+        self.assertIn("AAPL", table)
+        self.assertIn("MSFT", table)
+
+
 if __name__ == "__main__":
     unittest.main()
+
 
 
 
