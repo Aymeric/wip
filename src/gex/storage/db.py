@@ -9,12 +9,14 @@ import sqlite3
 from typing import Dict, List, Optional, Any
 from pathlib import Path
 
+from src.gex.core.config import validate_safe_path
+
 DEFAULT_DB_PATH = os.path.join("data", "trades.db")
 
 
 def init_db(db_path: Optional[str] = None) -> sqlite3.Connection:
     """Initializes the SQLite database with required tables and indexes."""
-    path = db_path or DEFAULT_DB_PATH
+    path = validate_safe_path(db_path or DEFAULT_DB_PATH)
     dir_name = os.path.dirname(path)
     if dir_name:
         os.makedirs(dir_name, exist_ok=True)

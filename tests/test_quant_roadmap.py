@@ -327,6 +327,13 @@ class TestRoadmapImplementations(unittest.TestCase):
             self.assertEqual(snapshot["spot"], 125.50)
             self.assertEqual(snapshot["call_wall"], 130.0)
 
+    def test_init_db_path_traversal_prevention(self):
+        from src.gex.storage.db import init_db
+        with self.assertRaises(ValueError):
+            init_db("../../etc/passwd.db")
+        with self.assertRaises(ValueError):
+            init_db("/etc/passwd.db")
+
     def test_multi_account_cache_isolation(self):
         from src.gex_engine import _JSON_FILE_CACHE, clear_account_cache
 
