@@ -106,6 +106,33 @@ class TestPerformanceBenchmark(unittest.TestCase):
 
         print(f"\n[BENCHMARK] Executed {total_calls} calls to discover_earnings_date in {elapsed:.4f} seconds ({elapsed/total_calls*1000:.4f} ms/call)")
 
+    def test_benchmark_derive_gex_profile(self):
+        expirations = ['2026-04-17', '2026-05-15', '2026-06-19', '2026-07-17']
+        inst_data = [
+            {
+                'id': f'opt_{i}',
+                'strike_price': str(80.0 + (i % 80) * 0.5),
+                'type': 'call' if i % 2 == 0 else 'put',
+                'expiration_date': expirations[i % len(expirations)]
+            } for i in range(500)
+        ]
+        quotes_data = [
+            {
+                'instrument_id': f'opt_{i}',
+                'open_interest': 100 * (i % 20 + 1),
+                'gamma': 0.05,
+                'implied_volatility': '0.35'
+            } for i in range(500)
+        ]
+        iterations = 1000
+
+        start_time = time.perf_counter()
+        for _ in range(iterations):
+            _ = gex_engine.derive_gex_profile(inst_data, quotes_data, spot=100.0)
+        elapsed = time.perf_counter() - start_time
+
+        print(f"\n[BENCHMARK] Executed {iterations} calls to derive_gex_profile in {elapsed:.4f} seconds ({elapsed/iterations*1000:.4f} ms/call)")
+
     def test_benchmark_select_best_option(self):
         expirations = ['2026-04-17', '2026-05-15', '2026-06-19', '2026-07-17']
         inst_data = [
