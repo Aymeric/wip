@@ -66,18 +66,19 @@ def find_flip_strikes(gex_by_strike: dict) -> list:
     if not gex_by_strike:
         return []
 
-    # Sort strikes ascending
-    sorted_strikes = sorted(float(k) for k in gex_by_strike.keys())
-    if len(sorted_strikes) < 2:
+    # Performance optimization (Bolt):
+    # Sort strike-GEX items once and iterate tuple values directly.
+    # Eliminates repeated dictionary key lookups inside zero-crossing loop.
+    items = [(float(k), float(v)) for k, v in gex_by_strike.items()]
+    items.sort(key=lambda x: x[0])
+    if len(items) < 2:
         return []
 
     flip_strikes: list = []
 
-    for i in range(1, len(sorted_strikes)):
-        k_prev = sorted_strikes[i - 1]
-        k_curr = sorted_strikes[i]
-        g_prev = float(gex_by_strike[k_prev])
-        g_curr = float(gex_by_strike[k_curr])
+    for i in range(1, len(items)):
+        k_prev, g_prev = items[i - 1]
+        k_curr, g_curr = items[i]
 
         # True zero-crossing between opposite signs
         if (g_prev < 0.0 and g_curr > 0.0) or (g_prev > 0.0 and g_curr < 0.0):
@@ -87,11 +88,11 @@ def find_flip_strikes(gex_by_strike: dict) -> list:
                 if not flip_strikes or abs(flip_strikes[-1] - k_star) > 1e-6:
                     flip_strikes.append(round(k_star, 4))
         elif g_prev == 0.0 and g_curr != 0.0:
-            if i >= 2 and float(gex_by_strike[sorted_strikes[i - 2]]) * g_curr < 0:
+            if i >= 2 and items[i - 2][1] * g_curr < 0:
                 if not flip_strikes or abs(flip_strikes[-1] - k_prev) > 1e-6:
                     flip_strikes.append(round(k_prev, 4))
 
-    return sorted(flip_strikes)
+    return flip_strikes
 
 
 def select_transition_points(

@@ -1318,18 +1318,32 @@ def derive_gex_profile(inst_data, quotes_data, spot):
         instruments_list = inst_data
         
     # Performance optimization (Bolt):
-    # Single-pass scalar search loops for pTrans, nTrans, +GEX, and nearest strike level extraction.
-    # Eliminates intermediate list allocations, lambda key extractions, and set union operations.
+    # Precalculate dte_val and dte_weight per expiration date when building inst_map.
+    # Eliminates date parsing, today() calls, and math.sqrt recalculations inside tight quote loop.
+    today_d = date.today()
+    exp_cache = {}
     inst_map = {}
     for inst in instruments_list:
         if not isinstance(inst, dict) or "id" not in inst:
             continue
         try:
-            inst_map[inst["id"]] = (
-                float(inst["strike_price"]) if "strike_price" in inst else float(inst.get("strike", 0.0)),
-                inst["type"],
-                inst.get("expiration_date"),
-            )
+            strike = float(inst["strike_price"]) if "strike_price" in inst else float(inst.get("strike", 0.0))
+            opt_type = inst["type"]
+            exp_str = inst.get("expiration_date")
+            dte_val = 30.0
+            if exp_str:
+                if exp_str not in exp_cache:
+                    try:
+                        exp_date = date.fromisoformat(exp_str[:10])
+                        d_val = float(max((exp_date - today_d).days, 0))
+                        w_val = 1.0 / math.sqrt(max(d_val, 1.0))
+                        exp_cache[exp_str] = (d_val, w_val)
+                    except Exception:
+                        exp_cache[exp_str] = (30.0, 1.0 / math.sqrt(30.0))
+                dte_val, dte_weight = exp_cache[exp_str]
+            else:
+                dte_weight = 1.0 / math.sqrt(30.0)
+            inst_map[inst["id"]] = (strike, opt_type, dte_val, dte_weight)
         except (ValueError, KeyError):
             continue
         
@@ -1374,24 +1388,14 @@ def derive_gex_profile(inst_data, quotes_data, spot):
         except (ValueError, TypeError):
             continue
             
-        strike, opt_type, exp_str = inst_map[opt_id]
+        strike, opt_type, dte_val, dte_weight = inst_map[opt_id]
 
         # Analytical Black-Scholes Gamma fallback if broker feed returns zero or missing gamma
-        dte_val = 30.0
-        if exp_str:
-            try:
-                exp_date = date.fromisoformat(exp_str[:10])
-                today_d = date.today()
-                dte_val = float(max((exp_date - today_d).days, 0))
-            except Exception:
-                pass
-
         if gamma <= 0.0 and iv > 0.0:
             gamma = calculate_black_scholes_gamma(calc_spot, strike, dte_val, iv)
         
         total_oi += oi
         gex_val = oi * gamma * 100.0 * calc_spot
-        dte_weight = 1.0 / math.sqrt(max(dte_val, 1.0))
         effective_gex_val = gex_val * dte_weight
         
         # IV proxy (within 15% of spot)
@@ -1503,21 +1507,13 @@ def derive_gex_profile(inst_data, quotes_data, spot):
     
     nearest_strike = calc_spot
     min_dist_key = (float('inf'), float('inf'))
-    for strike in strike_put_gex:
+    for strike in all_strikes:
         diff = strike - calc_spot
         dist = diff if diff >= 0 else -diff
         dist_key = (dist, strike)
         if dist_key < min_dist_key:
             min_dist_key = dist_key
             nearest_strike = strike
-    for strike in strike_call_gex:
-        if strike not in strike_put_gex:
-            diff = strike - calc_spot
-            dist = diff if diff >= 0 else -diff
-            dist_key = (dist, strike)
-            if dist_key < min_dist_key:
-                min_dist_key = dist_key
-                nearest_strike = strike
 
     net_gex_nearest = strike_call_gex.get(nearest_strike, 0.0) - strike_put_gex.get(nearest_strike, 0.0)
     rule10_derived = net_gex_nearest >= 0.0
