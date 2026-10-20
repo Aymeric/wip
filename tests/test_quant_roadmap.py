@@ -696,6 +696,11 @@ class TestPhase2ModularArchitecture(unittest.TestCase):
         self.assertIn("AAPL", table)
         self.assertIn("MSFT", table)
 
+        empty_table = format_table(["Sym", "Price"], [])
+        self.assertIn("No data available", empty_table)
+        custom_empty_table = format_table(["Sym", "Price"], [], empty_message="No candidates found")
+        self.assertIn("No candidates found", custom_empty_table)
+
 
 if __name__ == "__main__":
     unittest.main()

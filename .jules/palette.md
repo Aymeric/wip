@@ -15,3 +15,7 @@
 ## 2026-10-14 - Dim Styling for Unanalyzed Placeholders in CLI Tables
 **Learning:** In CLI terminal tables mixing active status badges with placeholder/unanalyzed values, leaving placeholders uncolored causes them to take on default foreground brightness, competing visually with highlighted status indicators.
 **Action:** Always format unanalyzed or placeholder text entries with a dim/muted color (e.g. ANSI 37) so that actionable status indicators pop out clearly.
+
+## 2026-10-24 - CLI Terminal Table Empty States
+**Learning:** Rendering CLI tables with zero rows as back-to-back header and footer separators without explicit messaging appears broken and ambiguous to users and screen readers.
+**Action:** Always handle empty row collections in table formatters and loops with explicit empty state notices (e.g. "No data available" or "No candidates matched the screening criteria") between table headers/footers.
