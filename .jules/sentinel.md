@@ -1,3 +1,8 @@
+## 2026-09-23 - Retention directory cleanup utilities must enforce path traversal validation
+**Vulnerability:** `cleanup_downloads()` in `src/gex/storage/retention.py` accepted an arbitrary `downloads_dir` directory path parameter and passed it directly to `os.listdir()` and `shutil.rmtree()` without invoking `validate_safe_path()`, permitting path traversal directory deletion outside allowed root directories.
+**Learning:** Directory purging/retention utilities taking optional target directory parameters must sanitize input paths using `validate_safe_path()` before performing directory traversal and file/folder deletion operations.
+**Prevention:** Always call `validate_safe_path()` on target directory arguments inside filesystem cleanup and retention functions prior to inspecting or purging directory contents.
+
 ## 2026-09-22 - Subcommand base directories and directory listing functions must validate input paths with validate_safe_path
 **Vulnerability:** `cmd_sync_positions` (`--base-dir`) and `list_download_files()` (`downloads_dir`) accepted user-controlled directory paths directly into `os.path.exists()`, `os.listdir()`, and `os.walk()` without calling `validate_safe_path()`, permitting directory traversal outside allowed root directories.
 **Learning:** Directory listing utilities and CLI subcommands taking directory path parameters must validate input paths against allowed roots before performing filesystem traversal operations.

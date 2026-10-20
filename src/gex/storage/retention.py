@@ -9,7 +9,7 @@ import shutil
 from datetime import datetime
 from typing import Optional
 
-from src.gex.core.config import DOWNLOADS_DIR
+from src.gex.core.config import DOWNLOADS_DIR, validate_safe_path
 
 
 def cleanup_downloads(days: int = 7, downloads_dir: Optional[str] = None) -> int:
@@ -23,10 +23,16 @@ def cleanup_downloads(days: int = 7, downloads_dir: Optional[str] = None) -> int
         Number of purged directories.
     """
     target_dir = downloads_dir or DOWNLOADS_DIR
+    try:
+        target_dir = validate_safe_path(target_dir)
+    except ValueError:
+        return 0
+
     now = datetime.now()
     removed_count = 0
 
     if not os.path.exists(target_dir):
+        print("No downloads directory found.")
         return 0
 
     for item in os.listdir(target_dir):
@@ -38,6 +44,7 @@ def cleanup_downloads(days: int = 7, downloads_dir: Optional[str] = None) -> int
                     dir_date = datetime.strptime(item, "%Y%m%d")
                     age_days = (now - dir_date).days
                     if age_days > days:
+                        print(f"Removing stale download folder: {item} ({age_days} days old)")
                         shutil.rmtree(item_path)
                         removed_count += 1
                 except Exception:
@@ -46,6 +53,7 @@ def cleanup_downloads(days: int = 7, downloads_dir: Optional[str] = None) -> int
                 try:
                     mtime = os.path.getmtime(item_path)
                     if (now - datetime.fromtimestamp(mtime)).days >= 1:
+                        print(f"Removing stale tmp folder: {item}")
                         shutil.rmtree(item_path)
                         removed_count += 1
                 except Exception:

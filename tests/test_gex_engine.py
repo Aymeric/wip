@@ -1488,6 +1488,18 @@ class TestGEXEngine(unittest.TestCase):
         finally:
             shutil.rmtree(temp_dir)
 
+    def test_cleanup_downloads_path_traversal(self):
+        """Test that cleanup_downloads rejects directory paths outside allowed roots."""
+        from src.gex.storage.retention import cleanup_downloads
+
+        # Unallowed path traversal directory
+        result = cleanup_downloads(days=7, downloads_dir="../../../etc")
+        self.assertEqual(result, 0)
+
+        # Absolute path outside allowed roots
+        result_abs = cleanup_downloads(days=7, downloads_dir="/etc")
+        self.assertEqual(result_abs, 0)
+
     def test_sync_positions_removes_cached_positions_absent_from_snapshot(self):
         import tempfile
         import shutil
