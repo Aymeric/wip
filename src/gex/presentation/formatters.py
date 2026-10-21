@@ -27,6 +27,9 @@ def format_table(headers: List[str], rows: List[List[Any]], empty_message: str =
         return ""
     if not rows:
         col_widths = [len(h) for h in headers]
+        table_width = sum(col_widths) + 3 * (len(headers) - 1)
+        if len(empty_message) > table_width:
+            col_widths[-1] += len(empty_message) - table_width
         header_line = " | ".join(h.ljust(col_widths[i]) for i, h in enumerate(headers))
         separator_line = "-+-".join("-" * col_widths[i] for i in range(len(headers)))
         return "\n".join([header_line, separator_line, empty_message])
