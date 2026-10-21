@@ -676,6 +676,10 @@ class TestPhase2ModularArchitecture(unittest.TestCase):
             cleaned = cleanup_downloads(days=7, downloads_dir=tmp_dir)
             self.assertEqual(cleaned, 0)
 
+            # Test path traversal protection in retention cleanup
+            cleaned_traversal = cleanup_downloads(days=7, downloads_dir="../../../etc")
+            self.assertEqual(cleaned_traversal, 0)
+
     def test_presentation_formatters_and_ascii(self):
         from src.gex.presentation.ascii_art import generate_ascii_gex_scale, format_color
         from src.gex.presentation.formatters import format_currency, format_pct, format_table
