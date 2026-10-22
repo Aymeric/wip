@@ -232,17 +232,27 @@ def calculate_atr(
     return atr
 
 
+_SQRT_252_X_100 = math.sqrt(252) * 100.0
+
+
 def calculate_annualized_vol(returns_list: Sequence[float]) -> float:
-    """Calculates annualized volatility from daily log returns."""
+    """Calculates annualized volatility from daily log returns.
+
+    Performance optimization (Bolt):
+    - Uses precomputed constant `_SQRT_252_X_100` (`math.sqrt(252) * 100.0`) to eliminate
+      redundant math.sqrt(252) recalculation on every function call.
+    - Uses numerically stable two-pass scalar loop to compute variance without generator
+      or list allocations.
+    """
     n = len(returns_list)
     if n < 2:
         return 0.0
-    mean_ret = sum(returns_list) / n
 
+    mean_ret = sum(returns_list) / n
     sum_sq_diff = 0.0
     for x in returns_list:
         diff = x - mean_ret
         sum_sq_diff += diff * diff
+
     variance = sum_sq_diff / (n - 1)
-    stdev_ret = math.sqrt(variance)
-    return stdev_ret * math.sqrt(252) * 100.0
+    return math.sqrt(variance) * _SQRT_252_X_100

@@ -23,3 +23,7 @@
 ## 2026-11-08 - Neutral Color Semantics for Zero Price Movement
 **Learning:** In financial CLI tables and simulation outputs, binary color evaluation (`chg > 0` -> green, else -> red) incorrectly colors flat 0.00% daily price changes as losses (red) or gains (green), creating false alarm states for users scanning table rows.
 **Action:** Always evaluate price movement across three distinct states (positive -> green 32, negative -> red 31, zero -> neutral/dim 37) to prevent misleading visual signals.
+
+## 2026-11-05 - Empty Table Line Alignment for Long Messages
+**Learning:** When formatting empty ASCII tables in CLI output, if the `empty_message` string is longer than the table headers, unadjusted column widths cause header and separator lines to be shorter than the message beneath them, creating visually truncated ASCII boundaries.
+**Action:** Dynamically expand column width in `format_table` when `rows` is empty so that header and separator lines match or exceed the width of long `empty_message` strings.

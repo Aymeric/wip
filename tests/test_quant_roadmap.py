@@ -676,6 +676,10 @@ class TestPhase2ModularArchitecture(unittest.TestCase):
             cleaned = cleanup_downloads(days=7, downloads_dir=tmp_dir)
             self.assertEqual(cleaned, 0)
 
+            # Test path traversal protection in retention cleanup
+            cleaned_traversal = cleanup_downloads(days=7, downloads_dir="../../../etc")
+            self.assertEqual(cleaned_traversal, 0)
+
     def test_presentation_formatters_and_ascii(self):
         from src.gex.presentation.ascii_art import generate_ascii_gex_scale, format_color
         from src.gex.presentation.formatters import format_currency, format_pct, format_table
@@ -700,6 +704,10 @@ class TestPhase2ModularArchitecture(unittest.TestCase):
         self.assertIn("No data available", empty_table)
         custom_empty_table = format_table(["Sym", "Price"], [], empty_message="No candidates found")
         self.assertIn("No candidates found", custom_empty_table)
+        # Verify separator line width expands to match or exceed long empty message
+        lines = custom_empty_table.split("\n")
+        self.assertEqual(len(lines[0]), len(lines[2]))
+        self.assertEqual(len(lines[1]), len(lines[2]))
 
 
 if __name__ == "__main__":
