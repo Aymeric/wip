@@ -244,6 +244,29 @@ class TestGEXEngine(unittest.TestCase):
             pnl, pct, status, cnt = gex_engine.get_monthly_realized_pnl(10000.0, monthly_file=invalid_path, pnl_file=invalid_path)
             self.assertEqual((pnl, pct, status, cnt), (0.0, 0.0, "PASS", 0))
 
+        # sync-pnl command with path traversal pnl_file safely rejects invalid file
+        sync_pnl_args = SimpleNamespace(pnl_file=invalid_path, account="")
+        with patch('sys.stderr'), patch('sys.stdout'):
+            with self.assertRaises(SystemExit) as cm:
+                gex_engine.cmd_sync_pnl(sync_pnl_args)
+            self.assertEqual(cm.exception.code, 1)
+
+        # update-regime command with path traversal etf_file safely rejects invalid file
+        update_regime_args = SimpleNamespace(
+            spy=None, qqq=None, bulls=None, bears=None, vix_bearish=None, vix_spot=15.0, hyg=None, etf_file=invalid_path
+        )
+        with patch('sys.stderr'), patch('sys.stdout'):
+            with self.assertRaises(SystemExit) as cm:
+                gex_engine.cmd_update_regime(update_regime_args)
+            self.assertEqual(cm.exception.code, 1)
+
+        # update-performance command with path traversal monthly_file / pnl_file safely rejects invalid file
+        update_perf_args = SimpleNamespace(net_liq=50000.0, account="ACC123", monthly_file=invalid_path, pnl_file=invalid_path)
+        with patch('sys.stderr'), patch('sys.stdout'):
+            with self.assertRaises(SystemExit) as cm:
+                gex_engine.cmd_update_performance(update_perf_args)
+            self.assertEqual(cm.exception.code, 1)
+
         # sync-positions command with path traversal base_dir safely rejects invalid directory
         sync_pos_args = SimpleNamespace(base_dir=invalid_path, account="")
         with patch('sys.stderr'), patch('sys.stdout'):
