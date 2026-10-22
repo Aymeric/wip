@@ -10,6 +10,10 @@ def format_currency(value: Optional[float], default: str = "$0.00") -> str:
     """Formats numeric value as currency."""
     if value is None:
         return default
+    if abs(value) < 0.005:
+        return "$0.00"
+    if value < 0:
+        return f"-${abs(value):,.2f}"
     return f"${value:,.2f}"
 
 
@@ -17,6 +21,8 @@ def format_pct(value: Optional[float], default: str = "+0.00%", include_sign: bo
     """Formats float value as percentage."""
     if value is None:
         return default
+    if abs(value) < 0.005:
+        return "+0.00%" if include_sign else "0.00%"
     sign = "+" if include_sign and value > 0 else ""
     return f"{sign}{value:.2f}%"
 
