@@ -5333,7 +5333,7 @@ def cmd_update_candidates(args):
                 gex_status_str = format_color(f"{gex_status_str:<16}", "37")
             
             # Color coding changes
-            change_color = "32" if c['chg_pct'] > 0.0 else "31"
+            change_color = "32" if c['chg_pct'] > 0.0 else ("31" if c['chg_pct'] < 0.0 else "37")
             change_fmt = format_color(f"{change:<12}", change_color, bold=True)
             ticker_fmt = format_color(f"{ticker:<8}", "35", bold=True)
 
@@ -6378,7 +6378,7 @@ def cmd_simulate(args):
     print(f"- **Simulated Spot**: {format_color(f'${sim_spot:.2f}', '35', bold=True)}")
     
     pct_chg = ((sim_spot - orig_spot) / orig_spot) * 100.0 if orig_spot > 0 else 0.0
-    print(f"- **Price Change**: {format_color(f'{pct_chg:+.2f}%', '32' if pct_chg >= 0 else '31', bold=True)}")
+    print(f"- **Price Change**: {format_color(f'{pct_chg:+.2f}%', '32' if pct_chg > 0.0 else ('31' if pct_chg < 0.0 else '37'), bold=True)}")
     
     # Recalculate Grade
     grade, rule_checklist = calculate_grade(symbol, sim_spot, ptrans, ntrans, gex, cotmp)
