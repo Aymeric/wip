@@ -5333,7 +5333,7 @@ def cmd_update_candidates(args):
                 gex_status_str = format_color(f"{gex_status_str:<16}", "37")
             
             # Color coding changes
-            change_color = "32" if c['chg_pct'] > 0.0 else "31"
+            change_color = "32" if c['chg_pct'] > 0.0 else ("31" if c['chg_pct'] < 0.0 else "37")
             change_fmt = format_color(f"{change:<12}", change_color, bold=True)
             ticker_fmt = format_color(f"{ticker:<8}", "35", bold=True)
 
@@ -6378,7 +6378,7 @@ def cmd_simulate(args):
     print(f"- **Simulated Spot**: {format_color(f'${sim_spot:.2f}', '35', bold=True)}")
     
     pct_chg = ((sim_spot - orig_spot) / orig_spot) * 100.0 if orig_spot > 0 else 0.0
-    print(f"- **Price Change**: {format_color(f'{pct_chg:+.2f}%', '32' if pct_chg >= 0 else '31', bold=True)}")
+    print(f"- **Price Change**: {format_color(f'{pct_chg:+.2f}%', '32' if pct_chg > 0.0 else ('31' if pct_chg < 0.0 else '37'), bold=True)}")
     
     # Recalculate Grade
     grade, rule_checklist = calculate_grade(symbol, sim_spot, ptrans, ntrans, gex, cotmp)
@@ -6437,36 +6437,10 @@ def cmd_simulate(args):
 
 def cleanup_downloads(days=7):
     """Removes dated download folders older than the retention period and stale tmp folders."""
-    now = datetime.now()
-    removed_count = 0
-    
-    if not os.path.exists(DOWNLOADS_DIR):
-        print("No downloads directory found.")
-        return
-        
-    for item in os.listdir(DOWNLOADS_DIR):
-        item_path = os.path.join(DOWNLOADS_DIR, item)
-        if os.path.isdir(item_path):
-            # Check if directory name is a date YYYYMMDD
-            if re.match(r"^\d{8}$", item):
-                try:
-                    dir_date = datetime.strptime(item, "%Y%m%d")
-                    age_days = (now - dir_date).days
-                    if age_days > days:
-                        print(f"Removing stale download folder: {item} ({age_days} days old)")
-                        shutil.rmtree(item_path)
-                        removed_count += 1
-                except Exception as e:
-                    print(f"Error removing {item}: {e}")
-            elif item == "tmp":
-                # Always clean tmp folders if they exist and are older than 1 day
-                mtime = os.path.getmtime(item_path)
-                if (now - datetime.fromtimestamp(mtime)).days >= 1:
-                    print(f"Removing stale tmp folder: {item}")
-                    shutil.rmtree(item_path)
-                    removed_count += 1
-                    
+    from src.gex.storage.retention import cleanup_downloads as _retention_cleanup
+    removed_count = _retention_cleanup(days=days, downloads_dir=DOWNLOADS_DIR)
     print(f"Cleanup complete. Removed {removed_count} folders.")
+    return removed_count
 
 
 def cmd_cleanup_downloads(args):

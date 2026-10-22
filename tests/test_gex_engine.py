@@ -5091,6 +5091,48 @@ class TestCmdStatus(unittest.TestCase):
             if os.path.exists(tmp_path):
                 os.remove(tmp_path)
 
+    def test_zero_change_color_formatting(self):
+        """Verify that 0.0% price change uses neutral ANSI color '37' instead of red '31' or green '32'."""
+        import gex_engine
+        from unittest.mock import patch, MagicMock
+        import io
+
+        # Mock stdout isatty to return True so format_color produces ANSI codes
+        with patch("sys.stdout.isatty", return_value=True):
+            # Test simulate output when spot remains unchanged (0.0% change)
+            mock_analyses = {
+                "TEST": {
+                    "Ticker": "TEST",
+                    "Spot": 100.0,
+                    "pTrans": 98.0,
+                    "nTrans": 95.0,
+                    "+GEX": 110.0,
+                    "COTMP": 90.0,
+                    "Grade": 10
+                }
+            }
+            def mock_load_json(path, default=None):
+                if "analyses" in path or path == gex_engine.ANALYSES_FILE:
+                    return mock_analyses
+                if "active_positions" in path:
+                    return {"options_positions": {}, "stocks_positions": {}}
+                return default or {}
+
+            with patch("gex_engine.load_json", side_effect=mock_load_json):
+                args = MagicMock()
+                args.symbol = "TEST"
+                args.spot = 100.0  # Exact match to original spot -> 0.0% change
+                args.account = ""
+
+                captured_output = io.StringIO()
+                captured_output.isatty = lambda: True
+                with patch("sys.stdout", captured_output):
+                    gex_engine.cmd_simulate(args)
+
+                output = captured_output.getvalue()
+                # Check that price change has neutral ANSI code '37' and not green '32' or red '31'
+                self.assertIn("\033[1;37m+0.00%\033[0m", output)
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -57,3 +57,7 @@
 ## 2026-10-14 - Pre-filtered Target Strikes & Pre-computed Sort Keys in Option Selection
 **Learning:** `select_best_option` previously sorted all candidate expiration dates with `list.sort()`, evaluated `strike >= gex_target` after performing dictionary quote parsing, and sorted eligible contracts using a lambda function that repeatedly evaluated dict keys (`x['tier']`, `x['delta']`, etc.). Using `min()` to select target expirations, checking `strike >= gex_target` before quote lookup, and pre-computing sort key tuples during list construction yielded a ~1.11x speedup in `select_best_option`.
 **Action:** In multi-criteria selection pipelines, filter out-of-bounds candidates before quote dictionary lookups and pre-compute sort key tuples during dictionary construction to avoid lambda attribute access overhead.
+
+## 2026-10-21 - Precomputed Scaling Constant & Numerically Stable Two-Pass Variance
+**Learning:** `calculate_annualized_vol` recomputed `math.sqrt(252) * 100.0` on every invocation. Hoisting `math.sqrt(252) * 100.0` into a module-level constant (`_SQRT_252_X_100`) while preserving numerically stable two-pass scalar variance calculation (`diff = x - mean_ret; sum_sq_diff += diff * diff`) avoided redundant constant math and function call overhead without risking catastrophic floating-point cancellation.
+**Action:** When performing windowed statistical return calculations, hoist invariant scaling constants out of function execution scope while preserving numerically stable two-pass variance formulas.

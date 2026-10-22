@@ -19,3 +19,11 @@
 ## 2026-10-24 - CLI Terminal Table Empty States
 **Learning:** Rendering CLI tables with zero rows as back-to-back header and footer separators without explicit messaging appears broken and ambiguous to users and screen readers.
 **Action:** Always handle empty row collections in table formatters and loops with explicit empty state notices (e.g. "No data available" or "No candidates matched the screening criteria") between table headers/footers.
+
+## 2026-11-08 - Neutral Color Semantics for Zero Price Movement
+**Learning:** In financial CLI tables and simulation outputs, binary color evaluation (`chg > 0` -> green, else -> red) incorrectly colors flat 0.00% daily price changes as losses (red) or gains (green), creating false alarm states for users scanning table rows.
+**Action:** Always evaluate price movement across three distinct states (positive -> green 32, negative -> red 31, zero -> neutral/dim 37) to prevent misleading visual signals.
+
+## 2026-11-05 - Empty Table Line Alignment for Long Messages
+**Learning:** When formatting empty ASCII tables in CLI output, if the `empty_message` string is longer than the table headers, unadjusted column widths cause header and separator lines to be shorter than the message beneath them, creating visually truncated ASCII boundaries.
+**Action:** Dynamically expand column width in `format_table` when `rows` is empty so that header and separator lines match or exceed the width of long `empty_message` strings.
