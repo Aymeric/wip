@@ -220,7 +220,7 @@ class TestGEXEngine(unittest.TestCase):
                 gex_engine.cmd_prune_candidates(prune_args)
             self.assertEqual(cm.exception.code, 1)
 
-        # analyze command with path traversal file options safely rejects invalid paths
+        # analyze command with path traversal file options safely rejects invalid paths with SystemExit(1)
         analyze_args = SimpleNamespace(
             symbol="TEST",
             spot=100.0,
@@ -232,12 +232,21 @@ class TestGEXEngine(unittest.TestCase):
             spike_crash=False,
             effective_session_date="2026-09-22",
             inst_file=invalid_path,
-            quote_file=invalid_path,
-            hist_file=invalid_path,
+            quote_file=None,
+            hist_file=None,
             rule1=None, rule2=None, rule7=None, rule8=None, rule9=None, rule10=None, rule11=None
         )
-        with patch('sys.stderr'), patch('sys.stdout'), patch('gex_engine.save_json'):
-            gex_engine.cmd_analyze(analyze_args)
+        with patch('sys.stderr'), patch('sys.stdout'):
+            with self.assertRaises(SystemExit) as cm:
+                gex_engine.cmd_analyze(analyze_args)
+            self.assertEqual(cm.exception.code, 1)
+
+        # snapshot command with path traversal output file safely rejects invalid path with SystemExit(1)
+        snapshot_args = SimpleNamespace(account="", output=invalid_path)
+        with patch('sys.stderr'), patch('sys.stdout'):
+            with self.assertRaises(SystemExit) as cm:
+                gex_engine.cmd_snapshot(snapshot_args)
+            self.assertEqual(cm.exception.code, 1)
 
         # get_monthly_realized_pnl with path traversal files safely rejects invalid paths
         with patch('sys.stderr'):
@@ -274,9 +283,10 @@ class TestGEXEngine(unittest.TestCase):
                 gex_engine.cmd_sync_positions(sync_pos_args)
             self.assertEqual(cm.exception.code, 1)
 
-        # list_download_files with path traversal downloads_dir returns empty list
+        # list_download_files and _get_downloads_files with path traversal downloads_dir return empty list
         with patch('sys.stderr'):
             self.assertEqual(gex_engine.list_download_files(invalid_path), [])
+            self.assertEqual(gex_engine._get_downloads_files(invalid_path), [])
 
     def test_save_json_preserves_existing_file_on_serialization_failure(self):
         import tempfile

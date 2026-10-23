@@ -1,3 +1,8 @@
+## 2026-09-25 - All CLI subcommand file output and input parameters must enforce validate_safe_path before writing or processing
+**Vulnerability:** Subcommands `cmd_snapshot` (`--output`) and `cmd_analyze` (`--inst-file`/`--quote-file`/`--hist-file`) as well as helper `_get_downloads_files` processed user-supplied output/input paths without `validate_safe_path()` checks, causing delayed or bypassed path traversal validation and misleading success outputs.
+**Learning:** Delegating path traversal checks solely to atomic save/load utilities can cause subcommands to output success messages or proceed with execution even after file persistence fails due to path validation errors.
+**Prevention:** Always perform `validate_safe_path()` checks at subcommand parameter extraction prior to executing file reads, writes, or printing execution status.
+
 ## 2026-09-24 - CLI subcommands must validate user-supplied file path parameters with validate_safe_path before os.path.exists checks
 **Vulnerability:** Subcommands `cmd_sync_pnl` (`--pnl-file`), `cmd_prune_candidates` (`--watchlist-file`), `cmd_update_regime` (`--etf-file`), and `cmd_update_performance` (`--monthly-file`/`--pnl-file`) checked `os.path.exists()` on raw user-supplied input paths before calling `validate_safe_path()`, permitting file existence probing and delayed validation.
 **Learning:** Checking file existence with `os.path.exists()` on raw user inputs before path traversal validation leaks file existence on arbitrary filesystem paths outside allowed roots.
