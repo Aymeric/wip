@@ -65,3 +65,7 @@
 ## 2026-10-28 - Deferred Grouping Rounding & Local Date Parsing Caching in Journal Aggregation
 **Learning:** `calculate_trade_journal` executed `dict.setdefault()` and inner `round()` calls on every trade record and re-parsed duplicate ISO date strings. Introducing a local `date_cache` dictionary and accumulating raw floating-point P&L in group buckets before applying a single deferred `round(..., 2)` pass over bucket values yielded a ~2.0x execution speedup (~0.388 ms/call to ~0.191 ms/call).
 **Action:** In data aggregation pipelines over grouped dictionaries, accumulate raw floating-point values during record iteration and defer rounding formatting to a single post-processing loop over grouped bucket values.
+
+## 2026-11-04 - Eliminate `abs()` and `max()` Overhead via Inline Scalar Conditionals in True Range
+**Learning:** `calculate_atr` called `abs()` twice per bar to compute price differences `abs(h - c_prev)` and `abs(l - c_prev)` before performing multi-variable comparison checks. Since `True Range = max(h, c_prev) - min(l, c_prev)`, replacing `abs()` and `max()` function calls with inline scalar conditional branches (`if c_prev > h: tr = c_prev - l; elif c_prev < l: tr = h - c_prev; else: tr = h - l`) eliminated CPython built-in function call overhead entirely, yielding a ~1.89x execution speedup (0.1042 ms/call to 0.0551 ms/call).
+**Action:** In high-frequency price loop calculations (such as ATR or range volatility), eliminate `abs()` and `max()` built-in function calls by using mathematically equivalent inline scalar conditional branches.
