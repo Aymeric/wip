@@ -429,6 +429,13 @@ def cmd_update_regime(args):
     hyg_val = getattr(args, "hyg", None)
     
     etf_file = getattr(args, "etf_file", None)
+    if etf_file:
+        try:
+            etf_file = validate_safe_path(etf_file)
+            args.etf_file = etf_file
+        except ValueError as e:
+            print(f"Error: Invalid etf_file path: {e}", file=sys.stderr)
+            sys.exit(1)
     if not etf_file and spy_val is None:
         # Try to auto-discover latest ETF quotes file
         etf_candidates = []
@@ -644,10 +651,26 @@ def cmd_update_performance(args):
         print("Error: --net-liq must be a positive account net liquidation value.", file=sys.stderr)
         sys.exit(1)
 
+    monthly_file = getattr(args, "monthly_file", None)
+    if monthly_file:
+        try:
+            monthly_file = validate_safe_path(monthly_file)
+        except ValueError as e:
+            print(f"Error: Invalid monthly_file path: {e}", file=sys.stderr)
+            sys.exit(1)
+
+    pnl_file = getattr(args, "pnl_file", None)
+    if pnl_file:
+        try:
+            pnl_file = validate_safe_path(pnl_file)
+        except ValueError as e:
+            print(f"Error: Invalid pnl_file path: {e}", file=sys.stderr)
+            sys.exit(1)
+
     monthly_pnl_dlr, monthly_pnl_pct, drawdown_gate_status, monthly_cnt = get_monthly_realized_pnl(
         args.net_liq,
-        monthly_file=getattr(args, "monthly_file", None),
-        pnl_file=getattr(args, "pnl_file", None),
+        monthly_file=monthly_file,
+        pnl_file=pnl_file,
     )
     performance_path = account_performance_file(args.account)
     performance_data = {
@@ -4451,6 +4474,12 @@ def cmd_close_pos(args):
 def cmd_sync_pnl(args):
     """Syncs P&L trade history from retrieved file to detect closed positions, and moves closed positions to closed_positions.json."""
     pnl_file = getattr(args, "pnl_file", "")
+    if pnl_file:
+        try:
+            pnl_file = validate_safe_path(pnl_file)
+        except ValueError as e:
+            print(f"Error: Invalid pnl_file path: {e}", file=sys.stderr)
+            sys.exit(1)
     raw_account = getattr(args, "account", "")
     account = sanitize_account(raw_account) if raw_account else ""
     options_file = account_positions_file(account)
@@ -5405,6 +5434,11 @@ def cmd_prune_candidates(args):
 
     symbols = []
     if watchlist_file:
+        try:
+            watchlist_file = validate_safe_path(watchlist_file)
+        except ValueError as e:
+            print(f"Error: Invalid watchlist_file path: {e}", file=sys.stderr)
+            sys.exit(1)
         if not os.path.exists(watchlist_file):
             print(f"Error: Watchlist file not found: {watchlist_file}", file=sys.stderr)
             sys.exit(1)

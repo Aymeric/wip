@@ -1,3 +1,8 @@
+## 2026-09-24 - CLI subcommands must validate user-supplied file path parameters with validate_safe_path before os.path.exists checks
+**Vulnerability:** Subcommands `cmd_sync_pnl` (`--pnl-file`), `cmd_prune_candidates` (`--watchlist-file`), `cmd_update_regime` (`--etf-file`), and `cmd_update_performance` (`--monthly-file`/`--pnl-file`) checked `os.path.exists()` on raw user-supplied input paths before calling `validate_safe_path()`, permitting file existence probing and delayed validation.
+**Learning:** Checking file existence with `os.path.exists()` on raw user inputs before path traversal validation leaks file existence on arbitrary filesystem paths outside allowed roots.
+**Prevention:** Always validate user-supplied file path arguments with `validate_safe_path()` immediately at the start of subcommand handlers before invoking `os.path.exists()` or other file operations.
+
 ## 2026-09-23 - Directory cleanup utilities must enforce path traversal validation before checking or deleting directories
 **Vulnerability:** `cleanup_downloads()` accepted an unvalidated `downloads_dir` parameter directly into `os.path.exists()`, `os.listdir()`, and `shutil.rmtree()`, permitting directory deletion and traversal outside allowed root directories.
 **Learning:** Directory deletion and retention utilities accepting directory parameters must validate input paths against allowed root directories before checking existence or purging directories.
