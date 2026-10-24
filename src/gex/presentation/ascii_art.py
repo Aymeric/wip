@@ -25,11 +25,11 @@ def format_color(text: str, color_code: str, bold: bool = False) -> str:
 
 
 def generate_ascii_gex_scale(
-    spot: float,
-    ptrans: Optional[float],
-    ntrans: Optional[float],
-    gex: Optional[float],
-    cotmp: Optional[float],
+    spot: Optional[float],
+    ptrans: Optional[float] = None,
+    ntrans: Optional[float] = None,
+    gex: Optional[float] = None,
+    cotmp: Optional[float] = None,
 ) -> str:
     """Constructs a visual linear ASCII representation of GEX levels and where SPOT resides."""
     levels_by_price = {}

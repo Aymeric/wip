@@ -2912,6 +2912,11 @@ class TestGEXEngine(unittest.TestCase):
         self.assertIn("COTMP", scale_grouped)
         self.assertIn("+", scale_grouped)
 
+        # Test single-node formatting when only spot is provided
+        scale_single = generate_ascii_gex_scale(spot=100.0)
+        self.assertIn("[SPOT (Current): $100.00]", scale_single)
+        self.assertNotIn("===>", scale_single)
+
     def test_cmd_simulate_not_found(self):
         """Test cmd_simulate exits with code 1 when symbol is not found in analyses or candidates."""
         from unittest.mock import patch, MagicMock
