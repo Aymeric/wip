@@ -693,6 +693,11 @@ class TestPhase2ModularArchitecture(unittest.TestCase):
 
         # Formatters
         self.assertEqual(format_currency(1234.5), "$1,234.50")
+        self.assertEqual(format_currency(-1234.5), "-$1,234.50")
+        self.assertEqual(format_currency(0.0), "$0.00")
+        self.assertEqual(format_currency(-0.001), "$0.00")
+        self.assertEqual(format_currency(None), "$0.00")
+        self.assertEqual(format_currency(None, default="N/A"), "N/A")
         self.assertEqual(format_pct(5.2), "+5.20%")
         self.assertEqual(format_pct(-3.1), "-3.10%")
 

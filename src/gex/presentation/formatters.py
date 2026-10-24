@@ -10,7 +10,9 @@ def format_currency(value: Optional[float], default: str = "$0.00") -> str:
     """Formats numeric value as currency."""
     if value is None:
         return default
-    return f"${value:,.2f}"
+    if round(value, 2) < 0:
+        return f"-${abs(value):,.2f}"
+    return f"${abs(value):,.2f}"
 
 
 def format_pct(value: Optional[float], default: str = "+0.00%", include_sign: bool = True) -> str:

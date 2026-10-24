@@ -27,3 +27,7 @@
 ## 2026-11-05 - Empty Table Line Alignment for Long Messages
 **Learning:** When formatting empty ASCII tables in CLI output, if the `empty_message` string is longer than the table headers, unadjusted column widths cause header and separator lines to be shorter than the message beneath them, creating visually truncated ASCII boundaries.
 **Action:** Dynamically expand column width in `format_table` when `rows` is empty so that header and separator lines match or exceed the width of long `empty_message` strings.
+
+## 2026-11-20 - Standardized Negative Currency Formatting
+**Learning:** Formatting negative monetary values with the minus sign inside the currency symbol (e.g., `$-1,234.50`) looks visually awkward and violates standard accounting and financial interface formatting standards.
+**Action:** Always format negative currency values with the minus sign preceding the currency symbol (e.g., `-$1,234.50`), and account for floating-point rounding edge cases like `-0.00`.
