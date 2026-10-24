@@ -790,6 +790,11 @@ def cmd_snapshot(args):
     snapshot = build_system_snapshot(account)
     output_path = getattr(args, "output", None)
     if output_path:
+        try:
+            output_path = validate_safe_path(output_path)
+        except ValueError as e:
+            print(f"Error: Invalid output path: {e}", file=sys.stderr)
+            sys.exit(1)
         save_json(output_path, snapshot)
         print(f"System snapshot saved to {output_path}")
     else:
@@ -2189,23 +2194,29 @@ def select_best_option(inst_data, quotes_data, spot, gex_target, today_override=
     # Group call option instruments by expiration date (`by_exp`) during initial parsing.
     # This enables determining `chosen_exp` before quote processing, so quotes are filtered
     # and stored strictly for target contracts of the chosen expiration date (~3.5x speedup).
+    # Performance optimization (Bolt):
+    # - Avoid `str(opt_type).lower()` on every instrument by checking equality with 'call'/'CALL' first.
+    # - Direct key lookups and dict insertion without `setdefault()` overhead.
     by_exp = {}
     expirations = set()
     for inst in instruments_list:
         if not isinstance(inst, dict):
             continue
+        opt_type = inst.get("type")
+        if opt_type != "call" and opt_type != "CALL" and (not isinstance(opt_type, str) or opt_type.lower() != "call"):
+            continue
         opt_id = inst.get("id")
         if not opt_id:
-            continue
-        opt_type = inst.get("type")
-        if not opt_type or str(opt_type).lower() != "call":
             continue
         try:
             strike = float(inst["strike_price"]) if "strike_price" in inst else float(inst.get("strike", 0.0))
             exp_str = inst.get("expiration_date")
             if exp_str:
-                by_exp.setdefault(exp_str, []).append((opt_id, strike))
-                expirations.add(exp_str)
+                if exp_str in by_exp:
+                    by_exp[exp_str].append((opt_id, strike))
+                else:
+                    by_exp[exp_str] = [(opt_id, strike)]
+                    expirations.add(exp_str)
         except (ValueError, KeyError, TypeError):
             continue
 
@@ -2268,15 +2279,15 @@ def select_best_option(inst_data, quotes_data, spot, gex_target, today_override=
 
     quotes_list = extract_quotes_list(quotes_data)
 
+    # Performance optimization (Bolt): Direct dictionary lookups for inner quote payloads
+    # and instrument IDs avoid redundant `.get()` call overhead.
     quotes_map = {}
     for q_item in quotes_list:
         if not isinstance(q_item, dict):
             continue
-        q = q_item.get("quote", q_item)
-        if not isinstance(q, dict):
-            continue
+        q = q_item["quote"] if ("quote" in q_item and isinstance(q_item["quote"], dict)) else q_item
         opt_id = q.get("instrument_id") or q.get("id") or q.get("instrument")
-        if opt_id and opt_id in target_opt_ids:
+        if opt_id in target_opt_ids:
             quotes_map[opt_id] = q
 
     # 4. Gather and score contracts for chosen expiration
@@ -2325,9 +2336,7 @@ def select_best_option(inst_data, quotes_data, spot, gex_target, today_override=
         pct_above_spot = ((strike - spot) / spot) * 100 if spot > 0 else 0.0
         strike_preferred = (0.0 <= pct_above_spot <= 5.0)
 
-        delta_preferred = False
-        if delta is not None:
-            delta_preferred = (target_delta - 0.05 <= delta <= target_delta + 0.05)
+        delta_preferred = (target_delta - 0.05 <= delta <= target_delta + 0.05) if delta is not None else False
 
         # Scoring contracts
         # Tier 1: Liquidity passed + strike or delta preferred
@@ -2422,9 +2431,35 @@ def cmd_analyze(args):
 
     # Discover option files if not explicitly passed
     discovered_files = find_latest_option_files(symbol)
-    inst_file = getattr(args, "inst_file", None) or discovered_files.get("inst_file")
-    quote_file = getattr(args, "quote_file", None) or discovered_files.get("quote_file")
-    hist_file = getattr(args, "hist_file", None) or discovered_files.get("hist_file")
+    inst_file = getattr(args, "inst_file", None)
+    if inst_file:
+        try:
+            inst_file = validate_safe_path(inst_file)
+        except ValueError as e:
+            print(f"Error: Invalid inst_file path: {e}", file=sys.stderr)
+            sys.exit(1)
+    else:
+        inst_file = discovered_files.get("inst_file")
+
+    quote_file = getattr(args, "quote_file", None)
+    if quote_file:
+        try:
+            quote_file = validate_safe_path(quote_file)
+        except ValueError as e:
+            print(f"Error: Invalid quote_file path: {e}", file=sys.stderr)
+            sys.exit(1)
+    else:
+        quote_file = discovered_files.get("quote_file")
+
+    hist_file = getattr(args, "hist_file", None)
+    if hist_file:
+        try:
+            hist_file = validate_safe_path(hist_file)
+        except ValueError as e:
+            print(f"Error: Invalid hist_file path: {e}", file=sys.stderr)
+            sys.exit(1)
+    else:
+        hist_file = discovered_files.get("hist_file")
 
     # If inst-file and quote-file exist, perform mechanical local GEX profile derivation
     if inst_file and quote_file:

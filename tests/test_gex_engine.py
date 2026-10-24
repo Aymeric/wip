@@ -220,24 +220,27 @@ class TestGEXEngine(unittest.TestCase):
                 gex_engine.cmd_prune_candidates(prune_args)
             self.assertEqual(cm.exception.code, 1)
 
-        # analyze command with path traversal file options safely rejects invalid paths
-        analyze_args = SimpleNamespace(
-            symbol="TEST",
-            spot=100.0,
-            ptrans=98.0,
-            ntrans=95.0,
-            gex=105.0,
-            cotmp=92.0,
-            db_change=0.5,
-            spike_crash=False,
-            effective_session_date="2026-09-22",
-            inst_file=invalid_path,
-            quote_file=invalid_path,
-            hist_file=invalid_path,
-            rule1=None, rule2=None, rule7=None, rule8=None, rule9=None, rule10=None, rule11=None
-        )
-        with patch('sys.stderr'), patch('sys.stdout'), patch('gex_engine.save_json'):
-            gex_engine.cmd_analyze(analyze_args)
+        # analyze command with path traversal file options safely rejects invalid inst_file, quote_file, and hist_file
+        for opt_key in ("inst_file", "quote_file", "hist_file"):
+            kw = {
+                "symbol": "TEST", "spot": 100.0, "ptrans": 98.0, "ntrans": 95.0, "gex": 105.0, "cotmp": 92.0,
+                "db_change": 0.5, "spike_crash": False, "effective_session_date": "2026-09-22",
+                "inst_file": None, "quote_file": None, "hist_file": None,
+                "rule1": None, "rule2": None, "rule7": None, "rule8": None, "rule9": None, "rule10": None, "rule11": None
+            }
+            kw[opt_key] = invalid_path
+            analyze_args = SimpleNamespace(**kw)
+            with patch('sys.stderr'), patch('sys.stdout'):
+                with self.assertRaises(SystemExit) as cm:
+                    gex_engine.cmd_analyze(analyze_args)
+                self.assertEqual(cm.exception.code, 1)
+
+        # snapshot command with path traversal output path safely rejects invalid file
+        snapshot_args = SimpleNamespace(account="", output=invalid_path)
+        with patch('sys.stderr'), patch('sys.stdout'):
+            with self.assertRaises(SystemExit) as cm:
+                gex_engine.cmd_snapshot(snapshot_args)
+            self.assertEqual(cm.exception.code, 1)
 
         # get_monthly_realized_pnl with path traversal files safely rejects invalid paths
         with patch('sys.stderr'):
@@ -2908,6 +2911,11 @@ class TestGEXEngine(unittest.TestCase):
         self.assertIn("nTrans", scale_grouped)
         self.assertIn("COTMP", scale_grouped)
         self.assertIn("+", scale_grouped)
+
+        # Test single-node formatting when only spot is provided
+        scale_single = generate_ascii_gex_scale(spot=100.0)
+        self.assertIn("[SPOT (Current): $100.00]", scale_single)
+        self.assertNotIn("===>", scale_single)
 
     def test_cmd_simulate_not_found(self):
         """Test cmd_simulate exits with code 1 when symbol is not found in analyses or candidates."""

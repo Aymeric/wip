@@ -691,10 +691,21 @@ class TestPhase2ModularArchitecture(unittest.TestCase):
         self.assertIn("nTrans", scale)
         self.assertIn("+GEX", scale)
 
+        # Single node ASCII Runway
+        single_scale = generate_ascii_gex_scale(spot=150.0)
+        self.assertIn("[SPOT (Current): $150.00]", single_scale)
+        self.assertNotIn("===>", single_scale)
+
         # Formatters
         self.assertEqual(format_currency(1234.5), "$1,234.50")
+        self.assertEqual(format_currency(-1234.5), "-$1,234.50")
+        self.assertEqual(format_currency(-0.001), "$0.00")
+        self.assertEqual(format_currency(None), "$0.00")
         self.assertEqual(format_pct(5.2), "+5.20%")
         self.assertEqual(format_pct(-3.1), "-3.10%")
+        self.assertEqual(format_pct(-0.001), "+0.00%")
+        self.assertEqual(format_pct(-0.001, include_sign=False), "0.00%")
+        self.assertEqual(format_pct(None), "+0.00%")
 
         table = format_table(["Sym", "Price"], [["AAPL", 180.0], ["MSFT", 400.0]])
         self.assertIn("AAPL", table)
