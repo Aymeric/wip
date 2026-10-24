@@ -2189,23 +2189,29 @@ def select_best_option(inst_data, quotes_data, spot, gex_target, today_override=
     # Group call option instruments by expiration date (`by_exp`) during initial parsing.
     # This enables determining `chosen_exp` before quote processing, so quotes are filtered
     # and stored strictly for target contracts of the chosen expiration date (~3.5x speedup).
+    # Performance optimization (Bolt):
+    # - Avoid `str(opt_type).lower()` on every instrument by checking equality with 'call'/'CALL' first.
+    # - Direct key lookups and dict insertion without `setdefault()` overhead.
     by_exp = {}
     expirations = set()
     for inst in instruments_list:
         if not isinstance(inst, dict):
             continue
+        opt_type = inst.get("type")
+        if opt_type != "call" and opt_type != "CALL" and (not isinstance(opt_type, str) or opt_type.lower() != "call"):
+            continue
         opt_id = inst.get("id")
         if not opt_id:
-            continue
-        opt_type = inst.get("type")
-        if not opt_type or str(opt_type).lower() != "call":
             continue
         try:
             strike = float(inst["strike_price"]) if "strike_price" in inst else float(inst.get("strike", 0.0))
             exp_str = inst.get("expiration_date")
             if exp_str:
-                by_exp.setdefault(exp_str, []).append((opt_id, strike))
-                expirations.add(exp_str)
+                if exp_str in by_exp:
+                    by_exp[exp_str].append((opt_id, strike))
+                else:
+                    by_exp[exp_str] = [(opt_id, strike)]
+                    expirations.add(exp_str)
         except (ValueError, KeyError, TypeError):
             continue
 
@@ -2268,15 +2274,15 @@ def select_best_option(inst_data, quotes_data, spot, gex_target, today_override=
 
     quotes_list = extract_quotes_list(quotes_data)
 
+    # Performance optimization (Bolt): Direct dictionary lookups for inner quote payloads
+    # and instrument IDs avoid redundant `.get()` call overhead.
     quotes_map = {}
     for q_item in quotes_list:
         if not isinstance(q_item, dict):
             continue
-        q = q_item.get("quote", q_item)
-        if not isinstance(q, dict):
-            continue
+        q = q_item["quote"] if ("quote" in q_item and isinstance(q_item["quote"], dict)) else q_item
         opt_id = q.get("instrument_id") or q.get("id") or q.get("instrument")
-        if opt_id and opt_id in target_opt_ids:
+        if opt_id in target_opt_ids:
             quotes_map[opt_id] = q
 
     # 4. Gather and score contracts for chosen expiration
@@ -2325,9 +2331,7 @@ def select_best_option(inst_data, quotes_data, spot, gex_target, today_override=
         pct_above_spot = ((strike - spot) / spot) * 100 if spot > 0 else 0.0
         strike_preferred = (0.0 <= pct_above_spot <= 5.0)
 
-        delta_preferred = False
-        if delta is not None:
-            delta_preferred = (target_delta - 0.05 <= delta <= target_delta + 0.05)
+        delta_preferred = (target_delta - 0.05 <= delta <= target_delta + 0.05) if delta is not None else False
 
         # Scoring contracts
         # Tier 1: Liquidity passed + strike or delta preferred
