@@ -790,6 +790,11 @@ def cmd_snapshot(args):
     snapshot = build_system_snapshot(account)
     output_path = getattr(args, "output", None)
     if output_path:
+        try:
+            output_path = validate_safe_path(output_path)
+        except ValueError as e:
+            print(f"Error: Invalid output path: {e}", file=sys.stderr)
+            sys.exit(1)
         save_json(output_path, snapshot)
         print(f"System snapshot saved to {output_path}")
     else:
@@ -2426,9 +2431,35 @@ def cmd_analyze(args):
 
     # Discover option files if not explicitly passed
     discovered_files = find_latest_option_files(symbol)
-    inst_file = getattr(args, "inst_file", None) or discovered_files.get("inst_file")
-    quote_file = getattr(args, "quote_file", None) or discovered_files.get("quote_file")
-    hist_file = getattr(args, "hist_file", None) or discovered_files.get("hist_file")
+    inst_file = getattr(args, "inst_file", None)
+    if inst_file:
+        try:
+            inst_file = validate_safe_path(inst_file)
+        except ValueError as e:
+            print(f"Error: Invalid inst_file path: {e}", file=sys.stderr)
+            sys.exit(1)
+    else:
+        inst_file = discovered_files.get("inst_file")
+
+    quote_file = getattr(args, "quote_file", None)
+    if quote_file:
+        try:
+            quote_file = validate_safe_path(quote_file)
+        except ValueError as e:
+            print(f"Error: Invalid quote_file path: {e}", file=sys.stderr)
+            sys.exit(1)
+    else:
+        quote_file = discovered_files.get("quote_file")
+
+    hist_file = getattr(args, "hist_file", None)
+    if hist_file:
+        try:
+            hist_file = validate_safe_path(hist_file)
+        except ValueError as e:
+            print(f"Error: Invalid hist_file path: {e}", file=sys.stderr)
+            sys.exit(1)
+    else:
+        hist_file = discovered_files.get("hist_file")
 
     # If inst-file and quote-file exist, perform mechanical local GEX profile derivation
     if inst_file and quote_file:
