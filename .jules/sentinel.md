@@ -1,3 +1,8 @@
+## 2026-09-25 - Webhook notification dispatchers must validate URL schemes to prevent SSRF and local file exposure
+**Vulnerability:** `dispatch_system_alert()` passed user-supplied or environment webhook URLs directly into `urllib.request.urlopen()` without validating the URL scheme, permitting `file://` or other arbitrary protocol requests.
+**Learning:** `urllib.request.urlopen()` handles arbitrary schemes (including `file://`) by default, making unvalidated URL inputs vulnerable to Server-Side Request Forgery (SSRF) and local file exposure.
+**Prevention:** Always parse and inspect URL schemes with `urllib.parse.urlparse()` before passing URLs to `urllib.request.urlopen()`, explicitly restricting permitted schemes to `http` and `https`.
+
 ## 2026-09-24 - CLI subcommands must validate user-supplied file path parameters with validate_safe_path before os.path.exists checks
 **Vulnerability:** Subcommands `cmd_sync_pnl` (`--pnl-file`), `cmd_prune_candidates` (`--watchlist-file`), `cmd_update_regime` (`--etf-file`), and `cmd_update_performance` (`--monthly-file`/`--pnl-file`) checked `os.path.exists()` on raw user-supplied input paths before calling `validate_safe_path()`, permitting file existence probing and delayed validation.
 **Learning:** Checking file existence with `os.path.exists()` on raw user inputs before path traversal validation leaks file existence on arbitrary filesystem paths outside allowed roots.
