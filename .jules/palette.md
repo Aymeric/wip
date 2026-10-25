@@ -27,3 +27,7 @@
 ## 2026-11-05 - Empty Table Line Alignment for Long Messages
 **Learning:** When formatting empty ASCII tables in CLI output, if the `empty_message` string is longer than the table headers, unadjusted column widths cause header and separator lines to be shorter than the message beneath them, creating visually truncated ASCII boundaries.
 **Action:** Dynamically expand column width in `format_table` when `rows` is empty so that header and separator lines match or exceed the width of long `empty_message` strings.
+
+## 2026-11-20 - Pre-Color String Width Padding in ANSI CLI Tables
+**Learning:** Applying fixed-width string formatting (e.g. `f"{text:<16}"`) on strings that already contain ANSI escape codes causes Python's `len()` to count non-printable control characters, inflating string length and misaligning CLI table columns.
+**Action:** Always apply width padding to raw uncolored strings before wrapping them with ANSI escape sequences in table formatters.

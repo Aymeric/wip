@@ -6,7 +6,9 @@ from src.gex.presentation.ascii_art import (
 from src.gex.presentation.formatters import (
     format_currency,
     format_pct,
+    format_pnl,
     format_table,
+    get_pnl_color,
 )
 
 __all__ = [
@@ -15,5 +17,7 @@ __all__ = [
     "generate_ascii_gex_scale",
     "format_currency",
     "format_pct",
+    "format_pnl",
     "format_table",
+    "get_pnl_color",
 ]
