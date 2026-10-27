@@ -3,7 +3,23 @@ Formatting helpers and markdown report generators for the GEX Trading System.
 Provides consistent currency, percentage, and tabular block formatting.
 """
 
+import re
 from typing import Any, Dict, List, Optional
+
+_ANSI_ESCAPE_RE = re.compile(r"\x1b\[[0-9;]*[a-zA-Z]")
+
+
+def _visible_len(s: str) -> int:
+    """Returns character length of string excluding ANSI escape sequences."""
+    return len(_ANSI_ESCAPE_RE.sub("", s))
+
+
+def _pad_cell(val: Any, width: int) -> str:
+    """Pads cell text to match target visible width, preserving ANSI escape sequences."""
+    s = str(val)
+    vis_len = _visible_len(s)
+    padding = " " * max(0, width - vis_len)
+    return s + padding
 
 
 def format_currency(value: Optional[float], default: str = "$0.00") -> str:
@@ -83,24 +99,24 @@ def format_table(headers: List[str], rows: List[List[Any]], empty_message: str =
     if not headers:
         return ""
     if not rows:
-        col_widths = [len(h) for h in headers]
+        col_widths = [_visible_len(h) for h in headers]
         table_width = sum(col_widths) + 3 * (len(headers) - 1)
-        if len(empty_message) > table_width:
-            col_widths[-1] += len(empty_message) - table_width
-        header_line = " | ".join(h.ljust(col_widths[i]) for i, h in enumerate(headers))
+        if _visible_len(empty_message) > table_width:
+            col_widths[-1] += _visible_len(empty_message) - table_width
+        header_line = " | ".join(_pad_cell(h, col_widths[i]) for i, h in enumerate(headers))
         separator_line = "-+-".join("-" * col_widths[i] for i in range(len(headers)))
         return "\n".join([header_line, separator_line, empty_message])
 
-    col_widths = [len(h) for h in headers]
+    col_widths = [_visible_len(h) for h in headers]
     for row in rows:
         for i, val in enumerate(row):
             if i < len(col_widths):
-                col_widths[i] = max(col_widths[i], len(str(val)))
+                col_widths[i] = max(col_widths[i], _visible_len(str(val)))
 
-    header_line = " | ".join(h.ljust(col_widths[i]) for i, h in enumerate(headers))
+    header_line = " | ".join(_pad_cell(h, col_widths[i]) for i, h in enumerate(headers))
     separator_line = "-+-".join("-" * col_widths[i] for i in range(len(headers)))
     row_lines = [
-        " | ".join(str(val).ljust(col_widths[i]) for i, val in enumerate(row))
+        " | ".join(_pad_cell(val, col_widths[i]) for i, val in enumerate(row))
         for row in rows
     ]
     return "\n".join([header_line, separator_line] + row_lines)

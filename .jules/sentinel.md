@@ -1,3 +1,8 @@
+## 2026-09-25 - File lookup utilities and P&L calculators accepting path parameters must validate inputs with validate_safe_path
+**Vulnerability:** `_get_downloads_files()` and `get_monthly_realized_pnl()` accepted directory and file path parameters directly into `os.path.exists()` checks without invoking `validate_safe_path()`, allowing unvalidated path traversal inputs.
+**Learning:** Functions that accept path parameters to scan directories or open files must validate inputs against allowed roots at the function entry point before evaluating `os.path.exists()` or traversing directories.
+**Prevention:** Always invoke `validate_safe_path()` immediately on user-supplied or internal path parameters before performing filesystem checks or reads.
+
 ## 2026-09-24 - CLI subcommands must validate user-supplied file path parameters with validate_safe_path before os.path.exists checks
 **Vulnerability:** Subcommands `cmd_sync_pnl` (`--pnl-file`), `cmd_prune_candidates` (`--watchlist-file`), `cmd_update_regime` (`--etf-file`), and `cmd_update_performance` (`--monthly-file`/`--pnl-file`) checked `os.path.exists()` on raw user-supplied input paths before calling `validate_safe_path()`, permitting file existence probing and delayed validation.
 **Learning:** Checking file existence with `os.path.exists()` on raw user inputs before path traversal validation leaks file existence on arbitrary filesystem paths outside allowed roots.
