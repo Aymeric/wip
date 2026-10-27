@@ -720,6 +720,34 @@ class TestPhase2ModularArchitecture(unittest.TestCase):
         self.assertEqual(len(lines[0]), len(lines[2]))
         self.assertEqual(len(lines[1]), len(lines[2]))
 
+    def test_format_table_ansi_escape_alignment(self):
+        import re
+        from src.gex.presentation.ascii_art import format_color
+        from src.gex.presentation.formatters import format_table
+
+        # Rows mixing ANSI colored and plain text cells
+        rows = [
+            ["AAPL", format_color("+5.20%", "32", bold=True), "$180.00"],
+            ["MSFT", format_color("-2.10%", "31"), "$400.00"],
+            ["NVDA", "+0.00%", "$130.00"],
+        ]
+        headers = ["Ticker", "Change", "Price"]
+        table = format_table(headers, rows)
+
+        table_lines = table.split("\n")
+        header_len = len(table_lines[0])
+        sep_len = len(table_lines[1])
+        self.assertEqual(header_len, sep_len)
+
+        # Verify that visible pipe positions align across header and all data rows
+        vis_header = re.sub(r"\x1b\[[0-9;]*[a-zA-Z]", "", table_lines[0])
+        header_vis_pipes = [i for i, ch in enumerate(vis_header) if ch == "|"]
+
+        for line in table_lines[2:]:
+            vis_line = re.sub(r"\x1b\[[0-9;]*[a-zA-Z]", "", line)
+            vis_pipe_indices = [i for i, ch in enumerate(vis_line) if ch == "|"]
+            self.assertEqual(vis_pipe_indices, header_vis_pipes)
+
 
 if __name__ == "__main__":
     unittest.main()

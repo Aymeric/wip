@@ -233,6 +233,11 @@ def _get_downloads_files(downloads_dir: str) -> List[Tuple[str, str]]:
     Pre-computes and caches uppercase basenames alongside file paths as (filepath, filename_upper)
     tuples to eliminate redundant os.path.basename(f).upper() calls in lookup utilities (~12x speedup).
     """
+    if downloads_dir:
+        try:
+            downloads_dir = validate_safe_path(downloads_dir)
+        except ValueError:
+            return []
     if not os.path.exists(downloads_dir):
         return []
     mtime_key = _get_dir_mtime_key(downloads_dir)
@@ -2980,6 +2985,18 @@ def get_monthly_realized_pnl(net_liq: float, monthly_file: Optional[str] = None,
     """
     pnl_file = pnl_file or ""
     monthly_file = monthly_file or ""
+
+    if monthly_file:
+        try:
+            monthly_file = validate_safe_path(monthly_file)
+        except ValueError:
+            monthly_file = ""
+
+    if pnl_file:
+        try:
+            pnl_file = validate_safe_path(pnl_file)
+        except ValueError:
+            pnl_file = ""
     
     if not monthly_file and not pnl_file and os.path.exists(DOWNLOADS_DIR):
         # Scan DOWNLOADS_DIR to locate any saved files and sort them lexicographically
