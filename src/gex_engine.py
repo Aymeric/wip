@@ -2318,15 +2318,15 @@ def select_best_option(inst_data, quotes_data, spot, gex_target, today_override=
 
     quotes_list = extract_quotes_list(quotes_data)
 
-    # Performance optimization (Bolt): Direct dictionary lookups for inner quote payloads
-    # and instrument IDs avoid redundant `.get()` call overhead.
+    # Performance optimization (Bolt): Pre-filter quotes map using direct membership check
+    # against target expiration contract IDs to eliminate redundant lookup passes.
     quotes_map = {}
     for q_item in quotes_list:
         if not isinstance(q_item, dict):
             continue
         q = q_item["quote"] if ("quote" in q_item and isinstance(q_item["quote"], dict)) else q_item
         opt_id = q.get("instrument_id") or q.get("id") or q.get("instrument")
-        if opt_id in target_opt_ids:
+        if opt_id and opt_id in target_opt_ids:
             quotes_map[opt_id] = q
 
     # 4. Gather and score contracts for chosen expiration
