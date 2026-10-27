@@ -18,7 +18,8 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..',
 from gex_engine import (
     sanitize_account,
     calculate_candidate_score,
-    calculate_grade, 
+    calculate_grade,
+    dispatch_system_alert,
     classify_etf,
     compute_regime_gates, 
     compute_exit_rule_state,
@@ -47,6 +48,21 @@ from gex_engine import (
 )
 
 class TestGEXEngine(unittest.TestCase):
+
+    def test_dispatch_system_alert_url_scheme_validation(self):
+        import io
+        from unittest.mock import patch
+
+        # Disallowed schemes should be caught and warning printed without executing network requests
+        with patch('sys.stderr', new_callable=io.StringIO) as mock_stderr:
+            res_file = dispatch_system_alert("Test Alert", "Message", webhook_url="file:///etc/passwd")
+            self.assertFalse(res_file)
+            self.assertIn("Unsupported URL scheme 'file'", mock_stderr.getvalue())
+
+        with patch('sys.stderr', new_callable=io.StringIO) as mock_stderr:
+            res_ftp = dispatch_system_alert("Test Alert", "Message", webhook_url="ftp://example.com/webhook")
+            self.assertFalse(res_ftp)
+            self.assertIn("Unsupported URL scheme 'ftp'", mock_stderr.getvalue())
 
     def test_slugify(self):
         # Standard text lowercasing and space replacement

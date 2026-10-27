@@ -1,3 +1,8 @@
+## 2026-09-25 - Webhook notification dispatchers must validate URL schemes to prevent SSRF and local file exposure
+**Vulnerability:** `dispatch_system_alert()` passed user-supplied or environment webhook URLs directly into `urllib.request.urlopen()` without validating the URL scheme, permitting `file://` or other arbitrary protocol requests.
+**Learning:** `urllib.request.urlopen()` handles arbitrary schemes (including `file://`) by default, making unvalidated URL inputs vulnerable to Server-Side Request Forgery (SSRF) and local file exposure.
+**Prevention:** Always parse and inspect URL schemes with `urllib.parse.urlparse()` before passing URLs to `urllib.request.urlopen()`, explicitly restricting permitted schemes to `http` and `https`.
+
 ## 2026-09-25 - File lookup utilities and P&L calculators accepting path parameters must validate inputs with validate_safe_path
 **Vulnerability:** `_get_downloads_files()` and `get_monthly_realized_pnl()` accepted directory and file path parameters directly into `os.path.exists()` checks without invoking `validate_safe_path()`, allowing unvalidated path traversal inputs.
 **Learning:** Functions that accept path parameters to scan directories or open files must validate inputs against allowed roots at the function entry point before evaluating `os.path.exists()` or traversing directories.

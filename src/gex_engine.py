@@ -276,7 +276,12 @@ def dispatch_system_alert(title: str, message: str, webhook_url: Optional[str] =
     # 1. Webhook alert via urllib.request (zero external dependencies)
     if url:
         try:
+            import urllib.parse
             import urllib.request
+            parsed = urllib.parse.urlparse(url)
+            if parsed.scheme.lower() not in ("http", "https"):
+                raise ValueError(f"Unsupported URL scheme '{parsed.scheme}': Webhook URLs must use http or https")
+
             payload = json.dumps({"title": title, "text": message, "content": f"**{title}**\n{message}"}).encode("utf-8")
             req = urllib.request.Request(
                 url,
