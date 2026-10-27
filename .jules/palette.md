@@ -35,3 +35,7 @@
 ## 2026-11-20 - ANSI Escape Code Alignment in CLI Tables
 **Learning:** In CLI tables containing ANSI color-formatted cells (such as colored P&L values or ticker badges), standard string length calculation `len()` counts non-printable escape bytes, causing column widths and pipe delimiters (`|`) to visually misalign across rows.
 **Action:** Always compute string widths and cell padding using ANSI-stripped visible length (`_visible_len`) in CLI table formatters so column boundaries remain pixel/character-aligned regardless of color styling.
+
+## 2026-11-22 - Column Alignment Support in ANSI CLI Tables
+**Learning:** Right-aligning numeric and financial cells in CLI ASCII tables significantly improves readability and scanning speed, but naive right-padding fails when strings contain ANSI color codes or when cells require variable alignment.
+**Action:** Support per-column alignment (`left`, `right`, `center`) in `format_table` by computing cell padding using ANSI-stripped visible string lengths (`_visible_len`) before wrapping value strings with left/right padding spaces.

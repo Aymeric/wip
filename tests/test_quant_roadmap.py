@@ -776,6 +776,44 @@ class TestPhase2ModularArchitecture(unittest.TestCase):
             vis_pipe_indices = [i for i, ch in enumerate(vis_line) if ch == "|"]
             self.assertEqual(vis_pipe_indices, header_vis_pipes)
 
+    def test_format_table_column_alignment(self):
+        import re
+        from src.gex.presentation.ascii_art import format_color
+        from src.gex.presentation.formatters import format_table
+
+        headers = ["Ticker", "Market Price", "Status"]
+        rows = [
+            ["AAPL", format_color("$180.00", "32"), "CONFIRMED"],
+            ["MSFT", "$5.00", format_color("PENDING", "33")],
+        ]
+        # Alignments: left for Ticker, right for Price, center for Status
+        table = format_table(headers, rows, alignments=["left", "right", "center"])
+
+        table_lines = table.split("\n")
+        # Line 0: Header ("Market Price" len 12)
+        # Line 1: Separator
+        # Line 2: AAPL row ("$180.00" len 7 -> right padded to 12)
+        # Line 3: MSFT row ("$5.00" len 5 -> right padded to 12)
+
+        # Stripping ANSI codes to verify padding and column bounds
+        row_aapl = re.sub(r"\x1b\[[0-9;]*[a-zA-Z]", "", table_lines[2])
+        cells_aapl = [cell for cell in row_aapl.split(" | ")]
+
+        # Right aligned price: "$180.00" in a 12-char column starts with 5 leading spaces
+        self.assertTrue(cells_aapl[1].startswith(" "))
+        self.assertTrue(cells_aapl[1].endswith("$180.00"))
+
+        # Center aligned status: "CONFIRMED" should be centered
+        self.assertEqual(cells_aapl[2].strip(), "CONFIRMED")
+
+        # Verify pipe positions remain identical across all lines
+        vis_header = re.sub(r"\x1b\[[0-9;]*[a-zA-Z]", "", table_lines[0])
+        header_pipes = [i for i, ch in enumerate(vis_header) if ch == "|"]
+        for line in table_lines[2:]:
+            vis_line = re.sub(r"\x1b\[[0-9;]*[a-zA-Z]", "", line)
+            pipe_indices = [i for i, ch in enumerate(vis_line) if ch == "|"]
+            self.assertEqual(pipe_indices, header_pipes)
+
 
 if __name__ == "__main__":
     unittest.main()
