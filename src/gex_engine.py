@@ -216,6 +216,10 @@ def _get_dir_mtime_key(d: str, ttl: float = 0.5) -> Any:
     last_check = _LAST_MTIME_CHECK_TIME.get(d, 0.0)
     if now - last_check < ttl and d in _CACHED_DIR_MTIME_KEY:
         return _CACHED_DIR_MTIME_KEY[d]
+    try:
+        d = validate_safe_path(d)
+    except ValueError:
+        return None
     if not os.path.exists(d):
         return None
     try:
@@ -298,8 +302,8 @@ def dispatch_system_alert(title: str, message: str, webhook_url: Optional[str] =
     if sys.platform == "darwin" and os.environ.get("GEX_DESKTOP_NOTIFICATIONS", "").lower() in ("1", "true", "yes"):
         try:
             import subprocess
-            clean_title = title.replace('"', '\\"')
-            clean_msg = message.replace('"', '\\"').replace("\n", " ")
+            clean_title = title.replace("\\", "\\\\").replace('"', '\\"').replace("\r", " ").replace("\n", " ")
+            clean_msg = message.replace("\\", "\\\\").replace('"', '\\"').replace("\r", " ").replace("\n", " ")
             applescript = f'display notification "{clean_msg}" with title "{clean_title}"'
             subprocess.run(["osascript", "-e", applescript], check=False, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
             alert_sent = True
