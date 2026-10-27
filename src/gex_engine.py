@@ -128,7 +128,9 @@ from src.gex.presentation.ascii_art import (
 from src.gex.presentation.formatters import (
     format_currency,
     format_pct,
+    format_pnl,
     format_table,
+    get_pnl_color,
 )
 from src.gex.storage.persistence import (
     load_json,
@@ -233,6 +235,11 @@ def _get_downloads_files(downloads_dir: str) -> List[Tuple[str, str]]:
     Pre-computes and caches uppercase basenames alongside file paths as (filepath, filename_upper)
     tuples to eliminate redundant os.path.basename(f).upper() calls in lookup utilities (~12x speedup).
     """
+    if downloads_dir:
+        try:
+            downloads_dir = validate_safe_path(downloads_dir)
+        except ValueError:
+            return []
     if not os.path.exists(downloads_dir):
         return []
     mtime_key = _get_dir_mtime_key(downloads_dir)
@@ -1028,8 +1035,7 @@ def cmd_status(args):
     
     drawdown_color = "32" if drawdown_gate_status == "PASS" else "31"
     drawdown_fmt = format_color(drawdown_gate_status, drawdown_color, bold=True)
-    m_pnl_color = "32" if monthly_pnl_dlr >= 0 else "31"
-    m_pnl_fmt = format_color(f"${monthly_pnl_dlr:+,.2f} ({monthly_pnl_pct:+.2f}%)", m_pnl_color, bold=True)
+    m_pnl_fmt = format_pnl(monthly_pnl_dlr, monthly_pnl_pct, bold=True)
     print(f"- **Account Drawdown Gate**: {drawdown_fmt} (30-Day Realized: {m_pnl_fmt} over {monthly_cnt} closed trades)")
     
     print(f"- **System Authorization**: {system_auth_str}")
@@ -1071,7 +1077,9 @@ def cmd_status(args):
         laggers_str = ", ".join(f"{format_color(sym, '35', bold=True)} ({chg:+.2f}%)" for chg, sym, name in laggers_tuples) or "None"
         
         print("\n### 🔄 Sector Momentum & Rotation")
-        print(f"- **Benchmark SPY Change**: {format_color(f'{spy_change:+.2f}%', '32' if spy_change >= 0 else '31', bold=True)}")
+        spy_color = get_pnl_color(spy_change)
+        spy_chg_str = format_pct(spy_change)
+        print(f"- **Benchmark SPY Change**: {format_color(spy_chg_str, spy_color, bold=True)}")
         print(f"- **Leading Sectors (Outperforming SPY)**: {leaders_str}")
         print(f"- **Lagging Sectors (Underperforming SPY)**: {laggers_str}")
             
@@ -1307,8 +1315,13 @@ def calculate_grade(ticker, spot, ptrans, ntrans, gex, cotmp, extra_rules=None):
     return grade, rules
 
 
+_DEFAULT_DTE_WEIGHT = 0.18257418583505537  # 1.0 / math.sqrt(30.0)
+
+
 def extract_quotes_list(quotes_data: Any) -> List[Any]:
     """Extracts a quotes list from dict or list data payload."""
+    if isinstance(quotes_data, list):
+        return quotes_data
     if isinstance(quotes_data, dict):
         data = quotes_data.get("data")
         quotes_list = []
@@ -1323,8 +1336,6 @@ def extract_quotes_list(quotes_data: Any) -> List[Any]:
                 quotes_list = res
 
         return quotes_list if isinstance(quotes_list, list) else []
-    elif isinstance(quotes_data, list):
-        return quotes_data
     return []
 
 
@@ -1342,28 +1353,32 @@ def derive_gex_profile(inst_data, quotes_data, spot):
         dict: Derived levels, rules, and intermediate calculations.
     """
     instruments_list = []
-    if isinstance(inst_data, dict):
-        if "data" in inst_data and isinstance(inst_data["data"], dict):
-            instruments_list = inst_data["data"].get("instruments", [])
+    if isinstance(inst_data, list):
+        instruments_list = inst_data
+    elif isinstance(inst_data, dict):
+        inst_dict = inst_data.get("data")
+        if isinstance(inst_dict, dict):
+            instruments_list = inst_dict.get("instruments", [])
         else:
             instruments_list = inst_data.get("instruments", [])
-    elif isinstance(inst_data, list):
-        instruments_list = inst_data
         
     # Performance optimization (Bolt):
-    # Precalculate dte_val and dte_weight per expiration date when building inst_map.
-    # Eliminates date parsing, today() calls, and math.sqrt recalculations inside tight quote loop.
+    # - Precalculate dte_val and dte_weight per expiration date when building inst_map.
+    # - Direct optimistic key indexing and `in` checks for quote payload parsing and GEX strike accumulation
+    #   eliminates millions of `.get()` dictionary function calls.
     today_d = date.today()
     exp_cache = {}
     inst_map = {}
     for inst in instruments_list:
-        if not isinstance(inst, dict) or "id" not in inst:
+        if not isinstance(inst, dict):
+            continue
+        opt_id = inst["id"] if "id" in inst else inst.get("id")
+        if not opt_id:
             continue
         try:
             strike = float(inst["strike_price"]) if "strike_price" in inst else float(inst.get("strike", 0.0))
-            opt_type = inst["type"]
-            exp_str = inst.get("expiration_date")
-            dte_val = 30.0
+            opt_type = inst["type"] if "type" in inst else inst.get("type")
+            exp_str = inst["expiration_date"] if "expiration_date" in inst else inst.get("exp_date")
             if exp_str:
                 if exp_str not in exp_cache:
                     try:
@@ -1372,11 +1387,11 @@ def derive_gex_profile(inst_data, quotes_data, spot):
                         w_val = 1.0 / math.sqrt(max(d_val, 1.0))
                         exp_cache[exp_str] = (d_val, w_val)
                     except Exception:
-                        exp_cache[exp_str] = (30.0, 1.0 / math.sqrt(30.0))
+                        exp_cache[exp_str] = (30.0, _DEFAULT_DTE_WEIGHT)
                 dte_val, dte_weight = exp_cache[exp_str]
             else:
-                dte_weight = 1.0 / math.sqrt(30.0)
-            inst_map[inst["id"]] = (strike, opt_type, dte_val, dte_weight)
+                dte_val, dte_weight = 30.0, _DEFAULT_DTE_WEIGHT
+            inst_map[opt_id] = (strike, opt_type, dte_val, dte_weight)
         except (ValueError, KeyError):
             continue
         
@@ -1398,27 +1413,38 @@ def derive_gex_profile(inst_data, quotes_data, spot):
     iv_count = 0
     
     calc_spot = spot if spot is not None else 100.0
+    spot_iv_bound = calc_spot * 0.15
     
     for q_item in quotes_list:
         if not isinstance(q_item, dict):
             continue
-        q = q_item.get("quote")
-        if not isinstance(q, dict):
-            q = q_item
-        opt_id = q.get("instrument_id") or q.get("id") or q.get("instrument")
-        if not opt_id or opt_id not in inst_map:
-            continue
-            
+        q = q_item["quote"] if ("quote" in q_item and isinstance(q_item["quote"], dict)) else q_item
+
         try:
-            raw_oi = q.get("open_interest")
+            opt_id = q["instrument_id"]
+            raw_oi = q["open_interest"]
+            raw_gamma = q["gamma"]
+            raw_iv = q["implied_volatility"]
             oi = int(raw_oi) if raw_oi else 0
-            raw_gamma = q.get("gamma")
             gamma = float(raw_gamma) if raw_gamma else 0.0
-            raw_iv = q.get("implied_volatility")
-            if raw_iv is None:
-                raw_iv = q.get("implied_vol")
             iv = float(raw_iv) if raw_iv else 0.0
+        except KeyError:
+            opt_id = q.get("instrument_id") or q.get("id") or q.get("instrument")
+            try:
+                raw_oi = q.get("open_interest")
+                oi = int(raw_oi) if raw_oi else 0
+                raw_gamma = q.get("gamma")
+                gamma = float(raw_gamma) if raw_gamma else 0.0
+                raw_iv = q.get("implied_volatility")
+                if raw_iv is None:
+                    raw_iv = q.get("implied_vol")
+                iv = float(raw_iv) if raw_iv else 0.0
+            except (ValueError, TypeError):
+                continue
         except (ValueError, TypeError):
+            continue
+
+        if not opt_id or opt_id not in inst_map:
             continue
             
         strike, opt_type, dte_val, dte_weight = inst_map[opt_id]
@@ -1433,22 +1459,30 @@ def derive_gex_profile(inst_data, quotes_data, spot):
         
         # IV proxy (within 15% of spot)
         diff = strike - calc_spot
-        abs_diff = diff if diff >= 0 else -diff
-        if abs_diff / calc_spot <= 0.15:
+        abs_diff = diff if diff >= 0.0 else -diff
+        if abs_diff <= spot_iv_bound:
             if iv > 0.0:
                 iv_sum += iv
                 iv_count += 1
                 
         if opt_type == "put":
-            strike_put_oi[strike] = strike_put_oi.get(strike, 0) + oi
-            strike_put_gex[strike] = strike_put_gex.get(strike, 0.0) + gex_val
+            if strike in strike_put_oi:
+                strike_put_oi[strike] += oi
+                strike_put_gex[strike] += gex_val
+            else:
+                strike_put_oi[strike] = oi
+                strike_put_gex[strike] = gex_val
             total_put_gex += gex_val
             effective_put_gex += effective_gex_val
             sum_strike_put_oi += strike * oi
             sum_put_oi += oi
         elif opt_type == "call":
-            strike_call_oi[strike] = strike_call_oi.get(strike, 0) + oi
-            strike_call_gex[strike] = strike_call_gex.get(strike, 0.0) + gex_val
+            if strike in strike_call_oi:
+                strike_call_oi[strike] += oi
+                strike_call_gex[strike] += gex_val
+            else:
+                strike_call_oi[strike] = oi
+                strike_call_gex[strike] = gex_val
             total_call_gex += gex_val
             effective_call_gex += effective_gex_val
             
@@ -2959,6 +2993,18 @@ def get_monthly_realized_pnl(net_liq: float, monthly_file: Optional[str] = None,
     """
     pnl_file = pnl_file or ""
     monthly_file = monthly_file or ""
+
+    if monthly_file:
+        try:
+            monthly_file = validate_safe_path(monthly_file)
+        except ValueError:
+            monthly_file = ""
+
+    if pnl_file:
+        try:
+            pnl_file = validate_safe_path(pnl_file)
+        except ValueError:
+            pnl_file = ""
     
     if not monthly_file and not pnl_file and os.path.exists(DOWNLOADS_DIR):
         # Scan DOWNLOADS_DIR to locate any saved files and sort them lexicographically
@@ -3315,12 +3361,7 @@ def cmd_portfolio(args):
         
         pnl_dlr = r['pnl_dlr']
         pnl_pct = r['pnl_pct']
-        if pnl_dlr >= 0:
-            pnl_str = f"+${pnl_dlr:,.2f} ({pnl_pct:+.2f}%)"
-        else:
-            pnl_str = f"-${abs(pnl_dlr):,.2f} ({pnl_pct:+.2f}%)"
-        pnl_color = "32" if pnl_dlr >= 0 else "31"
-        pnl_fmt = format_color(f"{pnl_str:<20}", pnl_color, bold=True)
+        pnl_fmt = format_pnl(pnl_dlr, pnl_pct, bold=True, width=20)
         
         weight_fmt = f"{r['weight']:5.2f}%"
         
@@ -3439,7 +3480,7 @@ def cmd_portfolio(args):
             tech_exposure += sizing_risk_weight
             
         # Format strings with CLI colors
-        pl_color = "32" if pl_pct >= 0 else "31"
+        pl_color = get_pnl_color(pl_pct)
         status_colors = {
             "HOLD": ("32", False),
             "WATCH": ("33", False),
@@ -3579,7 +3620,7 @@ def cmd_portfolio(args):
         if "Technology" in details_sector_tag or "Beta" in details_sector_tag:
             tech_exposure += sizing_risk_weight
             
-        pl_color = "32" if pl_pct >= 0 else "31"
+        pl_color = get_pnl_color(pl_pct)
         color_code, bold = ("32", False)
         if "STOP" in exit_rule_state or "EXPIRED" in exit_rule_state:
             color_code, bold = "31", True
@@ -3638,7 +3679,7 @@ def cmd_portfolio(args):
     cash_buffer = net_liq - total_current_value
     cash_buffer_pct = (cash_buffer / net_liq) * 100.0
     
-    pl_color = "32" if unrealized_pl_dlr >= 0 else "31"
+    pl_color = get_pnl_color(unrealized_pl_dlr)
     cash_buffer_status = format_color("PASS", "32", bold=True) if cash_buffer_pct >= 20.0 else format_color("WARNING (Low liquid buffer <20%)", "31", bold=True)
     
     # 3. Trailing 30-Day Realized Drawdown Gate
@@ -3652,13 +3693,13 @@ def cmd_portfolio(args):
     print(f"- **Total Portfolio Net Liquidation (Net Liq)**: ${net_liq:,.2f}")
     print(f"- **Total Positions Cost Basis**: ${total_cost_basis:,.2f}")
     print(f"- **Total Positions Market Value**: ${total_current_value:,.2f} ({options_exposure_pct:.2f}% allocation)")
-    print(f"- **Total Unrealized P&L**: {format_color(f'${unrealized_pl_dlr:+,.2f}', pl_color, bold=True)} ({format_color(f'{unrealized_pl_pct:+.2f}%', pl_color, bold=True)})")
+    print(f"- **Total Unrealized P&L**: {format_pnl(unrealized_pl_dlr, unrealized_pl_pct, bold=True)}")
     
     # Cumulative portfolio delta exposure
-    delta_shares_color = "32" if total_net_delta_shares >= 0 else "31"
-    delta_exposure_color = "32" if total_net_delta_exposure_dlr >= 0 else "31"
-    ds_fmt = format_color(f"{total_net_delta_shares:+,.2f} shares", delta_shares_color, bold=True)
-    de_fmt = format_color(f"${total_net_delta_exposure_dlr:+,.2f}", delta_exposure_color, bold=True)
+    delta_shares_color = get_pnl_color(total_net_delta_shares)
+    delta_exposure_color = get_pnl_color(total_net_delta_exposure_dlr)
+    ds_fmt = format_color(f"{total_net_delta_shares:+,.2f} shares" if abs(total_net_delta_shares) >= 0.005 else "0.00 shares", delta_shares_color, bold=True)
+    de_fmt = format_pnl(pnl_dlr=total_net_delta_exposure_dlr, bold=True)
     print(f"- **Cumulative Portfolio Net Delta**: {ds_fmt} (Delta-Equivalent directional Exposure: {de_fmt})")
     
     # Beta-Weighted Delta calculations
@@ -3671,14 +3712,14 @@ def cmd_portfolio(args):
             spy_price = val
             
     beta_weighted_delta_shares = total_beta_weighted_delta_exposure_dlr / spy_price if spy_price > 0 else 0.0
-    beta_shares_color = "32" if beta_weighted_delta_shares >= 0 else "31"
-    beta_exposure_color = "32" if total_beta_weighted_delta_exposure_dlr >= 0 else "31"
-    bds_fmt = format_color(f"{beta_weighted_delta_shares:+,.2f} SPY-equiv shares", beta_shares_color, bold=True)
-    bde_fmt = format_color(f"${total_beta_weighted_delta_exposure_dlr:+,.2f}", beta_exposure_color, bold=True)
+    beta_shares_color = get_pnl_color(beta_weighted_delta_shares)
+    beta_exposure_color = get_pnl_color(total_beta_weighted_delta_exposure_dlr)
+    bds_fmt = format_color(f"{beta_weighted_delta_shares:+,.2f} SPY-equiv shares" if abs(beta_weighted_delta_shares) >= 0.005 else "0.00 SPY-equiv shares", beta_shares_color, bold=True)
+    bde_fmt = format_pnl(pnl_dlr=total_beta_weighted_delta_exposure_dlr, bold=True)
     print(f"- **Beta-Weighted directional Delta (SPY)**: {bds_fmt} (Beta-Equivalent directional Exposure: {bde_fmt} at SPY ${spy_price:.2f})")
     
     # Live Brokerage 30-day realized statistics
-    m_pnl_color = "32" if monthly_pnl_dlr >= 0 else "31"
+    m_pnl_color = get_pnl_color(monthly_pnl_dlr)
     gate_color = "32" if drawdown_gate_status == "PASS" else "31"
     gate_fmt = format_color(drawdown_gate_status, gate_color, bold=True)
     print(f"- **Trailing 30-Day Realized P&L**: {format_color(f'${monthly_pnl_dlr:+,.2f}', m_pnl_color, bold=True)} ({format_color(f'{monthly_pnl_pct:+.2f}%', m_pnl_color, bold=True)}) over {monthly_cnt} closed trades")
@@ -3711,11 +3752,9 @@ def cmd_portfolio(args):
             avg_win_str = f"${avg_win_opt:,.2f}"
             avg_loss_str = f"${avg_loss_opt:,.2f}"
             win_loss_fmt = f"{avg_win_str} / {avg_loss_str} (Ratio: {r_ratio_opt:.2f})"
-            exp_color = "32" if expectancy_opt >= 0 else "31"
-            expectancy_fmt = format_color(f"${expectancy_opt:+,.2f}", exp_color, bold=True)
+            expectancy_fmt = format_pnl(pnl_dlr=expectancy_opt, bold=True)
             
-            opt_color = "32" if total_realized_opt >= 0 else "31"
-            print(f"- **Options Stats** ({total_closed_opt} trades): Realized Win Rate {win_rate_opt:.1f}% ({profitable_closed_opt}/{total_closed_opt} profitable) | Total Realized P&L: {format_color(f'${total_realized_opt:+,.2f}', opt_color, bold=True)} | PF: {pf_opt}")
+            print(f"- **Options Stats** ({total_closed_opt} trades): Realized Win Rate {win_rate_opt:.1f}% ({profitable_closed_opt}/{total_closed_opt} profitable) | Total Realized P&L: {format_pnl(pnl_dlr=total_realized_opt, bold=True)} | PF: {pf_opt}")
             print(f"  -> Avg Win/Loss: {win_loss_fmt} | Expectancy: {expectancy_fmt} per trade")
             
         # Stocks specific stats
@@ -3737,11 +3776,9 @@ def cmd_portfolio(args):
             avg_win_str = f"${avg_win_stk:,.2f}"
             avg_loss_str = f"${avg_loss_stk:,.2f}"
             win_loss_fmt = f"{avg_win_str} / {avg_loss_str} (Ratio: {r_ratio_stk:.2f})"
-            exp_color = "32" if expectancy_stk >= 0 else "31"
-            expectancy_fmt = format_color(f"${expectancy_stk:+,.2f}", exp_color, bold=True)
+            expectancy_fmt = format_pnl(pnl_dlr=expectancy_stk, bold=True)
             
-            stk_color = "32" if total_realized_stk >= 0 else "31"
-            print(f"- **Stocks Stats** ({total_closed_stk} trades): Realized Win Rate {win_rate_stk:.1f}% ({profitable_closed_stk}/{total_closed_stk} profitable) | Total Realized P&L: {format_color(f'${total_realized_stk:+,.2f}', stk_color, bold=True)} | PF: {pf_stk}")
+            print(f"- **Stocks Stats** ({total_closed_stk} trades): Realized Win Rate {win_rate_stk:.1f}% ({profitable_closed_stk}/{total_closed_stk} profitable) | Total Realized P&L: {format_pnl(pnl_dlr=total_realized_stk, bold=True)} | PF: {pf_stk}")
             print(f"  -> Avg Win/Loss: {win_loss_fmt} | Expectancy: {expectancy_fmt} per trade")
             
         # Unified combined stats
@@ -3764,11 +3801,9 @@ def cmd_portfolio(args):
             avg_win_str = f"${avg_win_all:,.2f}"
             avg_loss_str = f"${avg_loss_all:,.2f}"
             win_loss_fmt = f"{avg_win_str} / {avg_loss_str} (Ratio: {r_ratio_all:.2f})"
-            exp_color = "32" if expectancy_all >= 0 else "31"
-            expectancy_fmt = format_color(f"${expectancy_all:+,.2f}", exp_color, bold=True)
+            expectancy_fmt = format_pnl(pnl_dlr=expectancy_all, bold=True)
             
-            all_color = "32" if total_realized_all >= 0 else "31"
-            print(f"- **Total Combined Realized P&L**: {format_color(f'${total_realized_all:+,.2f}', all_color, bold=True)} | Win Rate {win_rate_all:.1f}% | Combined PF: {pf_all}")
+            print(f"- **Total Combined Realized P&L**: {format_pnl(pnl_dlr=total_realized_all, bold=True)} | Win Rate {win_rate_all:.1f}% | Combined PF: {pf_all}")
             print(f"  -> Avg Win/Loss: {win_loss_fmt} | Expectancy: {expectancy_fmt} per trade")
         
     # Sector Allocation Matrix
@@ -3900,8 +3935,7 @@ def cmd_portfolio(args):
         print_color("=" * 95, "31", bold=True)
         print_color("[ACTION REQUIRED] Confirm systematic GEX order routing for the following exits:", "37", bold=True)
         for idx, item in enumerate(pending_exits, 1):
-            pnl_c = "32" if item["pnl_dlr"] >= 0 else "31"
-            pnl_formatted = format_color(f"{item['pnl_pct']:+.2f}% (${item['pnl_dlr']:+,.2f})", pnl_c, bold=True)
+            pnl_formatted = format_pnl(pnl_dlr=item["pnl_dlr"], pnl_pct=item["pnl_pct"], bold=True)
             print(f"\n  {idx:d}. {format_color(item['ticker'], '35', bold=True)} ({item['asset_cls']}: {item['desc']})")
             print(f"     -> TRIGGER: {format_color(item['rule_state'], '31', bold=True)}")
             print(f"     -> ACTION: {format_color(item['proposed_action'], '33', bold=True)}")
@@ -4380,9 +4414,8 @@ def cmd_close_stock_pos(args):
     details["Realized P&L (%)"] = round(realized_pct, 2)
     closed.append(details)
     
-    pl_color = "32" if realized_dollar >= 0 else "31"
-    print(f"Closed stock position for {ticker}: "
-          + format_color(f"Realized P&L {realized_pct:+.2f}% (${realized_dollar:+.2f})", pl_color, bold=True))
+    pnl_str = format_pnl(realized_dollar, realized_pct, bold=True)
+    print(f"Closed stock position for {ticker}: Realized P&L {pnl_str}")
           
     options["stocks_positions"] = stocks
     save_json(options_file, options)
@@ -4494,9 +4527,8 @@ def cmd_close_pos(args):
         details["Realized P&L (%)"] = realized_pct
         closed.append(details)
         
-        pl_color = "32" if realized_dollar >= 0 else "31"
-        print(f"Closed {details.get('Underlier')} {details.get('Strike')} {details.get('Type')} ({opt_id}): "
-              + format_color(f"Realized P&L {realized_pct:+.2f}% (${realized_dollar:+.2f})", pl_color, bold=True))
+        pnl_str = format_pnl(realized_dollar, realized_pct, bold=True)
+        print(f"Closed {details.get('Underlier')} {details.get('Strike')} {details.get('Type')} ({opt_id}): Realized P&L {pnl_str}")
         
     options["options_positions"] = positions
     save_json(options_file, options)
@@ -4649,9 +4681,8 @@ def cmd_sync_pnl(args):
         stocks_to_remove.append(ticker)
         newly_closed_stocks += 1
 
-        pl_color = "32" if realized_dollar >= 0 else "31"
-        print(f"Detected Closed Stock {format_color(ticker, '35', bold=True)}: "
-              + format_color(f"Realized P&L {realized_pct:+.2f}% (${realized_dollar:+.2f})", pl_color, bold=True))
+        pnl_str = format_pnl(realized_dollar, realized_pct, bold=True)
+        print(f"Detected Closed Stock {format_color(ticker, '35', bold=True)}: Realized P&L {pnl_str}")
 
     for ticker in stocks_to_remove:
         stocks.pop(ticker)
@@ -4690,9 +4721,8 @@ def cmd_sync_pnl(args):
         options_to_remove.append(opt_id)
         newly_closed_options += 1
 
-        pl_color = "32" if realized_dollar >= 0 else "31"
-        print(f"Detected Closed Option {format_color(underlier, '35', bold=True)} {details.get('Strike')} {details.get('Type')}: "
-              + format_color(f"Realized P&L {realized_pct:+.2f}% (${realized_dollar:+.2f})", pl_color, bold=True))
+        pnl_str = format_pnl(realized_dollar, realized_pct, bold=True)
+        print(f"Detected Closed Option {format_color(underlier, '35', bold=True)} {details.get('Strike')} {details.get('Type')}: Realized P&L {pnl_str}")
 
     for opt_id in options_to_remove:
         positions.pop(opt_id)
@@ -5635,12 +5665,12 @@ def cmd_sentiment(args):
         
         high_ticker = highest.get("Ticker")
         high_score = highest.get("Sentiment", 0.0)
-        high_score_colored = format_color(f"{high_score:+.2f}", "32" if high_score >= 0 else "31", bold=True)
+        high_score_colored = format_color(f"{high_score:+.2f}" if abs(high_score) >= 0.005 else "0.00", get_pnl_color(high_score), bold=True)
         print(f"- **Highest Retail Buzz**: {format_color(high_ticker, '35', bold=True)} (Sentiment: {high_score_colored})")
 
         low_ticker = lowest.get("Ticker")
         low_score = lowest.get("Sentiment", 0.0)
-        low_score_colored = format_color(f"{low_score:+.2f}", "32" if low_score >= 0 else "31", bold=True)
+        low_score_colored = format_color(f"{low_score:+.2f}" if abs(low_score) >= 0.005 else "0.00", get_pnl_color(low_score), bold=True)
         print(f"- **Lowest Retail Buzz / Capitulation**: {format_color(low_ticker, '35', bold=True)} (Sentiment: {low_score_colored})")
         
     print("\n### Detailed Sentiment Dashboard:")
@@ -6080,10 +6110,8 @@ def cmd_closed(args):
         pnl_dlr = item.get("Realized P&L ($)", 0.0)
         pnl_pct = item.get("Realized P&L (%)", 0.0)
         
-        pnl_color = "32" if pnl_dlr >= 0 else "31"
-        pnl_dlr_str = f"${pnl_dlr:+,.2f}"
-        pnl_dlr_fmt = format_color(f"{pnl_dlr_str:<16}", pnl_color, bold=True)
-        pnl_pct_fmt = format_color(f"{pnl_pct:+.2f}%", pnl_color, bold=True)
+        pnl_dlr_fmt = format_pnl(pnl_dlr=pnl_dlr, bold=True, width=16)
+        pnl_pct_fmt = format_pnl(pnl_pct=pnl_pct, bold=True)
         
         print(f"  {ticker_fmt} | {cls_fmt} | {entry_date:<11} | {close_date:<11} | {days_str} | {cb_fmt} | {pnl_dlr_fmt} | {pnl_pct_fmt}")
 
@@ -6113,11 +6141,9 @@ def cmd_closed(args):
         avg_win_str = f"${avg_win_opt:,.2f}"
         avg_loss_str = f"${avg_loss_opt:,.2f}"
         win_loss_fmt = f"{avg_win_str} / {avg_loss_str} (Ratio: {r_ratio_opt:.2f})"
-        exp_color = "32" if expectancy_opt >= 0 else "31"
-        expectancy_fmt = format_color(f"${expectancy_opt:+,.2f}", exp_color, bold=True)
+        expectancy_fmt = format_pnl(pnl_dlr=expectancy_opt, bold=True)
         
-        opt_color = "32" if total_realized_opt >= 0 else "31"
-        print(f"- **Options Stats** ({total_closed_opt} trades): Realized Win Rate {win_rate_opt:.1f}% ({profitable_closed_opt}/{total_closed_opt} profitable) | Total Realized P&L: {format_color(f'${total_realized_opt:+,.2f}', opt_color, bold=True)} | PF: {pf_opt}")
+        print(f"- **Options Stats** ({total_closed_opt} trades): Realized Win Rate {win_rate_opt:.1f}% ({profitable_closed_opt}/{total_closed_opt} profitable) | Total Realized P&L: {format_pnl(pnl_dlr=total_realized_opt, bold=True)} | PF: {pf_opt}")
         print(f"  -> Avg Win/Loss: {win_loss_fmt} | Expectancy: {expectancy_fmt} per trade")
         
     if closed_stocks:
@@ -6138,11 +6164,9 @@ def cmd_closed(args):
         avg_win_str = f"${avg_win_stk:,.2f}"
         avg_loss_str = f"${avg_loss_stk:,.2f}"
         win_loss_fmt = f"{avg_win_str} / {avg_loss_str} (Ratio: {r_ratio_stk:.2f})"
-        exp_color = "32" if expectancy_stk >= 0 else "31"
-        expectancy_fmt = format_color(f"${expectancy_stk:+,.2f}", exp_color, bold=True)
+        expectancy_fmt = format_pnl(pnl_dlr=expectancy_stk, bold=True)
         
-        stk_color = "32" if total_realized_stk >= 0 else "31"
-        print(f"- **Stocks Stats** ({total_closed_stk} trades): Realized Win Rate {win_rate_stk:.1f}% ({profitable_closed_stk}/{total_closed_stk} profitable) | Total Realized P&L: {format_color(f'${total_realized_stk:+,.2f}', stk_color, bold=True)} | PF: {pf_stk}")
+        print(f"- **Stocks Stats** ({total_closed_stk} trades): Realized Win Rate {win_rate_stk:.1f}% ({profitable_closed_stk}/{total_closed_stk} profitable) | Total Realized P&L: {format_pnl(pnl_dlr=total_realized_stk, bold=True)} | PF: {pf_stk}")
         print(f"  -> Avg Win/Loss: {win_loss_fmt} | Expectancy: {expectancy_fmt} per trade")
         
     if closed_options and closed_stocks:
@@ -6164,11 +6188,9 @@ def cmd_closed(args):
         avg_win_str = f"${avg_win_all:,.2f}"
         avg_loss_str = f"${avg_loss_all:,.2f}"
         win_loss_fmt = f"{avg_win_str} / {avg_loss_str} (Ratio: {r_ratio_all:.2f})"
-        exp_color = "32" if expectancy_all >= 0 else "31"
-        expectancy_fmt = format_color(f"${expectancy_all:+,.2f}", exp_color, bold=True)
+        expectancy_fmt = format_pnl(pnl_dlr=expectancy_all, bold=True)
         
-        all_color = "32" if total_realized_all >= 0 else "31"
-        print(f"- **Total Combined Realized P&L**: {format_color(f'${total_realized_all:+,.2f}', all_color, bold=True)} | Win Rate {win_rate_all:.1f}% | Combined PF: {pf_all}")
+        print(f"- **Total Combined Realized P&L**: {format_pnl(pnl_dlr=total_realized_all, bold=True)} | Win Rate {win_rate_all:.1f}% | Combined PF: {pf_all}")
         print(f"  -> Avg Win/Loss: {win_loss_fmt} | Expectancy: {expectancy_fmt} per trade")
 
 
@@ -6512,8 +6534,9 @@ def cmd_simulate(args):
             )
             
             pl_pct = ((sim_mark - purchase_premium) / purchase_premium) * 100
-            pl_color = "32" if pl_pct >= 0 else "31"
-            print(f"- **Simulated Mark Price**: ${sim_mark:.2f} ({format_color(f'{pl_pct:+.2f}%', pl_color)})")
+            pl_color = get_pnl_color(pl_pct)
+            sim_pl_str = format_pct(pl_pct)
+            print(f"- **Simulated Mark Price**: ${sim_mark:.2f} ({format_color(sim_pl_str, pl_color)})")
             print(f"- **Simulated Exit Rule**: {format_color(exit_rule, '31' if 'STOP' in exit_rule else '32')}")
             print(f"- **Proposed Action**: {action}")
         else: # Stock
@@ -6524,8 +6547,9 @@ def cmd_simulate(args):
             sim_pl_dlr = sim_val - cost_basis
             sim_pl_pct = (sim_pl_dlr / cost_basis) * 100.0 if cost_basis > 0 else 0.0
             
-            pl_color = "32" if sim_pl_dlr >= 0 else "31"
-            print(f"- **Simulated Position Value**: ${sim_val:,.2f} ({format_color(f'{sim_pl_pct:+.2f}%', pl_color)})")
+            pl_color = get_pnl_color(sim_pl_dlr)
+            sim_pl_str = format_pct(sim_pl_pct)
+            print(f"- **Simulated Position Value**: ${sim_val:,.2f} ({format_color(sim_pl_str, pl_color)})")
             
     # Visual map
     print(f"\n### 🛣️ GEX Runway Map (Simulated)")

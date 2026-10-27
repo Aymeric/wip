@@ -15,8 +15,13 @@ from src.gex.quant.greeks import (
 )
 
 
+_DEFAULT_DTE_WEIGHT = 0.18257418583505537  # 1.0 / math.sqrt(30.0)
+
+
 def extract_quotes_list(quotes_data: Any) -> List[Any]:
     """Extracts a normalized quotes list from dict or list data payload."""
+    if isinstance(quotes_data, list):
+        return quotes_data
     if isinstance(quotes_data, dict):
         data = quotes_data.get("data")
         quotes_list = []
@@ -31,8 +36,6 @@ def extract_quotes_list(quotes_data: Any) -> List[Any]:
                 quotes_list = res
 
         return quotes_list if isinstance(quotes_list, list) else []
-    elif isinstance(quotes_data, list):
-        return quotes_data
     return []
 
 
@@ -53,28 +56,32 @@ def derive_gex_profile(
         dict: Derived levels, rules, and intermediate calculations.
     """
     instruments_list = []
-    if isinstance(inst_data, dict):
-        if "data" in inst_data and isinstance(inst_data["data"], dict):
-            instruments_list = inst_data["data"].get("instruments", [])
+    if isinstance(inst_data, list):
+        instruments_list = inst_data
+    elif isinstance(inst_data, dict):
+        inst_dict = inst_data.get("data")
+        if isinstance(inst_dict, dict):
+            instruments_list = inst_dict.get("instruments", [])
         else:
             instruments_list = inst_data.get("instruments", [])
-    elif isinstance(inst_data, list):
-        instruments_list = inst_data
 
     # Performance optimization (Bolt):
-    # Precalculate dte_val and dte_weight per expiration date when building inst_map.
-    # Eliminates date parsing, today() calls, and math.sqrt recalculations inside tight quote loop.
+    # - Precalculate dte_val and dte_weight per expiration date when building inst_map.
+    # - Direct optimistic key indexing and `in` checks for quote payload parsing and GEX strike accumulation
+    #   eliminates millions of `.get()` dictionary function calls.
     today_d = date.today()
     exp_cache = {}
     inst_map = {}
     for inst in instruments_list:
-        if not isinstance(inst, dict) or "id" not in inst:
+        if not isinstance(inst, dict):
+            continue
+        opt_id = inst["id"] if "id" in inst else inst.get("id")
+        if not opt_id:
             continue
         try:
             strike = float(inst["strike_price"]) if "strike_price" in inst else float(inst.get("strike", 0.0))
-            opt_type = inst["type"]
-            exp_str = inst.get("expiration_date")
-            dte_val = 30.0
+            opt_type = inst["type"] if "type" in inst else inst.get("type")
+            exp_str = inst["expiration_date"] if "expiration_date" in inst else inst.get("exp_date")
             if exp_str:
                 if exp_str not in exp_cache:
                     try:
@@ -83,11 +90,11 @@ def derive_gex_profile(
                         w_val = 1.0 / math.sqrt(max(d_val, 1.0))
                         exp_cache[exp_str] = (d_val, w_val)
                     except Exception:
-                        exp_cache[exp_str] = (30.0, 1.0 / math.sqrt(30.0))
+                        exp_cache[exp_str] = (30.0, _DEFAULT_DTE_WEIGHT)
                 dte_val, dte_weight = exp_cache[exp_str]
             else:
-                dte_weight = 1.0 / math.sqrt(30.0)
-            inst_map[inst["id"]] = (strike, opt_type, dte_val, dte_weight)
+                dte_val, dte_weight = 30.0, _DEFAULT_DTE_WEIGHT
+            inst_map[opt_id] = (strike, opt_type, dte_val, dte_weight)
         except (ValueError, KeyError):
             continue
 
@@ -109,27 +116,38 @@ def derive_gex_profile(
     iv_count = 0
 
     calc_spot = spot if spot is not None else 100.0
+    spot_iv_bound = calc_spot * 0.15
 
     for q_item in quotes_list:
         if not isinstance(q_item, dict):
             continue
-        q = q_item.get("quote")
-        if not isinstance(q, dict):
-            q = q_item
-        opt_id = q.get("instrument_id") or q.get("id") or q.get("instrument")
-        if not opt_id or opt_id not in inst_map:
-            continue
+        q = q_item["quote"] if ("quote" in q_item and isinstance(q_item["quote"], dict)) else q_item
 
         try:
-            raw_oi = q.get("open_interest")
+            opt_id = q["instrument_id"]
+            raw_oi = q["open_interest"]
+            raw_gamma = q["gamma"]
+            raw_iv = q["implied_volatility"]
             oi = int(raw_oi) if raw_oi else 0
-            raw_gamma = q.get("gamma")
             gamma = float(raw_gamma) if raw_gamma else 0.0
-            raw_iv = q.get("implied_volatility")
-            if raw_iv is None:
-                raw_iv = q.get("implied_vol")
             iv = float(raw_iv) if raw_iv else 0.0
+        except KeyError:
+            opt_id = q.get("instrument_id") or q.get("id") or q.get("instrument")
+            try:
+                raw_oi = q.get("open_interest")
+                oi = int(raw_oi) if raw_oi else 0
+                raw_gamma = q.get("gamma")
+                gamma = float(raw_gamma) if raw_gamma else 0.0
+                raw_iv = q.get("implied_volatility")
+                if raw_iv is None:
+                    raw_iv = q.get("implied_vol")
+                iv = float(raw_iv) if raw_iv else 0.0
+            except (ValueError, TypeError):
+                continue
         except (ValueError, TypeError):
+            continue
+
+        if not opt_id or opt_id not in inst_map:
             continue
 
         strike, opt_type, dte_val, dte_weight = inst_map[opt_id]
@@ -144,22 +162,30 @@ def derive_gex_profile(
 
         # IV proxy (within 15% of spot)
         diff = strike - calc_spot
-        abs_diff = diff if diff >= 0 else -diff
-        if abs_diff / calc_spot <= 0.15:
+        abs_diff = diff if diff >= 0.0 else -diff
+        if abs_diff <= spot_iv_bound:
             if iv > 0.0:
                 iv_sum += iv
                 iv_count += 1
 
         if opt_type == "put":
-            strike_put_oi[strike] = strike_put_oi.get(strike, 0) + oi
-            strike_put_gex[strike] = strike_put_gex.get(strike, 0.0) + gex_val
+            if strike in strike_put_oi:
+                strike_put_oi[strike] += oi
+                strike_put_gex[strike] += gex_val
+            else:
+                strike_put_oi[strike] = oi
+                strike_put_gex[strike] = gex_val
             total_put_gex += gex_val
             effective_put_gex += effective_gex_val
             sum_strike_put_oi += strike * oi
             sum_put_oi += oi
         elif opt_type == "call":
-            strike_call_oi[strike] = strike_call_oi.get(strike, 0) + oi
-            strike_call_gex[strike] = strike_call_gex.get(strike, 0.0) + gex_val
+            if strike in strike_call_oi:
+                strike_call_oi[strike] += oi
+                strike_call_gex[strike] += gex_val
+            else:
+                strike_call_oi[strike] = oi
+                strike_call_gex[strike] = gex_val
             total_call_gex += gex_val
             effective_call_gex += effective_gex_val
 

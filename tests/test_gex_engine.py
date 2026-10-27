@@ -293,9 +293,17 @@ class TestGEXEngine(unittest.TestCase):
                 gex_engine.cmd_sync_positions(sync_pos_args)
             self.assertEqual(cm.exception.code, 1)
 
-        # list_download_files with path traversal downloads_dir returns empty list
+        # list_download_files and _get_downloads_files with path traversal downloads_dir return empty list
         with patch('sys.stderr'):
             self.assertEqual(gex_engine.list_download_files(invalid_path), [])
+            self.assertEqual(gex_engine._get_downloads_files(invalid_path), [])
+
+    def test_get_downloads_files_path_traversal_returns_empty(self):
+        import gex_engine
+        from unittest.mock import patch
+        invalid_path = os.path.join(gex_engine.REPOSITORY_ROOT, "..", "..", "etc")
+        with patch('sys.stderr'):
+            self.assertEqual(gex_engine._get_downloads_files(invalid_path), [])
 
     def test_save_json_preserves_existing_file_on_serialization_failure(self):
         import tempfile

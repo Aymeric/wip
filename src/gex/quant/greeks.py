@@ -67,14 +67,16 @@ def find_flip_strikes(gex_by_strike: dict) -> list:
         return []
 
     # Performance optimization (Bolt):
-    # Sort strike-GEX items once and iterate tuple values directly.
-    # Eliminates repeated dictionary key lookups inside zero-crossing loop.
-    items = [(float(k), float(v)) for k, v in gex_by_strike.items()]
-    items.sort(key=lambda x: x[0])
+    # Sort strike-GEX items directly using C-level tuple comparison (`items.sort()`)
+    # and eliminate redundant list comprehensions, lambda sorting keys, and built-in function calls.
+    items = list(gex_by_strike.items())
     if len(items) < 2:
         return []
 
+    items.sort()
+
     flip_strikes: list = []
+    prev_flip = None
 
     for i in range(1, len(items)):
         k_prev, g_prev = items[i - 1]
@@ -82,15 +84,20 @@ def find_flip_strikes(gex_by_strike: dict) -> list:
 
         # True zero-crossing between opposite signs
         if (g_prev < 0.0 and g_curr > 0.0) or (g_prev > 0.0 and g_curr < 0.0):
-            denom = abs(g_prev) + abs(g_curr)
+            abs_gp = g_prev if g_prev >= 0.0 else -g_prev
+            abs_gc = g_curr if g_curr >= 0.0 else -g_curr
+            denom = abs_gp + abs_gc
             if denom > 0.0:
-                k_star = k_prev + (k_curr - k_prev) * (abs(g_prev) / denom)
-                if not flip_strikes or abs(flip_strikes[-1] - k_star) > 1e-6:
-                    flip_strikes.append(round(k_star, 4))
+                k_star = round(k_prev + (k_curr - k_prev) * (abs_gp / denom), 4)
+                if prev_flip is None or abs(k_star - prev_flip) > 1e-6:
+                    flip_strikes.append(k_star)
+                    prev_flip = k_star
         elif g_prev == 0.0 and g_curr != 0.0:
             if i >= 2 and items[i - 2][1] * g_curr < 0:
-                if not flip_strikes or abs(flip_strikes[-1] - k_prev) > 1e-6:
-                    flip_strikes.append(round(k_prev, 4))
+                k_star = round(k_prev, 4)
+                if prev_flip is None or abs(k_star - prev_flip) > 1e-6:
+                    flip_strikes.append(k_star)
+                    prev_flip = k_star
 
     return flip_strikes
 

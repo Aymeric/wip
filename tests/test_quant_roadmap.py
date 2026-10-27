@@ -682,7 +682,13 @@ class TestPhase2ModularArchitecture(unittest.TestCase):
 
     def test_presentation_formatters_and_ascii(self):
         from src.gex.presentation.ascii_art import generate_ascii_gex_scale, format_color
-        from src.gex.presentation.formatters import format_currency, format_pct, format_table
+        from src.gex.presentation.formatters import (
+            format_currency,
+            format_pct,
+            format_pnl,
+            format_table,
+            get_pnl_color,
+        )
 
         # ASCII Runway
         scale = generate_ascii_gex_scale(spot=100.0, ptrans=103.0, ntrans=96.0, gex=110.0, cotmp=94.0)
@@ -707,6 +713,28 @@ class TestPhase2ModularArchitecture(unittest.TestCase):
         self.assertEqual(format_pct(-0.001, include_sign=False), "0.00%")
         self.assertEqual(format_pct(None), "+0.00%")
 
+        # 3-State P&L Color and Formatting
+        self.assertEqual(get_pnl_color(150.0), "32")
+        self.assertEqual(get_pnl_color(-50.0), "31")
+        self.assertEqual(get_pnl_color(0.0), "37")
+        self.assertEqual(get_pnl_color(None), "37")
+        self.assertEqual(get_pnl_color(0.001), "37")
+
+        pnl_pos = format_pnl(100.0, 5.0)
+        pnl_neg = format_pnl(-50.0, -2.5)
+        pnl_zero = format_pnl(0.0, 0.0)
+        pnl_padded = format_pnl(100.0, 5.0, width=25)
+
+        self.assertIn("+$100.00", pnl_pos)
+        self.assertIn("(+5.00%)", pnl_pos)
+        self.assertIn("+$100.00 (+5.00%)", pnl_padded)
+        self.assertIn("-$50.00", pnl_neg)
+        self.assertIn("(-2.50%)", pnl_neg)
+        self.assertIn("$0.00", pnl_zero)
+        self.assertIn("(0.00%)", pnl_zero)
+        self.assertNotIn("+$0.00", pnl_zero)
+        self.assertNotIn("+0.00%", pnl_zero)
+
         table = format_table(["Sym", "Price"], [["AAPL", 180.0], ["MSFT", 400.0]])
         self.assertIn("AAPL", table)
         self.assertIn("MSFT", table)
@@ -719,6 +747,34 @@ class TestPhase2ModularArchitecture(unittest.TestCase):
         lines = custom_empty_table.split("\n")
         self.assertEqual(len(lines[0]), len(lines[2]))
         self.assertEqual(len(lines[1]), len(lines[2]))
+
+    def test_format_table_ansi_escape_alignment(self):
+        import re
+        from src.gex.presentation.ascii_art import format_color
+        from src.gex.presentation.formatters import format_table
+
+        # Rows mixing ANSI colored and plain text cells
+        rows = [
+            ["AAPL", format_color("+5.20%", "32", bold=True), "$180.00"],
+            ["MSFT", format_color("-2.10%", "31"), "$400.00"],
+            ["NVDA", "+0.00%", "$130.00"],
+        ]
+        headers = ["Ticker", "Change", "Price"]
+        table = format_table(headers, rows)
+
+        table_lines = table.split("\n")
+        header_len = len(table_lines[0])
+        sep_len = len(table_lines[1])
+        self.assertEqual(header_len, sep_len)
+
+        # Verify that visible pipe positions align across header and all data rows
+        vis_header = re.sub(r"\x1b\[[0-9;]*[a-zA-Z]", "", table_lines[0])
+        header_vis_pipes = [i for i, ch in enumerate(vis_header) if ch == "|"]
+
+        for line in table_lines[2:]:
+            vis_line = re.sub(r"\x1b\[[0-9;]*[a-zA-Z]", "", line)
+            vis_pipe_indices = [i for i, ch in enumerate(vis_line) if ch == "|"]
+            self.assertEqual(vis_pipe_indices, header_vis_pipes)
 
 
 if __name__ == "__main__":
