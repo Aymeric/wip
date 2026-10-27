@@ -64,6 +64,30 @@ class TestGEXEngine(unittest.TestCase):
             self.assertFalse(res_ftp)
             self.assertIn("Unsupported URL scheme 'ftp'", mock_stderr.getvalue())
 
+    def test_dispatch_system_alert_applescript_escaping(self):
+        from unittest.mock import patch
+        from gex_engine import dispatch_system_alert
+
+        with patch('sys.platform', 'darwin'), \
+             patch.dict(os.environ, {'GEX_DESKTOP_NOTIFICATIONS': '1'}), \
+             patch('subprocess.run') as mock_run:
+            title = r'Alert\" & do shell script "touch /tmp/pwned" &'
+            message = "Message with \"quotes\" and \\ backslashes\r\nline2"
+            dispatch_system_alert(title, message, webhook_url=None)
+
+            self.assertTrue(mock_run.called)
+            cmd = mock_run.call_args[0][0]
+            applescript_str = cmd[2]
+            self.assertIn('display notification', applescript_str)
+            self.assertIn(r'Alert\\\" & do shell script', applescript_str)
+            self.assertNotIn('\r', applescript_str)
+            self.assertNotIn('\n', applescript_str)
+
+    def test_get_dir_mtime_key_path_traversal(self):
+        from gex_engine import _get_dir_mtime_key
+        result = _get_dir_mtime_key("../../../etc/passwd")
+        self.assertIsNone(result)
+
     def test_slugify(self):
         # Standard text lowercasing and space replacement
         self.assertEqual(slugify("Hello World"), "hello_world")
