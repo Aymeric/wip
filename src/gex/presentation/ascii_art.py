@@ -30,6 +30,7 @@ def generate_ascii_gex_scale(
     ntrans: Optional[float] = None,
     gex: Optional[float] = None,
     cotmp: Optional[float] = None,
+    colorize: bool = False,
 ) -> str:
     """Constructs a visual linear ASCII representation of GEX levels and where SPOT resides."""
     levels_by_price = {}
@@ -47,15 +48,15 @@ def generate_ascii_gex_scale(
         label_strs = []
         for label in labels:
             if label == "SPOT":
-                label_strs.append(format_color("SPOT (Current)", "35", bold=True))
+                label_strs.append(format_color("SPOT (Current)", "35", bold=True) if colorize else "SPOT (Current)")
             elif label == "+GEX":
-                label_strs.append(format_color("+GEX (T1 Target)", "32", bold=True))
+                label_strs.append(format_color("+GEX (T1 Target)", "32", bold=True) if colorize else "+GEX (T1 Target)")
             elif label == "pTrans":
-                label_strs.append(format_color("pTrans (Trigger)", "36", bold=True))
+                label_strs.append(format_color("pTrans (Trigger)", "36", bold=True) if colorize else "pTrans (Trigger)")
             elif label == "nTrans":
-                label_strs.append(format_color("nTrans (Stop)", "31", bold=True))
+                label_strs.append(format_color("nTrans (Stop)", "31", bold=True) if colorize else "nTrans (Stop)")
             elif label == "COTMP":
-                label_strs.append(format_color("COTMP (Support)", "31", bold=True))
+                label_strs.append(format_color("COTMP (Support)", "31", bold=True) if colorize else "COTMP (Support)")
             else:
                 label_strs.append(label)
 

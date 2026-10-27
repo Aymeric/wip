@@ -165,35 +165,56 @@ src/gex/
 
 ---
 
-## 🚀 Phase 5: Advanced Strategy Engineering & Backtesting (Future Horizons)
+## 🚀 Phase 5: Advanced Strategy Engineering & Operational Automation
 
 ### 5.1 Historical Options Replay & Backtesting Engine
-- **Objective**: Develop an offline simulation harness that iterates across historical option chains and price historicals (`data/downloads/`) to evaluate setup win rates, stop performance, and profit expectancy without broker interaction.
-- **Components**:
-  - Virtual portfolio state machine simulating order fills, slippage, and Stop 1–5 exits.
-  - Parameter grid search (optimal target delta, DTE windows, stalling thresholds).
+- **Need & Outcome**: Enable systematic backtesting and offline simulation of the GEX trading rules across cached historical option chains and price series (`data/downloads/`). Validates win rate, expectancy, and parameter sensitivity (delta targets, stalling days, stop thresholds) without capital risk.
+- **Action Items**:
+  - [ ] Implement `src/gex/backtest/engine.py` with virtual portfolio state machine and trade ledger.
+  - [ ] Build historical quote replay harness parsing dated JSON files in `data/downloads/`.
+  - [ ] Implement simulated fill models incorporating the 35% bid-ask spread slippage penalty.
+  - [ ] Calculate backtest performance metrics (Sharpe ratio, Sortino ratio, max drawdown, win rate by market regime).
+  - [ ] Expose CLI command `python3 src/gex_engine.py backtest --start YYYY-MM-DD --end YYYY-MM-DD`.
 
-### 5.2 Dynamic Delta Rolling & Profit Optimization
-- **Objective**: Implement systematic option contract rolling rules when positions achieve significant gains:
-  - Roll up and out (e.g. from Delta $\ge 0.70$ back to Delta $0.45$, extending DTE back to 30–45 days) to extract realized capital while maintaining upside convexity.
-  - Systematic stop ratchet adjustments upon reaching +50% and +100% ROI.
+### 5.2 Dynamic Delta Rolling & Profit Optimization Engine
+- **Need & Outcome**: When long call options move deeply into the money (Delta $\ge 0.70$ or $>+50\%$ gain), gamma and convexity diminish while capital at risk increases. This engine systematically identifies roll candidates to lock in realized gains, reset DTE back to 30–45 days, and restore optimal delta ($\approx 0.45$).
+- **Action Items**:
+  - [ ] Implement `src/gex/risk/rolling.py` to evaluate roll eligibility for active positions.
+  - [ ] Compute net credit/debit for rolling out and up to target strike (Delta 0.40–0.50, 30–45 DTE).
+  - [ ] Implement systematic profit-ratchet rules (+50% giveback trailing stop adjustment).
+  - [ ] Integrate roll recommendations into `portfolio-risk-manager` and `agentic-trader` approval flows.
+  - [ ] Expose CLI command `python3 src/gex_engine.py evaluate-rolls --account ACCOUNT_NUMBER`.
 
-### 5.3 Automated Macro Hedge Sizing
-- **Objective**: Quantitative hedging framework when Regime Gates shift to `DEFENSIVE` or `BLOCKED`:
-  - Compute total portfolio beta-weighted directional delta against SPY.
-  - Determine optimal hedge contract allocation (SPY / QQQ put spreads) to neutralize directional exposure while maintaining high-conviction individual GEX setups.
+### 5.3 Automated Portfolio Beta-Weighted Macro Hedging Engine
+- **Need & Outcome**: During market-wide regime transitions to `DEFENSIVE` or `BLOCKED` (Stop 4), closing all single-stock setups prematurely can disrupt high-conviction structural holds. This engine derives an optimal index hedge (SPY/QQQ debit put spreads) sized to neutralize portfolio beta-weighted directional delta.
+- **Action Items**:
+  - [ ] Implement `src/gex/risk/hedge.py` calculating aggregate beta-weighted directional delta:
+    $$\Delta_{\text{portfolio, SPY}} = \sum_i \beta_i \cdot \Delta_i \cdot \frac{S_i}{S_{\text{SPY}}}$$
+  - [ ] Derive target hedge contract allocation using SPY / QQQ put debit spreads.
+  - [ ] Define entry, sizing, and exit rules for macro hedges linked to Market Regime Gates transitions.
+  - [ ] Expose CLI command `python3 src/gex_engine.py hedge-plan --account ACCOUNT_NUMBER`.
+
+### 5.4 Intraday GEX Level Breach Monitor & Real-Time Alert Daemon
+- **Need & Outcome**: Daily GEX levels ($pTrans$, $nTrans$, $+GEX$) provide structural runway bounds, but underlying spot prices can breach $nTrans$ (Stop 1) or reach $+GEX$ (Profit Target) during trading hours. This daemon monitors active holdings in near-real-time and dispatches instant webhook/desktop alerts upon level breaches.
+- **Action Items**:
+  - [ ] Implement `src/gex/screening/monitor.py` with lightweight polling/event loop for active position underliers.
+  - [ ] Compare intraday quotes against active holding GEX thresholds ($nTrans$ stop breach, $+GEX$ target touch, trailing stop giveback).
+  - [ ] Integrate with `dispatch_system_alert` for instant Slack, Discord, Telegram, and desktop notifications.
+  - [ ] Expose CLI daemon command `python3 src/gex_engine.py monitor --interval SECONDS --alert`.
 
 ---
 
 ## 📊 Summary Roadmap Matrix
 
+> **Current Shipped Release**: **v1.1.0** (incorporating all milestones across Phase 1, Phase 2, Phase 3, and Phase 4).
+
 | Milestone | Phase | Priority | Status | Primary Impact | Dependencies |
 | :--- | :---: | :---: | :---: | :--- | :--- |
 | **Multi-Harness Synchronization** | Phase 1 (Foundations) | 🔴 High | ✅ Completed | Automated bidirectional sync between .github/ and .agents/ | None |
-| **Packaging & CI/CD** | Phase 1 (Foundations) | 🔴 High | ✅ Completed | Automated linting, test execution, regression guards (146 tests) | None |
+| **Packaging & CI/CD** | Phase 1 (Foundations) | 🔴 High | ✅ Completed | Automated linting, test execution, regression guards (152 tests) | None |
 | **Modular Package Refactoring** | Phase 2 (Modularization) | 🔴 High | ✅ Completed | Clean domain packages (`core`, `quant`, `risk`, `screening`, `storage`, `presentation`) | Phase 1 |
 | **Strict Domain Models & Adapters** | Phase 2 (Modularization) | 🔴 High | ✅ Completed | Strongly typed dataclasses with ingestion boundary adapters | Phase 2 |
-| **Modular Roadmap Test Suite** | Phase 2 (Modularization) | 🟡 Medium | ✅ Completed | 146 unit tests passing across all domain packages | Phase 2 |
+| **Modular Roadmap Test Suite** | Phase 2 (Modularization) | 🟡 Medium | ✅ Completed | 152 unit tests passing across all domain packages | Phase 2 |
 | **Zero-Crossing Linear Interpolation** | Phase 3 (Quant Modeling) | 🔴 High | ✅ Completed | Exact continuous zero-crossing strikes for pTrans & nTrans | Phase 2 |
 | **Black-Scholes Gamma Fallback** | Phase 3 (Quant Modeling) | 🟡 Medium | ✅ Completed | Pure Python analytical Gamma fallback for illiquid chains | Phase 2 |
 | **DTE-Weighted GEX Modeling** | Phase 3 (Quant Modeling) | 🟢 Low | ✅ Completed | Real-time effective dealer delta hedging pressure | Phase 3 |
@@ -202,9 +223,10 @@ src/gex/
 | **SQLite Trade Journal Persistence** | Phase 4 (Persistence) | 🟢 Low | ✅ Completed | Embedded ACID database for historical trades and GEX snapshots | Phase 2 |
 | **Notification Webhooks** | Phase 4 (Persistence) | 🟢 Low | ✅ Completed | Webhooks (Slack/Discord/Telegram) and macOS notifications | Phase 2 |
 | **Headless Pre-Market Audit Mode** | Phase 4 (Persistence) | 🟢 Low | ✅ Completed | Automated `audit-all` CLI mode with executive morning markdown | Phase 4 |
-| **Historical Replay & Backtesting** | Phase 5 (Future) | 🟡 Medium | 📋 Planned | Offline simulation harness for rule validation | Phase 4 |
-| **Dynamic Delta Rolling Engine** | Phase 5 (Future) | 🟢 Low | 📋 Planned | Systematic roll-up/roll-out rules for winning options | Phase 3 |
-| **Automated Macro Hedge Sizing** | Phase 5 (Future) | 🟢 Low | 📋 Planned | Beta-weighted SPY/QQQ hedge sizing on defensive regime transitions | Phase 3 |
+| **Historical Replay & Backtesting** | Phase 5 (Advanced Strategy) | 🟡 Medium | 📋 Planned | Offline simulation harness for rule validation across downloads | Phase 4 |
+| **Dynamic Delta Rolling Engine** | Phase 5 (Advanced Strategy) | 🟢 Low | 📋 Planned | Systematic roll-up/roll-out rules for winning options (Delta >= 0.70) | Phase 3 |
+| **Automated Macro Hedge Sizing** | Phase 5 (Advanced Strategy) | 🟢 Low | 📋 Planned | Beta-weighted SPY/QQQ hedge sizing on defensive regime transitions | Phase 3 |
+| **Intraday Level Breach Monitor** | Phase 5 (Advanced Strategy) | 🟡 Medium | 📋 Planned | Real-time monitoring daemon for Stop 1 / Profit Target breaches | Phase 4 |
 
 ---
 

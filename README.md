@@ -5,6 +5,7 @@ Welcome to the GEX Options & Agentic Portfolio Trading Suite! This repository pr
 The system consists of a **Python mechanical GEX engine CLI** and **specialized Copilot prompts** designed to guide interactive swing-trading decisions, with absolute discipline and zero emotional discretion.
 
 > 🗺️ **Roadmap**: See [ROADMAP.md](ROADMAP.md) for planned architectural refactoring, quantitative model improvements, and engineering milestones.
+> 📝 **Changelog**: See [CHANGELOG.md](CHANGELOG.md) for version release notes and history.
 
 ---
 
