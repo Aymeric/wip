@@ -212,6 +212,10 @@ _CACHED_DIR_MTIME_KEY: Dict[str, Any] = {}
 
 
 def _get_dir_mtime_key(d: str, ttl: float = 0.5) -> Any:
+    try:
+        d = validate_safe_path(d)
+    except ValueError:
+        return None
     now = time.time()
     last_check = _LAST_MTIME_CHECK_TIME.get(d, 0.0)
     if now - last_check < ttl and d in _CACHED_DIR_MTIME_KEY:
@@ -1864,6 +1868,7 @@ _SPOT_PRICE_CACHE: Dict[Tuple[str, Any, Any, Any], Optional[float]] = {}
 
 def _get_file_mtime(filepath: str) -> Optional[float]:
     try:
+        filepath = validate_safe_path(filepath)
         if os.path.exists(filepath):
             return os.path.getmtime(filepath)
     except Exception:
@@ -5191,6 +5196,11 @@ def cmd_update_candidates(args):
         return default
 
     def process_scan_file(filepath, source_name):
+        try:
+            filepath = validate_safe_path(filepath)
+        except ValueError as e:
+            print(f"Error: Invalid scan file path: {e}", file=sys.stderr)
+            return
         if not os.path.exists(filepath):
             print(f"Offline file not found for {source_name}: {filepath}")
             return
