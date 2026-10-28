@@ -258,6 +258,29 @@ class TestGEXEngine(unittest.TestCase):
                 gex_engine.cmd_snapshot(snapshot_args)
             self.assertEqual(cm.exception.code, 1)
 
+    def test_get_dir_mtime_key_path_traversal_prevention(self):
+        import gex_engine
+        invalid_dir = os.path.join(gex_engine.REPOSITORY_ROOT, "..", "..", "etc")
+        res = gex_engine._get_dir_mtime_key(invalid_dir)
+        self.assertIsNone(res)
+
+    def test_get_file_mtime_path_traversal_prevention(self):
+        import gex_engine
+        invalid_path = os.path.join(gex_engine.REPOSITORY_ROOT, "..", "..", "etc", "passwd")
+        res = gex_engine._get_file_mtime(invalid_path)
+        self.assertIsNone(res)
+
+    def test_process_scan_file_path_traversal_prevention(self):
+        from unittest.mock import patch
+        from types import SimpleNamespace
+        import gex_engine
+        invalid_path = os.path.join(gex_engine.REPOSITORY_ROOT, "..", "..", "etc", "passwd")
+        # Ensure list_download_files returns invalid_path to test process_scan_file handling
+        with patch.object(gex_engine, 'list_download_files', return_value=[invalid_path]), \
+             patch('sys.stderr'):
+            # cmd_update_candidates shouldn't crash or process forbidden files
+            gex_engine.cmd_update_candidates(SimpleNamespace(top=10))
+
         # get_monthly_realized_pnl with path traversal files safely rejects invalid paths
         with patch('sys.stderr'):
             pnl, pct, status, cnt = gex_engine.get_monthly_realized_pnl(10000.0, monthly_file=invalid_path, pnl_file=invalid_path)
