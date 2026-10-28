@@ -776,6 +776,41 @@ class TestPhase2ModularArchitecture(unittest.TestCase):
             vis_pipe_indices = [i for i, ch in enumerate(vis_line) if ch == "|"]
             self.assertEqual(vis_pipe_indices, header_vis_pipes)
 
+    def test_format_table_column_alignments(self):
+        import re
+        from src.gex.presentation.ascii_art import format_color
+        from src.gex.presentation.formatters import format_table
+
+        headers = ["Ticker", "Change", "Price"]
+        rows = [
+            ["AAPL", format_color("+5.20%", "32", bold=True), "$180.00"],
+            ["MSFT", format_color("-2.10%", "31"), "$400.00"],
+        ]
+
+        # Test left, center, right per-column alignment
+        alignments = ["left", "center", "right"]
+        table = format_table(headers, rows, alignments=alignments)
+
+        table_lines = table.split("\n")
+        self.assertEqual(len(table_lines), 4)
+
+        # Verify pipe positions align visually
+        vis_header = re.sub(r"\x1b\[[0-9;]*[a-zA-Z]", "", table_lines[0])
+        header_pipes = [i for i, ch in enumerate(vis_header) if ch == "|"]
+
+        for line in table_lines[2:]:
+            vis_line = re.sub(r"\x1b\[[0-9;]*[a-zA-Z]", "", line)
+            pipe_indices = [i for i, ch in enumerate(vis_line) if ch == "|"]
+            self.assertEqual(pipe_indices, header_pipes)
+
+        # Verify right alignment of last column ($180.00 in Price column)
+        row1_cell3 = re.sub(r"\x1b\[[0-9;]*[a-zA-Z]", "", table_lines[2]).split("|")[2]
+        self.assertTrue(row1_cell3.endswith("$180.00"))
+
+        # Verify fallback for partial or invalid alignments
+        partial_table = format_table(headers, rows, alignments=["center", "invalid_align"])
+        self.assertIn("AAPL", partial_table)
+
 
 if __name__ == "__main__":
     unittest.main()
