@@ -7,6 +7,10 @@ import math
 from typing import Optional
 
 
+_INV_SQRT_2PI = 0.3989422804014327
+_ONE_OVER_365_25 = 1.0 / 365.25
+
+
 def calculate_black_scholes_gamma(
     spot: float,
     strike: float,
@@ -36,14 +40,14 @@ def calculate_black_scholes_gamma(
     if spot <= 0.0 or strike <= 0.0 or iv <= 0.0:
         return 0.0
 
-    t = max(dte_days, 0.5) / 365.25
+    t = max(dte_days, 0.5) * _ONE_OVER_365_25
     sigma_sqrt_t = iv * math.sqrt(t)
     if sigma_sqrt_t <= 0.0:
         return 0.0
 
     try:
         d1 = (math.log(spot / strike) + (risk_free_rate + 0.5 * iv * iv) * t) / sigma_sqrt_t
-        n_prime_d1 = (1.0 / math.sqrt(2.0 * math.pi)) * math.exp(-0.5 * d1 * d1)
+        n_prime_d1 = _INV_SQRT_2PI * math.exp(-0.5 * d1 * d1)
         gamma = n_prime_d1 / (spot * sigma_sqrt_t)
         return gamma if math.isfinite(gamma) else 0.0
     except (ValueError, OverflowError, ZeroDivisionError):
@@ -127,11 +131,17 @@ def select_transition_points(
     Returns:
         tuple[float, float]: (pTrans, nTrans) where pTrans > nTrans strictly holds.
     """
-    flips_above = [k for k in flip_strikes if k >= spot]
-    flips_below = [k for k in flip_strikes if k < spot]
-
-    ptrans: Optional[float] = min(flips_above) if flips_above else None
-    ntrans: Optional[float] = max(flips_below) if flips_below else None
+    # Performance optimization (Bolt):
+    # Exploit the ascending sorted order of flip_strikes to isolate ptrans (min K* >= spot)
+    # and ntrans (max K* < spot) in a single scalar loop pass without list allocations.
+    ptrans: Optional[float] = None
+    ntrans: Optional[float] = None
+    for k in flip_strikes:
+        if k < spot:
+            ntrans = k
+        else:
+            ptrans = k
+            break
 
     default_put_wall = put_wall if put_wall is not None and put_wall > 0 else spot * 0.95
     default_cotmp = cotmp if cotmp is not None and cotmp > 0 else default_put_wall
