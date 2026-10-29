@@ -104,6 +104,7 @@ def derive_gex_profile(
     strike_call_oi = {}
     strike_put_gex = {}
     strike_call_gex = {}
+    net_gex_by_strike = {}
     total_oi = 0
     total_call_gex = 0.0
     total_put_gex = 0.0
@@ -172,9 +173,11 @@ def derive_gex_profile(
             if strike in strike_put_oi:
                 strike_put_oi[strike] += oi
                 strike_put_gex[strike] += gex_val
+                net_gex_by_strike[strike] -= gex_val
             else:
                 strike_put_oi[strike] = oi
                 strike_put_gex[strike] = gex_val
+                net_gex_by_strike[strike] = net_gex_by_strike.get(strike, 0.0) - gex_val
             total_put_gex += gex_val
             effective_put_gex += effective_gex_val
             sum_strike_put_oi += strike * oi
@@ -183,9 +186,11 @@ def derive_gex_profile(
             if strike in strike_call_oi:
                 strike_call_oi[strike] += oi
                 strike_call_gex[strike] += gex_val
+                net_gex_by_strike[strike] += gex_val
             else:
                 strike_call_oi[strike] = oi
                 strike_call_gex[strike] = gex_val
+                net_gex_by_strike[strike] = net_gex_by_strike.get(strike, 0.0) + gex_val
             total_call_gex += gex_val
             effective_call_gex += effective_gex_val
 
@@ -241,11 +246,8 @@ def derive_gex_profile(
         secondary_put_wall = put_wall * 0.95
 
     # pTrans & nTrans via continuous zero-crossing linear interpolation
-    all_strikes = sorted(set(strike_put_gex.keys()) | set(strike_call_gex.keys()))
-    net_gex_by_strike = {
-        s: strike_call_gex.get(s, 0.0) - strike_put_gex.get(s, 0.0)
-        for s in all_strikes
-    }
+    # Performance optimization (Bolt): net_gex_by_strike is accumulated in-loop during quote iteration,
+    # eliminating set unions, sort passes, and dict comprehensions over all strikes.
     flip_strikes = find_flip_strikes(net_gex_by_strike)
     derived_ptrans, derived_ntrans = select_transition_points(
         flip_strikes=flip_strikes,
@@ -276,13 +278,12 @@ def derive_gex_profile(
     rule9_derived = call_oi_at_target >= max_call_oi if max_call_oi > 0 else True
 
     nearest_strike = calc_spot
-    min_dist_key = (float('inf'), float('inf'))
-    for strike in all_strikes:
+    min_dist = float('inf')
+    for strike in net_gex_by_strike:
         diff = strike - calc_spot
-        dist = diff if diff >= 0 else -diff
-        dist_key = (dist, strike)
-        if dist_key < min_dist_key:
-            min_dist_key = dist_key
+        dist = diff if diff >= 0.0 else -diff
+        if dist < min_dist or (dist == min_dist and strike < nearest_strike):
+            min_dist = dist
             nearest_strike = strike
 
     net_gex_nearest = strike_call_gex.get(nearest_strike, 0.0) - strike_put_gex.get(nearest_strike, 0.0)
