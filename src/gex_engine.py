@@ -298,8 +298,9 @@ def dispatch_system_alert(title: str, message: str, webhook_url: Optional[str] =
     if sys.platform == "darwin" and os.environ.get("GEX_DESKTOP_NOTIFICATIONS", "").lower() in ("1", "true", "yes"):
         try:
             import subprocess
-            clean_title = title.replace('"', '\\"')
-            clean_msg = message.replace('"', '\\"').replace("\n", " ")
+            # Escape backslashes first before escaping double quotes to prevent AppleScript string breakouts
+            clean_title = title.replace("\\", "\\\\").replace('"', '\\"').replace("\n", " ").replace("\r", " ")
+            clean_msg = message.replace("\\", "\\\\").replace('"', '\\"').replace("\n", " ").replace("\r", " ")
             applescript = f'display notification "{clean_msg}" with title "{clean_title}"'
             subprocess.run(["osascript", "-e", applescript], check=False, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
             alert_sent = True
