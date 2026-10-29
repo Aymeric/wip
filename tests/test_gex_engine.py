@@ -65,14 +65,13 @@ class TestGEXEngine(unittest.TestCase):
             self.assertIn("Unsupported URL scheme 'ftp'", mock_stderr.getvalue())
 
     def test_dispatch_system_alert_applescript_escaping(self):
-        import sys
-        from unittest.mock import patch, MagicMock
+        from unittest.mock import patch
 
         with patch('sys.platform', 'darwin'), \
              patch.dict('os.environ', {'GEX_DESKTOP_NOTIFICATIONS': 'true'}), \
              patch('subprocess.run') as mock_run:
-            title = 'Test "Title" \\ with backslash'
-            msg = 'Message "Quote" \\ backslash\nand newline'
+            title = 'Test "Title" \\ with backslash\nand newline\r\n'
+            msg = 'Message "Quote" \\ backslash\nand newline\r'
             res = dispatch_system_alert(title, msg, webhook_url=None)
             self.assertTrue(res)
             mock_run.assert_called_once()
@@ -81,8 +80,8 @@ class TestGEXEngine(unittest.TestCase):
             self.assertEqual(cmd[0], "osascript")
             self.assertEqual(cmd[1], "-e")
             applescript_str = cmd[2]
-            # Backslashes must be escaped to \\\\ and quotes to \\"
-            self.assertIn('display notification "Message \\"Quote\\" \\\\ backslash and newline" with title "Test \\"Title\\" \\\\ with backslash"', applescript_str)
+            # Backslashes must be escaped to \\\\ and quotes to \\", newlines and carriage returns replaced with spaces
+            self.assertIn('display notification "Message \\"Quote\\" \\\\ backslash and newline " with title "Test \\"Title\\" \\\\ with backslash and newline  "', applescript_str)
 
     def test_slugify(self):
         # Standard text lowercasing and space replacement
