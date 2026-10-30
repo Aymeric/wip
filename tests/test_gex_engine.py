@@ -64,6 +64,25 @@ class TestGEXEngine(unittest.TestCase):
             self.assertFalse(res_ftp)
             self.assertIn("Unsupported URL scheme 'ftp'", mock_stderr.getvalue())
 
+    def test_dispatch_system_alert_applescript_escaping(self):
+        from unittest.mock import patch
+
+        with patch('sys.platform', 'darwin'), \
+             patch.dict('os.environ', {'GEX_DESKTOP_NOTIFICATIONS': 'true'}), \
+             patch('subprocess.run') as mock_run:
+            title = 'Alert "Quotes" & \\Backslash\\'
+            msg = 'Message "Quotes" \\\nNew Line'
+            res = dispatch_system_alert(title, msg)
+            self.assertTrue(res)
+            mock_run.assert_called_once()
+            cmd_args = mock_run.call_args[0][0]
+            self.assertEqual(cmd_args[0], "osascript")
+            self.assertEqual(cmd_args[1], "-e")
+            applescript_expr = cmd_args[2]
+            # Backslashes must be escaped (\\) before quotes (\")
+            self.assertIn('title "Alert \\"Quotes\\" & \\\\Backslash\\\\"', applescript_expr)
+            self.assertIn('display notification "Message \\"Quotes\\" \\\\ New Line"', applescript_expr)
+
     def test_slugify(self):
         # Standard text lowercasing and space replacement
         self.assertEqual(slugify("Hello World"), "hello_world")
