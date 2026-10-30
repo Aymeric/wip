@@ -1,3 +1,8 @@
+## 2026-09-26 - Desktop notification command string formatters must escape backslashes before quotes to prevent command injection
+**Vulnerability:** `dispatch_system_alert()` formatted AppleScript command literals for macOS `osascript -e` by replacing `"` with `\"` without escaping backslashes first (`\`), allowing backslashes to escape the double quotes and break out of the string literal into arbitrary AppleScript command execution.
+**Learning:** Replacing quotes with `\"` without first escaping backslashes (`\` -> `\\`) leaves double quotes unescaped when preceded by backslashes, allowing string breakout in command execution contexts.
+**Prevention:** Always escape backslashes (`replace("\\", "\\\\")`) before escaping double quotes (`replace('"', '\\"')`) when embedding dynamic strings into command literals.
+
 ## 2026-09-25 - Webhook notification dispatchers must validate URL schemes to prevent SSRF and local file exposure
 **Vulnerability:** `dispatch_system_alert()` passed user-supplied or environment webhook URLs directly into `urllib.request.urlopen()` without validating the URL scheme, permitting `file://` or other arbitrary protocol requests.
 **Learning:** `urllib.request.urlopen()` handles arbitrary schemes (including `file://`) by default, making unvalidated URL inputs vulnerable to Server-Side Request Forgery (SSRF) and local file exposure.
