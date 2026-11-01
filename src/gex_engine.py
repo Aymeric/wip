@@ -3913,7 +3913,7 @@ def cmd_audit_all(args):
     alert_dispatched = False
     if should_alert and all_pending_exits:
         alert_body = f"GEX Risk Stop Alert: {len(all_pending_exits)} exit(s) triggered across {len(accounts_audit)} account(s)!"
-        dispatch_system_alert(alert_body, title="GEX Pre-Market Risk Audit")
+        dispatch_system_alert(title="GEX Pre-Market Risk Audit", message=alert_body)
         alert_dispatched = True
 
     # 6. Output format

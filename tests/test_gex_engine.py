@@ -5237,6 +5237,45 @@ class TestCmdStatus(unittest.TestCase):
                 # Check that price change has neutral ANSI code '37' and not green '32' or red '31'
                 self.assertIn("\033[1;37m+0.00%\033[0m", output)
 
+    def test_cmd_audit_all_alert_dispatch(self):
+        """Verify cmd_audit_all dispatches alerts properly when stops are triggered without argument TypeError."""
+        import gex_engine
+        from types import SimpleNamespace
+        from unittest.mock import patch, MagicMock
+        import io
+
+        mock_positions = {
+            "options_positions": {},
+            "stocks_positions": {
+                "AAPL": {
+                    "Shares": 10.0,
+                    "Average Buy Price": 150.0,
+                    "Current Price": 70.0,  # >50% loss triggers catastrophic STOP 5
+                    "Entry Date": "2026-01-01"
+                }
+            }
+        }
+
+        def mock_load_json(path, default=None):
+            if "active_positions" in path:
+                return mock_positions
+            if "regime" in path:
+                return {"system_authorization": "AUTHORIZED"}
+            if "analyses" in path:
+                return {}
+            return default or {}
+
+        mock_args = SimpleNamespace(account="", json=True, alert=True, net_liq=50000.0)
+
+        with patch("gex_engine.load_json", side_effect=mock_load_json), \
+             patch("gex_engine.dispatch_system_alert") as mock_alert, \
+             patch("sys.stdout", new=io.StringIO()):
+            gex_engine.cmd_audit_all(mock_args)
+            mock_alert.assert_called_once()
+            _, kwargs = mock_alert.call_args
+            self.assertEqual(kwargs.get("title"), "GEX Pre-Market Risk Audit")
+            self.assertIn("GEX Risk Stop Alert", kwargs.get("message", ""))
+
 
 if __name__ == '__main__':
     unittest.main()
