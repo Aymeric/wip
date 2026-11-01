@@ -64,6 +64,32 @@ class TestGEXEngine(unittest.TestCase):
             self.assertFalse(res_ftp)
             self.assertIn("Unsupported URL scheme 'ftp'", mock_stderr.getvalue())
 
+    def test_dispatch_system_alert_osascript_injection_prevention(self):
+        from unittest.mock import patch
+
+        # Payload attempting breakout via unescaped backslash and quote
+        malicious_title = 'Alert\\\\" & do shell script "touch /tmp/pwn" & "'
+        malicious_msg = 'Test\\\\" & do shell script "touch /tmp/pwn2" & "'
+
+        with patch("sys.platform", "darwin"), \
+             patch.dict(os.environ, {"GEX_DESKTOP_NOTIFICATIONS": "1"}), \
+             patch("subprocess.run") as mock_run:
+            res = dispatch_system_alert(malicious_title, malicious_msg, webhook_url=None)
+            self.assertTrue(res)
+            mock_run.assert_called_once()
+            args, kwargs = mock_run.call_args
+            cmd = args[0]
+            self.assertEqual(cmd[0], "osascript")
+            self.assertEqual(cmd[1], "-e")
+            script = cmd[2]
+
+            # Verify that backslashes and double quotes are safely escaped
+            # in AppleScript literals so there is no unescaped quote or dangling backslash breakout
+            expected_title_fragment = 'with title "Alert\\\\\\\\\\" & do shell script \\"touch /tmp/pwn\\" & \\""'
+            expected_msg_fragment = 'display notification "Test\\\\\\\\\\" & do shell script \\"touch /tmp/pwn2\\" & \\""'
+            self.assertIn(expected_title_fragment, script)
+            self.assertIn(expected_msg_fragment, script)
+
     def test_slugify(self):
         # Standard text lowercasing and space replacement
         self.assertEqual(slugify("Hello World"), "hello_world")
@@ -257,6 +283,29 @@ class TestGEXEngine(unittest.TestCase):
             with self.assertRaises(SystemExit) as cm:
                 gex_engine.cmd_snapshot(snapshot_args)
             self.assertEqual(cm.exception.code, 1)
+
+    def test_get_dir_mtime_key_path_traversal_prevention(self):
+        import gex_engine
+        invalid_dir = os.path.join(gex_engine.REPOSITORY_ROOT, "..", "..", "etc")
+        res = gex_engine._get_dir_mtime_key(invalid_dir)
+        self.assertIsNone(res)
+
+    def test_get_file_mtime_path_traversal_prevention(self):
+        import gex_engine
+        invalid_path = os.path.join(gex_engine.REPOSITORY_ROOT, "..", "..", "etc", "passwd")
+        res = gex_engine._get_file_mtime(invalid_path)
+        self.assertIsNone(res)
+
+    def test_process_scan_file_path_traversal_prevention(self):
+        from unittest.mock import patch
+        from types import SimpleNamespace
+        import gex_engine
+        invalid_path = os.path.join(gex_engine.REPOSITORY_ROOT, "..", "..", "etc", "passwd")
+        # Ensure list_download_files returns invalid_path to test process_scan_file handling
+        with patch.object(gex_engine, 'list_download_files', return_value=[invalid_path]), \
+             patch('sys.stderr'):
+            # cmd_update_candidates shouldn't crash or process forbidden files
+            gex_engine.cmd_update_candidates(SimpleNamespace(top=10))
 
         # get_monthly_realized_pnl with path traversal files safely rejects invalid paths
         with patch('sys.stderr'):
