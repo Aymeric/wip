@@ -4,7 +4,10 @@ Provides analytical Black-Scholes Greeks with robust edge-case handling.
 """
 
 import math
-from typing import Optional
+from typing import Optional, Sequence, Tuple, Union, Any
+
+_ONE_OVER_SQRT_TWO_PI = 1.0 / math.sqrt(2.0 * math.pi)
+_ONE_OVER_365_25 = 1.0 / 365.25
 
 
 def calculate_black_scholes_gamma(
@@ -36,21 +39,21 @@ def calculate_black_scholes_gamma(
     if spot <= 0.0 or strike <= 0.0 or iv <= 0.0:
         return 0.0
 
-    t = max(dte_days, 0.5) / 365.25
+    t = max(dte_days, 0.5) * _ONE_OVER_365_25
     sigma_sqrt_t = iv * math.sqrt(t)
     if sigma_sqrt_t <= 0.0:
         return 0.0
 
     try:
         d1 = (math.log(spot / strike) + (risk_free_rate + 0.5 * iv * iv) * t) / sigma_sqrt_t
-        n_prime_d1 = (1.0 / math.sqrt(2.0 * math.pi)) * math.exp(-0.5 * d1 * d1)
+        n_prime_d1 = _ONE_OVER_SQRT_TWO_PI * math.exp(-0.5 * d1 * d1)
         gamma = n_prime_d1 / (spot * sigma_sqrt_t)
         return gamma if math.isfinite(gamma) else 0.0
     except (ValueError, OverflowError, ZeroDivisionError):
         return 0.0
 
 
-def find_flip_strikes(gex_by_strike: dict) -> list:
+def find_flip_strikes(gex_input: Union[dict, Sequence[Tuple[float, float]]]) -> list:
     """
     Finds continuous zero-crossing strikes where net GEX flips between positive and negative.
     Matches the linear interpolation implementation in gamma-exposure.ts:
@@ -58,22 +61,26 @@ def find_flip_strikes(gex_by_strike: dict) -> list:
         K* = K_{i-1} + (K_i - K_{i-1}) * (|netGEX_{i-1}| / (|netGEX_{i-1}| + |netGEX_i|))
 
     Args:
-        gex_by_strike: Mapping from strike price (float) to net GEX value (float).
+        gex_input: Mapping from strike price to net GEX value, or sequence of (strike, net_gex) tuples.
 
     Returns:
         List of continuous interpolated zero-crossing strike prices in ascending order.
     """
-    if not gex_by_strike:
+    if not gex_input:
         return []
 
     # Performance optimization (Bolt):
-    # Sort strike-GEX items directly using C-level tuple comparison (`items.sort()`)
-    # and eliminate redundant list comprehensions, lambda sorting keys, and built-in function calls.
-    items = list(gex_by_strike.items())
-    if len(items) < 2:
-        return []
-
-    items.sort()
+    # Accept dict or pre-sorted sequence of (strike, net_gex) tuples to avoid
+    # dict item creation and re-sorting overhead when called from GEX derivation loops.
+    if type(gex_input) is dict:
+        items = list(gex_input.items())
+        if len(items) < 2:
+            return []
+        items.sort()
+    else:
+        items = gex_input
+        if len(items) < 2:
+            return []
 
     flip_strikes: list = []
     prev_flip = None

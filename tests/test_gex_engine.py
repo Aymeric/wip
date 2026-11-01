@@ -64,6 +64,32 @@ class TestGEXEngine(unittest.TestCase):
             self.assertFalse(res_ftp)
             self.assertIn("Unsupported URL scheme 'ftp'", mock_stderr.getvalue())
 
+    def test_dispatch_system_alert_osascript_injection_prevention(self):
+        from unittest.mock import patch
+
+        # Payload attempting breakout via unescaped backslash and quote
+        malicious_title = 'Alert\\\\" & do shell script "touch /tmp/pwn" & "'
+        malicious_msg = 'Test\\\\" & do shell script "touch /tmp/pwn2" & "'
+
+        with patch("sys.platform", "darwin"), \
+             patch.dict(os.environ, {"GEX_DESKTOP_NOTIFICATIONS": "1"}), \
+             patch("subprocess.run") as mock_run:
+            res = dispatch_system_alert(malicious_title, malicious_msg, webhook_url=None)
+            self.assertTrue(res)
+            mock_run.assert_called_once()
+            args, kwargs = mock_run.call_args
+            cmd = args[0]
+            self.assertEqual(cmd[0], "osascript")
+            self.assertEqual(cmd[1], "-e")
+            script = cmd[2]
+
+            # Verify that backslashes and double quotes are safely escaped
+            # in AppleScript literals so there is no unescaped quote or dangling backslash breakout
+            expected_title_fragment = 'with title "Alert\\\\\\\\\\" & do shell script \\"touch /tmp/pwn\\" & \\""'
+            expected_msg_fragment = 'display notification "Test\\\\\\\\\\" & do shell script \\"touch /tmp/pwn2\\" & \\""'
+            self.assertIn(expected_title_fragment, script)
+            self.assertIn(expected_msg_fragment, script)
+
     def test_slugify(self):
         # Standard text lowercasing and space replacement
         self.assertEqual(slugify("Hello World"), "hello_world")

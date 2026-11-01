@@ -776,6 +776,35 @@ class TestPhase2ModularArchitecture(unittest.TestCase):
             vis_pipe_indices = [i for i, ch in enumerate(vis_line) if ch == "|"]
             self.assertEqual(vis_pipe_indices, header_vis_pipes)
 
+    def test_format_table_alignments(self):
+        import re
+        from src.gex.presentation.ascii_art import format_color
+        from src.gex.presentation.formatters import format_table
+
+        headers = ["Symbol", "Price", "Status"]
+        rows = [
+            ["AAPL", "$180.00", format_color("ACTIVE", "32")],
+            ["MSFT", "$400.00", format_color("HOLD", "37")],
+        ]
+        alignments = ["left", "right", "center"]
+        table = format_table(headers, rows, alignments=alignments)
+
+        table_lines = table.split("\n")
+        self.assertEqual(len(table_lines), 4)
+
+        vis_header = re.sub(r"\x1b\[[0-9;]*[a-zA-Z]", "", table_lines[0])
+        header_pipes = [i for i, ch in enumerate(vis_header) if ch == "|"]
+
+        for line in table_lines[2:]:
+            vis_line = re.sub(r"\x1b\[[0-9;]*[a-zA-Z]", "", line)
+            line_pipes = [i for i, ch in enumerate(vis_line) if ch == "|"]
+            self.assertEqual(line_pipes, header_pipes)
+            self.assertEqual(len(vis_line), len(vis_header))
+
+        # Check right alignment for Price column (" $180.00 |")
+        row1_vis = re.sub(r"\x1b\[[0-9;]*[a-zA-Z]", "", table_lines[2])
+        self.assertIn(" $180.00 |", row1_vis)
+
 
 if __name__ == "__main__":
     unittest.main()
