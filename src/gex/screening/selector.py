@@ -49,30 +49,40 @@ def select_best_option(
         instruments_list = inst_data
 
     # Performance optimization (Bolt):
-    # - Avoid `str(opt_type).lower()` on every instrument by checking equality with 'call'/'CALL' first.
-    # - Direct key lookups and dict insertion without `setdefault()` overhead.
+    # - Direct type() check avoids isinstance MRO traversal.
+    # - Check for 'put'/'PUT' before falling back to .lower() to avoid redundant string allocations.
+    # - Direct key subscripting with fallback for standard instrument fields.
     by_exp: Dict[str, List[Tuple[str, float]]] = {}
     expirations = set()
     for inst in instruments_list:
-        if not isinstance(inst, dict):
+        if type(inst) is not dict:
             continue
         opt_type = inst.get("type")
-        if opt_type != "call" and opt_type != "CALL" and (not isinstance(opt_type, str) or opt_type.lower() != "call"):
-            continue
-        opt_id = inst.get("id")
-        if not opt_id:
-            continue
+        if opt_type != "call" and opt_type != "CALL":
+            if opt_type == "put" or opt_type == "PUT" or type(opt_type) is not str or opt_type.lower() != "call":
+                continue
         try:
-            strike = float(inst["strike_price"]) if "strike_price" in inst else float(inst.get("strike", 0.0))
+            opt_id = inst["id"]
+            if not opt_id:
+                continue
+            strike = float(inst["strike_price"])
+            exp_str = inst["expiration_date"]
+        except KeyError:
+            opt_id = inst.get("id")
+            if not opt_id:
+                continue
+            strike_val = inst.get("strike_price")
+            strike = float(strike_val) if strike_val is not None else float(inst.get("strike", 0.0))
             exp_str = inst.get("expiration_date")
-            if exp_str:
-                if exp_str in by_exp:
-                    by_exp[exp_str].append((opt_id, strike))
-                else:
-                    by_exp[exp_str] = [(opt_id, strike)]
-                    expirations.add(exp_str)
-        except (ValueError, KeyError, TypeError):
+        except (ValueError, TypeError):
             continue
+
+        if exp_str:
+            if exp_str in by_exp:
+                by_exp[exp_str].append((opt_id, strike))
+            else:
+                by_exp[exp_str] = [(opt_id, strike)]
+                expirations.add(exp_str)
 
     if not expirations:
         return None, []
@@ -123,45 +133,72 @@ def select_best_option(
 
     # 3. Parse quotes for chosen expiration contracts only
     target_contracts = by_exp.get(chosen_exp, [])
-    target_opt_ids = {opt_id for opt_id, _ in target_contracts}
+    # Performance optimization (Bolt): Pre-filter target contracts against gex_target
+    # before building target_opt_ids to eliminate quote map parsing for excluded strikes.
+    if gex_target:
+        target_contracts = [c for c in target_contracts if c[1] < gex_target]
 
+    if not target_contracts:
+        return None, []
+
+    target_opt_ids = {opt_id for opt_id, _ in target_contracts}
     quotes_list = extract_quotes_list(quotes_data)
 
-    # Performance optimization (Bolt): Pre-filter quotes map using direct membership check
-    # against target expiration contract IDs to eliminate redundant lookup passes.
+    # Performance optimization (Bolt):
+    # - Optimistic direct subscripting for quote instrument IDs.
+    # - Pre-filter quotes map using direct membership check against target expiration contract IDs.
     quotes_map = {}
     for q_item in quotes_list:
-        if not isinstance(q_item, dict):
+        if type(q_item) is not dict:
             continue
-        q = q_item["quote"] if ("quote" in q_item and isinstance(q_item["quote"], dict)) else q_item
-        opt_id = q.get("instrument_id") or q.get("id") or q.get("instrument")
-        if opt_id and opt_id in target_opt_ids:
+        q = q_item["quote"] if ("quote" in q_item and type(q_item["quote"]) is dict) else q_item
+        try:
+            opt_id = q["instrument_id"]
+        except KeyError:
+            opt_id = q.get("instrument_id") or q.get("id") or q.get("instrument")
+        if opt_id in target_opt_ids:
             quotes_map[opt_id] = q
 
     # 4. Gather and score contracts for chosen expiration
     eligible_contracts = []
     for opt_id, strike in target_contracts:
-        # Performance optimization (Bolt): Early filter out-of-bounds strikes before quote lookup
-        if gex_target and strike >= gex_target:
-            continue
-
         q = quotes_map.get(opt_id)
         if not q:
             continue
 
+        # Performance optimization (Bolt): Optimistic direct dictionary subscripting
+        # for standard quote payload fields with graceful fallback to .get().
         try:
-            bid = float(q.get("bid_price") or 0.0)
-            ask = float(q.get("ask_price") or 0.0)
-            mark_val = q.get("mark_price") or q.get("adjusted_mark_price")
-            mark = float(mark_val) if mark_val is not None else ((bid + ask) / 2.0)
-            oi = int(q.get("open_interest") or 0)
-            vol = int(q.get("volume") or 0)
-            delta_val = q.get("delta")
-            delta = float(delta_val) if delta_val is not None else None
-            gamma_val = q.get("gamma")
-            gamma = float(gamma_val) if gamma_val is not None else None
-            iv_val = q.get("implied_volatility") or q.get("implied_vol")
-            iv = float(iv_val) if iv_val is not None else 0.0
+            bid = float(q["bid_price"])
+            ask = float(q["ask_price"])
+            raw_mark = q.get("mark_price") or q.get("adjusted_mark_price")
+            mark = float(raw_mark) if raw_mark is not None else ((bid + ask) * 0.5)
+            raw_oi = q["open_interest"]
+            oi = int(raw_oi) if raw_oi else 0
+            raw_vol = q["volume"]
+            vol = int(raw_vol) if raw_vol else 0
+            raw_delta = q["delta"]
+            delta = float(raw_delta) if raw_delta is not None else None
+            raw_gamma = q["gamma"]
+            gamma = float(raw_gamma) if raw_gamma is not None else None
+            raw_iv = q["implied_volatility"]
+            iv = float(raw_iv) if raw_iv else 0.0
+        except KeyError:
+            try:
+                bid = float(q.get("bid_price") or 0.0)
+                ask = float(q.get("ask_price") or 0.0)
+                mark_val = q.get("mark_price") or q.get("adjusted_mark_price")
+                mark = float(mark_val) if mark_val is not None else ((bid + ask) * 0.5)
+                oi = int(q.get("open_interest") or 0)
+                vol = int(q.get("volume") or 0)
+                delta_val = q.get("delta")
+                delta = float(delta_val) if delta_val is not None else None
+                gamma_val = q.get("gamma")
+                gamma = float(gamma_val) if gamma_val is not None else None
+                iv_val = q.get("implied_volatility") or q.get("implied_vol")
+                iv = float(iv_val) if iv_val is not None else 0.0
+            except (ValueError, TypeError):
+                continue
         except (ValueError, TypeError):
             continue
 
