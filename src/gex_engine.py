@@ -4187,16 +4187,24 @@ def cmd_audit_all(args):
         if not acc_data["options"] and not acc_data["stocks"]:
             print("  💤 No open positions.")
             continue
-        print("  " + "-" * 90)
-        print(f"  {'Ticker':<6} | {'Class':<7} | {'Spot':<8} | {'Cost Basis':<11} | {'Cur Value':<11} | {'P&L ($)':<12} | {'State'}")
-        print("  " + "-" * 90)
+        table_headers = ["Ticker", "Class", "Spot", "Cost Basis", "Cur Value", "P&L ($)", "State"]
+        table_rows = []
         for p in acc_data["options"] + acc_data["stocks"]:
-            pnl_c = "32" if p["pnl_dollar"] >= 0 else "31"
-            pnl_s = format_color(f"${p['pnl_dollar']:+,.2f}", pnl_c)
+            pnl_s = format_pnl(pnl_dlr=p["pnl_dollar"], bold=False)
             state_c = "31" if p["is_pending_exit"] else "32" if "PROFIT" in p["rule_state"] or "T1" in p["rule_state"] else "37"
             state_s = format_color(f"{p['rule_state']}", state_c, bold=p["is_pending_exit"])
-            print(f"  {p['ticker']:<6} | {p['asset_cls']:<7} | ${p['spot']:<7.2f} | ${p['cost_basis']:<10.2f} | ${p['current_val']:<10.2f} | {pnl_s:<21} | {state_s}")
-        print("  " + "-" * 90)
+            table_rows.append([
+                format_color(p["ticker"], "35", bold=True),
+                p["asset_cls"],
+                f"${p['spot']:.2f}",
+                f"${p['cost_basis']:,.2f}",
+                f"${p['current_val']:,.2f}",
+                pnl_s,
+                state_s,
+            ])
+        formatted_table = format_table(table_headers, table_rows)
+        for line in formatted_table.split("\n"):
+            print(f"  {line}")
 
 
 def cmd_add_pos(args):

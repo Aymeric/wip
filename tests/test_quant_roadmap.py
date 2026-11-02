@@ -371,6 +371,42 @@ class TestRoadmapImplementations(unittest.TestCase):
             self.assertIn("accounts", data)
             self.assertGreaterEqual(data["summary"]["total_positions"], 0)
 
+    def test_cmd_audit_all_cli_table_formatting(self):
+        import io
+        import re
+        from unittest.mock import patch
+        from src.gex_engine import cmd_audit_all
+
+        class MockArgs:
+            account = ""
+            json = False
+            alert = False
+            net_liq = 50000.0
+
+        with patch("sys.stdout.isatty", return_value=True):
+            with patch("sys.stdout", new=io.StringIO()) as fake_out:
+                cmd_audit_all(MockArgs())
+                output = fake_out.getvalue()
+
+        self.assertIn("Position Breakdown by Account", output)
+        self.assertIn("Ticker", output)
+        self.assertIn("Cost Basis", output)
+        self.assertIn("P&L ($)", output)
+
+        # Verify delimiter alignment across table header, separator, and data rows
+        table_lines = [
+            line for line in output.split("\n")
+            if "Ticker" in line or ("+-" in line and "---" in line) or "Option" in line or "Stock" in line
+        ]
+        self.assertGreaterEqual(len(table_lines), 2)
+        def get_vis_pipes(l):
+            vis = re.sub(r"\x1b\[[0-9;]*[a-zA-Z]", "", l)
+            return [i for i, c in enumerate(vis) if c == "|" or (c == "+" and "-" in vis)]
+
+        header_pipes = get_vis_pipes(table_lines[0])
+        for line in table_lines[1:]:
+            self.assertEqual(get_vis_pipes(line), header_pipes)
+
     def test_find_flip_strikes_linear_interpolation(self):
         from src.gex.quant.greeks import find_flip_strikes
 

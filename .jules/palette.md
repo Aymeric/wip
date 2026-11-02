@@ -35,3 +35,7 @@
 ## 2026-11-20 - ANSI Escape Code Alignment in CLI Tables
 **Learning:** In CLI tables containing ANSI color-formatted cells (such as colored P&L values or ticker badges), standard string length calculation `len()` counts non-printable escape bytes, causing column widths and pipe delimiters (`|`) to visually misalign across rows.
 **Action:** Always compute string widths and cell padding using ANSI-stripped visible length (`_visible_len`) in CLI table formatters so column boundaries remain pixel/character-aligned regardless of color styling.
+
+## 2026-11-25 - Standardized Table Formatting in Multi-Account CLI Audits
+**Learning:** Hardcoding manual string widths and delimiter lines for table rows in multi-account subcommands leaks unformatted lines, creates mismatched separator widths, and bypasses 3-state P&L semantics.
+**Action:** Route all account position breakdown and multi-row CLI matrices through `format_table` with `format_pnl` rather than manual fixed-width f-string lines.
