@@ -37,6 +37,13 @@ The system's engineering lifecycle is organized into structured phases:
   - [x] Created [.github/workflows/ci.yml](.github/workflows/ci.yml) running test matrices across Python 3.10, 3.11, and 3.12.
   - [x] Integrated benchmark verification ([tests/test_performance.py](tests/test_performance.py)) and harness sync checks ([scripts/sync_harnesses.py](scripts/sync_harnesses.py)).
 
+### 1.4 Static Analysis CI Gate (ruff + mypy) ([#162](https://github.com/Aymeric/wip/issues/162))
+- **Need & Outcome**: `ruff` and `mypy` are configured in [pyproject.toml](pyproject.toml) but never executed in [.github/workflows/ci.yml](.github/workflows/ci.yml), so lint and type regressions in the modular `src/gex/` packages go undetected.
+- **Action Items**:
+  - [ ] Add `ruff check` and `mypy src/gex` steps to the CI matrix.
+  - [ ] Establish a baseline (per-module ignores/allowlist) so the gate starts green without a mass rewrite.
+  - [ ] Ratchet strictness per package (`core`, `quant`, `risk` first) and document the local commands in [README.md](README.md).
+
 ---
 
 ## 🧱 Phase 2: Modular Architecture & Type Safety
@@ -202,6 +209,35 @@ src/gex/
   - [ ] Integrate with `dispatch_system_alert` for instant Slack, Discord, Telegram, and desktop notifications.
   - [ ] Expose CLI daemon command `python3 src/gex_engine.py monitor --interval SECONDS --alert`.
 
+### 5.5 Stop-Coded Exit Attribution ([#163](https://github.com/Aymeric/wip/issues/163))
+- **Status**: ✅ **Implemented** (codes in [src/gex/core/config.py](src/gex/core/config.py); tests in [tests/test_exit_attribution.py](tests/test_exit_attribution.py)).
+- **Need & Outcome**: The SQLite `trades.exit_reason` column ([src/gex/storage/db.py](src/gex/storage/db.py)) always records `MANUAL` because `close-position` / `close-stock` accept no reason. Coding every exit against the Stop 1–5 hierarchy lets the trade journal measure expectancy and adherence per stop.
+- **Action Items**:
+  - [x] Add a validated `--reason {STOP1,STOP2,STOP3,STOP4,STOP5,TARGET,MANUAL,RECONCILED}` flag to `close-position` and `close-stock`.
+  - [x] Persist the code to JSON closed caches and SQLite `exit_reason`; map trade-history reconciliation closes to `RECONCILED`.
+  - [x] Add per-exit-reason win rate / expectancy breakdown to `journal`, and update `portfolio-risk-manager` / `agentic-trader` skills to pass the triggering stop.
+
+### 5.6 Approval Decision Ledger ([#164](https://github.com/Aymeric/wip/issues/164))
+- **Need & Outcome**: Execution approval requests (entries and exits) are only printed to the terminal, and the `ask_question` answer is not persisted. A durable ledger provides provenance for every decision and lets the journal audit mechanical adherence vs. human overrides.
+- **Action Items**:
+  - [ ] Add a `decisions` SQLite table (timestamp, masked account, symbol/contract, action, grade, regime gates, triggering stop, recommendation, human answer, order ref).
+  - [ ] Expose `record-decision` and `decisions --account ACCOUNT_NUMBER` CLI commands; never store credentials or full account numbers.
+  - [ ] Wire `gex-orchestrator` / `agentic-trader` skills to record each approval outcome, including declines and skipped/ambiguous answers.
+
+### 5.7 IV Rank / IV Percentile Entry Context ([#165](https://github.com/Aymeric/wip/issues/165))
+- **Need & Outcome**: Entry screening uses an absolute IV floor (≥ 30%) only. *Hypothesis*: buying single-leg premium when IV is high relative to the underlier's own history degrades expectancy. Relative IV context would inform contract selection and grading.
+- **Action Items**:
+  - [ ] Capture daily ATM IV (30-day) into `gex_snapshots` alongside GEX levels.
+  - [ ] Implement IV rank / percentile in `src/gex/quant/` with explicit `UNKNOWN` when history is below a minimum lookback.
+  - [ ] Surface IVR in `analyze` / candidate tables as informational first; promote to a gate only after backtest evidence (depends on 5.1).
+
+### 5.8 CLI Extraction into `src/gex/cli/` ([#166](https://github.com/Aymeric/wip/issues/166))
+- **Need & Outcome**: [src/gex_engine.py](src/gex_engine.py) is ~6,600 lines hosting 28 subcommands while `src/gex/cli/` is empty. Phase 5 adds four more commands; extracting command handlers reduces regression risk and review cost.
+- **Action Items**:
+  - [ ] Move argparse wiring and `cmd_*` handlers into `src/gex/cli/` modules grouped by domain (portfolio, screening, regime, journal, ops).
+  - [ ] Keep `python3 src/gex_engine.py <subcommand>` and existing root re-exports 100% backward compatible.
+  - [ ] Full test suite and harness sync pass unchanged after extraction.
+
 ---
 
 ## 📊 Summary Roadmap Matrix
@@ -227,6 +263,11 @@ src/gex/
 | **Dynamic Delta Rolling Engine** | Phase 5 (Advanced Strategy) | 🟢 Low | 📋 Planned | Systematic roll-up/roll-out rules for winning options (Delta >= 0.70) | Phase 3 |
 | **Automated Macro Hedge Sizing** | Phase 5 (Advanced Strategy) | 🟢 Low | 📋 Planned | Beta-weighted SPY/QQQ hedge sizing on defensive regime transitions | Phase 3 |
 | **Intraday Level Breach Monitor** | Phase 5 (Advanced Strategy) | 🟡 Medium | 📋 Planned | Real-time monitoring daemon for Stop 1 / Profit Target breaches | Phase 4 |
+| **Static Analysis CI Gate** | Phase 1 (Foundations) | 🟡 Medium | 📋 Planned | ruff + mypy enforced in CI with baseline ratchet | Phase 1 |
+| **Stop-Coded Exit Attribution** | Phase 5 (Advanced Strategy) | 🔴 High | ✅ Completed | Per-stop expectancy via coded `exit_reason` | Phase 4 |
+| **Approval Decision Ledger** | Phase 5 (Advanced Strategy) | 🟡 Medium | 📋 Planned | Durable provenance of approvals, declines, and overrides | Phase 4 |
+| **IV Rank / Percentile Context** | Phase 5 (Advanced Strategy) | 🟢 Low | 📋 Planned | Relative IV context for entries (gate only after backtest) | 5.1 |
+| **CLI Extraction (`src/gex/cli/`)** | Phase 5 (Advanced Strategy) | 🟡 Medium | 📋 Planned | Smaller engine module; safer Phase 5 command additions | Phase 2 |
 
 ---
 

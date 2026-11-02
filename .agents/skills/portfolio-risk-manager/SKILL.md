@@ -64,6 +64,13 @@ Evaluate exits in this *strict priority order* for open options:
    - Position suffers a $-50\%$ loss from entry premium.
    - **Action**: Immediate mandatory exit.
 
+**Exit Attribution**: Every exit recommendation must carry the triggering stop code (`STOP1`–`STOP5`, `TARGET` for profit-target exits, `MANUAL` for discretionary closes). When the exit is recorded, pass it explicitly so the journal can measure expectancy per stop:
+```bash
+python3 src/gex_engine.py close-position <option_id> --close-premium <fill> --reason STOP1 --account ACCOUNT_NUMBER
+python3 src/gex_engine.py close-stock <ticker> --close-price <fill> --reason TARGET --account ACCOUNT_NUMBER
+```
+Closes detected by `sync-pnl` trade-history reconciliation are recorded automatically as `RECONCILED`.
+
 ---
 
 ## Step 3: Portfolio Sizing & Concentration Constraints

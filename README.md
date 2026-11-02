@@ -659,8 +659,9 @@ python3 src/gex_engine.py update-option <option_id_or_ticker> --mark <mark_price
 
 #### Close a tracked contract and archive realized P&L:
 ```bash
-python3 src/gex_engine.py close-position <option_id_or_ticker> --close-premium <exit_premium>
+python3 src/gex_engine.py close-position <option_id_or_ticker> --close-premium <exit_premium> [--reason STOP1|STOP2|STOP3|STOP4|STOP5|TARGET|MANUAL|RECONCILED]
 ```
+*(`--reason` records the coded exit trigger from the Stop 1–5 hierarchy (default `MANUAL`). It is persisted to the closed-position cache and SQLite `exit_reason`, and `journal` reports win rate and expectancy per reason. Closes detected by `sync-pnl` are coded `RECONCILED`.)*
 
 #### Manually register an open stock position:
 ```bash
@@ -674,7 +675,7 @@ python3 src/gex_engine.py update-stock <ticker> [--price <price>] [--shares <sha
 
 #### Close a tracked stock position and archive standard P&L:
 ```bash
-python3 src/gex_engine.py close-stock <ticker> [--close-price <close_price>]
+python3 src/gex_engine.py close-stock <ticker> [--close-price <close_price>] [--reason <EXIT_CODE>]
 ```
 
 #### Sync trade history to automatically detect and archive closed positions:

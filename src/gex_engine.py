@@ -92,6 +92,9 @@ from src.gex.core.config import (
     MIN_VOLUME,
     MIN_CHG_PCT,
     MIN_MARKET_CAP,
+    EXIT_REASON_CODES,
+    DEFAULT_EXIT_REASON,
+    RECONCILED_EXIT_REASON,
     validate_safe_path,
     sanitize_account,
 )
@@ -4191,10 +4194,11 @@ def cmd_close_stock_pos(args):
     details["Close Date"] = datetime.today().strftime('%Y-%m-%d')
     details["Realized P&L ($)"] = round(realized_dollar, 2)
     details["Realized P&L (%)"] = round(realized_pct, 2)
+    details["Close Reason"] = getattr(args, "reason", None) or DEFAULT_EXIT_REASON
     closed.append(details)
     
     pnl_str = format_pnl(realized_dollar, realized_pct, bold=True)
-    print(f"Closed stock position for {ticker}: Realized P&L {pnl_str}")
+    print(f"Closed stock position for {ticker} [{details['Close Reason']}]: Realized P&L {pnl_str}")
           
     options["stocks_positions"] = stocks
     save_json(options_file, options)
@@ -4304,10 +4308,11 @@ def cmd_close_pos(args):
         details["Close Date"] = datetime.today().strftime('%Y-%m-%d')
         details["Realized P&L ($)"] = realized_dollar
         details["Realized P&L (%)"] = realized_pct
+        details["Close Reason"] = getattr(args, "reason", None) or DEFAULT_EXIT_REASON
         closed.append(details)
         
         pnl_str = format_pnl(realized_dollar, realized_pct, bold=True)
-        print(f"Closed {details.get('Underlier')} {details.get('Strike')} {details.get('Type')} ({opt_id}): Realized P&L {pnl_str}")
+        print(f"Closed {details.get('Underlier')} {details.get('Strike')} {details.get('Type')} ({opt_id}) [{details['Close Reason']}]: Realized P&L {pnl_str}")
         
     options["options_positions"] = positions
     save_json(options_file, options)
@@ -4452,7 +4457,8 @@ def cmd_sync_pnl(args):
         details["Close Date"] = ts[:10] if ts else datetime.today().strftime('%Y-%m-%d')
         details["Realized P&L ($)"] = round(realized_dollar, 2)
         details["Realized P&L (%)"] = round(realized_pct, 2)
-        details["Close Reason"] = "Detected closed via trade history quantity reconciliation"
+        details["Close Reason"] = RECONCILED_EXIT_REASON
+        details["Close Note"] = "Detected closed via trade history quantity reconciliation"
         if account:
             details["Account"] = account
 
@@ -4492,7 +4498,8 @@ def cmd_sync_pnl(args):
         details["Close Date"] = ts[:10] if ts else datetime.today().strftime('%Y-%m-%d')
         details["Realized P&L ($)"] = round(realized_dollar, 2)
         details["Realized P&L (%)"] = round(realized_pct, 2)
-        details["Close Reason"] = "Detected closed via trade history quantity reconciliation"
+        details["Close Reason"] = RECONCILED_EXIT_REASON
+        details["Close Note"] = "Detected closed via trade history quantity reconciliation"
         if account:
             details["Account"] = account
 
@@ -6071,10 +6078,12 @@ def calculate_trade_journal(closed_data: Dict[str, Any], performance_data: Optio
 
             bucket_cr = close_reasons.get(close_reason)
             if bucket_cr is None:
-                bucket_cr = {"count": 0, "pnl": 0.0}
+                bucket_cr = {"count": 0, "pnl": 0.0, "win_count": 0}
                 close_reasons[close_reason] = bucket_cr
             bucket_cr["count"] += 1
             bucket_cr["pnl"] += realized_value
+            if realized_value > 0:
+                bucket_cr["win_count"] += 1
 
             bucket_tm = target_modes.get(target_mode)
             if bucket_tm is None:
@@ -6084,6 +6093,9 @@ def calculate_trade_journal(closed_data: Dict[str, Any], performance_data: Optio
             bucket_tm["pnl"] += realized_value
 
     for bucket in close_reasons.values():
+        cnt = bucket["count"]
+        bucket["win_rate_pct"] = round(bucket["win_count"] / cnt * 100, 2) if cnt > 0 else None
+        bucket["expectancy_per_trade"] = round(bucket["pnl"] / cnt, 2) if cnt > 0 else None
         bucket["pnl"] = round(bucket["pnl"], 2)
     for bucket in target_modes.values():
         bucket["pnl"] = round(bucket["pnl"], 2)
@@ -6458,6 +6470,7 @@ def main():
     p_close_pos.add_argument("option_id", type=str, help="Option ID or Ticker underlier name")
     p_close_pos.add_argument("--close-premium", type=float, dest="close_premium", help="Exit premium received (defaults to last Mark Price)")
     p_close_pos.add_argument("--account", type=str, default="", help="Account number used to scope position caches")
+    p_close_pos.add_argument("--reason", type=str.upper, choices=EXIT_REASON_CODES, default=DEFAULT_EXIT_REASON, help="Coded exit reason (Stop 1-5 hierarchy, TARGET, MANUAL, RECONCILED). Default: MANUAL")
     
     # add-stock subcommand
     p_add_stock = subparsers.add_parser("add-stock", help="Register a stock position in tracking sheet.")
@@ -6487,6 +6500,7 @@ def main():
     p_close_stock.add_argument("ticker", type=str, help="Stock ticker symbol")
     p_close_stock.add_argument("--close-price", type=float, dest="close_price", help="Exit price received per share (defaults to last current price)")
     p_close_stock.add_argument("--account", type=str, default="", help="Account number used to scope position caches")
+    p_close_stock.add_argument("--reason", type=str.upper, choices=EXIT_REASON_CODES, default=DEFAULT_EXIT_REASON, help="Coded exit reason (Stop 1-5 hierarchy, TARGET, MANUAL, RECONCILED). Default: MANUAL")
 
     # update-candidates subcommand
     p_candidates = subparsers.add_parser("update-candidates", help="Persist downloaded scans and update candidate_stocks.json.")

@@ -85,3 +85,9 @@ If the user selects "Approve and execute limit order", proceed immediately to St
      --plus-gex PLUS_GEX
    ```
 4. Output the official **Order Execution Receipt** with Order ID, Timestamp, Contract Details, and Active Position confirmation.
+5. **Exit orders (closing trades)**: After a confirmed closing fill, archive the position with the stop code that triggered the exit (supplied by `portfolio-risk-manager`):
+   ```bash
+   python3 src/gex_engine.py close-position OPTION_ID --close-premium FILL_PRICE --reason STOP1 --account ACCOUNT_NUMBER
+   python3 src/gex_engine.py close-stock TICKER --close-price FILL_PRICE --reason TARGET --account ACCOUNT_NUMBER
+   ```
+   Valid `--reason` codes: `STOP1`, `STOP2`, `STOP3`, `STOP4`, `STOP5`, `TARGET`, `MANUAL` (default), `RECONCILED`. Never guess the code; use `MANUAL` when the exit was discretionary.

@@ -31,6 +31,13 @@ MIN_VOLUME = 200000
 MIN_CHG_PCT = 0.3
 MIN_MARKET_CAP = 1000000000
 
+# Coded exit reasons aligned with the Stop 1-5 priority hierarchy (see AGENTS.md).
+# STOP1 Structural (nTrans), STOP2 Trailing giveback, STOP3 Time/Theta, STOP4 Macro/Regime,
+# STOP5 Catastrophic (-50%), TARGET profit target, MANUAL discretionary, RECONCILED broker history sync.
+EXIT_REASON_CODES = ("STOP1", "STOP2", "STOP3", "STOP4", "STOP5", "TARGET", "MANUAL", "RECONCILED")
+DEFAULT_EXIT_REASON = "MANUAL"
+RECONCILED_EXIT_REASON = "RECONCILED"
+
 
 def validate_safe_path(filepath: str, allowed_roots: Optional[List[str]] = None) -> str:
     """Ensure filepath resolves strictly within allowed roots (defaults to REPOSITORY_ROOT and temp dir)."""
