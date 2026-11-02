@@ -59,6 +59,9 @@ from src.gex.storage.db import (
     sync_closed_positions_to_db,
     save_gex_snapshot,
     query_latest_gex_snapshot,
+    record_decision,
+    query_decisions,
+    summarize_decisions,
 )
 
 
@@ -95,6 +98,9 @@ from src.gex.core.config import (
     EXIT_REASON_CODES,
     DEFAULT_EXIT_REASON,
     RECONCILED_EXIT_REASON,
+    DECISION_TYPES,
+    DECISION_ANSWERS,
+    mask_account,
     validate_safe_path,
     sanitize_account,
 )
@@ -5935,6 +5941,104 @@ def cmd_journal(args):
     print(json.dumps(calculate_trade_journal(closed_data, performance_data), indent=2, sort_keys=True))
 
 
+def cmd_record_decision(args):
+    """Records an execution approval decision into the SQLite audit ledger."""
+    db_path = getattr(args, "db_path", None)
+    account = getattr(args, "account", "")
+    if not account:
+        print("Error: --account is required to record a decision.", file=sys.stderr)
+        sys.exit(1)
+
+    try:
+        decision_id = record_decision(
+            decision_type=args.type,
+            symbol=args.symbol,
+            recommendation=args.recommendation,
+            human_answer=args.answer,
+            account=account,
+            contract=getattr(args, "contract", None),
+            grade=getattr(args, "grade", None),
+            regime_authorization=getattr(args, "regime", None),
+            gates_passed=getattr(args, "gates_passed", None),
+            trigger_code=getattr(args, "trigger", None),
+            order_ref=getattr(args, "order_ref", None),
+            notes=getattr(args, "notes", None),
+            db_path=db_path,
+        )
+    except ValueError as e:
+        print(f"Error: {e}", file=sys.stderr)
+        sys.exit(1)
+
+    masked = mask_account(account)
+    ans_color = "32" if args.answer == "APPROVED" else ("31" if args.answer == "DECLINED" else "33")
+    ans_formatted = format_color(args.answer, ans_color, bold=True)
+    print(f"Recorded decision #{decision_id} ({args.type} {args.symbol.upper()} -> {ans_formatted}) for {masked}")
+
+
+def cmd_decisions(args):
+    """Displays recorded human approval decisions and rule-adherence metrics."""
+    account = getattr(args, "account", "")
+    db_path = getattr(args, "db_path", None)
+    limit = getattr(args, "limit", 50)
+    as_json = getattr(args, "json", False)
+
+    decisions = query_decisions(account=account, limit=limit, db_path=db_path)
+    summary = summarize_decisions(account=account, db_path=db_path)
+
+    if as_json:
+        print(json.dumps({"summary": summary, "decisions": decisions}, indent=2, sort_keys=True))
+        return
+
+    masked = mask_account(account) if account else "ALL ACCOUNTS"
+    print(f"\n### 📋 Execution Approval Decision Ledger ({masked})")
+
+    headers = ["ID", "Recorded At", "Account", "Type", "Symbol", "Grade/Trigger", "Answer", "Order Ref"]
+    rows = []
+    for d in decisions:
+        d_type = d.get("decision_type", "")
+        gt = d.get("trigger_code") if d_type == "EXIT" else (d.get("grade") or "-")
+        ans = d.get("human_answer", "")
+        ans_color = "32" if ans == "APPROVED" else ("31" if ans == "DECLINED" else "33")
+        ans_str = format_color(ans, ans_color, bold=(ans in ("APPROVED", "DECLINED")))
+
+        rec_at = (d.get("recorded_at") or "")[:19].replace("T", " ")
+
+        rows.append([
+            str(d.get("id")),
+            rec_at,
+            d.get("account_mask") or "-",
+            d_type,
+            d.get("symbol", ""),
+            gt or "-",
+            ans_str,
+            d.get("order_ref") or "-",
+        ])
+
+    alignments = ["right", "left", "left", "left", "left", "left", "left", "left"]
+    print(format_table(headers, rows, empty_message="No decisions recorded in ledger.", alignments=alignments))
+    print()
+
+    total = summary["total_decisions"]
+    by_type = summary["by_type"]
+    by_ans = summary["by_answer"]
+    app_rate = summary["approval_rate_pct"]
+    conflicts = summary["rule_conflicts_count"]
+
+    print(f"  Total Decisions: {total} (Entries: {by_type.get('ENTRY', 0)}, Exits: {by_type.get('EXIT', 0)})")
+    print(f"  Outcomes: Approved: {by_ans.get('APPROVED', 0)} | Declined: {by_ans.get('DECLINED', 0)} | Skipped: {by_ans.get('SKIPPED', 0)} | Ambiguous: {by_ans.get('AMBIGUOUS', 0)}")
+    print(f"  Approval Rate: {app_rate:.1f}%")
+
+    if conflicts > 0:
+        conf_str = format_color(f"{conflicts} rule conflict(s) detected!", "31", bold=True)
+        print(f"  ⚠️  Audit Warning: {conf_str}")
+        for c in summary["rule_conflicts"]:
+            print(f"      - Decision #{c['id']} ({c['type']} {c['symbol']}): {c['reason']}")
+    else:
+        ok_str = format_color("0 rule conflicts (100% mechanical adherence)", "32")
+        print(f"  Audit Status: {ok_str}")
+    print()
+
+
 
 def cmd_payoff(args):
     """Runs an offline option payoff simulation scenario grid."""
@@ -6342,6 +6446,29 @@ def main():
     p_audit_all.add_argument("--json", action="store_true", help="Output machine-readable JSON summary instead of markdown")
     p_audit_all.add_argument("--alert", action="store_true", help="Dispatch system notification webhooks/desktop alerts if any stop breaches are detected")
 
+    # record-decision subcommand (Roadmap 5.6 Approval Decision Ledger)
+    p_rec_dec = subparsers.add_parser("record-decision", help="Record human-in-the-loop trade approval or exit decision.")
+    p_rec_dec.add_argument("--account", type=str, required=True, help="Account number used to scope decision provenance")
+    p_rec_dec.add_argument("--type", type=str.upper, choices=DECISION_TYPES, required=True, help="Decision type (ENTRY or EXIT)")
+    p_rec_dec.add_argument("--symbol", type=str, required=True, help="Underlier ticker symbol (e.g. AAPL)")
+    p_rec_dec.add_argument("--recommendation", type=str, required=True, help="Proposed action summary or trade specification")
+    p_rec_dec.add_argument("--answer", type=str.upper, choices=DECISION_ANSWERS, required=True, help="Human response (APPROVED, DECLINED, SKIPPED, AMBIGUOUS)")
+    p_rec_dec.add_argument("--contract", type=str, help="Option contract description or strike/expiry")
+    p_rec_dec.add_argument("--grade", type=str.upper, choices=["CONFIRMED", "PENDING", "REJECTED"], help="Setup grade for entry decisions")
+    p_rec_dec.add_argument("--regime", type=str, help="Market regime state at decision time (e.g. 'ALL TRACKS OK')")
+    p_rec_dec.add_argument("--gates-passed", type=int, dest="gates_passed", help="Number of regime gates passed (0-3)")
+    p_rec_dec.add_argument("--trigger", type=str.upper, choices=EXIT_REASON_CODES, help="Triggering stop code for EXIT decisions (e.g. STOP1, STOP5, TARGET)")
+    p_rec_dec.add_argument("--order-ref", type=str, dest="order_ref", help="Broker order reference UUID if approved and executed")
+    p_rec_dec.add_argument("--notes", type=str, help="Additional context or notes for the decision")
+    p_rec_dec.add_argument("--db-path", type=str, dest="db_path", help="Custom SQLite database file path")
+
+    # decisions subcommand (Roadmap 5.6 Approval Decision Ledger)
+    p_dec = subparsers.add_parser("decisions", help="Display recorded trade approval decisions and rule-adherence metrics.")
+    p_dec.add_argument("--account", type=str, default="", help="Account number used to filter decision ledger")
+    p_dec.add_argument("--limit", type=int, default=50, help="Maximum number of decisions to return (default: 50)")
+    p_dec.add_argument("--json", action="store_true", help="Output machine-readable JSON format")
+    p_dec.add_argument("--db-path", type=str, dest="db_path", help="Custom SQLite database file path")
+
 
     # workflow subcommand
     p_workflow = subparsers.add_parser("workflow", help="Aggregates all JSON state into a high-level system summary.")
@@ -6433,6 +6560,10 @@ def main():
         cmd_journal(args)
     elif args.command == "audit-all":
         cmd_audit_all(args)
+    elif args.command == "record-decision":
+        cmd_record_decision(args)
+    elif args.command == "decisions":
+        cmd_decisions(args)
     elif args.command == "payoff":
 
         cmd_payoff(args)

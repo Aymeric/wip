@@ -72,4 +72,17 @@ Interpret each request as one of these modes:
 - Present confirmed setups and specific option contract recommendations.
 - Display Watchlist actions: Pending stock candidates on the equity watchlist (`GEX_DAILY_CANDIDATES`), pruned outdated entries removed, and option candidates on the dedicated **"options watchlist"**.
 - Prompt user for execution approval via `ask_question`.
+- Record the human's response immediately into the decision ledger:
+  ```bash
+  python3 src/gex_engine.py record-decision \
+    --account ACCOUNT_NUMBER \
+    --type ENTRY \
+    --symbol TICKER \
+    --contract "CONTRACT_DESC" \
+    --grade GRADE \
+    --regime "REGIME_STATUS" \
+    --gates-passed GATES_COUNT \
+    --recommendation "Buy QTYx CONTRACT @ LIMIT" \
+    --answer APPROVED|DECLINED|SKIPPED|AMBIGUOUS
+  ```
 - If approved, invoke `agentic-trader` for pre-trade clearance, simulation, and limit order submission.

@@ -690,6 +690,24 @@ python3 src/gex_engine.py closed
 ```
 *(This aggregates all closed options and stock positions stored in [data/closed_positions.json](data/closed_positions.json), rendering an aligned execution grid with duration, cost basis, realized return in dollars and percentage, alongside overall strategy stats such as profit factors, Win Rates, expectancy, and mathematical expectancies).*
 
+#### Display machine-readable trade journal metrics (including exit-reason attribution):
+```bash
+python3 src/gex_engine.py journal [--account <account_number>] [--db] [--sync-db]
+```
+*(Calculates win rate, expectancy, profit factor, hold duration, and per-stop exit-reason breakdowns from closed positions cache or SQLite).*
+
+#### Record human-in-the-loop execution approval decisions in the SQLite decision ledger:
+```bash
+python3 src/gex_engine.py record-decision --account <account_number> --type <ENTRY|EXIT> --symbol <ticker> --recommendation "<proposed_trade>" --answer <APPROVED|DECLINED|SKIPPED|AMBIGUOUS> [--contract "<contract>"] [--grade <CONFIRMED|PENDING|REJECTED>] [--regime "<regime_status>"] [--gates-passed <0-3>] [--trigger <STOP1..STOP5|TARGET|MANUAL|RECONCILED>] [--order-ref <order_uuid>] [--notes "<context>"]
+```
+*(Persists decision provenance to the SQLite audit ledger with masked account numbers (`••••9961`), redacting sensitive account strings from free text).*
+
+#### Display recorded execution approval decisions and rule-adherence metrics:
+```bash
+python3 src/gex_engine.py decisions [--account <account_number>] [--limit <N>] [--json]
+```
+*(Renders a tabular decision log or machine-readable JSON summary, auditing overall approval rates and flagging rule conflicts such as approved entries on non-confirmed setups or declined mandatory exits).*
+
 #### Run an offline option payoff simulation scenario grid:
 ```bash
 python3 src/gex_engine.py payoff <symbol> --spot <spot_price> --strike <strike_price> --mark <current_mark_premium> [--delta <delta_value>] [--gamma <gamma_value>] [--dte <days_to_expiration>] [--target-spots <comma_separated_prices>]

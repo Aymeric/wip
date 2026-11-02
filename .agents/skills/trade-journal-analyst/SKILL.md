@@ -17,8 +17,13 @@ Your job is to audit realized P&L, analyze closed options and stock positions in
 ## Step 1: Ingest Closed Position History
 
 1. Verify that `sync-pnl` has completed for the selected account so that `data/closed_positions_ACCOUNT_NUMBER.json` is fresh.
-2. Read the closed trades ledger and filter for completed round-trip trades.
-3. If no closed positions are found, report `NO_CLOSED_TRADES_FOUND` and summarize open position metrics instead.
+2. Synchronize closed trades and audit the decision ledger:
+   ```bash
+   python3 src/gex_engine.py journal --account ACCOUNT_NUMBER --sync-db --db
+   python3 src/gex_engine.py decisions --account ACCOUNT_NUMBER --json
+   ```
+3. Read the closed trades ledger and filter for completed round-trip trades.
+4. If no closed positions are found, report `NO_CLOSED_TRADES_FOUND` and summarize open position metrics instead.
 
 ---
 

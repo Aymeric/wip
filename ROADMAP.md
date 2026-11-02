@@ -218,11 +218,12 @@ src/gex/
   - [x] Add per-exit-reason win rate / expectancy breakdown to `journal`, and update `portfolio-risk-manager` / `agentic-trader` skills to pass the triggering stop.
 
 ### 5.6 Approval Decision Ledger ([#164](https://github.com/Aymeric/wip/issues/164))
+- **Status**: ✅ **Implemented** (SQLite ledger in [src/gex/storage/db.py](src/gex/storage/db.py); CLI commands `record-decision` and `decisions` in [src/gex_engine.py](src/gex_engine.py); tests in [tests/test_decision_ledger.py](tests/test_decision_ledger.py)).
 - **Need & Outcome**: Execution approval requests (entries and exits) are only printed to the terminal, and the `ask_question` answer is not persisted. A durable ledger provides provenance for every decision and lets the journal audit mechanical adherence vs. human overrides.
 - **Action Items**:
-  - [ ] Add a `decisions` SQLite table (timestamp, masked account, symbol/contract, action, grade, regime gates, triggering stop, recommendation, human answer, order ref).
-  - [ ] Expose `record-decision` and `decisions --account ACCOUNT_NUMBER` CLI commands; never store credentials or full account numbers.
-  - [ ] Wire `gex-orchestrator` / `agentic-trader` skills to record each approval outcome, including declines and skipped/ambiguous answers.
+  - [x] Add a `decisions` SQLite table (timestamp, masked account, symbol/contract, action, grade, regime gates, triggering stop, recommendation, human answer, order ref).
+  - [x] Expose `record-decision` and `decisions --account ACCOUNT_NUMBER` CLI commands; never store credentials or full account numbers.
+  - [x] Wire `gex-orchestrator` / `agentic-trader` skills to record each approval outcome, including declines and skipped/ambiguous answers.
 
 ### 5.7 IV Rank / IV Percentile Entry Context ([#165](https://github.com/Aymeric/wip/issues/165))
 - **Need & Outcome**: Entry screening uses an absolute IV floor (≥ 30%) only. *Hypothesis*: buying single-leg premium when IV is high relative to the underlier's own history degrades expectancy. Relative IV context would inform contract selection and grading.
@@ -265,7 +266,7 @@ src/gex/
 | **Intraday Level Breach Monitor** | Phase 5 (Advanced Strategy) | 🟡 Medium | 📋 Planned | Real-time monitoring daemon for Stop 1 / Profit Target breaches | Phase 4 |
 | **Static Analysis CI Gate** | Phase 1 (Foundations) | 🟡 Medium | 📋 Planned | ruff + mypy enforced in CI with baseline ratchet | Phase 1 |
 | **Stop-Coded Exit Attribution** | Phase 5 (Advanced Strategy) | 🔴 High | ✅ Completed | Per-stop expectancy via coded `exit_reason` | Phase 4 |
-| **Approval Decision Ledger** | Phase 5 (Advanced Strategy) | 🟡 Medium | 📋 Planned | Durable provenance of approvals, declines, and overrides | Phase 4 |
+| **Approval Decision Ledger** | Phase 5 (Advanced Strategy) | 🟡 Medium | ✅ Completed | Durable provenance of approvals, declines, and overrides | Phase 4 |
 | **IV Rank / Percentile Context** | Phase 5 (Advanced Strategy) | 🟢 Low | 📋 Planned | Relative IV context for entries (gate only after backtest) | 5.1 |
 | **CLI Extraction (`src/gex/cli/`)** | Phase 5 (Advanced Strategy) | 🟡 Medium | 📋 Planned | Smaller engine module; safer Phase 5 command additions | Phase 2 |
 
