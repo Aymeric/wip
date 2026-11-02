@@ -3683,7 +3683,7 @@ def cmd_audit_all(args):
     alert_dispatched = False
     if should_alert and all_pending_exits:
         alert_body = f"GEX Risk Stop Alert: {len(all_pending_exits)} exit(s) triggered across {len(accounts_audit)} account(s)!"
-        dispatch_system_alert(alert_body, title="GEX Pre-Market Risk Audit")
+        dispatch_system_alert(title="GEX Pre-Market Risk Audit", message=alert_body)
         alert_dispatched = True
 
     # 6. Output format
@@ -3737,16 +3737,15 @@ def cmd_audit_all(args):
         if not acc_data["options"] and not acc_data["stocks"]:
             print("  💤 No open positions.")
             continue
-        print("  " + "-" * 90)
+        print("  " + "-" * 80)
         print(f"  {'Ticker':<6} | {'Class':<7} | {'Spot':<8} | {'Cost Basis':<11} | {'Cur Value':<11} | {'P&L ($)':<12} | {'State'}")
-        print("  " + "-" * 90)
+        print("  " + "-" * 80)
         for p in acc_data["options"] + acc_data["stocks"]:
-            pnl_c = "32" if p["pnl_dollar"] >= 0 else "31"
-            pnl_s = format_color(f"${p['pnl_dollar']:+,.2f}", pnl_c)
+            pnl_s = format_pnl(pnl_dlr=p["pnl_dollar"], bold=True, width=12)
             state_c = "31" if p["is_pending_exit"] else "32" if "PROFIT" in p["rule_state"] or "T1" in p["rule_state"] else "37"
             state_s = format_color(f"{p['rule_state']}", state_c, bold=p["is_pending_exit"])
-            print(f"  {p['ticker']:<6} | {p['asset_cls']:<7} | ${p['spot']:<7.2f} | ${p['cost_basis']:<10.2f} | ${p['current_val']:<10.2f} | {pnl_s:<21} | {state_s}")
-        print("  " + "-" * 90)
+            print(f"  {p['ticker']:<6} | {p['asset_cls']:<7} | ${p['spot']:<7.2f} | ${p['cost_basis']:<10.2f} | ${p['current_val']:<10.2f} | {pnl_s} | {state_s}")
+        print("  " + "-" * 80)
 
 
 def cmd_add_pos(args):
