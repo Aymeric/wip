@@ -66,36 +66,38 @@ def derive_gex_profile(
             instruments_list = inst_data.get("instruments", [])
 
     # Performance optimization (Bolt):
-    # - Precalculate dte_val and dte_weight per expiration date when building inst_map.
-    # - Direct optimistic key indexing and `in` checks for quote payload parsing and GEX strike accumulation
-    #   eliminates millions of `.get()` dictionary function calls.
+    # - Direct type() identity checks avoid isinstance MRO traversal.
+    # - Precalculate dte_val and dte_weight per expiration date in exp_cache.
+    # - Direct inst_map.get(opt_id) lookup for quote payloads avoids redundant key checks.
     today_d = date.today()
     exp_cache = {}
     inst_map = {}
     for inst in instruments_list:
-        if not isinstance(inst, dict):
+        if type(inst) is not dict:
             continue
-        opt_id = inst["id"] if "id" in inst else inst.get("id")
+        opt_id = inst.get("id")
         if not opt_id:
             continue
         try:
-            strike = float(inst["strike_price"]) if "strike_price" in inst else float(inst.get("strike", 0.0))
-            opt_type = inst["type"] if "type" in inst else inst.get("type")
-            exp_str = inst["expiration_date"] if "expiration_date" in inst else inst.get("exp_date")
+            strike = float(inst.get("strike_price") or inst.get("strike", 0.0))
+            opt_type = inst.get("type")
+            exp_str = inst.get("expiration_date") or inst.get("exp_date")
             if exp_str:
-                if exp_str not in exp_cache:
+                cached = exp_cache.get(exp_str)
+                if cached is None:
                     try:
                         exp_date = date.fromisoformat(exp_str[:10])
                         d_val = float(max((exp_date - today_d).days, 0))
                         w_val = 1.0 / math.sqrt(max(d_val, 1.0))
-                        exp_cache[exp_str] = (d_val, w_val)
+                        cached = (d_val, w_val)
                     except Exception:
-                        exp_cache[exp_str] = (30.0, _DEFAULT_DTE_WEIGHT)
-                dte_val, dte_weight = exp_cache[exp_str]
+                        cached = (30.0, _DEFAULT_DTE_WEIGHT)
+                    exp_cache[exp_str] = cached
+                dte_val, dte_weight = cached
             else:
                 dte_val, dte_weight = 30.0, _DEFAULT_DTE_WEIGHT
             inst_map[opt_id] = (strike, opt_type, dte_val, dte_weight)
-        except (ValueError, KeyError):
+        except (ValueError, KeyError, TypeError):
             continue
 
     quotes_list = extract_quotes_list(quotes_data)
@@ -117,11 +119,12 @@ def derive_gex_profile(
 
     calc_spot = spot if spot is not None else 100.0
     spot_iv_bound = calc_spot * 0.15
+    spot_x_100 = calc_spot * 100.0
 
     for q_item in quotes_list:
-        if not isinstance(q_item, dict):
+        if type(q_item) is not dict:
             continue
-        q = q_item["quote"] if ("quote" in q_item and isinstance(q_item["quote"], dict)) else q_item
+        q = q_item["quote"] if ("quote" in q_item and type(q_item["quote"]) is dict) else q_item
 
         try:
             opt_id = q["instrument_id"]
@@ -147,26 +150,26 @@ def derive_gex_profile(
         except (ValueError, TypeError):
             continue
 
-        if not opt_id or opt_id not in inst_map:
+        inst_info = inst_map.get(opt_id)
+        if inst_info is None:
             continue
 
-        strike, opt_type, dte_val, dte_weight = inst_map[opt_id]
+        strike, opt_type, dte_val, dte_weight = inst_info
 
         # Analytical Black-Scholes Gamma fallback if broker feed returns zero or missing gamma
         if gamma <= 0.0 and iv > 0.0:
             gamma = calculate_black_scholes_gamma(calc_spot, strike, dte_val, iv)
 
         total_oi += oi
-        gex_val = oi * gamma * 100.0 * calc_spot
+        gex_val = oi * gamma * spot_x_100
         effective_gex_val = gex_val * dte_weight
 
         # IV proxy (within 15% of spot)
         diff = strike - calc_spot
         abs_diff = diff if diff >= 0.0 else -diff
-        if abs_diff <= spot_iv_bound:
-            if iv > 0.0:
-                iv_sum += iv
-                iv_count += 1
+        if abs_diff <= spot_iv_bound and iv > 0.0:
+            iv_sum += iv
+            iv_count += 1
 
         if opt_type == "put":
             if strike in strike_put_oi:
@@ -241,12 +244,15 @@ def derive_gex_profile(
         secondary_put_wall = put_wall * 0.95
 
     # pTrans & nTrans via continuous zero-crossing linear interpolation
-    all_strikes = sorted(set(strike_put_gex.keys()) | set(strike_call_gex.keys()))
-    net_gex_by_strike = {
-        s: strike_call_gex.get(s, 0.0) - strike_put_gex.get(s, 0.0)
+    all_strikes_set = set(strike_put_gex.keys())
+    all_strikes_set.update(strike_call_gex.keys())
+    all_strikes = sorted(all_strikes_set)
+
+    net_gex_items = [
+        (s, strike_call_gex.get(s, 0.0) - strike_put_gex.get(s, 0.0))
         for s in all_strikes
-    }
-    flip_strikes = find_flip_strikes(net_gex_by_strike)
+    ]
+    flip_strikes = find_flip_strikes(net_gex_items)
     derived_ptrans, derived_ntrans = select_transition_points(
         flip_strikes=flip_strikes,
         spot=calc_spot,

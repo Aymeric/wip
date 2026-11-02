@@ -1,3 +1,13 @@
+## 2026-09-26 - Internal file mtime and scan processing utilities accepting path parameters must validate inputs with validate_safe_path
+**Vulnerability:** `_get_dir_mtime_key()`, `_get_file_mtime()`, and candidate `process_scan_file()` evaluated `os.path.exists()`, `os.path.getmtime()`, or `os.walk()` on path parameters prior to or without calling `validate_safe_path()`, permitting path traversal checks and mtime inspections outside allowed directories.
+**Learning:** Cache mtime lookup utilities and local file processors that accept file or directory paths must validate parameters against allowed roots before executing `os.path.exists()` or inspecting filesystem metadata.
+**Prevention:** Always invoke `validate_safe_path()` at function entry for any helper or file processor taking filesystem path arguments before evaluating existence or walking directories.
+
+## 2026-10-27 - Desktop alert notifications using osascript must escape backslashes before double quotes to prevent AppleScript breakout
+**Vulnerability:** `dispatch_system_alert()` replaced double quotes with `\"` but did not escape backslashes first, permitting string literal breakout and arbitrary AppleScript execution when inputs contained trailing or unescaped backslashes.
+**Learning:** In AppleScript string literals passed via `osascript -e`, an unescaped backslash before an escaped quote (`\\\"`) cancels the quote's escape in the parser, terminating the literal and executing subsequent tokens.
+**Prevention:** Always escape backslashes (`\\` -> `\\\\`) prior to escaping double quotes (`"` -> `\\"`) when generating AppleScript string arguments.
+
 ## 2026-09-25 - Webhook notification dispatchers must validate URL schemes to prevent SSRF and local file exposure
 **Vulnerability:** `dispatch_system_alert()` passed user-supplied or environment webhook URLs directly into `urllib.request.urlopen()` without validating the URL scheme, permitting `file://` or other arbitrary protocol requests.
 **Learning:** `urllib.request.urlopen()` handles arbitrary schemes (including `file://`) by default, making unvalidated URL inputs vulnerable to Server-Side Request Forgery (SSRF) and local file exposure.

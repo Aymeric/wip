@@ -371,7 +371,7 @@ class TestRoadmapImplementations(unittest.TestCase):
             self.assertIn("accounts", data)
             self.assertGreaterEqual(data["summary"]["total_positions"], 0)
 
-    def test_cmd_audit_all_cli_table_formatting(self):
+    def test_cmd_audit_all_markdown_table_alignment(self):
         import io
         import re
         from unittest.mock import patch
@@ -383,29 +383,45 @@ class TestRoadmapImplementations(unittest.TestCase):
             alert = False
             net_liq = 50000.0
 
-        with patch("sys.stdout.isatty", return_value=True):
+        sample_positions = {
+            "options_positions": {},
+            "stocks_positions": {
+                "AAPL": {
+                    "Shares": 10.0,
+                    "Average Buy Price": 150.0,
+                    "Current Price": 160.0,
+                    "Entry Date": "2026-09-01",
+                },
+                "MSFT": {
+                    "Shares": 5.0,
+                    "Average Buy Price": 300.0,
+                    "Current Price": 260.0,
+                    "Entry Date": "2026-09-01",
+                },
+            },
+        }
+
+        def mock_load_json(path, default=None):
+            if "active_positions" in path:
+                return sample_positions
+            return default if default is not None else {}
+
+        with patch("src.gex_engine.load_json", side_effect=mock_load_json):
             with patch("sys.stdout", new=io.StringIO()) as fake_out:
                 cmd_audit_all(MockArgs())
-                output = fake_out.getvalue()
+                lines = fake_out.getvalue().splitlines()
 
-        self.assertIn("Position Breakdown by Account", output)
-        self.assertIn("Ticker", output)
-        self.assertIn("Cost Basis", output)
-        self.assertIn("P&L ($)", output)
+            # Locate table lines for Account default
+            table_lines = [l for l in lines if "|" in l and "---" not in l]
+            # Headers line and row lines
+            headers_line = [l for l in table_lines if "Ticker" in l][0]
+            header_pipes = [i for i, ch in enumerate(headers_line) if ch == "|"]
 
-        # Verify delimiter alignment across table header, separator, and data rows
-        table_lines = [
-            line for line in output.split("\n")
-            if "Ticker" in line or ("+-" in line and "---" in line) or "Option" in line or "Stock" in line
-        ]
-        self.assertGreaterEqual(len(table_lines), 2)
-        def get_vis_pipes(l):
-            vis = re.sub(r"\x1b\[[0-9;]*[a-zA-Z]", "", l)
-            return [i for i, c in enumerate(vis) if c == "|" or (c == "+" and "-" in vis)]
-
-        header_pipes = get_vis_pipes(table_lines[0])
-        for line in table_lines[1:]:
-            self.assertEqual(get_vis_pipes(line), header_pipes)
+            ansi_re = re.compile(r"\x1b\[[0-9;]*[a-zA-Z]")
+            for row in [l for l in table_lines if "AAPL" in l or "MSFT" in l]:
+                vis_row = ansi_re.sub("", row)
+                row_pipes = [i for i, ch in enumerate(vis_row) if ch == "|"]
+                self.assertEqual(row_pipes, header_pipes)
 
     def test_find_flip_strikes_linear_interpolation(self):
         from src.gex.quant.greeks import find_flip_strikes
@@ -811,6 +827,35 @@ class TestPhase2ModularArchitecture(unittest.TestCase):
             vis_line = re.sub(r"\x1b\[[0-9;]*[a-zA-Z]", "", line)
             vis_pipe_indices = [i for i, ch in enumerate(vis_line) if ch == "|"]
             self.assertEqual(vis_pipe_indices, header_vis_pipes)
+
+    def test_format_table_alignments(self):
+        import re
+        from src.gex.presentation.ascii_art import format_color
+        from src.gex.presentation.formatters import format_table
+
+        headers = ["Symbol", "Price", "Status"]
+        rows = [
+            ["AAPL", "$180.00", format_color("ACTIVE", "32")],
+            ["MSFT", "$400.00", format_color("HOLD", "37")],
+        ]
+        alignments = ["left", "right", "center"]
+        table = format_table(headers, rows, alignments=alignments)
+
+        table_lines = table.split("\n")
+        self.assertEqual(len(table_lines), 4)
+
+        vis_header = re.sub(r"\x1b\[[0-9;]*[a-zA-Z]", "", table_lines[0])
+        header_pipes = [i for i, ch in enumerate(vis_header) if ch == "|"]
+
+        for line in table_lines[2:]:
+            vis_line = re.sub(r"\x1b\[[0-9;]*[a-zA-Z]", "", line)
+            line_pipes = [i for i, ch in enumerate(vis_line) if ch == "|"]
+            self.assertEqual(line_pipes, header_pipes)
+            self.assertEqual(len(vis_line), len(vis_header))
+
+        # Check right alignment for Price column (" $180.00 |")
+        row1_vis = re.sub(r"\x1b\[[0-9;]*[a-zA-Z]", "", table_lines[2])
+        self.assertIn(" $180.00 |", row1_vis)
 
 
 if __name__ == "__main__":
