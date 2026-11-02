@@ -371,6 +371,58 @@ class TestRoadmapImplementations(unittest.TestCase):
             self.assertIn("accounts", data)
             self.assertGreaterEqual(data["summary"]["total_positions"], 0)
 
+    def test_cmd_audit_all_markdown_table_alignment(self):
+        import io
+        import re
+        from unittest.mock import patch
+        from src.gex_engine import cmd_audit_all
+
+        class MockArgs:
+            account = ""
+            json = False
+            alert = False
+            net_liq = 50000.0
+
+        sample_positions = {
+            "options_positions": {},
+            "stocks_positions": {
+                "AAPL": {
+                    "Shares": 10.0,
+                    "Average Buy Price": 150.0,
+                    "Current Price": 160.0,
+                    "Entry Date": "2026-09-01",
+                },
+                "MSFT": {
+                    "Shares": 5.0,
+                    "Average Buy Price": 300.0,
+                    "Current Price": 260.0,
+                    "Entry Date": "2026-09-01",
+                },
+            },
+        }
+
+        def mock_load_json(path, default=None):
+            if "active_positions" in path:
+                return sample_positions
+            return default if default is not None else {}
+
+        with patch("src.gex_engine.load_json", side_effect=mock_load_json):
+            with patch("sys.stdout", new=io.StringIO()) as fake_out:
+                cmd_audit_all(MockArgs())
+                lines = fake_out.getvalue().splitlines()
+
+            # Locate table lines for Account default
+            table_lines = [l for l in lines if "|" in l and "---" not in l]
+            # Headers line and row lines
+            headers_line = [l for l in table_lines if "Ticker" in l][0]
+            header_pipes = [i for i, ch in enumerate(headers_line) if ch == "|"]
+
+            ansi_re = re.compile(r"\x1b\[[0-9;]*[a-zA-Z]")
+            for row in [l for l in table_lines if "AAPL" in l or "MSFT" in l]:
+                vis_row = ansi_re.sub("", row)
+                row_pipes = [i for i, ch in enumerate(vis_row) if ch == "|"]
+                self.assertEqual(row_pipes, header_pipes)
+
     def test_find_flip_strikes_linear_interpolation(self):
         from src.gex.quant.greeks import find_flip_strikes
 
