@@ -74,3 +74,9 @@ Evaluate the three core Daily Regime Gates:
        - "Bypass market regime for this run"
      - `is_multi_select: false`
    - A bypass applies only to the current run and never alters measured data.
+3. **Macro Hedging Directive**:
+   - When the regime transitions to `DEFENSIVE` or `BLOCKED` (Stop 4), recommend evaluating a beta-weighted macro hedge:
+     ```bash
+     python3 src/gex_engine.py hedge-plan --account ACCOUNT_NUMBER
+     ```
+     This derives an optimal SPY/QQQ Bear Put Debit Spread to immunize active portfolio inventory against broad market drawdown.

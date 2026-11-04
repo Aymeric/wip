@@ -690,6 +690,24 @@ python3 src/gex_engine.py closed
 ```
 *(This aggregates all closed options and stock positions stored in [data/closed_positions.json](data/closed_positions.json), rendering an aligned execution grid with duration, cost basis, realized return in dollars and percentage, alongside overall strategy stats such as profit factors, Win Rates, expectancy, and mathematical expectancies).*
 
+#### Display machine-readable trade journal metrics (including exit-reason attribution):
+```bash
+python3 src/gex_engine.py journal [--account <account_number>] [--db] [--sync-db]
+```
+*(Calculates win rate, expectancy, profit factor, hold duration, and per-stop exit-reason breakdowns from closed positions cache or SQLite).*
+
+#### Record human-in-the-loop execution approval decisions in the SQLite decision ledger:
+```bash
+python3 src/gex_engine.py record-decision --account <account_number> --type <ENTRY|EXIT> --symbol <ticker> --recommendation "<proposed_trade>" --answer <APPROVED|DECLINED|SKIPPED|AMBIGUOUS> [--contract "<contract>"] [--grade <CONFIRMED|PENDING|REJECTED>] [--regime "<regime_status>"] [--gates-passed <0-3>] [--trigger <STOP1..STOP5|TARGET|MANUAL|RECONCILED>] [--order-ref <order_uuid>] [--notes "<context>"]
+```
+*(Persists decision provenance to the SQLite audit ledger with masked account numbers (`••••9961`), redacting sensitive account strings from free text).*
+
+#### Display recorded execution approval decisions and rule-adherence metrics:
+```bash
+python3 src/gex_engine.py decisions [--account <account_number>] [--limit <N>] [--json]
+```
+*(Renders a tabular decision log or machine-readable JSON summary, auditing overall approval rates and flagging rule conflicts such as approved entries on non-confirmed setups or declined mandatory exits).*
+
 #### Run an offline option payoff simulation scenario grid:
 ```bash
 python3 src/gex_engine.py payoff <symbol> --spot <spot_price> --strike <strike_price> --mark <current_mark_premium> [--delta <delta_value>] [--gamma <gamma_value>] [--dte <days_to_expiration>] [--target-spots <comma_separated_prices>]
@@ -712,6 +730,18 @@ python3 src/gex_engine.py update-sentiment <ticker> --score <score> --buzz <buzz
 python3 src/gex_engine.py rankings [--status <ALL/CONFIRMED/PENDING/BLOCKED>] [--min-grade <0-11>] [--sort <grade/spot/cushion/rr/status>]
 ```
 *(This loads all historically stored quantitative candidate gradings inside [data/ticker_analyses.json](data/ticker_analyses.json), filters them by minimum grade or signal status, sorts them according to your custom preferences, and renders a stunningly aligned terminal board including current execution-readiness validations).*
+
+#### Evaluate dynamic delta rolls and profit optimization:
+```bash
+python3 src/gex_engine.py evaluate-rolls [--account <account_number>] [--threshold-delta <0.70>] [--threshold-gain <50.0>] [--json]
+```
+*(Evaluates open winning options positions against programmatic roll triggers: Delta expansion ($\Delta \ge 0.70$), profit acceleration ($ROI \ge 50\%$), and theta preservation ($DTE \le 21$ on winners). Calculates profit ratchet floors, estimated credit extraction, replacement 30-45 DTE contracts, and capital risk reduction).*
+
+#### Derive portfolio beta-weighted macro hedge plan:
+```bash
+python3 src/gex_engine.py hedge-plan [--account <account_number>] [--target-coverage <0.50>] [--instrument <AUTO/SPY/QQQ>] [--json]
+```
+*(Calculates aggregate portfolio beta-weighted directional delta expressed in SPY-equivalent shares. When Daily Regime Gates transition to DEFENSIVE or BLOCKED under Stop 4, derives an optimal defined-risk SPY or QQQ Bear Put Debit Spread (30–45 DTE) to insulate active holdings against macro drawdown while honoring portfolio sizing caps and micro-account buying power rules).*
 
 ---
 

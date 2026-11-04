@@ -62,7 +62,16 @@ Present the complete preflight execution ticket to the user using `ask_question`
 - Maximum Capital Outlay ($100 \times \text{Qty} \times \text{Limit}$)
 - Stop Level ($pTrans$) and Defined Downside Risk
 
-If the user selects "Approve and execute limit order", proceed immediately to Step 4. If cancelled or skipped, abort execution cleanly.
+If the user selects "Approve and execute limit order", proceed immediately to Step 4. If cancelled or skipped, abort execution cleanly and log the outcome in the decision ledger:
+```bash
+python3 src/gex_engine.py record-decision \
+  --account ACCOUNT_NUMBER \
+  --type ENTRY \
+  --symbol TICKER \
+  --contract "CONTRACT_DESC" \
+  --recommendation "Buy QTYx CONTRACT @ LIMIT" \
+  --answer DECLINED|SKIPPED|AMBIGUOUS
+```
 
 ---
 
@@ -84,10 +93,44 @@ If the user selects "Approve and execute limit order", proceed immediately to St
      --ntrans NTRANS \
      --plus-gex PLUS_GEX
    ```
-4. Output the official **Order Execution Receipt** with Order ID, Timestamp, Contract Details, and Active Position confirmation.
-5. **Exit orders (closing trades)**: After a confirmed closing fill, archive the position with the stop code that triggered the exit (supplied by `portfolio-risk-manager`):
+4. Record the approved execution in the decision ledger:
+   ```bash
+   python3 src/gex_engine.py record-decision \
+     --account ACCOUNT_NUMBER \
+     --type ENTRY \
+     --symbol TICKER \
+     --contract "CONTRACT_DESC" \
+     --grade GRADE \
+     --recommendation "Buy QTYx CONTRACT @ LIMIT" \
+     --answer APPROVED \
+     --order-ref ORDER_ID
+   ```
+5. Output the official **Order Execution Receipt** with Order ID, Timestamp, Contract Details, and Active Position confirmation.
+6. **Exit orders (closing trades)**: After a confirmed closing fill, archive the position with the stop code that triggered the exit (supplied by `portfolio-risk-manager`), and log the exit decision:
    ```bash
    python3 src/gex_engine.py close-position OPTION_ID --close-premium FILL_PRICE --reason STOP1 --account ACCOUNT_NUMBER
    python3 src/gex_engine.py close-stock TICKER --close-price FILL_PRICE --reason TARGET --account ACCOUNT_NUMBER
+   python3 src/gex_engine.py record-decision \
+     --account ACCOUNT_NUMBER \
+     --type EXIT \
+     --symbol TICKER \
+     --trigger STOP1 \
+     --recommendation "Close OPTION_ID @ FILL_PRICE (STOP1 breach)" \
+     --answer APPROVED \
+     --order-ref ORDER_ID
    ```
    Valid `--reason` codes: `STOP1`, `STOP2`, `STOP3`, `STOP4`, `STOP5`, `TARGET`, `MANUAL` (default), `RECONCILED`. Never guess the code; use `MANUAL` when the exit was discretionary.
+7. **Roll executions (rolling positions)**: When executing an approved roll recommendation from `evaluate-rolls`:
+   - Close the existing contract via `place_option_order` (sell to close) and archive it via `close-position` with `--reason TARGET`.
+   - Submit the opening limit order for the replacement contract via `place_option_order` (buy to open) and register it via `update-option`.
+   - Log the roll decision in the audit ledger:
+     ```bash
+     python3 src/gex_engine.py record-decision \
+       --account ACCOUNT_NUMBER \
+       --type ROLL \
+       --symbol TICKER \
+       --contract "OLD_CONTRACT -> NEW_CONTRACT" \
+       --recommendation "Roll up/out to extract credit and reset gamma" \
+       --answer APPROVED \
+       --order-ref ORDER_ID
+     ```
