@@ -52,6 +52,18 @@ from src.gex.quant.indicators import (
     calculate_annualized_vol,
 )
 from src.gex.risk.stops import compute_exit_rule_state
+from src.gex.risk.rolling import (
+    RollRecommendation,
+    calculate_profit_ratchet,
+    evaluate_position_roll,
+    evaluate_portfolio_rolls,
+)
+from src.gex.risk.hedge import (
+    PositionDeltaExposure,
+    HedgePlan,
+    calculate_portfolio_beta_delta,
+    derive_macro_hedge_plan,
+)
 from src.gex.storage.db import (
     init_db,
     upsert_trade,
@@ -59,6 +71,9 @@ from src.gex.storage.db import (
     sync_closed_positions_to_db,
     save_gex_snapshot,
     query_latest_gex_snapshot,
+    record_decision,
+    query_decisions,
+    summarize_decisions,
 )
 
 
@@ -95,6 +110,9 @@ from src.gex.core.config import (
     EXIT_REASON_CODES,
     DEFAULT_EXIT_REASON,
     RECONCILED_EXIT_REASON,
+    DECISION_TYPES,
+    DECISION_ANSWERS,
+    mask_account,
     validate_safe_path,
     sanitize_account,
 )
@@ -5934,6 +5952,396 @@ def cmd_journal(args):
     print(json.dumps(calculate_trade_journal(closed_data, performance_data), indent=2, sort_keys=True))
 
 
+def cmd_record_decision(args):
+    """Records an execution approval decision into the SQLite audit ledger."""
+    db_path = getattr(args, "db_path", None)
+    account = getattr(args, "account", "")
+    if not account:
+        print("Error: --account is required to record a decision.", file=sys.stderr)
+        sys.exit(1)
+
+    try:
+        decision_id = record_decision(
+            decision_type=args.type,
+            symbol=args.symbol,
+            recommendation=args.recommendation,
+            human_answer=args.answer,
+            account=account,
+            contract=getattr(args, "contract", None),
+            grade=getattr(args, "grade", None),
+            regime_authorization=getattr(args, "regime", None),
+            gates_passed=getattr(args, "gates_passed", None),
+            trigger_code=getattr(args, "trigger", None),
+            order_ref=getattr(args, "order_ref", None),
+            notes=getattr(args, "notes", None),
+            db_path=db_path,
+        )
+    except ValueError as e:
+        print(f"Error: {e}", file=sys.stderr)
+        sys.exit(1)
+
+    masked = mask_account(account)
+    ans_color = "32" if args.answer == "APPROVED" else ("31" if args.answer == "DECLINED" else "33")
+    ans_formatted = format_color(args.answer, ans_color, bold=True)
+    print(f"Recorded decision #{decision_id} ({args.type} {args.symbol.upper()} -> {ans_formatted}) for {masked}")
+
+
+def cmd_decisions(args):
+    """Displays recorded human approval decisions and rule-adherence metrics."""
+    account = getattr(args, "account", "")
+    db_path = getattr(args, "db_path", None)
+    limit = getattr(args, "limit", 50)
+    as_json = getattr(args, "json", False)
+
+    decisions = query_decisions(account=account, limit=limit, db_path=db_path)
+    summary = summarize_decisions(account=account, db_path=db_path)
+
+    if as_json:
+        print(json.dumps({"summary": summary, "decisions": decisions}, indent=2, sort_keys=True))
+        return
+
+    masked = mask_account(account) if account else "ALL ACCOUNTS"
+    print(f"\n### 📋 Execution Approval Decision Ledger ({masked})")
+
+    headers = ["ID", "Recorded At", "Account", "Type", "Symbol", "Grade/Trigger", "Answer", "Order Ref"]
+    rows = []
+    for d in decisions:
+        d_type = d.get("decision_type", "")
+        gt = d.get("trigger_code") if d_type == "EXIT" else (d.get("grade") or "-")
+        ans = d.get("human_answer", "")
+        ans_color = "32" if ans == "APPROVED" else ("31" if ans == "DECLINED" else "33")
+        ans_str = format_color(ans, ans_color, bold=(ans in ("APPROVED", "DECLINED")))
+
+        rec_at = (d.get("recorded_at") or "")[:19].replace("T", " ")
+
+        rows.append([
+            str(d.get("id")),
+            rec_at,
+            d.get("account_mask") or "-",
+            d_type,
+            d.get("symbol", ""),
+            gt or "-",
+            ans_str,
+            d.get("order_ref") or "-",
+        ])
+
+    alignments = ["right", "left", "left", "left", "left", "left", "left", "left"]
+    print(format_table(headers, rows, empty_message="No decisions recorded in ledger.", alignments=alignments))
+    print()
+
+    total = summary["total_decisions"]
+    by_type = summary["by_type"]
+    by_ans = summary["by_answer"]
+    app_rate = summary["approval_rate_pct"]
+    conflicts = summary["rule_conflicts_count"]
+
+    print(f"  Total Decisions: {total} (Entries: {by_type.get('ENTRY', 0)}, Exits: {by_type.get('EXIT', 0)})")
+    print(f"  Outcomes: Approved: {by_ans.get('APPROVED', 0)} | Declined: {by_ans.get('DECLINED', 0)} | Skipped: {by_ans.get('SKIPPED', 0)} | Ambiguous: {by_ans.get('AMBIGUOUS', 0)}")
+    print(f"  Approval Rate: {app_rate:.1f}%")
+
+    if conflicts > 0:
+        conf_str = format_color(f"{conflicts} rule conflict(s) detected!", "31", bold=True)
+        print(f"  ⚠️  Audit Warning: {conf_str}")
+        for c in summary["rule_conflicts"]:
+            print(f"      - Decision #{c['id']} ({c['type']} {c['symbol']}): {c['reason']}")
+    else:
+        ok_str = format_color("0 rule conflicts (100% mechanical adherence)", "32")
+        print(f"  Audit Status: {ok_str}")
+    print()
+
+
+def cmd_evaluate_rolls(args):
+    """Evaluates active options positions for systematic dynamic delta rolling and profit ratchets."""
+    account = getattr(args, "account", "")
+    threshold_delta = getattr(args, "threshold_delta", 0.70)
+    if threshold_delta is None:
+        threshold_delta = 0.70
+    threshold_gain = getattr(args, "threshold_gain", 50.0)
+    if threshold_gain is None:
+        threshold_gain = 50.0
+    as_json = getattr(args, "json", False)
+
+    options_file = account_positions_file(account)
+    options_data = load_json(options_file, {"options_positions": {}})
+    active_opts = options_data.get("options_positions", {})
+
+    spots: Dict[str, float] = {}
+    analyses = load_json(ANALYSES_FILE, {})
+    for opt_id, details in active_opts.items():
+        underlier = (details.get("Underlier") or details.get("underlier") or "").upper()
+        if underlier and underlier not in spots:
+            spot_found = find_latest_underlier_spot(underlier)
+            if spot_found is None and underlier in analyses:
+                spot_found = analyses[underlier].get("spot")
+            if spot_found is None:
+                spot_found = float(details.get("Underlier Spot") or details.get("Strike") or 100.0)
+            spots[underlier] = float(spot_found)
+
+    roll_summary = evaluate_portfolio_rolls(
+        active_options=active_opts,
+        spots=spots,
+        threshold_delta=threshold_delta,
+        threshold_gain=threshold_gain,
+    )
+
+    if as_json:
+        clean_summary = {k: v for k, v in roll_summary.items() if k != "recommendation_objects"}
+        print(json.dumps(clean_summary, indent=2, sort_keys=True))
+        return
+
+    masked_acc = mask_account(account) if account else "DEFAULT / ALL"
+    print(f"\n### 🔄 Dynamic Delta Rolling & Profit Ratchet Audit ({masked_acc})")
+    print(f"  - Sizing & Convexity Rules: Roll at Delta >= {threshold_delta:.2f} or ROI >= +{threshold_gain:.1f}%")
+    print(f"  - Target Re-Centering: Delta 0.40 - 0.50 | 30 - 45 DTE | Net Cash Credit Extraction\n")
+
+    recs = roll_summary.get("recommendation_objects", [])
+    headers = [
+        "Status", "Contract", "Spot", "Delta", "DTE", "P&L (%)",
+        "Target Roll", "Target Mark", "Net Credit", "Extracted ($)", "Ratchet Floor"
+    ]
+    rows = []
+    for r in recs:
+        if r.eligible:
+            status_str = format_color("ROLL NOW", "32", bold=True)
+        elif r.ratchet_stop_floor_pct is not None:
+            status_str = format_color("RATCHET", "33", bold=True)
+        else:
+            status_str = format_color("HOLD", "37")
+
+        delta_str = f"{r.delta:.2f}" if r.delta is not None else "N/A"
+        if r.delta is not None and abs(r.delta) >= threshold_delta:
+            delta_str = format_color(delta_str, "31", bold=True)
+
+        pnl_pct_str = format_pnl(r.unrealized_pnl_dollar, r.unrealized_pnl_pct)
+
+        target_str = f"${r.target_strike:.2f} ({r.target_dte}d)" if r.target_strike else "N/A"
+        target_mark_str = f"${r.target_mark:.2f}" if r.target_mark else "N/A"
+
+        credit_str = f"+${r.estimated_net_credit:.2f}" if r.estimated_net_credit and r.estimated_net_credit > 0 else f"${r.estimated_net_credit:.2f}" if r.estimated_net_credit else "N/A"
+        if r.estimated_net_credit and r.estimated_net_credit > 0:
+            credit_str = format_color(credit_str, "32", bold=True)
+
+        extracted_str = f"+${r.capital_extracted:,.2f}" if r.capital_extracted and r.capital_extracted > 0 else f"${r.capital_extracted:,.2f}" if r.capital_extracted else "$0.00"
+        if r.capital_extracted and r.capital_extracted > 0:
+            extracted_str = format_color(extracted_str, "32", bold=True)
+
+        ratchet_str = f"{r.ratchet_stop_floor_pct:+.1f}% min" if r.ratchet_stop_floor_pct is not None else "-"
+        if r.ratchet_stop_floor_pct is not None:
+            ratchet_str = format_color(ratchet_str, "36", bold=True)
+
+        spot_val = spots.get(r.underlier, r.strike)
+
+        rows.append([
+            status_str,
+            f"{r.underlier} ${r.strike:.1f}C",
+            f"${spot_val:.2f}",
+            delta_str,
+            f"{r.dte}d",
+            pnl_pct_str,
+            target_str,
+            target_mark_str,
+            credit_str,
+            extracted_str,
+            ratchet_str,
+        ])
+
+    alignments = ["left", "left", "right", "right", "right", "right", "left", "right", "right", "right", "right"]
+    print(format_table(headers, rows, empty_message="No active options positions found in account portfolio.", alignments=alignments))
+    print()
+
+    tot = roll_summary["total_positions"]
+    elig = roll_summary["eligible_roll_count"]
+    cap = roll_summary["total_extractable_capital"]
+
+    print(f"  Summary: {tot} Position(s) Evaluated | {elig} Eligible Roll Candidate(s)")
+    if elig > 0:
+        cap_fmt = format_color(f"+${cap:,.2f}", "32", bold=True)
+        print(f"  💰 Total Extractable Cash Capital: {cap_fmt}")
+        print("\n  Detailed Roll Triggers:")
+        for r in recs:
+            if r.eligible:
+                print(f"  -> {format_color(r.contract_desc, '36', bold=True)}:")
+                for t in r.triggers:
+                    print(f"     * {t}")
+                print(f"     * Roll Action: Close current at ${r.mark_price:.2f}, Open target ${r.target_strike:.2f} ({r.target_dte} DTE, Delta {r.target_delta:.2f}) at ${r.target_mark:.2f}")
+                print(f"     * Capital Extraction: +${r.capital_extracted:,.2f} cash credit, Risk Reduction: {r.capital_at_risk_reduction_pct:.1f}%")
+                if r.ratchet_stop_floor_pct is not None:
+                    print(f"     * Profit Ratchet: Minimum gain stop floor locked at {r.ratchet_stop_floor_pct:+.1f}%")
+    else:
+        print("  All active positions maintain optimal delta (<0.70) and positive runway convexity.")
+    print()
+
+
+def cmd_hedge_plan(args):
+    """Derives an automated portfolio beta-weighted macro hedge plan."""
+    account = getattr(args, "account", "")
+    target_coverage = getattr(args, "target_coverage", None)
+    instrument_choice = getattr(args, "instrument", "AUTO") or "AUTO"
+    as_json = getattr(args, "json", False)
+
+    options_file = account_positions_file(account)
+    options_data = load_json(options_file, {"options_positions": {}, "stocks_positions": {}})
+    positions = options_data.get("options_positions", {})
+    stocks = options_data.get("stocks_positions", {})
+
+    if account:
+        positions = {
+            pid: det for pid, det in positions.items()
+            if not det.get("Account") or det.get("Account") == account
+        }
+        stocks = {
+            tick: det for tick, det in stocks.items()
+            if not det.get("Account") or det.get("Account") == account
+        }
+
+    # Net liq resolution
+    net_liq = getattr(args, "net_liq", None)
+    if net_liq is None:
+        perf = get_performance_status(account)
+        cached_net_liq = perf.get("net_liq")
+        if cached_net_liq and float(cached_net_liq) > 0:
+            net_liq = float(cached_net_liq)
+        elif account and "9961" in account:
+            net_liq = 8500.0  # micro-account default
+        else:
+            net_liq = 50000.0  # standard default
+
+    cash_buying_power = getattr(args, "cash_buying_power", None)
+    if cash_buying_power is None:
+        cash_buying_power = net_liq * 0.40  # estimate available cash
+
+    # Retrieve regime and reference ETF prices
+    regime = get_regime_status()
+    etf_details = regime.get("etf_details", {})
+    spy_price = 550.0
+    if "SPY" in etf_details:
+        val = etf_details["SPY"].get("Price", 0.0)
+        if val > 0:
+            spy_price = val
+    if spy_price == 550.0:
+        spot_spy = find_latest_underlier_spot("SPY")
+        if spot_spy:
+            spy_price = float(spot_spy)
+
+    qqq_price = 480.0
+    if "QQQ" in etf_details:
+        val = etf_details["QQQ"].get("Price", 0.0)
+        if val > 0:
+            qqq_price = val
+    if qqq_price == 480.0:
+        spot_qqq = find_latest_underlier_spot("QQQ")
+        if spot_qqq:
+            qqq_price = float(spot_qqq)
+
+    # Spot overrides if any from analyses
+    spot_overrides: Dict[str, float] = {}
+    analyses = load_json(ANALYSES_FILE, {})
+    for opt_id, details in positions.items():
+        sym = (details.get("Underlier") or "").upper()
+        if sym and sym not in spot_overrides:
+            sp = find_latest_underlier_spot(sym)
+            if sp is not None:
+                spot_overrides[sym] = float(sp)
+            elif sym in analyses and analyses[sym].get("spot"):
+                spot_overrides[sym] = float(analyses[sym]["spot"])
+
+    for tick in stocks.keys():
+        sym = tick.upper()
+        if sym and sym not in spot_overrides:
+            sp = find_latest_underlier_spot(sym)
+            if sp is not None:
+                spot_overrides[sym] = float(sp)
+            elif sym in analyses and analyses[sym].get("spot"):
+                spot_overrides[sym] = float(analyses[sym]["spot"])
+
+    hedge_plan = derive_macro_hedge_plan(
+        account=account,
+        net_liq=net_liq,
+        cash_buying_power=cash_buying_power,
+        regime=regime,
+        options_positions=positions,
+        stocks_positions=stocks,
+        spy_price=spy_price,
+        qqq_price=qqq_price,
+        target_coverage=target_coverage,
+        instrument_choice=instrument_choice,
+        spot_overrides=spot_overrides,
+    )
+
+    if as_json:
+        print(json.dumps(hedge_plan.to_dict(), indent=2, sort_keys=True))
+        return
+
+    masked_acc = mask_account(account) if account else "DEFAULT / ALL"
+    print(f"\n### 🛡️ Portfolio Beta-Weighted Macro Hedge Plan ({masked_acc})")
+    print(f"  - Portfolio Net Liq: ${hedge_plan.net_liq:,.2f} | Available Cash BP: ${hedge_plan.cash_buying_power:,.2f}")
+    print(f"  - Reference Index Spot: SPY ${hedge_plan.spy_price:.2f} | QQQ ${qqq_price:.2f}")
+    print(f"  - Market Regime Status: {hedge_plan.regime_status} ({hedge_plan.gates_passed}/3 Gates Passed)\n")
+
+    if not hedge_plan.positions:
+        print_color("💤 No open portfolio positions found to evaluate for macro hedging.", "33")
+        return
+
+    print("#### 📊 Component Holdings Delta Exposure Matrix")
+    headers = ["Symbol", "Asset", "Qty", "Spot", "Raw Delta", "Delta Shs", "Beta", "BW Exp ($)", "SPY Equiv"]
+    rows = []
+    for p in hedge_plan.positions:
+        rows.append([
+            p.symbol,
+            p.asset_type,
+            f"{p.quantity:g}",
+            f"${p.spot:,.2f}",
+            f"{p.raw_delta:+.2f}",
+            f"{p.delta_shares:+,.1f}",
+            f"{p.beta:.2f}",
+            f"${p.beta_weighted_dollar_exposure:+,.2f}",
+            f"{p.spy_equivalent_delta_shares:+,.1f}",
+        ])
+    alignments = ["left", "left", "right", "right", "right", "right", "right", "right", "right"]
+    print(format_table(headers, rows, empty_message="No positions.", alignments=alignments))
+    print()
+
+    print(f"  - Total Beta-Weighted Dollar Delta: {format_pnl(pnl_dlr=hedge_plan.total_beta_weighted_dollar_delta, bold=True)}")
+    spy_color = "32" if hedge_plan.spy_equivalent_delta_shares > 0 else "31"
+    print(f"  - Total SPY-Equivalent Directional Delta: {format_color(f'{hedge_plan.spy_equivalent_delta_shares:+,.2f} shares', spy_color, bold=True)}")
+    print(f"  - Tech / Growth Beta Concentration: {hedge_plan.tech_exposure_pct:.1f}%\n")
+
+    print("#### 🚦 Macro Regime Gate & Hedge Authorization")
+    status_color = "32" if hedge_plan.hedge_status == "NO_HEDGE_NEEDED" else "33" if hedge_plan.hedge_status == "DEFENSIVE_HEDGE" else "31"
+    status_fmt = format_color(hedge_plan.hedge_status, status_color, bold=True)
+    cov_fmt = format_color(f"{hedge_plan.target_coverage_pct * 100:.1f}%", "36", bold=True)
+    print(f"  - Hedge Recommendation Status: {status_fmt}")
+    print(f"  - Prescribed Coverage Ratio: {cov_fmt} of Net Positive Delta")
+
+    if hedge_plan.hedge_required and hedge_plan.target_contracts > 0:
+        inst = hedge_plan.recommended_instrument
+        print(f"\n#### 🎯 Structured Index Hedge: {inst} Bear Put Debit Spread")
+        print(f"  - Expiration: ~{hedge_plan.target_dte} DTE Monthly Cycle")
+        print(f"  - Long Put Strike: ${hedge_plan.long_put_strike:.2f} (~ -0.35 Delta, OTM Cushion)")
+        print(f"  - Short Put Strike: ${hedge_plan.short_put_strike:.2f} (~ -0.15 Delta, Spread Width: ${hedge_plan.spread_width:.2f})")
+        print(f"  - Recommended Allocation: {format_color(f'{hedge_plan.target_contracts} contract(s)', '33', bold=True)}")
+        print(f"  - Estimated Spread Debit: ${hedge_plan.estimated_spread_debit:.2f}/sh (${hedge_plan.estimated_spread_debit * 100:,.2f}/contract)")
+        outlay_pct = (hedge_plan.total_estimated_cost / hedge_plan.net_liq) * 100.0 if hedge_plan.net_liq > 0 else 0.0
+        print(f"  - Total Capital Outlay: ${hedge_plan.total_estimated_cost:,.2f} ({outlay_pct:.2f}% of Net Liq)")
+        print(f"  - Max Downside Protection P&L: {format_color(f'+${hedge_plan.max_protection_pnl:,.2f}', '32', bold=True)}")
+        print(f"  - Post-Hedge Net Directional Delta: {format_color(f'{hedge_plan.post_hedge_net_delta_shares:+,.2f} {inst}-equiv shares', '36', bold=True)}")
+    elif hedge_plan.hedge_required and hedge_plan.target_contracts == 0:
+        print_color("\n⚠️ HEDGE ALLOCATION DEFERRED: Capital constrained or insufficient delta threshold.", "33")
+    else:
+        print_color("\n✅ UNHEDGED SWING CLEARANCE: Daily Regime Gates fully authorized (ALL TRACKS OK). No macro hedge required.", "32", bold=True)
+
+    if hedge_plan.notes:
+        print("\n💡 Sizing & Account Notes:")
+        for note in hedge_plan.notes:
+            print(f"  • {note}")
+
+    if hedge_plan.hedge_rules:
+        print("\n📜 Operational Hedge Rules:")
+        for r in hedge_plan.hedge_rules:
+            print(f"  • {r}")
+    print()
+
+
 
 def cmd_payoff(args):
     """Runs an offline option payoff simulation scenario grid."""
@@ -6341,6 +6749,44 @@ def main():
     p_audit_all.add_argument("--json", action="store_true", help="Output machine-readable JSON summary instead of markdown")
     p_audit_all.add_argument("--alert", action="store_true", help="Dispatch system notification webhooks/desktop alerts if any stop breaches are detected")
 
+    # record-decision subcommand (Roadmap 5.6 Approval Decision Ledger)
+    p_rec_dec = subparsers.add_parser("record-decision", help="Record human-in-the-loop trade approval or exit decision.")
+    p_rec_dec.add_argument("--account", type=str, required=True, help="Account number used to scope decision provenance")
+    p_rec_dec.add_argument("--type", type=str.upper, choices=DECISION_TYPES, required=True, help="Decision type (ENTRY or EXIT)")
+    p_rec_dec.add_argument("--symbol", type=str, required=True, help="Underlier ticker symbol (e.g. AAPL)")
+    p_rec_dec.add_argument("--recommendation", type=str, required=True, help="Proposed action summary or trade specification")
+    p_rec_dec.add_argument("--answer", type=str.upper, choices=DECISION_ANSWERS, required=True, help="Human response (APPROVED, DECLINED, SKIPPED, AMBIGUOUS)")
+    p_rec_dec.add_argument("--contract", type=str, help="Option contract description or strike/expiry")
+    p_rec_dec.add_argument("--grade", type=str.upper, choices=["CONFIRMED", "PENDING", "REJECTED"], help="Setup grade for entry decisions")
+    p_rec_dec.add_argument("--regime", type=str, help="Market regime state at decision time (e.g. 'ALL TRACKS OK')")
+    p_rec_dec.add_argument("--gates-passed", type=int, dest="gates_passed", help="Number of regime gates passed (0-3)")
+    p_rec_dec.add_argument("--trigger", type=str.upper, choices=EXIT_REASON_CODES, help="Triggering stop code for EXIT decisions (e.g. STOP1, STOP5, TARGET)")
+    p_rec_dec.add_argument("--order-ref", type=str, dest="order_ref", help="Broker order reference UUID if approved and executed")
+    p_rec_dec.add_argument("--notes", type=str, help="Additional context or notes for the decision")
+    p_rec_dec.add_argument("--db-path", type=str, dest="db_path", help="Custom SQLite database file path")
+
+    # decisions subcommand (Roadmap 5.6 Approval Decision Ledger)
+    p_dec = subparsers.add_parser("decisions", help="Display recorded trade approval decisions and rule-adherence metrics.")
+    p_dec.add_argument("--account", type=str, default="", help="Account number used to filter decision ledger")
+    p_dec.add_argument("--limit", type=int, default=50, help="Maximum number of decisions to return (default: 50)")
+    p_dec.add_argument("--json", action="store_true", help="Output machine-readable JSON format")
+    p_dec.add_argument("--db-path", type=str, dest="db_path", help="Custom SQLite database file path")
+
+    # evaluate-rolls subcommand (Roadmap 5.2 Dynamic Delta Rolling & Profit Optimization)
+    p_rolls = subparsers.add_parser("evaluate-rolls", help="Evaluates active options positions for dynamic delta rolling and profit ratchets.")
+    p_rolls.add_argument("--account", type=str, default="", help="Account number used to scope position cache")
+    p_rolls.add_argument("--threshold-delta", type=float, default=0.70, dest="threshold_delta", help="Minimum delta trigger for rolling (default: 0.70)")
+    p_rolls.add_argument("--threshold-gain", type=float, default=50.0, dest="threshold_gain", help="Minimum profit %% trigger for rolling (default: 50.0%%)")
+    p_rolls.add_argument("--json", action="store_true", help="Output machine-readable JSON format")
+
+    # hedge-plan subcommand (Roadmap 5.3 Automated Beta-Weighted Macro Hedging Engine)
+    p_hedge = subparsers.add_parser("hedge-plan", help="Derives an automated portfolio beta-weighted macro hedge plan.")
+    p_hedge.add_argument("--account", type=str, default="", help="Account number used to scope position cache")
+    p_hedge.add_argument("--net-liq", type=float, default=None, dest="net_liq", help="Portfolio Net Liquidation value in USD")
+    p_hedge.add_argument("--target-coverage", type=float, default=None, dest="target_coverage", help="Target delta coverage ratio (0.0 to 1.0, e.g. 0.50 for 50%%)")
+    p_hedge.add_argument("--instrument", type=str, default="AUTO", choices=["AUTO", "SPY", "QQQ"], help="Target index ETF for hedge spread (default: AUTO)")
+    p_hedge.add_argument("--json", action="store_true", help="Output machine-readable JSON format")
+
 
     # workflow subcommand
     p_workflow = subparsers.add_parser("workflow", help="Aggregates all JSON state into a high-level system summary.")
@@ -6432,6 +6878,14 @@ def main():
         cmd_journal(args)
     elif args.command == "audit-all":
         cmd_audit_all(args)
+    elif args.command == "record-decision":
+        cmd_record_decision(args)
+    elif args.command == "decisions":
+        cmd_decisions(args)
+    elif args.command == "evaluate-rolls":
+        cmd_evaluate_rolls(args)
+    elif args.command == "hedge-plan":
+        cmd_hedge_plan(args)
     elif args.command == "payoff":
 
         cmd_payoff(args)
