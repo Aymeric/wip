@@ -5632,27 +5632,24 @@ def cmd_closed(args):
         return
         
     print("### 📊 GEX Closed Positions History")
-    print("  " + "-" * 99)
-    print(f"  {'Ticker':<6} | {'Class':<7} | {'Entry Date':<11} | {'Close Date':<11} | {'Days':<4} | {'Cost Basis':<11} | {'Realized P&L ($)':<16} | {'Realized P&L (%)'}")
-    print("  " + "-" * 99)
-    
-    def format_row(item, asset_cls):
+
+    table_headers = ["Ticker", "Class", "Entry Date", "Close Date", "Days", "Cost Basis", "Realized P&L ($)", "Realized P&L (%)"]
+    table_rows = []
+
+    def build_row(item, asset_cls):
         ticker = item.get("Ticker") or item.get("Underlier", "Unknown").upper()
-        ticker_fmt = format_color(f"{ticker:<6}", "35", bold=True)
-        cls_fmt = f"{asset_cls:<7}"
+        ticker_fmt = format_color(ticker, "35", bold=True)
         entry_date = item.get("Entry Date", "N/A")
         close_date = item.get("Close Date", "N/A")
-        
+
         # Calculate days held
         days = "N/A"
         if entry_date != "N/A" and close_date != "N/A":
             try:
-                days = (datetime.strptime(close_date, "%Y-%m-%d") - datetime.strptime(entry_date, "%Y-%m-%d")).days + 1
+                days = str((datetime.strptime(close_date, "%Y-%m-%d") - datetime.strptime(entry_date, "%Y-%m-%d")).days + 1)
             except Exception:
                 pass
-            
-        days_str = f"{days:<4}"
-        
+
         cost_basis = item.get("Asset Cost Basis")
         if cost_basis is None:
             if asset_cls == "Option":
@@ -5666,22 +5663,24 @@ def cmd_closed(args):
                 except Exception:
                     cost_basis = 0.0
         cb_str = f"${cost_basis:,.2f}" if cost_basis is not None else f"${0.0:,.2f}"
-        cb_fmt = f"{cb_str:<11}"
-        
+
         pnl_dlr = item.get("Realized P&L ($)", 0.0)
         pnl_pct = item.get("Realized P&L (%)", 0.0)
-        
-        pnl_dlr_fmt = format_pnl(pnl_dlr=pnl_dlr, bold=True, width=16)
+
+        pnl_dlr_fmt = format_pnl(pnl_dlr=pnl_dlr, bold=True)
         pnl_pct_fmt = format_pnl(pnl_pct=pnl_pct, bold=True)
-        
-        print(f"  {ticker_fmt} | {cls_fmt} | {entry_date:<11} | {close_date:<11} | {days_str} | {cb_fmt} | {pnl_dlr_fmt} | {pnl_pct_fmt}")
+
+        return [ticker_fmt, asset_cls, entry_date, close_date, str(days), cb_str, pnl_dlr_fmt, pnl_pct_fmt]
 
     for opt in closed_options:
-        format_row(opt, "Option")
+        table_rows.append(build_row(opt, "Option"))
     for stk in closed_stocks:
-        format_row(stk, "Stock")
-        
-    print("  " + "-" * 99)
+        table_rows.append(build_row(stk, "Stock"))
+
+    alignments = ["left", "left", "left", "left", "right", "right", "right", "right"]
+    table_output = format_table(table_headers, table_rows, alignments=alignments)
+    for line in table_output.split("\n"):
+        print(f"  {line}")
     
     # Print summarized stats
     if closed_options:

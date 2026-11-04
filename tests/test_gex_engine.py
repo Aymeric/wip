@@ -2707,6 +2707,9 @@ class TestGEXEngine(unittest.TestCase):
                 self.assertIn("GEX Closed Positions History", output)
                 self.assertIn("AAPL", output)
                 self.assertIn("AMZN", output)
+                # Verify format_table structure with aligned columns and separator
+                self.assertIn("Ticker | Class  | Entry Date | Close Date | Days | Cost Basis", output)
+                self.assertIn("-------+--------+------------+------------+------+-----------", output)
                 self.assertIn("Options Stats", output)
                 self.assertIn("Stocks Stats", output)
                 self.assertIn("Total Combined Realized P&L", output)
