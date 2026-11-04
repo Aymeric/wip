@@ -731,6 +731,12 @@ python3 src/gex_engine.py rankings [--status <ALL/CONFIRMED/PENDING/BLOCKED>] [-
 ```
 *(This loads all historically stored quantitative candidate gradings inside [data/ticker_analyses.json](data/ticker_analyses.json), filters them by minimum grade or signal status, sorts them according to your custom preferences, and renders a stunningly aligned terminal board including current execution-readiness validations).*
 
+#### Evaluate dynamic delta rolls and profit optimization:
+```bash
+python3 src/gex_engine.py evaluate-rolls [--account <account_number>] [--threshold-delta <0.70>] [--threshold-gain <50.0>] [--json]
+```
+*(Evaluates open winning options positions against programmatic roll triggers: Delta expansion ($\Delta \ge 0.70$), profit acceleration ($ROI \ge 50\%$), and theta preservation ($DTE \le 21$ on winners). Calculates profit ratchet floors, estimated credit extraction, replacement 30-45 DTE contracts, and capital risk reduction).*
+
 ---
 
 ## 🗄️ [data/active_positions.json](data/active_positions.json) Schema Documentation

@@ -52,6 +52,12 @@ from src.gex.quant.indicators import (
     calculate_annualized_vol,
 )
 from src.gex.risk.stops import compute_exit_rule_state
+from src.gex.risk.rolling import (
+    RollRecommendation,
+    calculate_profit_ratchet,
+    evaluate_position_roll,
+    evaluate_portfolio_rolls,
+)
 from src.gex.storage.db import (
     init_db,
     upsert_trade,
@@ -6039,6 +6045,128 @@ def cmd_decisions(args):
     print()
 
 
+def cmd_evaluate_rolls(args):
+    """Evaluates active options positions for systematic dynamic delta rolling and profit ratchets."""
+    account = getattr(args, "account", "")
+    threshold_delta = getattr(args, "threshold_delta", 0.70)
+    if threshold_delta is None:
+        threshold_delta = 0.70
+    threshold_gain = getattr(args, "threshold_gain", 50.0)
+    if threshold_gain is None:
+        threshold_gain = 50.0
+    as_json = getattr(args, "json", False)
+
+    options_file = account_positions_file(account)
+    options_data = load_json(options_file, {"options_positions": {}})
+    active_opts = options_data.get("options_positions", {})
+
+    spots: Dict[str, float] = {}
+    analyses = load_json(ANALYSES_FILE, {})
+    for opt_id, details in active_opts.items():
+        underlier = (details.get("Underlier") or details.get("underlier") or "").upper()
+        if underlier and underlier not in spots:
+            spot_found = find_latest_underlier_spot(underlier)
+            if spot_found is None and underlier in analyses:
+                spot_found = analyses[underlier].get("spot")
+            if spot_found is None:
+                spot_found = float(details.get("Underlier Spot") or details.get("Strike") or 100.0)
+            spots[underlier] = float(spot_found)
+
+    roll_summary = evaluate_portfolio_rolls(
+        active_options=active_opts,
+        spots=spots,
+        threshold_delta=threshold_delta,
+        threshold_gain=threshold_gain,
+    )
+
+    if as_json:
+        clean_summary = {k: v for k, v in roll_summary.items() if k != "recommendation_objects"}
+        print(json.dumps(clean_summary, indent=2, sort_keys=True))
+        return
+
+    masked_acc = mask_account(account) if account else "DEFAULT / ALL"
+    print(f"\n### 🔄 Dynamic Delta Rolling & Profit Ratchet Audit ({masked_acc})")
+    print(f"  - Sizing & Convexity Rules: Roll at Delta >= {threshold_delta:.2f} or ROI >= +{threshold_gain:.1f}%")
+    print(f"  - Target Re-Centering: Delta 0.40 - 0.50 | 30 - 45 DTE | Net Cash Credit Extraction\n")
+
+    recs = roll_summary.get("recommendation_objects", [])
+    headers = [
+        "Status", "Contract", "Spot", "Delta", "DTE", "P&L (%)",
+        "Target Roll", "Target Mark", "Net Credit", "Extracted ($)", "Ratchet Floor"
+    ]
+    rows = []
+    for r in recs:
+        if r.eligible:
+            status_str = format_color("ROLL NOW", "32", bold=True)
+        elif r.ratchet_stop_floor_pct is not None:
+            status_str = format_color("RATCHET", "33", bold=True)
+        else:
+            status_str = format_color("HOLD", "37")
+
+        delta_str = f"{r.delta:.2f}" if r.delta is not None else "N/A"
+        if r.delta is not None and abs(r.delta) >= threshold_delta:
+            delta_str = format_color(delta_str, "31", bold=True)
+
+        pnl_pct_str = format_pnl(r.unrealized_pnl_dollar, r.unrealized_pnl_pct)
+
+        target_str = f"${r.target_strike:.2f} ({r.target_dte}d)" if r.target_strike else "N/A"
+        target_mark_str = f"${r.target_mark:.2f}" if r.target_mark else "N/A"
+
+        credit_str = f"+${r.estimated_net_credit:.2f}" if r.estimated_net_credit and r.estimated_net_credit > 0 else f"${r.estimated_net_credit:.2f}" if r.estimated_net_credit else "N/A"
+        if r.estimated_net_credit and r.estimated_net_credit > 0:
+            credit_str = format_color(credit_str, "32", bold=True)
+
+        extracted_str = f"+${r.capital_extracted:,.2f}" if r.capital_extracted and r.capital_extracted > 0 else f"${r.capital_extracted:,.2f}" if r.capital_extracted else "$0.00"
+        if r.capital_extracted and r.capital_extracted > 0:
+            extracted_str = format_color(extracted_str, "32", bold=True)
+
+        ratchet_str = f"{r.ratchet_stop_floor_pct:+.1f}% min" if r.ratchet_stop_floor_pct is not None else "-"
+        if r.ratchet_stop_floor_pct is not None:
+            ratchet_str = format_color(ratchet_str, "36", bold=True)
+
+        spot_val = spots.get(r.underlier, r.strike)
+
+        rows.append([
+            status_str,
+            f"{r.underlier} ${r.strike:.1f}C",
+            f"${spot_val:.2f}",
+            delta_str,
+            f"{r.dte}d",
+            pnl_pct_str,
+            target_str,
+            target_mark_str,
+            credit_str,
+            extracted_str,
+            ratchet_str,
+        ])
+
+    alignments = ["left", "left", "right", "right", "right", "right", "left", "right", "right", "right", "right"]
+    print(format_table(headers, rows, empty_message="No active options positions found in account portfolio.", alignments=alignments))
+    print()
+
+    tot = roll_summary["total_positions"]
+    elig = roll_summary["eligible_roll_count"]
+    cap = roll_summary["total_extractable_capital"]
+
+    print(f"  Summary: {tot} Position(s) Evaluated | {elig} Eligible Roll Candidate(s)")
+    if elig > 0:
+        cap_fmt = format_color(f"+${cap:,.2f}", "32", bold=True)
+        print(f"  💰 Total Extractable Cash Capital: {cap_fmt}")
+        print("\n  Detailed Roll Triggers:")
+        for r in recs:
+            if r.eligible:
+                print(f"  -> {format_color(r.contract_desc, '36', bold=True)}:")
+                for t in r.triggers:
+                    print(f"     * {t}")
+                print(f"     * Roll Action: Close current at ${r.mark_price:.2f}, Open target ${r.target_strike:.2f} ({r.target_dte} DTE, Delta {r.target_delta:.2f}) at ${r.target_mark:.2f}")
+                print(f"     * Capital Extraction: +${r.capital_extracted:,.2f} cash credit, Risk Reduction: {r.capital_at_risk_reduction_pct:.1f}%")
+                if r.ratchet_stop_floor_pct is not None:
+                    print(f"     * Profit Ratchet: Minimum gain stop floor locked at {r.ratchet_stop_floor_pct:+.1f}%")
+    else:
+        print("  All active positions maintain optimal delta (<0.70) and positive runway convexity.")
+    print()
+
+
 
 def cmd_payoff(args):
     """Runs an offline option payoff simulation scenario grid."""
@@ -6469,6 +6597,13 @@ def main():
     p_dec.add_argument("--json", action="store_true", help="Output machine-readable JSON format")
     p_dec.add_argument("--db-path", type=str, dest="db_path", help="Custom SQLite database file path")
 
+    # evaluate-rolls subcommand (Roadmap 5.2 Dynamic Delta Rolling & Profit Optimization)
+    p_rolls = subparsers.add_parser("evaluate-rolls", help="Evaluates active options positions for dynamic delta rolling and profit ratchets.")
+    p_rolls.add_argument("--account", type=str, default="", help="Account number used to scope position cache")
+    p_rolls.add_argument("--threshold-delta", type=float, default=0.70, dest="threshold_delta", help="Minimum delta trigger for rolling (default: 0.70)")
+    p_rolls.add_argument("--threshold-gain", type=float, default=50.0, dest="threshold_gain", help="Minimum profit %% trigger for rolling (default: 50.0%%)")
+    p_rolls.add_argument("--json", action="store_true", help="Output machine-readable JSON format")
+
 
     # workflow subcommand
     p_workflow = subparsers.add_parser("workflow", help="Aggregates all JSON state into a high-level system summary.")
@@ -6564,6 +6699,8 @@ def main():
         cmd_record_decision(args)
     elif args.command == "decisions":
         cmd_decisions(args)
+    elif args.command == "evaluate-rolls":
+        cmd_evaluate_rolls(args)
     elif args.command == "payoff":
 
         cmd_payoff(args)

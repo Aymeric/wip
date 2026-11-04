@@ -71,6 +71,15 @@ python3 src/gex_engine.py close-stock <ticker> --close-price <fill> --reason TAR
 ```
 Closes detected by `sync-pnl` trade-history reconciliation are recorded automatically as `RECONCILED`.
 
+### Dynamic Delta Rolling & Profit Optimization Check
+Before executing outright exits on profitable positions, evaluate dynamic delta rolling opportunities:
+```bash
+python3 src/gex_engine.py evaluate-rolls --account ACCOUNT_NUMBER --threshold-delta 0.70 --threshold-gain 50.0
+```
+- **Delta Expansion Trigger ($\Delta \ge 0.70$)**: Recommend rolling up and out to a 30–45 DTE 0.40–0.50 Delta contract to lock in accrued gains and reset gamma leverage.
+- **Profit Acceleration Trigger ($ROI \ge 50\%$)**: Recommend ratcheting stops (+25% / +50% profit floors) or rolling to extract initial principal while maintaining upside exposure.
+- **Theta Preservation ($DTE \le 21$ on winning positions)**: Roll forward into the next liquid monthly cycle before accelerated theta decay sets in.
+
 ---
 
 ## Step 3: Portfolio Sizing & Concentration Constraints

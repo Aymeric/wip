@@ -184,13 +184,14 @@ src/gex/
   - [ ] Expose CLI command `python3 src/gex_engine.py backtest --start YYYY-MM-DD --end YYYY-MM-DD`.
 
 ### 5.2 Dynamic Delta Rolling & Profit Optimization Engine
+- **Status**: ✅ **Implemented** (module in [src/gex/risk/rolling.py](src/gex/risk/rolling.py); CLI command `evaluate-rolls` in [src/gex_engine.py](src/gex_engine.py); tests in [tests/test_rolling.py](tests/test_rolling.py)).
 - **Need & Outcome**: When long call options move deeply into the money (Delta $\ge 0.70$ or $>+50\%$ gain), gamma and convexity diminish while capital at risk increases. This engine systematically identifies roll candidates to lock in realized gains, reset DTE back to 30–45 days, and restore optimal delta ($\approx 0.45$).
 - **Action Items**:
-  - [ ] Implement `src/gex/risk/rolling.py` to evaluate roll eligibility for active positions.
-  - [ ] Compute net credit/debit for rolling out and up to target strike (Delta 0.40–0.50, 30–45 DTE).
-  - [ ] Implement systematic profit-ratchet rules (+50% giveback trailing stop adjustment).
-  - [ ] Integrate roll recommendations into `portfolio-risk-manager` and `agentic-trader` approval flows.
-  - [ ] Expose CLI command `python3 src/gex_engine.py evaluate-rolls --account ACCOUNT_NUMBER`.
+  - [x] Implement `src/gex/risk/rolling.py` to evaluate roll eligibility for active positions.
+  - [x] Compute net credit/debit for rolling out and up to target strike (Delta 0.40–0.50, 30–45 DTE).
+  - [x] Implement systematic profit-ratchet rules (+50% giveback trailing stop adjustment).
+  - [x] Integrate roll recommendations into `portfolio-risk-manager` and `agentic-trader` approval flows.
+  - [x] Expose CLI command `python3 src/gex_engine.py evaluate-rolls --account ACCOUNT_NUMBER`.
 
 ### 5.3 Automated Portfolio Beta-Weighted Macro Hedging Engine
 - **Need & Outcome**: During market-wide regime transitions to `DEFENSIVE` or `BLOCKED` (Stop 4), closing all single-stock setups prematurely can disrupt high-conviction structural holds. This engine derives an optimal index hedge (SPY/QQQ debit put spreads) sized to neutralize portfolio beta-weighted directional delta.
@@ -261,7 +262,7 @@ src/gex/
 | **Notification Webhooks** | Phase 4 (Persistence) | 🟢 Low | ✅ Completed | Webhooks (Slack/Discord/Telegram) and macOS notifications | Phase 2 |
 | **Headless Pre-Market Audit Mode** | Phase 4 (Persistence) | 🟢 Low | ✅ Completed | Automated `audit-all` CLI mode with executive morning markdown | Phase 4 |
 | **Historical Replay & Backtesting** | Phase 5 (Advanced Strategy) | 🟡 Medium | 📋 Planned | Offline simulation harness for rule validation across downloads | Phase 4 |
-| **Dynamic Delta Rolling Engine** | Phase 5 (Advanced Strategy) | 🟢 Low | 📋 Planned | Systematic roll-up/roll-out rules for winning options (Delta >= 0.70) | Phase 3 |
+| **Dynamic Delta Rolling Engine** | Phase 5 (Advanced Strategy) | 🟢 Low | ✅ Completed | Systematic roll-up/roll-out rules for winning options (Delta >= 0.70) | Phase 3 |
 | **Automated Macro Hedge Sizing** | Phase 5 (Advanced Strategy) | 🟢 Low | 📋 Planned | Beta-weighted SPY/QQQ hedge sizing on defensive regime transitions | Phase 3 |
 | **Intraday Level Breach Monitor** | Phase 5 (Advanced Strategy) | 🟡 Medium | 📋 Planned | Real-time monitoring daemon for Stop 1 / Profit Target breaches | Phase 4 |
 | **Static Analysis CI Gate** | Phase 1 (Foundations) | 🟡 Medium | 📋 Planned | ruff + mypy enforced in CI with baseline ratchet | Phase 1 |

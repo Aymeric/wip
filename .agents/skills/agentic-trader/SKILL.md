@@ -120,3 +120,17 @@ python3 src/gex_engine.py record-decision \
      --order-ref ORDER_ID
    ```
    Valid `--reason` codes: `STOP1`, `STOP2`, `STOP3`, `STOP4`, `STOP5`, `TARGET`, `MANUAL` (default), `RECONCILED`. Never guess the code; use `MANUAL` when the exit was discretionary.
+7. **Roll executions (rolling positions)**: When executing an approved roll recommendation from `evaluate-rolls`:
+   - Close the existing contract via `place_option_order` (sell to close) and archive it via `close-position` with `--reason TARGET`.
+   - Submit the opening limit order for the replacement contract via `place_option_order` (buy to open) and register it via `update-option`.
+   - Log the roll decision in the audit ledger:
+     ```bash
+     python3 src/gex_engine.py record-decision \
+       --account ACCOUNT_NUMBER \
+       --type ROLL \
+       --symbol TICKER \
+       --contract "OLD_CONTRACT -> NEW_CONTRACT" \
+       --recommendation "Roll up/out to extract credit and reset gamma" \
+       --answer APPROVED \
+       --order-ref ORDER_ID
+     ```
