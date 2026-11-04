@@ -58,6 +58,12 @@ from src.gex.risk.rolling import (
     evaluate_position_roll,
     evaluate_portfolio_rolls,
 )
+from src.gex.risk.hedge import (
+    PositionDeltaExposure,
+    HedgePlan,
+    calculate_portfolio_beta_delta,
+    derive_macro_hedge_plan,
+)
 from src.gex.storage.db import (
     init_db,
     upsert_trade,
@@ -6167,6 +6173,176 @@ def cmd_evaluate_rolls(args):
     print()
 
 
+def cmd_hedge_plan(args):
+    """Derives an automated portfolio beta-weighted macro hedge plan."""
+    account = getattr(args, "account", "")
+    target_coverage = getattr(args, "target_coverage", None)
+    instrument_choice = getattr(args, "instrument", "AUTO") or "AUTO"
+    as_json = getattr(args, "json", False)
+
+    options_file = account_positions_file(account)
+    options_data = load_json(options_file, {"options_positions": {}, "stocks_positions": {}})
+    positions = options_data.get("options_positions", {})
+    stocks = options_data.get("stocks_positions", {})
+
+    if account:
+        positions = {
+            pid: det for pid, det in positions.items()
+            if not det.get("Account") or det.get("Account") == account
+        }
+        stocks = {
+            tick: det for tick, det in stocks.items()
+            if not det.get("Account") or det.get("Account") == account
+        }
+
+    # Net liq resolution
+    net_liq = getattr(args, "net_liq", None)
+    if net_liq is None:
+        perf = get_performance_status(account)
+        cached_net_liq = perf.get("net_liq")
+        if cached_net_liq and float(cached_net_liq) > 0:
+            net_liq = float(cached_net_liq)
+        elif account and "9961" in account:
+            net_liq = 8500.0  # micro-account default
+        else:
+            net_liq = 50000.0  # standard default
+
+    cash_buying_power = getattr(args, "cash_buying_power", None)
+    if cash_buying_power is None:
+        cash_buying_power = net_liq * 0.40  # estimate available cash
+
+    # Retrieve regime and reference ETF prices
+    regime = get_regime_status()
+    etf_details = regime.get("etf_details", {})
+    spy_price = 550.0
+    if "SPY" in etf_details:
+        val = etf_details["SPY"].get("Price", 0.0)
+        if val > 0:
+            spy_price = val
+    if spy_price == 550.0:
+        spot_spy = find_latest_underlier_spot("SPY")
+        if spot_spy:
+            spy_price = float(spot_spy)
+
+    qqq_price = 480.0
+    if "QQQ" in etf_details:
+        val = etf_details["QQQ"].get("Price", 0.0)
+        if val > 0:
+            qqq_price = val
+    if qqq_price == 480.0:
+        spot_qqq = find_latest_underlier_spot("QQQ")
+        if spot_qqq:
+            qqq_price = float(spot_qqq)
+
+    # Spot overrides if any from analyses
+    spot_overrides: Dict[str, float] = {}
+    analyses = load_json(ANALYSES_FILE, {})
+    for opt_id, details in positions.items():
+        sym = (details.get("Underlier") or "").upper()
+        if sym and sym not in spot_overrides:
+            sp = find_latest_underlier_spot(sym)
+            if sp is not None:
+                spot_overrides[sym] = float(sp)
+            elif sym in analyses and analyses[sym].get("spot"):
+                spot_overrides[sym] = float(analyses[sym]["spot"])
+
+    for tick in stocks.keys():
+        sym = tick.upper()
+        if sym and sym not in spot_overrides:
+            sp = find_latest_underlier_spot(sym)
+            if sp is not None:
+                spot_overrides[sym] = float(sp)
+            elif sym in analyses and analyses[sym].get("spot"):
+                spot_overrides[sym] = float(analyses[sym]["spot"])
+
+    hedge_plan = derive_macro_hedge_plan(
+        account=account,
+        net_liq=net_liq,
+        cash_buying_power=cash_buying_power,
+        regime=regime,
+        options_positions=positions,
+        stocks_positions=stocks,
+        spy_price=spy_price,
+        qqq_price=qqq_price,
+        target_coverage=target_coverage,
+        instrument_choice=instrument_choice,
+        spot_overrides=spot_overrides,
+    )
+
+    if as_json:
+        print(json.dumps(hedge_plan.to_dict(), indent=2, sort_keys=True))
+        return
+
+    masked_acc = mask_account(account) if account else "DEFAULT / ALL"
+    print(f"\n### 🛡️ Portfolio Beta-Weighted Macro Hedge Plan ({masked_acc})")
+    print(f"  - Portfolio Net Liq: ${hedge_plan.net_liq:,.2f} | Available Cash BP: ${hedge_plan.cash_buying_power:,.2f}")
+    print(f"  - Reference Index Spot: SPY ${hedge_plan.spy_price:.2f} | QQQ ${qqq_price:.2f}")
+    print(f"  - Market Regime Status: {hedge_plan.regime_status} ({hedge_plan.gates_passed}/3 Gates Passed)\n")
+
+    if not hedge_plan.positions:
+        print_color("💤 No open portfolio positions found to evaluate for macro hedging.", "33")
+        return
+
+    print("#### 📊 Component Holdings Delta Exposure Matrix")
+    headers = ["Symbol", "Asset", "Qty", "Spot", "Raw Delta", "Delta Shs", "Beta", "BW Exp ($)", "SPY Equiv"]
+    rows = []
+    for p in hedge_plan.positions:
+        rows.append([
+            p.symbol,
+            p.asset_type,
+            f"{p.quantity:g}",
+            f"${p.spot:,.2f}",
+            f"{p.raw_delta:+.2f}",
+            f"{p.delta_shares:+,.1f}",
+            f"{p.beta:.2f}",
+            f"${p.beta_weighted_dollar_exposure:+,.2f}",
+            f"{p.spy_equivalent_delta_shares:+,.1f}",
+        ])
+    alignments = ["left", "left", "right", "right", "right", "right", "right", "right", "right"]
+    print(format_table(headers, rows, empty_message="No positions.", alignments=alignments))
+    print()
+
+    print(f"  - Total Beta-Weighted Dollar Delta: {format_pnl(pnl_dlr=hedge_plan.total_beta_weighted_dollar_delta, bold=True)}")
+    spy_color = "32" if hedge_plan.spy_equivalent_delta_shares > 0 else "31"
+    print(f"  - Total SPY-Equivalent Directional Delta: {format_color(f'{hedge_plan.spy_equivalent_delta_shares:+,.2f} shares', spy_color, bold=True)}")
+    print(f"  - Tech / Growth Beta Concentration: {hedge_plan.tech_exposure_pct:.1f}%\n")
+
+    print("#### 🚦 Macro Regime Gate & Hedge Authorization")
+    status_color = "32" if hedge_plan.hedge_status == "NO_HEDGE_NEEDED" else "33" if hedge_plan.hedge_status == "DEFENSIVE_HEDGE" else "31"
+    status_fmt = format_color(hedge_plan.hedge_status, status_color, bold=True)
+    cov_fmt = format_color(f"{hedge_plan.target_coverage_pct * 100:.1f}%", "36", bold=True)
+    print(f"  - Hedge Recommendation Status: {status_fmt}")
+    print(f"  - Prescribed Coverage Ratio: {cov_fmt} of Net Positive Delta")
+
+    if hedge_plan.hedge_required and hedge_plan.target_contracts > 0:
+        inst = hedge_plan.recommended_instrument
+        print(f"\n#### 🎯 Structured Index Hedge: {inst} Bear Put Debit Spread")
+        print(f"  - Expiration: ~{hedge_plan.target_dte} DTE Monthly Cycle")
+        print(f"  - Long Put Strike: ${hedge_plan.long_put_strike:.2f} (~ -0.35 Delta, OTM Cushion)")
+        print(f"  - Short Put Strike: ${hedge_plan.short_put_strike:.2f} (~ -0.15 Delta, Spread Width: ${hedge_plan.spread_width:.2f})")
+        print(f"  - Recommended Allocation: {format_color(f'{hedge_plan.target_contracts} contract(s)', '33', bold=True)}")
+        print(f"  - Estimated Spread Debit: ${hedge_plan.estimated_spread_debit:.2f}/sh (${hedge_plan.estimated_spread_debit * 100:,.2f}/contract)")
+        outlay_pct = (hedge_plan.total_estimated_cost / hedge_plan.net_liq) * 100.0 if hedge_plan.net_liq > 0 else 0.0
+        print(f"  - Total Capital Outlay: ${hedge_plan.total_estimated_cost:,.2f} ({outlay_pct:.2f}% of Net Liq)")
+        print(f"  - Max Downside Protection P&L: {format_color(f'+${hedge_plan.max_protection_pnl:,.2f}', '32', bold=True)}")
+        print(f"  - Post-Hedge Net Directional Delta: {format_color(f'{hedge_plan.post_hedge_net_delta_shares:+,.2f} {inst}-equiv shares', '36', bold=True)}")
+    elif hedge_plan.hedge_required and hedge_plan.target_contracts == 0:
+        print_color("\n⚠️ HEDGE ALLOCATION DEFERRED: Capital constrained or insufficient delta threshold.", "33")
+    else:
+        print_color("\n✅ UNHEDGED SWING CLEARANCE: Daily Regime Gates fully authorized (ALL TRACKS OK). No macro hedge required.", "32", bold=True)
+
+    if hedge_plan.notes:
+        print("\n💡 Sizing & Account Notes:")
+        for note in hedge_plan.notes:
+            print(f"  • {note}")
+
+    if hedge_plan.hedge_rules:
+        print("\n📜 Operational Hedge Rules:")
+        for r in hedge_plan.hedge_rules:
+            print(f"  • {r}")
+    print()
+
+
 
 def cmd_payoff(args):
     """Runs an offline option payoff simulation scenario grid."""
@@ -6604,6 +6780,14 @@ def main():
     p_rolls.add_argument("--threshold-gain", type=float, default=50.0, dest="threshold_gain", help="Minimum profit %% trigger for rolling (default: 50.0%%)")
     p_rolls.add_argument("--json", action="store_true", help="Output machine-readable JSON format")
 
+    # hedge-plan subcommand (Roadmap 5.3 Automated Beta-Weighted Macro Hedging Engine)
+    p_hedge = subparsers.add_parser("hedge-plan", help="Derives an automated portfolio beta-weighted macro hedge plan.")
+    p_hedge.add_argument("--account", type=str, default="", help="Account number used to scope position cache")
+    p_hedge.add_argument("--net-liq", type=float, default=None, dest="net_liq", help="Portfolio Net Liquidation value in USD")
+    p_hedge.add_argument("--target-coverage", type=float, default=None, dest="target_coverage", help="Target delta coverage ratio (0.0 to 1.0, e.g. 0.50 for 50%%)")
+    p_hedge.add_argument("--instrument", type=str, default="AUTO", choices=["AUTO", "SPY", "QQQ"], help="Target index ETF for hedge spread (default: AUTO)")
+    p_hedge.add_argument("--json", action="store_true", help="Output machine-readable JSON format")
+
 
     # workflow subcommand
     p_workflow = subparsers.add_parser("workflow", help="Aggregates all JSON state into a high-level system summary.")
@@ -6701,6 +6885,8 @@ def main():
         cmd_decisions(args)
     elif args.command == "evaluate-rolls":
         cmd_evaluate_rolls(args)
+    elif args.command == "hedge-plan":
+        cmd_hedge_plan(args)
     elif args.command == "payoff":
 
         cmd_payoff(args)

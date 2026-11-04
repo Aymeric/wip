@@ -737,6 +737,12 @@ python3 src/gex_engine.py evaluate-rolls [--account <account_number>] [--thresho
 ```
 *(Evaluates open winning options positions against programmatic roll triggers: Delta expansion ($\Delta \ge 0.70$), profit acceleration ($ROI \ge 50\%$), and theta preservation ($DTE \le 21$ on winners). Calculates profit ratchet floors, estimated credit extraction, replacement 30-45 DTE contracts, and capital risk reduction).*
 
+#### Derive portfolio beta-weighted macro hedge plan:
+```bash
+python3 src/gex_engine.py hedge-plan [--account <account_number>] [--target-coverage <0.50>] [--instrument <AUTO/SPY/QQQ>] [--json]
+```
+*(Calculates aggregate portfolio beta-weighted directional delta expressed in SPY-equivalent shares. When Daily Regime Gates transition to DEFENSIVE or BLOCKED under Stop 4, derives an optimal defined-risk SPY or QQQ Bear Put Debit Spread (30–45 DTE) to insulate active holdings against macro drawdown while honoring portfolio sizing caps and micro-account buying power rules).*
+
 ---
 
 ## 🗄️ [data/active_positions.json](data/active_positions.json) Schema Documentation

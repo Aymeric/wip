@@ -6,6 +6,12 @@ from src.gex.risk.rolling import (
     evaluate_position_roll,
     evaluate_portfolio_rolls,
 )
+from src.gex.risk.hedge import (
+    PositionDeltaExposure,
+    HedgePlan,
+    calculate_portfolio_beta_delta,
+    derive_macro_hedge_plan,
+)
 
 __all__ = [
     "compute_exit_rule_state",
@@ -15,4 +21,8 @@ __all__ = [
     "calculate_profit_ratchet",
     "evaluate_position_roll",
     "evaluate_portfolio_rolls",
+    "PositionDeltaExposure",
+    "HedgePlan",
+    "calculate_portfolio_beta_delta",
+    "derive_macro_hedge_plan",
 ]

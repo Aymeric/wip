@@ -59,7 +59,11 @@ Evaluate exits in this *strict priority order* for open options:
    - **Action**: Close or roll position to mitigate theta decay.
 4. **Stop 4 (Macro / Regime Stop)**:
    - Market Regime collapses (Bull:Bear $< 3.0:1$ or VIX expansion).
-   - **Action**: Tighten stops to breakeven or trim position size by $50\%$.
+   - **Action**: Tighten stops to breakeven, or evaluate an automated macro hedge to protect high-conviction structural holds without premature blanket liquidations:
+     ```bash
+     python3 src/gex_engine.py hedge-plan --account ACCOUNT_NUMBER
+     ```
+     Derives an optimal SPY/QQQ Bear Put Debit Spread (30–45 DTE) sized to neutralize portfolio beta-weighted directional delta.
 5. **Stop 5 (Catastrophic Risk Stop)**:
    - Position suffers a $-50\%$ loss from entry premium.
    - **Action**: Immediate mandatory exit.
