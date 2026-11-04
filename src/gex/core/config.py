@@ -64,17 +64,20 @@ def validate_safe_path(filepath: str, allowed_roots: Optional[List[str]] = None)
         allowed_roots = [REPOSITORY_ROOT, tempfile.gettempdir()]
 
     if not os.path.isabs(filepath):
-        abs_target = os.path.abspath(os.path.join(REPOSITORY_ROOT, filepath))
+        target = os.path.join(REPOSITORY_ROOT, filepath)
     else:
-        abs_target = os.path.abspath(filepath)
+        target = filepath
+
+    # Security: Resolve realpath to prevent symlink traversal breakouts
+    real_target = os.path.realpath(target)
 
     for root in allowed_roots:
         if not root:
             continue
-        abs_root = os.path.abspath(root)
+        real_root = os.path.realpath(root)
         try:
-            if os.path.commonpath([abs_root, abs_target]) == abs_root:
-                return abs_target
+            if os.path.commonpath([real_root, real_target]) == real_root:
+                return real_target
         except ValueError:
             continue
 

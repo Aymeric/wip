@@ -239,6 +239,20 @@ class TestGEXEngine(unittest.TestCase):
         with self.assertRaises(ValueError):
             gex_engine.validate_safe_path(invalid_path)
 
+        # Symlink breakout attempting to bypass allowed roots
+        import tempfile
+        tmp_symlink = os.path.join(tempfile.gettempdir(), f"sentinel_symlink_test_{os.getpid()}")
+        try:
+            if os.path.islink(tmp_symlink) or os.path.exists(tmp_symlink):
+                os.remove(tmp_symlink)
+            os.symlink("/etc", tmp_symlink)
+            symlink_target = os.path.join(tmp_symlink, "passwd")
+            with self.assertRaises(ValueError):
+                gex_engine.validate_safe_path(symlink_target)
+        finally:
+            if os.path.islink(tmp_symlink):
+                os.remove(tmp_symlink)
+
         # save_json handles ValueError cleanly when path traversal is attempted
         with patch('sys.stderr') as mock_stderr:
             gex_engine.save_json(invalid_path, {"test": "data"})
