@@ -59,7 +59,11 @@ Evaluate exits in this *strict priority order* for open options:
    - **Action**: Close or roll position to mitigate theta decay.
 4. **Stop 4 (Macro / Regime Stop)**:
    - Market Regime collapses (Bull:Bear $< 3.0:1$ or VIX expansion).
-   - **Action**: Tighten stops to breakeven or trim position size by $50\%$.
+   - **Action**: Tighten stops to breakeven, or evaluate an automated macro hedge to protect high-conviction structural holds without premature blanket liquidations:
+     ```bash
+     python3 src/gex_engine.py hedge-plan --account ACCOUNT_NUMBER
+     ```
+     Derives an optimal SPY/QQQ Bear Put Debit Spread (30–45 DTE) sized to neutralize portfolio beta-weighted directional delta.
 5. **Stop 5 (Catastrophic Risk Stop)**:
    - Position suffers a $-50\%$ loss from entry premium.
    - **Action**: Immediate mandatory exit.
@@ -70,6 +74,15 @@ python3 src/gex_engine.py close-position <option_id> --close-premium <fill> --re
 python3 src/gex_engine.py close-stock <ticker> --close-price <fill> --reason TARGET --account ACCOUNT_NUMBER
 ```
 Closes detected by `sync-pnl` trade-history reconciliation are recorded automatically as `RECONCILED`.
+
+### Dynamic Delta Rolling & Profit Optimization Check
+Before executing outright exits on profitable positions, evaluate dynamic delta rolling opportunities:
+```bash
+python3 src/gex_engine.py evaluate-rolls --account ACCOUNT_NUMBER --threshold-delta 0.70 --threshold-gain 50.0
+```
+- **Delta Expansion Trigger ($\Delta \ge 0.70$)**: Recommend rolling up and out to a 30–45 DTE 0.40–0.50 Delta contract to lock in accrued gains and reset gamma leverage.
+- **Profit Acceleration Trigger ($ROI \ge 50\%$)**: Recommend ratcheting stops (+25% / +50% profit floors) or rolling to extract initial principal while maintaining upside exposure.
+- **Theta Preservation ($DTE \le 21$ on winning positions)**: Roll forward into the next liquid monthly cycle before accelerated theta decay sets in.
 
 ---
 

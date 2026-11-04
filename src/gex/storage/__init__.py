@@ -5,6 +5,9 @@ from src.gex.storage.db import (
     sync_closed_positions_to_db,
     save_gex_snapshot,
     query_latest_gex_snapshot,
+    record_decision,
+    query_decisions,
+    summarize_decisions,
 )
 from src.gex.storage.persistence import (
     load_json,
@@ -22,6 +25,9 @@ __all__ = [
     "sync_closed_positions_to_db",
     "save_gex_snapshot",
     "query_latest_gex_snapshot",
+    "record_decision",
+    "query_decisions",
+    "summarize_decisions",
     "load_json",
     "save_json",
     "clear_account_cache",

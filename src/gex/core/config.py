@@ -38,6 +38,25 @@ EXIT_REASON_CODES = ("STOP1", "STOP2", "STOP3", "STOP4", "STOP5", "TARGET", "MAN
 DEFAULT_EXIT_REASON = "MANUAL"
 RECONCILED_EXIT_REASON = "RECONCILED"
 
+# Decision ledger constants (Roadmap 5.6)
+DECISION_TYPES = ("ENTRY", "EXIT")
+DECISION_ANSWERS = ("APPROVED", "DECLINED", "SKIPPED", "AMBIGUOUS")
+DECISION_TEXT_MAX_LEN = 500
+
+
+def mask_account(account: str = "") -> str:
+    """Return a display-safe masked account label (e.g. '••••9961'); '' when unset."""
+    if not account:
+        return ""
+    try:
+        sanitized = sanitize_account(account)
+    except ValueError:
+        return ""
+    if not sanitized:
+        return ""
+    return f"••••{sanitized[-4:]}"
+
+
 
 def validate_safe_path(filepath: str, allowed_roots: Optional[List[str]] = None) -> str:
     """Ensure filepath resolves strictly within allowed roots (defaults to REPOSITORY_ROOT and temp dir)."""

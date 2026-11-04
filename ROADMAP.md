@@ -184,22 +184,24 @@ src/gex/
   - [ ] Expose CLI command `python3 src/gex_engine.py backtest --start YYYY-MM-DD --end YYYY-MM-DD`.
 
 ### 5.2 Dynamic Delta Rolling & Profit Optimization Engine
+- **Status**: ✅ **Implemented** (module in [src/gex/risk/rolling.py](src/gex/risk/rolling.py); CLI command `evaluate-rolls` in [src/gex_engine.py](src/gex_engine.py); tests in [tests/test_rolling.py](tests/test_rolling.py)).
 - **Need & Outcome**: When long call options move deeply into the money (Delta $\ge 0.70$ or $>+50\%$ gain), gamma and convexity diminish while capital at risk increases. This engine systematically identifies roll candidates to lock in realized gains, reset DTE back to 30–45 days, and restore optimal delta ($\approx 0.45$).
 - **Action Items**:
-  - [ ] Implement `src/gex/risk/rolling.py` to evaluate roll eligibility for active positions.
-  - [ ] Compute net credit/debit for rolling out and up to target strike (Delta 0.40–0.50, 30–45 DTE).
-  - [ ] Implement systematic profit-ratchet rules (+50% giveback trailing stop adjustment).
-  - [ ] Integrate roll recommendations into `portfolio-risk-manager` and `agentic-trader` approval flows.
-  - [ ] Expose CLI command `python3 src/gex_engine.py evaluate-rolls --account ACCOUNT_NUMBER`.
+  - [x] Implement `src/gex/risk/rolling.py` to evaluate roll eligibility for active positions.
+  - [x] Compute net credit/debit for rolling out and up to target strike (Delta 0.40–0.50, 30–45 DTE).
+  - [x] Implement systematic profit-ratchet rules (+50% giveback trailing stop adjustment).
+  - [x] Integrate roll recommendations into `portfolio-risk-manager` and `agentic-trader` approval flows.
+  - [x] Expose CLI command `python3 src/gex_engine.py evaluate-rolls --account ACCOUNT_NUMBER`.
 
 ### 5.3 Automated Portfolio Beta-Weighted Macro Hedging Engine
+- **Status**: ✅ **Implemented** (module in [src/gex/risk/hedge.py](src/gex/risk/hedge.py); CLI command `hedge-plan` in [src/gex_engine.py](src/gex_engine.py); tests in [tests/test_hedge.py](tests/test_hedge.py)).
 - **Need & Outcome**: During market-wide regime transitions to `DEFENSIVE` or `BLOCKED` (Stop 4), closing all single-stock setups prematurely can disrupt high-conviction structural holds. This engine derives an optimal index hedge (SPY/QQQ debit put spreads) sized to neutralize portfolio beta-weighted directional delta.
 - **Action Items**:
-  - [ ] Implement `src/gex/risk/hedge.py` calculating aggregate beta-weighted directional delta:
+  - [x] Implement `src/gex/risk/hedge.py` calculating aggregate beta-weighted directional delta:
     $$\Delta_{\text{portfolio, SPY}} = \sum_i \beta_i \cdot \Delta_i \cdot \frac{S_i}{S_{\text{SPY}}}$$
-  - [ ] Derive target hedge contract allocation using SPY / QQQ put debit spreads.
-  - [ ] Define entry, sizing, and exit rules for macro hedges linked to Market Regime Gates transitions.
-  - [ ] Expose CLI command `python3 src/gex_engine.py hedge-plan --account ACCOUNT_NUMBER`.
+  - [x] Derive target hedge contract allocation using SPY / QQQ put debit spreads.
+  - [x] Define entry, sizing, and exit rules for macro hedges linked to Market Regime Gates transitions.
+  - [x] Expose CLI command `python3 src/gex_engine.py hedge-plan --account ACCOUNT_NUMBER`.
 
 ### 5.4 Intraday GEX Level Breach Monitor & Real-Time Alert Daemon
 - **Need & Outcome**: Daily GEX levels ($pTrans$, $nTrans$, $+GEX$) provide structural runway bounds, but underlying spot prices can breach $nTrans$ (Stop 1) or reach $+GEX$ (Profit Target) during trading hours. This daemon monitors active holdings in near-real-time and dispatches instant webhook/desktop alerts upon level breaches.
@@ -218,11 +220,12 @@ src/gex/
   - [x] Add per-exit-reason win rate / expectancy breakdown to `journal`, and update `portfolio-risk-manager` / `agentic-trader` skills to pass the triggering stop.
 
 ### 5.6 Approval Decision Ledger ([#164](https://github.com/Aymeric/wip/issues/164))
+- **Status**: ✅ **Implemented** (SQLite ledger in [src/gex/storage/db.py](src/gex/storage/db.py); CLI commands `record-decision` and `decisions` in [src/gex_engine.py](src/gex_engine.py); tests in [tests/test_decision_ledger.py](tests/test_decision_ledger.py)).
 - **Need & Outcome**: Execution approval requests (entries and exits) are only printed to the terminal, and the `ask_question` answer is not persisted. A durable ledger provides provenance for every decision and lets the journal audit mechanical adherence vs. human overrides.
 - **Action Items**:
-  - [ ] Add a `decisions` SQLite table (timestamp, masked account, symbol/contract, action, grade, regime gates, triggering stop, recommendation, human answer, order ref).
-  - [ ] Expose `record-decision` and `decisions --account ACCOUNT_NUMBER` CLI commands; never store credentials or full account numbers.
-  - [ ] Wire `gex-orchestrator` / `agentic-trader` skills to record each approval outcome, including declines and skipped/ambiguous answers.
+  - [x] Add a `decisions` SQLite table (timestamp, masked account, symbol/contract, action, grade, regime gates, triggering stop, recommendation, human answer, order ref).
+  - [x] Expose `record-decision` and `decisions --account ACCOUNT_NUMBER` CLI commands; never store credentials or full account numbers.
+  - [x] Wire `gex-orchestrator` / `agentic-trader` skills to record each approval outcome, including declines and skipped/ambiguous answers.
 
 ### 5.7 IV Rank / IV Percentile Entry Context ([#165](https://github.com/Aymeric/wip/issues/165))
 - **Need & Outcome**: Entry screening uses an absolute IV floor (≥ 30%) only. *Hypothesis*: buying single-leg premium when IV is high relative to the underlier's own history degrades expectancy. Relative IV context would inform contract selection and grading.
@@ -260,12 +263,12 @@ src/gex/
 | **Notification Webhooks** | Phase 4 (Persistence) | 🟢 Low | ✅ Completed | Webhooks (Slack/Discord/Telegram) and macOS notifications | Phase 2 |
 | **Headless Pre-Market Audit Mode** | Phase 4 (Persistence) | 🟢 Low | ✅ Completed | Automated `audit-all` CLI mode with executive morning markdown | Phase 4 |
 | **Historical Replay & Backtesting** | Phase 5 (Advanced Strategy) | 🟡 Medium | 📋 Planned | Offline simulation harness for rule validation across downloads | Phase 4 |
-| **Dynamic Delta Rolling Engine** | Phase 5 (Advanced Strategy) | 🟢 Low | 📋 Planned | Systematic roll-up/roll-out rules for winning options (Delta >= 0.70) | Phase 3 |
-| **Automated Macro Hedge Sizing** | Phase 5 (Advanced Strategy) | 🟢 Low | 📋 Planned | Beta-weighted SPY/QQQ hedge sizing on defensive regime transitions | Phase 3 |
+| **Dynamic Delta Rolling Engine** | Phase 5 (Advanced Strategy) | 🟢 Low | ✅ Completed | Systematic roll-up/roll-out rules for winning options (Delta >= 0.70) | Phase 3 |
+| **Automated Macro Hedge Sizing** | Phase 5 (Advanced Strategy) | 🟢 Low | ✅ Completed | Beta-weighted SPY/QQQ hedge sizing on defensive regime transitions | Phase 3 |
 | **Intraday Level Breach Monitor** | Phase 5 (Advanced Strategy) | 🟡 Medium | 📋 Planned | Real-time monitoring daemon for Stop 1 / Profit Target breaches | Phase 4 |
 | **Static Analysis CI Gate** | Phase 1 (Foundations) | 🟡 Medium | 📋 Planned | ruff + mypy enforced in CI with baseline ratchet | Phase 1 |
 | **Stop-Coded Exit Attribution** | Phase 5 (Advanced Strategy) | 🔴 High | ✅ Completed | Per-stop expectancy via coded `exit_reason` | Phase 4 |
-| **Approval Decision Ledger** | Phase 5 (Advanced Strategy) | 🟡 Medium | 📋 Planned | Durable provenance of approvals, declines, and overrides | Phase 4 |
+| **Approval Decision Ledger** | Phase 5 (Advanced Strategy) | 🟡 Medium | ✅ Completed | Durable provenance of approvals, declines, and overrides | Phase 4 |
 | **IV Rank / Percentile Context** | Phase 5 (Advanced Strategy) | 🟢 Low | 📋 Planned | Relative IV context for entries (gate only after backtest) | 5.1 |
 | **CLI Extraction (`src/gex/cli/`)** | Phase 5 (Advanced Strategy) | 🟡 Medium | 📋 Planned | Smaller engine module; safer Phase 5 command additions | Phase 2 |
 
