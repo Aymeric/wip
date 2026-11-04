@@ -2710,6 +2710,14 @@ class TestGEXEngine(unittest.TestCase):
                 self.assertIn("Options Stats", output)
                 self.assertIn("Stocks Stats", output)
                 self.assertIn("Total Combined Realized P&L", output)
+
+                # Verify table headers and pipe delimiters are present and aligned across all rows
+                table_lines = [l for l in output.splitlines() if "|" in l and ("Ticker" in l or "AAPL" in l or "AMZN" in l)]
+                self.assertEqual(len(table_lines), 3)  # Header + 2 data rows
+                header_pipes = [i for i, ch in enumerate(table_lines[0]) if ch == "|"]
+                for row_line in table_lines[1:]:
+                    row_pipes = [i for i, ch in enumerate(row_line) if ch == "|"]
+                    self.assertEqual(row_pipes, header_pipes)
         finally:
             if os.path.exists(options_path):
                 os.remove(options_path)
