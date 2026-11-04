@@ -1,3 +1,8 @@
+## 2026-11-03 - Database queries and synchronization accepting account parameters must sanitize inputs with sanitize_account
+**Vulnerability:** `query_trade_metrics()`, `sync_closed_positions_to_db()`, and `upsert_trade()` in `src/gex/storage/db.py` used unvalidated account parameter strings, allowing special characters or path traversal sequences to bypass strict account validation or leak unisolated records across accounts.
+**Learning:** Even when SQL injection is mitigated via parameterized queries, domain identifiers like accounts must be normalized and sanitized before querying or writing to ensure consistent multi-tenant account boundaries and reject invalid inputs.
+**Prevention:** Always sanitize account arguments with `sanitize_account()` at the entry points of database query and synchronization helpers.
+
 ## 2026-09-26 - Internal file mtime and scan processing utilities accepting path parameters must validate inputs with validate_safe_path
 **Vulnerability:** `_get_dir_mtime_key()`, `_get_file_mtime()`, and candidate `process_scan_file()` evaluated `os.path.exists()`, `os.path.getmtime()`, or `os.walk()` on path parameters prior to or without calling `validate_safe_path()`, permitting path traversal checks and mtime inspections outside allowed directories.
 **Learning:** Cache mtime lookup utilities and local file processors that accept file or directory paths must validate parameters against allowed roots before executing `os.path.exists()` or inspecting filesystem metadata.

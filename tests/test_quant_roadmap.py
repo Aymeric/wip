@@ -334,6 +334,49 @@ class TestRoadmapImplementations(unittest.TestCase):
         with self.assertRaises(ValueError):
             init_db("/etc/passwd.db")
 
+    def test_db_account_sanitization(self):
+        import tempfile
+        from src.gex.storage.db import (
+            upsert_trade,
+            query_trade_metrics,
+            sync_closed_positions_to_db,
+        )
+
+        with tempfile.NamedTemporaryFile(suffix=".db") as tmp:
+            test_db = tmp.name
+
+            # 1. Invalid account inputs raise ValueError
+            with self.assertRaises(ValueError):
+                query_trade_metrics(account="!!!", db_path=test_db)
+
+            with self.assertRaises(ValueError):
+                query_trade_metrics(account="---", db_path=test_db)
+
+            with self.assertRaises(ValueError):
+                sync_closed_positions_to_db({"closed_options": []}, account="...", db_path=test_db)
+
+            # 2. Account with traversal sequences gets sanitized and isolated
+            upsert_trade(
+                trade_id="trade_sanitized_1",
+                symbol="MSFT",
+                asset_type="STOCK",
+                quantity=10.0,
+                entry_price=300.0,
+                exit_price=320.0,
+                realized_pnl=200.0,
+                realized_pnl_pct=6.67,
+                account="../ACC_99",
+                db_path=test_db,
+            )
+
+            metrics_sanitized = query_trade_metrics(account="ACC_99", db_path=test_db)
+            self.assertEqual(metrics_sanitized["total_trades"], 1)
+            self.assertEqual(metrics_sanitized["total_realized_pnl"], 200.0)
+
+            # Query with traversal syntax also normalizes to ACC_99
+            metrics_via_traversal = query_trade_metrics(account="../ACC_99", db_path=test_db)
+            self.assertEqual(metrics_via_traversal["total_trades"], 1)
+
     def test_multi_account_cache_isolation(self):
         from src.gex_engine import _JSON_FILE_CACHE, clear_account_cache
 

@@ -9,7 +9,7 @@ import sqlite3
 from typing import Dict, List, Optional, Any
 from pathlib import Path
 
-from src.gex.core.config import validate_safe_path
+from src.gex.core.config import validate_safe_path, sanitize_account
 
 DEFAULT_DB_PATH = os.path.join("data", "trades.db")
 
@@ -85,6 +85,8 @@ def upsert_trade(
     db_path: Optional[str] = None,
 ) -> None:
     """Inserts or updates a trade record in the embedded database."""
+    # Security: Normalize account identifier to prevent path traversal or injection anomalies
+    clean_account = sanitize_account(account) if account else None
     conn = init_db(db_path)
     with conn:
         conn.execute(
@@ -104,7 +106,7 @@ def upsert_trade(
                 exit_reason=excluded.exit_reason;
             """,
             (
-                trade_id, account, symbol, asset_type, quantity,
+                trade_id, clean_account, symbol, asset_type, quantity,
                 entry_price, exit_price, realized_pnl, realized_pnl_pct,
                 opened_at, closed_at, holding_days, exit_reason, target_mode
             ),
@@ -114,14 +116,16 @@ def upsert_trade(
 
 def query_trade_metrics(account: Optional[str] = None, db_path: Optional[str] = None) -> Dict[str, Any]:
     """Computes quantitative trade journal metrics from the database."""
+    # Security: Normalize account identifier; raises ValueError if explicitly provided but invalid
+    clean_account = sanitize_account(account) if account else ""
     conn = init_db(db_path)
     cur = conn.cursor()
 
     query = "SELECT realized_pnl, realized_pnl_pct, holding_days FROM trades"
     params = []
-    if account:
+    if clean_account:
         query += " WHERE account = ?"
-        params.append(account)
+        params.append(clean_account)
 
     cur.execute(query, params)
     rows = cur.fetchall()
@@ -181,9 +185,12 @@ def sync_closed_positions_to_db(
     closed_options = closed_data.get("closed_options", []) or []
     closed_stocks = closed_data.get("closed_stocks", []) or []
 
+    # Security: Normalize account identifier; raises ValueError if explicitly provided but invalid
+    clean_account = sanitize_account(account) if account else ""
+
     for idx, opt in enumerate(closed_options):
         symbol = opt.get("Underlier") or opt.get("Ticker") or "UNKNOWN"
-        opt_id = opt.get("Option ID") or opt.get("id") or f"{account or 'default'}_opt_{symbol}_{idx}"
+        opt_id = opt.get("Option ID") or opt.get("id") or f"{clean_account or 'default'}_opt_{symbol}_{idx}"
         strike = opt.get("Strike", "")
         exp = opt.get("Expiration", "")
         opened_at = opt.get("Entry Date")
@@ -211,7 +218,8 @@ def sync_closed_positions_to_db(
         exit_reason = opt.get("Close Reason") or opt.get("Exit Reason") or opt.get("Rule State") or "MANUAL"
         target_mode = opt.get("Target Mode", "T1")
 
-        trade_account = account or opt.get("Account") or ""
+        raw_trade_account = clean_account or opt.get("Account") or ""
+        trade_account = sanitize_account(raw_trade_account) if raw_trade_account else ""
 
         upsert_trade(
             trade_id=str(opt_id),
@@ -234,7 +242,7 @@ def sync_closed_positions_to_db(
 
     for idx, stk in enumerate(closed_stocks):
         symbol = stk.get("Ticker") or "UNKNOWN"
-        trade_id = stk.get("Trade ID") or f"{account or 'default'}_stk_{symbol}_{idx}"
+        trade_id = stk.get("Trade ID") or f"{clean_account or 'default'}_stk_{symbol}_{idx}"
         opened_at = stk.get("Entry Date")
         closed_at = stk.get("Close Date")
 
@@ -252,7 +260,8 @@ def sync_closed_positions_to_db(
                 pass
 
         exit_reason = stk.get("Close Reason") or stk.get("Exit Reason") or "MANUAL"
-        trade_account = account or stk.get("Account") or ""
+        raw_trade_account = clean_account or stk.get("Account") or ""
+        trade_account = sanitize_account(raw_trade_account) if raw_trade_account else ""
 
         upsert_trade(
             trade_id=str(trade_id),
