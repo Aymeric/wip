@@ -202,5 +202,42 @@ class TestPerformanceBenchmark(unittest.TestCase):
             if os.path.exists(pnl_path):
                 os.remove(pnl_path)
 
+    def test_benchmark_sync_closed_positions_to_db(self):
+        import tempfile
+        from src.gex.storage.db import sync_closed_positions_to_db
+
+        closed_data = {
+            'closed_options': [
+                {
+                    'Option ID': f'opt_{i}', 'Underlier': 'NVDA', 'Strike': '120.0',
+                    'Purchase Premium': 5.0, 'Close Premium': 7.0, 'Realized P&L ($)': 200.0,
+                    'Realized P&L (%)': 40.0, 'Entry Date': '2026-01-01', 'Close Date': '2026-01-05',
+                    'Close Reason': 'TARGET', 'Target Mode': 'T1'
+                }
+                for i in range(50)
+            ],
+            'closed_stocks': [
+                {
+                    'Ticker': 'AAPL', 'Shares': 10.0, 'Average Buy Price': 150.0,
+                    'Close Price': 160.0, 'Realized P&L ($)': 100.0, 'Realized P&L (%)': 6.67,
+                    'Entry Date': '2026-01-02', 'Close Date': '2026-01-08', 'Close Reason': 'TARGET'
+                }
+                for i in range(50)
+            ]
+        }
+        with tempfile.NamedTemporaryFile('w', delete=False, suffix='.db') as f:
+            test_db = f.name
+
+        try:
+            iterations = 50
+            start_time = time.perf_counter()
+            for _ in range(iterations):
+                _ = sync_closed_positions_to_db(closed_data, account='PERF_TEST', db_path=test_db)
+            elapsed = time.perf_counter() - start_time
+            print(f"\n[BENCHMARK] Executed {iterations} calls (100 trades each) to sync_closed_positions_to_db in {elapsed:.4f} seconds ({elapsed/iterations*1000:.4f} ms/call)")
+        finally:
+            if os.path.exists(test_db):
+                os.remove(test_db)
+
 if __name__ == "__main__":
     unittest.main()
