@@ -243,6 +243,34 @@ class TestGEXEngine(unittest.TestCase):
         with patch('sys.stderr') as mock_stderr:
             gex_engine.save_json(invalid_path, {"test": "data"})
 
+    def test_validate_safe_path_symlink_traversal_prevention(self):
+        import gex_engine
+
+        # Test symlink breakout: symlink within temp dir pointing outside allowed roots (/etc)
+        with tempfile.TemporaryDirectory() as tmpdir:
+            outside_dir = "/etc"
+            symlink_path = os.path.join(tmpdir, "outside_symlink")
+            try:
+                os.symlink(outside_dir, symlink_path)
+            except (OSError, NotImplementedError):
+                self.skipTest("Symlinks not supported in environment")
+
+            # Resolving through the symlink to an outside file must raise ValueError
+            target_via_symlink = os.path.join(symlink_path, "passwd")
+            with self.assertRaises(ValueError) as cm:
+                gex_engine.validate_safe_path(target_via_symlink)
+            self.assertIn("Path traversal detected", str(cm.exception))
+
+            # Valid symlink pointing inside allowed roots (inside tmpdir)
+            valid_target = os.path.join(tmpdir, "valid_file.json")
+            with open(valid_target, "w") as f:
+                f.write("{}")
+            valid_symlink = os.path.join(tmpdir, "valid_symlink")
+            os.symlink(valid_target, valid_symlink)
+
+            safe_resolved = gex_engine.validate_safe_path(valid_symlink)
+            self.assertEqual(safe_resolved, os.path.realpath(valid_target))
+
     def test_load_json_and_cli_commands_path_traversal_prevention(self):
         from unittest.mock import patch
         from types import SimpleNamespace
