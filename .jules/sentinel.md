@@ -1,3 +1,8 @@
+## 2026-10-28 - validate_safe_path must resolve canonical paths using realpath to prevent symlink traversal breakouts
+**Vulnerability:** `validate_safe_path()` used `os.path.abspath()` rather than `os.path.realpath()`, allowing symlinks located within allowed directories pointing to outside paths (e.g. `/etc` or root) to bypass `os.path.commonpath()` checks.
+**Learning:** `os.path.abspath()` only performs lexical path normalization on `..` segments and does not follow or resolve filesystem symbolic links, leaving path traversal guards vulnerable to symlink breakouts.
+**Prevention:** Always resolve paths and allowed root directories with `os.path.realpath()` before evaluating `os.path.commonpath()` boundaries.
+
 ## 2026-09-26 - Internal file mtime and scan processing utilities accepting path parameters must validate inputs with validate_safe_path
 **Vulnerability:** `_get_dir_mtime_key()`, `_get_file_mtime()`, and candidate `process_scan_file()` evaluated `os.path.exists()`, `os.path.getmtime()`, or `os.walk()` on path parameters prior to or without calling `validate_safe_path()`, permitting path traversal checks and mtime inspections outside allowed directories.
 **Learning:** Cache mtime lookup utilities and local file processors that accept file or directory paths must validate parameters against allowed roots before executing `os.path.exists()` or inspecting filesystem metadata.
