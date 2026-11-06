@@ -2449,6 +2449,9 @@ class TestGEXEngine(unittest.TestCase):
                     self.assertIn("BABA", output)
                     self.assertIn("FOMO ALERT", output)
                     self.assertIn("CAPITULATION WATCH", output)
+                    self.assertIn("Ticker | Asset Type", output)
+                    self.assertIn("-------+------------", output)
+                    self.assertIn("Sentiment (-1 to +1)", output)
         finally:
             for path in (sent_path, analyses_path, options_path, cand_path):
                 if os.path.exists(path):

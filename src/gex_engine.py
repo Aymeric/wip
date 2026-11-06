@@ -5253,8 +5253,17 @@ def cmd_sentiment(args):
         print(f"- **Lowest Retail Buzz / Capitulation**: {format_color(low_ticker, '35', bold=True)} (Sentiment: {low_score_colored})")
         
     print("\n### Detailed Sentiment Dashboard:")
-    print("| Ticker | Asset Type | Reddit Buzz | Sentiment (-1 to +1) | Retail Narrative & Catalysts | GEX Alignment / Threat Level | Action Recommendation |")
-    print("| :--- | :--- | :--- | :--- | :--- | :--- | :--- |")
+    dashboard_headers = [
+        "Ticker",
+        "Asset Type",
+        "Reddit Buzz",
+        "Sentiment (-1 to +1)",
+        "Retail Narrative & Catalysts",
+        "GEX Alignment / Threat Level",
+        "Action Recommendation",
+    ]
+    dashboard_rows = []
+    dashboard_alignments = ["left", "left", "left", "right", "left", "left", "left"]
     
     fomo_alerts = []
     cap_alerts = []
@@ -5371,8 +5380,17 @@ def cmd_sentiment(args):
         sent_color = "32" if sentiment >= 0.4 else "31" if sentiment <= -0.4 else "37"
         sentiment_fmt = format_color(f"{sentiment:+.2f}", sent_color, bold=True)
         
-        # Print table row
-        print(f"| {format_color(ticker_upper, '35', bold=True)} | {asset_type} | {buzz} | {sentiment_fmt} | {narrative} | {threat_level} | {recommendation} |")
+        dashboard_rows.append([
+            format_color(ticker_upper, "35", bold=True),
+            asset_type,
+            buzz,
+            sentiment_fmt,
+            narrative,
+            threat_level,
+            recommendation,
+        ])
+
+    print(format_table(dashboard_headers, dashboard_rows, empty_message="No sentiment records found.", alignments=dashboard_alignments))
         
     # Scored Sentiment Breakdowns (5-Factor Valuation)
     print("\n### Scored Sentiment Breakdowns (5-Factor Valuation):")
