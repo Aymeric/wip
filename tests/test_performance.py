@@ -202,6 +202,27 @@ class TestPerformanceBenchmark(unittest.TestCase):
             if os.path.exists(pnl_path):
                 os.remove(pnl_path)
 
+    def test_benchmark_format_table(self):
+        from src.gex.presentation.formatters import format_table, format_pnl
+        from src.gex.presentation.ascii_art import format_color
+
+        headers = ['Ticker', 'Class', 'Spot', 'Cost Basis', 'Current Val', 'Unrealized P&L', 'Weight', 'Rule State']
+        rows = [
+            ['AAPL', 'Option', '$160.00', '$1,500.00', '$1,800.00', format_pnl(300.0, 20.0), '3.00%', format_color('[HOLD] Normal Posture', '32')],
+            ['MSFT', 'Stock', '$260.00', '$1,500.00', '$1,300.00', format_pnl(-200.0, -13.33), '3.00%', format_color('[STOP] Trailing Stop', '31')],
+            ['GOOG', 'Stock', '$90.00', '$2,000.00', '$1,800.00', format_pnl(-200.0, -10.00), '4.00%', format_color('[STOP] Stop Loss', '31')],
+            ['AMZN', 'Stock', '$140.00', '$1,200.00', '$1,400.00', format_pnl(200.0, 16.67), '2.40%', format_color('[TAKE] Profit Target', '32')],
+        ] * 10
+        alignments = ['left', 'left', 'right', 'right', 'right', 'right', 'right', 'left']
+        iterations = 2000
+
+        start_time = time.perf_counter()
+        for _ in range(iterations):
+            _ = format_table(headers, rows, alignments=alignments)
+        elapsed = time.perf_counter() - start_time
+
+        print(f"\n[BENCHMARK] Executed {iterations} calls to format_table in {elapsed:.4f} seconds ({elapsed/iterations*1000:.4f} ms/call)")
+
     def test_benchmark_sync_closed_positions_to_db(self):
         import tempfile
         from src.gex.storage.db import sync_closed_positions_to_db
