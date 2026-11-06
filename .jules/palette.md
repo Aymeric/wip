@@ -39,3 +39,7 @@
 ## 2026-11-22 - Consistent Pre-Color Padding in Audit Output
 **Learning:** In pre-market account audit tables (`cmd_audit_all`), applying manual ANSI formatting with fixed format widths like `pnl_s:<21` inflates column width in non-TTY environments and misaligns column pipes (`|`) with header lines (`P&L ($)` at 12 characters).
 **Action:** Always leverage `format_pnl(..., width=N)` which formats and pads the raw string prior to ANSI code encapsulation, and synchronize horizontal boundary separator lengths with total header line width.
+
+## 2026-11-25 - Trailing Delimiter Alignment in Historical Closed Trade Tables
+**Learning:** In terminal CLI historical tables like `cmd_closed`, omitting width padding on the final column (`pnl_pct_fmt`) while using a fixed-width header (`Realized P&L (%)` at 16 chars) causes row endpoints and horizontal boundary separators to visually mismatch header bounds.
+**Action:** Always pass `width=N` to the trailing column formatter (e.g. `format_pnl(pnl_pct=..., width=16)`) and calibrate separator dash lengths to match total header visible width.

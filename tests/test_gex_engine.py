@@ -2710,6 +2710,17 @@ class TestGEXEngine(unittest.TestCase):
                 self.assertIn("Options Stats", output)
                 self.assertIn("Stocks Stats", output)
                 self.assertIn("Total Combined Realized P&L", output)
+
+                # Verify table boundary separator rules and column width alignment
+                sep_line = "  " + "-" * 103
+                self.assertIn(sep_line, output)
+                lines = [l for l in output.splitlines() if "Ticker" in l or "AAPL" in l or "AMZN" in l or sep_line in l]
+                self.assertTrue(len(lines) >= 5)
+                header_line = next(l for l in lines if "Ticker" in l)
+                self.assertEqual(len(header_line), len(sep_line))
+                # Row line length in non-TTY mode matches header and separator length
+                aapl_line = next(l for l in lines if "AAPL" in l)
+                self.assertEqual(len(aapl_line), len(sep_line))
         finally:
             if os.path.exists(options_path):
                 os.remove(options_path)
