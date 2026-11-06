@@ -1,3 +1,8 @@
+## 2026-11-06 - Decision ledger database operations must strictly validate account identifiers with sanitize_account
+**Vulnerability:** `record_decision()`, `query_decisions()`, and `summarize_decisions()` relied solely on `mask_account()` without calling `sanitize_account()`, causing invalid account inputs (such as non-alphanumeric strings or traversal sequences) to be silently swallowed into empty masks rather than rejected.
+**Learning:** `mask_account()` catches `ValueError` from `sanitize_account()` and silently returns `""` for safe display purposes; using `mask_account()` directly for input validation bypasses strict parameter checks on database recording and query routines.
+**Prevention:** Always invoke `sanitize_account()` directly on explicit account arguments before masking or executing database operations.
+
 ## 2026-10-28 - validate_safe_path must resolve canonical paths using realpath to prevent symlink traversal breakouts
 **Vulnerability:** `validate_safe_path()` used `os.path.abspath()` rather than `os.path.realpath()`, allowing symlinks located within allowed directories pointing to outside paths (e.g. `/etc` or root) to bypass `os.path.commonpath()` checks.
 **Learning:** `os.path.abspath()` only performs lexical path normalization on `..` segments and does not follow or resolve filesystem symbolic links, leaving path traversal guards vulnerable to symlink breakouts.

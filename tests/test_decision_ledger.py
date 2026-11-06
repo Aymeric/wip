@@ -218,6 +218,24 @@ class TestDecisionLedgerStorage(unittest.TestCase):
                 db_path=self.db_path,
             )
 
+        # Invalid account string validation (security check)
+        with self.assertRaises(ValueError) as cm:
+            record_decision(
+                decision_type="ENTRY",
+                symbol="AAPL",
+                recommendation="rec",
+                human_answer="APPROVED",
+                account="!@#$%",
+                db_path=self.db_path,
+            )
+        self.assertIn("account must contain at least one alphanumeric character", str(cm.exception))
+
+        with self.assertRaises(ValueError):
+            query_decisions(account="!@#$%", db_path=self.db_path)
+
+        with self.assertRaises(ValueError):
+            summarize_decisions(account="!@#$%", db_path=self.db_path)
+
     def test_summarize_decisions_and_rule_conflicts(self):
         # 1. Approved confirmed entry (No conflict)
         record_decision(

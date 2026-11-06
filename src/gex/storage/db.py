@@ -13,6 +13,7 @@ from pathlib import Path
 from src.gex.core.config import (
     validate_safe_path,
     mask_account,
+    sanitize_account,
     DECISION_TYPES,
     DECISION_ANSWERS,
     DECISION_TEXT_MAX_LEN,
@@ -425,6 +426,9 @@ def record_decision(
     if not sym_norm:
         raise ValueError("symbol cannot be empty")
 
+    # Security: Strictly validate account identifier if provided to prevent malicious inputs
+    if account:
+        sanitize_account(account)
     account_mask = mask_account(account) if account else ""
 
     rec_str = str(recommendation or "").strip()
@@ -477,6 +481,9 @@ def query_decisions(
     db_path: Optional[str] = None,
 ) -> List[Dict[str, Any]]:
     """Queries logged approval decisions from SQLite, newest first."""
+    # Security: Validate account format before querying
+    if account:
+        sanitize_account(account)
     conn = init_db(db_path)
     cur = conn.cursor()
     account_mask = mask_account(account) if account else None
@@ -510,6 +517,9 @@ def summarize_decisions(
     db_path: Optional[str] = None,
 ) -> Dict[str, Any]:
     """Generates an audit summary of decisions, approval rates, and rule conflicts."""
+    # Security: Validate account format before summarizing
+    if account:
+        sanitize_account(account)
     conn = init_db(db_path)
     cur = conn.cursor()
     account_mask = mask_account(account) if account else None
