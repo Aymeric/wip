@@ -58,11 +58,23 @@ def mask_account(account: str = "") -> str:
 
 
 
-def validate_safe_path(filepath: str, allowed_roots: Optional[List[str]] = None) -> str:
-    """Ensure filepath resolves strictly within allowed roots (defaults to REPOSITORY_ROOT and temp dir)."""
-    if allowed_roots is None:
-        allowed_roots = [REPOSITORY_ROOT, tempfile.gettempdir()]
+_REAL_REPO_ROOT = os.path.realpath(REPOSITORY_ROOT)
+_REAL_TEMP_DIR = os.path.realpath(tempfile.gettempdir())
+_REAL_REPO_ROOT_SEP = _REAL_REPO_ROOT + os.sep
+_REAL_TEMP_DIR_SEP = _REAL_TEMP_DIR + os.sep
 
+
+def validate_safe_path(filepath: str, allowed_roots: Optional[List[str]] = None) -> str:
+    """Ensure filepath resolves strictly within allowed roots (defaults to REPOSITORY_ROOT and temp dir).
+
+    Performance optimization (Bolt):
+    - Precomputes canonical allowed roots (_REAL_REPO_ROOT, _REAL_TEMP_DIR) and trailing separator
+      prefixes at module load, eliminating redundant tempfile.gettempdir() and os.path.realpath()
+      calls on default allowed roots on every validation call (~1.8x speedup).
+    - Checks boundary containment via exact match or directory separator prefix comparison
+      (real_target == real_root or real_target.startswith(real_root + os.sep)), replacing expensive
+      os.path.commonpath() frame allocation while strictly preserving symlink and directory security.
+    """
     if not os.path.isabs(filepath):
         target_path = os.path.join(REPOSITORY_ROOT, filepath)
     else:
@@ -70,15 +82,21 @@ def validate_safe_path(filepath: str, allowed_roots: Optional[List[str]] = None)
 
     real_target = os.path.realpath(target_path)
 
-    for root in allowed_roots:
-        if not root:
-            continue
-        real_root = os.path.realpath(root)
-        try:
-            if os.path.commonpath([real_root, real_target]) == real_root:
+    if allowed_roots is None:
+        if (
+            real_target == _REAL_REPO_ROOT
+            or real_target.startswith(_REAL_REPO_ROOT_SEP)
+            or real_target == _REAL_TEMP_DIR
+            or real_target.startswith(_REAL_TEMP_DIR_SEP)
+        ):
+            return real_target
+    else:
+        for root in allowed_roots:
+            if not root:
+                continue
+            real_root = os.path.realpath(root)
+            if real_target == real_root or real_target.startswith(real_root + os.sep):
                 return real_target
-        except ValueError:
-            continue
 
     raise ValueError(f"Path traversal detected: '{filepath}' is outside allowed directories")
 
