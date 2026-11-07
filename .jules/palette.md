@@ -39,3 +39,7 @@
 ## 2026-11-22 - Consistent Pre-Color Padding in Audit Output
 **Learning:** In pre-market account audit tables (`cmd_audit_all`), applying manual ANSI formatting with fixed format widths like `pnl_s:<21` inflates column width in non-TTY environments and misaligns column pipes (`|`) with header lines (`P&L ($)` at 12 characters).
 **Action:** Always leverage `format_pnl(..., width=N)` which formats and pads the raw string prior to ANSI code encapsulation, and synchronize horizontal boundary separator lengths with total header line width.
+
+## 2026-11-25 - Trailing Cell Width Padding in CLI Table Reports
+**Learning:** In CLI tabular reports such as `cmd_closed`, leaving the final column's formatted cell without explicit width padding (e.g., omitting `width=16` on `format_pnl` for `Realized P&L (%)`) causes data rows to terminate prematurely relative to the header line. Furthermore, hardcoding horizontal separator lengths without matching the sum of header column widths and delimiters results in jagged or truncated ASCII table boundaries.
+**Action:** Always apply explicit width padding to all cell formatters matching header column widths (including the final column) and verify that table separator lines (`"-" * N`) precisely equal the total visible length of the header line.
