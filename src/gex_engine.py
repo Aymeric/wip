@@ -5687,7 +5687,7 @@ def cmd_closed(args):
         pnl_dlr_fmt = format_pnl(pnl_dlr=pnl_dlr, bold=True)
         pnl_pct_fmt = format_pnl(pnl_pct=pnl_pct, bold=True)
 
-        rows.append([ticker_fmt, asset_cls, entry_date, close_date, str(days), cb_str, pnl_dlr_fmt, pnl_pct_fmt])
+        rows.append([ticker_fmt, asset_cls, entry_date, close_date, days, cb_str, pnl_dlr_fmt, pnl_pct_fmt])
 
     for opt in closed_options:
         build_row(opt, "Option")

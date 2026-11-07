@@ -2736,7 +2736,7 @@ class TestGEXEngine(unittest.TestCase):
                 self.assertIn("AAPL", output)
                 self.assertIn("AMZN", output)
                 self.assertIn("Ticker | Class", output)
-                self.assertIn("-------+-------", output)
+                self.assertIn("Entry Date | Close Date", output)
                 self.assertIn("Options Stats", output)
                 self.assertIn("Stocks Stats", output)
                 self.assertIn("Total Combined Realized P&L", output)

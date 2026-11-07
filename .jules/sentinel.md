@@ -1,3 +1,8 @@
+## 2026-11-06 - Database operations must validate accounts with sanitize_account to avoid silent fallback to cross-account queries
+**Vulnerability:** `record_decision()`, `query_decisions()`, and `summarize_decisions()` relied directly on `mask_account()`, which catches `ValueError` from `sanitize_account()` and silently returns an empty string `""`. Consequently, passing an invalid account identifier caused `query_decisions()` and `summarize_decisions()` to fall back to unscoped queries across all accounts, leaking private decision logs across accounts.
+**Learning:** Functions that scope data queries by user or account identifiers must explicitly validate parameters using validation helpers (e.g. `sanitize_account()`) rather than display helpers (e.g. `mask_account()`) that silently swallow validation errors and return empty strings.
+**Prevention:** Always invoke `sanitize_account(account)` directly when `account` is provided before scoping database transactions or masking for presentation.
+
 ## 2026-10-28 - validate_safe_path must resolve canonical paths using realpath to prevent symlink traversal breakouts
 **Vulnerability:** `validate_safe_path()` used `os.path.abspath()` rather than `os.path.realpath()`, allowing symlinks located within allowed directories pointing to outside paths (e.g. `/etc` or root) to bypass `os.path.commonpath()` checks.
 **Learning:** `os.path.abspath()` only performs lexical path normalization on `..` segments and does not follow or resolve filesystem symbolic links, leaving path traversal guards vulnerable to symlink breakouts.
