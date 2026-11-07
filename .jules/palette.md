@@ -39,3 +39,7 @@
 ## 2026-11-22 - Consistent Pre-Color Padding in Audit Output
 **Learning:** In pre-market account audit tables (`cmd_audit_all`), applying manual ANSI formatting with fixed format widths like `pnl_s:<21` inflates column width in non-TTY environments and misaligns column pipes (`|`) with header lines (`P&L ($)` at 12 characters).
 **Action:** Always leverage `format_pnl(..., width=N)` which formats and pads the raw string prior to ANSI code encapsulation, and synchronize horizontal boundary separator lengths with total header line width.
+
+## 2026-11-26 - Standardizing Tabular CLI Output with format_table
+**Learning:** In CLI subcommands rendering tabular historical records (e.g. `cmd_closed`), hardcoding manual boundary separators (like `"-" * 99`) and fixed-width f-string cells causes separator line truncation when headers or data exceed 99 characters, and causes column pipe shifts when ANSI colors are rendered.
+**Action:** Always route CLI table outputs through `format_table(headers, rows, alignments=alignments)` to ensure dynamic column measurement, proper numerical right-alignment, and boundary harmony across all terminal themes.
