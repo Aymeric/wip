@@ -43,3 +43,7 @@
 ## 2026-11-25 - Trailing Cell Width Padding in CLI Table Reports
 **Learning:** In CLI tabular reports such as `cmd_closed`, leaving the final column's formatted cell without explicit width padding (e.g., omitting `width=16` on `format_pnl` for `Realized P&L (%)`) causes data rows to terminate prematurely relative to the header line. Furthermore, hardcoding horizontal separator lengths without matching the sum of header column widths and delimiters results in jagged or truncated ASCII table boundaries.
 **Action:** Always apply explicit width padding to all cell formatters matching header column widths (including the final column) and verify that table separator lines (`"-" * N`) precisely equal the total visible length of the header line.
+
+## 2026-11-25 - Neutral Color Semantics for Volatility Discounts and Payoff Cells
+**Learning:** In terminal CLI projection matrices and setup rankings, using binary comparison (`diff < 0` or `pnl >= 0`) causes flat 0.00% volatility discounts to show as an expensive premium (red 31) and flat 0.0% P&L payoff cells to show as profitable (green 32). This creates false alerts and misleading visual cues for users scanning tables.
+**Action:** Always use 3-state evaluation via `get_pnl_color()` or explicit 3-way checks (`positive -> 32`, `negative -> 31`, `zero/flat -> 37`) across all matrix and metric cells so neutral states remain dim.
