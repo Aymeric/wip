@@ -2506,7 +2506,7 @@ def cmd_analyze(args):
             def fmt_pnl_cell(m_val, p_val, width=17):
                 raw_str = f"${m_val:.2f} ({p_val:+.1f}%)"
                 raw_padded = raw_str.ljust(width)
-                p_color = "32" if p_val >= 0 else "31"
+                p_color = get_pnl_color(p_val)
                 p_bold = p_val >= 20.0 or p_val <= -20.0
                 return format_color(raw_padded, p_color, bold=p_bold)
                 
@@ -5559,7 +5559,7 @@ def cmd_rankings(args):
         if iv30_val and hv90_val and hv90_val > 0.0:
             diff = iv30_val - hv90_val
             discount_str = f"{diff:+.2f}%"
-            discount_color = "32" if diff < 0.0 else "31"
+            discount_color = "32" if diff < -0.005 else ("31" if diff > 0.005 else "37")
             
         discount_fmt = format_color(f"{discount_str:<16}", discount_color, bold=(discount_color == "32"))
         
@@ -5650,9 +5650,9 @@ def cmd_closed(args):
         return
         
     print("### 📊 GEX Closed Positions History")
-    print("  " + "-" * 99)
+    print("  " + "-" * 103)
     print(f"  {'Ticker':<6} | {'Class':<7} | {'Entry Date':<11} | {'Close Date':<11} | {'Days':<4} | {'Cost Basis':<11} | {'Realized P&L ($)':<16} | {'Realized P&L (%)'}")
-    print("  " + "-" * 99)
+    print("  " + "-" * 103)
     
     def format_row(item, asset_cls):
         ticker = item.get("Ticker") or item.get("Underlier", "Unknown").upper()
@@ -5690,7 +5690,7 @@ def cmd_closed(args):
         pnl_pct = item.get("Realized P&L (%)", 0.0)
         
         pnl_dlr_fmt = format_pnl(pnl_dlr=pnl_dlr, bold=True, width=16)
-        pnl_pct_fmt = format_pnl(pnl_pct=pnl_pct, bold=True)
+        pnl_pct_fmt = format_pnl(pnl_pct=pnl_pct, bold=True, width=16)
         
         print(f"  {ticker_fmt} | {cls_fmt} | {entry_date:<11} | {close_date:<11} | {days_str} | {cb_fmt} | {pnl_dlr_fmt} | {pnl_pct_fmt}")
 
@@ -5699,7 +5699,7 @@ def cmd_closed(args):
     for stk in closed_stocks:
         format_row(stk, "Stock")
         
-    print("  " + "-" * 99)
+    print("  " + "-" * 103)
     
     # Print summarized stats
     if closed_options:
@@ -6412,7 +6412,7 @@ def cmd_payoff(args):
         def fmt_pnl_cell(m_val, p_val, width=17):
             raw_str = f"${m_val:.2f} ({p_val:+.1f}%)"
             raw_padded = raw_str.ljust(width)
-            p_color = "32" if p_val >= 0 else "31"
+            p_color = get_pnl_color(p_val)
             p_bold = p_val >= 20.0 or p_val <= -20.0
             return format_color(raw_padded, p_color, bold=p_bold)
             

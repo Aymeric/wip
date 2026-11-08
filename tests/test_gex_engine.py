@@ -2738,6 +2738,17 @@ class TestGEXEngine(unittest.TestCase):
                 self.assertIn("Options Stats", output)
                 self.assertIn("Stocks Stats", output)
                 self.assertIn("Total Combined Realized P&L", output)
+
+                lines = output.splitlines()
+                sep_lines = [line for line in lines if line.startswith("  -") and set(line.strip()) == {"-"}]
+                self.assertTrue(len(sep_lines) >= 3, "Expected at least 3 separator lines in closed table")
+                header_line = [line for line in lines if "Ticker" in line and "Realized P&L (%)" in line][0]
+                for sep in sep_lines:
+                    self.assertEqual(len(sep), len(header_line), f"Separator width {len(sep)} should match header width {len(header_line)}")
+
+                row_lines = [line for line in lines if line.startswith("  AAPL") or line.startswith("  AMZN")]
+                for row in row_lines:
+                    self.assertEqual(len(row), len(header_line), f"Data row length {len(row)} should match header length {len(header_line)}")
         finally:
             if os.path.exists(options_path):
                 os.remove(options_path)
