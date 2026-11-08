@@ -898,6 +898,38 @@ class TestPhase2ModularArchitecture(unittest.TestCase):
         row1_vis = re.sub(r"\x1b\[[0-9;]*[a-zA-Z]", "", table_lines[2])
         self.assertIn(" $180.00 |", row1_vis)
 
+    def test_3_state_pnl_and_vol_discount_neutral_coloring(self):
+        """Tests that 0.00% P&L and 0.00% volatility discount evaluate to neutral dim ANSI 37."""
+        import sys
+        from src.gex.presentation.ascii_art import format_color
+        from src.gex.presentation.formatters import get_pnl_color
+
+        orig_isatty = sys.stdout.isatty
+        try:
+            sys.stdout.isatty = lambda: True
+
+            # 1. get_pnl_color semantics
+            self.assertEqual(get_pnl_color(10.5), "32")
+            self.assertEqual(get_pnl_color(-5.0), "31")
+            self.assertEqual(get_pnl_color(0.0), "37")
+            self.assertEqual(get_pnl_color(0.001), "37")
+
+            # 2. Simulated payoff cell formatting at 0.0% P&L
+            p_val = 0.0
+            p_color = get_pnl_color(p_val)
+            formatted_cell = format_color(f"$10.00 ({p_val:+.1f}%)".ljust(17), p_color, bold=False)
+            self.assertIn("\033[0;37m", formatted_cell)
+            self.assertNotIn("\033[0;32m", formatted_cell)
+            self.assertNotIn("\033[0;31m", formatted_cell)
+
+            # 3. Volatility discount 3-state evaluation
+            for iv, hv, expected_color in [(30.0, 35.0, "32"), (40.0, 30.0, "31"), (35.0, 35.0, "37")]:
+                diff = iv - hv
+                discount_color = "32" if diff < -0.005 else ("31" if diff > 0.005 else "37")
+                self.assertEqual(discount_color, expected_color)
+        finally:
+            sys.stdout.isatty = orig_isatty
+
 
 if __name__ == "__main__":
     unittest.main()
