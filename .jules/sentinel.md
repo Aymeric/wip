@@ -1,3 +1,8 @@
+## 2026-11-07 - SQLite trade storage operations must validate account parameters with sanitize_account
+**Vulnerability:** `upsert_trade()`, `query_trade_metrics()`, and `sync_closed_positions_to_db()` accepted `account` parameters directly without validating or normalizing them via `sanitize_account()`, allowing malformed or unsanitized account inputs to be queried or recorded in the database.
+**Learning:** All database access layers accepting account or user identifier boundaries must uniformly enforce validation and sanitization at the entry point of querying and storage functions to prevent data pollution and ensure consistent multi-account isolation.
+**Prevention:** Always invoke `sanitize_account(account)` directly when `account` is passed to SQLite database storage or query functions before binding query parameters or storing records.
+
 ## 2026-11-06 - Database operations must validate accounts with sanitize_account to avoid silent fallback to cross-account queries
 **Vulnerability:** `record_decision()`, `query_decisions()`, and `summarize_decisions()` relied directly on `mask_account()`, which catches `ValueError` from `sanitize_account()` and silently returns an empty string `""`. Consequently, passing an invalid account identifier caused `query_decisions()` and `summarize_decisions()` to fall back to unscoped queries across all accounts, leaking private decision logs across accounts.
 **Learning:** Functions that scope data queries by user or account identifiers must explicitly validate parameters using validation helpers (e.g. `sanitize_account()`) rather than display helpers (e.g. `mask_account()`) that silently swallow validation errors and return empty strings.

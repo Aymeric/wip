@@ -7,6 +7,7 @@ Unit tests for roadmap implementations:
 """
 
 import os
+import tempfile
 import unittest
 from src.gex.quant.greeks import calculate_black_scholes_gamma
 from src.gex.core.models import OptionQuote, GexProfile, ScannerCandidate, RegimeStatus
@@ -333,6 +334,46 @@ class TestRoadmapImplementations(unittest.TestCase):
             init_db("../../etc/passwd.db")
         with self.assertRaises(ValueError):
             init_db("/etc/passwd.db")
+
+    def test_db_account_validation_and_sanitization(self):
+        from src.gex.storage.db import (
+            upsert_trade,
+            query_trade_metrics,
+            sync_closed_positions_to_db,
+        )
+        with tempfile.TemporaryDirectory() as temp_dir:
+            test_db = os.path.join(temp_dir, "trades_validation.db")
+
+            # 1. Invalid account inputs must raise ValueError
+            invalid_accounts = ["../../../", "!@#$%", "---", "   "]
+            for bad_acc in invalid_accounts:
+                with self.assertRaises(ValueError):
+                    query_trade_metrics(account=bad_acc, db_path=test_db)
+                with self.assertRaises(ValueError):
+                    upsert_trade(
+                        "t1", "AAPL", "STOCK", 10.0, 150.0, 160.0, 100.0, 6.67,
+                        account=bad_acc, db_path=test_db
+                    )
+                with self.assertRaises(ValueError):
+                    sync_closed_positions_to_db(
+                        {"closed_stocks": [{"Ticker": "AAPL", "Close Price": 160.0}]},
+                        account=bad_acc,
+                        db_path=test_db,
+                    )
+                with self.assertRaises(ValueError):
+                    sync_closed_positions_to_db(
+                        {"closed_stocks": [{"Ticker": "AAPL", "Account": bad_acc}]},
+                        db_path=test_db,
+                    )
+
+            # 2. Valid account with normalization
+            upsert_trade(
+                "t_valid", "MSFT", "STOCK", 5.0, 200.0, 220.0, 100.0, 10.0,
+                account="••••9961", db_path=test_db
+            )
+            metrics = query_trade_metrics(account="9961", db_path=test_db)
+            self.assertEqual(metrics["total_trades"], 1)
+            self.assertEqual(metrics["total_realized_pnl"], 100.0)
 
     def test_multi_account_cache_isolation(self):
         from src.gex_engine import _JSON_FILE_CACHE, clear_account_cache
