@@ -47,6 +47,9 @@ ignore = [
     "E501",  # line length handled by black/formatter style
 ]
 
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["E402"]
+
 [tool.pytest.ini_options]
 minversion = "7.0"
 addopts = "-ra -q"
@@ -59,7 +62,27 @@ python_files = [
 
 [tool.mypy]
 python_version = "3.10"
+mypy_path = "src:."
+files = ["src/gex"]
 warn_return_any = false
 warn_unused_configs = true
 disallow_untyped_defs = false
 ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = ["gex.core.*", "src.gex.core.*"]
+check_untyped_defs = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+
+[[tool.mypy.overrides]]
+module = ["gex.quant.*", "src.gex.quant.*"]
+check_untyped_defs = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+
+[[tool.mypy.overrides]]
+module = ["gex.risk.*", "src.gex.risk.*"]
+check_untyped_defs = true
+warn_redundant_casts = true
+warn_unused_ignores = true

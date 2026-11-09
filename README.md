@@ -1076,5 +1076,40 @@ The cache file [data/candidate_stocks.json](data/candidate_stocks.json) persists
 
 ---
 
+## 🛠️ Development, Code Quality & CI/CD
+
+The GEX Trading System enforces continuous integration, static analysis, and multi-harness consistency gates.
+
+### 1. Developer Setup
+Install development dependencies in editable mode:
+```bash
+pip install -e ".[dev]"
+```
+
+### 2. Code Quality & Static Analysis
+Run linting and type checking locally:
+```bash
+# Lint checks across domain packages and test suite
+ruff check src/gex tests
+
+# Static type checking across modular packages
+mypy src/gex
+```
+
+### 3. Test Suite & Benchmarks
+Execute unit tests, performance benchmarks, and harness synchronization parity checks:
+```bash
+# Run unit test suite
+python3 -m unittest discover tests
+
+# Run quantitative performance benchmarks
+python3 tests/test_performance.py
+
+# Verify multi-harness (.agents/ vs .github/) synchronization parity
+python3 scripts/sync_harnesses.py --check
+```
+
+---
+
 > **Disclaimer**: *The content of this repository is strictly for educational and automation demonstration purposes. None of the included materials, code, or metrics constitute official financial, tax, or investment advice.*
 

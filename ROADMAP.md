@@ -38,11 +38,12 @@ The system's engineering lifecycle is organized into structured phases:
   - [x] Integrated benchmark verification ([tests/test_performance.py](tests/test_performance.py)) and harness sync checks ([scripts/sync_harnesses.py](scripts/sync_harnesses.py)).
 
 ### 1.4 Static Analysis CI Gate (ruff + mypy) ([#162](https://github.com/Aymeric/wip/issues/162))
+- **Status**: ✅ **Implemented** (configured in [pyproject.toml](pyproject.toml), executed in [.github/workflows/ci.yml](.github/workflows/ci.yml), and documented in [README.md](README.md)).
 - **Need & Outcome**: `ruff` and `mypy` are configured in [pyproject.toml](pyproject.toml) but never executed in [.github/workflows/ci.yml](.github/workflows/ci.yml), so lint and type regressions in the modular `src/gex/` packages go undetected.
 - **Action Items**:
-  - [ ] Add `ruff check` and `mypy src/gex` steps to the CI matrix.
-  - [ ] Establish a baseline (per-module ignores/allowlist) so the gate starts green without a mass rewrite.
-  - [ ] Ratchet strictness per package (`core`, `quant`, `risk` first) and document the local commands in [README.md](README.md).
+  - [x] Add `ruff check` and `mypy src/gex` steps to the CI matrix.
+  - [x] Establish a baseline (per-module ignores/allowlist) so the gate starts green without a mass rewrite.
+  - [x] Ratchet strictness per package (`core`, `quant`, `risk` first) and document the local commands in [README.md](README.md).
 
 ---
 
@@ -266,7 +267,7 @@ src/gex/
 | **Dynamic Delta Rolling Engine** | Phase 5 (Advanced Strategy) | 🟢 Low | ✅ Completed | Systematic roll-up/roll-out rules for winning options (Delta >= 0.70) | Phase 3 |
 | **Automated Macro Hedge Sizing** | Phase 5 (Advanced Strategy) | 🟢 Low | ✅ Completed | Beta-weighted SPY/QQQ hedge sizing on defensive regime transitions | Phase 3 |
 | **Intraday Level Breach Monitor** | Phase 5 (Advanced Strategy) | 🟡 Medium | 📋 Planned | Real-time monitoring daemon for Stop 1 / Profit Target breaches | Phase 4 |
-| **Static Analysis CI Gate** | Phase 1 (Foundations) | 🟡 Medium | 📋 Planned | ruff + mypy enforced in CI with baseline ratchet | Phase 1 |
+| **Static Analysis CI Gate** | Phase 1 (Foundations) | 🟡 Medium | ✅ Completed | ruff + mypy enforced in CI with baseline ratchet | Phase 1 |
 | **Stop-Coded Exit Attribution** | Phase 5 (Advanced Strategy) | 🔴 High | ✅ Completed | Per-stop expectancy via coded `exit_reason` | Phase 4 |
 | **Approval Decision Ledger** | Phase 5 (Advanced Strategy) | 🟡 Medium | ✅ Completed | Durable provenance of approvals, declines, and overrides | Phase 4 |
 | **IV Rank / Percentile Context** | Phase 5 (Advanced Strategy) | 🟢 Low | 📋 Planned | Relative IV context for entries (gate only after backtest) | 5.1 |
