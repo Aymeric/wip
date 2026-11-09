@@ -133,8 +133,9 @@ def upsert_trade(
     conn: Optional[sqlite3.Connection] = None,
 ) -> None:
     """Inserts or updates a trade record in the embedded database."""
+    validated_account = sanitize_account(account) if account else account
     params = (
-        trade_id, account, symbol, asset_type, quantity,
+        trade_id, validated_account, symbol, asset_type, quantity,
         entry_price, exit_price, realized_pnl, realized_pnl_pct,
         opened_at, closed_at, holding_days, exit_reason, target_mode
     )
@@ -149,6 +150,8 @@ def upsert_trade(
 
 def query_trade_metrics(account: Optional[str] = None, db_path: Optional[str] = None) -> Dict[str, Any]:
     """Computes quantitative trade journal metrics from the database."""
+    if account:
+        account = sanitize_account(account)
     conn = init_db(db_path)
     cur = conn.cursor()
 
@@ -219,6 +222,9 @@ def sync_closed_positions_to_db(
     """
     from datetime import date
 
+    if account:
+        account = sanitize_account(account)
+
     closed_options = closed_data.get("closed_options", []) or []
     closed_stocks = closed_data.get("closed_stocks", []) or []
 
@@ -254,7 +260,7 @@ def sync_closed_positions_to_db(
 
         exit_reason = opt.get("Close Reason") or opt.get("Exit Reason") or opt.get("Rule State") or "MANUAL"
         target_mode = opt.get("Target Mode", "T1")
-        trade_account = account or opt.get("Account") or ""
+        trade_account = account or (sanitize_account(opt.get("Account")) if opt.get("Account") else "")
 
         trade_records.append((
             str(opt_id),
@@ -293,7 +299,7 @@ def sync_closed_positions_to_db(
                 pass
 
         exit_reason = stk.get("Close Reason") or stk.get("Exit Reason") or "MANUAL"
-        trade_account = account or stk.get("Account") or ""
+        trade_account = account or (sanitize_account(stk.get("Account")) if stk.get("Account") else "")
 
         trade_records.append((
             str(trade_id),
