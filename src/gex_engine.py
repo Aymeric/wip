@@ -170,6 +170,12 @@ from src.gex.screening.scanner import (
 from src.gex.screening.selector import (
     select_best_option,
 )
+from src.gex.screening.monitor import (
+    PositionBreachAlert,
+    evaluate_holding_breaches,
+    run_monitor_pass,
+    monitor_daemon,
+)
 from src.gex.quant.gex import (
     extract_quotes_list,
     derive_gex_profile,
@@ -3769,6 +3775,40 @@ def cmd_audit_all(args):
         print("  " + "-" * 80)
 
 
+def cmd_monitor(args):
+    """Run intraday GEX level breach monitor daemon or single pass."""
+    raw_account = getattr(args, "account", "")
+    target_account = sanitize_account(raw_account) if raw_account else ""
+    interval = getattr(args, "interval", 60)
+    should_alert = getattr(args, "alert", False)
+    is_once = getattr(args, "once", False)
+    is_json = getattr(args, "json", False)
+
+    if is_once:
+        result = run_monitor_pass(account=target_account, alert=should_alert)
+        if is_json:
+            print(json.dumps(result, indent=2))
+        else:
+            ts = result.get("timestamp", "")
+            breaches = result.get("breaches", [])
+            checked = result.get("total_positions_checked", 0)
+            accs = ", ".join(result.get("accounts_checked", [])) or "None"
+            print(format_color(f"🛰️ GEX Level Breach Monitor (Single Pass: {ts})", "36", bold=True))
+            print(f"Checked accounts: {accs} | Total positions: {checked}")
+            if breaches:
+                print(format_color(f"\n⚠️ {len(breaches)} LEVEL BREACH(ES) DETECTED:", "31", bold=True))
+                for b in breaches:
+                    acc_label = b.get("masked_account") or b.get("account") or "Account"
+                    print(
+                        f"  - [{acc_label}] {b.get('symbol')} ({b.get('position_type')}): "
+                        f"{b.get('breach_type')} (Spot ${b.get('spot', 0.0):.2f} vs Level ${b.get('threshold', 0.0):.2f}) -> {b.get('action')}"
+                    )
+            else:
+                print(format_color("\n✅ All holdings within structural runway bounds.", "32", bold=True))
+    else:
+        monitor_daemon(interval=interval, account=target_account, alert=should_alert)
+
+
 def cmd_add_pos(args):
     """Add new options position manually."""
     options_file = account_positions_file(getattr(args, "account", ""))
@@ -6750,6 +6790,14 @@ def main():
     p_audit_all.add_argument("--json", action="store_true", help="Output machine-readable JSON summary instead of markdown")
     p_audit_all.add_argument("--alert", action="store_true", help="Dispatch system notification webhooks/desktop alerts if any stop breaches are detected")
 
+    # monitor subcommand (Roadmap 5.4 Intraday GEX Level Breach Monitor & Alert Daemon)
+    p_monitor = subparsers.add_parser("monitor", help="Intraday GEX level breach monitor daemon and real-time alert engine.")
+    p_monitor.add_argument("--account", type=str, default="", help="Optional account number used to scope active holdings (monitors all accounts if omitted)")
+    p_monitor.add_argument("--interval", type=int, default=60, help="Polling interval in seconds between monitoring passes (default: 60)")
+    p_monitor.add_argument("--alert", action="store_true", help="Dispatch system notification webhooks/desktop alerts upon level breaches")
+    p_monitor.add_argument("--once", action="store_true", help="Execute a single monitoring pass and exit")
+    p_monitor.add_argument("--json", action="store_true", help="Output machine-readable JSON format")
+
     # record-decision subcommand (Roadmap 5.6 Approval Decision Ledger)
     p_rec_dec = subparsers.add_parser("record-decision", help="Record human-in-the-loop trade approval or exit decision.")
     p_rec_dec.add_argument("--account", type=str, required=True, help="Account number used to scope decision provenance")
@@ -6879,6 +6927,8 @@ def main():
         cmd_journal(args)
     elif args.command == "audit-all":
         cmd_audit_all(args)
+    elif args.command == "monitor":
+        cmd_monitor(args)
     elif args.command == "record-decision":
         cmd_record_decision(args)
     elif args.command == "decisions":

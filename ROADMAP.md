@@ -205,12 +205,13 @@ src/gex/
   - [x] Expose CLI command `python3 src/gex_engine.py hedge-plan --account ACCOUNT_NUMBER`.
 
 ### 5.4 Intraday GEX Level Breach Monitor & Real-Time Alert Daemon
+- **Status**: ✅ **Implemented** (module in [src/gex/screening/monitor.py](src/gex/screening/monitor.py); CLI command `monitor` in [src/gex_engine.py](src/gex_engine.py); tests in [tests/test_monitor.py](tests/test_monitor.py)).
 - **Need & Outcome**: Daily GEX levels ($pTrans$, $nTrans$, $+GEX$) provide structural runway bounds, but underlying spot prices can breach $nTrans$ (Stop 1) or reach $+GEX$ (Profit Target) during trading hours. This daemon monitors active holdings in near-real-time and dispatches instant webhook/desktop alerts upon level breaches.
 - **Action Items**:
-  - [ ] Implement `src/gex/screening/monitor.py` with lightweight polling/event loop for active position underliers.
-  - [ ] Compare intraday quotes against active holding GEX thresholds ($nTrans$ stop breach, $+GEX$ target touch, trailing stop giveback).
-  - [ ] Integrate with `dispatch_system_alert` for instant Slack, Discord, Telegram, and desktop notifications.
-  - [ ] Expose CLI daemon command `python3 src/gex_engine.py monitor --interval SECONDS --alert`.
+  - [x] Implement `src/gex/screening/monitor.py` with lightweight polling/event loop for active position underliers.
+  - [x] Compare intraday quotes against active holding GEX thresholds ($nTrans$ stop breach, $+GEX$ target touch, trailing stop giveback).
+  - [x] Integrate with `dispatch_system_alert` for instant Slack, Discord, Telegram, and desktop notifications.
+  - [x] Expose CLI daemon command `python3 src/gex_engine.py monitor --interval SECONDS --alert`.
 
 ### 5.5 Stop-Coded Exit Attribution ([#163](https://github.com/Aymeric/wip/issues/163))
 - **Status**: ✅ **Implemented** (codes in [src/gex/core/config.py](src/gex/core/config.py); tests in [tests/test_exit_attribution.py](tests/test_exit_attribution.py)).
@@ -266,7 +267,7 @@ src/gex/
 | **Historical Replay & Backtesting** | Phase 5 (Advanced Strategy) | 🟡 Medium | 📋 Planned | Offline simulation harness for rule validation across downloads | Phase 4 |
 | **Dynamic Delta Rolling Engine** | Phase 5 (Advanced Strategy) | 🟢 Low | ✅ Completed | Systematic roll-up/roll-out rules for winning options (Delta >= 0.70) | Phase 3 |
 | **Automated Macro Hedge Sizing** | Phase 5 (Advanced Strategy) | 🟢 Low | ✅ Completed | Beta-weighted SPY/QQQ hedge sizing on defensive regime transitions | Phase 3 |
-| **Intraday Level Breach Monitor** | Phase 5 (Advanced Strategy) | 🟡 Medium | 📋 Planned | Real-time monitoring daemon for Stop 1 / Profit Target breaches | Phase 4 |
+| **Intraday Level Breach Monitor** | Phase 5 (Advanced Strategy) | 🟡 Medium | ✅ Completed | Real-time monitoring daemon for Stop 1 / Profit Target breaches | Phase 4 |
 | **Static Analysis CI Gate** | Phase 1 (Foundations) | 🟡 Medium | ✅ Completed | ruff + mypy enforced in CI with baseline ratchet | Phase 1 |
 | **Stop-Coded Exit Attribution** | Phase 5 (Advanced Strategy) | 🔴 High | ✅ Completed | Per-stop expectancy via coded `exit_reason` | Phase 4 |
 | **Approval Decision Ledger** | Phase 5 (Advanced Strategy) | 🟡 Medium | ✅ Completed | Durable provenance of approvals, declines, and overrides | Phase 4 |
