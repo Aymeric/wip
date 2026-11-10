@@ -223,6 +223,20 @@ class TestPerformanceBenchmark(unittest.TestCase):
 
         print(f"\n[BENCHMARK] Executed {iterations} calls to format_table in {elapsed:.4f} seconds ({elapsed/iterations*1000:.4f} ms/call)")
 
+    def test_benchmark_select_transition_points(self):
+        from src.gex.quant.greeks import select_transition_points
+
+        flip_strikes = [70.0, 75.0, 82.5, 91.0, 97.5, 102.5, 107.0, 115.0, 120.0]
+        spot = 100.0
+        iterations = 100000
+
+        start_time = time.perf_counter()
+        for _ in range(iterations):
+            _ = select_transition_points(flip_strikes, spot=spot, cotmp=95.0, put_wall=92.0, secondary_put_wall=88.0)
+        elapsed = time.perf_counter() - start_time
+
+        print(f"\n[BENCHMARK] Executed {iterations} calls to select_transition_points in {elapsed:.4f} seconds ({elapsed/iterations*1000:.4f} ms/call)")
+
     def test_benchmark_sync_closed_positions_to_db(self):
         import tempfile
         from src.gex.storage.db import sync_closed_positions_to_db
