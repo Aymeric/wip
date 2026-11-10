@@ -13,4 +13,4 @@ Activate the **gex-candidate-generator** skill to:
 3. Apply quantitative baseline and options liquidity filters (Price \$5-\$1000, 30d Avg Vol $\ge 200\text{k}$, 30d Avg Options Vol $\ge 10\text{k}$ or Relative Options Vol $\ge 1.5\times$, Market Cap $\ge \$1\text{B}$).
 4. Overlay daily RSI/MACD indicators, and pre-screen viable 30–45 DTE option contract candidates.
 5. Update `data/candidate_stocks.json` and `data/candidate_options.json`.
-6. Prune outdated entries from `GEX_DAILY_CANDIDATES` via `prune-candidates` and `remove_from_watchlist`, synchronize valid stock candidates to `GEX_DAILY_CANDIDATES`, and synchronize isolated option candidates to the dedicated Robinhood "options watchlist" via `add_option_to_watchlist`.
+6. Prune outdated entries from `GEX_DAILY_CANDIDATES` via `prune-candidates` and `remove_from_watchlist`, synchronize valid stock candidates to `GEX_DAILY_CANDIDATES`, and synchronize isolated option candidates to the dedicated Robinhood "options watchlist" via `add_option_to_watchlist` (execute watchlist updates autonomously without prompts under Antigravity Automations).
