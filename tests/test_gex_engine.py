@@ -2473,6 +2473,12 @@ class TestGEXEngine(unittest.TestCase):
                     
                     output = "".join(call.args[0] for call in mock_stdout.write.call_args_list if call.args)
                     self.assertIn("Reddit Sentiment Analysis Report", output)
+                    self.assertIn("Detailed Sentiment Dashboard:", output)
+                    # Verify format_table headers and separator
+                    self.assertIn("Ticker", output)
+                    self.assertIn("Reddit Buzz", output)
+                    self.assertIn("Sentiment (-1 to +1)", output)
+                    self.assertIn("-+-", output)
                     self.assertIn("OKLO", output)
                     self.assertIn("BABA", output)
                     self.assertIn("FOMO ALERT", output)
