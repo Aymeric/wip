@@ -45,11 +45,12 @@ Your job is to derive the daily candidate universe for **both options contracts 
   ```
 
 ### Step 5: Dual Watchlist Synchronization & Hygiene Pruning
+- **Antigravity Automations Autonomy**: When running under Antigravity Automations (scheduled background cron, unattended runs, or automated workflows), dual watchlist synchronization and hygiene pruning (`add_to_watchlist`, `remove_from_watchlist`, `add_option_to_watchlist`, `remove_option_from_watchlist`) MUST execute autonomously without prompting the user. Interactive `ask_question` prompts are reserved strictly for manual/interactive sessions and monetary trade execution.
 - **Equity Watchlist (`GEX_DAILY_CANDIDATES`)**:
   - Run `python3 src/gex_engine.py prune-candidates`.
-  - Confirm with user via `ask_question` and prune outdated symbols via `robinhood-trading/remove_from_watchlist`.
+  - Prune outdated symbols via `robinhood-trading/remove_from_watchlist` (prompt user via `ask_question` only if interactive; execute autonomously in automations).
   - Sync verified and pending underlier candidates via `robinhood-trading/add_to_watchlist` (`symbols`).
 - **Options Watchlist (`Options Watchlist`)**:
   - Inspect contracts via `robinhood-trading/get_option_watchlist`.
   - Add qualifying option contract candidates via `robinhood-trading/add_option_to_watchlist(option_ids=[...], position_type="long")`.
-  - Prune expired or invalidated contracts via `robinhood-trading/remove_option_from_watchlist(option_ids=[...])` after confirmation.
+  - Prune expired or invalidated contracts via `robinhood-trading/remove_option_from_watchlist(option_ids=[...])` (prompt user via `ask_question` only if interactive; execute autonomously in automations).

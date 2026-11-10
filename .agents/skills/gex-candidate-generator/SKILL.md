@@ -93,11 +93,11 @@ For each screened candidate underlier and for contracts retrieved from `get_opti
    - **Equity Watchlist (`GEX_DAILY_CANDIDATES`)**:
      - Inspect current entries via `robinhood-trading/get_watchlist_items`.
      - Run `python3 src/gex_engine.py prune-candidates --watchlist-file data/downloads/YYYYMMDD/watchlist_gex_daily_candidates.json`.
-     - Confirm with user via `ask_question` and prune active holdings, rejected setups, or stale tickers via `robinhood-trading/remove_from_watchlist`.
+     - Prune active holdings, rejected setups, or stale tickers via `robinhood-trading/remove_from_watchlist`. In Antigravity Automations, execute pruning autonomously without prompting; in interactive manual sessions, confirm via `ask_question`.
    - **Options Watchlist (`Options Watchlist`)**:
      - Inspect current contracts via `robinhood-trading/get_option_watchlist`.
-     - Identify any contracts that have expired, are delisted, or belong to underliers that have broken support ($nTrans$).
-     - Confirm with user via `ask_question` and remove outdated options via `robinhood-trading/remove_option_from_watchlist(option_ids=[...])`.
+     - Identify any contracts that have expired, are $\le 14$ DTE, are delisted, or belong to underliers that have broken support ($nTrans$).
+     - Remove outdated options via `robinhood-trading/remove_option_from_watchlist(option_ids=[...])`. In Antigravity Automations, execute pruning autonomously without prompting; in interactive manual sessions, confirm via `ask_question`.
 4. **Dual Watchlist Synchronization**:
-   - **Stock Candidates / Pending Underliers**: Sync to `GEX_DAILY_CANDIDATES` via `robinhood-trading/add_to_watchlist(symbols=[...])`.
-   - **Option Candidates**: Add qualifying option contract candidates to the dedicated Robinhood **"options watchlist"** via `robinhood-trading/add_option_to_watchlist(option_ids=[...], position_type="long")`.
+   - **Stock Candidates / Pending Underliers**: Sync to `GEX_DAILY_CANDIDATES` via `robinhood-trading/add_to_watchlist(symbols=[...])` (executed autonomously without prompting in Antigravity Automations).
+   - **Option Candidates**: Add qualifying option contract candidates to the dedicated Robinhood **"options watchlist"** via `robinhood-trading/add_option_to_watchlist(option_ids=[...], position_type="long")` (executed autonomously without prompting in Antigravity Automations).

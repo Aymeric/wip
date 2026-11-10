@@ -6,9 +6,10 @@ When working in this repository:
    - Do not perform manual calculations for option Greeks, GEX indicators, regime breadth, or position sizing. Use `python3 src/gex_engine.py <subcommand>`.
    - Never infer, guess, or assume missing market data. If live quotes or GEX levels are unavailable, record `UNKNOWN/BLOCKED` with explicit evidence.
 
-2. **User Interaction Convention**:
+2. **User Interaction Convention & Automations**:
    - For all user prompts requiring decisions, confirmations, account picks (unless explicitly specified in the prompt), or gate skips, invoke the `ask_question` tool.
    - Never ask or confirm orders via free-form chat.
+   - **Antigravity Automations Watchlist Maintenance Exemption**: Watchlist maintenance (adding pending/screened underliers to `GEX_DAILY_CANDIDATES`, syncing option candidates to the Options Watchlist, and pruning outdated/rejected/expired entries) is non-financial candidate tracking hygiene. When running from Antigravity Automations (scheduled background cron, unattended runs, or automated workflows), execute watchlist synchronization and pruning autonomously without prompting the user via `ask_question`. Interactive prompts are reserved for monetary order executions (`place_equity_order`, `place_option_order`) and manual risk stop overrides.
 
 3. **Account Partitioning**:
    - Every operation touching Robinhood positions or P&L must be account-scoped. Always specify `--account ACCOUNT_NUMBER` in CLI invocations.
