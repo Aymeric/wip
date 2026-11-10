@@ -47,3 +47,7 @@
 ## 2026-11-25 - Neutral Color Semantics for Volatility Discounts and Payoff Cells
 **Learning:** In terminal CLI projection matrices and setup rankings, using binary comparison (`diff < 0` or `pnl >= 0`) causes flat 0.00% volatility discounts to show as an expensive premium (red 31) and flat 0.0% P&L payoff cells to show as profitable (green 32). This creates false alerts and misleading visual cues for users scanning tables.
 **Action:** Always use 3-state evaluation via `get_pnl_color()` or explicit 3-way checks (`positive -> 32`, `negative -> 31`, `zero/flat -> 37`) across all matrix and metric cells so neutral states remain dim.
+
+## 2026-12-02 - ANSI-Aware Column Alignment in Terminal Tables
+**Learning:** Printing Markdown pipe tables directly via raw string formatting in CLI output without calculating cell visible width causes columns to misalign whenever cells vary in length or contain ANSI escape sequences (such as colored tickers or score badges). Right-aligning numeric columns also vastly improves number scanning.
+**Action:** Route CLI tables through `format_table` with explicit per-column `alignments` (right-aligning numeric scores) to ensure pixel/character-perfect alignment across diverse terminal widths and screen readers.
