@@ -2444,7 +2444,7 @@ def cmd_analyze(args):
         print("  This matrix simulates target contract value using Delta & Gamma price adjustment")
         print("  and is adjusted for square-root-of-time extrinsic decay.")
         print("  " + "-" * 141)
-        print(f"  {'Target Spot':<20} | {'Underlier %':<11} | {'Scenario / Level':<24} | {'Day 0 (Instant)':<17} | {'Day 3 Held':<17} | {'Day 7 Held':<17} | {'Day 14 Held'}")
+        print(f"  {'Target Spot':<20} | {'Underlier %':<11} | {'Scenario / Level':<24} | {'Day 0 (Instant)':<17} | {'Day 3 Held':<17} | {'Day 7 Held':<17} | {'Day 14 Held':<17}")
         print("  " + "-" * 141)
         
         # Scenarios to print
@@ -6412,9 +6412,9 @@ def cmd_payoff(args):
         spots_list = [round(spot * (1 + p/100.0), 2) for p in [-10.0, -5.0, -2.0, 0.0, 2.0, 5.0, 10.0]]
         spots_list = sorted(list(set(spots_list)))
         
-    print("  " + "-" * 106)
-    print(f"  {'Target Spot':<18} | {'Underlier %':<11} | {'Day 0 (Instant)':<17} | {'Day 3 Held':<17} | {'Day 7 Held':<17} | {'Day 14 Held'}")
-    print("  " + "-" * 106)
+    print("  " + "-" * 112)
+    print(f"  {'Target Spot':<18} | {'Underlier %':<11} | {'Day 0 (Instant)':<17} | {'Day 3 Held':<17} | {'Day 7 Held':<17} | {'Day 14 Held':<17}")
+    print("  " + "-" * 112)
     
     import math
     for s_price in spots_list:
@@ -6467,7 +6467,7 @@ def cmd_payoff(args):
         
         print(f"  {spot_fmt_str} | {chg_fmt_str} | {cell_d0} | {cell_d3} | {cell_d7} | {cell_d14}")
         
-    print("  " + "-" * 106)
+    print("  " + "-" * 112)
 
 
 def cmd_simulate(args):

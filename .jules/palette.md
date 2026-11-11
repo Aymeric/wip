@@ -47,3 +47,7 @@
 ## 2026-11-25 - Neutral Color Semantics for Volatility Discounts and Payoff Cells
 **Learning:** In terminal CLI projection matrices and setup rankings, using binary comparison (`diff < 0` or `pnl >= 0`) causes flat 0.00% volatility discounts to show as an expensive premium (red 31) and flat 0.0% P&L payoff cells to show as profitable (green 32). This creates false alerts and misleading visual cues for users scanning tables.
 **Action:** Always use 3-state evaluation via `get_pnl_color()` or explicit 3-way checks (`positive -> 32`, `negative -> 31`, `zero/flat -> 37`) across all matrix and metric cells so neutral states remain dim.
+
+## 2026-12-02 - Trailing Header Column Width Padding and Boundary Alignment in Payoff Matrices
+**Learning:** In CLI terminal option payoff simulation matrices (`cmd_payoff` and setup payoff projections), omitting width padding on the final column header (`Day 14 Held` without `:<17`) and mismatching horizontal separator line lengths (`"-" * 106` instead of `"-" * 112`) results in header and separator boundaries being 6 characters shorter than the 17-character padded data rows. This creates ragged, misaligned right borders that disrupt visual scanning and tabular comprehension.
+**Action:** Always explicitly specify width padding (`:<N`) on the final header column matching the data cell formatter width, and calibrate horizontal separator line lengths (`"-" * N`) to precisely match total table width across header and data rows.

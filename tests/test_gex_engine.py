@@ -2910,6 +2910,13 @@ class TestGEXEngine(unittest.TestCase):
             self.assertIn("$200.00 (Spot)", output)
             self.assertIn("$210.00", output)
 
+            # Micro-UX alignment check: verify separators, headers, and rows align to identical visible width (114 chars)
+            lines = [l for l in output.splitlines() if l.strip()]
+            table_lines = [l for l in lines if l.startswith("  -") or l.startswith("  Target Spot") or l.startswith("  $")]
+            self.assertTrue(len(table_lines) >= 6, "Expected separators, header, and data rows in payoff table")
+            for t_line in table_lines:
+                self.assertEqual(len(t_line), 114, f"Table line visible length {len(t_line)} must equal 114: {t_line}")
+
     def test_format_color(self):
         from unittest.mock import patch
 
