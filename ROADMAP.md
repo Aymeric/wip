@@ -14,6 +14,7 @@ The system's engineering lifecycle is organized into structured phases:
 3. **Phase 3: Quantitative Modeling, Risk & Execution Accuracy** (Zero-Crossing Interpolation, Analytical Greeks, Slippage).
 4. **Phase 4: Persistence, Analytics & Operational Automation** (Embedded SQLite, Audit Mode, Alert Webhooks).
 5. **Phase 5: Advanced Strategy Engineering & Backtesting** (Historical Playback, Dynamic Rolling, Automated Hedging).
+6. **Phase 6: Capital Efficiency & Multi-Leg Spread Engineering** (Defined-Risk Vertical Spreads, Dynamic Collars).
 
 ---
 
@@ -175,7 +176,7 @@ src/gex/
 
 ## 🚀 Phase 5: Advanced Strategy Engineering & Operational Automation
 
-### 5.1 Historical Options Replay & Backtesting Engine
+### 5.1 Historical Options Replay & Backtesting Engine ([#193](https://github.com/Aymeric/wip/issues/193))
 - **Need & Outcome**: Enable systematic backtesting and offline simulation of the GEX trading rules across cached historical option chains and price series (`data/downloads/`). Validates win rate, expectancy, and parameter sensitivity (delta targets, stalling days, stop thresholds) without capital risk.
 - **Action Items**:
   - [ ] Implement `src/gex/backtest/engine.py` with virtual portfolio state machine and trade ledger.
@@ -243,6 +244,34 @@ src/gex/
   - [ ] Keep `python3 src/gex_engine.py <subcommand>` and existing root re-exports 100% backward compatible.
   - [ ] Full test suite and harness sync pass unchanged after extraction.
 
+### 5.9 Second-Order Dealer Exposure Modeling (Vanna & Charm Profiles) ([#194](https://github.com/Aymeric/wip/issues/194))
+- **Need & Outcome**: While Gamma Exposure (GEX) models price acceleration, dealer delta hedging is also heavily driven by implied volatility changes ($\text{Vanna} = \partial \Delta / \partial \sigma$) and time decay ($\text{Charm} = \partial \Delta / \partial t$). Capturing Vanna and Charm provides leading indicators for market direction ahead of volatility events (FOMC, CPI, earnings) and weekend theta decay.
+- **Action Items**:
+  - [ ] Implement analytical Black-Scholes Vanna and Charm formulations in `src/gex/quant/greeks.py`.
+  - [ ] Aggregate strike-level net Vanna and Charm exposures into `derive_gex_profile` and domain models in `src/gex/core/models.py`.
+  - [ ] Calculate net Vanna asymmetry score and Charm tilt to detect whether dealer decay will create buying or selling pressure.
+  - [ ] Surface Vanna/Charm exposure metrics in Runway Maps and `analyze` CLI output.
+
+### 5.10 Alert Hysteresis & Notification Rate-Limiting Engine ([#195](https://github.com/Aymeric/wip/issues/195))
+- **Need & Outcome**: Intraday level breach monitoring (`src/gex/screening/monitor.py`) can generate duplicate alerts and exceed webhook rate limits when underlying spot prices oscillate rapidly across $nTrans$ (Stop 1) or $+GEX$ (Profit Target). A stateful alerting engine with cooldowns and hysteresis deadbands ensures reliable alerting without notification fatigue.
+- **Action Items**:
+  - [ ] Implement an alert tracking state machine in `src/gex/screening/monitor.py` or dedicated alerting module.
+  - [ ] Enforce configurable per-symbol/per-stop alert cooldown intervals (e.g. 30–60 minutes between repeat alerts).
+  - [ ] Add a $\pm 0.25\%$ hysteresis deadband around key GEX boundaries before re-arming level breach triggers.
+  - [ ] Support consolidated end-of-day alert digests and prevent webhook HTTP 429 throttling.
+
+---
+
+## 🏛️ Phase 6: Capital Efficiency & Multi-Leg Spread Engineering
+
+### 6.1 Defined-Risk Vertical Spread Architecture & Payoff Engine ([#196](https://github.com/Aymeric/wip/issues/196))
+- **Need & Outcome**: Long single-leg options experience severe theta decay and IV crush when underliers trade at elevated implied volatility (e.g., IV rank > 70%). A defined-risk debit vertical spread engine allows buying an ATM/near-OTM contract and selling an OTM strike at the $+GEX$ call wall, reducing capital outlay by 30–50% and matching profit targets directly to dealer resistance bounds.
+- **Action Items**:
+  - [ ] Implement vertical spread modeling in `src/gex/screening/selector.py` (or `src/gex/screening/spreads.py`) to pair long ATM strikes with short $+GEX$ call wall strikes.
+  - [ ] Compute net debit, maximum profit, maximum loss, breakeven, and risk/reward ratios with realistic bid-ask spread slippage.
+  - [ ] Integrate spread selection into candidate generation for elevated IV regimes (IV rank > 70%).
+  - [ ] Expose CLI command `python3 src/gex_engine.py select-spreads --symbol TICKER`.
+
 ---
 
 ## 📊 Summary Roadmap Matrix
@@ -273,6 +302,9 @@ src/gex/
 | **Approval Decision Ledger** | Phase 5 (Advanced Strategy) | 🟡 Medium | ✅ Completed | Durable provenance of approvals, declines, and overrides | Phase 4 |
 | **IV Rank / Percentile Context** | Phase 5 (Advanced Strategy) | 🟢 Low | 📋 Planned | Relative IV context for entries (gate only after backtest) | 5.1 |
 | **CLI Extraction (`src/gex/cli/`)** | Phase 5 (Advanced Strategy) | 🟡 Medium | 📋 Planned | Smaller engine module; safer Phase 5 command additions | Phase 2 |
+| **Vanna & Charm Exposure** | Phase 5 (Advanced Strategy) | 🟡 Medium | 📋 Planned | Second-order dealer exposure modeling for vol crush and decay flows | Phase 3 |
+| **Alert Hysteresis & Rate-Limiting** | Phase 5 (Advanced Strategy) | 🟢 Low | 📋 Planned | Stateful cooldowns and deadbands for intraday webhook alerts | 5.4 |
+| **Defined-Risk Vertical Spreads** | Phase 6 (Multi-Leg Spreads) | 🟡 Medium | 📋 Planned | Debit call spreads pegged to +GEX call walls for high IV regimes | 5.7 |
 
 ---
 
