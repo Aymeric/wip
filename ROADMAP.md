@@ -233,9 +233,9 @@ src/gex/
 ### 5.7 IV Rank / IV Percentile Entry Context ([#165](https://github.com/Aymeric/wip/issues/165))
 - **Need & Outcome**: Entry screening uses an absolute IV floor (≥ 30%) only. *Hypothesis*: buying single-leg premium when IV is high relative to the underlier's own history degrades expectancy. Relative IV context would inform contract selection and grading.
 - **Action Items**:
-  - [ ] Capture daily ATM IV (30-day) into `gex_snapshots` alongside GEX levels.
-  - [ ] Implement IV rank / percentile in `src/gex/quant/` with explicit `UNKNOWN` when history is below a minimum lookback.
-  - [ ] Surface IVR in `analyze` / candidate tables as informational first; promote to a gate only after backtest evidence (depends on 5.1).
+  - [x] Capture daily ATM IV (30-day) into `gex_snapshots` alongside GEX levels.
+  - [x] Implement IV rank / percentile in `src/gex/quant/` with explicit `UNKNOWN` when history is below a minimum lookback.
+  - [x] Surface IVR in `analyze` / candidate tables as informational first; promote to a gate only after backtest evidence (depends on 5.1).
 
 ### 5.8 CLI Extraction into `src/gex/cli/` ([#166](https://github.com/Aymeric/wip/issues/166))
 - **Need & Outcome**: [src/gex_engine.py](src/gex_engine.py) is ~6,600 lines hosting 28 subcommands while `src/gex/cli/` is empty. Phase 5 adds four more commands; extracting command handlers reduces regression risk and review cost.
@@ -302,7 +302,7 @@ src/gex/
 | **Static Analysis CI Gate** | Phase 1 (Foundations) | 🟡 Medium | ✅ Completed | ruff + mypy enforced in CI with baseline ratchet | Phase 1 |
 | **Stop-Coded Exit Attribution** | Phase 5 (Advanced Strategy) | 🔴 High | ✅ Completed | Per-stop expectancy via coded `exit_reason` | Phase 4 |
 | **Approval Decision Ledger** | Phase 5 (Advanced Strategy) | 🟡 Medium | ✅ Completed | Durable provenance of approvals, declines, and overrides | Phase 4 |
-| **IV Rank / Percentile Context** | Phase 5 (Advanced Strategy) | 🟢 Low | 📋 Planned | Relative IV context for entries (gate only after backtest) | 5.1 |
+| **IV Rank / Percentile Context** | Phase 5 (Advanced Strategy) | 🟢 Low | ✅ Completed | Relative IV context for entries (gate only after backtest) | 5.1 |
 | **CLI Extraction (`src/gex/cli/`)** | Phase 5 (Advanced Strategy) | 🟡 Medium | 📋 Planned | Smaller engine module; safer Phase 5 command additions | Phase 2 |
 | **Vanna & Charm Exposure** | Phase 5 (Advanced Strategy) | 🟡 Medium | ✅ Completed | Second-order dealer exposure modeling for vol crush and decay flows | Phase 3 |
 | **Alert Hysteresis & Rate-Limiting** | Phase 5 (Advanced Strategy) | 🟢 Low | ✅ Completed | Stateful cooldowns and deadbands for intraday webhook alerts | 5.4 |

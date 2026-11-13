@@ -52,6 +52,8 @@ from src.gex.quant.indicators import (
     calculate_bollinger_bands,
     calculate_atr,
     calculate_annualized_vol,
+    calculate_iv_rank,
+    calculate_iv_percentile,
 )
 from src.gex.risk.stops import compute_exit_rule_state
 from src.gex.risk.rolling import (
@@ -73,6 +75,7 @@ from src.gex.storage.db import (
     sync_closed_positions_to_db,
     save_gex_snapshot,
     query_latest_gex_snapshot,
+    query_historical_ivs,
     record_decision,
     query_decisions,
     summarize_decisions,
@@ -155,6 +158,7 @@ from src.gex.presentation.formatters import (
     format_table,
     get_pnl_color,
     format_vanna_charm_summary,
+    format_iv_context,
 )
 from src.gex.storage.persistence import (
     load_json,
@@ -2278,6 +2282,32 @@ def cmd_analyze(args):
         hv90 = vol_profile.get("hv90_val")
         rv10 = vol_profile.get("rv10_val")
 
+    current_iv = None
+    if gex_profile and gex_profile.get("iv_count", 0) > 0:
+        current_iv = round((gex_profile["iv_sum"] / gex_profile["iv_count"]) * 100.0, 2)
+    elif cached.get("current_iv") is not None:
+        current_iv = cached.get("current_iv")
+
+    try:
+        save_gex_snapshot(
+            symbol=symbol,
+            spot=spot,
+            ptrans=ptrans,
+            ntrans=ntrans,
+            gex=gex,
+            cotmp=cotmp,
+            net_gex=gex_profile.get("net_gex", 0.0) if gex_profile else 0.0,
+            total_oi=gex_profile.get("total_oi", 0) if gex_profile else 0,
+            iv=current_iv,
+            session_date=args.effective_session_date,
+        )
+    except Exception:
+        pass
+
+    hist_ivs = query_historical_ivs(symbol)
+    iv_rank = calculate_iv_rank(current_iv, hist_ivs) if current_iv is not None else None
+    iv_percentile = calculate_iv_percentile(current_iv, hist_ivs) if current_iv is not None else None
+
     # Update analyses file
     analyses[symbol] = {
         "Ticker": symbol,
@@ -2293,6 +2323,9 @@ def cmd_analyze(args):
         "iv30_val": round(iv30, 2) if iv30 is not None else None,
         "hv90_val": round(hv90, 2) if hv90 is not None else None,
         "rv10_val": round(rv10, 2) if rv10 is not None else None,
+        "current_iv": current_iv,
+        "iv_rank": round(iv_rank, 2) if iv_rank is not None else None,
+        "iv_percentile": round(iv_percentile, 2) if iv_percentile is not None else None,
         "Signal Status": status,
         "analyzed_date": args.effective_session_date,
         "spike_crash": bool(spike_crash),
@@ -2326,6 +2359,7 @@ def cmd_analyze(args):
     print(f"  - COTMP (Center of Put Mass): ${cotmp:.2f}")
     if gex_profile:
         print(f"  {format_vanna_charm_summary(gex_profile)}")
+    print(f"- **IV Regime Context**: {format_iv_context(current_iv, iv_rank, iv_percentile, len(hist_ivs))}")
     
     scale_str = generate_ascii_gex_scale(spot, ptrans, ntrans, gex, cotmp)
     print(f"\n### 🛣️ Dealer GEX Structural Runway Map")

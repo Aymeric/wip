@@ -196,6 +196,8 @@ class ScannerCandidate:
     market_cap: Optional[float] = None
     rsi: Optional[float] = None
     macd_hist: Optional[float] = None
+    iv_rank: Optional[float] = None
+    iv_percentile: Optional[float] = None
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "ScannerCandidate":
@@ -210,6 +212,8 @@ class ScannerCandidate:
             market_cap=float(data["market_cap"]) if data.get("market_cap") is not None else None,
             rsi=float(data["rsi"]) if data.get("rsi") is not None else None,
             macd_hist=float(data["macd_hist"]) if data.get("macd_hist") is not None else None,
+            iv_rank=float(data["iv_rank"]) if data.get("iv_rank") is not None else None,
+            iv_percentile=float(data["iv_percentile"]) if data.get("iv_percentile") is not None else None,
         )
 
 

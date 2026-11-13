@@ -286,3 +286,72 @@ def calculate_annualized_vol(returns_list: Sequence[float]) -> float:
 
     variance = sum_sq_diff / (n - 1)
     return math.sqrt(variance) * _SQRT_252_X_100
+
+
+def calculate_iv_rank(
+    current_iv: float,
+    historical_ivs: Sequence[float],
+    min_lookback: int = 20,
+) -> Optional[float]:
+    """Calculates IV Rank given current IV and historical daily IV observations.
+
+    Formula:
+        IV Rank = ((current_iv - min_iv) / (max_iv - min_iv)) * 100.0
+
+    Guards:
+        - Returns None if current_iv is None, <= 0, or not finite.
+        - Filters out non-positive/invalid values from historical_ivs.
+        - Returns None if count of valid historical_ivs < min_lookback (insufficient sample).
+        - If max_iv == min_iv, returns 50.0 (neutral midpoint).
+        - Clamped to [0.0, 100.0].
+    """
+    if current_iv is None or current_iv <= 0 or not math.isfinite(current_iv):
+        return None
+
+    valid_ivs = [x for x in historical_ivs if x is not None and x > 0 and math.isfinite(x)]
+    if len(valid_ivs) < min_lookback:
+        return None
+
+    min_iv = min(valid_ivs)
+    max_iv = max(valid_ivs)
+
+    if current_iv < min_iv:
+        min_iv = current_iv
+    if current_iv > max_iv:
+        max_iv = current_iv
+
+    denom = max_iv - min_iv
+    if denom <= 1e-9:
+        return 50.0
+
+    rank = ((current_iv - min_iv) / denom) * 100.0
+    return max(0.0, min(100.0, rank))
+
+
+def calculate_iv_percentile(
+    current_iv: float,
+    historical_ivs: Sequence[float],
+    min_lookback: int = 20,
+) -> Optional[float]:
+    """Calculates IV Percentile (% of historical days where IV was strictly less than current IV).
+
+    Formula:
+        IV Percentile = (count(historical_iv < current_iv) / total_historical_days) * 100.0
+
+    Guards:
+        - Returns None if current_iv is None, <= 0, or not finite.
+        - Filters out non-positive/invalid values from historical_ivs.
+        - Returns None if count of valid historical_ivs < min_lookback (insufficient sample).
+        - Clamped to [0.0, 100.0].
+    """
+    if current_iv is None or current_iv <= 0 or not math.isfinite(current_iv):
+        return None
+
+    valid_ivs = [x for x in historical_ivs if x is not None and x > 0 and math.isfinite(x)]
+    if len(valid_ivs) < min_lookback:
+        return None
+
+    below_count = sum(1 for x in valid_ivs if x < current_iv)
+    percentile = (below_count / len(valid_ivs)) * 100.0
+    return max(0.0, min(100.0, percentile))
+

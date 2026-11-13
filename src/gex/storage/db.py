@@ -68,10 +68,17 @@ def init_db(db_path: Optional[str] = None) -> sqlite3.Connection:
                 total_call_gex REAL,
                 total_put_gex REAL,
                 net_gex REAL,
+                iv REAL,
                 UNIQUE(symbol, session_date)
             );
         """)
         conn.execute("CREATE INDEX IF NOT EXISTS idx_gex_symbol_date ON gex_snapshots (symbol, session_date);")
+
+        cursor = conn.cursor()
+        cursor.execute("PRAGMA table_info(gex_snapshots);")
+        cols = {row["name"] if isinstance(row, sqlite3.Row) else row[1] for row in cursor.fetchall()}
+        if cols and "iv" not in cols:
+            conn.execute("ALTER TABLE gex_snapshots ADD COLUMN iv REAL;")
 
         conn.execute("""
             CREATE TABLE IF NOT EXISTS decisions (
@@ -330,8 +337,8 @@ def sync_closed_positions_to_db(
 
 def save_gex_snapshot(
     symbol: str,
-    session_date: str,
-    spot: float,
+    session_date: Optional[str] = None,
+    spot: float = 0.0,
     ptrans: Optional[float] = None,
     ntrans: Optional[float] = None,
     call_wall: Optional[float] = None,
@@ -339,17 +346,29 @@ def save_gex_snapshot(
     total_call_gex: Optional[float] = None,
     total_put_gex: Optional[float] = None,
     net_gex: Optional[float] = None,
+    iv: Optional[float] = None,
     db_path: Optional[str] = None,
+    gex: Optional[float] = None,
+    cotmp: Optional[float] = None,
+    total_oi: Optional[int] = None,
 ) -> None:
     """Saves or updates a daily GEX profile snapshot for an underlier in SQLite."""
+    from datetime import date
+    if session_date is None:
+        session_date = date.today().isoformat()
+    if call_wall is None and gex is not None:
+        call_wall = gex
+    if put_wall is None and cotmp is not None:
+        put_wall = cotmp
+
     conn = init_db(db_path)
     with conn:
         conn.execute(
             """
             INSERT INTO gex_snapshots (
                 symbol, session_date, spot, ptrans, ntrans,
-                call_wall, put_wall, total_call_gex, total_put_gex, net_gex
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                call_wall, put_wall, total_call_gex, total_put_gex, net_gex, iv
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ON CONFLICT(symbol, session_date) DO UPDATE SET
                 spot=excluded.spot,
                 ptrans=excluded.ptrans,
@@ -358,14 +377,40 @@ def save_gex_snapshot(
                 put_wall=excluded.put_wall,
                 total_call_gex=excluded.total_call_gex,
                 total_put_gex=excluded.total_put_gex,
-                net_gex=excluded.net_gex;
+                net_gex=excluded.net_gex,
+                iv=excluded.iv;
             """,
             (
                 symbol.upper(), session_date, spot, ptrans, ntrans,
-                call_wall, put_wall, total_call_gex, total_put_gex, net_gex
+                call_wall, put_wall, total_call_gex, total_put_gex, net_gex, iv
             ),
         )
     conn.close()
+
+
+def query_historical_ivs(
+    symbol: str,
+    lookback_days: int = 252,
+    db_path: Optional[str] = None,
+) -> List[float]:
+    """
+    Fetches historical daily ATM IV records for a symbol from gex_snapshots,
+    ordered chronologically (oldest to newest). Only non-null positive IV values are returned.
+    """
+    conn = init_db(db_path)
+    cur = conn.cursor()
+    cur.execute(
+        """
+        SELECT iv FROM gex_snapshots
+        WHERE symbol = ? AND iv IS NOT NULL AND iv > 0
+        ORDER BY session_date DESC
+        LIMIT ?
+        """,
+        (symbol.upper(), lookback_days),
+    )
+    rows = cur.fetchall()
+    conn.close()
+    return [float(row["iv"] if isinstance(row, sqlite3.Row) else row[0]) for row in reversed(rows)]
 
 
 def query_latest_gex_snapshot(symbol: str, db_path: Optional[str] = None) -> Optional[Dict[str, Any]]:

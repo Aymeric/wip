@@ -220,3 +220,38 @@ def format_vanna_charm_summary(profile: Dict[str, Any]) -> str:
     ]
     return "\n".join(lines)
 
+
+def format_iv_context(
+    current_iv: Optional[float],
+    iv_rank: Optional[float],
+    iv_percentile: Optional[float],
+    history_len: int = 0,
+) -> str:
+    """Formats 30-day ATM IV, IV Rank, and IV Percentile into an informational string.
+
+    Example outputs:
+      "IV: 35.2% | IV Rank: 42.5 | IV Percentile: 55.0% (N=252 sessions)"
+      "IV: 35.2% | IV Rank: UNKNOWN (N=5 < 20 sessions) | IV Percentile: UNKNOWN"
+      "IV: N/A | IV Rank: N/A | IV Percentile: N/A"
+    """
+    if current_iv is None:
+        return "IV: N/A | IV Rank: N/A | IV Percentile: N/A"
+
+    iv_str = f"{current_iv:.1f}%"
+
+    if iv_rank is not None:
+        ivr_str = f"{iv_rank:.1f}"
+    elif history_len < 20:
+        ivr_str = f"UNKNOWN (N={history_len} < 20 sessions)"
+    else:
+        ivr_str = "UNKNOWN"
+
+    if iv_percentile is not None:
+        ivp_str = f"{iv_percentile:.1f}%"
+    else:
+        ivp_str = "UNKNOWN"
+
+    sample_suffix = f" (N={history_len} sessions)" if history_len >= 20 else ""
+    return f"IV: {iv_str} | IV Rank: {ivr_str} | IV Percentile: {ivp_str}{sample_suffix}"
+
+
