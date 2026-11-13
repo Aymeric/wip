@@ -254,12 +254,13 @@ src/gex/
   - [x] Surface Vanna/Charm exposure metrics in Runway Maps and `analyze` CLI output.
 
 ### 5.10 Alert Hysteresis & Notification Rate-Limiting Engine ([#195](https://github.com/Aymeric/wip/issues/195))
+- **Status**: ✅ **Implemented** (state machine & hysteresis in [src/gex/screening/monitor.py](src/gex/screening/monitor.py); CLI options in [src/gex_engine.py](src/gex_engine.py); tests in [tests/test_alert_hysteresis.py](tests/test_alert_hysteresis.py)).
 - **Need & Outcome**: Intraday level breach monitoring (`src/gex/screening/monitor.py`) can generate duplicate alerts and exceed webhook rate limits when underlying spot prices oscillate rapidly across $nTrans$ (Stop 1) or $+GEX$ (Profit Target). A stateful alerting engine with cooldowns and hysteresis deadbands ensures reliable alerting without notification fatigue.
 - **Action Items**:
-  - [ ] Implement an alert tracking state machine in `src/gex/screening/monitor.py` or dedicated alerting module.
-  - [ ] Enforce configurable per-symbol/per-stop alert cooldown intervals (e.g. 30–60 minutes between repeat alerts).
-  - [ ] Add a $\pm 0.25\%$ hysteresis deadband around key GEX boundaries before re-arming level breach triggers.
-  - [ ] Support consolidated end-of-day alert digests and prevent webhook HTTP 429 throttling.
+  - [x] Implement an alert tracking state machine in `src/gex/screening/monitor.py` or dedicated alerting module.
+  - [x] Enforce configurable per-symbol/per-stop alert cooldown intervals (e.g. 30–60 minutes between repeat alerts).
+  - [x] Add a $\pm 0.25\%$ hysteresis deadband around key GEX boundaries before re-arming level breach triggers.
+  - [x] Support consolidated end-of-day alert digests and prevent webhook HTTP 429 throttling.
 
 ---
 
@@ -304,7 +305,7 @@ src/gex/
 | **IV Rank / Percentile Context** | Phase 5 (Advanced Strategy) | 🟢 Low | 📋 Planned | Relative IV context for entries (gate only after backtest) | 5.1 |
 | **CLI Extraction (`src/gex/cli/`)** | Phase 5 (Advanced Strategy) | 🟡 Medium | 📋 Planned | Smaller engine module; safer Phase 5 command additions | Phase 2 |
 | **Vanna & Charm Exposure** | Phase 5 (Advanced Strategy) | 🟡 Medium | ✅ Completed | Second-order dealer exposure modeling for vol crush and decay flows | Phase 3 |
-| **Alert Hysteresis & Rate-Limiting** | Phase 5 (Advanced Strategy) | 🟢 Low | 📋 Planned | Stateful cooldowns and deadbands for intraday webhook alerts | 5.4 |
+| **Alert Hysteresis & Rate-Limiting** | Phase 5 (Advanced Strategy) | 🟢 Low | ✅ Completed | Stateful cooldowns and deadbands for intraday webhook alerts | 5.4 |
 | **Defined-Risk Vertical Spreads** | Phase 6 (Multi-Leg Spreads) | 🟡 Medium | 📋 Planned | Debit call spreads pegged to +GEX call walls for high IV regimes | 5.7 |
 
 ---

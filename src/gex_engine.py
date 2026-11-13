@@ -175,6 +175,9 @@ from src.gex.screening.selector import (
 )
 from src.gex.screening.monitor import (
     PositionBreachAlert,
+    AlertState,
+    AlertStateManager,
+    format_alert_digest,
     evaluate_holding_breaches,
     run_monitor_pass,
     monitor_daemon,
@@ -3789,9 +3792,16 @@ def cmd_monitor(args):
     should_alert = getattr(args, "alert", False)
     is_once = getattr(args, "once", False)
     is_json = getattr(args, "json", False)
+    cooldown = getattr(args, "cooldown", 1800)
+    deadband = getattr(args, "deadband", 0.25)
+    show_digest = getattr(args, "digest", False)
 
     if is_once:
-        result = run_monitor_pass(account=target_account, alert=should_alert)
+        alert_mgr = AlertStateManager(
+            cooldown_seconds=float(cooldown),
+            deadband_pct=float(deadband) / 100.0,
+        )
+        result = run_monitor_pass(account=target_account, alert=should_alert, alert_cache=alert_mgr)
         if is_json:
             print(json.dumps(result, indent=2))
         else:
@@ -3800,7 +3810,7 @@ def cmd_monitor(args):
             checked = result.get("total_positions_checked", 0)
             accs = ", ".join(result.get("accounts_checked", [])) or "None"
             print(format_color(f"🛰️ GEX Level Breach Monitor (Single Pass: {ts})", "36", bold=True))
-            print(f"Checked accounts: {accs} | Total positions: {checked}")
+            print(f"Checked accounts: {accs} | Total positions: {checked} | Cooldown: {cooldown}s | Deadband: {deadband:.2f}%")
             if breaches:
                 print(format_color(f"\n⚠️ {len(breaches)} LEVEL BREACH(ES) DETECTED:", "31", bold=True))
                 for b in breaches:
@@ -3811,8 +3821,20 @@ def cmd_monitor(args):
                     )
             else:
                 print(format_color("\n✅ All holdings within structural runway bounds.", "32", bold=True))
+
+            if show_digest:
+                digest = result.get("digest")
+                if digest:
+                    print("\n" + format_alert_digest(digest))
     else:
-        monitor_daemon(interval=interval, account=target_account, alert=should_alert)
+        monitor_daemon(
+            interval=interval,
+            account=target_account,
+            alert=should_alert,
+            cooldown=cooldown,
+            deadband=deadband,
+            show_digest=show_digest,
+        )
 
 
 def cmd_add_pos(args):
@@ -6803,6 +6825,9 @@ def main():
     p_monitor.add_argument("--alert", action="store_true", help="Dispatch system notification webhooks/desktop alerts upon level breaches")
     p_monitor.add_argument("--once", action="store_true", help="Execute a single monitoring pass and exit")
     p_monitor.add_argument("--json", action="store_true", help="Output machine-readable JSON format")
+    p_monitor.add_argument("--cooldown", type=int, default=1800, help="Per-holding alert cooldown in seconds (default: 1800s / 30m)")
+    p_monitor.add_argument("--deadband", type=float, default=0.25, help="Hysteresis deadband percentage before re-arming triggers (default: 0.25%%)")
+    p_monitor.add_argument("--digest", action="store_true", help="Print consolidated daily alert digest summary")
 
     # record-decision subcommand (Roadmap 5.6 Approval Decision Ledger)
     p_rec_dec = subparsers.add_parser("record-decision", help="Record human-in-the-loop trade approval or exit decision.")
