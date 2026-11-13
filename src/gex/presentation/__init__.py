@@ -11,6 +11,7 @@ from src.gex.presentation.formatters import (
     get_pnl_color,
     format_vanna_charm_summary,
     format_iv_context,
+    format_vertical_spread_summary,
 )
 
 __all__ = [
@@ -24,4 +25,5 @@ __all__ = [
     "get_pnl_color",
     "format_vanna_charm_summary",
     "format_iv_context",
+    "format_vertical_spread_summary",
 ]

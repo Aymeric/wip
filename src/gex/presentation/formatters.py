@@ -255,3 +255,33 @@ def format_iv_context(
     return f"IV: {iv_str} | IV Rank: {ivr_str} | IV Percentile: {ivp_str}{sample_suffix}"
 
 
+def format_vertical_spread_summary(spread: Any) -> str:
+    """Formats a VerticalSpread instance into a structured markdown block for display."""
+    from src.gex.presentation.ascii_art import format_color
+
+    eb_status = ""
+    if getattr(spread, "earnings_blocked", False):
+        eb_status = format_color(" | 🔴 BLOCKED BY EARNINGS RISK", "31", bold=True)
+
+    liq_status = format_color("✅ LIQUIDITY: PASS", "32")
+    if not getattr(spread, "spread_ok", True) or not getattr(spread, "oi_ok", True):
+        liq_status = format_color("⚠️ LIQUIDITY: CAUTION (Wide spread or low OI)", "33", bold=True)
+
+    delta_str = f"{spread.net_delta:.4f}" if getattr(spread, "net_delta", None) is not None else "N/A"
+
+    lines = [
+        f"### 🛡️ Defined-Risk Vertical Spread Recommendation: {spread.symbol}",
+        f"- **Structure**: Bull Call Debit Spread ({spread.expiration_date}, DTE: {spread.dte}){eb_status}",
+        f"  - **Long Leg**: Buy Call Strike ${spread.long_strike:.2f} (Mark: ${spread.long_mark:.2f}, Ask: ${spread.long_ask:.2f}, Delta: {spread.long_delta or 'N/A'})",
+        f"  - **Short Leg**: Sell Call Strike ${spread.short_strike:.2f} (Mark: ${spread.short_mark:.2f}, Bid: ${spread.short_bid:.2f}, Delta: {spread.short_delta or 'N/A'})",
+        f"- **Payoff & Capital Efficiency**:",
+        f"  - **Net Debit**: ${spread.net_debit:.2f} (${spread.max_loss:.2f}/contract) | **Width**: ${spread.width:.2f}",
+        f"  - **Max Profit**: ${spread.max_profit:.2f}/contract | **Risk/Reward**: {spread.risk_reward_ratio:.2f}:1",
+        f"  - **Breakeven**: ${spread.breakeven:.2f} | **Net Delta**: {delta_str}",
+        f"  - **Capital Savings vs. Naked Call**: {format_color(f'{spread.capital_savings_pct:.1f}%', '32', bold=True)}",
+        f"- **Gate & Liquidity**: {liq_status}",
+    ]
+    return "\n".join(lines)
+
+
+

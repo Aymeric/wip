@@ -9,6 +9,7 @@ from src.gex.core.models import (
     OptionSentiment,
     Position,
     TradeRecord,
+    VerticalSpread,
 )
 from src.gex.core.config import (
     REPOSITORY_ROOT,
@@ -46,6 +47,7 @@ __all__ = [
     "OptionSentiment",
     "Position",
     "TradeRecord",
+    "VerticalSpread",
     "REPOSITORY_ROOT",
     "DATA_DIR",
     "REGIME_FILE",

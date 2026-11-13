@@ -5,6 +5,10 @@ from src.gex.screening.scanner import (
 from src.gex.screening.selector import (
     select_best_option,
 )
+from src.gex.screening.spreads import (
+    calculate_spread_payoff,
+    select_vertical_spread,
+)
 from src.gex.screening.monitor import (
     PositionBreachAlert,
     AlertState,
@@ -19,6 +23,8 @@ __all__ = [
     "calculate_candidate_score",
     "filter_candidate",
     "select_best_option",
+    "calculate_spread_payoff",
+    "select_vertical_spread",
     "PositionBreachAlert",
     "AlertState",
     "AlertStateManager",

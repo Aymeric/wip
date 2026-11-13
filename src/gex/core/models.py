@@ -524,3 +524,62 @@ class TradeRecord:
     exit_reason: str = "MANUAL"
     target_mode: str = "T1"
     account: Optional[str] = None
+
+
+@dataclass(slots=True)
+class VerticalSpread:
+    """Represents a paired defined-risk vertical debit spread."""
+    symbol: str
+    expiration_date: str
+    dte: int
+    long_strike: float
+    short_strike: float
+    long_option_id: str
+    short_option_id: str
+    long_mark: float
+    short_mark: float
+    long_ask: float
+    long_bid: float
+    short_ask: float
+    short_bid: float
+    net_debit: float
+    max_profit: float
+    max_loss: float
+    breakeven: float
+    risk_reward_ratio: float
+    capital_savings_pct: float
+    long_delta: Optional[float] = None
+    short_delta: Optional[float] = None
+    net_delta: Optional[float] = None
+    long_oi: int = 0
+    short_oi: int = 0
+    earnings_blocked: bool = False
+    spread_ok: bool = True
+    oi_ok: bool = True
+
+    @property
+    def width(self) -> float:
+        return self.short_strike - self.long_strike
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "symbol": self.symbol,
+            "expiration_date": self.expiration_date,
+            "dte": self.dte,
+            "long_strike": self.long_strike,
+            "short_strike": self.short_strike,
+            "width": round(self.width, 2),
+            "net_debit": round(self.net_debit, 2),
+            "max_profit": round(self.max_profit, 2),
+            "max_loss": round(self.max_loss, 2),
+            "breakeven": round(self.breakeven, 2),
+            "risk_reward_ratio": round(self.risk_reward_ratio, 2),
+            "capital_savings_pct": round(self.capital_savings_pct, 1),
+            "long_delta": round(self.long_delta, 4) if self.long_delta is not None else None,
+            "short_delta": round(self.short_delta, 4) if self.short_delta is not None else None,
+            "net_delta": round(self.net_delta, 4) if self.net_delta is not None else None,
+            "earnings_blocked": self.earnings_blocked,
+            "spread_ok": self.spread_ok,
+            "oi_ok": self.oi_ok,
+        }
+

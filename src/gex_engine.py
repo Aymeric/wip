@@ -93,6 +93,7 @@ from src.gex.core.models import (
     OptionSentiment,
     Position,
     TradeRecord,
+    VerticalSpread,
 )
 from src.gex.core.config import (
     REPOSITORY_ROOT,
@@ -159,6 +160,7 @@ from src.gex.presentation.formatters import (
     get_pnl_color,
     format_vanna_charm_summary,
     format_iv_context,
+    format_vertical_spread_summary,
 )
 from src.gex.storage.persistence import (
     load_json,
@@ -176,6 +178,10 @@ from src.gex.screening.scanner import (
 )
 from src.gex.screening.selector import (
     select_best_option,
+)
+from src.gex.screening.spreads import (
+    calculate_spread_payoff,
+    select_vertical_spread,
 )
 from src.gex.screening.monitor import (
     PositionBreachAlert,
@@ -2571,6 +2577,22 @@ def cmd_analyze(args):
             print(f"  {spot_fmt_str} | {chg_fmt_str} | {s_name_str} | {cell_d0} | {cell_d3} | {cell_d7} | {cell_d14}")
             
         print("  " + "-" * 141)
+
+        # High-IV Defined-Risk Vertical Spread Alternative (Milestone 6.1)
+        show_spread = getattr(args, "spread", False) or (iv_rank is not None and iv_rank > 70.0)
+        best_spread = None
+        if show_spread and inst_data and quotes_data:
+            best_spread, all_spreads = select_vertical_spread(
+                inst_data, quotes_data, spot, gex_target=gex, earnings_date=earnings_date
+            )
+            if best_spread:
+                analyses[symbol]["recommended_vertical_spread"] = best_spread.to_dict()
+                save_json(ANALYSES_FILE, analyses)
+                print()
+                print_color("### 🛡️ High-IV Regime Defined-Risk Alternative: Vertical Debit Spread", "36", bold=True)
+                if iv_rank is not None and iv_rank > 70.0:
+                    print_color(f"  -> Implied Volatility is elevated (IV Rank: {iv_rank:.1f} > 70.0). Vertical debit spread mitigates theta decay and IV crush.", "33")
+                print(format_vertical_spread_summary(best_spread))
 
     # Render Execution Approval Requests for systematic entry setups
     regime = get_regime_status()
@@ -6445,6 +6467,97 @@ def cmd_hedge_plan(args):
     print()
 
 
+def cmd_select_spreads(args):
+    """Isolates and evaluates defined-risk vertical debit call spreads."""
+    symbol = args.symbol.upper()
+    analyses = load_json(ANALYSES_FILE, {})
+    cached = analyses.get(symbol, {})
+
+    spot = args.spot if args.spot is not None else cached.get("Spot")
+    if spot is None:
+        spot = find_latest_underlier_spot(symbol)
+
+    gex_target = args.gex if args.gex is not None else cached.get("+GEX")
+    earnings_date = args.earnings_date if getattr(args, "earnings_date", None) else discover_earnings_date(symbol)
+    if not earnings_date and cached.get("earnings_date"):
+        earnings_date = cached.get("earnings_date")
+
+    discovered_files = find_latest_option_files(symbol)
+    inst_file = getattr(args, "inst_file", None)
+    if inst_file:
+        try:
+            inst_file = validate_safe_path(inst_file)
+        except ValueError as e:
+            print(f"Error: Invalid inst_file path: {e}", file=sys.stderr)
+            sys.exit(1)
+    else:
+        inst_file = discovered_files.get("inst_file")
+
+    quote_file = getattr(args, "quote_file", None)
+    if quote_file:
+        try:
+            quote_file = validate_safe_path(quote_file)
+        except ValueError as e:
+            print(f"Error: Invalid quote_file path: {e}", file=sys.stderr)
+            sys.exit(1)
+    else:
+        quote_file = discovered_files.get("quote_file")
+
+    if not inst_file or not quote_file:
+        print(f"Error: Missing option data files for {symbol}. Pass --inst-file and --quote-file or ensure files exist in data/downloads/.", file=sys.stderr)
+        sys.exit(1)
+
+    inst_data = load_json(inst_file, None)
+    quotes_data = load_json(quote_file, None)
+
+    calc_spot = spot if spot is not None else 100.0
+    best_spread, all_spreads = select_vertical_spread(
+        inst_data=inst_data,
+        quotes_data=quotes_data,
+        spot=calc_spot,
+        gex_target=gex_target,
+        earnings_date=earnings_date,
+        target_delta=getattr(args, "target_delta", 0.45),
+        min_dte=getattr(args, "min_dte", 30),
+        max_dte=getattr(args, "max_dte", 45),
+    )
+
+    if not best_spread:
+        print(f"No eligible vertical spreads found for {symbol}.", file=sys.stderr)
+        sys.exit(1)
+
+    if getattr(args, "json", False):
+        output = {
+            "symbol": symbol,
+            "spot": spot,
+            "gex_target": gex_target,
+            "best_spread": best_spread.to_dict(),
+            "eligible_count": len(all_spreads),
+            "top_candidates": [s.to_dict() for s in all_spreads[:5]],
+        }
+        print(json.dumps(output, indent=2))
+        return
+
+    print(format_vertical_spread_summary(best_spread))
+
+    if len(all_spreads) > 1:
+        print(f"\n### 📋 Alternative Spread Candidates ({len(all_spreads)} evaluated):")
+        headers = ["Long K1", "Short K2", "Width", "Net Debit", "Max Profit", "R:R", "Savings", "Liquidity"]
+        rows = []
+        for s in all_spreads[:5]:
+            liq = "PASS" if (s.spread_ok and s.oi_ok) else "CAUTION"
+            rows.append([
+                f"${s.long_strike:.2f}",
+                f"${s.short_strike:.2f}",
+                f"${s.width:.2f}",
+                f"${s.net_debit:.2f}",
+                f"${s.max_profit:.2f}",
+                f"{s.risk_reward_ratio:.2f}:1",
+                f"{s.capital_savings_pct:.1f}%",
+                liq,
+            ])
+        print(format_table(headers, rows))
+
 
 def cmd_payoff(args):
     """Runs an offline option payoff simulation scenario grid."""
@@ -6700,6 +6813,7 @@ def main():
     p_analyze.add_argument("--target-delta", type=float, dest="target_delta", default=0.45, help="Option selection target delta (default: 0.45)")
     p_analyze.add_argument("--min-dte", type=int, dest="min_dte", default=30, help="Option selection minimum DTE (default: 30)")
     p_analyze.add_argument("--max-dte", type=int, dest="max_dte", default=45, help="Option selection maximum DTE (default: 45)")
+    p_analyze.add_argument("--spread", action="store_true", help="Evaluate defined-risk vertical debit call spreads")
     
     # Grade Checklist overrides if needed
     p_analyze.add_argument("--rule1", type=str2bool, help="Overriding total call GEX is positive (True/False)")
@@ -6918,6 +7032,19 @@ def main():
     p_up_flow.add_argument("--status", type=str, choices=["SUCCESS", "FAILED", "PARTIAL", "BLOCKED"], help="Status of the subagent")
     p_up_flow.add_argument("--note", type=str, help="Add a manual progress note")
 
+    # select-spreads subcommand (Milestone 6.1)
+    p_spreads = subparsers.add_parser("select-spreads", help="Selects defined-risk vertical debit call spreads pairing ATM calls with +GEX call walls.")
+    p_spreads.add_argument("--symbol", type=str, required=True, help="Underlier ticker symbol (e.g. NVDA, AAPL)")
+    p_spreads.add_argument("--spot", type=float, help="Current underlier spot price (defaults to cached spot)")
+    p_spreads.add_argument("--gex", type=float, help="+GEX target strike / Call Wall (defaults to cached +GEX)")
+    p_spreads.add_argument("--inst-file", type=str, help="Option instruments JSON file")
+    p_spreads.add_argument("--quote-file", type=str, help="Option quotes JSON file")
+    p_spreads.add_argument("--earnings-date", type=str, help="Upcoming earnings date (YYYY-MM-DD)")
+    p_spreads.add_argument("--target-delta", type=float, default=0.45, help="Target long leg delta (default: 0.45)")
+    p_spreads.add_argument("--min-dte", type=int, default=30, help="Minimum target DTE (default: 30)")
+    p_spreads.add_argument("--max-dte", type=int, default=45, help="Maximum target DTE (default: 45)")
+    p_spreads.add_argument("--json", action="store_true", help="Output results as JSON")
+
     # payoff subcommand
     p_payoff = subparsers.add_parser("payoff", help="Runs an offline option payoff simulation scenario grid.")
     p_payoff.add_argument("symbol", type=str, help="Ticker symbol (e.g. NVDA)")
@@ -7002,6 +7129,8 @@ def main():
         cmd_evaluate_rolls(args)
     elif args.command == "hedge-plan":
         cmd_hedge_plan(args)
+    elif args.command == "select-spreads":
+        cmd_select_spreads(args)
     elif args.command == "payoff":
 
         cmd_payoff(args)

@@ -267,12 +267,13 @@ src/gex/
 ## 🏛️ Phase 6: Capital Efficiency & Multi-Leg Spread Engineering
 
 ### 6.1 Defined-Risk Vertical Spread Architecture & Payoff Engine ([#196](https://github.com/Aymeric/wip/issues/196))
+- **Status**: ✅ **Implemented** (module in [src/gex/screening/spreads.py](src/gex/screening/spreads.py); domain model in [src/gex/core/models.py](src/gex/core/models.py); presentation in [src/gex/presentation/formatters.py](src/gex/presentation/formatters.py); CLI command `select-spreads` in [src/gex_engine.py](src/gex_engine.py); tests in [tests/test_vertical_spreads.py](tests/test_vertical_spreads.py)).
 - **Need & Outcome**: Long single-leg options experience severe theta decay and IV crush when underliers trade at elevated implied volatility (e.g., IV rank > 70%). A defined-risk debit vertical spread engine allows buying an ATM/near-OTM contract and selling an OTM strike at the $+GEX$ call wall, reducing capital outlay by 30–50% and matching profit targets directly to dealer resistance bounds.
 - **Action Items**:
-  - [ ] Implement vertical spread modeling in `src/gex/screening/selector.py` (or `src/gex/screening/spreads.py`) to pair long ATM strikes with short $+GEX$ call wall strikes.
-  - [ ] Compute net debit, maximum profit, maximum loss, breakeven, and risk/reward ratios with realistic bid-ask spread slippage.
-  - [ ] Integrate spread selection into candidate generation for elevated IV regimes (IV rank > 70%).
-  - [ ] Expose CLI command `python3 src/gex_engine.py select-spreads --symbol TICKER`.
+  - [x] Implement vertical spread modeling in `src/gex/screening/selector.py` (or `src/gex/screening/spreads.py`) to pair long ATM strikes with short $+GEX$ call wall strikes.
+  - [x] Compute net debit, maximum profit, maximum loss, breakeven, and risk/reward ratios with realistic bid-ask spread slippage.
+  - [x] Integrate spread selection into candidate generation for elevated IV regimes (IV rank > 70%).
+  - [x] Expose CLI command `python3 src/gex_engine.py select-spreads --symbol TICKER`.
 
 ---
 
@@ -306,7 +307,7 @@ src/gex/
 | **CLI Extraction (`src/gex/cli/`)** | Phase 5 (Advanced Strategy) | 🟡 Medium | 📋 Planned | Smaller engine module; safer Phase 5 command additions | Phase 2 |
 | **Vanna & Charm Exposure** | Phase 5 (Advanced Strategy) | 🟡 Medium | ✅ Completed | Second-order dealer exposure modeling for vol crush and decay flows | Phase 3 |
 | **Alert Hysteresis & Rate-Limiting** | Phase 5 (Advanced Strategy) | 🟢 Low | ✅ Completed | Stateful cooldowns and deadbands for intraday webhook alerts | 5.4 |
-| **Defined-Risk Vertical Spreads** | Phase 6 (Multi-Leg Spreads) | 🟡 Medium | 📋 Planned | Debit call spreads pegged to +GEX call walls for high IV regimes | 5.7 |
+| **Defined-Risk Vertical Spreads** | Phase 6 (Multi-Leg Spreads) | 🟡 Medium | ✅ Completed | Debit call spreads pegged to +GEX call walls for high IV regimes | 5.7 |
 
 ---
 
