@@ -9,6 +9,7 @@ from src.gex.presentation.formatters import (
     format_pnl,
     format_table,
     get_pnl_color,
+    format_vanna_charm_summary,
 )
 
 __all__ = [
@@ -20,4 +21,5 @@ __all__ = [
     "format_pnl",
     "format_table",
     "get_pnl_color",
+    "format_vanna_charm_summary",
 ]

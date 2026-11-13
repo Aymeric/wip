@@ -38,6 +38,8 @@ if _REPO_ROOT not in sys.path:
 
 from src.gex.quant.greeks import (
     calculate_black_scholes_gamma,
+    calculate_black_scholes_vanna,
+    calculate_black_scholes_charm,
     find_flip_strikes,
     select_transition_points,
 )
@@ -152,6 +154,7 @@ from src.gex.presentation.formatters import (
     format_pnl,
     format_table,
     get_pnl_color,
+    format_vanna_charm_summary,
 )
 from src.gex.storage.persistence import (
     load_json,
@@ -2078,6 +2081,7 @@ def cmd_analyze(args):
         hist_file = discovered_files.get("hist_file")
 
     # If inst-file and quote-file exist, perform mechanical local GEX profile derivation
+    gex_profile: Optional[Dict[str, Any]] = None
     if inst_file and quote_file:
         try:
             inst_data = load_json(inst_file, None)
@@ -2317,6 +2321,8 @@ def cmd_analyze(args):
     print(f"  - nTrans (Negative Transition): ${ntrans:.2f}")
     print(f"  - +GEX (T1 Target): ${gex:.2f}")
     print(f"  - COTMP (Center of Put Mass): ${cotmp:.2f}")
+    if gex_profile:
+        print(f"  {format_vanna_charm_summary(gex_profile)}")
     
     scale_str = generate_ascii_gex_scale(spot, ptrans, ntrans, gex, cotmp)
     print(f"\n### 🛣️ Dealer GEX Structural Runway Map")

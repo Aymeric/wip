@@ -183,3 +183,40 @@ def format_table(
         row_lines.append(" | ".join(row_cells))
 
     return "\n".join([header_line, separator_line] + row_lines)
+
+
+def format_vanna_charm_summary(profile: Dict[str, Any]) -> str:
+    """Formats higher-order Greek exposures (Vanna & Charm) into a structured summary block."""
+    from src.gex.presentation.ascii_art import format_color
+    net_vanna = float(profile.get("net_vanna", 0.0))
+    vas = float(profile.get("vanna_asymmetry_score", 0.0))
+    net_charm = float(profile.get("net_charm", 0.0))
+    charm_tilt = float(profile.get("charm_tilt", 0.0))
+
+    if vas > 0.15:
+        vas_color = "32"
+        vas_interp = "Bullish Vol Squeeze (Dealers buy on IV crush)"
+    elif vas < -0.15:
+        vas_color = "31"
+        vas_interp = "Bearish Vol Expansion (Dealers sell on IV crush)"
+    else:
+        vas_color = "37"
+        vas_interp = "Neutral Vanna Balance"
+
+    if charm_tilt > 0.05:
+        charm_color = "32"
+        charm_interp = "Positive Delta Decay Drift (Upward decay tailwind)"
+    elif charm_tilt < -0.05:
+        charm_color = "31"
+        charm_interp = "Negative Delta Decay Drift (Downward decay headwind)"
+    else:
+        charm_color = "37"
+        charm_interp = "Neutral Charm Balance"
+
+    lines = [
+        "- **Second-Order Dealer Exposures (Vanna & Charm)**:",
+        f"  - Net Vanna Exposure: {format_currency(net_vanna)} (VAS: {format_color(f'{vas:+.2f}', vas_color, bold=True)} -> {vas_interp})",
+        f"  - Net Charm Exposure: {format_currency(net_charm)}/day (Tilt: {format_color(f'{charm_tilt:+.2f}', charm_color, bold=True)} -> {charm_interp})",
+    ]
+    return "\n".join(lines)
+

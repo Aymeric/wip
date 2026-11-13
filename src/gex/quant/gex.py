@@ -10,6 +10,8 @@ from typing import Any, Dict, List, Optional, Tuple
 
 from src.gex.quant.greeks import (
     calculate_black_scholes_gamma,
+    calculate_black_scholes_vanna,
+    calculate_black_scholes_charm,
     find_flip_strikes,
     select_transition_points,
 )
@@ -111,6 +113,10 @@ def derive_gex_profile(
     total_put_gex = 0.0
     effective_call_gex = 0.0
     effective_put_gex = 0.0
+    total_call_vanna = 0.0
+    total_put_vanna = 0.0
+    total_call_charm = 0.0
+    total_put_charm = 0.0
     sum_strike_put_oi = 0.0
     sum_put_oi = 0
 
@@ -164,6 +170,14 @@ def derive_gex_profile(
         gex_val = oi * gamma * spot_x_100
         effective_gex_val = gex_val * dte_weight
 
+        vanna_val = 0.0
+        charm_val = 0.0
+        if oi > 0 and iv > 0.0:
+            vanna = calculate_black_scholes_vanna(calc_spot, strike, dte_val, iv)
+            charm = calculate_black_scholes_charm(calc_spot, strike, dte_val, iv)
+            vanna_val = oi * vanna * spot_x_100
+            charm_val = oi * charm * spot_x_100
+
         # IV proxy (within 15% of spot)
         diff = strike - calc_spot
         abs_diff = diff if diff >= 0.0 else -diff
@@ -180,6 +194,8 @@ def derive_gex_profile(
                 strike_put_gex[strike] = gex_val
             total_put_gex += gex_val
             effective_put_gex += effective_gex_val
+            total_put_vanna += vanna_val
+            total_put_charm += charm_val
             sum_strike_put_oi += strike * oi
             sum_put_oi += oi
         elif opt_type == "call":
@@ -191,6 +207,8 @@ def derive_gex_profile(
                 strike_call_gex[strike] = gex_val
             total_call_gex += gex_val
             effective_call_gex += effective_gex_val
+            total_call_vanna += vanna_val
+            total_call_charm += charm_val
 
     if total_oi <= 0:
         return {
@@ -205,6 +223,14 @@ def derive_gex_profile(
             "total_put_gex": 0.0,
             "effective_call_gex": 0.0,
             "effective_put_gex": 0.0,
+            "total_call_vanna": 0.0,
+            "total_put_vanna": 0.0,
+            "net_vanna": 0.0,
+            "total_call_charm": 0.0,
+            "total_put_charm": 0.0,
+            "net_charm": 0.0,
+            "vanna_asymmetry_score": 0.0,
+            "charm_tilt": 0.0,
             "net_gex": 0.0,
             "net_effective_gex": 0.0,
             "flip_strikes": [],
@@ -294,6 +320,13 @@ def derive_gex_profile(
     net_gex_nearest = strike_call_gex.get(nearest_strike, 0.0) - strike_put_gex.get(nearest_strike, 0.0)
     rule10_derived = net_gex_nearest >= 0.0
 
+    net_vanna = total_call_vanna - total_put_vanna
+    net_charm = total_call_charm - total_put_charm
+    vanna_denom = abs(total_call_vanna) + abs(total_put_vanna)
+    vanna_asymmetry_score = max(-1.0, min(1.0, net_vanna / (vanna_denom + 1e-6))) if vanna_denom > 0 else 0.0
+    charm_denom = abs(total_call_gex) + abs(total_put_gex)
+    charm_tilt = max(-1.0, min(1.0, net_charm / (charm_denom + 1e-6))) if charm_denom > 0 else 0.0
+
     return {
         "total_oi": total_oi,
         "iv_sum": iv_sum,
@@ -306,6 +339,14 @@ def derive_gex_profile(
         "total_put_gex": total_put_gex,
         "effective_call_gex": effective_call_gex,
         "effective_put_gex": effective_put_gex,
+        "total_call_vanna": total_call_vanna,
+        "total_put_vanna": total_put_vanna,
+        "net_vanna": net_vanna,
+        "total_call_charm": total_call_charm,
+        "total_put_charm": total_put_charm,
+        "net_charm": net_charm,
+        "vanna_asymmetry_score": vanna_asymmetry_score,
+        "charm_tilt": charm_tilt,
         "net_gex": total_call_gex - total_put_gex,
         "net_effective_gex": effective_call_gex - effective_put_gex,
         "flip_strikes": flip_strikes,

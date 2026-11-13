@@ -92,6 +92,14 @@ class GexProfile:
     effective_put_gex: float = 0.0
     net_gex: float = 0.0
     net_effective_gex: float = 0.0
+    total_call_vanna: float = 0.0
+    total_put_vanna: float = 0.0
+    net_vanna: float = 0.0
+    total_call_charm: float = 0.0
+    total_put_charm: float = 0.0
+    net_charm: float = 0.0
+    vanna_asymmetry_score: float = 0.0
+    charm_tilt: float = 0.0
     iv_sum: float = 0.0
     iv_count: int = 0
     flip_strikes: List[float] = field(default_factory=list)
@@ -116,6 +124,14 @@ class GexProfile:
             "total_put_gex": self.total_put_gex,
             "effective_call_gex": self.effective_call_gex,
             "effective_put_gex": self.effective_put_gex,
+            "total_call_vanna": self.total_call_vanna,
+            "total_put_vanna": self.total_put_vanna,
+            "net_vanna": self.net_vanna,
+            "total_call_charm": self.total_call_charm,
+            "total_put_charm": self.total_put_charm,
+            "net_charm": self.net_charm,
+            "vanna_asymmetry_score": self.vanna_asymmetry_score,
+            "charm_tilt": self.charm_tilt,
             "net_gex": self.net_gex,
             "net_effective_gex": self.net_effective_gex,
             "flip_strikes": list(self.flip_strikes),
@@ -148,6 +164,14 @@ class GexProfile:
             effective_put_gex=float(data.get("effective_put_gex", 0.0)),
             net_gex=float(data.get("net_gex", 0.0)),
             net_effective_gex=float(data.get("net_effective_gex", 0.0)),
+            total_call_vanna=float(data.get("total_call_vanna", 0.0)),
+            total_put_vanna=float(data.get("total_put_vanna", 0.0)),
+            net_vanna=float(data.get("net_vanna", 0.0)),
+            total_call_charm=float(data.get("total_call_charm", 0.0)),
+            total_put_charm=float(data.get("total_put_charm", 0.0)),
+            net_charm=float(data.get("net_charm", 0.0)),
+            vanna_asymmetry_score=float(data.get("vanna_asymmetry_score", 0.0)),
+            charm_tilt=float(data.get("charm_tilt", 0.0)),
             iv_sum=float(data.get("iv_sum", 0.0)),
             iv_count=int(data.get("iv_count", 0)),
             flip_strikes=[float(s) for s in raw_flips],

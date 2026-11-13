@@ -245,12 +245,13 @@ src/gex/
   - [ ] Full test suite and harness sync pass unchanged after extraction.
 
 ### 5.9 Second-Order Dealer Exposure Modeling (Vanna & Charm Profiles) ([#194](https://github.com/Aymeric/wip/issues/194))
+- **Status**: ✅ **Implemented** (Greeks in [src/gex/quant/greeks.py](src/gex/quant/greeks.py); GEX profile derivation in [src/gex/quant/gex.py](src/gex/quant/gex.py); domain models in [src/gex/core/models.py](src/gex/core/models.py); presentation in [src/gex/presentation/formatters.py](src/gex/presentation/formatters.py); tests in [tests/test_vanna_charm.py](tests/test_vanna_charm.py)).
 - **Need & Outcome**: While Gamma Exposure (GEX) models price acceleration, dealer delta hedging is also heavily driven by implied volatility changes ($\text{Vanna} = \partial \Delta / \partial \sigma$) and time decay ($\text{Charm} = \partial \Delta / \partial t$). Capturing Vanna and Charm provides leading indicators for market direction ahead of volatility events (FOMC, CPI, earnings) and weekend theta decay.
 - **Action Items**:
-  - [ ] Implement analytical Black-Scholes Vanna and Charm formulations in `src/gex/quant/greeks.py`.
-  - [ ] Aggregate strike-level net Vanna and Charm exposures into `derive_gex_profile` and domain models in `src/gex/core/models.py`.
-  - [ ] Calculate net Vanna asymmetry score and Charm tilt to detect whether dealer decay will create buying or selling pressure.
-  - [ ] Surface Vanna/Charm exposure metrics in Runway Maps and `analyze` CLI output.
+  - [x] Implement analytical Black-Scholes Vanna and Charm formulations in `src/gex/quant/greeks.py`.
+  - [x] Aggregate strike-level net Vanna and Charm exposures into `derive_gex_profile` and domain models in `src/gex/core/models.py`.
+  - [x] Calculate net Vanna asymmetry score and Charm tilt to detect whether dealer decay will create buying or selling pressure.
+  - [x] Surface Vanna/Charm exposure metrics in Runway Maps and `analyze` CLI output.
 
 ### 5.10 Alert Hysteresis & Notification Rate-Limiting Engine ([#195](https://github.com/Aymeric/wip/issues/195))
 - **Need & Outcome**: Intraday level breach monitoring (`src/gex/screening/monitor.py`) can generate duplicate alerts and exceed webhook rate limits when underlying spot prices oscillate rapidly across $nTrans$ (Stop 1) or $+GEX$ (Profit Target). A stateful alerting engine with cooldowns and hysteresis deadbands ensures reliable alerting without notification fatigue.
@@ -302,7 +303,7 @@ src/gex/
 | **Approval Decision Ledger** | Phase 5 (Advanced Strategy) | 🟡 Medium | ✅ Completed | Durable provenance of approvals, declines, and overrides | Phase 4 |
 | **IV Rank / Percentile Context** | Phase 5 (Advanced Strategy) | 🟢 Low | 📋 Planned | Relative IV context for entries (gate only after backtest) | 5.1 |
 | **CLI Extraction (`src/gex/cli/`)** | Phase 5 (Advanced Strategy) | 🟡 Medium | 📋 Planned | Smaller engine module; safer Phase 5 command additions | Phase 2 |
-| **Vanna & Charm Exposure** | Phase 5 (Advanced Strategy) | 🟡 Medium | 📋 Planned | Second-order dealer exposure modeling for vol crush and decay flows | Phase 3 |
+| **Vanna & Charm Exposure** | Phase 5 (Advanced Strategy) | 🟡 Medium | ✅ Completed | Second-order dealer exposure modeling for vol crush and decay flows | Phase 3 |
 | **Alert Hysteresis & Rate-Limiting** | Phase 5 (Advanced Strategy) | 🟢 Low | 📋 Planned | Stateful cooldowns and deadbands for intraday webhook alerts | 5.4 |
 | **Defined-Risk Vertical Spreads** | Phase 6 (Multi-Leg Spreads) | 🟡 Medium | 📋 Planned | Debit call spreads pegged to +GEX call walls for high IV regimes | 5.7 |
 

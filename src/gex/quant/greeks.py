@@ -184,3 +184,98 @@ def select_transition_points(
     return (round(ptrans, 2), round(ntrans, 2))
 
 
+def calculate_black_scholes_vanna(
+    spot: float,
+    strike: float,
+    dte_days: float,
+    iv: float,
+    risk_free_rate: float = 0.04,
+) -> float:
+    """
+    Calculates analytical Black-Scholes option Vanna (dDelta / dVol = dVega / dSpot).
+
+    Vanna = -N'(d1) * d2 / sigma
+    where:
+        T = max(dte_days, 0.5) / 365.25
+        d1 = [ln(S / K) + (r + 0.5 * sigma^2) * T] / (sigma * sqrt(T))
+        d2 = d1 - sigma * sqrt(T)
+        N'(d1) = (1 / sqrt(2 * pi)) * exp(-0.5 * d1^2)
+
+    Args:
+        spot: Current spot price of the underlying asset.
+        strike: Option strike price.
+        dte_days: Days to expiration (e.g. 30.0).
+        iv: Implied volatility as a decimal ratio (e.g. 0.35 for 35% IV).
+        risk_free_rate: Annualized risk-free interest rate (default: 0.04).
+
+    Returns:
+        float: Analytical option Vanna, or 0.0 if inputs are invalid.
+    """
+    if spot <= 0.0 or strike <= 0.0 or iv <= 0.0:
+        return 0.0
+
+    t = max(dte_days, 0.5) * _ONE_OVER_365_25
+    sigma_sqrt_t = iv * math.sqrt(t)
+    if sigma_sqrt_t <= 0.0:
+        return 0.0
+
+    try:
+        d1 = (math.log(spot / strike) + (risk_free_rate + 0.5 * iv * iv) * t) / sigma_sqrt_t
+        d2 = d1 - sigma_sqrt_t
+        n_prime_d1 = _ONE_OVER_SQRT_TWO_PI * math.exp(-0.5 * d1 * d1)
+        vanna = -(n_prime_d1 * d2) / iv
+        return vanna if math.isfinite(vanna) else 0.0
+    except (ValueError, OverflowError, ZeroDivisionError):
+        return 0.0
+
+
+def calculate_black_scholes_charm(
+    spot: float,
+    strike: float,
+    dte_days: float,
+    iv: float,
+    risk_free_rate: float = 0.04,
+) -> float:
+    """
+    Calculates analytical Black-Scholes daily option Charm (dDelta / dt = -dDelta / dT).
+    Measures the rate of option delta decay per calendar day.
+
+    Daily Charm = -N'(d1) * [r / (sigma * sqrt(T)) - d2 / (2 * T)] / 365.25
+    where:
+        T = max(dte_days, 0.5) / 365.25
+        d1 = [ln(S / K) + (r + 0.5 * sigma^2) * T] / (sigma * sqrt(T))
+        d2 = d1 - sigma * sqrt(T)
+        N'(d1) = (1 / sqrt(2 * pi)) * exp(-0.5 * d1^2)
+
+    Args:
+        spot: Current spot price of the underlying asset.
+        strike: Option strike price.
+        dte_days: Days to expiration (e.g. 30.0).
+        iv: Implied volatility as a decimal ratio (e.g. 0.35 for 35% IV).
+        risk_free_rate: Annualized risk-free interest rate (default: 0.04).
+
+    Returns:
+        float: Analytical daily option Charm, or 0.0 if inputs are invalid.
+    """
+    if spot <= 0.0 or strike <= 0.0 or iv <= 0.0:
+        return 0.0
+
+    t = max(dte_days, 0.5) * _ONE_OVER_365_25
+    sigma_sqrt_t = iv * math.sqrt(t)
+    if sigma_sqrt_t <= 0.0 or t <= 0.0:
+        return 0.0
+
+    try:
+        d1 = (math.log(spot / strike) + (risk_free_rate + 0.5 * iv * iv) * t) / sigma_sqrt_t
+        d2 = d1 - sigma_sqrt_t
+        n_prime_d1 = _ONE_OVER_SQRT_TWO_PI * math.exp(-0.5 * d1 * d1)
+        term1 = risk_free_rate / sigma_sqrt_t
+        term2 = d2 / (2.0 * t)
+        charm_annual = -n_prime_d1 * (term1 - term2)
+        charm_daily = charm_annual * _ONE_OVER_365_25
+        return charm_daily if math.isfinite(charm_daily) else 0.0
+    except (ValueError, OverflowError, ZeroDivisionError):
+        return 0.0
+
+
+
