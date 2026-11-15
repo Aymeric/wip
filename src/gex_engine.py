@@ -94,6 +94,10 @@ from src.gex.core.models import (
     Position,
     TradeRecord,
     VerticalSpread,
+    BacktestConfig,
+    BacktestTrade,
+    BacktestDailySnapshot,
+    BacktestResult,
 )
 from src.gex.core.config import (
     REPOSITORY_ROOT,
@@ -161,6 +165,17 @@ from src.gex.presentation.formatters import (
     format_vanna_charm_summary,
     format_iv_context,
     format_vertical_spread_summary,
+    format_backtest_summary,
+    format_backtest_regime_breakdown,
+    format_backtest_trade_log,
+)
+from src.gex.backtest import (
+    BacktestEngine,
+    HistoricalReplayHarness,
+    simulate_backtest,
+    calculate_backtest_metrics,
+    calculate_simulated_entry_fill,
+    calculate_simulated_exit_fill,
 )
 from src.gex.storage.persistence import (
     load_json,
@@ -6559,6 +6574,46 @@ def cmd_select_spreads(args):
         print(format_table(headers, rows))
 
 
+def cmd_backtest(args):
+    """Executes historical options replay and systematic backtesting."""
+    start_date = getattr(args, "start", None)
+    end_date = getattr(args, "end", None)
+    initial_capital = getattr(args, "capital", 100000.0) or 100000.0
+    max_positions = getattr(args, "max_positions", 5) or 5
+    position_size_pct = getattr(args, "position_size_pct", 0.05) or 0.05
+    target_delta = getattr(args, "target_delta", 0.45) or 0.45
+    min_dte = getattr(args, "min_dte", 30) or 30
+    max_dte = getattr(args, "max_dte", 45) or 45
+    target_mode = getattr(args, "target_mode", "T1") or "T1"
+    downloads_dir = getattr(args, "downloads_dir", None) or DOWNLOADS_DIR
+
+    config = BacktestConfig(
+        start_date=start_date,
+        end_date=end_date,
+        initial_capital=initial_capital,
+        position_size_pct=position_size_pct,
+        max_active_positions=max_positions,
+        target_delta=target_delta,
+        min_dte=min_dte,
+        max_dte=max_dte,
+        target_mode=target_mode,
+    )
+
+    result = simulate_backtest(config=config, downloads_dir=downloads_dir)
+
+    if getattr(args, "json", False):
+        print(json.dumps(result.to_dict(), indent=2))
+        return
+
+    print()
+    print(format_backtest_summary(result))
+    print()
+    print(format_backtest_regime_breakdown(result))
+    print()
+    print(format_backtest_trade_log(result))
+    print()
+
+
 def cmd_payoff(args):
     """Runs an offline option payoff simulation scenario grid."""
     symbol = args.symbol.upper()
@@ -7045,6 +7100,20 @@ def main():
     p_spreads.add_argument("--max-dte", type=int, default=45, help="Maximum target DTE (default: 45)")
     p_spreads.add_argument("--json", action="store_true", help="Output results as JSON")
 
+    # backtest subcommand (Milestone 5.1)
+    p_backtest = subparsers.add_parser("backtest", help="Simulates historical options replay across cached data downloads.")
+    p_backtest.add_argument("--start", type=str, help="Start date for simulation window (YYYY-MM-DD or YYYYMMDD)")
+    p_backtest.add_argument("--end", type=str, help="End date for simulation window (YYYY-MM-DD or YYYYMMDD)")
+    p_backtest.add_argument("--capital", type=float, default=100000.0, help="Initial virtual capital (default: 100,000.0)")
+    p_backtest.add_argument("--max-positions", type=int, default=5, help="Maximum concurrent open positions (default: 5)")
+    p_backtest.add_argument("--position-size-pct", type=float, default=0.05, help="Single-leg position allocation limit (default: 0.05 = 5%%)")
+    p_backtest.add_argument("--target-delta", type=float, default=0.45, help="Target option delta (default: 0.45)")
+    p_backtest.add_argument("--min-dte", type=int, default=30, help="Minimum target DTE (default: 30)")
+    p_backtest.add_argument("--max-dte", type=int, default=45, help="Maximum target DTE (default: 45)")
+    p_backtest.add_argument("--target-mode", type=str, default="T1", choices=["T1", "T2"], help="Exit target mode: T1 (+GEX touch) or T2 (Lock & Ride)")
+    p_backtest.add_argument("--downloads-dir", type=str, help="Custom historical downloads directory")
+    p_backtest.add_argument("--json", action="store_true", help="Output results as JSON")
+
     # payoff subcommand
     p_payoff = subparsers.add_parser("payoff", help="Runs an offline option payoff simulation scenario grid.")
     p_payoff.add_argument("symbol", type=str, help="Ticker symbol (e.g. NVDA)")
@@ -7131,6 +7200,8 @@ def main():
         cmd_hedge_plan(args)
     elif args.command == "select-spreads":
         cmd_select_spreads(args)
+    elif args.command == "backtest":
+        cmd_backtest(args)
     elif args.command == "payoff":
 
         cmd_payoff(args)

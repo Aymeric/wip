@@ -583,3 +583,148 @@ class VerticalSpread:
             "oi_ok": self.oi_ok,
         }
 
+
+@dataclass(slots=True)
+class BacktestConfig:
+    """Configuration parameters for historical replay and backtesting."""
+    start_date: Optional[str] = None
+    end_date: Optional[str] = None
+    initial_capital: float = 100000.0
+    position_size_pct: float = 0.05
+    max_active_positions: int = 5
+    slippage_penalty_pct: float = 0.35
+    target_delta: float = 0.45
+    min_dte: int = 30
+    max_dte: int = 45
+    target_mode: str = "T1"
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "start_date": self.start_date,
+            "end_date": self.end_date,
+            "initial_capital": self.initial_capital,
+            "position_size_pct": self.position_size_pct,
+            "max_active_positions": self.max_active_positions,
+            "slippage_penalty_pct": self.slippage_penalty_pct,
+            "target_delta": self.target_delta,
+            "min_dte": self.min_dte,
+            "max_dte": self.max_dte,
+            "target_mode": self.target_mode,
+        }
+
+
+@dataclass(slots=True)
+class BacktestTrade:
+    """Represents a simulated executed trade during backtesting."""
+    trade_id: str
+    symbol: str
+    option_id: str
+    strike: float
+    expiration_date: str
+    entry_date: str
+    exit_date: Optional[str]
+    entry_price: float
+    exit_price: Optional[float]
+    contracts: int
+    cost_basis: float
+    realized_pnl: Optional[float] = None
+    realized_pnl_pct: Optional[float] = None
+    holding_days: int = 0
+    exit_reason: Optional[str] = None
+    regime_at_entry: str = "ALL TRACKS OK"
+    status: str = "OPEN"  # "OPEN" or "CLOSED"
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "trade_id": self.trade_id,
+            "symbol": self.symbol,
+            "option_id": self.option_id,
+            "strike": self.strike,
+            "expiration_date": self.expiration_date,
+            "entry_date": self.entry_date,
+            "exit_date": self.exit_date,
+            "entry_price": round(self.entry_price, 2),
+            "exit_price": round(self.exit_price, 2) if self.exit_price is not None else None,
+            "contracts": self.contracts,
+            "cost_basis": round(self.cost_basis, 2),
+            "realized_pnl": round(self.realized_pnl, 2) if self.realized_pnl is not None else None,
+            "realized_pnl_pct": round(self.realized_pnl_pct, 2) if self.realized_pnl_pct is not None else None,
+            "holding_days": self.holding_days,
+            "exit_reason": self.exit_reason,
+            "regime_at_entry": self.regime_at_entry,
+            "status": self.status,
+        }
+
+
+@dataclass(slots=True)
+class BacktestDailySnapshot:
+    """Point-in-time portfolio valuation on a simulation date."""
+    date: str
+    cash: float
+    portfolio_equity: float
+    unrealized_pnl: float
+    open_positions_count: int
+    regime_status: str
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "date": self.date,
+            "cash": round(self.cash, 2),
+            "portfolio_equity": round(self.portfolio_equity, 2),
+            "unrealized_pnl": round(self.unrealized_pnl, 2),
+            "open_positions_count": self.open_positions_count,
+            "regime_status": self.regime_status,
+        }
+
+
+@dataclass(slots=True)
+class BacktestResult:
+    """Aggregated quantitative performance report from a historical simulation."""
+    config: BacktestConfig
+    start_date: str
+    end_date: str
+    simulation_days: int
+    initial_capital: float
+    final_equity: float
+    total_realized_pnl: float
+    total_return_pct: float
+    total_trades: int
+    winning_trades: int
+    losing_trades: int
+    win_rate: float
+    profit_factor: float
+    max_drawdown_pct: float
+    sharpe_ratio: float
+    sortino_ratio: float
+    avg_holding_days: float
+    trades_by_regime: Dict[str, Dict[str, Any]] = field(default_factory=dict)
+    trades_by_exit_reason: Dict[str, int] = field(default_factory=dict)
+    daily_snapshots: List[BacktestDailySnapshot] = field(default_factory=list)
+    trades: List[BacktestTrade] = field(default_factory=list)
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "config": self.config.to_dict(),
+            "start_date": self.start_date,
+            "end_date": self.end_date,
+            "simulation_days": self.simulation_days,
+            "initial_capital": round(self.initial_capital, 2),
+            "final_equity": round(self.final_equity, 2),
+            "total_realized_pnl": round(self.total_realized_pnl, 2),
+            "total_return_pct": round(self.total_return_pct, 2),
+            "total_trades": self.total_trades,
+            "winning_trades": self.winning_trades,
+            "losing_trades": self.losing_trades,
+            "win_rate": round(self.win_rate, 2),
+            "profit_factor": round(self.profit_factor, 2),
+            "max_drawdown_pct": round(self.max_drawdown_pct, 2),
+            "sharpe_ratio": round(self.sharpe_ratio, 3),
+            "sortino_ratio": round(self.sortino_ratio, 3),
+            "avg_holding_days": round(self.avg_holding_days, 1),
+            "trades_by_regime": self.trades_by_regime,
+            "trades_by_exit_reason": self.trades_by_exit_reason,
+            "daily_snapshots": [s.to_dict() for s in self.daily_snapshots],
+            "trades": [t.to_dict() for t in self.trades],
+        }
+
+

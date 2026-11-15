@@ -12,6 +12,9 @@ from src.gex.presentation.formatters import (
     format_vanna_charm_summary,
     format_iv_context,
     format_vertical_spread_summary,
+    format_backtest_summary,
+    format_backtest_regime_breakdown,
+    format_backtest_trade_log,
 )
 
 __all__ = [
@@ -26,4 +29,7 @@ __all__ = [
     "format_vanna_charm_summary",
     "format_iv_context",
     "format_vertical_spread_summary",
+    "format_backtest_summary",
+    "format_backtest_regime_breakdown",
+    "format_backtest_trade_log",
 ]

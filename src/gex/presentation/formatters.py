@@ -284,4 +284,88 @@ def format_vertical_spread_summary(spread: Any) -> str:
     return "\n".join(lines)
 
 
+def format_backtest_summary(result: Any) -> str:
+    """Formats an executive backtest performance card."""
+    from src.gex.presentation.ascii_art import format_color
+
+    ret_color = "32" if result.total_return_pct >= 0 else "31"
+    pnl_color = "32" if result.total_realized_pnl >= 0 else "31"
+    ret_str = format_color(f"{result.total_return_pct:+.2f}%", ret_color, bold=True)
+    pnl_str = format_color(format_currency(result.total_realized_pnl), pnl_color, bold=True)
+    wr_str = f"{result.win_rate:.1f}% ({result.winning_trades}W / {result.losing_trades}L)"
+
+    sharpe_str = f"{result.sharpe_ratio:.2f}" if result.sharpe_ratio != 0.0 else "N/A"
+    sortino_str = f"{result.sortino_ratio:.2f}" if result.sortino_ratio != 0.0 else "N/A"
+    pf_str = f"{result.profit_factor:.2f}" if result.profit_factor < 999.0 else "INF"
+    mdd_str = format_color(f"-{result.max_drawdown_pct:.2f}%", "31" if result.max_drawdown_pct > 15.0 else "33")
+
+    lines = [
+        "==================================================================================",
+        "  📊 GEX SYSTEMATIC HISTORICAL BACKTEST PERFORMANCE SUMMARY",
+        "==================================================================================",
+        f"  Simulation Window : {result.start_date} to {result.end_date} ({result.simulation_days} sessions)",
+        f"  Capital Profile   : Initial {format_currency(result.initial_capital)} -> Final {format_currency(result.final_equity)}",
+        f"  Realized P&L      : {pnl_str} ({ret_str})",
+        f"  Trade Volume      : {result.total_trades} closed positions (Avg Hold: {result.avg_holding_days:.1f} days)",
+        f"  Win Rate          : {wr_str} | Profit Factor: {pf_str}",
+        f"  Risk & Volatility : Sharpe: {sharpe_str} | Sortino: {sortino_str} | Max Drawdown: {mdd_str}",
+        "==================================================================================",
+    ]
+    return "\n".join(lines)
+
+
+def format_backtest_regime_breakdown(result: Any) -> str:
+    """Formats market-regime-stratified trade performance into a table."""
+    headers = ["Regime at Entry", "Trades", "Wins", "Win Rate", "Realized P&L"]
+    rows = []
+    for regime_name in ("ALL TRACKS OK", "TRACK 1 OK", "BLOCKED"):
+        data = getattr(result, "trades_by_regime", {}).get(regime_name, {})
+        trades_cnt = data.get("total_trades", 0)
+        wins = data.get("winning_trades", 0)
+        wr = f"{data.get('win_rate', 0.0):.1f}%"
+        pnl = format_currency(data.get("realized_pnl", 0.0))
+        rows.append([regime_name, str(trades_cnt), str(wins), wr, pnl])
+
+    alignments = ["left", "right", "right", "right", "right"]
+    table_str = format_table(headers, rows, alignments=alignments)
+    return f"📈 Performance Attribution by Market Regime\n{table_str}"
+
+
+def format_backtest_trade_log(result: Any, limit: int = 50) -> str:
+    """Formats executed historical simulation trades into a tabular log."""
+    trades = getattr(result, "trades", [])
+    if not trades:
+        return "No trades executed during simulation."
+
+    headers = [
+        "Trade ID", "Symbol", "Strike/Exp", "Entry Date", "Exit Date",
+        "Entry", "Exit", "Qty", "P&L ($)", "P&L (%)", "Exit Reason"
+    ]
+    rows = []
+    for t in trades[:limit]:
+        strike_exp = f"${t.strike:.1f} {t.expiration_date[-5:]}"
+        pnl_val = t.realized_pnl or 0.0
+        pnl_pct_val = t.realized_pnl_pct or 0.0
+        exit_pr = f"${t.exit_price:.2f}" if t.exit_price is not None else "N/A"
+        rows.append([
+            t.trade_id,
+            t.symbol,
+            strike_exp,
+            t.entry_date,
+            t.exit_date or "OPEN",
+            f"${t.entry_price:.2f}",
+            exit_pr,
+            str(t.contracts),
+            format_currency(pnl_val),
+            f"{pnl_pct_val:+.1f}%",
+            t.exit_reason or "N/A",
+        ])
+
+    alignments = ["left", "left", "left", "center", "center", "right", "right", "right", "right", "right", "left"]
+    table_str = format_table(headers, rows, alignments=alignments)
+    suffix = f"\n  (Showing {min(len(trades), limit)} of {len(trades)} trades)" if len(trades) > limit else ""
+    return f"📜 Simulated Historical Execution Ledger\n{table_str}{suffix}"
+
+
+
 

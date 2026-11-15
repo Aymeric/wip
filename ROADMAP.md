@@ -177,13 +177,14 @@ src/gex/
 ## 🚀 Phase 5: Advanced Strategy Engineering & Operational Automation
 
 ### 5.1 Historical Options Replay & Backtesting Engine ([#193](https://github.com/Aymeric/wip/issues/193))
+- **Status**: ✅ **Implemented** (module in [src/gex/backtest/engine.py](src/gex/backtest/engine.py); domain models in [src/gex/core/models.py](src/gex/core/models.py); presentation in [src/gex/presentation/formatters.py](src/gex/presentation/formatters.py); CLI command `backtest` in [src/gex_engine.py](src/gex_engine.py); tests in [tests/test_backtest.py](tests/test_backtest.py)).
 - **Need & Outcome**: Enable systematic backtesting and offline simulation of the GEX trading rules across cached historical option chains and price series (`data/downloads/`). Validates win rate, expectancy, and parameter sensitivity (delta targets, stalling days, stop thresholds) without capital risk.
 - **Action Items**:
-  - [ ] Implement `src/gex/backtest/engine.py` with virtual portfolio state machine and trade ledger.
-  - [ ] Build historical quote replay harness parsing dated JSON files in `data/downloads/`.
-  - [ ] Implement simulated fill models incorporating the 35% bid-ask spread slippage penalty.
-  - [ ] Calculate backtest performance metrics (Sharpe ratio, Sortino ratio, max drawdown, win rate by market regime).
-  - [ ] Expose CLI command `python3 src/gex_engine.py backtest --start YYYY-MM-DD --end YYYY-MM-DD`.
+  - [x] Implement `src/gex/backtest/engine.py` with virtual portfolio state machine and trade ledger.
+  - [x] Build historical quote replay harness parsing dated JSON files in `data/downloads/`.
+  - [x] Implement simulated fill models incorporating the 35% bid-ask spread slippage penalty.
+  - [x] Calculate backtest performance metrics (Sharpe ratio, Sortino ratio, max drawdown, win rate by market regime).
+  - [x] Expose CLI command `python3 src/gex_engine.py backtest --start YYYY-MM-DD --end YYYY-MM-DD`.
 
 ### 5.2 Dynamic Delta Rolling & Profit Optimization Engine
 - **Status**: ✅ **Implemented** (module in [src/gex/risk/rolling.py](src/gex/risk/rolling.py); CLI command `evaluate-rolls` in [src/gex_engine.py](src/gex_engine.py); tests in [tests/test_rolling.py](tests/test_rolling.py)).
@@ -296,7 +297,7 @@ src/gex/
 | **SQLite Trade Journal Persistence** | Phase 4 (Persistence) | 🟢 Low | ✅ Completed | Embedded ACID database for historical trades and GEX snapshots | Phase 2 |
 | **Notification Webhooks** | Phase 4 (Persistence) | 🟢 Low | ✅ Completed | Webhooks (Slack/Discord/Telegram) and macOS notifications | Phase 2 |
 | **Headless Pre-Market Audit Mode** | Phase 4 (Persistence) | 🟢 Low | ✅ Completed | Automated `audit-all` CLI mode with executive morning markdown | Phase 4 |
-| **Historical Replay & Backtesting** | Phase 5 (Advanced Strategy) | 🟡 Medium | 📋 Planned | Offline simulation harness for rule validation across downloads | Phase 4 |
+| **Historical Replay & Backtesting** | Phase 5 (Advanced Strategy) | 🟡 Medium | ✅ Completed | Offline simulation harness for rule validation across downloads | Phase 4 |
 | **Dynamic Delta Rolling Engine** | Phase 5 (Advanced Strategy) | 🟢 Low | ✅ Completed | Systematic roll-up/roll-out rules for winning options (Delta >= 0.70) | Phase 3 |
 | **Automated Macro Hedge Sizing** | Phase 5 (Advanced Strategy) | 🟢 Low | ✅ Completed | Beta-weighted SPY/QQQ hedge sizing on defensive regime transitions | Phase 3 |
 | **Intraday Level Breach Monitor** | Phase 5 (Advanced Strategy) | 🟡 Medium | ✅ Completed | Real-time monitoring daemon for Stop 1 / Profit Target breaches | Phase 4 |

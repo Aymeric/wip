@@ -10,6 +10,10 @@ from src.gex.core.models import (
     Position,
     TradeRecord,
     VerticalSpread,
+    BacktestConfig,
+    BacktestTrade,
+    BacktestDailySnapshot,
+    BacktestResult,
 )
 from src.gex.core.config import (
     REPOSITORY_ROOT,
@@ -48,6 +52,10 @@ __all__ = [
     "Position",
     "TradeRecord",
     "VerticalSpread",
+    "BacktestConfig",
+    "BacktestTrade",
+    "BacktestDailySnapshot",
+    "BacktestResult",
     "REPOSITORY_ROOT",
     "DATA_DIR",
     "REGIME_FILE",

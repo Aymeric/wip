@@ -1395,7 +1395,7 @@ class TestGEXEngine(unittest.TestCase):
         from unittest.mock import patch
         import gex_engine
 
-        temp_dir = tempfile.mkdtemp()
+        temp_dir = os.path.realpath(tempfile.mkdtemp())
         tmp_path = os.path.join(temp_dir, "active_positions_TEST.json")
         initial_data = {
             "options_positions": {
@@ -1510,7 +1510,7 @@ class TestGEXEngine(unittest.TestCase):
         from unittest.mock import patch
         import gex_engine
 
-        temp_dir = tempfile.mkdtemp()
+        temp_dir = os.path.realpath(tempfile.mkdtemp())
         try:
             downloads_dir = os.path.join(temp_dir, "downloads")
             dated_dir = os.path.join(downloads_dir, "20260728")
@@ -1548,7 +1548,7 @@ class TestGEXEngine(unittest.TestCase):
         from unittest.mock import patch, MagicMock
         import gex_engine
 
-        temp_dir = tempfile.mkdtemp()
+        temp_dir = os.path.realpath(tempfile.mkdtemp())
         try:
             # 1. Test non-existent DOWNLOADS_DIR
             non_existent_dir = os.path.join(temp_dir, "nonexistent")
@@ -1621,7 +1621,7 @@ class TestGEXEngine(unittest.TestCase):
         from unittest.mock import patch
         import gex_engine
 
-        temp_dir = tempfile.mkdtemp()
+        temp_dir = os.path.realpath(tempfile.mkdtemp())
         try:
             downloads_dir = os.path.join(temp_dir, "downloads")
             os.makedirs(downloads_dir)
@@ -1662,7 +1662,7 @@ class TestGEXEngine(unittest.TestCase):
         from unittest.mock import patch
         import gex_engine
 
-        temp_dir = tempfile.mkdtemp()
+        temp_dir = os.path.realpath(tempfile.mkdtemp())
         try:
             downloads_dir = os.path.join(temp_dir, "downloads")
             old_dir = os.path.join(downloads_dir, "20260710")
@@ -1990,7 +1990,7 @@ class TestGEXEngine(unittest.TestCase):
         from unittest.mock import patch
         import gex_engine
 
-        temp_dir = tempfile.mkdtemp()
+        temp_dir = os.path.realpath(tempfile.mkdtemp())
         try:
             downloads_dir = os.path.join(temp_dir, "downloads", "20260827")
             os.makedirs(downloads_dir)
@@ -2023,7 +2023,7 @@ class TestGEXEngine(unittest.TestCase):
         from unittest.mock import patch
         import gex_engine
 
-        temp_dir = tempfile.mkdtemp()
+        temp_dir = os.path.realpath(tempfile.mkdtemp())
         try:
             downloads_dir = os.path.join(temp_dir, "downloads")
             os.makedirs(downloads_dir)
@@ -2826,7 +2826,7 @@ class TestGEXEngine(unittest.TestCase):
         import gex_engine
 
         # Create nested temp directories mimicking data/downloads/YYYYMMDD
-        temp_dir = tempfile.mkdtemp()
+        temp_dir = os.path.realpath(tempfile.mkdtemp())
         try:
             day1_dir = os.path.join(temp_dir, "20260708")
             day2_dir = os.path.join(temp_dir, "20260710")
@@ -3205,7 +3205,7 @@ class TestGEXEngine(unittest.TestCase):
         from datetime import datetime as real_datetime
         import gex_engine
 
-        temp_dir = tempfile.mkdtemp()
+        temp_dir = os.path.realpath(tempfile.mkdtemp())
         try:
             day_dir = os.path.join(temp_dir, "20260710")
             os.makedirs(day_dir)
@@ -3498,7 +3498,7 @@ class TestGEXEngine(unittest.TestCase):
         from unittest.mock import patch
         import gex_engine
         
-        temp_dir = tempfile.mkdtemp()
+        temp_dir = os.path.realpath(tempfile.mkdtemp())
         try:
             opt_file = os.path.join(temp_dir, "active_positions.json")
             gex_engine.save_json(opt_file, {"options_positions": {}, "stocks_positions": {}})
@@ -3661,7 +3661,7 @@ class TestGEXEngine(unittest.TestCase):
         from unittest.mock import patch
         import gex_engine
 
-        temp_dir = tempfile.mkdtemp()
+        temp_dir = os.path.realpath(tempfile.mkdtemp())
         try:
             data_dir = os.path.join(temp_dir, "data")
             os.makedirs(data_dir)
@@ -3701,7 +3701,7 @@ class TestGEXEngine(unittest.TestCase):
         from unittest.mock import patch
         import gex_engine
 
-        temp_dir = tempfile.mkdtemp()
+        temp_dir = os.path.realpath(tempfile.mkdtemp())
         try:
             # 1. Non-existent data directory
             with patch("gex_engine.REPOSITORY_ROOT", temp_dir):
@@ -3748,7 +3748,7 @@ class TestGEXEngine(unittest.TestCase):
         from unittest.mock import patch
         import gex_engine
 
-        temp_dir = tempfile.mkdtemp()
+        temp_dir = os.path.realpath(tempfile.mkdtemp())
         try:
             downloads_dir = os.path.join(temp_dir, "downloads")
             os.makedirs(downloads_dir, exist_ok=True)
@@ -3792,7 +3792,7 @@ class TestGEXEngine(unittest.TestCase):
         from unittest.mock import patch
         import gex_engine
 
-        temp_dir = tempfile.mkdtemp()
+        temp_dir = os.path.realpath(tempfile.mkdtemp())
         try:
             downloads_dir = os.path.join(temp_dir, "downloads")
             os.makedirs(downloads_dir, exist_ok=True)
@@ -3863,7 +3863,7 @@ class TestGEXEngine(unittest.TestCase):
         from unittest.mock import patch
         import gex_engine
 
-        temp_dir = tempfile.mkdtemp()
+        temp_dir = os.path.realpath(tempfile.mkdtemp())
         try:
             non_existent_dir = os.path.join(temp_dir, "non_existent")
             with patch("gex_engine.DOWNLOADS_DIR", non_existent_dir):
@@ -3888,7 +3888,7 @@ class TestGEXEngine(unittest.TestCase):
         from unittest.mock import patch
         import gex_engine
 
-        temp_dir = tempfile.mkdtemp()
+        temp_dir = os.path.realpath(tempfile.mkdtemp())
         try:
             downloads_dir = os.path.join(temp_dir, "downloads")
             os.makedirs(downloads_dir, exist_ok=True)
@@ -3952,7 +3952,7 @@ class TestGEXEngine(unittest.TestCase):
         from unittest.mock import patch
         import gex_engine
 
-        temp_dir = tempfile.mkdtemp()
+        temp_dir = os.path.realpath(tempfile.mkdtemp())
         try:
             downloads_dir = os.path.join(temp_dir, "downloads")
             os.makedirs(downloads_dir, exist_ok=True)
@@ -4011,7 +4011,7 @@ class TestGEXEngine(unittest.TestCase):
         from unittest.mock import patch
         import gex_engine
 
-        temp_dir = tempfile.mkdtemp()
+        temp_dir = os.path.realpath(tempfile.mkdtemp())
         try:
             downloads_dir = os.path.join(temp_dir, "downloads")
 
@@ -4159,7 +4159,7 @@ class TestGEXEngine(unittest.TestCase):
         from types import SimpleNamespace
         import gex_engine
 
-        temp_dir = tempfile.mkdtemp()
+        temp_dir = os.path.realpath(tempfile.mkdtemp())
         try:
             active_file = os.path.join(temp_dir, "active_positions.json")
             closed_file = os.path.join(temp_dir, "closed_positions.json")
@@ -4350,7 +4350,7 @@ class TestGEXEngine(unittest.TestCase):
         from unittest.mock import patch, MagicMock
         import gex_engine
 
-        temp_dir = tempfile.mkdtemp()
+        temp_dir = os.path.realpath(tempfile.mkdtemp())
         try:
             workflow_file = os.path.join(temp_dir, "workflow_state.json")
             regime_file = os.path.join(temp_dir, "regime.json")
@@ -4434,7 +4434,7 @@ class TestGEXEngine(unittest.TestCase):
         from types import SimpleNamespace
         import gex_engine
 
-        temp_dir = tempfile.mkdtemp()
+        temp_dir = os.path.realpath(tempfile.mkdtemp())
         try:
             perf_path = os.path.join(temp_dir, "data", "performance.json")
             args = SimpleNamespace(
@@ -4529,7 +4529,7 @@ class TestCmdStatus(unittest.TestCase):
         from unittest.mock import patch, MagicMock
         import gex_engine
 
-        temp_dir = tempfile.mkdtemp()
+        temp_dir = os.path.realpath(tempfile.mkdtemp())
         try:
             non_existent = os.path.join(temp_dir, "nonexistent.json")
             with patch('gex_engine.REGIME_FILE', non_existent), \
@@ -4559,7 +4559,7 @@ class TestCmdStatus(unittest.TestCase):
         from unittest.mock import patch, MagicMock
         import gex_engine
 
-        temp_dir = tempfile.mkdtemp()
+        temp_dir = os.path.realpath(tempfile.mkdtemp())
         today = datetime.today().strftime('%Y-%m-%d')
         try:
             regime_file = os.path.join(temp_dir, "regime.json")
@@ -4636,7 +4636,7 @@ class TestCmdStatus(unittest.TestCase):
         from unittest.mock import patch, MagicMock
         import gex_engine
 
-        temp_dir = tempfile.mkdtemp()
+        temp_dir = os.path.realpath(tempfile.mkdtemp())
         today = datetime.today().strftime('%Y-%m-%d')
         try:
             regime_file = os.path.join(temp_dir, "regime.json")
@@ -4740,7 +4740,7 @@ class TestCmdStatus(unittest.TestCase):
         from unittest.mock import patch, MagicMock
         import gex_engine
 
-        temp_dir = tempfile.mkdtemp()
+        temp_dir = os.path.realpath(tempfile.mkdtemp())
         today = datetime.today().strftime('%Y-%m-%d')
         account = "ACC123"
         try:
@@ -4946,7 +4946,7 @@ class TestCmdStatus(unittest.TestCase):
         from types import SimpleNamespace
         import gex_engine
 
-        temp_dir = tempfile.mkdtemp()
+        temp_dir = os.path.realpath(tempfile.mkdtemp())
         try:
             analyses_path = os.path.join(temp_dir, "ticker_analyses.json")
             inst_path = os.path.join(temp_dir, "test_instruments.json")
