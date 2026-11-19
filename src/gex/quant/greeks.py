@@ -78,7 +78,7 @@ def find_flip_strikes(gex_input: Union[dict, Sequence[Tuple[float, float]]]) -> 
             return []
         items.sort()
     else:
-        items = gex_input
+        items = list(gex_input)
         if len(items) < 2:
             return []
 

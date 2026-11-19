@@ -565,7 +565,6 @@ def cmd_status(args):
             
     # Check stock exits
     for ticker, details in stocks.items():
-        shares = float(details.get("Shares", 0.0))
         avg_price = float(details.get("Average Buy Price", 0.0))
         
         levels = analyses.get(ticker, {})

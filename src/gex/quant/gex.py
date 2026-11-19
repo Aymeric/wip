@@ -72,8 +72,8 @@ def derive_gex_profile(
     # - Precalculate dte_val and dte_weight per expiration date in exp_cache.
     # - Direct inst_map.get(opt_id) lookup for quote payloads avoids redundant key checks.
     today_d = date.today()
-    exp_cache = {}
-    inst_map = {}
+    exp_cache: Dict[str, Tuple[float, float]] = {}
+    inst_map: Dict[str, Tuple[float, Any, float, float]] = {}
     for inst in instruments_list:
         if type(inst) is not dict:
             continue
@@ -104,10 +104,10 @@ def derive_gex_profile(
 
     quotes_list = extract_quotes_list(quotes_data)
 
-    strike_put_oi = {}
-    strike_call_oi = {}
-    strike_put_gex = {}
-    strike_call_gex = {}
+    strike_put_oi: Dict[float, int] = {}
+    strike_call_oi: Dict[float, int] = {}
+    strike_put_gex: Dict[float, float] = {}
+    strike_call_gex: Dict[float, float] = {}
     total_oi = 0
     total_call_gex = 0.0
     total_put_gex = 0.0
@@ -156,7 +156,10 @@ def derive_gex_profile(
         except (ValueError, TypeError):
             continue
 
-        inst_info = inst_map.get(opt_id)
+        if not opt_id:
+            continue
+
+        inst_info = inst_map.get(str(opt_id))
         if inst_info is None:
             continue
 

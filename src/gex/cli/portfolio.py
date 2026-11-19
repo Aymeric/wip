@@ -747,7 +747,6 @@ def cmd_portfolio(args):
     
     # Cumulative portfolio delta exposure
     delta_shares_color = get_pnl_color(total_net_delta_shares)
-    delta_exposure_color = get_pnl_color(total_net_delta_exposure_dlr)
     ds_fmt = format_color(f"{total_net_delta_shares:+,.2f} shares" if abs(total_net_delta_shares) >= 0.005 else "0.00 shares", delta_shares_color, bold=True)
     de_fmt = format_pnl(pnl_dlr=total_net_delta_exposure_dlr, bold=True)
     print(f"- **Cumulative Portfolio Net Delta**: {ds_fmt} (Delta-Equivalent directional Exposure: {de_fmt})")
@@ -763,7 +762,6 @@ def cmd_portfolio(args):
             
     beta_weighted_delta_shares = total_beta_weighted_delta_exposure_dlr / spy_price if spy_price > 0 else 0.0
     beta_shares_color = get_pnl_color(beta_weighted_delta_shares)
-    beta_exposure_color = get_pnl_color(total_beta_weighted_delta_exposure_dlr)
     bds_fmt = format_color(f"{beta_weighted_delta_shares:+,.2f} SPY-equiv shares" if abs(beta_weighted_delta_shares) >= 0.005 else "0.00 SPY-equiv shares", beta_shares_color, bold=True)
     bde_fmt = format_pnl(pnl_dlr=total_beta_weighted_delta_exposure_dlr, bold=True)
     print(f"- **Beta-Weighted directional Delta (SPY)**: {bds_fmt} (Beta-Equivalent directional Exposure: {bde_fmt} at SPY ${spy_price:.2f})")
