@@ -36,17 +36,27 @@ Provide the next semantic version (for example, `1.2.0`). If no version is provi
    # 1. Syntax check all modified Python modules
    python3 -m py_compile src/gex_engine.py src/gex/**/*.py
 
-   # 2. Comprehensive unit test discovery
+   # 2. Static analysis and code linting
+   ruff check src/gex tests
+
+   # 3. Static type checking
+   mypy src/gex
+
+   # 4. Comprehensive unit test discovery
    python3 -m unittest discover -s tests -p "test_*.py"
 
-   # 3. Performance benchmarks
+   # 5. Project version consistency check
+   python3 -m unittest tests/test_version.py
+
+   # 6. Performance benchmarks
    python3 tests/test_performance.py
 
-   # 4. Multi-harness synchronization check
+   # 7. Multi-harness synchronization check
    python3 scripts/sync_harnesses.py --check
 
-   # 5. CLI sanity check
+   # 8. CLI sanity check
    python3 src/gex_engine.py --help
+   python3 src/gex_engine.py --version
    ```
 
 9. **Ask before committing and creating a release tag.** After release preparation and quality checks are complete, summarize the changes and ask the user via `ask_question` whether they want to commit the release changes and create a `v<major.minor.patch>` git tag.

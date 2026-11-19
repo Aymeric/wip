@@ -21,6 +21,7 @@ Select one valuable, implementable item from the GEX Options Trading System (`ge
    - Follow the modular package architecture under `src/gex/` (`core`, `quant`, `risk`, `screening`, `storage`, `presentation`) and CLI routing in `src/gex_engine.py`.
    - Maintain the **strict quantitative framework**: do not compute option Greeks, GEX levels, regime indicators, or position sizing with manual approximations; use deterministic Python implementations.
    - Maintain institutional risk safety: preserve Stop 1–5 hierarchy, account scoping (`--account ACCOUNT_NUMBER`), cash buying power bounds, and micro-account threshold rules ($10,000 net liq).
+   - Maintain static analysis and typing standards: avoid undefined variables, unresolved imports, and unhandled typing regressions, conforming strictly to `ruff check src/gex tests` and `mypy src/gex`.
    - Do not silently expand scope into adjacent roadmap work.
    - Add or update focused unit tests in `tests/test_<feature>.py`.
    - Do not commit, push, deploy, or mutate remote GitHub issues (including closing or editing issues) unless explicitly requested.
@@ -38,12 +39,14 @@ Select one valuable, implementable item from the GEX Options Trading System (`ge
 7. **Reconcile local documentation.** Update `ROADMAP.md` only when the selected work corresponds to an entry and its completion is verified. Mark a task complete (`[x]`) and update the Summary Roadmap Matrix only when its stated scope is actually implemented and verified; do not mark a parent complete while child tasks remain. If the selected issue has no matching roadmap entry, do not invent a roadmap commitment. Do not change GitHub issue state or claim that it is resolved; report the implemented result and the issue reference so the user can decide whether to close it.
 
 8. **Verify the change.** Run project quality gates for changed files:
+   - Syntax validation: `python3 -m py_compile src/gex_engine.py src/gex/**/*.py`.
+   - Lint & static analysis: `ruff check src/gex tests` (must pass with 0 errors).
+   - Type check: `mypy src/gex` (must pass with 0 errors).
    - Unit tests: `python3 -m unittest tests/test_<feature>.py` (and related domain test suites).
    - Core regression check: `python3 -m unittest discover -s tests -p "test_*.py"` or relevant multi-suite test run.
    - Project version consistency check: `python3 -m unittest tests/test_version.py` (ensures `src/gex/__init__.__version__` strictly matches `pyproject.toml` `project.version` and adheres to SemVer).
    - Performance benchmarks: `python3 tests/test_performance.py` (ensure Bolt optimizations and sub-millisecond latencies are maintained).
    - Multi-Harness Sync: `python3 scripts/sync_harnesses.py --check` (if agents or prompts were modified, run `python3 scripts/sync_harnesses.py --sync`).
-   - Syntax validation: `python3 -m py_compile src/gex_engine.py src/gex/**/*.py`.
    Review the final diff and ensure unrelated worktree changes are untouched.
 
 ## Completion Report
