@@ -1183,7 +1183,7 @@ class TestGEXEngine(unittest.TestCase):
             }
             gex_engine.save_json(tmp_path, mock_data)
             
-            with patch('gex_engine.OPTIONS_FILE', tmp_path), patch('sys.stdout') as mock_stdout:
+            with patch('gex_engine.OPTIONS_FILE', tmp_path), patch('gex_engine.ANALYSES_FILE', tmp_path + '.analyses.json'), patch('sys.stdout') as mock_stdout:
                 mock_stdout.isatty = MagicMock(return_value=False)
                 class PortfolioArgs:
                     net_liq = 50000.0
@@ -2323,7 +2323,7 @@ class TestGEXEngine(unittest.TestCase):
             }
             gex_engine.save_json(tmp_path, mock_data)
             
-            with patch('gex_engine.OPTIONS_FILE', tmp_path), patch('sys.stdout') as mock_stdout:
+            with patch('gex_engine.OPTIONS_FILE', tmp_path), patch('gex_engine.ANALYSES_FILE', tmp_path + '.analyses.json'), patch('sys.stdout') as mock_stdout:
                 mock_stdout.isatty = MagicMock(return_value=False)
                 class PortfolioArgs:
                     net_liq = 50000.0

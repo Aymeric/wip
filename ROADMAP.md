@@ -240,11 +240,12 @@ src/gex/
   - [x] Surface IVR in `analyze` / candidate tables as informational first; promote to a gate only after backtest evidence (depends on 5.1).
 
 ### 5.8 CLI Extraction into `src/gex/cli/` ([#166](https://github.com/Aymeric/wip/issues/166))
-- **Need & Outcome**: [src/gex_engine.py](src/gex_engine.py) is ~6,600 lines hosting 28 subcommands while `src/gex/cli/` is empty. Phase 5 adds four more commands; extracting command handlers reduces regression risk and review cost.
+- **Status**: ✅ **Implemented** (domain modules in [src/gex/cli/](src/gex/cli/): `regime.py`, `portfolio.py`, `screening.py`, `journal.py`, `ops.py`, `parser.py`; re-exports in [src/gex_engine.py](src/gex_engine.py); tests in [tests/test_cli_extraction.py](tests/test_cli_extraction.py)).
+- **Need & Outcome**: [src/gex_engine.py](src/gex_engine.py) was ~7,200 lines hosting 34 subcommands while `src/gex/cli/` was empty. Extracting command handlers into domain-aligned modules reduces monolith complexity, improves maintainability, and prevents review regressions.
 - **Action Items**:
-  - [ ] Move argparse wiring and `cmd_*` handlers into `src/gex/cli/` modules grouped by domain (portfolio, screening, regime, journal, ops).
-  - [ ] Keep `python3 src/gex_engine.py <subcommand>` and existing root re-exports 100% backward compatible.
-  - [ ] Full test suite and harness sync pass unchanged after extraction.
+  - [x] Move argparse wiring and `cmd_*` handlers into `src/gex/cli/` modules grouped by domain (portfolio, screening, regime, journal, ops).
+  - [x] Keep `python3 src/gex_engine.py <subcommand>` and existing root re-exports 100% backward compatible.
+  - [x] Full test suite and harness sync pass unchanged after extraction (287 unit tests passing).
 
 ### 5.9 Second-Order Dealer Exposure Modeling (Vanna & Charm Profiles) ([#194](https://github.com/Aymeric/wip/issues/194))
 - **Status**: ✅ **Implemented** (Greeks in [src/gex/quant/greeks.py](src/gex/quant/greeks.py); GEX profile derivation in [src/gex/quant/gex.py](src/gex/quant/gex.py); domain models in [src/gex/core/models.py](src/gex/core/models.py); presentation in [src/gex/presentation/formatters.py](src/gex/presentation/formatters.py); tests in [tests/test_vanna_charm.py](tests/test_vanna_charm.py)).
@@ -374,7 +375,7 @@ src/gex/
 | **Stop-Coded Exit Attribution** | Phase 5 (Advanced Strategy) | 🔴 High | ✅ Completed | Per-stop expectancy via coded `exit_reason` | Phase 4 |
 | **Approval Decision Ledger** | Phase 5 (Advanced Strategy) | 🟡 Medium | ✅ Completed | Durable provenance of approvals, declines, and overrides | Phase 4 |
 | **IV Rank / Percentile Context** | Phase 5 (Advanced Strategy) | 🟢 Low | ✅ Completed | Relative IV context for entries (gate only after backtest) | 5.1 |
-| **CLI Extraction (`src/gex/cli/`)** | Phase 5 (Advanced Strategy) | 🟡 Medium | 📋 Planned | Smaller engine module; safer Phase 5 command additions | Phase 2 |
+| **CLI Extraction (`src/gex/cli/`)** | Phase 5 (Advanced Strategy) | 🟡 Medium | ✅ Completed | Smaller engine module; safer Phase 5 command additions | Phase 2 |
 | **Vanna & Charm Exposure** | Phase 5 (Advanced Strategy) | 🟡 Medium | ✅ Completed | Second-order dealer exposure modeling for vol crush and decay flows | Phase 3 |
 | **Alert Hysteresis & Rate-Limiting** | Phase 5 (Advanced Strategy) | 🟢 Low | ✅ Completed | Stateful cooldowns and deadbands for intraday webhook alerts | 5.4 |
 | **Defined-Risk Vertical Spreads** | Phase 6 (Multi-Leg Spreads) | 🟡 Medium | ✅ Completed | Debit call spreads pegged to +GEX call walls for high IV regimes | 5.7 |
