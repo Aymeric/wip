@@ -47,7 +47,7 @@ from src.gex.risk.stops import compute_exit_rule_state
 from src.gex.storage.db import sync_closed_positions_to_db
 
 
-import src.gex_engine as ge
+from src.gex.cli.proxy import ge
 
 _get_downloads_files = lambda *a, **k: ge._get_downloads_files(*a, **k)
 account_positions_file = lambda *a, **k: ge.account_positions_file(*a, **k)

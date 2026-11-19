@@ -45,6 +45,7 @@ from src.gex.quant.greeks import (
     calculate_black_scholes_gamma,
     calculate_black_scholes_vanna,
     calculate_black_scholes_charm,
+    calculate_black_scholes_vega,
     find_flip_strikes,
     select_transition_points,
 )
@@ -103,6 +104,7 @@ from src.gex.core.models import (
     BacktestTrade,
     BacktestDailySnapshot,
     BacktestResult,
+    PreEarningsCandidate,
 )
 from src.gex.core.config import (
     REPOSITORY_ROOT,
@@ -173,6 +175,7 @@ from src.gex.presentation.formatters import (
     format_backtest_summary,
     format_backtest_regime_breakdown,
     format_backtest_trade_log,
+    format_pre_earnings_table,
 )
 from src.gex.backtest import (
     BacktestEngine,
@@ -202,6 +205,10 @@ from src.gex.screening.selector import (
 from src.gex.screening.spreads import (
     calculate_spread_payoff,
     select_vertical_spread,
+)
+from src.gex.screening.vega_scanner import (
+    calculate_pre_earnings_vega_setup,
+    scan_pre_earnings_candidates,
 )
 from src.gex.screening.monitor import (
     PositionBreachAlert,
@@ -1866,50 +1873,62 @@ def cleanup_downloads(days=7):
 # ==============================================================================
 # Extracted CLI Subcommands & Dispatcher (Roadmap Milestone 5.8)
 # ==============================================================================
-from src.gex.cli import (
+from src.gex.cli.parser import (
     COMMAND_HANDLERS,
-    add_journal_parsers,
-    add_ops_parsers,
-    add_portfolio_parsers,
-    add_regime_parsers,
-    add_screening_parsers,
     build_parser,
+    dispatch_command,
+)
+from src.gex.cli.regime import (
+    add_regime_parsers,
+    cmd_status,
+    cmd_update_regime,
+)
+from src.gex.cli.portfolio import (
+    add_portfolio_parsers,
     cmd_add_pos,
     cmd_add_stock_pos,
-    cmd_analyze,
-    cmd_audit_all,
-    cmd_backtest,
-    cmd_cleanup_downloads,
     cmd_close_pos,
     cmd_close_stock_pos,
-    cmd_closed,
-    cmd_decisions,
     cmd_evaluate_rolls,
     cmd_hedge_plan,
-    cmd_journal,
-    cmd_monitor,
-    cmd_payoff,
     cmd_portfolio,
+    cmd_sync_positions,
+    cmd_update_opt,
+    cmd_update_stock_pos,
+)
+from src.gex.cli.screening import (
+    add_screening_parsers,
+    cmd_analyze,
+    cmd_payoff,
+    cmd_pre_earnings_candidates,
     cmd_prune_candidates,
     cmd_rankings,
-    cmd_record_decision,
     cmd_select_spreads,
     cmd_sentiment,
     cmd_simulate,
-    cmd_snapshot,
-    cmd_status,
-    cmd_sync_pnl,
-    cmd_sync_positions,
     cmd_update_candidates,
-    cmd_update_opt,
-    cmd_update_performance,
-    cmd_update_regime,
     cmd_update_sentiment,
-    cmd_update_stock_pos,
+)
+from src.gex.cli.journal import (
+    add_journal_parsers,
+    cmd_closed,
+    cmd_decisions,
+    cmd_journal,
+    cmd_record_decision,
+    cmd_sync_pnl,
+    cmd_update_performance,
+)
+from src.gex.cli.ops import (
+    add_ops_parsers,
+    cmd_audit_all,
+    cmd_backtest,
+    cmd_cleanup_downloads,
+    cmd_monitor,
+    cmd_snapshot,
     cmd_update_workflow,
     cmd_workflow,
-    dispatch_command,
 )
+
 
 
 def main():

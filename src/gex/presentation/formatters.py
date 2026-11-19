@@ -367,5 +367,47 @@ def format_backtest_trade_log(result: Any, limit: int = 50) -> str:
     return f"📜 Simulated Historical Execution Ledger\n{table_str}{suffix}"
 
 
+def format_pre_earnings_table(candidates: Sequence[Any]) -> str:
+    """Formats pre-earnings vega run-up candidates into a clean, informative terminal table."""
+    if not candidates:
+        return "No underliers currently match the Pre-Earnings Vega Run-Up screening criteria (15-25 DTE to earnings, IV Rank <= 40%)."
+
+    headers = [
+        "Symbol", "Spot", "Earnings", "Days", "Mandatory Exit",
+        "Cur IV", "IV Rank", "Tgt IV", "Vega", "Proj P&L", "Proj Ret%"
+    ]
+    rows = []
+    for c in candidates:
+        ivr_str = f"{c.iv_rank:.1f}%" if c.iv_rank is not None else "N/A"
+        cur_iv_str = f"{c.current_iv * 100:.1f}%"
+        tgt_iv_str = f"{c.projected_iv_target * 100:.1f}%"
+        pnl_str = f"+${c.projected_vega_pnl:.2f}" if c.projected_vega_pnl >= 0 else f"-${abs(c.projected_vega_pnl):.2f}"
+        ret_str = f"+{c.projected_return_pct:.1f}%" if c.projected_return_pct >= 0 else f"{c.projected_return_pct:.1f}%"
+        rows.append([
+            c.symbol,
+            f"${c.spot:.2f}",
+            c.earnings_date,
+            str(c.days_to_earnings),
+            c.mandatory_exit_date,
+            cur_iv_str,
+            ivr_str,
+            tgt_iv_str,
+            f"{c.option_vega:.3f}",
+            pnl_str,
+            ret_str,
+        ])
+
+    alignments = ["left", "right", "center", "right", "center", "right", "right", "right", "right", "right", "right"]
+    table_str = format_table(headers, rows, alignments=alignments)
+    
+    header_block = (
+        "🎯 Pre-Earnings Vega Run-Up Harvester Candidates\n"
+        "  Strategy: Long ATM Call / Debit Spread capture of pre-earnings IV ramp (15-25 days before report)\n"
+        "  Rule 7 Hard Stop: Mandatory exit strictly at T-14 calendar days (before blackout window opens)\n"
+    )
+    return f"{header_block}\n{table_str}"
+
+
+
 
 

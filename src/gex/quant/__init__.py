@@ -2,6 +2,7 @@ from src.gex.quant.greeks import (
     calculate_black_scholes_gamma,
     calculate_black_scholes_vanna,
     calculate_black_scholes_charm,
+    calculate_black_scholes_vega,
     find_flip_strikes,
     select_transition_points,
 )
@@ -25,6 +26,7 @@ __all__ = [
     "calculate_black_scholes_gamma",
     "calculate_black_scholes_vanna",
     "calculate_black_scholes_charm",
+    "calculate_black_scholes_vega",
     "find_flip_strikes",
     "select_transition_points",
     "calculate_rsi",

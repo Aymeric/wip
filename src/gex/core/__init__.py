@@ -14,6 +14,7 @@ from src.gex.core.models import (
     BacktestTrade,
     BacktestDailySnapshot,
     BacktestResult,
+    PreEarningsCandidate,
 )
 from src.gex.core.config import (
     REPOSITORY_ROOT,
@@ -56,6 +57,7 @@ __all__ = [
     "BacktestTrade",
     "BacktestDailySnapshot",
     "BacktestResult",
+    "PreEarningsCandidate",
     "REPOSITORY_ROOT",
     "DATA_DIR",
     "REGIME_FILE",

@@ -39,6 +39,7 @@ from src.gex.cli.screening import (
     cmd_select_spreads,
     cmd_sentiment,
     cmd_simulate,
+    cmd_pre_earnings_candidates,
     cmd_update_candidates,
     cmd_update_sentiment,
 )
@@ -101,6 +102,7 @@ __all__ = [
     "cmd_select_spreads",
     "cmd_payoff",
     "cmd_simulate",
+    "cmd_pre_earnings_candidates",
     # Journal Commands
     "cmd_update_performance",
     "cmd_closed",

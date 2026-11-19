@@ -47,7 +47,7 @@ from src.gex.screening.monitor import (
 )
 
 
-import src.gex_engine as ge
+from src.gex.cli.proxy import ge
 
 _get_downloads_files = lambda *a, **k: ge._get_downloads_files(*a, **k)
 account_positions_file = lambda *a, **k: ge.account_positions_file(*a, **k)

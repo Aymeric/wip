@@ -61,7 +61,7 @@ from src.gex.storage.db import (
 )
 
 
-import src.gex_engine as ge
+from src.gex.cli.proxy import ge
 
 _get_downloads_files = lambda *a, **k: ge._get_downloads_files(*a, **k)
 account_positions_file = lambda *a, **k: ge.account_positions_file(*a, **k)
@@ -209,6 +209,17 @@ def add_screening_parsers(subparsers: Any) -> None:
     p_sim.add_argument("symbol", help="Ticker symbol")
     p_sim.add_argument("spot", type=float, help="Simulated spot price")
     p_sim.add_argument("--account", type=str, default="", help="Optional account number used to scope the position cache")
+
+    # pre-earnings-candidates subcommand (Roadmap 5.11 Pre-Earnings Vega Run-Up Harvester)
+    p_pre_earn = subparsers.add_parser("pre-earnings-candidates", help="Scan underliers entering pre-earnings IV expansion ramp (15-25 DTE, IV Rank <= 40%%).")
+    p_pre_earn.add_argument("--symbols", nargs="+", help="Specific ticker symbols to evaluate")
+    p_pre_earn.add_argument("--min-days", type=int, default=15, help="Minimum days to earnings (default: 15)")
+    p_pre_earn.add_argument("--max-days", type=int, default=25, help="Maximum days to earnings (default: 25)")
+    p_pre_earn.add_argument("--max-iv-rank", type=float, default=40.0, help="Maximum IV Rank threshold (default: 40.0)")
+    p_pre_earn.add_argument("--strict-iv-rank", action="store_true", help="Require at least 20 historical IV observations for IV Rank")
+    p_pre_earn.add_argument("--session-date", type=str, help="Market session date (YYYY-MM-DD)")
+    p_pre_earn.add_argument("--json", action="store_true", help="Output machine-readable JSON format")
+
 
 
 
@@ -1985,3 +1996,36 @@ def cmd_simulate(args):
     # Visual map
     print(f"\n### 🛣️ GEX Runway Map (Simulated)")
     print(f"  {generate_ascii_gex_scale(sim_spot, ptrans, ntrans, gex, cotmp)}\n")
+
+
+def cmd_pre_earnings_candidates(args: Any) -> Any:
+    """Scans and surfaces pre-earnings vega run-up candidates."""
+    from src.gex.presentation.formatters import format_pre_earnings_table
+    from src.gex.screening.vega_scanner import scan_pre_earnings_candidates
+
+    symbols = getattr(args, "symbols", None)
+    session_date = getattr(args, "session_date", None)
+    min_days = getattr(args, "min_days", 15)
+    max_days = getattr(args, "max_days", 25)
+    max_iv_rank = getattr(args, "max_iv_rank", 40.0)
+    strict_iv_rank = getattr(args, "strict_iv_rank", False)
+
+    candidates = scan_pre_earnings_candidates(
+        symbols=symbols,
+        session_date=session_date,
+        min_days=min_days,
+        max_days=max_days,
+        max_iv_rank=max_iv_rank,
+        strict_iv_rank=strict_iv_rank,
+    )
+
+    if getattr(args, "json", False):
+        import json
+        payload = [c.to_dict() for c in candidates]
+        print(json.dumps(payload, indent=2))
+        return payload
+
+    table_output = format_pre_earnings_table(candidates)
+    print(table_output)
+    return candidates
+

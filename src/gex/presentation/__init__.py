@@ -15,6 +15,7 @@ from src.gex.presentation.formatters import (
     format_backtest_summary,
     format_backtest_regime_breakdown,
     format_backtest_trade_log,
+    format_pre_earnings_table,
 )
 
 __all__ = [
@@ -32,4 +33,5 @@ __all__ = [
     "format_backtest_summary",
     "format_backtest_regime_breakdown",
     "format_backtest_trade_log",
+    "format_pre_earnings_table",
 ]

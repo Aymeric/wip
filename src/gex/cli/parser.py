@@ -58,8 +58,13 @@ def parse_spot_overrides(values: Optional[List[str]]) -> Dict[str, float]:
 
 def build_parser() -> argparse.ArgumentParser:
     """Assembles the unified command-line argument parser with all subcommands."""
+    from src.gex import __version__
+
     parser = argparse.ArgumentParser(
         description="GEX Options Mechanical Engine - Rule validation CLI and storage keeper"
+    )
+    parser.add_argument(
+        "--version", action="version", version=f"%(prog)s {__version__}"
     )
     subparsers = parser.add_subparsers(dest="command", required=True)
 
@@ -95,6 +100,7 @@ def get_command_handlers() -> Dict[str, Any]:
             cmd_analyze, cmd_update_candidates, cmd_prune_candidates,
             cmd_sentiment, cmd_update_sentiment, cmd_rankings,
             cmd_select_spreads, cmd_payoff, cmd_simulate,
+            cmd_pre_earnings_candidates,
         )
         from src.gex.cli.journal import (
             cmd_update_performance, cmd_closed, cmd_journal,
@@ -127,6 +133,7 @@ def get_command_handlers() -> Dict[str, Any]:
             "select-spreads": cmd_select_spreads,
             "payoff": cmd_payoff,
             "simulate": cmd_simulate,
+            "pre-earnings-candidates": cmd_pre_earnings_candidates,
             "update-performance": cmd_update_performance,
             "closed": cmd_closed,
             "journal": cmd_journal,
@@ -174,6 +181,7 @@ def dispatch_command(args: argparse.Namespace) -> Any:
         "select-spreads": "cmd_select_spreads",
         "payoff": "cmd_payoff",
         "simulate": "cmd_simulate",
+        "pre-earnings-candidates": "cmd_pre_earnings_candidates",
         "update-performance": "cmd_update_performance",
         "closed": "cmd_closed",
         "journal": "cmd_journal",

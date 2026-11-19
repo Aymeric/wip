@@ -728,3 +728,51 @@ class BacktestResult:
         }
 
 
+@dataclass(slots=True)
+class PreEarningsCandidate:
+    """Represents a pre-earnings candidate underlier poised for implied volatility run-up."""
+    symbol: str
+    spot: float
+    earnings_date: str
+    days_to_earnings: int
+    mandatory_exit_date: str
+    current_iv: float
+    iv_rank: Optional[float]
+    iv_percentile: Optional[float]
+    historical_high_iv: float
+    projected_iv_target: float
+    projected_iv_expansion: float
+    option_strike: float
+    option_expiration: str
+    option_dte: int
+    option_vega: float
+    option_ask: float
+    projected_vega_pnl: float
+    projected_return_pct: float
+    setup_grade: str = "CONFIRMED"
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "symbol": self.symbol,
+            "spot": round(self.spot, 2),
+            "earnings_date": self.earnings_date,
+            "days_to_earnings": self.days_to_earnings,
+            "mandatory_exit_date": self.mandatory_exit_date,
+            "current_iv": round(self.current_iv, 4),
+            "iv_rank": round(self.iv_rank, 1) if self.iv_rank is not None else None,
+            "iv_percentile": round(self.iv_percentile, 1) if self.iv_percentile is not None else None,
+            "historical_high_iv": round(self.historical_high_iv, 4),
+            "projected_iv_target": round(self.projected_iv_target, 4),
+            "projected_iv_expansion": round(self.projected_iv_expansion, 4),
+            "option_strike": round(self.option_strike, 2),
+            "option_expiration": self.option_expiration,
+            "option_dte": self.option_dte,
+            "option_vega": round(self.option_vega, 4),
+            "option_ask": round(self.option_ask, 2),
+            "projected_vega_pnl": round(self.projected_vega_pnl, 2),
+            "projected_return_pct": round(self.projected_return_pct, 2),
+            "setup_grade": self.setup_grade,
+        }
+
+
+

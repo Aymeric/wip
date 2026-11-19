@@ -36,7 +36,7 @@ def calculate_black_scholes_gamma(
     Returns:
         float: Analytical option Gamma, or 0.0 if inputs are invalid.
     """
-    if spot <= 0.0 or strike <= 0.0 or iv <= 0.0:
+    if spot <= 0.0 or strike <= 0.0 or iv <= 0.0 or dte_days <= 0.0:
         return 0.0
 
     t = max(dte_days, 0.5) * _ONE_OVER_365_25
@@ -211,7 +211,7 @@ def calculate_black_scholes_vanna(
     Returns:
         float: Analytical option Vanna, or 0.0 if inputs are invalid.
     """
-    if spot <= 0.0 or strike <= 0.0 or iv <= 0.0:
+    if spot <= 0.0 or strike <= 0.0 or iv <= 0.0 or dte_days <= 0.0:
         return 0.0
 
     t = max(dte_days, 0.5) * _ONE_OVER_365_25
@@ -257,7 +257,7 @@ def calculate_black_scholes_charm(
     Returns:
         float: Analytical daily option Charm, or 0.0 if inputs are invalid.
     """
-    if spot <= 0.0 or strike <= 0.0 or iv <= 0.0:
+    if spot <= 0.0 or strike <= 0.0 or iv <= 0.0 or dte_days <= 0.0:
         return 0.0
 
     t = max(dte_days, 0.5) * _ONE_OVER_365_25
@@ -276,6 +276,53 @@ def calculate_black_scholes_charm(
         return charm_daily if math.isfinite(charm_daily) else 0.0
     except (ValueError, OverflowError, ZeroDivisionError):
         return 0.0
+
+
+def calculate_black_scholes_vega(
+    spot: float,
+    strike: float,
+    dte_days: float,
+    iv: float,
+    risk_free_rate: float = 0.04,
+) -> float:
+    """
+    Calculates analytical Black-Scholes option Vega (dPrice / dVol).
+    Measures dollar sensitivity of option price per 1.0 (100 percentage points) change in IV.
+    For a 1% (0.01) IV change, the price impact is Vega * 0.01.
+
+    Vega = S * sqrt(T) * N'(d1)
+    where:
+        T = max(dte_days, 0.5) / 365.25
+        d1 = [ln(S / K) + (r + 0.5 * sigma^2) * T] / (sigma * sqrt(T))
+        N'(d1) = (1 / sqrt(2 * pi)) * exp(-0.5 * d1^2)
+
+    Args:
+        spot: Current spot price of the underlying asset.
+        strike: Option strike price.
+        dte_days: Days to expiration (e.g. 30.0).
+        iv: Implied volatility as a decimal ratio (e.g. 0.35 for 35% IV).
+        risk_free_rate: Annualized risk-free interest rate (default: 0.04).
+
+    Returns:
+        float: Analytical option Vega, or 0.0 if inputs are invalid.
+    """
+    if spot <= 0.0 or strike <= 0.0 or iv <= 0.0 or dte_days <= 0.0:
+        return 0.0
+
+    t = max(dte_days, 0.5) * _ONE_OVER_365_25
+    sigma_sqrt_t = iv * math.sqrt(t)
+    if sigma_sqrt_t <= 0.0 or t <= 0.0:
+        return 0.0
+
+    try:
+        sqrt_t = math.sqrt(t)
+        d1 = (math.log(spot / strike) + (risk_free_rate + 0.5 * iv * iv) * t) / sigma_sqrt_t
+        n_prime_d1 = _ONE_OVER_SQRT_TWO_PI * math.exp(-0.5 * d1 * d1)
+        vega = spot * sqrt_t * n_prime_d1
+        return vega if math.isfinite(vega) else 0.0
+    except (ValueError, OverflowError, ZeroDivisionError):
+        return 0.0
+
 
 
 

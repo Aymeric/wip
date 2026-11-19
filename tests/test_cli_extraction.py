@@ -36,7 +36,7 @@ ALL_34_COMMANDS = [
     "sync-positions",
     "evaluate-rolls",
     "hedge-plan",
-    # Screening (10)
+    # Screening (11)
     "analyze",
     "update-candidates",
     "prune-candidates",
@@ -46,6 +46,7 @@ ALL_34_COMMANDS = [
     "select-spreads",
     "payoff",
     "simulate",
+    "pre-earnings-candidates",
     # Journal (6)
     "update-performance",
     "closed",
@@ -88,6 +89,7 @@ ALL_34_HANDLERS = [
     "cmd_select_spreads",
     "cmd_payoff",
     "cmd_simulate",
+    "cmd_pre_earnings_candidates",
     # Journal
     "cmd_update_performance",
     "cmd_closed",
@@ -121,7 +123,7 @@ class TestCliExtraction(unittest.TestCase):
         self.assertEqual(len(subparsers_actions), 1)
         subparser_choices = set(subparsers_actions[0].choices.keys())
 
-        self.assertEqual(len(ALL_34_COMMANDS), 34)
+        self.assertEqual(len(ALL_34_COMMANDS), 35)
         for cmd in ALL_34_COMMANDS:
             self.assertIn(
                 cmd,
@@ -150,9 +152,9 @@ class TestCliExtraction(unittest.TestCase):
             self.assertTrue(callable(handler))
 
     def test_command_handlers_map_integrity(self):
-        """Verify get_command_handlers() returns all 34 registered commands."""
+        """Verify get_command_handlers() returns all 35 registered commands."""
         handlers = get_command_handlers()
-        self.assertEqual(len(handlers), 34)
+        self.assertEqual(len(handlers), 35)
         for cmd in ALL_34_COMMANDS:
             self.assertIn(cmd, handlers)
             self.assertTrue(callable(handlers[cmd]))

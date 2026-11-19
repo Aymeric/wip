@@ -1,15 +1,15 @@
 ---
 name: roadmap-implementation
-description: "Choose and implement the next suitable GEX Options Trading System (gex-orchestrator) roadmap item by weighing ROADMAP.md against open GitHub issues, then verify the implementation and reconcile local roadmap status."
+description: "Choose and implement the next suitable GEX Options Trading System (gex-orchestrator) roadmap item by weighing ROADMAP.md against open GitHub issues, implement it end-to-end, maintain project version metadata, verify the implementation, and reconcile local roadmap status."
 ---
 
 # Roadmap Implementation
 
-Select one valuable, implementable item from the GEX Options Trading System (`gex-orchestrator`) roadmap and open GitHub issues, implement it end to end, and report the evidence for the selection and verification. Use this workflow when asked to work on the next roadmap item, pick the next feature, or continue planned quantitative/engineering work.
+Select one valuable, implementable item from the GEX Options Trading System (`gex-orchestrator`) roadmap and open GitHub issues, implement it end to end, maintain project version metadata, and report the evidence for the selection and verification. Use this workflow when asked to work on the next roadmap item, pick the next feature, or continue planned quantitative/engineering work.
 
 ## Workflow
 
-1. **Understand the current worktree and system rules.** Read `AGENTS.md`, `GEMINI.md`, and any more specific instructions relevant to candidate files. Run `git status --short` and inspect the current branch. Preserve all existing changes; do not overwrite, stage, or revert unrelated work. Read `ROADMAP.md` and enough nearby code and tests under `src/gex/` and `src/gex_engine.py` to understand existing architecture and conventions.
+1. **Understand the current worktree and system rules.** Read `AGENTS.md`, `GEMINI.md`, and any more specific instructions relevant to candidate files. Run `git status --short` and inspect the current branch. Preserve all existing changes; do not overwrite, stage, or revert unrelated work. Inspect the current project version declared in `src/gex/__init__.py` (`__version__`) and `pyproject.toml` (`version`). Read `ROADMAP.md` and enough nearby code and tests under `src/gex/` and `src/gex_engine.py` to understand existing architecture and conventions.
 
 2. **Gather GitHub issue candidates.** Determine the repository from its configured Git remote rather than guessing its owner or name. When GitHub CLI access is available, list open issues with their titles, bodies, labels, URLs, milestones, and update times (for example, `gh issue list --state open --limit 1000 --json number,title,body,url,labels,milestone,updatedAt`). Otherwise use the available GitHub issue search/list tools. If issues cannot be accessed, say so and continue with the roadmap; do not imply the issue list was reviewed. Read candidate issue details and comments when needed to clarify scope, acceptance criteria, quantitative formulas, dependencies, and whether work is already underway.
 
@@ -25,11 +25,22 @@ Select one valuable, implementable item from the GEX Options Trading System (`ge
    - Add or update focused unit tests in `tests/test_<feature>.py`.
    - Do not commit, push, deploy, or mutate remote GitHub issues (including closing or editing issues) unless explicitly requested.
 
-6. **Reconcile local documentation.** Update `ROADMAP.md` only when the selected work corresponds to an entry and its completion is verified. Mark a task complete (`[x]`) and update the Summary Roadmap Matrix only when its stated scope is actually implemented and verified; do not mark a parent complete while child tasks remain. If the selected issue has no matching roadmap entry, do not invent a roadmap commitment. Do not change GitHub issue state or claim that it is resolved; report the implemented result and the issue reference so the user can decide whether to close it.
+6. **Maintain project version metadata.** Keep the system version aligned with the implemented changes following Semantic Versioning (SemVer 2.0.0):
+   - The project version is canonically declared in two locations:
+     - `src/gex/__init__.py` (`__version__ = "X.Y.Z"`)
+     - `pyproject.toml` (`version = "X.Y.Z"` under `[project]`)
+   - Determine the required SemVer increment based on the implemented change:
+     - **Patch** (`1.1.X` -> `1.1.X+1`): Backward-compatible bug fixes, internal refactoring or modular code extractions (e.g. CLI subcommands extraction), performance optimizations, documentation updates, or minor adjustments that preserve existing APIs and behavior without adding new user capabilities.
+     - **Minor** (`1.X.0` -> `1.X+1.0`): New user-facing features, quantitative indicators (e.g. Vanna/Charm, IV Rank, Skew, Gamma Pinning), new screening filters or scanners, new strategy engines (e.g. backtester, rolling engine, vertical spreads, vega harvester), or new CLI commands/subcommands that add capabilities in a backward-compatible manner. Reset patch version to `0`.
+     - **Major** (`X.0.0` -> `X+1.0.0`): Breaking architectural shifts, incompatible API/CLI modifications, database schema redesigns requiring manual migrations, or major strategy engine overhauls. Reset minor and patch versions to `0`.
+   - Update both `src/gex/__init__.py` and `pyproject.toml` in lockstep. Never allow version drift between these files.
 
-7. **Verify the change.** Run project quality gates for changed files:
+7. **Reconcile local documentation.** Update `ROADMAP.md` only when the selected work corresponds to an entry and its completion is verified. Mark a task complete (`[x]`) and update the Summary Roadmap Matrix only when its stated scope is actually implemented and verified; do not mark a parent complete while child tasks remain. If the selected issue has no matching roadmap entry, do not invent a roadmap commitment. Do not change GitHub issue state or claim that it is resolved; report the implemented result and the issue reference so the user can decide whether to close it.
+
+8. **Verify the change.** Run project quality gates for changed files:
    - Unit tests: `python3 -m unittest tests/test_<feature>.py` (and related domain test suites).
    - Core regression check: `python3 -m unittest discover -s tests -p "test_*.py"` or relevant multi-suite test run.
+   - Project version consistency check: `python3 -m unittest tests/test_version.py` (ensures `src/gex/__init__.__version__` strictly matches `pyproject.toml` `project.version` and adheres to SemVer).
    - Performance benchmarks: `python3 tests/test_performance.py` (ensure Bolt optimizations and sub-millisecond latencies are maintained).
    - Multi-Harness Sync: `python3 scripts/sync_harnesses.py --check` (if agents or prompts were modified, run `python3 scripts/sync_harnesses.py --sync`).
    - Syntax validation: `python3 -m py_compile src/gex_engine.py src/gex/**/*.py`.
@@ -37,4 +48,4 @@ Select one valuable, implementable item from the GEX Options Trading System (`ge
 
 ## Completion Report
 
-Report the selected roadmap item and/or issue link, why it was chosen over the other ready candidates, the implementation details and any roadmap status update, checks run and their results, and any blockers or remaining work. Be explicit if GitHub issues could not be reviewed or if the issue itself was not changed.
+Report the selected roadmap item and/or issue link, why it was chosen over the other ready candidates, the updated project version (with SemVer rationale), the implementation details and any roadmap status update, checks run and their results, and any blockers or remaining work. Be explicit if GitHub issues could not be reviewed or if the issue itself was not changed.

@@ -9,6 +9,10 @@ from src.gex.screening.spreads import (
     calculate_spread_payoff,
     select_vertical_spread,
 )
+from src.gex.screening.vega_scanner import (
+    calculate_pre_earnings_vega_setup,
+    scan_pre_earnings_candidates,
+)
 from src.gex.screening.monitor import (
     PositionBreachAlert,
     AlertState,
@@ -25,6 +29,8 @@ __all__ = [
     "select_best_option",
     "calculate_spread_payoff",
     "select_vertical_spread",
+    "calculate_pre_earnings_vega_setup",
+    "scan_pre_earnings_candidates",
     "PositionBreachAlert",
     "AlertState",
     "AlertStateManager",

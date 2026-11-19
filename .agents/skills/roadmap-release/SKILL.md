@@ -17,7 +17,7 @@ Provide the next semantic version (for example, `1.2.0`). If no version is provi
 
 2. **Inventory the documentation.** Find tracked Markdown files with `rg --files -g '*.md'`, excluding generated/build output. Review relevant content in `README.md`, `ROADMAP.md`, `AGENTS.md`, and any other docs affected by the changes. This repository maintains a durable release history in `CHANGELOG.md`; create or update it when preparing a release.
 
-3. **Choose and apply version metadata.** The system version is declared in `src/gex/__init__.py` as `__version__ = "X.Y.Z"`. Use semantic versioning:
+3. **Choose and apply version metadata.** The system version is declared in `src/gex/__init__.py` (`__version__ = "X.Y.Z"`) and `pyproject.toml` (`version = "X.Y.Z"`). Keep both synchronized. Use semantic versioning:
    - **Patch** (`1.1.X`): Backward-compatible bug fixes, minor performance refactors, or formatting adjustments.
    - **Minor** (`1.X.0`): New quantitative indicators (e.g. Vanna/Charm, IV Rank), new screening filters, additional CLI subcommands, or new strategy phases.
    - **Major** (`X.0.0`): Breaking architectural shifts, database schema redesigns requiring manual migrations, or major strategy engine overhauls.
@@ -53,7 +53,7 @@ Provide the next semantic version (for example, `1.2.0`). If no version is provi
    Do not stage, commit, push, or tag until the user explicitly approves.
 
    If approved:
-   - Recheck the branch, worktree, remote, and whether the target tag already exists. Confirm the semantic version in `src/gex/__init__.py` matches the tag.
+   - Recheck the branch, worktree, remote, and whether the target tag already exists. Confirm the semantic version in `src/gex/__init__.py` and `pyproject.toml` matches the tag.
    - Stage only the changes prepared for this release. Exclude pre-existing or unrelated user changes unless the user explicitly includes them.
    - Commit the release changes to the branch first.
    - Create the version tag only after the release commit is made.
