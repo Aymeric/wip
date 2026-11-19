@@ -263,6 +263,22 @@ src/gex/
   - [x] Add a $\pm 0.25\%$ hysteresis deadband around key GEX boundaries before re-arming level breach triggers.
   - [x] Support consolidated end-of-day alert digests and prevent webhook HTTP 429 throttling.
 
+### 5.11 Pre-Earnings Vega Run-Up Harvester ([#197](https://github.com/Aymeric/wip/issues/197))
+- **Need & Outcome**: Rule 7 enforces a strict 14-day earnings blackout to prevent post-earnings volatility crush. However, between 25 and 15 days prior to an earnings release, implied volatility exhibits systematic expansion as options demand escalates (the "IV run-up"). An automated vega run-up scanner isolates underliers with low baseline IV rank poised for pre-earnings expansion, with an automated mandatory exit rule prior to the 14-day blackout.
+- **Action Items**:
+  - [ ] Implement pre-earnings vega scanner evaluating underliers 15–25 days before scheduled earnings with IV Rank $\le 40\%$.
+  - [ ] Model vega sensitivity and projected gain from implied volatility expansion toward historical event levels.
+  - [ ] Enforce hard mandatory exit rule at 14 calendar days before earnings (strict compliance with Rule 7).
+  - [ ] Expose CLI command `python3 src/gex_engine.py pre-earnings-candidates`.
+
+### 5.12 Volatility Skew & Smile Surface Curve Interpolator ([#198](https://github.com/Aymeric/wip/issues/198))
+- **Need & Outcome**: Currently, dealer gamma profiling and Black-Scholes fallback calculations assume flat implied volatility across strikes or single ATM IV proxies. In reality, equity options exhibit pronounced downside put skew. A volatility smile interpolator fits a continuous IV curve (cubic spline or SVI) across strikes for each expiration, smoothing continuous zero-crossing strikes and improving accuracy for illiquid out-of-the-money strikes.
+- **Action Items**:
+  - [ ] Implement volatility smile interpolator in `src/gex/quant/volatility.py` fitting market IVs across delta/moneyness space.
+  - [ ] Integrate continuous IV curve into `derive_gex_profile` and analytical Greeks fallback.
+  - [ ] Eliminate strike-level IV step discontinuities in $pTrans$ and $nTrans$ zero-crossing linear interpolation.
+  - [ ] Add visual ASCII volatility skew curve output to `analyze` CLI command.
+
 ---
 
 ## 🏛️ Phase 6: Capital Efficiency & Multi-Leg Spread Engineering
@@ -275,6 +291,22 @@ src/gex/
   - [x] Compute net debit, maximum profit, maximum loss, breakeven, and risk/reward ratios with realistic bid-ask spread slippage.
   - [x] Integrate spread selection into candidate generation for elevated IV regimes (IV rank > 70%).
   - [x] Expose CLI command `python3 src/gex_engine.py select-spreads --symbol TICKER`.
+
+### 6.2 Synthetic Zero-Cost Collar Protection Engine ([#199](https://github.com/Aymeric/wip/issues/199))
+- **Need & Outcome**: Existing long equity or deep ITM option positions face macro regime or sector headwinds where an outright exit triggers taxable realization or misses long-term upside. A zero-cost or low-debit Collar engine models buying an OTM protective put at $nTrans$ (structural dealer secondary support) funded by selling an OTM covered call at $+GEX$ (call wall resistance), creating a defined-risk capital floor.
+- **Action Items**:
+  - [ ] Implement collar payoff and pricing logic in `src/gex/screening/spreads.py` (or `src/gex/screening/collars.py`).
+  - [ ] Peg protective put strike to $nTrans$ and covered/synthetic call strike to $+GEX$.
+  - [ ] Calculate net debit/credit, maximum loss, maximum profit, and capital protection floor.
+  - [ ] Expose CLI command `python3 src/gex_engine.py evaluate-collars --symbol TICKER`.
+
+### 6.3 Multi-Leg Spread Order Construction & Execution Routing Adapter ([#200](https://github.com/Aymeric/wip/issues/200))
+- **Need & Outcome**: Milestones 6.1 (Vertical Spreads), 5.3 (Macro Put Debit Spreads), and 6.2 (Collars) calculate theoretical multi-leg payoffs, but executing them through `agentic-trader` requires packaging atomic multi-leg payloads for broker submission with net debit/credit limit orders, ratio validation, and fill leg tracking.
+- **Action Items**:
+  - [ ] Implement multi-leg order builder in `src/gex/core/orders.py` supporting debit/credit spreads and collars.
+  - [ ] Add net price limit validation with leg bid-ask slippage bounds.
+  - [ ] Wire multi-leg simulation and order staging into `agentic-trader` skill and `ask_question` execution confirmation.
+  - [ ] Support multi-leg order status tracking and trade ledger persistence in `data/trades.db`.
 
 ---
 
@@ -309,6 +341,10 @@ src/gex/
 | **Vanna & Charm Exposure** | Phase 5 (Advanced Strategy) | 🟡 Medium | ✅ Completed | Second-order dealer exposure modeling for vol crush and decay flows | Phase 3 |
 | **Alert Hysteresis & Rate-Limiting** | Phase 5 (Advanced Strategy) | 🟢 Low | ✅ Completed | Stateful cooldowns and deadbands for intraday webhook alerts | 5.4 |
 | **Defined-Risk Vertical Spreads** | Phase 6 (Multi-Leg Spreads) | 🟡 Medium | ✅ Completed | Debit call spreads pegged to +GEX call walls for high IV regimes | 5.7 |
+| **Pre-Earnings Vega Harvester** | Phase 5 (Advanced Strategy) | 🟢 Low | 📋 Planned | Capture pre-earnings IV expansion with strict 14-day exit | 5.7 |
+| **Volatility Skew & Smile Interpolator** | Phase 5 (Advanced Strategy) | 🟡 Medium | 📋 Planned | Continuous smile curve to smooth zero-crossings and illiquid strikes | Phase 3 |
+| **Synthetic Zero-Cost Collars** | Phase 6 (Multi-Leg Spreads) | 🟡 Medium | 📋 Planned | Capital protection floor pegged to +GEX (call) and nTrans (put) | 6.1 |
+| **Multi-Leg Spread Routing Adapter** | Phase 6 (Multi-Leg Spreads) | 🔴 High | 📋 Planned | Atomic broker order packaging, ratio checks, and limit execution | 6.1 |
 
 ---
 
