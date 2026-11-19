@@ -15,6 +15,7 @@ The system's engineering lifecycle is organized into structured phases:
 4. **Phase 4: Persistence, Analytics & Operational Automation** (Embedded SQLite, Audit Mode, Alert Webhooks).
 5. **Phase 5: Advanced Strategy Engineering & Backtesting** (Historical Playback, Dynamic Rolling, Automated Hedging).
 6. **Phase 6: Capital Efficiency & Multi-Leg Spread Engineering** (Defined-Risk Vertical Spreads, Dynamic Collars).
+7. **Phase 7: Institutional Portfolio Intelligence & Risk Stress-Testing** (Cross-Greek Stress Testing, Flow Sweeps, EV Calibration).
 
 ---
 
@@ -310,6 +311,42 @@ src/gex/
 
 ---
 
+## 🏛️ Phase 7: Institutional Portfolio Intelligence & Risk Stress-Testing
+
+### 7.1 Multi-Scenario Greek Portfolio Stress Testing & Shock Matrix Simulator ([#201](https://github.com/Aymeric/wip/issues/201))
+- **Need & Outcome**: Options portfolios exhibit non-linear curvature under extreme market dislocations (Gamma acceleration, Vega expansion/crush, and rapid Theta erosion). While `hedge-plan` calculates single-point beta-delta, the trader cannot currently visualize portfolio P&L across simultaneous price shocks ($\pm 3\%, \pm 5\%, \pm 10\%$) and volatility shifts ($\pm 10\%, \pm 25\%, \pm 50\%$). A portfolio stress testing engine computes a full cross-Greek repricing matrix across active holdings, estimating Portfolio Value-at-Risk (VaR 95/99), Expected Shortfall (CVaR), and catastrophic drawdown risk.
+- **Action Items**:
+  - [ ] Implement portfolio stress testing engine in `src/gex/risk/stress.py` computing a 2D P&L grid (Spot shocks $\times$ IV shocks).
+  - [ ] Model non-linear Greeks repricing (Delta, Gamma, Vega, Theta) across all active single-leg and multi-leg holdings.
+  - [ ] Calculate Parametric and Historical Value-at-Risk (VaR 95/99) and Expected Shortfall for active accounts.
+  - [ ] Expose CLI command `python3 src/gex_engine.py stress-test --account ACCOUNT_NUMBER`.
+
+### 7.2 Institutional Unusual Options Volume & Sweep Flow Detector ([#202](https://github.com/Aymeric/wip/issues/202))
+- **Need & Outcome**: Candidate sourcing currently relies on Robinhood scanners (options volume/IV) and retail social sentiment (Reddit). Institutional accumulation ahead of GEX transition breakout triggers is characterized by large aggressive sweeps (transactions executed across multiple exchanges at the ask with volume $> OI$). An options flow analytics module detects Unusual Options Activity (UOA), aggressive ask-side sweep prints ($Vol/OI \ge 2.5$), and computes an institutional Flow Conviction Score to corroborate Rule 1–11 setup grades.
+- **Action Items**:
+  - [ ] Implement unusual options flow detector in `src/gex/screening/flow.py` evaluating volume-to-open-interest ratios ($Vol/OI \ge 2.5$) and relative volume surges.
+  - [ ] Categorize aggressive directional flow: ask-side call sweeps (bullish flow) vs. bid-side put sweeps (bearish flow).
+  - [ ] Calculate composite Flow Conviction Score and integrate with `ScannerCandidate` domain model.
+  - [ ] Expose CLI command `python3 src/gex_engine.py sweep-scanner`.
+
+### 7.3 Calibrated Win Probability & Expected Value (EV) Scoring Engine ([#203](https://github.com/Aymeric/wip/issues/203))
+- **Need & Outcome**: Currently, the 11-Rule checklist assigns a discrete grade (0–11) where Grade $\ge 9$ triggers an entry. However, a Grade 10 setup with positive Vanna asymmetry and low IV rank might have a 78% empirical win rate, while a Grade 9 setup in elevated IV might only achieve 52%. An empirical probability calibration engine uses historical trade journal outcomes and backtest results to compute a continuous Win Probability $P(\text{Win})$ and Expected Value ($\text{EV} = P \times \text{Reward} - (1-P) \times \text{Risk}$) for candidate contracts, ranking trades strictly by expected return per dollar of risk.
+- **Action Items**:
+  - [ ] Implement probability calibration module in `src/gex/quant/probability.py` using historical trade ledger and backtest data.
+  - [ ] Calculate continuous win probability $P(\text{Win})$ based on setup grade, COTMP cushion, Vanna asymmetry, and IV Rank.
+  - [ ] Compute trade Expected Value (EV) and EV-to-Risk ratio for candidate option contracts.
+  - [ ] Expose CLI command `python3 src/gex_engine.py rank-ev`.
+
+### 7.4 Expiration Pinning & 0–3 DTE Gamma Magnet Setup Detector ([#204](https://github.com/Aymeric/wip/issues/204))
+- **Need & Outcome**: As options approach expiration (0–3 DTE), dealer gamma reaches its mathematical maximum near large open interest strikes. The spot price frequently gets "pinned" to the Call Wall (+GEX) or Put Wall (-GEX) due to dealer hedging flows as extrinsic value decays to zero. A specialized short-horizon Gamma Pinning detector identifies underliers within 1.5% of major gamma walls 1–3 days before expiration, enabling high-probability mean-reversion and pinning plays.
+- **Action Items**:
+  - [ ] Implement gamma pinning detection engine in `src/gex/screening/pinning.py` measuring gamma concentration and proximity to major walls.
+  - [ ] Calculate strike pinning probability score based on 0–3 DTE gamma mass, spot distance ($\le 1.5\%$), and decay velocity.
+  - [ ] Isolate pinning candidate underliers and target pinning strikes (+GEX / Call Wall or -GEX / Put Wall).
+  - [ ] Expose CLI command `python3 src/gex_engine.py gamma-pins [--max-dte 3]`.
+
+---
+
 ## 📊 Summary Roadmap Matrix
 
 > **Current Shipped Release**: **v1.1.0** (incorporating all milestones across Phase 1, Phase 2, Phase 3, and Phase 4).
@@ -345,6 +382,10 @@ src/gex/
 | **Volatility Skew & Smile Interpolator** | Phase 5 (Advanced Strategy) | 🟡 Medium | 📋 Planned | Continuous smile curve to smooth zero-crossings and illiquid strikes | Phase 3 |
 | **Synthetic Zero-Cost Collars** | Phase 6 (Multi-Leg Spreads) | 🟡 Medium | 📋 Planned | Capital protection floor pegged to +GEX (call) and nTrans (put) | 6.1 |
 | **Multi-Leg Spread Routing Adapter** | Phase 6 (Multi-Leg Spreads) | 🔴 High | 📋 Planned | Atomic broker order packaging, ratio checks, and limit execution | 6.1 |
+| **Portfolio Stress Testing Matrix** | Phase 7 (Institutional Risk) | 🔴 High | 📋 Planned | Cross-Greek non-linear P&L shock grid and VaR/CVaR calculations | 5.3 |
+| **Institutional Flow & Sweep Scanner** | Phase 7 (Institutional Risk) | 🟡 Medium | 📋 Planned | Detect aggressive ask-side sweeps (Vol/OI >= 2.5) to corroborate setups | Phase 2 |
+| **Calibrated Win Probability & EV** | Phase 7 (Institutional Risk) | 🟡 Medium | 📋 Planned | Empirical P(Win) and Expected Value ranking from trade history | 5.1 |
+| **0-3 DTE Gamma Pinning Detector** | Phase 7 (Institutional Risk) | 🟢 Low | 📋 Planned | Identify expiration pinning targets and high-probability magnet strikes | Phase 3 |
 
 ---
 
