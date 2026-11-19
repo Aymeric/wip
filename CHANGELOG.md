@@ -7,6 +7,50 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [5.11.0] - 2026-11-18
+
+### 🚀 Advanced Strategy Engineering & Multi-Leg Architecture
+- **Pre-Earnings Vega Run-Up Harvester (Milestone 5.11)**: Engineered options scanner and setup grading for pre-earnings implied volatility expansion, evaluating underliers 15–25 DTE prior to earnings announcements with IV Rank $\le 40\%$, and enforcing strict 14-day mandatory exits prior to earnings (Rule 7) (`gex pre-earnings-candidates`) ([#197](https://github.com/Aymeric/wip/issues/197)).
+- **Historical Options Replay & Backtesting Engine**: Added simulation harness with realistic bid/ask slippage modeling, regime-gated entries, and multi-day portfolio equity tracking (`gex backtest`) ([#193](https://github.com/Aymeric/wip/issues/193)).
+- **Defined-Risk Vertical Spreads**: Implemented long call debit vertical spreads pegged to dealer +GEX call walls, payoff diagrams, and multi-leg simulation (`gex select-spreads`, `gex payoff`, `gex simulate`) ([#196](https://github.com/Aymeric/wip/issues/196)).
+- **Second-Order Dealer Exposure Modeling (Vanna & Charm)**: Analytical derivation of Vanna ($\partial \Delta / \partial \sigma$) and Charm ($-\partial \Delta / \partial t$) dealer positioning profiles across option chains to project volatility-crush and weekend decay flows ([#194](https://github.com/Aymeric/wip/issues/194)).
+- **IV Rank & IV Percentile Context**: Added relative implied volatility ranking context with automated SQLite volatility snapshot persistence (`gex snapshot`) ([#165](https://github.com/Aymeric/wip/issues/165)).
+- **Beta-Weighted Macro Hedging Engine**: Automated portfolio hedge sizing allocating inverse/index contracts (SPY/QQQ) on defensive regime transitions (Roadmap 5.3; `gex hedge-plan`).
+- **Dynamic Delta Rolling Engine**: Systematic roll-up and roll-out rules for deep-ITM winning contracts ($\Delta \ge 0.70$) to lock in capital gains (`gex evaluate-rolls`).
+- **Intraday GEX Level Breach Monitor Daemon**: Real-time intraday monitoring daemon evaluating Stop 1 and profit target breaches with stateful cooldowns and deadbands (`gex monitor`).
+- **Alert Hysteresis & Rate Limiting**: Added stateful alert dispatch suppression with minimum 15-minute cooldowns and threshold deadbands to eliminate notification noise ([#195](https://github.com/Aymeric/wip/issues/195)).
+- **Stop-Coded Exit Attribution**: Recorded explicit stop-loss triggers (Stops 1–5, Target, Manual, Expiration) on trade exit records for quantitative attribution ([#163](https://github.com/Aymeric/wip/issues/163)).
+- **Approval Decision Ledger**: Implemented durable SQLite audit ledger tracking trade confirmations, declines, and overrides with masked-account provenance (`gex record-decision`, `gex decisions`) ([#164](https://github.com/Aymeric/wip/issues/164)).
+
+### 🏗️ Architecture & CLI Refactoring
+- **Modular CLI Command Extraction**: Extracted 34 CLI subcommands from monolithic `gex_engine.py` into dedicated domain modules in `src/gex/cli/` (`regime`, `portfolio`, `screening`, `journal`, `ops`, `parser`, `proxy`) ([#166](https://github.com/Aymeric/wip/issues/166)).
+- **Direct CLI `--version` Support**: Exposed root `--version` argument on `gex_engine.py` tied to package metadata.
+- **Autonomous Watchlist Hygiene**: Enacted non-financial candidate tracking exemption allowing background automations to synchronize and prune watchlists without user interaction interruption.
+
+### 🛡️ Security Hardening
+- **Path Traversal Containment**: Hardened `validate_safe_path` with symlink traversal breakout protection and precomputed root prefix checks ([#176](https://github.com/Aymeric/wip/pull/176), [#180](https://github.com/Aymeric/wip/pull/180)).
+- **Account Parameter Sanitization**: Strictly validated and sanitized account parameters across SQLite decision and trade journal operations ([#181](https://github.com/Aymeric/wip/pull/181), [#187](https://github.com/Aymeric/wip/pull/187)).
+- **Desktop Alert Escaping**: Escaped backslashes and quotes in macOS AppleScript notification dispatch ([#156](https://github.com/Aymeric/wip/pull/156)).
+- **File Access Hardening**: Fixed path traversal vulnerabilities across mtime calculation and scan download utilities ([#147](https://github.com/Aymeric/wip/pull/147)).
+
+### ⚡ Performance & Optimization (Bolt)
+- **Table Formatting**: Consolidated visible length calculation and inlined cell padding for single-pass table rendering ([#173](https://github.com/Aymeric/wip/pull/173), [#182](https://github.com/Aymeric/wip/pull/182)).
+- **Technical Indicator Speedups**: Optimized Wilder's ATR calculation with running accumulators ([#175](https://github.com/Aymeric/wip/pull/175)), scalar reciprocal periods in RSI ([#168](https://github.com/Aymeric/wip/pull/168)), and vectorized Bollinger Band evaluation ([#186](https://github.com/Aymeric/wip/pull/186)).
+- **Option Contract Selection**: Optimized contract filtering with direct set indexing and pre-filtered quotes lookups ([#144](https://github.com/Aymeric/wip/pull/144), [#160](https://github.com/Aymeric/wip/pull/160)).
+- **SQLite Batch Operations**: Implemented batched transactions and single-connection upserts in closed position persistence ([#167](https://github.com/Aymeric/wip/pull/167)).
+- **Black-Scholes & GEX Profile Speedups**: Vectorized d1/d2 computation and unrolled candidate scoring evaluations ([#153](https://github.com/Aymeric/wip/pull/153), [#157](https://github.com/Aymeric/wip/pull/157)).
+
+### 🎨 User Experience & Formatting (Palette)
+- **3-State Color Semantics**: Introduced neutral color styling for volatility discounts and payoff table cells ([#185](https://github.com/Aymeric/wip/pull/185)).
+- **Table Formatting & Alignment**: Added per-column text alignment and aligned borders in closed positions and audit tables ([#154](https://github.com/Aymeric/wip/pull/154), [#158](https://github.com/Aymeric/wip/pull/158), [#184](https://github.com/Aymeric/wip/pull/184)).
+
+### 🤖 Tooling & Agent Workflow
+- **Multi-Harness Synchronization**: Enforced prompt and agent manifest parity between `.agents/` and `.github/` with CI checking.
+- **Static Analysis Gate**: Integrated `ruff` and `mypy` static typing and linting checks into GitHub Actions CI matrix ([#162](https://github.com/Aymeric/wip/issues/162)).
+- **Project Version Maintenance**: Enforced project version metadata synchronization across `src/gex/__init__.py` and `pyproject.toml` in `roadmap-implementation` and `roadmap-release` workflows with dedicated unit test verification (`tests/test_version.py`).
+
+---
+
 ## [1.1.0] - 2026-10-26
 
 ### 🚀 Features & Architecture

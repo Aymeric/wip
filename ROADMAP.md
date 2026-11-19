@@ -351,7 +351,7 @@ src/gex/
 
 ## 📊 Summary Roadmap Matrix
 
-> **Current Shipped Release**: **v1.1.0** (incorporating all milestones across Phase 1, Phase 2, Phase 3, and Phase 4).
+> **Current Shipped Release**: **v5.11.0** (incorporating Phase 1–4 foundational milestones, Phase 5 advanced strategy engineering up to Milestone 5.11, and Phase 6 defined-risk vertical spreads).
 
 | Milestone | Phase | Priority | Status | Primary Impact | Dependencies |
 | :--- | :---: | :---: | :---: | :--- | :--- |
